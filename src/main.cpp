@@ -29,6 +29,17 @@ int main(int argc, char* argv[]) {
 	camera.setFormat(XI_RAW8);
 	camera.setAutoWhiteBalance(false);
 	camera.setAutoExposureGain(false);
+	camera.setQueueSize(12);
+
+	std::cout << "Camera info:" << std::endl;
+	std::cout << "  > Name: " << camera.getName() << std::endl;
+	std::cout << "  > Type: " << camera.getDeviceType() << std::endl;
+	std::cout << "  > API version: " << camera.getApiVersion() << std::endl;
+	std::cout << "  > Driver version: " << camera.getDriverVersion() << std::endl;
+	std::cout << "  > Serial number: " << camera.getSerialNumber() << std::endl;
+	std::cout << "  > Color: " << (camera.supportsColor() ? "yes" : "no") << std::endl;
+	std::cout << "  > Framerate: " << camera.getFramerate() << std::endl;
+	std::cout << "  > Available bandwidth: " << camera.getAvailableBandwidth() << std::endl;
 
 	camera.startAcquisition();
 

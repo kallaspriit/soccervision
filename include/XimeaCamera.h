@@ -30,6 +30,7 @@ public:
     int getAvailableBandwidth() { return getIntParam(XI_PRM_AVAILABLE_BANDWIDTH); }
 	int getExposure() { return getIntParam(XI_PRM_EXPOSURE); }
     int getGain() { return getIntParam(XI_PRM_GAIN); }
+    int getFramerate() { return getIntParam(XI_PRM_FRAMERATE); }
 
     void setFormat(int format) { setIntParam(XI_PRM_IMAGE_DATA_FORMAT, format); }
     void setExposure(int microseconds) { setIntParam(XI_PRM_EXPOSURE, microseconds); }
@@ -42,6 +43,8 @@ public:
     void setChromaticityGamma(float value) { setFloatParam(XI_PRM_GAMMAC, value); }
     void setAutoWhiteBalance(bool enabled) { setIntParam(XI_PRM_AUTO_WB, enabled ? 1 : 0); }
     void setAutoExposureGain(bool enabled) { setIntParam(XI_PRM_AEAG, enabled ? 1 : 0); }
+    void setQueueSize(int size) { setIntParam(XI_PRM_BUFFERS_QUEUE_SIZE, size); }
+    void setAcquisitionBufferSize(int size) { setIntParam(XI_PRM_ACQ_BUFFER_SIZE, size); }
 
     std::string getStringParam(const char* name);
     int getIntParam(const char* name);
