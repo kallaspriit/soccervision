@@ -39,6 +39,57 @@
     <ClInclude Include="lib\libyuv\include\libyuv.h">
       <Filter>libyuv</Filter>
     </ClInclude>
+    <ClInclude Include="lib\libyuv\include\libyuv\basic_types.h">
+      <Filter>libyuv</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\libyuv\include\libyuv\compare.h">
+      <Filter>libyuv</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\libyuv\include\libyuv\convert.h">
+      <Filter>libyuv</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\libyuv\include\libyuv\convert_argb.h">
+      <Filter>libyuv</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\libyuv\include\libyuv\convert_from.h">
+      <Filter>libyuv</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\libyuv\include\libyuv\convert_from_argb.h">
+      <Filter>libyuv</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\libyuv\include\libyuv\cpu_id.h">
+      <Filter>libyuv</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\libyuv\include\libyuv\format_conversion.h">
+      <Filter>libyuv</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\libyuv\include\libyuv\mjpeg_decoder.h">
+      <Filter>libyuv</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\libyuv\include\libyuv\planar_functions.h">
+      <Filter>libyuv</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\libyuv\include\libyuv\rotate.h">
+      <Filter>libyuv</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\libyuv\include\libyuv\rotate_argb.h">
+      <Filter>libyuv</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\libyuv\include\libyuv\row.h">
+      <Filter>libyuv</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\libyuv\include\libyuv\scale.h">
+      <Filter>libyuv</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\libyuv\include\libyuv\scale_argb.h">
+      <Filter>libyuv</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\libyuv\include\libyuv\version.h">
+      <Filter>libyuv</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\libyuv\include\libyuv\video_common.h">
+      <Filter>libyuv</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\DisplayWindow.cpp">

@@ -87,6 +87,23 @@
     <ClInclude Include="include\DisplayWindow.h" />
     <ClInclude Include="include\Gui.h" />
     <ClInclude Include="lib\libyuv\include\libyuv.h" />
+    <ClInclude Include="lib\libyuv\include\libyuv\basic_types.h" />
+    <ClInclude Include="lib\libyuv\include\libyuv\compare.h" />
+    <ClInclude Include="lib\libyuv\include\libyuv\convert.h" />
+    <ClInclude Include="lib\libyuv\include\libyuv\convert_argb.h" />
+    <ClInclude Include="lib\libyuv\include\libyuv\convert_from.h" />
+    <ClInclude Include="lib\libyuv\include\libyuv\convert_from_argb.h" />
+    <ClInclude Include="lib\libyuv\include\libyuv\cpu_id.h" />
+    <ClInclude Include="lib\libyuv\include\libyuv\format_conversion.h" />
+    <ClInclude Include="lib\libyuv\include\libyuv\mjpeg_decoder.h" />
+    <ClInclude Include="lib\libyuv\include\libyuv\planar_functions.h" />
+    <ClInclude Include="lib\libyuv\include\libyuv\rotate.h" />
+    <ClInclude Include="lib\libyuv\include\libyuv\rotate_argb.h" />
+    <ClInclude Include="lib\libyuv\include\libyuv\row.h" />
+    <ClInclude Include="lib\libyuv\include\libyuv\scale.h" />
+    <ClInclude Include="lib\libyuv\include\libyuv\scale_argb.h" />
+    <ClInclude Include="lib\libyuv\include\libyuv\version.h" />
+    <ClInclude Include="lib\libyuv\include\libyuv\video_common.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="lib\libyuv\source\compare.cc" />

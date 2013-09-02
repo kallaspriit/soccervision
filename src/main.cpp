@@ -169,11 +169,11 @@ int main(int argc, char* argv[]) {
 			);
 
 			std::cout << "@ ARGB > RGB: " << Util::timerEnd() << std::endl;
-			/*Util::timerStart();
+			Util::timerStart();
 
 			cameraWindow1->setImage(rgbBuffer, false);
 
-			std::cout << "@ Display: " << Util::timerEnd() << std::endl;*/
+			std::cout << "@ Display: " << Util::timerEnd() << std::endl;
 
 			std::cout << "  > camera 1 frame #" << frame->number << " @ " << frame->width << "x" << frame->height << ", " << fpsCounter.getFps() << "FPS" << (!frame->fresh ? " (not fresh)" : "") << std::endl;
 		}
