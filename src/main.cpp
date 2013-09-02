@@ -62,8 +62,19 @@ int main(int argc, char* argv[]) {
 
 	std::cout << "! Capturing frames" << std::endl;
 
-	unsigned char* argbBuffer = new unsigned char[1280 * 1024 * 4];
-	unsigned char* rgbBuffer = new unsigned char[1280 * 1024 * 3];
+	int width = 1280;
+	int height = 1024;
+	int strideY = width;
+	int strideU = (width + 1) / 2;
+	int strideV = (width + 1) / 2;
+
+	unsigned char* argbBuffer = new unsigned char[width * height * 4];
+	unsigned char* rgbBuffer = new unsigned char[width * height * 3];
+
+	unsigned char* dataY = new uint8[width * height];
+    unsigned char* dataU = new uint8[(width / 2) * (height / 2)];
+    unsigned char* dataV = new uint8[(width / 2) * (height / 2)];
+	unsigned char* dataYUYV = new uint8[width * height * 3];
 
 	const BaseCamera::Frame* frame = NULL;
 
@@ -86,6 +97,22 @@ int main(int argc, char* argv[]) {
 				continue;
 			}
 
+			Util::timerStart();
+
+			libyuv::BayerRGGBToI420(
+				frame->data,
+				frame->width,
+				dataY,
+				strideY,
+				dataU,
+				strideU,
+				dataV,
+				strideV,
+				frame->width,
+				frame->height
+			);
+
+			std::cout << "@ RGGB > I420: " << Util::timerEnd() << std::endl;
 			Util::timerStart();
 
 			libyuv::BayerRGGBToARGB(
