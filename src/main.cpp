@@ -42,7 +42,7 @@ int main(int argc, char* argv[]) {
 	int cameraSerial1 = 857735761;
 	int cameraSerial2 = 857769553;
 
-	if (!camera1.open(cameraSerial1) && !camera1.open(cameraSerial2)) {
+	if (!camera1.open(cameraSerial2) && !camera1.open(cameraSerial1)) {
 		std::cout << "- Opening camera 1 failed" << std::endl;
 	}
 
@@ -57,6 +57,7 @@ int main(int argc, char* argv[]) {
 	}
 
 	setupCamera(camera1);
+	setupCamera(camera2);
 
 	std::cout << "! Capturing frames" << std::endl;
 
