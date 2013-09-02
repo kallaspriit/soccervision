@@ -1,6 +1,7 @@
 #include "Gui.h"
 #include "XimeaCamera.h"
 #include "FpsCounter.h"
+#include "Util.h"
 #include <libyuv.h>
 
 #include <iostream>
@@ -83,6 +84,8 @@ int main(int argc, char* argv[]) {
 				continue;
 			}
 
+			double s = Util::millitime();
+
 			libyuv::BayerRGGBToARGB(
 				frame->data,
 				frame->width,
@@ -92,13 +95,24 @@ int main(int argc, char* argv[]) {
 				frame->height
 			);
 
+			std::cout << "RGGB > ARGB: " << (Util::millitime() - s) << std::endl;
+			s = Util::millitime();
+
 			libyuv::ARGBToRGB24(
 				argbBuffer, frame->width * 4,
 				rgbBuffer, frame->width * 3,
 				frame->width, frame->height
 			);
 
+			std::cout << "ARGB > RGB: " << (Util::millitime() - s) << std::endl;
+
+			s = Util::millitime();
+
 			cameraWindow1->setImage(rgbBuffer, false);
+
+			std::cout << "Display: " << (Util::millitime() - s) << std::endl;
+
+			std::cout << "  > camera 1 frame #" << frame->number << " @ " << frame->width << "x" << frame->height << ", " << fpsCounter.getFps() << "FPS" << (!frame->fresh ? " (not fresh)" : "") << std::endl;
 		}
 
 		// camera2
@@ -133,14 +147,14 @@ int main(int argc, char* argv[]) {
 			);
 
 			cameraWindow2->setImage(rgbBuffer, false);
+
+			std::cout << "  > camera 2 frame #" << frame->number << " @ " << frame->width << "x" << frame->height << ", " << fpsCounter.getFps() << "FPS" << (!frame->fresh ? " (not fresh)" : "") << std::endl;
 		}
 
 
 		gui.update();
 
 		fpsCounter.step();
-
-		std::cout << "  > frame #" << frame->number << " @ " << frame->width << "x" << frame->height << ", " << fpsCounter.getFps() << "FPS" << (!frame->fresh ? " (not fresh)" : "") << std::endl;
 	}
 
 	delete cameraWindow1;
