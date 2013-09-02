@@ -85,6 +85,7 @@ int main(int argc, char* argv[]) {
 			}
 
 			double s = Util::millitime();
+			Util::timerStart();
 
 			libyuv::BayerRGGBToARGB(
 				frame->data,
@@ -95,7 +96,7 @@ int main(int argc, char* argv[]) {
 				frame->height
 			);
 
-			std::cout << "RGGB > ARGB: " << (Util::millitime() - s) << std::endl;
+			std::cout << "RGGB > ARGB: " << (Util::millitime() - s) << ", " << Util::timerEnd() << std::endl;
 			s = Util::millitime();
 
 			libyuv::ARGBToRGB24(

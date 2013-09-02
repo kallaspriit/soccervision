@@ -20,6 +20,8 @@ class Util {
         static size_t strpos(const std::string& haystack, const std::string &needle);
         static bool replace(std::string& str, const std::string& from, const std::string& to);
 		static void sleep(int milliseconds) { Sleep(milliseconds); }
+		static void timerStart();
+		static double timerEnd();
 		static void correctCameraPoint(int& x, int& y);
 		static void confineField(float& x, float& y);
         //static std::string exec(const std::string& cmd);
@@ -71,6 +73,8 @@ class Util {
 
     private:
         static const std::string base64Chars;
+		static double queryPerformanceFrequency;
+		static __int64 timerStartCount;
 };
 
 #endif // UTIL_H

@@ -10,6 +10,9 @@
 #include <stdio.h>
 #include <Windows.h>
 
+double Util::queryPerformanceFrequency = 0;
+__int64 Util::timerStartCount = 0;
+
 void Util::yuyvToRgb(int width, int height, unsigned char *data, unsigned char *out) {
     int w2 = width / 2;
 
@@ -54,6 +57,23 @@ void Util::yuyvToRgb(int width, int height, unsigned char *data, unsigned char *
             out[i+5] = (unsigned char)(b);
         }
     }
+}
+
+void Util::timerStart() {
+	LARGE_INTEGER li;
+    QueryPerformanceFrequency(&li);
+
+    queryPerformanceFrequency = double(li.QuadPart)/1000.0;
+
+    QueryPerformanceCounter(&li);
+    timerStartCount = li.QuadPart;
+}
+
+double Util::timerEnd() {
+	LARGE_INTEGER li;
+    QueryPerformanceCounter(&li);
+
+    return double(li.QuadPart-timerStartCount) / queryPerformanceFrequency;
 }
 
 const std::string Util::base64Chars =
