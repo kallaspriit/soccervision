@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="libyuv">
+      <UniqueIdentifier>{3f722816-5db7-4323-bfb8-22d4ef089a6b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\DisplayWindow.h">
@@ -33,6 +36,9 @@
     <ClInclude Include="include\Util.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="lib\libyuv\include\libyuv.h">
+      <Filter>libyuv</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\DisplayWindow.cpp">
@@ -52,6 +58,69 @@
     </ClCompile>
     <ClCompile Include="src\Util.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\libyuv\source\compare.cc">
+      <Filter>libyuv</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\libyuv\source\compare_neon.cc">
+      <Filter>libyuv</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\libyuv\source\convert.cc">
+      <Filter>libyuv</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\libyuv\source\convert_argb.cc">
+      <Filter>libyuv</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\libyuv\source\convert_from.cc">
+      <Filter>libyuv</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\libyuv\source\convert_from_argb.cc">
+      <Filter>libyuv</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\libyuv\source\cpu_id.cc">
+      <Filter>libyuv</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\libyuv\source\format_conversion.cc">
+      <Filter>libyuv</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\libyuv\source\mjpeg_decoder.cc">
+      <Filter>libyuv</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\libyuv\source\planar_functions.cc">
+      <Filter>libyuv</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\libyuv\source\rotate.cc">
+      <Filter>libyuv</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\libyuv\source\rotate_argb.cc">
+      <Filter>libyuv</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\libyuv\source\rotate_neon.cc">
+      <Filter>libyuv</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\libyuv\source\row_common.cc">
+      <Filter>libyuv</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\libyuv\source\row_neon.cc">
+      <Filter>libyuv</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\libyuv\source\row_posix.cc">
+      <Filter>libyuv</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\libyuv\source\row_win.cc">
+      <Filter>libyuv</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\libyuv\source\scale.cc">
+      <Filter>libyuv</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\libyuv\source\scale_argb.cc">
+      <Filter>libyuv</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\libyuv\source\scale_neon.cc">
+      <Filter>libyuv</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\libyuv\source\video_common.cc">
+      <Filter>libyuv</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

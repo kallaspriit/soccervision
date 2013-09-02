@@ -52,7 +52,8 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>include;$(XIMEAROOT)\API;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>include;$(XIMEAROOT)\API;lib\libyuv\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -66,7 +67,8 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>include;$(XIMEAROOT)\API;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>include;$(XIMEAROOT)\API;lib\libyuv\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -83,8 +85,30 @@
     <ClInclude Include="include\XimeaCamera.h" />
     <ClInclude Include="include\DisplayWindow.h" />
     <ClInclude Include="include\Gui.h" />
+    <ClInclude Include="lib\libyuv\include\libyuv.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="lib\libyuv\source\compare.cc" />
+    <ClCompile Include="lib\libyuv\source\compare_neon.cc" />
+    <ClCompile Include="lib\libyuv\source\convert.cc" />
+    <ClCompile Include="lib\libyuv\source\convert_argb.cc" />
+    <ClCompile Include="lib\libyuv\source\convert_from.cc" />
+    <ClCompile Include="lib\libyuv\source\convert_from_argb.cc" />
+    <ClCompile Include="lib\libyuv\source\cpu_id.cc" />
+    <ClCompile Include="lib\libyuv\source\format_conversion.cc" />
+    <ClCompile Include="lib\libyuv\source\mjpeg_decoder.cc" />
+    <ClCompile Include="lib\libyuv\source\planar_functions.cc" />
+    <ClCompile Include="lib\libyuv\source\rotate.cc" />
+    <ClCompile Include="lib\libyuv\source\rotate_argb.cc" />
+    <ClCompile Include="lib\libyuv\source\rotate_neon.cc" />
+    <ClCompile Include="lib\libyuv\source\row_common.cc" />
+    <ClCompile Include="lib\libyuv\source\row_neon.cc" />
+    <ClCompile Include="lib\libyuv\source\row_posix.cc" />
+    <ClCompile Include="lib\libyuv\source\row_win.cc" />
+    <ClCompile Include="lib\libyuv\source\scale.cc" />
+    <ClCompile Include="lib\libyuv\source\scale_argb.cc" />
+    <ClCompile Include="lib\libyuv\source\scale_neon.cc" />
+    <ClCompile Include="lib\libyuv\source\video_common.cc" />
     <ClCompile Include="src\FpsCounter.cpp" />
     <ClCompile Include="src\Util.cpp" />
     <ClCompile Include="src\XimeaCamera.cpp" />

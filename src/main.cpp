@@ -1,6 +1,7 @@
 #include "Gui.h"
 #include "XimeaCamera.h"
 #include "FpsCounter.h"
+#include <libyuv.h>
 
 #include <iostream>
 
@@ -45,6 +46,9 @@ int main(int argc, char* argv[]) {
 
 	std::cout << "! Capturing frames" << std::endl;
 
+	unsigned char* argbBuffer = new unsigned char[1280 * 1024 * 4];
+	unsigned char* rgbBuffer = new unsigned char[1280 * 1024 * 3];
+
 	for (int i = 0; i < 60 * 10; i++) {
 		const BaseCamera::Frame* frame = camera.getFrame();
 
@@ -60,8 +64,24 @@ int main(int argc, char* argv[]) {
 			continue;
 		}
 
+		libyuv::BayerRGGBToARGB(
+			frame->data,
+			frame->width,
+			argbBuffer,
+			frame->width * 4,
+			frame->width,
+			frame->height
+		);
+
+		libyuv::ARGBToRGB24(
+			argbBuffer, frame->width * 4,
+			rgbBuffer, frame->width * 3,
+			frame->width, frame->height
+		);
+
 		//cameraWindow->setImage(frame->data);
-		//gui.update();
+		cameraWindow->setImage(rgbBuffer, false);
+		gui.update();
 
 		fpsCounter.step();
 
