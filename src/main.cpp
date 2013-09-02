@@ -84,7 +84,6 @@ int main(int argc, char* argv[]) {
 				continue;
 			}
 
-			double s = Util::millitime();
 			Util::timerStart();
 
 			libyuv::BayerRGGBToARGB(
@@ -96,8 +95,8 @@ int main(int argc, char* argv[]) {
 				frame->height
 			);
 
-			std::cout << "RGGB > ARGB: " << (Util::millitime() - s) << ", " << Util::timerEnd() << std::endl;
-			s = Util::millitime();
+			std::cout << "@ RGGB > ARGB: " << Util::timerEnd() << std::endl;
+			Util::timerStart();
 
 			libyuv::ARGBToRGB24(
 				argbBuffer, frame->width * 4,
@@ -105,13 +104,12 @@ int main(int argc, char* argv[]) {
 				frame->width, frame->height
 			);
 
-			std::cout << "ARGB > RGB: " << (Util::millitime() - s) << std::endl;
-
-			s = Util::millitime();
+			std::cout << "@ ARGB > RGB: " << Util::timerEnd() << std::endl;
+			/*Util::timerStart();
 
 			cameraWindow1->setImage(rgbBuffer, false);
 
-			std::cout << "Display: " << (Util::millitime() - s) << std::endl;
+			std::cout << "@ Display: " << Util::timerEnd() << std::endl;*/
 
 			std::cout << "  > camera 1 frame #" << frame->number << " @ " << frame->width << "x" << frame->height << ", " << fpsCounter.getFps() << "FPS" << (!frame->fresh ? " (not fresh)" : "") << std::endl;
 		}
@@ -147,7 +145,7 @@ int main(int argc, char* argv[]) {
 				frame->width, frame->height
 			);
 
-			cameraWindow2->setImage(rgbBuffer, false);
+			//cameraWindow2->setImage(rgbBuffer, false);
 
 			std::cout << "  > camera 2 frame #" << frame->number << " @ " << frame->width << "x" << frame->height << ", " << fpsCounter.getFps() << "FPS" << (!frame->fresh ? " (not fresh)" : "") << std::endl;
 		}
