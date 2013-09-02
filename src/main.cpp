@@ -78,7 +78,10 @@ int main(int argc, char* argv[]) {
 
 	const BaseCamera::Frame* frame = NULL;
 
-	for (int i = 0; i < 60 * 10; i++) {
+	//for (int i = 0; i < 60 * 10; i++) {
+	bool running = true;
+
+	while (running) {
 		// camera1
 		if (camera1.isAcquisitioning()) {
 			Util::timerStart();
