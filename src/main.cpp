@@ -70,7 +70,9 @@ int main(int argc, char* argv[]) {
 	for (int i = 0; i < 60 * 10; i++) {
 		// camera1
 		if (camera1.isAcquisitioning()) {
+			Util::timerStart();
 			frame = camera1.getFrame();
+			std::cout << "@ Get frame: " << Util::timerEnd() << std::endl;
 
 			if (frame == NULL) {
 				std::cout << "  > failed getting camera 1 frame" << std::endl;
