@@ -5,27 +5,7 @@
 
 #include <iostream>
 
-int main(int argc, char* argv[]) {
-	HWND consoleWindow = GetConsoleWindow();
-	HINSTANCE instance = GetModuleHandle(0);
-
-    std::cout << "-- Starting Up --" << std::endl;
-
-	Gui gui = Gui(instance);
-	FpsCounter fpsCounter = FpsCounter();
-	DisplayWindow* cameraWindow = gui.createWindow(1280, 1024, "Camera RGB");
-
-	XimeaCamera camera = XimeaCamera();
-
-	int cameraSerial1 = 857735761;
-	int cameraSerial2 = 857769553;
-
-	if (!camera.open(cameraSerial1) && !camera.open(cameraSerial2)) {
-		std::cout << "- Opening camera failed" << std::endl;
-
-		return 1;
-	}
-
+void setupCamera(XimeaCamera& camera) {
 	camera.setExposure(16000);
 	camera.setFormat(XI_RAW8);
 	camera.setAutoWhiteBalance(false);
@@ -43,44 +23,118 @@ int main(int argc, char* argv[]) {
 	std::cout << "  > Available bandwidth: " << camera.getAvailableBandwidth() << std::endl;
 
 	camera.startAcquisition();
+}
+
+int main(int argc, char* argv[]) {
+	HWND consoleWindow = GetConsoleWindow();
+	HINSTANCE instance = GetModuleHandle(0);
+
+    std::cout << "-- Starting Up --" << std::endl;
+
+	Gui gui = Gui(instance);
+	FpsCounter fpsCounter = FpsCounter();
+	DisplayWindow* cameraWindow1 = gui.createWindow(1280, 1024, "Camera 1 RGB");
+	DisplayWindow* cameraWindow2 = gui.createWindow(1280, 1024, "Camera 2 RGB");
+
+	XimeaCamera camera1 = XimeaCamera();
+	XimeaCamera camera2 = XimeaCamera();
+
+	int cameraSerial1 = 857735761;
+	int cameraSerial2 = 857769553;
+
+	if (!camera1.open(cameraSerial1) && !camera1.open(cameraSerial2)) {
+		std::cout << "- Opening camera 1 failed" << std::endl;
+	}
+
+	if (!camera2.open(cameraSerial1) && !camera2.open(cameraSerial2)) {
+		std::cout << "- Opening camera 2 failed" << std::endl;
+	}
+
+	if (!camera1.isOpened() && !camera2.isOpened()) {
+		std::cout << "- Opening both cameras failed, giving up" << std::endl;
+
+		return 1;
+	}
+
+	setupCamera(camera1);
 
 	std::cout << "! Capturing frames" << std::endl;
 
 	unsigned char* argbBuffer = new unsigned char[1280 * 1024 * 4];
 	unsigned char* rgbBuffer = new unsigned char[1280 * 1024 * 3];
 
+	const BaseCamera::Frame* frame = NULL;
+
 	for (int i = 0; i < 60 * 10; i++) {
-		const BaseCamera::Frame* frame = camera.getFrame();
+		// camera1
+		if (camera1.isAcquisitioning()) {
+			frame = camera1.getFrame();
 
-		if (frame == NULL) {
-			std::cout << "  > failed getting frame" << std::endl;
+			if (frame == NULL) {
+				std::cout << "  > failed getting camera 1 frame" << std::endl;
 
-			continue;
+				continue;
+			}
+
+			if (!frame->fresh) {
+				std::cout << "  > got old camera 1 frame" << std::endl;
+
+				continue;
+			}
+
+			libyuv::BayerRGGBToARGB(
+				frame->data,
+				frame->width,
+				argbBuffer,
+				frame->width * 4,
+				frame->width,
+				frame->height
+			);
+
+			libyuv::ARGBToRGB24(
+				argbBuffer, frame->width * 4,
+				rgbBuffer, frame->width * 3,
+				frame->width, frame->height
+			);
+
+			cameraWindow1->setImage(rgbBuffer, false);
 		}
 
-		if (!frame->fresh) {
-			std::cout << "  > got old frame" << std::endl;
+		// camera2
+		if (camera2.isAcquisitioning()) {
+			frame = camera2.getFrame();
 
-			continue;
+			if (frame == NULL) {
+				std::cout << "  > failed getting camera 2 frame" << std::endl;
+
+				continue;
+			}
+
+			if (!frame->fresh) {
+				std::cout << "  > got old camera 2 frame" << std::endl;
+
+				continue;
+			}
+
+			libyuv::BayerRGGBToARGB(
+				frame->data,
+				frame->width,
+				argbBuffer,
+				frame->width * 4,
+				frame->width,
+				frame->height
+			);
+
+			libyuv::ARGBToRGB24(
+				argbBuffer, frame->width * 4,
+				rgbBuffer, frame->width * 3,
+				frame->width, frame->height
+			);
+
+			cameraWindow2->setImage(rgbBuffer, false);
 		}
 
-		libyuv::BayerRGGBToARGB(
-			frame->data,
-			frame->width,
-			argbBuffer,
-			frame->width * 4,
-			frame->width,
-			frame->height
-		);
 
-		libyuv::ARGBToRGB24(
-			argbBuffer, frame->width * 4,
-			rgbBuffer, frame->width * 3,
-			frame->width, frame->height
-		);
-
-		//cameraWindow->setImage(frame->data);
-		cameraWindow->setImage(rgbBuffer, false);
 		gui.update();
 
 		fpsCounter.step();
@@ -88,7 +142,8 @@ int main(int argc, char* argv[]) {
 		std::cout << "  > frame #" << frame->number << " @ " << frame->width << "x" << frame->height << ", " << fpsCounter.getFps() << "FPS" << (!frame->fresh ? " (not fresh)" : "") << std::endl;
 	}
 
-	delete cameraWindow;
+	delete cameraWindow1;
+	delete cameraWindow2;
 
 	//camera.open(857735761);
 

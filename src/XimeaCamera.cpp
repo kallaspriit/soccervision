@@ -91,7 +91,7 @@ bool XimeaCamera::open(int serial) {
     return true;
 }
 
-const XimeaCamera::Frame* XimeaCamera::getFrame() {
+XimeaCamera::Frame* XimeaCamera::getFrame() {
 	if (!opened) {
 		return NULL;
 	}

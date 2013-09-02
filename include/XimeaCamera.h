@@ -16,10 +16,12 @@ public:
     ~XimeaCamera();
 
     bool open(int serial = 0);
+	bool isOpened() { return opened; };
+	bool isAcquisitioning() { return acquisitioning; };
 	void startAcquisition();
     void stopAcquisition();
     void close();
-    const Frame* getFrame();
+    Frame* getFrame();
     
     std::string getName() { return getStringParam(XI_PRM_DEVICE_NAME); }
     std::string getDeviceType() { return getStringParam(XI_PRM_DEVICE_TYPE); }
