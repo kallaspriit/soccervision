@@ -115,6 +115,41 @@ int main(int argc, char* argv[]) {
 			std::cout << "@ RGGB > I420: " << Util::timerEnd() << std::endl;
 			Util::timerStart();
 
+			int dstIndex = 0;
+			int yIndex = 0;
+			int dstStride = frame->width * 2;
+			int yStride = frame->width;
+			int uvStride = frame->width / 2;
+			int row = 0;
+			int pixelsInRow = 0;
+			int elementCount = (frame->width / 2) * (frame->height / 2);
+
+			for (int uvIndex = 0; uvIndex < elementCount; uvIndex++) {
+				dataYUYV[dstIndex]     = dataY[yIndex];
+				dataYUYV[dstIndex + 1] = dataU[uvIndex];
+				dataYUYV[dstIndex + 2] = dataY[yIndex + 1];
+				dataYUYV[dstIndex + 3] = dataV[uvIndex];
+
+				dataYUYV[dstIndex + dstStride]     = dataY[yIndex + yStride];
+				dataYUYV[dstIndex + dstStride + 1] = dataU[uvIndex];
+				dataYUYV[dstIndex + dstStride + 2] = dataY[yIndex + yStride + 1];
+				dataYUYV[dstIndex + dstStride + 3] = dataV[uvIndex];
+
+				dstIndex += 4;
+				yIndex += 2;
+				pixelsInRow += 2;
+
+				if (pixelsInRow == frame->width) {
+					row += 2;
+					yIndex = row * yStride;
+					dstIndex = row * dstStride;
+					pixelsInRow = 0;
+				}
+			}
+
+			std::cout << "@ I420 > YUYV: " << Util::timerEnd() << std::endl;
+			Util::timerStart();
+
 			libyuv::BayerRGGBToARGB(
 				frame->data,
 				frame->width,
@@ -144,7 +179,7 @@ int main(int argc, char* argv[]) {
 		}
 
 		// camera2
-		if (camera2.isAcquisitioning()) {
+		/*if (camera2.isAcquisitioning()) {
 			frame = camera2.getFrame();
 
 			if (frame == NULL) {
@@ -177,7 +212,7 @@ int main(int argc, char* argv[]) {
 			//cameraWindow2->setImage(rgbBuffer, false);
 
 			std::cout << "  > camera 2 frame #" << frame->number << " @ " << frame->width << "x" << frame->height << ", " << fpsCounter.getFps() << "FPS" << (!frame->fresh ? " (not fresh)" : "") << std::endl;
-		}
+		}*/
 
 
 		gui.update();
