@@ -91,6 +91,9 @@ int main(int argc, char* argv[]) {
 
 	//for (int i = 0; i < 60 * 10; i++) {
 	while (running) {
+
+		__int64 startTime = Util::timerStart();
+
 		// camera1
 		if (camera1.isAcquisitioning()) {
 
@@ -102,7 +105,7 @@ int main(int argc, char* argv[]) {
 				continue;
 			}
 
-			std::cout << "  > camera 1 frame #" << frame->number << " @ " << frame->width << "x" << frame->height << ", " << fpsCounter.getFps() << "FPS" << (!frame->fresh ? " (not fresh)" : "") << std::endl;
+			std::cout << "  > camera 1 frame #" << frame->number << " @ " << frame->width << "x" << frame->height << ", " << (!frame->fresh ? " (not fresh)" : "") << std::endl;
 
 			// RGGB to I420
 			Util::timerStart();
@@ -165,7 +168,7 @@ int main(int argc, char* argv[]) {
 				continue;
 			}
 
-			std::cout << "  > camera 2 frame #" << frame->number << " @ " << frame->width << "x" << frame->height << ", " << fpsCounter.getFps() << "FPS" << (!frame->fresh ? " (not fresh)" : "") << std::endl;
+			std::cout << "  > camera 2 frame #" << frame->number << " @ " << frame->width << "x" << frame->height << ", " << (!frame->fresh ? " (not fresh)" : "") << std::endl;
 
 			// RGGB to I420
 			Util::timerStart();
@@ -217,6 +220,8 @@ int main(int argc, char* argv[]) {
 			std::cout << "    - Display: " << Util::timerEnd() << std::endl;
 			*/
 		}
+
+		std::cout << "! Total time: " << Util::timerEnd(startTime) << ", " << fpsCounter.getFps() << "FPS" << std::endl << std::endl;
 
 		//gui.update(); // ADD BACK WHEN DISPLAYING SOMETHING
 
