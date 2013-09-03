@@ -122,6 +122,11 @@ int main(int argc, char* argv[]) {
 
 			// Process the frame with blobber
 			Util::timerStart();
+			blobber->processFrame((Blobber::Pixel*)dataYUYV);
+			std::cout << "    - Blobber process: " << Util::timerEnd() << std::endl;
+
+			// Classify the frame with blobber
+			Util::timerStart();
 			blobber->classify((Blobber::Rgb*)classificationBuffer, (Blobber::Pixel*)dataYUYV);
 			std::cout << "    - Blobber classify: " << Util::timerEnd() << std::endl;
 

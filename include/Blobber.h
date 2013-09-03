@@ -87,7 +87,14 @@ class Blobber {
             Rgb() : red(0), green(0), blue(0) {}
             Rgb(char red, char green, char blue) : red(red), green(green), blue(blue) {}
 
-            //unsigned char red, green, blue;
+            unsigned char red, green, blue;
+            //unsigned char blue, green, red;
+        };
+
+		struct Bgr {
+            Bgr() : red(0), green(0), blue(0) {}
+            Bgr(char red, char green, char blue) : red(red), green(green), blue(blue) {}
+
             unsigned char blue, green, red;
         };
 
