@@ -27,6 +27,10 @@ void setupCamera(XimeaCamera& camera) {
 	camera.startAcquisition();
 }
 
+/*void processCamera(XimeaCamera& camera, Blobber* blobber) {
+
+}*/
+
 int main(int argc, char* argv[]) {
 	HWND consoleWindow = GetConsoleWindow();
 	HINSTANCE instance = GetModuleHandle(0);
@@ -91,9 +95,7 @@ int main(int argc, char* argv[]) {
 		if (camera1.isAcquisitioning()) {
 
 			// get the frame
-			Util::timerStart();
 			frame = camera1.getFrame();
-			std::cout << "@ Get frame: " << Util::timerEnd() << std::endl;
 
 			// quit if got nothing
 			if (frame == NULL || !frame->fresh) {
@@ -153,7 +155,70 @@ int main(int argc, char* argv[]) {
 			*/
 		}
 
-		gui.update();
+		if (camera2.isAcquisitioning()) {
+
+			// get the frame
+			frame = camera2.getFrame();
+
+			// quit if got nothing
+			if (frame == NULL || !frame->fresh) {
+				continue;
+			}
+
+			std::cout << "  > camera 2 frame #" << frame->number << " @ " << frame->width << "x" << frame->height << ", " << fpsCounter.getFps() << "FPS" << (!frame->fresh ? " (not fresh)" : "") << std::endl;
+
+			// RGGB to I420
+			Util::timerStart();
+			ImageProcessor::bayerRGGBToI420(
+				frame->data,
+				dataY, dataU, dataV,
+				frame->width, frame->height
+			);
+			std::cout << "    - RGGB > I420: " << Util::timerEnd() << std::endl;
+
+			// I420 to YUYV
+			Util::timerStart();
+			ImageProcessor::I420ToYUYV(
+				dataY, dataU, dataV,
+				dataYUYV,
+				frame->width, frame->height
+			);
+			std::cout << "    - I420 > YUYV: " << Util::timerEnd() << std::endl;
+
+			// Process the frame with blobber
+			Util::timerStart();
+			blobber->processFrame((Blobber::Pixel*)dataYUYV);
+			std::cout << "    - Blobber process: " << Util::timerEnd() << " (" << blobber->getBlobCount("ball") << " ball blobs)" << std::endl;
+
+			/*
+			// Classify the frame with blobber
+			Util::timerStart();
+			blobber->classify((Blobber::Rgb*)classificationBuffer, (Blobber::Pixel*)dataYUYV);
+			std::cout << "    - Blobber classify: " << Util::timerEnd() << std::endl;
+
+			// YUYV to ARGB
+			Util::timerStart();
+			ImageProcessor::YUYVToARGB(dataYUYV, argbBuffer, frame->width, frame->height);
+			std::cout << "    - YUYV > ARGB: " << Util::timerEnd() << std::endl;
+
+			// ARGB to RGB24
+			Util::timerStart();
+			ImageProcessor::ARGBToRGB24(
+				argbBuffer,
+				rgbBuffer,
+				frame->width, frame->height
+			);
+			std::cout << "    - ARGB > RGB: " << Util::timerEnd() << std::endl;
+
+			// Display
+			Util::timerStart();
+			//cameraWindow1->setImage(rgbBuffer, false);
+			cameraWindow1->setImage(classificationBuffer, false);
+			std::cout << "    - Display: " << Util::timerEnd() << std::endl;
+			*/
+		}
+
+		//gui.update(); // ADD BACK WHEN DISPLAYING SOMETHING
 
 		fpsCounter.step();
 	}

@@ -59,7 +59,7 @@ void Util::yuyvToRgb(int width, int height, unsigned char *data, unsigned char *
     }
 }
 
-void Util::timerStart() {
+__int64 Util::timerStart() {
 	LARGE_INTEGER li;
     QueryPerformanceFrequency(&li);
 
@@ -67,13 +67,15 @@ void Util::timerStart() {
 
     QueryPerformanceCounter(&li);
     timerStartCount = li.QuadPart;
+
+	return li.QuadPart;
 }
 
-double Util::timerEnd() {
+double Util::timerEnd(__int64 startTime) {
 	LARGE_INTEGER li;
     QueryPerformanceCounter(&li);
 
-    return double(li.QuadPart-timerStartCount) / queryPerformanceFrequency;
+    return double(li.QuadPart - (startTime != -1 ? startTime : timerStartCount)) / queryPerformanceFrequency;
 }
 
 const std::string Util::base64Chars =
