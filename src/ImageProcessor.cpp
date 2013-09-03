@@ -36,7 +36,7 @@ void ImageProcessor::I420ToYUYV(unsigned char* inputY, unsigned char* inputU, un
 }
 
 void ImageProcessor::YUYVToARGB(unsigned char* input, unsigned char* output, int width, int height) {
-	int inputStride = width;
+	int inputStride = width * 2;
 	int outputStride = width * 4;
 
 	libyuv::YUY2ToARGB(
