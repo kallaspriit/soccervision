@@ -82,6 +82,7 @@
   <ItemGroup>
     <ClInclude Include="include\BaseCamera.h" />
     <ClInclude Include="include\FpsCounter.h" />
+    <ClInclude Include="include\ImageProcessor.h" />
     <ClInclude Include="include\Util.h" />
     <ClInclude Include="include\XimeaCamera.h" />
     <ClInclude Include="include\DisplayWindow.h" />
@@ -128,6 +129,7 @@
     <ClCompile Include="lib\libyuv\source\scale_neon.cc" />
     <ClCompile Include="lib\libyuv\source\video_common.cc" />
     <ClCompile Include="src\FpsCounter.cpp" />
+    <ClCompile Include="src\ImageProcessor.cpp" />
     <ClCompile Include="src\Util.cpp" />
     <ClCompile Include="src\XimeaCamera.cpp" />
     <ClCompile Include="src\DisplayWindow.cpp" />

@@ -90,6 +90,9 @@
     <ClInclude Include="lib\libyuv\include\libyuv\video_common.h">
       <Filter>libyuv</Filter>
     </ClInclude>
+    <ClInclude Include="include\ImageProcessor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\DisplayWindow.cpp">
@@ -172,6 +175,9 @@
     </ClCompile>
     <ClCompile Include="lib\libyuv\source\video_common.cc">
       <Filter>libyuv</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ImageProcessor.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

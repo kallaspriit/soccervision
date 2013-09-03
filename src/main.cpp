@@ -1,5 +1,6 @@
 #include "Gui.h"
 #include "XimeaCamera.h"
+#include "ImageProcessor.h"
 #include "FpsCounter.h"
 #include "Util.h"
 #include <libyuv.h>
@@ -102,7 +103,13 @@ int main(int argc, char* argv[]) {
 
 			Util::timerStart();
 
-			libyuv::BayerRGGBToI420(
+			ImageProcessor::bayerRGGBToI420(
+				frame->data,
+				dataY, dataU, dataV,
+				frame->width, frame->height
+			);
+
+			/*libyuv::BayerRGGBToI420(
 				frame->data,
 				frame->width,
 				dataY,
@@ -113,12 +120,18 @@ int main(int argc, char* argv[]) {
 				strideV,
 				frame->width,
 				frame->height
-			);
+			);*/
 
 			std::cout << "@ RGGB > I420: " << Util::timerEnd() << std::endl;
 			Util::timerStart();
 
-			int dstIndex = 0;
+			ImageProcessor::I420ToYUYV(
+				dataY, dataU, dataV,
+				dataYUYV,
+				frame->width, frame->height
+			);
+
+			/*int dstIndex = 0;
 			int yIndex = 0;
 			int dstStride = frame->width * 2;
 			int yStride = frame->width;
@@ -148,10 +161,15 @@ int main(int argc, char* argv[]) {
 					dstIndex = row * dstStride;
 					pixelsInRow = 0;
 				}
-			}
+			}*/
 
 			std::cout << "@ I420 > YUYV: " << Util::timerEnd() << std::endl;
+
 			Util::timerStart();
+			ImageProcessor::YUYVToARGB(dataYUYV, argbBuffer, frame->width, frame->height);
+			std::cout << "@ YUYV > ARGB: " << Util::timerEnd() << std::endl;
+
+			/*Util::timerStart();
 
 			libyuv::BayerRGGBToARGB(
 				frame->data,
@@ -162,12 +180,12 @@ int main(int argc, char* argv[]) {
 				frame->height
 			);
 
-			std::cout << "@ RGGB > ARGB: " << Util::timerEnd() << std::endl;
+			std::cout << "@ RGGB > ARGB: " << Util::timerEnd() << std::endl;*/
 			Util::timerStart();
 
-			libyuv::ARGBToRGB24(
-				argbBuffer, frame->width * 4,
-				rgbBuffer, frame->width * 3,
+			ImageProcessor::ARGBToRGB24(
+				argbBuffer,
+				rgbBuffer,
 				frame->width, frame->height
 			);
 
