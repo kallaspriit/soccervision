@@ -48,7 +48,7 @@ int main(int argc, char* argv[]) {
 	Blobber* blobber = new Blobber();
 	blobber->initialize(width, height);
 	blobber->loadOptions("config/blobber.cfg");
-	//blobber->enable(BLOBBER_DENSITY_MERGE);
+	//blobber->enable(BLOBBER_DENSITY_MERGE); // somewhat expensive..
 
 	int cameraSerial1 = 857735761;
 	int cameraSerial2 = 857769553;
@@ -68,12 +68,13 @@ int main(int argc, char* argv[]) {
 	}
 
 	setupCamera(camera1);
-	setupCamera(camera2);
+	//setupCamera(camera2);
 
 	std::cout << "! Capturing frames" << std::endl;
 
 	unsigned char* argbBuffer = new unsigned char[width * height * 4];
 	unsigned char* rgbBuffer = new unsigned char[width * height * 3];
+	unsigned char* classificationBuffer = new unsigned char[width * height * 3];
 
 	unsigned char* dataY = new uint8[width * height];
     unsigned char* dataU = new uint8[(width / 2) * (height / 2)];
@@ -82,9 +83,9 @@ int main(int argc, char* argv[]) {
 
 	const BaseCamera::Frame* frame = NULL;
 
-	//for (int i = 0; i < 60 * 10; i++) {
 	bool running = true;
 
+	//for (int i = 0; i < 60 * 10; i++) {
 	while (running) {
 		// camera1
 		if (camera1.isAcquisitioning()) {
@@ -119,6 +120,11 @@ int main(int argc, char* argv[]) {
 			);
 			std::cout << "    - I420 > YUYV: " << Util::timerEnd() << std::endl;
 
+			// Process the frame with blobber
+			Util::timerStart();
+			blobber->classify((Blobber::Rgb*)classificationBuffer, (Blobber::Pixel*)dataYUYV);
+			std::cout << "    - Blobber classify: " << Util::timerEnd() << std::endl;
+
 			// YUYV to ARGB
 			Util::timerStart();
 			ImageProcessor::YUYVToARGB(dataYUYV, argbBuffer, frame->width, frame->height);
@@ -133,15 +139,10 @@ int main(int argc, char* argv[]) {
 			);
 			std::cout << "    - ARGB > RGB: " << Util::timerEnd() << std::endl;
 
-			// Process the frame with blobber
-			Util::timerStart();
-			blobber->processFrame((Blobber::Pixel*)dataYUYV);
-			std::cout << "    - Blobber process: " << Util::timerEnd() << std::endl;
-
-
 			// Display
 			Util::timerStart();
-			cameraWindow1->setImage(rgbBuffer, false);
+			//cameraWindow1->setImage(rgbBuffer, false);
+			cameraWindow1->setImage(classificationBuffer, false);
 			std::cout << "    - Display: " << Util::timerEnd() << std::endl;
 		}
 
