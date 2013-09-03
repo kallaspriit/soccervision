@@ -123,8 +123,9 @@ int main(int argc, char* argv[]) {
 			// Process the frame with blobber
 			Util::timerStart();
 			blobber->processFrame((Blobber::Pixel*)dataYUYV);
-			std::cout << "    - Blobber process: " << Util::timerEnd() << std::endl;
+			std::cout << "    - Blobber process: " << Util::timerEnd() << " (" << blobber->getBlobCount("ball") << " ball blobs)" << std::endl;
 
+			/*
 			// Classify the frame with blobber
 			Util::timerStart();
 			blobber->classify((Blobber::Rgb*)classificationBuffer, (Blobber::Pixel*)dataYUYV);
@@ -149,6 +150,7 @@ int main(int argc, char* argv[]) {
 			//cameraWindow1->setImage(rgbBuffer, false);
 			cameraWindow1->setImage(classificationBuffer, false);
 			std::cout << "    - Display: " << Util::timerEnd() << std::endl;
+			*/
 		}
 
 		gui.update();
