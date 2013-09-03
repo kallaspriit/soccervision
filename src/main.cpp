@@ -92,7 +92,7 @@ int main(int argc, char* argv[]) {
 	//for (int i = 0; i < 60 * 10; i++) {
 	while (running) {
 
-		__int64 startTime = Util::timerStart();
+		//__int64 startTime = Util::timerStart();
 
 		// camera1
 		if (camera1.isAcquisitioning()) {
@@ -227,7 +227,8 @@ int main(int argc, char* argv[]) {
 			*/
 		}
 
-		std::cout << "! Total time: " << Util::timerEnd(startTime) << ", " << fpsCounter.getFps() << "FPS" << std::endl << std::endl;
+		//std::cout << "! Total time: " << Util::timerEnd(startTime) << ", " << fpsCounter.getFps() << "FPS" << std::endl << std::endl;
+		std::cout << "! " << fpsCounter.getFps() << "FPS" << std::endl << std::endl;
 
 		//gui.update(); // ADD BACK WHEN DISPLAYING SOMETHING
 
