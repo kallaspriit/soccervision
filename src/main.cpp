@@ -98,40 +98,40 @@ int main(int argc, char* argv[]) {
 		if (camera1.isAcquisitioning()) {
 
 			// get the frame
-			Util::timerStart();
+			//Util::timerStart();
 			frame = camera1.getFrame();
-			double getFrameTime = Util::timerEnd();
+			//double getFrameTime = Util::timerEnd();
 
 			// quit if got nothing
 			if (frame == NULL || !frame->fresh) {
 				continue;
 			}
 
-			std::cout << "> camera 1 frame #" << frame->number << " @ " << frame->width << "x" << frame->height << ", " << (!frame->fresh ? " (not fresh)" : "") << std::endl;
-			std::cout << "  - Fetch image: " << getFrameTime << std::endl;
+			//std::cout << "> camera 1 frame #" << frame->number << " @ " << frame->width << "x" << frame->height << ", " << (!frame->fresh ? " (not fresh)" : "") << std::endl;
+			//std::cout << "  - Fetch image: " << getFrameTime << std::endl;
 
 			// RGGB to I420
-			Util::timerStart();
+			//Util::timerStart();
 			ImageProcessor::bayerRGGBToI420(
 				frame->data,
 				dataY, dataU, dataV,
 				frame->width, frame->height
 			);
-			std::cout << "  - RGGB > I420: " << Util::timerEnd() << std::endl;
+			//std::cout << "  - RGGB > I420: " << Util::timerEnd() << std::endl;
 
 			// I420 to YUYV
-			Util::timerStart();
+			//Util::timerStart();
 			ImageProcessor::I420ToYUYV(
 				dataY, dataU, dataV,
 				dataYUYV,
 				frame->width, frame->height
 			);
-			std::cout << "  - I420 > YUYV: " << Util::timerEnd() << std::endl;
+			//std::cout << "  - I420 > YUYV: " << Util::timerEnd() << std::endl;
 
 			// Process the frame with blobber
-			Util::timerStart();
+			//Util::timerStart();
 			blobber->processFrame((Blobber::Pixel*)dataYUYV);
-			std::cout << "  - Process:     " << Util::timerEnd() << " (" << blobber->getBlobCount("ball") << " ball blobs)" << std::endl;
+			//std::cout << "  - Process:     " << Util::timerEnd() << " (" << blobber->getBlobCount("ball") << " ball blobs)" << std::endl;
 
 			/*
 			// Classify the frame with blobber
@@ -164,40 +164,40 @@ int main(int argc, char* argv[]) {
 		if (camera2.isAcquisitioning()) {
 
 			// get the frame
-			Util::timerStart();
+			//Util::timerStart();
 			frame = camera2.getFrame();
-			double getFrameTime = Util::timerEnd();
+			//double getFrameTime = Util::timerEnd();
 
 			// quit if got nothing
 			if (frame == NULL || !frame->fresh) {
 				continue;
 			}
 
-			std::cout << "> camera 2 frame #" << frame->number << " @ " << frame->width << "x" << frame->height << ", " << (!frame->fresh ? " (not fresh)" : "") << std::endl;
-			std::cout << "  - Fetch image: " << getFrameTime << std::endl;
+			//std::cout << "> camera 2 frame #" << frame->number << " @ " << frame->width << "x" << frame->height << ", " << (!frame->fresh ? " (not fresh)" : "") << std::endl;
+			//std::cout << "  - Fetch image: " << getFrameTime << std::endl;
 
 			// RGGB to I420
-			Util::timerStart();
+			//Util::timerStart();
 			ImageProcessor::bayerRGGBToI420(
 				frame->data,
 				dataY, dataU, dataV,
 				frame->width, frame->height
 			);
-			std::cout << "  - RGGB > I420: " << Util::timerEnd() << std::endl;
+			//std::cout << "  - RGGB > I420: " << Util::timerEnd() << std::endl;
 
 			// I420 to YUYV
-			Util::timerStart();
+			//Util::timerStart();
 			ImageProcessor::I420ToYUYV(
 				dataY, dataU, dataV,
 				dataYUYV,
 				frame->width, frame->height
 			);
-			std::cout << "  - I420 > YUYV: " << Util::timerEnd() << std::endl;
+			//std::cout << "  - I420 > YUYV: " << Util::timerEnd() << std::endl;
 
 			// Process the frame with blobber
-			Util::timerStart();
+			//Util::timerStart();
 			blobber->processFrame((Blobber::Pixel*)dataYUYV);
-			std::cout << "  - Process:     " << Util::timerEnd() << " (" << blobber->getBlobCount("ball") << " ball blobs)" << std::endl;
+			//std::cout << "  - Process:     " << Util::timerEnd() << " (" << blobber->getBlobCount("ball") << " ball blobs)" << std::endl;
 
 			/*
 			// Classify the frame with blobber
