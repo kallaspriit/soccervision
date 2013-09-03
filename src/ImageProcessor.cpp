@@ -23,7 +23,7 @@ void ImageProcessor::I420ToYUYV(unsigned char* inputY, unsigned char* inputU, un
 	int strideY = width;
 	int strideU = (width + 1) / 2;
 	int strideV = (width + 1) / 2;
-	int outputStride = width;
+	int outputStride = width * 2;
 	
 	libyuv::I420ToYUY2(
 		inputY, strideY,
