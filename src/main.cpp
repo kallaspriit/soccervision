@@ -98,14 +98,17 @@ int main(int argc, char* argv[]) {
 		if (camera1.isAcquisitioning()) {
 
 			// get the frame
+			Util::timerStart();
 			frame = camera1.getFrame();
+			double getFrameTime = Util::timerEnd();
 
 			// quit if got nothing
 			if (frame == NULL || !frame->fresh) {
 				continue;
 			}
 
-			std::cout << "  > camera 1 frame #" << frame->number << " @ " << frame->width << "x" << frame->height << ", " << (!frame->fresh ? " (not fresh)" : "") << std::endl;
+			std::cout << "> camera 1 frame #" << frame->number << " @ " << frame->width << "x" << frame->height << ", " << (!frame->fresh ? " (not fresh)" : "") << std::endl;
+			std::cout << "  - Fetch image: " << getFrameTime << std::endl;
 
 			// RGGB to I420
 			Util::timerStart();
@@ -114,7 +117,7 @@ int main(int argc, char* argv[]) {
 				dataY, dataU, dataV,
 				frame->width, frame->height
 			);
-			std::cout << "    - RGGB > I420: " << Util::timerEnd() << std::endl;
+			std::cout << "  - RGGB > I420: " << Util::timerEnd() << std::endl;
 
 			// I420 to YUYV
 			Util::timerStart();
@@ -123,23 +126,23 @@ int main(int argc, char* argv[]) {
 				dataYUYV,
 				frame->width, frame->height
 			);
-			std::cout << "    - I420 > YUYV: " << Util::timerEnd() << std::endl;
+			std::cout << "  - I420 > YUYV: " << Util::timerEnd() << std::endl;
 
 			// Process the frame with blobber
 			Util::timerStart();
 			blobber->processFrame((Blobber::Pixel*)dataYUYV);
-			std::cout << "    - Blobber process: " << Util::timerEnd() << " (" << blobber->getBlobCount("ball") << " ball blobs)" << std::endl;
+			std::cout << "  - Process:     " << Util::timerEnd() << " (" << blobber->getBlobCount("ball") << " ball blobs)" << std::endl;
 
 			/*
 			// Classify the frame with blobber
 			Util::timerStart();
 			blobber->classify((Blobber::Rgb*)classificationBuffer, (Blobber::Pixel*)dataYUYV);
-			std::cout << "    - Blobber classify: " << Util::timerEnd() << std::endl;
+			std::cout << "  - Blobber classify: " << Util::timerEnd() << std::endl;
 
 			// YUYV to ARGB
 			Util::timerStart();
 			ImageProcessor::YUYVToARGB(dataYUYV, argbBuffer, frame->width, frame->height);
-			std::cout << "    - YUYV > ARGB: " << Util::timerEnd() << std::endl;
+			std::cout << "  - YUYV > ARGB: " << Util::timerEnd() << std::endl;
 
 			// ARGB to RGB24
 			Util::timerStart();
@@ -148,7 +151,7 @@ int main(int argc, char* argv[]) {
 				rgbBuffer,
 				frame->width, frame->height
 			);
-			std::cout << "    - ARGB > RGB: " << Util::timerEnd() << std::endl;
+			std::cout << "  - ARGB > RGB: " << Util::timerEnd() << std::endl;
 
 			// Display
 			Util::timerStart();
@@ -161,14 +164,17 @@ int main(int argc, char* argv[]) {
 		if (camera2.isAcquisitioning()) {
 
 			// get the frame
+			Util::timerStart();
 			frame = camera2.getFrame();
+			double getFrameTime = Util::timerEnd();
 
 			// quit if got nothing
 			if (frame == NULL || !frame->fresh) {
 				continue;
 			}
 
-			std::cout << "  > camera 2 frame #" << frame->number << " @ " << frame->width << "x" << frame->height << ", " << (!frame->fresh ? " (not fresh)" : "") << std::endl;
+			std::cout << "> camera 2 frame #" << frame->number << " @ " << frame->width << "x" << frame->height << ", " << (!frame->fresh ? " (not fresh)" : "") << std::endl;
+			std::cout << "  - Fetch image: " << getFrameTime << std::endl;
 
 			// RGGB to I420
 			Util::timerStart();
@@ -177,7 +183,7 @@ int main(int argc, char* argv[]) {
 				dataY, dataU, dataV,
 				frame->width, frame->height
 			);
-			std::cout << "    - RGGB > I420: " << Util::timerEnd() << std::endl;
+			std::cout << "  - RGGB > I420: " << Util::timerEnd() << std::endl;
 
 			// I420 to YUYV
 			Util::timerStart();
@@ -186,23 +192,23 @@ int main(int argc, char* argv[]) {
 				dataYUYV,
 				frame->width, frame->height
 			);
-			std::cout << "    - I420 > YUYV: " << Util::timerEnd() << std::endl;
+			std::cout << "  - I420 > YUYV: " << Util::timerEnd() << std::endl;
 
 			// Process the frame with blobber
 			Util::timerStart();
 			blobber->processFrame((Blobber::Pixel*)dataYUYV);
-			std::cout << "    - Blobber process: " << Util::timerEnd() << " (" << blobber->getBlobCount("ball") << " ball blobs)" << std::endl;
+			std::cout << "  - Process:     " << Util::timerEnd() << " (" << blobber->getBlobCount("ball") << " ball blobs)" << std::endl;
 
 			/*
 			// Classify the frame with blobber
 			Util::timerStart();
 			blobber->classify((Blobber::Rgb*)classificationBuffer, (Blobber::Pixel*)dataYUYV);
-			std::cout << "    - Blobber classify: " << Util::timerEnd() << std::endl;
+			std::cout << "  - Blobber classify: " << Util::timerEnd() << std::endl;
 
 			// YUYV to ARGB
 			Util::timerStart();
 			ImageProcessor::YUYVToARGB(dataYUYV, argbBuffer, frame->width, frame->height);
-			std::cout << "    - YUYV > ARGB: " << Util::timerEnd() << std::endl;
+			std::cout << "  - YUYV > ARGB: " << Util::timerEnd() << std::endl;
 
 			// ARGB to RGB24
 			Util::timerStart();
@@ -211,7 +217,7 @@ int main(int argc, char* argv[]) {
 				rgbBuffer,
 				frame->width, frame->height
 			);
-			std::cout << "    - ARGB > RGB: " << Util::timerEnd() << std::endl;
+			std::cout << "  - ARGB > RGB: " << Util::timerEnd() << std::endl;
 
 			// Display
 			Util::timerStart();
