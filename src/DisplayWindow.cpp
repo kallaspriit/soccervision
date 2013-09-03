@@ -4,7 +4,7 @@
 #include <iostream>
 
 DisplayWindow::DisplayWindow(HINSTANCE instance, int width, int height, std::string name, Gui* gui) : instance(instance), gui(gui), width(width), height(height), name(name), firstDraw(true) {
-    hWnd = CreateWindowEx(
+    windowHandle = CreateWindowEx(
 		NULL,
 		"Window Class",
 		name.c_str(),
@@ -19,7 +19,7 @@ DisplayWindow::DisplayWindow(HINSTANCE instance, int width, int height, std::str
 		(void*)this
 	);
 
-	if (!hWnd) {
+	if (!windowHandle) {
 		int nResult = GetLastError();
 
 		MessageBox(NULL,
@@ -28,35 +28,35 @@ DisplayWindow::DisplayWindow(HINSTANCE instance, int width, int height, std::str
 			MB_ICONERROR);
 	}
 
-	info.bmiHeader.biSize = sizeof(info.bmiHeader);
-	info.bmiHeader.biWidth = width;
-	info.bmiHeader.biHeight = height;
-	info.bmiHeader.biPlanes = 1;
-	info.bmiHeader.biBitCount = 24;
-	info.bmiHeader.biCompression = BI_RGB;
-	info.bmiHeader.biSizeImage = 0;
-	info.bmiHeader.biClrUsed = 0;
-	info.bmiHeader.biClrImportant = 0;
+	bitmapInfo.bmiHeader.biSize = sizeof(bitmapInfo.bmiHeader);
+	bitmapInfo.bmiHeader.biWidth = width;
+	bitmapInfo.bmiHeader.biHeight = height;
+	bitmapInfo.bmiHeader.biPlanes = 1;
+	bitmapInfo.bmiHeader.biBitCount = 24;
+	bitmapInfo.bmiHeader.biCompression = BI_RGB;
+	bitmapInfo.bmiHeader.biSizeImage = 0;
+	bitmapInfo.bmiHeader.biClrUsed = 0;
+	bitmapInfo.bmiHeader.biClrImportant = 0;
 
-	hdc = GetDC(hWnd);
-	cDC = CreateCompatibleDC(hdc);
-	hBitmap = CreateCompatibleBitmap(hdc, width, height);
+	windowDeviceHandle = GetDC(windowHandle);
+	bitmapDeviceHandle = CreateCompatibleDC(windowDeviceHandle);
+	bitmap = CreateCompatibleBitmap(windowDeviceHandle, width, height);
 }
 
 DisplayWindow::~DisplayWindow() {
-	DeleteObject(SelectObject(cDC, hBitmap));
-	DeleteDC(cDC);
-	DeleteObject(hBitmap);
+	DeleteObject(SelectObject(bitmapDeviceHandle, bitmap));
+	DeleteDC(bitmapDeviceHandle);
+	DeleteObject(bitmap);
 }
 
 void DisplayWindow::setImage(unsigned char* image, bool rgb2bgr) {
 	if (firstDraw) {
-		ShowWindow(hWnd, SW_SHOWNORMAL);
+		ShowWindow(windowHandle, SW_SHOWNORMAL);
 
 		firstDraw = false;
 	}
 
-	/*if (!IsWindowVisible(hWnd)) {
+	/*if (!IsWindowVisible(windowHandle)) {
 		std::cout << "! Window not visible" << std::endl;
 
 		return;
@@ -73,15 +73,15 @@ void DisplayWindow::setImage(unsigned char* image, bool rgb2bgr) {
 		}
 	}
 
-    SetDIBits (hdc, hBitmap, 0, height, image, &info, DIB_RGB_COLORS);
-	hBitmap = (HBITMAP) SelectObject (cDC, hBitmap);
-	//BitBlt (hdc, 0, 0, width, height, cDC, 0, 0, SRCCOPY);
-	StretchBlt(hdc, 0, height, width, -height, cDC, 0, 0, width, height, SRCCOPY);
+    SetDIBits(windowDeviceHandle, bitmap, 0, height, image, &bitmapInfo, DIB_RGB_COLORS);
+	bitmap = (HBITMAP) SelectObject(bitmapDeviceHandle, bitmap);
+	//BitBlt (windowDeviceHandle, 0, 0, width, height, bitmapDeviceHandle, 0, 0, SRCCOPY);
+	StretchBlt(windowDeviceHandle, 0, height, width, -height, bitmapDeviceHandle, 0, 0, width, height, SRCCOPY);
 
-	//RedrawWindow(hWnd, NULL, NULL, RDW_INVALIDATE);
+	//RedrawWindow(windowHandle, NULL, NULL, RDW_INVALIDATE);
 }
 
-LRESULT DisplayWindow::handleMessage(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
+LRESULT DisplayWindow::handleMessage(HWND windowHandle, UINT msg, WPARAM wParam, LPARAM lParam) {
 	int x, y;
 
 	switch(msg) {
@@ -95,7 +95,7 @@ LRESULT DisplayWindow::handleMessage(HWND hWnd, UINT msg, WPARAM wParam, LPARAM 
 		break;
 
 		default:
-			return DefWindowProc(hWnd, msg, wParam, lParam);
+			return DefWindowProc(windowHandle, msg, wParam, lParam);
 		break;
 	}
 
