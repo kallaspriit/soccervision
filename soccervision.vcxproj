@@ -81,6 +81,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="include\BaseCamera.h" />
+    <ClInclude Include="include\Blobber.h" />
     <ClInclude Include="include\FpsCounter.h" />
     <ClInclude Include="include\ImageProcessor.h" />
     <ClInclude Include="include\Util.h" />
@@ -128,6 +129,7 @@
     <ClCompile Include="lib\libyuv\source\scale_argb.cc" />
     <ClCompile Include="lib\libyuv\source\scale_neon.cc" />
     <ClCompile Include="lib\libyuv\source\video_common.cc" />
+    <ClCompile Include="src\Blobber.cpp" />
     <ClCompile Include="src\FpsCounter.cpp" />
     <ClCompile Include="src\ImageProcessor.cpp" />
     <ClCompile Include="src\Util.cpp" />

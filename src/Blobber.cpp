@@ -835,7 +835,8 @@ bool Blobber::loadOptions(std::string filename) {
             color->color.red = red;
             color->color.green= green;
             color->color.blue = blue;
-            color->name  = strdup(str);
+            //color->name = strdup(str);
+            color->name = _strdup(str);
             color->mergeThreshold = mergeThreshold;
             color->expectedBlobs = expectedBlobs;
 
@@ -985,7 +986,8 @@ void Blobber::addColor(
     colors[colorCount].color.red = red;
     colors[colorCount].color.green = green;
     colors[colorCount].color.blue = blue;
-    colors[colorCount].name = strdup(name.c_str());
+    //colors[colorCount].name = strdup(name.c_str());
+    colors[colorCount].name = _strdup(name.c_str());
     colors[colorCount].mergeThreshold = mergeThreshold;
     colors[colorCount].expectedBlobs = expectedBlobs;
     colors[colorCount].yLow = yLow;

@@ -1,6 +1,7 @@
 #include "Gui.h"
 #include "XimeaCamera.h"
 #include "ImageProcessor.h"
+#include "Blobber.h"
 #include "FpsCounter.h"
 #include "Util.h"
 
@@ -32,6 +33,10 @@ int main(int argc, char* argv[]) {
 
     std::cout << "-- Starting Up --" << std::endl;
 
+	// config
+	int width = 1280;
+	int height = 1024;
+
 	Gui gui = Gui(instance);
 	FpsCounter fpsCounter = FpsCounter();
 	DisplayWindow* cameraWindow1 = gui.createWindow(1280, 1024, "Camera 1 RGB");
@@ -39,6 +44,11 @@ int main(int argc, char* argv[]) {
 
 	XimeaCamera camera1 = XimeaCamera();
 	XimeaCamera camera2 = XimeaCamera();
+
+	Blobber blobber = Blobber();
+	blobber.initialize(width, height);
+	blobber.loadOptions("config/blobber.cfg");
+	blobber.enable(BLOBBER_DENSITY_MERGE);
 
 	int cameraSerial1 = 857735761;
 	int cameraSerial2 = 857769553;
@@ -61,12 +71,6 @@ int main(int argc, char* argv[]) {
 	setupCamera(camera2);
 
 	std::cout << "! Capturing frames" << std::endl;
-
-	int width = 1280;
-	int height = 1024;
-	int strideY = width;
-	int strideU = (width + 1) / 2;
-	int strideV = (width + 1) / 2;
 
 	unsigned char* argbBuffer = new unsigned char[width * height * 4];
 	unsigned char* rgbBuffer = new unsigned char[width * height * 3];
@@ -128,6 +132,11 @@ int main(int argc, char* argv[]) {
 				frame->width, frame->height
 			);
 			std::cout << "    - ARGB > RGB: " << Util::timerEnd() << std::endl;
+
+			// Process the frame with blobber
+			Util::timerStart();
+			blobber.processFrame((Blobber::Pixel*)dataYUYV);
+			std::cout << "    - Blobber process: " << Util::timerEnd() << std::endl;
 
 
 			// Display

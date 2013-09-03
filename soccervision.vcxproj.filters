@@ -93,6 +93,9 @@
     <ClInclude Include="include\ImageProcessor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\Blobber.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\DisplayWindow.cpp">
@@ -177,6 +180,9 @@
       <Filter>libyuv</Filter>
     </ClCompile>
     <ClCompile Include="src\ImageProcessor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Blobber.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -75,8 +75,8 @@ void DisplayWindow::setImage(unsigned char* image, bool rgb2bgr) {
 
     SetDIBits(windowDeviceHandle, bitmap, 0, height, image, &bitmapInfo, DIB_RGB_COLORS);
 	bitmap = (HBITMAP) SelectObject(bitmapDeviceHandle, bitmap);
-	BitBlt (windowDeviceHandle, 0, 0, width, -height, bitmapDeviceHandle, 0, 0, SRCCOPY);
-	//StretchBlt(windowDeviceHandle, 0, height, width, -height, bitmapDeviceHandle, 0, 0, width, height, SRCCOPY);
+	//BitBlt (windowDeviceHandle, 0, 0, width, height, bitmapDeviceHandle, 0, 0, SRCCOPY);
+	StretchBlt(windowDeviceHandle, 0, height, width, -height, bitmapDeviceHandle, 0, 0, width, height, SRCCOPY);
 
 	//RedrawWindow(windowHandle, NULL, NULL, RDW_INVALIDATE);
 }
