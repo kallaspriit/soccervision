@@ -45,10 +45,10 @@ int main(int argc, char* argv[]) {
 	XimeaCamera camera1 = XimeaCamera();
 	XimeaCamera camera2 = XimeaCamera();
 
-	Blobber blobber = Blobber();
-	blobber.initialize(width, height);
-	blobber.loadOptions("config/blobber.cfg");
-	blobber.enable(BLOBBER_DENSITY_MERGE);
+	Blobber* blobber = new Blobber();
+	blobber->initialize(width, height);
+	blobber->loadOptions("config/blobber.cfg");
+	blobber->enable(BLOBBER_DENSITY_MERGE);
 
 	int cameraSerial1 = 857735761;
 	int cameraSerial2 = 857769553;
@@ -135,7 +135,7 @@ int main(int argc, char* argv[]) {
 
 			// Process the frame with blobber
 			Util::timerStart();
-			blobber.processFrame((Blobber::Pixel*)dataYUYV);
+			blobber->processFrame((Blobber::Pixel*)dataYUYV);
 			std::cout << "    - Blobber process: " << Util::timerEnd() << std::endl;
 
 
@@ -150,6 +150,7 @@ int main(int argc, char* argv[]) {
 		fpsCounter.step();
 	}
 
+	delete blobber;
 	delete cameraWindow1;
 	delete cameraWindow2;
 

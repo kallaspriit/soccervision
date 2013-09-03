@@ -148,6 +148,8 @@ void XimeaCamera::stopAcquisition() {
 void XimeaCamera::close() {
     if (!opened) {
 		std::cout << "- Unable to close camera, not opened" << std::endl;
+
+		return;
 	}
 
 	if (acquisitioning) {
