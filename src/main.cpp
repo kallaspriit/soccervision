@@ -48,7 +48,7 @@ int main(int argc, char* argv[]) {
 	Blobber* blobber = new Blobber();
 	blobber->initialize(width, height);
 	blobber->loadOptions("config/blobber.cfg");
-	blobber->enable(BLOBBER_DENSITY_MERGE);
+	//blobber->enable(BLOBBER_DENSITY_MERGE);
 
 	int cameraSerial1 = 857735761;
 	int cameraSerial2 = 857769553;
