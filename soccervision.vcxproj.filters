@@ -96,6 +96,12 @@
     <ClInclude Include="include\Blobber.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\Thread.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ProcessThread.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\DisplayWindow.cpp">
@@ -183,6 +189,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Blobber.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Thread.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ProcessThread.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
