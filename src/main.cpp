@@ -131,12 +131,12 @@ int main(int argc, char* argv[]) {
 		if (debug) {
 			if (gotFrame1) {
 				winRGB1->setImage(processor1->rgb, false);
-				winClassification1->setImage(processor1->classification, false);
+				winClassification1->setImage(processor1->classification, true);
 			}
 
 			if (gotFrame2) {
 				winRGB2->setImage(processor2->rgb, false);
-				winClassification2->setImage(processor2->classification, false);
+				winClassification2->setImage(processor2->classification, true);
 			}
 
 			gui->update();
