@@ -2,10 +2,25 @@
 #include "ImageBuffer.h"
 #include "Maths.h"
 #include "Util.h"
-#include "Config.h"
 
-void DebugRenderer::renderBlobs(ImageBuffer* img, Blobber::Blob* blobs, Blobber::Color color) {
+void DebugRenderer::renderBlobs(unsigned char* image, Blobber* blobber, int width, int height) {
+	ImageBuffer img = ImageBuffer();
 
+	img.data = image;
+	img.width = width;
+	img.height = height;
+
+	img.drawText(20, 20, "Colors:");
+
+	for (int i = 0; i < blobber->getColorCount(); i++) {
+		Blobber::Color* color = blobber->getColor(i);
+
+		if (color == NULL) {
+			continue;
+		}
+
+		img.drawText(20, 40 + 20 * i, color->name);
+	}
 }
 
 void DebugRenderer::renderBalls(ImageBuffer* img, const ObjectList& balls) {

@@ -4,7 +4,6 @@
 #include "Thread.h"
 
 class Blobber;
-class ImageBuffer;
 
 class ProcessThread : public Thread {
 
@@ -31,10 +30,8 @@ public:
 
 private:
 	void* run();
-	void renderBlobsTo(unsigned char* image);
 
 	bool done;
-	ImageBuffer* img;
 	unsigned char* dataY;
     unsigned char* dataU;
     unsigned char* dataV;

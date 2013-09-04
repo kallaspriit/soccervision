@@ -1,11 +1,12 @@
 #include "ProcessThread.h"
 #include "Blobber.h"
 #include "ImageProcessor.h"
+#include "DebugRenderer.h"
 #include "ImageBuffer.h"
 
 #include <iostream>
 
-ProcessThread::ProcessThread(int width, int height) : Thread(), width(width), height(height), classify(false), convertRGB(false), renderBlobs(false), img(NULL), done(true) {
+ProcessThread::ProcessThread(int width, int height) : Thread(), width(width), height(height), classify(false), convertRGB(false), renderBlobs(false), done(true) {
 	frame = NULL;
 	dataY = new unsigned char[width * height];
     dataU = new unsigned char[(width / 2) * (height / 2)];
@@ -22,11 +23,6 @@ ProcessThread::ProcessThread(int width, int height) : Thread(), width(width), he
 
 ProcessThread::~ProcessThread() {
 	delete blobber;
-
-	if (img != NULL) {
-		delete img;
-		img = NULL;
-	}
 }
 
 void* ProcessThread::run() {
@@ -62,7 +58,7 @@ void* ProcessThread::run() {
 		//std::cout << "  - Blobber classify: " << Util::timerEnd() << std::endl;
 
 		if (renderBlobs) {
-			renderBlobsTo(classification);
+			DebugRenderer::renderBlobs(classification, blobber);
 		}
 	}
 
@@ -83,26 +79,4 @@ void* ProcessThread::run() {
 	done = true;
 
 	return NULL;
-}
-
-void ProcessThread::renderBlobsTo(unsigned char* image) {
-	if (img == NULL) {
-		img = new ImageBuffer();
-	}
-
-	img->data = image;
-	img->width = width;
-	img->height = height;
-
-	img->drawText(20, 20, "Colors:");
-
-	for (int i = 0; i < blobber->getColorCount(); i++) {
-		Blobber::Color* color = blobber->getColor(i);
-
-		if (color == NULL) {
-			continue;
-		}
-
-		img->drawText(20, 40 + 20 * i, color->name);
-	}
 }
