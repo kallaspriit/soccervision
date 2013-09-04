@@ -22,7 +22,7 @@ void DebugRenderer::renderBlobs(unsigned char* image, Blobber* blobber, int widt
 		Blobber::Blob* blob = blobber->getBlobs(color->name);
 
 		while (blob != NULL) {
-			img.drawBox(
+			img.drawBoxCentered(
 				(int)blob->centerX, (int)blob->centerY,
 				blob->x2 - blob->x1, blob->y2 - blob->y1,
 				color->color.red, color->color.green, color->color.blue
