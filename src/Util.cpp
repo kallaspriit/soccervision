@@ -1,5 +1,5 @@
 #include "Util.h"
-//#include "Config.h"
+#include "Config.h"
 //#include "jpge.h"
 
 //#include <math.h>
@@ -241,7 +241,7 @@ bool Util::replace(std::string& str, const std::string& from, const std::string&
 }
 */
 
-/*void Util::correctCameraPoint(int& x, int& y) {
+void Util::correctCameraPoint(int& x, int& y) {
 	float k = Config::cameraCorrectionK;
 	float zoom = Config::cameraCorrectionZoom;
 	float centerX = Config::cameraWidth / 2.0f - 0.5f;
@@ -251,8 +251,8 @@ bool Util::replace(std::string& str, const std::string& from, const std::string&
 	float krd2 = k * (centerOffsetX * centerOffsetX + centerOffsetY * centerOffsetY);
 	float magnifacationFactor = 1.0f / (1.0f + krd2);
 
-	x = zoom * centerOffsetX / magnifacationFactor + centerX,
-	y = zoom * centerOffsetY / magnifacationFactor + centerY;
+	x = (int)(zoom * centerOffsetX / magnifacationFactor + centerX),
+	y = (int)(zoom * centerOffsetY / magnifacationFactor + centerY);
 }
 
 void Util::confineField(float& x, float& y) {
@@ -267,4 +267,4 @@ void Util::confineField(float& x, float& y) {
 	} else if (y > Config::fieldHeight + Config::confineMargin) {
 		y = Config::fieldHeight + Config::confineMargin;
 	}
-}*/
+}

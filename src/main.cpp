@@ -3,6 +3,7 @@
 #include "ProcessThread.h"
 #include "FpsCounter.h"
 #include "Util.h"
+#include "Config.h"
 
 #include <iostream>
 
@@ -37,22 +38,22 @@ int main(int argc, char* argv[]) {
     std::cout << "-- Starting Up --" << std::endl;
 
 	// config
-	int width = 1280;
-	int height = 1024;
+	int width = Config::cameraWidth;
+	int height = Config::cameraHeight;
+	bool debug = true;
 
 	Gui* gui = new Gui(instance);
 	FpsCounter* fpsCounter = new FpsCounter();
-	DisplayWindow* cameraWindow1 = gui->createWindow(1280, 1024, "Camera 1 RGB");
-	DisplayWindow* cameraWindow2 = gui->createWindow(1280, 1024, "Camera 2 RGB");
+	DisplayWindow* winRGB1 = gui->createWindow(1280, 1024, "Camera 1 RGB");
+	DisplayWindow* winRGB2 = gui->createWindow(1280, 1024, "Camera 2 RGB");
+	DisplayWindow* winClassification1 = gui->createWindow(1280, 1024, "Camera 1 Classification");
+	DisplayWindow* winClassification2 = gui->createWindow(1280, 1024, "Camera 2 Classification");
 
 	XimeaCamera* camera1 = new XimeaCamera();
 	XimeaCamera* camera2 = new XimeaCamera();
 
 	ProcessThread* processor1 = new ProcessThread(width, height);
 	ProcessThread* processor2 = new ProcessThread(width, height);
-
-	//processor1->classify = true;
-	//processor1->convertRGB = true;
 
 	int cameraSerial1 = 857735761;
 	int cameraSerial2 = 857769553;
@@ -85,6 +86,10 @@ int main(int argc, char* argv[]) {
 	while (running) {
 		gotFrame1 = false;
 		gotFrame2 = false;
+
+		processor1->classify = processor2->classify = debug;
+		processor1->convertRGB = processor2->convertRGB = debug;
+		processor1->renderBlobs = processor2->renderBlobs = debug;
 
 		//__int64 startTime = Util::timerStart();
 
@@ -123,14 +128,22 @@ int main(int argc, char* argv[]) {
 		processor1->join();
 		processor2->join();
 
-		//Util::timerStart();
-		//cameraWindow1->setImage(processor1->rgb, false);
-		//cameraWindow1->setImage(processor1->classification, false);
-		//std::cout << "    - Display: " << Util::timerEnd() << std::endl;
-		//gui->update(); // ADD BACK WHEN DISPLAYING SOMETHING
+		if (debug) {
+			if (gotFrame1) {
+				winRGB1->setImage(processor1->rgb, false);
+				winClassification1->setImage(processor1->classification, false);
+			}
+
+			if (gotFrame2) {
+				winRGB2->setImage(processor2->rgb, false);
+				winClassification2->setImage(processor2->classification, false);
+			}
+
+			gui->update();
+		}
 
 		//std::cout << "! Total time: " << Util::timerEnd(startTime) << ", " << fpsCounter.getFps() << "FPS" << std::endl << std::endl;
-		std::cout << "! " << fpsCounter->getFps() << "FPS" << std::endl << std::endl;
+		std::cout << "! " << fpsCounter->getFps() << "FPS" << std::endl;
 
 
 		fpsCounter->step();
@@ -138,8 +151,8 @@ int main(int argc, char* argv[]) {
 
 	delete camera1;
 	delete camera2;
-	delete cameraWindow1;
-	delete cameraWindow2;
+	delete winRGB1;
+	delete winRGB2;
 	delete fpsCounter;
 	delete gui;
 

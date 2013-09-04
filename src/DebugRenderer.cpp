@@ -1,21 +1,11 @@
 #include "DebugRenderer.h"
-#include "Config.h"
 #include "ImageBuffer.h"
 #include "Maths.h"
 #include "Util.h"
+#include "Config.h"
 
-void DebugRenderer::render(unsigned char* image, const ObjectList& balls, const ObjectList& goals, bool swapRB) {
-	ImageBuffer* img = new ImageBuffer();;
+void DebugRenderer::renderBlobs(ImageBuffer* img, Blobber::Blob* blobs, Blobber::Color color) {
 
-	img->data = image;
-	img->width = Config::cameraWidth;
-	img->height = Config::cameraHeight;
-	img->swapRB = swapRB;
-
-	renderBalls(img, balls);
-	renderGoals(img, goals);
-
-	delete img;
 }
 
 void DebugRenderer::renderBalls(ImageBuffer* img, const ObjectList& balls) {
@@ -54,7 +44,7 @@ void DebugRenderer::renderBalls(ImageBuffer* img, const ObjectList& balls) {
     }
 
 	// TEMP - draw centerline
-	img->drawLine(Config::cameraWidth / 2, 0, Config::cameraWidth / 2, Config::cameraHeight);
+	img->drawLine(img->width / 2, 0, img->width / 2, img->height);
 	//img->fillCircleCentered(Config::cameraWidth / 2, Config::cameraHeight / 2, 100, 0, 0, 255);
 
     /*Blobber::Blob* blob = blobber->getBlobs("ball");
