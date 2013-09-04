@@ -1,7 +1,7 @@
 #include "FpsCounter.h"
 #include "Util.h"
 
-FpsCounter::FpsCounter(int interval) : interval(interval) {
+FpsCounter::FpsCounter(int interval) : interval(interval), firstInterval(true) {
     startTime = -1;
     frames = 0;
     fps = 0;
@@ -16,7 +16,7 @@ void FpsCounter::step() {
         return;
     }
 
-    if (frames >= interval) {
+    if (firstInterval || frames >= interval) {
         double currentTime = Util::millitime();
         double elapsedTime = currentTime - startTime;
 
@@ -25,6 +25,7 @@ void FpsCounter::step() {
         frames = 0;
 
         changed = true;
+		firstInterval = false;
     } else {
         frames++;
     }

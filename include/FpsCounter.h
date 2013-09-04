@@ -12,6 +12,7 @@ class FpsCounter {
         int interval;
         double startTime;
         bool changed;
+		bool firstInterval;
         int frames;
         int fps;
 

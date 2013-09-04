@@ -1,31 +1,29 @@
 #include "Gui.h"
 #include "XimeaCamera.h"
-#include "ImageProcessor.h"
 #include "ProcessThread.h"
-#include "Blobber.h"
 #include "FpsCounter.h"
 #include "Util.h"
 
 #include <iostream>
 
-void setupCamera(XimeaCamera& camera) {
-	camera.setExposure(16000);
-	camera.setFormat(XI_RAW8);
-	camera.setAutoWhiteBalance(false);
-	camera.setAutoExposureGain(false);
-	camera.setQueueSize(12);
+void setupCamera(XimeaCamera* camera) {
+	camera->setExposure(16000);
+	camera->setFormat(XI_RAW8);
+	camera->setAutoWhiteBalance(false);
+	camera->setAutoExposureGain(false);
+	camera->setQueueSize(12);
 
 	std::cout << "Camera info:" << std::endl;
-	std::cout << "  > Name: " << camera.getName() << std::endl;
-	std::cout << "  > Type: " << camera.getDeviceType() << std::endl;
-	std::cout << "  > API version: " << camera.getApiVersion() << std::endl;
-	std::cout << "  > Driver version: " << camera.getDriverVersion() << std::endl;
-	std::cout << "  > Serial number: " << camera.getSerialNumber() << std::endl;
-	std::cout << "  > Color: " << (camera.supportsColor() ? "yes" : "no") << std::endl;
-	std::cout << "  > Framerate: " << camera.getFramerate() << std::endl;
-	std::cout << "  > Available bandwidth: " << camera.getAvailableBandwidth() << std::endl;
+	std::cout << "  > Name: " << camera->getName() << std::endl;
+	std::cout << "  > Type: " << camera->getDeviceType() << std::endl;
+	std::cout << "  > API version: " << camera->getApiVersion() << std::endl;
+	std::cout << "  > Driver version: " << camera->getDriverVersion() << std::endl;
+	std::cout << "  > Serial number: " << camera->getSerialNumber() << std::endl;
+	std::cout << "  > Color: " << (camera->supportsColor() ? "yes" : "no") << std::endl;
+	std::cout << "  > Framerate: " << camera->getFramerate() << std::endl;
+	std::cout << "  > Available bandwidth: " << camera->getAvailableBandwidth() << std::endl;
 
-	camera.startAcquisition();
+	camera->startAcquisition();
 }
 
 /*void processCamera(XimeaCamera& camera, Blobber* blobber) {
@@ -33,24 +31,6 @@ void setupCamera(XimeaCamera& camera) {
 }*/
 
 int main(int argc, char* argv[]) {
-	ProcessThread t1(1000);
-	ProcessThread t2(5000);
-
-	std::cout << "! Starting threads" << std::endl;
-
-	t1.start();
-	t2.start();
-
-	t1.join();
-	t2.join();
-
-	std::cout << "! Threads complete" << std::endl;
-
-
-	return 0;
-
-
-
 	HWND consoleWindow = GetConsoleWindow();
 	HINSTANCE instance = GetModuleHandle(0);
 
@@ -60,49 +40,41 @@ int main(int argc, char* argv[]) {
 	int width = 1280;
 	int height = 1024;
 
-	Gui gui = Gui(instance);
-	FpsCounter fpsCounter = FpsCounter();
-	DisplayWindow* cameraWindow1 = gui.createWindow(1280, 1024, "Camera 1 RGB");
-	DisplayWindow* cameraWindow2 = gui.createWindow(1280, 1024, "Camera 2 RGB");
+	Gui* gui = new Gui(instance);
+	FpsCounter* fpsCounter = new FpsCounter();
+	DisplayWindow* cameraWindow1 = gui->createWindow(1280, 1024, "Camera 1 RGB");
+	DisplayWindow* cameraWindow2 = gui->createWindow(1280, 1024, "Camera 2 RGB");
 
-	XimeaCamera camera1 = XimeaCamera();
-	XimeaCamera camera2 = XimeaCamera();
+	XimeaCamera* camera1 = new XimeaCamera();
+	XimeaCamera* camera2 = new XimeaCamera();
 
-	Blobber* blobber = new Blobber();
-	blobber->initialize(width, height);
-	blobber->loadOptions("config/blobber.cfg");
-	//blobber->enable(BLOBBER_DENSITY_MERGE); // somewhat expensive..
+	ProcessThread* processor1 = new ProcessThread(width, height);
+	ProcessThread* processor2 = new ProcessThread(width, height);
+
+	//processor1->classify = true;
+	//processor1->convertRGB = true;
 
 	int cameraSerial1 = 857735761;
 	int cameraSerial2 = 857769553;
 
-	if (!camera1.open(cameraSerial2) && !camera1.open(cameraSerial1)) {
+	if (!camera1->open(cameraSerial2) && !camera1->open(cameraSerial1)) {
 		std::cout << "- Opening camera 1 failed" << std::endl;
 	}
 
-	if (!camera2.open(cameraSerial1) && !camera2.open(cameraSerial2)) {
+	if (!camera2->open(cameraSerial1) && !camera2->open(cameraSerial2)) {
 		std::cout << "- Opening camera 2 failed" << std::endl;
 	}
 
-	if (!camera1.isOpened() && !camera2.isOpened()) {
+	if (!camera1->isOpened() && !camera2->isOpened()) {
 		std::cout << "- Opening both cameras failed, giving up" << std::endl;
 
 		return 1;
 	}
 
 	setupCamera(camera1);
-	setupCamera(camera2);
+	//setupCamera(camera2);
 
 	std::cout << "! Capturing frames" << std::endl;
-
-	unsigned char* argbBuffer = new unsigned char[width * height * 4];
-	unsigned char* rgbBuffer = new unsigned char[width * height * 3];
-	unsigned char* classificationBuffer = new unsigned char[width * height * 3];
-
-	unsigned char* dataY = new uint8[width * height];
-    unsigned char* dataU = new uint8[(width / 2) * (height / 2)];
-    unsigned char* dataV = new uint8[(width / 2) * (height / 2)];
-	unsigned char* dataYUYV = new uint8[width * height * 3];
 
 	const BaseCamera::Frame* frame = NULL;
 
@@ -117,152 +89,59 @@ int main(int argc, char* argv[]) {
 		//__int64 startTime = Util::timerStart();
 
 		// camera1
-		if (camera1.isAcquisitioning()) {
+		if (camera1->isAcquisitioning()) {
 
 			// get the frame
 			//Util::timerStart();
-			frame = camera1.getFrame();
+			frame = camera1->getFrame();
 			//double getFrameTime = Util::timerEnd();
 
 			// check if there's a new frame
 			if (frame != NULL && frame->fresh) {
 				gotFrame1 = true;
-				//std::cout << "> camera 1 frame #" << frame->number << " @ " << frame->width << "x" << frame->height << ", " << (!frame->fresh ? " (not fresh)" : "") << std::endl;
-				//std::cout << "  - Fetch image: " << getFrameTime << std::endl;
-
-				// RGGB to I420
-				//Util::timerStart();
-				ImageProcessor::bayerRGGBToI420(
-					frame->data,
-					dataY, dataU, dataV,
-					frame->width, frame->height
-				);
-				//std::cout << "  - RGGB > I420: " << Util::timerEnd() << std::endl;
-
-				// I420 to YUYV
-				//Util::timerStart();
-				ImageProcessor::I420ToYUYV(
-					dataY, dataU, dataV,
-					dataYUYV,
-					frame->width, frame->height
-				);
-				//std::cout << "  - I420 > YUYV: " << Util::timerEnd() << std::endl;
-
-				// Process the frame with blobber
-				//Util::timerStart();
-				blobber->processFrame((Blobber::Pixel*)dataYUYV);
-				//std::cout << "  - Process:     " << Util::timerEnd() << " (" << blobber->getBlobCount("ball") << " ball blobs)" << std::endl;
-
-				/*
-				// Classify the frame with blobber
-				Util::timerStart();
-				blobber->classify((Blobber::Rgb*)classificationBuffer, (Blobber::Pixel*)dataYUYV);
-				std::cout << "  - Blobber classify: " << Util::timerEnd() << std::endl;
-
-				// YUYV to ARGB
-				Util::timerStart();
-				ImageProcessor::YUYVToARGB(dataYUYV, argbBuffer, frame->width, frame->height);
-				std::cout << "  - YUYV > ARGB: " << Util::timerEnd() << std::endl;
-
-				// ARGB to RGB24
-				Util::timerStart();
-				ImageProcessor::ARGBToRGB24(
-					argbBuffer,
-					rgbBuffer,
-					frame->width, frame->height
-				);
-				std::cout << "  - ARGB > RGB: " << Util::timerEnd() << std::endl;
-
-				// Display
-				Util::timerStart();
-				//cameraWindow1->setImage(rgbBuffer, false);
-				cameraWindow1->setImage(classificationBuffer, false);
-				std::cout << "    - Display: " << Util::timerEnd() << std::endl;
-				*/
+				processor1->setFrame(frame->data);
 			} else {
 				std::cout << "- Got empty/old frame from camera 1" << std::endl;
 			}
 		}
 
-		if (camera2.isAcquisitioning()) {
+		if (camera2->isAcquisitioning()) {
+			frame = camera2->getFrame();
 
-			// get the frame
-			//Util::timerStart();
-			frame = camera2.getFrame();
-			//double getFrameTime = Util::timerEnd();
-
-			// check if there's a new frame
 			if (frame != NULL && frame->fresh) {
-				gotFrame1 = true;
+				gotFrame2 = true;
 
-				//std::cout << "> camera 2 frame #" << frame->number << " @ " << frame->width << "x" << frame->height << ", " << (!frame->fresh ? " (not fresh)" : "") << std::endl;
-				//std::cout << "  - Fetch image: " << getFrameTime << std::endl;
-
-				// RGGB to I420
-				//Util::timerStart();
-				ImageProcessor::bayerRGGBToI420(
-					frame->data,
-					dataY, dataU, dataV,
-					frame->width, frame->height
-				);
-				//std::cout << "  - RGGB > I420: " << Util::timerEnd() << std::endl;
-
-				// I420 to YUYV
-				//Util::timerStart();
-				ImageProcessor::I420ToYUYV(
-					dataY, dataU, dataV,
-					dataYUYV,
-					frame->width, frame->height
-				);
-				//std::cout << "  - I420 > YUYV: " << Util::timerEnd() << std::endl;
-
-				// Process the frame with blobber
-				//Util::timerStart();
-				blobber->processFrame((Blobber::Pixel*)dataYUYV);
-				//std::cout << "  - Process:     " << Util::timerEnd() << " (" << blobber->getBlobCount("ball") << " ball blobs)" << std::endl;
-
-				/*
-				// Classify the frame with blobber
-				Util::timerStart();
-				blobber->classify((Blobber::Rgb*)classificationBuffer, (Blobber::Pixel*)dataYUYV);
-				std::cout << "  - Blobber classify: " << Util::timerEnd() << std::endl;
-
-				// YUYV to ARGB
-				Util::timerStart();
-				ImageProcessor::YUYVToARGB(dataYUYV, argbBuffer, frame->width, frame->height);
-				std::cout << "  - YUYV > ARGB: " << Util::timerEnd() << std::endl;
-
-				// ARGB to RGB24
-				Util::timerStart();
-				ImageProcessor::ARGBToRGB24(
-					argbBuffer,
-					rgbBuffer,
-					frame->width, frame->height
-				);
-				std::cout << "  - ARGB > RGB: " << Util::timerEnd() << std::endl;
-
-				// Display
-				Util::timerStart();
-				//cameraWindow1->setImage(rgbBuffer, false);
-				cameraWindow1->setImage(classificationBuffer, false);
-				std::cout << "    - Display: " << Util::timerEnd() << std::endl;
-				*/
+				processor2->setFrame(frame->data);
 			} else {
 				std::cout << "- Got empty/old frame from camera 2" << std::endl;
 			}
 		}
 
+		processor1->start();
+		processor2->start();
+
+		processor1->join();
+		processor2->join();
+
+		//Util::timerStart();
+		//cameraWindow1->setImage(processor1->rgb, false);
+		//cameraWindow1->setImage(processor1->classification, false);
+		//std::cout << "    - Display: " << Util::timerEnd() << std::endl;
+		//gui->update(); // ADD BACK WHEN DISPLAYING SOMETHING
+
 		//std::cout << "! Total time: " << Util::timerEnd(startTime) << ", " << fpsCounter.getFps() << "FPS" << std::endl << std::endl;
-		std::cout << "! " << fpsCounter.getFps() << "FPS" << std::endl << std::endl;
+		std::cout << "! " << fpsCounter->getFps() << "FPS" << std::endl << std::endl;
 
-		//gui.update(); // ADD BACK WHEN DISPLAYING SOMETHING
 
-		fpsCounter.step();
+		fpsCounter->step();
 	}
 
-	delete blobber;
+	delete camera1;
+	delete camera2;
 	delete cameraWindow1;
 	delete cameraWindow2;
+	delete fpsCounter;
+	delete gui;
 
 	//camera.open(857735761);
 
