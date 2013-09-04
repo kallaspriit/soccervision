@@ -10,7 +10,7 @@ void DebugRenderer::renderBlobs(unsigned char* image, Blobber* blobber, int widt
 	img.width = width;
 	img.height = height;
 
-	img.drawText(20, 20, "Colors:");
+	//img.drawText(20, 20, "Colors:");
 
 	for (int i = 0; i < blobber->getColorCount(); i++) {
 		Blobber::Color* color = blobber->getColor(i);
@@ -19,7 +19,19 @@ void DebugRenderer::renderBlobs(unsigned char* image, Blobber* blobber, int widt
 			continue;
 		}
 
-		img.drawText(20, 40 + 20 * i, color->name);
+		Blobber::Blob* blob = blobber->getBlobs(color->name);
+
+		while (blob != NULL) {
+			img.drawBox(
+				(int)blob->centerX, (int)blob->centerY,
+				blob->x2 - blob->x1, blob->y2 - blob->y1,
+				color->color.red, color->color.green, color->color.blue
+			);
+
+			blob = blob->next;
+		}
+
+		//img.drawText(20, 40 + 20 * i, color->name);
 	}
 }
 
