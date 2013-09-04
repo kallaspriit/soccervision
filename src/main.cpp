@@ -73,7 +73,7 @@ int main(int argc, char* argv[]) {
 	}
 
 	setupCamera(camera1);
-	//setupCamera(camera2);
+	setupCamera(camera2);
 
 	std::cout << "! Capturing frames" << std::endl;
 
