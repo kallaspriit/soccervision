@@ -66,6 +66,8 @@ VisionResults* Vision::process() {
 		updateColorDistances();
 	}
 
+	// TODO Populate the results..
+
 	return results;
 }
 
@@ -373,11 +375,11 @@ int Vision::getGoalMaxInvalidSpree(int y) {
 }*/
 
 int Vision::getBallRadius(int width, int height) {
-	return Math::min(width, height) / 2;
+	return (int)(Math::min((float)width, (float)height) / 2.0f);
 }
 
-int Vision::getBallSenseRadius(int ballRadius, int distance) {
-	return Math::min(ballRadius * 1.35f * Math::max(distance / 2.0f, 1.0f) + 10.0f, Config::maxBallSenseRadius);
+int Vision::getBallSenseRadius(int ballRadius, float distance) {
+	return (int)Math::min((float)ballRadius * 1.35f * Math::max(distance / 2.0f, 1.0f) + 10.0f, (float)Config::maxBallSenseRadius);
 }
 
 float Vision::getDistance(Dir dir, int x, int y) {
@@ -472,7 +474,7 @@ Blobber::Color* Vision::getColorAt(int x, int y) {
     return blobber->getColorAt(x, y);
 }
 
-float Vision::getSurroundMetric(int x, int y, float radius, std::vector<std::string> validColors, std::string requiredColor, int side, bool allowNone) {
+float Vision::getSurroundMetric(int x, int y, int radius, std::vector<std::string> validColors, std::string requiredColor, int side, bool allowNone) {
 	int matches = 0;
 	int misses = 0;
     int points = radius * 2;
@@ -492,8 +494,8 @@ float Vision::getSurroundMetric(int x, int y, float radius, std::vector<std::str
     for (int i = start; i <= start + sensePoints; i++) {
         double t = 2 * Math::PI * i / points + Math::PI;
 
-        int senseX = x + radius * cos(t);
-        int senseY = y + radius * sin(t);
+        int senseX = (int)(x + radius * cos(t));
+        int senseY = (int)(y + radius * sin(t));
 
 		if (
 			senseX < 0
@@ -547,10 +549,10 @@ float Vision::getSurroundMetric(int x, int y, float radius, std::vector<std::str
 }
 
 Vision::PathMetric Vision::getPathMetric(int x1, int y1, int x2, int y2, std::vector<std::string> validColors, std::string requiredColor) {
-	x1 = Math::limit(x1, 0, Config::cameraWidth);
-	x2 = Math::limit(x2, 0, Config::cameraWidth);
-	y1 = Math::limit(y1, 0, Config::cameraHeight);
-	y2 = Math::limit(y2, 0, Config::cameraHeight);
+	x1 = (int)Math::limit((float)x1, 0.0f, (float)Config::cameraWidth);
+	x2 = (int)Math::limit((float)x2, 0.0f, (float)Config::cameraWidth);
+	y1 = (int)Math::limit((float)y1, 0.0f, (float)Config::cameraHeight);
+	y2 = (int)Math::limit((float)y2, 0.0f, (float)Config::cameraHeight);
 
 	int originalX1 = x1;
 	int originalX2 = x2;
@@ -864,10 +866,10 @@ Vision::PathMetric Vision::getPathMetric(int x1, int y1, int x2, int y2, std::ve
 }
 
 float Vision::getColorDistance(std::string colorName, int x1, int y1, int x2, int y2) {
-	x1 = Math::limit(x1, 0, Config::cameraWidth);
-	x2 = Math::limit(x2, 0, Config::cameraWidth);
-	y1 = Math::limit(y1, 0, Config::cameraHeight);
-	y2 = Math::limit(y2, 0, Config::cameraHeight);
+	x1 = (int)Math::limit((float)x1, 0.0f, (float)Config::cameraWidth);
+	x2 = (int)Math::limit((float)x2, 0.0f, (float)Config::cameraWidth);
+	y1 = (int)Math::limit((float)y1, 0.0f, (float)Config::cameraHeight);
+	y2 = (int)Math::limit((float)y2, 0.0f, (float)Config::cameraHeight);
 
 	int originalX1 = x1;
 	int originalX2 = x2;
@@ -1127,8 +1129,8 @@ float Vision::getBlockMetric(int x1, int y1, int blockWidth, int blockHeight, st
 	int matches = 0;
 	int misses = 0;
 
-	for (int x = Math::max(x1, 0); x < Math::min(x1 + blockWidth, width); x += step) {
-		for (int y = Math::max(y1, 0); y < Math::min(y1 + blockHeight, height); y += step) {
+	for (int x = (int)Math::max((float)x1, 0.0f); x < (int)Math::min((float)(x1 + blockWidth), (float)width); x += step) {
+		for (int y = (int)Math::max((float)y1, 0.0f); y < (int)Math::min((float)(y1 + blockHeight), (float)height); y += step) {
 			Blobber::Color* color = getColorAt(x, y);
 
 			if (color != NULL) {
@@ -1191,14 +1193,14 @@ float Vision::getUndersideMetric(int x1, int y1, float distance, int blockWidth,
 	minValidY = -1;
 	maxValidY = -1;
 
-	for (int x = Math::max(x1, 0); x < Math::min(x1 + blockWidth, width); x += xStep) {
+	for (int x = (int)Math::max((float)x1, 0.0f); x < (int)Math::min((float)(x1 + blockWidth), (float)width); x += xStep) {
 		if (x > width - 1) {
 			break;
 		}
 
 		stepsBelow = 0;
 
-		for (int y = y1; y < Math::min(y1 + blockHeight * 4, height); y += yStep) {
+		for (int y = y1; y < (int)Math::min((float)(y1 + blockHeight * 4), (float)height); y += yStep) {
 			if (y > height - 1) {
 				break;
 			}
@@ -1235,7 +1237,7 @@ float Vision::getUndersideMetric(int x1, int y1, float distance, int blockWidth,
 
 			//std::cout << "! DOWN FROM " << (y + yStep) << " to " << y + blockHeight << std::endl;
 
-			for (int senseY = y + yStep; senseY < Math::min(y + blockHeight * 4, height); senseY += yStep) {
+			for (int senseY = y + yStep; senseY < (int)Math::min((float)(y + blockHeight * 4), (float)height); senseY += yStep) {
 				if (senseY > height - 1) {
 					break;
 				}
@@ -1262,7 +1264,7 @@ float Vision::getUndersideMetric(int x1, int y1, float distance, int blockWidth,
 					int runMatches = 0;
 					int runMisses = 0;
 
-					for (int gapY = senseY + gapStep; gapY < Math::min(senseY + senseSteps * yStep, height); gapY += gapStep) {
+					for (int gapY = senseY + gapStep; gapY < (int)Math::min((float)(senseY + senseSteps * yStep), (float)height); gapY += gapStep) {
 						if (gapY > height - 1) {
 							break;
 						}

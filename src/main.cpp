@@ -42,7 +42,7 @@ int main(int argc, char* argv[]) {
 	// config
 	int width = Config::cameraWidth;
 	int height = Config::cameraHeight;
-	bool debug = true;
+	bool debug = false;
 
 	Gui* gui = new Gui(instance);
 	FpsCounter* fpsCounter = new FpsCounter();
@@ -139,6 +139,8 @@ int main(int argc, char* argv[]) {
 
 		processor1->join();
 		processor2->join();
+
+		// TODO Merge the vision results
 
 		if (debug) {
 			if (gotFrame1) {

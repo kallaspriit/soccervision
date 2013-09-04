@@ -48,7 +48,7 @@ class Vision {
 		ObjectList processBalls(Dir dir);
         ObjectList processGoals(Dir dir);
 
-		float getSurroundMetric(int x, int y, float radius, std::vector<std::string> validColors, std::string requiredColor = "", int side = 0, bool allowNone = false);
+		float getSurroundMetric(int x, int y, int radius, std::vector<std::string> validColors, std::string requiredColor = "", int side = 0, bool allowNone = false);
         PathMetric getPathMetric(int x1, int y1, int x2, int y2, std::vector<std::string> validColors, std::string requiredColor = "");
 		float getBlockMetric(int x, int y, int width, int height, std::vector<std::string> validColors, int step = 6);
 		float getUndersideMetric(int x, int y, float distance, int width, int height, std::string targetColor, std::string targetColor2, std::vector<std::string> validColors, bool expand = true);
@@ -61,7 +61,7 @@ class Vision {
         bool isValidGoal(Object* goal, Side side);
 		bool isBallInGoal(Object* ball, Dir dir);
 		int getBallRadius(int width, int height);
-		int getBallSenseRadius(int ballRadius, int distance);
+		int getBallSenseRadius(int ballRadius, float distance);
 		/*int getBallMaxInvalidSpree(int y);
 		int getGoalMaxInvalidSpree(int y);*/
 
