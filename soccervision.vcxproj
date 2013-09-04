@@ -79,7 +79,7 @@
       <AdditionalDependencies>m3api.lib;pthreadVC2.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>git commit -m "Update"
+      <Command>git commit -a -m "Update"
 git push</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
