@@ -6,7 +6,7 @@
 #include <iostream>
 #include <algorithm>
 
-Vision::Vision(Blobber* blobber, int width, int height) : blobber(blobber), width(width), height(height), obstructionSide(Obstruction::NONE), blackDistance(-1.0f) {
+Vision::Vision(Blobber* blobber, Dir dir, int width, int height) : blobber(blobber), dir(dir), width(width), height(height), obstructionSide(Obstruction::NONE), blackDistance(-1.0f) {
 	frontDistanceLookup.load(Config::frontDistanceLookupFilename/*, 0.13f*/);
 	rearDistanceLookup.load(Config::rearDistanceLookupFilename);
 	frontAngleLookup.load(Config::frontAngleLookupFilename);
@@ -54,10 +54,8 @@ void Vision::setDebugImage(unsigned char* image, int width, int height) {
 	img.height = height;
 }
 
-VisionResults* Vision::process(unsigned char* frame, Dir dir) {
+VisionResults* Vision::process() {
 	VisionResults* results = new VisionResults();
-
-	this->frame = frame;
 
     ObjectList balls = processBalls(dir);
 	ObjectList goals = processGoals(dir);
@@ -378,7 +376,7 @@ int Vision::getBallRadius(int width, int height) {
 }
 
 int Vision::getBallSenseRadius(int ballRadius, int distance) {
-	Math::min(ballRadius * 1.35f * Math::max(distance / 2.0f, 1.0f) + 10.0f, Config::maxBallSenseRadius);
+	return Math::min(ballRadius * 1.35f * Math::max(distance / 2.0f, 1.0f) + 10.0f, Config::maxBallSenseRadius);
 }
 
 float Vision::getDistance(Dir dir, int x, int y) {

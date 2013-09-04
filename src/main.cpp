@@ -52,8 +52,8 @@ int main(int argc, char* argv[]) {
 	XimeaCamera* camera1 = new XimeaCamera();
 	XimeaCamera* camera2 = new XimeaCamera();
 
-	ProcessThread* processor1 = new ProcessThread(width, height);
-	ProcessThread* processor2 = new ProcessThread(width, height);
+	ProcessThread* processor1 = new ProcessThread(Dir::FRONT, width, height);
+	ProcessThread* processor2 = new ProcessThread(Dir::REAR, width, height);
 
 	int cameraSerial1 = 857735761;
 	int cameraSerial2 = 857769553;

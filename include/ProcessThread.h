@@ -2,13 +2,15 @@
 #define PROCESSTHREAD_H
 
 #include "Thread.h"
+#include "Config.h"
 
 class Blobber;
+class Vision;
 
 class ProcessThread : public Thread {
 
 public:
-	ProcessThread(int width, int height);
+	ProcessThread(Dir dir, int width, int height);
 	~ProcessThread();
 
 	void setFrame(unsigned char* data) { frame = data; };
@@ -16,12 +18,14 @@ public:
 
 	int width;
 	int height;
+	Dir dir;
 
 	bool classify;
 	bool convertRGB;
 	bool renderBlobs;
 
 	Blobber* blobber;
+	Vision* vision;
 
 	unsigned char* frame;
 	unsigned char* dataYUYV;

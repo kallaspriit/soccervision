@@ -29,12 +29,12 @@ class Vision {
 			BOTH = 3,
 		};
 
-        Vision(Blobber* blobber, int width, int height);
+        Vision(Blobber* blobber, Dir dir, int width, int height);
         ~Vision();
 
 		// make sure to destroy it!
 		void setDebugImage(unsigned char* image, int width, int height);
-        VisionResults* process(unsigned char* frame, Dir dir);
+        VisionResults* process();
         Blobber::Color* getColorAt(int x, int y);
 		bool isViewObstructed() { return obstructionSide != Obstruction::NONE; }
 		Obstruction getObstruction() { return obstructionSide; }
@@ -68,7 +68,7 @@ class Vision {
 		void updateObstructions();
 		void updateColorDistances();
 
-		unsigned char* frame;
+		Dir dir;
 		ImageBuffer img;
         Blobber* blobber;
         LookupTable frontDistanceLookup;

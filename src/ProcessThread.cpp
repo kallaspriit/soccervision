@@ -1,5 +1,6 @@
 #include "ProcessThread.h"
 #include "Blobber.h"
+#include "Vision.h"
 #include "ImageProcessor.h"
 #include "DebugRenderer.h"
 #include "ImageBuffer.h"
@@ -7,7 +8,7 @@
 
 #include <iostream>
 
-ProcessThread::ProcessThread(int width, int height) : Thread(), width(width), height(height), classify(false), convertRGB(false), renderBlobs(false), done(true) {
+ProcessThread::ProcessThread(Dir dir, int width, int height) : Thread(), dir(dir), blobber(NULL), vision(NULL), width(width), height(height), classify(false), convertRGB(false), renderBlobs(false), done(true) {
 	frame = NULL;
 	dataY = new unsigned char[width * height];
     dataU = new unsigned char[(width / 2) * (height / 2)];
@@ -20,11 +21,14 @@ ProcessThread::ProcessThread(int width, int height) : Thread(), width(width), he
 	blobber = new Blobber();
 	blobber->initialize(width, height);
 	blobber->loadOptions(Config::blobberConfigFilename);
+
+	vision = new Vision(blobber, dir, width, height);
 }
 
 ProcessThread::~ProcessThread() {
 	blobber->saveOptions(Config::blobberConfigFilename);
 
+	delete vision;
 	delete blobber;
 }
 
@@ -76,7 +80,12 @@ void* ProcessThread::run() {
 			rgb,
 			width, height
 		);
+
+		vision->setDebugImage(rgb, width, height);
 	}
+
+	vision->process();
+
 	//std::cout << "  - ARGB > RGB: " << Util::timerEnd() << std::endl;
 
 	done = true;
