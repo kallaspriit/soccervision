@@ -91,7 +91,7 @@ int main(int argc, char* argv[]) {
 		processor1->convertRGB = processor2->convertRGB = debug;
 		processor1->renderBlobs = processor2->renderBlobs = debug;
 
-		//__int64 startTime = Util::timerStart();
+		__int64 startTime = Util::timerStart();
 
 		// camera1
 		if (camera1->isAcquisitioning()) {
@@ -142,8 +142,8 @@ int main(int argc, char* argv[]) {
 			gui->update();
 		}
 
-		//std::cout << "! Total time: " << Util::timerEnd(startTime) << ", " << fpsCounter.getFps() << "FPS" << std::endl << std::endl;
-		std::cout << "@  " << fpsCounter->getFps() << "FPS" << std::endl;
+		std::cout << "! Total time: " << Util::timerEnd(startTime) << ", " << fpsCounter->getFps() << "FPS" << std::endl << std::endl;
+		//std::cout << "! " << fpsCounter->getFps() << "FPS" << std::endl;
 
 
 		fpsCounter->step();
