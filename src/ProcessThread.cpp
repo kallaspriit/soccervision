@@ -8,8 +8,10 @@
 
 #include <iostream>
 
-ProcessThread::ProcessThread(Dir dir, int width, int height) : Thread(), dir(dir), blobber(NULL), vision(NULL), width(width), height(height), classify(false), convertRGB(false), renderBlobs(false), done(true) {
+ProcessThread::ProcessThread(Blobber* blobber, Vision* vision) : Thread(), dir(dir), blobber(NULL), vision(NULL), classify(false), convertRGB(false), renderBlobs(false), done(true) {
 	frame = NULL;
+	width = blobber->getWidth();
+	height = blobber->getHeight();
 	dataY = new unsigned char[width * height];
     dataU = new unsigned char[(width / 2) * (height / 2)];
     dataV = new unsigned char[(width / 2) * (height / 2)];
@@ -17,19 +19,10 @@ ProcessThread::ProcessThread(Dir dir, int width, int height) : Thread(), dir(dir
 	classification = new unsigned char[width * height * 3];
 	argb = new unsigned char[width * height * 4];
 	rgb = new unsigned char[width * height * 3];
-
-	blobber = new Blobber();
-	blobber->initialize(width, height);
-	blobber->loadOptions(Config::blobberConfigFilename);
-
-	vision = new Vision(blobber, dir, width, height);
 }
 
 ProcessThread::~ProcessThread() {
 	blobber->saveOptions(Config::blobberConfigFilename);
-
-	delete vision;
-	delete blobber;
 }
 
 void* ProcessThread::run() {

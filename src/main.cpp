@@ -1,6 +1,8 @@
 #include "Gui.h"
 #include "XimeaCamera.h"
 #include "ProcessThread.h"
+#include "Blobber.h"
+#include "Vision.h"
 #include "FpsCounter.h"
 #include "Util.h"
 #include "Config.h"
@@ -52,8 +54,18 @@ int main(int argc, char* argv[]) {
 	XimeaCamera* camera1 = new XimeaCamera();
 	XimeaCamera* camera2 = new XimeaCamera();
 
-	ProcessThread* processor1 = new ProcessThread(Dir::FRONT, width, height);
-	ProcessThread* processor2 = new ProcessThread(Dir::REAR, width, height);
+	Blobber* blobber1 = new Blobber();
+	blobber1->initialize(width, height);
+	blobber1->loadOptions(Config::blobberConfigFilename);
+	Vision* vision1 = new Vision(blobber1, Dir::FRONT, width, height);
+
+	Blobber* blobber2 = new Blobber();
+	blobber2->initialize(width, height);
+	blobber2->loadOptions(Config::blobberConfigFilename);
+	Vision* vision2 = new Vision(blobber2, Dir::REAR, width, height);
+
+	ProcessThread* processor1 = new ProcessThread(blobber1, vision1);
+	ProcessThread* processor2 = new ProcessThread(blobber2, vision2);
 
 	int cameraSerial1 = 857735761;
 	int cameraSerial2 = 857769553;
@@ -149,6 +161,10 @@ int main(int argc, char* argv[]) {
 		fpsCounter->step();
 	}
 
+	delete blobber1;
+	delete blobber2;
+	delete vision1;
+	delete vision2;
 	delete camera1;
 	delete camera2;
 	delete winRGB1;

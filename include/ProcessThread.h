@@ -10,7 +10,7 @@ class Vision;
 class ProcessThread : public Thread {
 
 public:
-	ProcessThread(Dir dir, int width, int height);
+	ProcessThread(Blobber* blobber, Vision* vision);
 	~ProcessThread();
 
 	void setFrame(unsigned char* data) { frame = data; };

@@ -250,6 +250,8 @@ class Blobber {
 
         Color* getColorAt(int x, int y);
 		Pixel* getPixelAt(int x, int y);
+		int getWidth() { return width; }
+		int getHeight() { return height; }
 
         void setColor(int color, Color& info) {
             colors[color] = info;
@@ -286,7 +288,8 @@ class Blobber {
 
         Color colors[BLOBBER_MAX_COLORS];
         int colorCount;
-        int width, height;
+        int width;
+        int height;
         unsigned int* map;
 
         MapFilter* mapFilter;
