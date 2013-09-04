@@ -6,6 +6,7 @@
 
 class Blobber;
 class Vision;
+class VisionResults;
 
 class ProcessThread : public Thread {
 
@@ -26,6 +27,7 @@ public:
 
 	Blobber* blobber;
 	Vision* vision;
+	VisionResults* visionResults;
 
 	unsigned char* frame;
 	unsigned char* dataYUYV;

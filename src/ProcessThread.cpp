@@ -8,7 +8,7 @@
 
 #include <iostream>
 
-ProcessThread::ProcessThread(Blobber* blobber, Vision* vision) : Thread(), dir(dir), blobber(blobber), vision(vision), classify(false), convertRGB(false), renderBlobs(false), done(true) {
+ProcessThread::ProcessThread(Blobber* blobber, Vision* vision) : Thread(), dir(dir), blobber(blobber), vision(vision), visionResults(NULL), classify(false), convertRGB(false), renderBlobs(false), done(true) {
 	frame = NULL;
 	width = blobber->getWidth();
 	height = blobber->getHeight();
@@ -22,12 +22,20 @@ ProcessThread::ProcessThread(Blobber* blobber, Vision* vision) : Thread(), dir(d
 }
 
 ProcessThread::~ProcessThread() {
-	
+	if (visionResults != NULL) {
+		delete visionResults;
+		visionResults = NULL;
+	}
 }
 
 void* ProcessThread::run() {
 	if (frame == NULL) {
 		return NULL;
+	}
+
+	if (visionResults != NULL) {
+		delete visionResults;
+		visionResults = NULL;
 	}
 
 	done = false;
@@ -73,13 +81,12 @@ void* ProcessThread::run() {
 			rgb,
 			width, height
 		);
+		//std::cout << "  - ARGB > RGB: " << Util::timerEnd() << std::endl;
 
 		vision->setDebugImage(rgb, width, height);
 	}
 
-	vision->process();
-
-	//std::cout << "  - ARGB > RGB: " << Util::timerEnd() << std::endl;
+	visionResults = vision->process();
 
 	done = true;
 

@@ -85,8 +85,8 @@ ObjectList Vision::processBalls(Dir dir) {
 			continue;
 		}
 
-		distance = getDistance(dir, blob->centerX, blob->y2);
-        angle = getAngle(dir, blob->centerX, blob->y2);
+		distance = getDistance(dir, (int)blob->centerX, (int)blob->y2);
+        angle = getAngle(dir, (int)blob->centerX, (int)blob->y2);
 
 		if (dir == Dir::REAR) {
 			if (angle > 0.0f) {
@@ -101,8 +101,8 @@ ObjectList Vision::processBalls(Dir dir) {
 		if (blob->y1 < 0) blob->y1 = 0;
 		if (blob->y2 > height - 1) blob->y2 = height - 1;
 
-		float width = blob->x2 - blob->x1;
-		float height = blob->y2 - blob->y1;
+		int width = blob->x2 - blob->x1;
+		int height = blob->y2 - blob->y1;
 
         Object* ball = new Object(
             blob->x1 + width / 2,
@@ -153,8 +153,8 @@ ObjectList Vision::processGoals(Dir dir) {
 				continue;
 			}
 
-			distance = getDistance(dir, blob->centerX, blob->y2);
-            angle = getAngle(dir, blob->centerX, blob->y2);
+			distance = getDistance(dir, (int)blob->centerX, (int)blob->y2);
+            angle = getAngle(dir, (int)blob->centerX, (int)blob->y2);
 
 			if (dir == Dir::REAR) {
 				if (angle > 0.0f) {
@@ -169,8 +169,8 @@ ObjectList Vision::processGoals(Dir dir) {
 			if (blob->y1 < 0) blob->y1 = 0;
 			if (blob->y2 > height - 1) blob->y2 = height - 1;
 
-			float width = blob->x2 - blob->x1;
-			float height = blob->y2 - blob->y1;
+			int width = blob->x2 - blob->x1;
+			int height = blob->y2 - blob->y1;
 
 			Object* goal = new Object(
 				blob->x1 + width / 2,
