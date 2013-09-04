@@ -8,7 +8,7 @@
 
 #include <iostream>
 
-ProcessThread::ProcessThread(Blobber* blobber, Vision* vision) : Thread(), dir(dir), blobber(NULL), vision(NULL), classify(false), convertRGB(false), renderBlobs(false), done(true) {
+ProcessThread::ProcessThread(Blobber* blobber, Vision* vision) : Thread(), dir(dir), blobber(blobber), vision(vision), classify(false), convertRGB(false), renderBlobs(false), done(true) {
 	frame = NULL;
 	width = blobber->getWidth();
 	height = blobber->getHeight();
@@ -22,7 +22,7 @@ ProcessThread::ProcessThread(Blobber* blobber, Vision* vision) : Thread(), dir(d
 }
 
 ProcessThread::~ProcessThread() {
-	blobber->saveOptions(Config::blobberConfigFilename);
+	
 }
 
 void* ProcessThread::run() {

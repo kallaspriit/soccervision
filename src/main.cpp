@@ -161,6 +161,9 @@ int main(int argc, char* argv[]) {
 		fpsCounter->step();
 	}
 
+	blobber1->saveOptions(Config::blobberConfigFilename);
+	//blobber2->saveOptions(Config::blobberConfigFilename);
+
 	delete blobber1;
 	delete blobber2;
 	delete vision1;
