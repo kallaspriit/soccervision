@@ -40,7 +40,7 @@ int main(int argc, char* argv[]) {
 	// config
 	int width = Config::cameraWidth;
 	int height = Config::cameraHeight;
-	bool debug = true;
+	bool debug = false;
 
 	Gui* gui = new Gui(instance);
 	FpsCounter* fpsCounter = new FpsCounter();
@@ -143,7 +143,7 @@ int main(int argc, char* argv[]) {
 		}
 
 		//std::cout << "! Total time: " << Util::timerEnd(startTime) << ", " << fpsCounter.getFps() << "FPS" << std::endl << std::endl;
-		std::cout << "! " << fpsCounter->getFps() << "FPS" << std::endl;
+		std::cout << "@ " << fpsCounter->getFps() << "FPS" << std::endl;
 
 
 		fpsCounter->step();
