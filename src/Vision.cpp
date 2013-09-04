@@ -6,17 +6,11 @@
 #include <iostream>
 #include <algorithm>
 
-Vision::Vision(int width, int height) : blobber(NULL), width(width), height(height), lastFrameFront(NULL), lastFrameRear(NULL), classificationFront(NULL), classificationRear(NULL), viewObstructed(false), robotInWay(0), blackDistance(-1.0f) {
-    blobber = new Blobber();
-
-    blobber->initialize(width, height);
-    blobber->loadOptions(Config::blobberConfigFilename);
-    blobber->enable(BLOBBER_DENSITY_MERGE);
-
-    frontDistanceLookup.load("config/distance-front.cfg"/*, 0.13f*/);
-    rearDistanceLookup.load("config/distance-rear.cfg");
-    frontAngleLookup.load("config/angle-front.cfg");
-    rearAngleLookup.load("config/angle-rear.cfg");
+Vision::Vision(Blobber* blobber, int width, int height) : blobber(blobber), width(width), height(height), obstructionSide(Obstruction::NONE), blackDistance(-1.0f) {
+	frontDistanceLookup.load(Config::frontDistanceLookupFilename/*, 0.13f*/);
+	rearDistanceLookup.load(Config::rearDistanceLookupFilename);
+	frontAngleLookup.load(Config::frontAngleLookupFilename);
+    rearAngleLookup.load(Config::rearAngleLookupFilename);
 
     validBallBgColors.push_back("green");
     validBallBgColors.push_back("white");
@@ -48,107 +42,37 @@ Vision::Vision(int width, int height) : blobber(NULL), width(width), height(heig
 
 	goalColors.push_back("yellow-goal");
     goalColors.push_back("blue-goal");
-
-    //blobber->enable(BLOBBER_DUAL_THRESHOLD);
-    //blobber->setMapFilter(this);
-
-    /*
-    [Colors]
-    (255,128,  0) 0.5000 5 ball
-    (255,255,  0) 0.5000 5 yellow-goal
-    (  0,  0,255) 0.5000 5 blue-goal
-    (255,255,255) 0.5000 5 white
-    (  0,255,  0) 0.5000 5 green
-    ( 32, 32, 32) 0.5000 5 black
-
-    [Thresholds]
-    ( 50:133, 88:128,154:196)
-    (  0:  0,  0:255,  0:255)
-    (  0:  0,  0:255,  0:255)
-    (  0:  0,  0:255,  0:255)
-    (  0:  0,  0:255,  0:255)
-    (  0:  0,  0:255,  0:255)
-    */
-
-    /*
-    frontDistanceLookup.load("config/distance-front.cfg");
-
-    for (int i = 0; i < 800; i += 100) {
-        float v = frontDistanceLookup.getValue(i);
-
-        std::cout << "Test " << i << ": " << v << std::endl;
-    }
-    */
-
-	/*LookupTable testLookup;
-    testLookup.addValue(0, 4.0f);
-    testLookup.addValue(100, 3.0f);
-    testLookup.addValue(150, 2.0f);
-
-    double d1 = testLookup.getValue(0);
-    double d2 = testLookup.getValue(100);
-    double d3 = testLookup.getValue(50);
-    double d4 = testLookup.getValue(25);
-    double d5 = testLookup.getValue(75);
-    double d6 = testLookup.getValue(125);
-    double d7 = testLookup.getValue(200);
-
-    std::cout << "Distance   0: " << d1 << " / 4.00" << std::endl;
-    std::cout << "Distance 100: " << d2 << " / 3.00" << std::endl;
-    std::cout << "Distance  50: " << d3 << " / 3.50" << std::endl;
-    std::cout << "Distance  25: " << d4 << " / 3.75" << std::endl;
-    std::cout << "Distance  75: " << d5 << " / 3.25" << std::endl;
-    std::cout << "Distance 125: " << d6 << " / 2.50" << std::endl;
-    std::cout << "Distance 200: " << d7 << " / 2.00" << std::endl;*/
 }
 
 Vision::~Vision() {
-    if (blobber != NULL) {
-        blobber->saveOptions(Config::blobberConfigFilename);
-
-        delete blobber;
-
-        blobber = NULL;
-    }
-
-    if (classificationFront != NULL) {
-        delete classificationFront;
-    }
-
-	if (classificationRear != NULL) {
-        delete classificationRear;
-    }
+   
 }
 
-void Vision::setFrame(unsigned char* frame, Dir dir) {
-    blobber->processFrame((Blobber::Pixel*)frame);
-
-	if (dir == Dir::DIR_FRONT) {
-		lastFrameFront = frame;
-	} else {
-		lastFrameRear = frame;
-	}
+void Vision::setDebugImage(unsigned char* image, int width, int height) {
+	img.data = image;
+	img.width = width;
+	img.height = height;
 }
 
-void Vision::process(Dir dir) {
-    processBalls(dir);
-	processGoals(dir);
+VisionResults* Vision::process(unsigned char* frame, Dir dir) {
+	VisionResults* results = new VisionResults();
 
-	if (dir == Dir::DIR_FRONT) {
+	this->frame = frame;
+
+    ObjectList balls = processBalls(dir);
+	ObjectList goals = processGoals(dir);
+
+	if (dir == Dir::FRONT) {
 		updateObstructions();
 		updateColorDistances();
 	}
+
+	return results;
 }
 
-void Vision::processBalls(Dir dir) {
-	ObjectList ballset;
-	ObjectList* balls = dir == Dir::DIR_FRONT ? &frontBalls : &rearBalls;
-
-    for (ObjectListIt it = balls->begin(); it != balls->end(); it++) {
-        delete *it;
-    }
-
-    balls->clear();
+ObjectList Vision::processBalls(Dir dir) {
+	ObjectList allBalls;
+	ObjectList filteredBalls;
 
     float distance;
     float angle;
@@ -165,7 +89,7 @@ void Vision::processBalls(Dir dir) {
 		distance = getDistance(dir, blob->centerX, blob->y2);
         angle = getAngle(dir, blob->centerX, blob->y2);
 
-		if (dir == Dir::DIR_REAR) {
+		if (dir == Dir::REAR) {
 			if (angle > 0.0f) {
 				angle -= Math::PI;
 			} else {
@@ -190,36 +114,32 @@ void Vision::processBalls(Dir dir) {
             distance,
             angle,
 			0,
-			dir == Dir::DIR_FRONT ? false : true
+			dir == Dir::FRONT ? false : true
         );
 		
-        ballset.push_back(ball);
+        allBalls.push_back(ball);
 
         blob = blob->next;
     }
 
-	ObjectList individualBalls = Object::mergeOverlapping(ballset, Config::ballOverlapMargin);
+	ObjectList mergedBalls = Object::mergeOverlapping(allBalls, Config::ballOverlapMargin);
 
-	for (ObjectListItc it = individualBalls.begin(); it != individualBalls.end(); it++) {
+	for (ObjectListItc it = mergedBalls.begin(); it != mergedBalls.end(); it++) {
 		Object* ball = *it;
 
 		if (isValidBall(ball, dir)) {
 			ball->distance = getDistance(dir, ball->x, ball->y + ball->height / 2);
 			ball->angle = getAngle(dir, ball->x, ball->y + ball->height / 2);
-			balls->push_back(ball);
+			filteredBalls.push_back(ball);
 		}
 	}
+
+	return filteredBalls;
 }
 
-void Vision::processGoals(Dir dir) {
-	ObjectList goalset;
-	ObjectList* goals = dir == Dir::DIR_FRONT ? &frontGoals : &rearGoals;
-
-    for (ObjectListIt it = goals->begin(); it != goals->end(); it++) {
-        delete *it;
-    }
-
-    goals->clear();
+ObjectList Vision::processGoals(Dir dir) {
+	ObjectList allGoals;
+	ObjectList filteredGoals;
 
     float distance;
     float angle;
@@ -234,11 +154,10 @@ void Vision::processGoals(Dir dir) {
 				continue;
 			}
 
-			// TODO Calculate from center lowest y pixel and recalculate after merge
 			distance = getDistance(dir, blob->centerX, blob->y2);
             angle = getAngle(dir, blob->centerX, blob->y2);
 
-			if (dir == Dir::DIR_REAR) {
+			if (dir == Dir::REAR) {
 				if (angle > 0.0f) {
 					angle -= Math::PI;
 				} else {
@@ -263,19 +182,19 @@ void Vision::processGoals(Dir dir) {
 				distance,
 				angle,
 				i == 0 ? Side::YELLOW : Side::BLUE,
-				dir == Dir::DIR_FRONT ? false : true
+				dir == Dir::FRONT ? false : true
 			);
 
 			goal->processed = false;
-			goalset.push_back(goal);
+			allGoals.push_back(goal);
 
             blob = blob->next;
         }
     }
 
-	ObjectList individualGoals = Object::mergeOverlapping(goalset, Config::goalOverlapMargin, true);
+	ObjectList mergedGoals = Object::mergeOverlapping(allGoals, Config::goalOverlapMargin, true);
 
-	for (ObjectListItc it = individualGoals.begin(); it != individualGoals.end(); it++) {
+	for (ObjectListItc it = mergedGoals.begin(); it != mergedGoals.end(); it++) {
 		Object* goal = *it;
 
 		if (isValidGoal(goal, goal->type == 0 ? Side::YELLOW : Side::BLUE)) {
@@ -283,9 +202,11 @@ void Vision::processGoals(Dir dir) {
 
 			goal->distance = getDistance(dir, goal->x, goal->y + goal->height / 2);
 			goal->angle = getAngle(dir, goal->x, goal->y + goal->height / 2);
-			goals->push_back(goal);
+			filteredGoals.push_back(goal);
 		}
 	}
+
+	return filteredGoals;
 }
 
 bool Vision::isValidGoal(Object* goal, Side side) {
@@ -314,7 +235,7 @@ bool Vision::isValidGoal(Object* goal, Side side) {
 		//std::cout << "@ GOAL INVALID MIN AREA: " << goal->area << " VS " << Config::goalMinArea << std::endl;
 
 		return false;
-	} else if (goal->area > 10000) {
+	} else if (goal->area > Config::goalCertainArea) {
 		return true;
 	}
 
@@ -342,14 +263,14 @@ bool Vision::isValidBall(Object* ball, Dir dir) {
 
 	float sizeRatio = (float)ball->width / (float)ball->height;
 
-	if (sizeRatio > Config::maxBallSizeRatio || sizeRatio < 1.0f/Config::maxBallSizeRatio) {
+	if (sizeRatio > Config::maxBallSizeRatio || sizeRatio < 1.0f / Config::maxBallSizeRatio) {
 		return false;
 	}
 
-	int ballRadius = Math::min(ball->width, ball->height) / 2;
-	int senseRadius = Math::min(ballRadius * 1.35f * Math::max(ball->distance / 2.0f, 1.0f) + 10.0f, Config::maxBallSenseRadius);
+	int ballRadius = getBallRadius(ball->width, ball->height);
+	int senseRadius = getBallSenseRadius(ballRadius, ball->distance);
 
-	if (ball->y + ballRadius < Config::maxSurroundSenseY) {
+	if (ball->y + ballRadius < Config::surroundSenseThresholdY) {
 		float surroundMetric = getSurroundMetric(
 			ball->x,
 			ball->y + ballRadius,
@@ -361,17 +282,17 @@ bool Vision::isValidBall(Object* ball, Dir dir) {
 
 		//std::cout << "Surround: " << surroundMetric << std::endl;
 
-		if (surroundMetric != -1.0f && surroundMetric < Config::validBallSurroundThreshold) {
+		if (surroundMetric != -1.0f && surroundMetric < Config::minValidBallSurroundThreshold) {
 			//std::cout << "@ BALL SURROUND FAIL: " << surroundMetric << " VS " << Config::validBallSurroundThreshold << std::endl;
 
 			return false;
 		}
 	}
 
-	if (ball->y < Config::cameraPathStartY) {
+	if (ball->y + ballRadius < Config::ballPathSenseThresholdY) {
 		PathMetric pathMetric = getPathMetric(
-			Config::cameraPathStartX,
-			Config::cameraPathStartY,
+			Config::cameraWidth / 2,
+			Config::ballPathSenseThresholdY,
 			ball->x,
 			ball->y + ballRadius + senseRadius / 2 + 6,
 			validBallPathColors
@@ -380,10 +301,8 @@ bool Vision::isValidBall(Object* ball, Dir dir) {
 
 		//std::cout << "Ball path: " << pathMetric << std::endl;
 
-		// @TODO Path must not contain green-white-black
-
 		if (
-			pathMetric.percentage < Config::validBallPathThreshold
+			pathMetric.percentage < Config::minValidBallPathThreshold
 			|| pathMetric.out
 			//|| !pathMetric.validColorFound
 			//|| pathMetric.invalidSpree > getBallMaxInvalidSpree(ball->y + ball->height / 2)
@@ -404,9 +323,9 @@ bool Vision::isValidBall(Object* ball, Dir dir) {
 }
 
 bool Vision::isBallInGoal(Object* ball, Dir dir) {
-	if (ball->distance < 1.0f) {
-		int ballRadius = Math::max(ball->width, ball->height) / 2;
-		int senseRadius = Math::min(ballRadius * 1.35f * Math::max(ball->distance / 2.0f, 1.0f) + 10.0f, Config::maxBallSenseRadius);
+	if (ball->distance < Config::ballInGoalConsiderMaxDistance) {
+		int ballRadius = getBallRadius(ball->width, ball->height);
+		int senseRadius = getBallSenseRadius(ballRadius, ball->distance);
 
 		float surroundMetric = getSurroundMetric(
 			ball->x,
@@ -418,14 +337,14 @@ bool Vision::isBallInGoal(Object* ball, Dir dir) {
 			true
 		);
 
-		if (surroundMetric != -1.0f && surroundMetric > Config::ballInGoalThreshold) {
+		if (surroundMetric != -1.0f && surroundMetric > Config::ballInGoalSurroundThreshold) {
 			//std::cout << "@ BALL IN GOAL SURROUND: " << surroundMetric << " VS " << Config::ballInGoalThreshold << std::endl;
 
 			return true;
 		}
 	}
 
-	/*if (dir == Dir::DIR_FRONT) {
+	/*if (dir == Dir::FRONT) {
 		for (ObjectListItc it = frontGoals.begin(); it != frontGoals.end(); it++) {
 			if (ball->contains(*it)) {
 				//std::cout << "@ BALL IN GOAL INTERSECTS FRONT" << std::endl;
@@ -433,7 +352,7 @@ bool Vision::isBallInGoal(Object* ball, Dir dir) {
 				return true;
 			}
 		}
-	} else if (dir == Dir::DIR_REAR) {
+	} else if (dir == Dir::REAR) {
 		for (ObjectListItc it = rearGoals.begin(); it != rearGoals.end(); it++) {
 			if (ball->contains(*it)) {
 				//std::cout << "@ BALL IN GOAL INTERSECTS REAR" << std::endl;
@@ -446,22 +365,23 @@ bool Vision::isBallInGoal(Object* ball, Dir dir) {
 	return false;
 }
 
-int Vision::getBallMaxInvalidSpree(int y) {
+/*int Vision::getBallMaxInvalidSpree(int y) {
 	return y / 20.0f; // @TODO Something reasonable..
 }
 
 int Vision::getGoalMaxInvalidSpree(int y) {
 	return y / 20.0f;
-}
-
-/*void Vision::filterMap(unsigned int* map) {
-
 }*/
 
-float Vision::getDistance(Dir dir, int x, int y) {
-	//float yCorrection = 0.000095 * Math::pow(x, 2) - 0.0536 * x + 7;
-	//std::cout << "! Y-correction: " << yCorrection << " at x: " << x << std::endl;
+int Vision::getBallRadius(int width, int height) {
+	return Math::min(width, height) / 2;
+}
 
+int Vision::getBallSenseRadius(int ballRadius, int distance) {
+	Math::min(ballRadius * 1.35f * Math::max(distance / 2.0f, 1.0f) + 10.0f, Config::maxBallSenseRadius);
+}
+
+float Vision::getDistance(Dir dir, int x, int y) {
 	int realX = x;
 	int realY = y;
 
@@ -470,7 +390,7 @@ float Vision::getDistance(Dir dir, int x, int y) {
 	float yCorrection = 0;
 	float distance;
 
-    if (dir == DIR_FRONT) {
+    if (dir == FRONT) {
 		distance = frontDistanceLookup.getValue(realY - yCorrection);
     } else {
         distance = rearDistanceLookup.getValue(realY - yCorrection);
@@ -479,22 +399,22 @@ float Vision::getDistance(Dir dir, int x, int y) {
 	return Math::max(distance + Config::distanceCorrection, 0.01f);
 }
 
-float Vision::getHorizontalDistance(Dir dir, int x, int y) {
-	/*float measurementPixels = 150;
+/*float Vision::getHorizontalDistance(Dir dir, int x, int y) {
+	/float measurementPixels = 150;
 	float distance = getDistance(dir, x, y);
-	float distanceLookup = dir == DIR_FRONT ? frontAngleLookup.getValue(distance) : frontAngleLookup.getValue(distance);
+	float distanceLookup = dir == FRONT ? frontAngleLookup.getValue(distance) : frontAngleLookup.getValue(distance);
 	float metersPerPixel = distanceLookup / measurementPixels;
 	float centerOffset = (float)(x - (Config::cameraWidth / 2));
-	float horizontalDistance = centerOffset * metersPerPixel;*/
+	float horizontalDistance = centerOffset * metersPerPixel;/
 
-	/*std::cout << "! Solve horizontal distance for " << x << "x" << y << std::endl;
+	/std::cout << "! Solve horizontal distance for " << x << "x" << y << std::endl;
 	std::cout << " > Dir " << dir << std::endl;
 	std::cout << " > Distance " << distance << std::endl;
 	std::cout << " > Horizontal " << measurementPixels << " pixels meters: " << distanceLookup << std::endl;
 	std::cout << " > Test 2m lookup: " << frontAngleLookup.getValue(2.0f) << std::endl;
 	std::cout << " > Meters for pixel: " << metersPerPixel << std::endl;
 	std::cout << " > Center offset: " << centerOffset << std::endl;
-	std::cout << " > Horizontal distance: " << horizontalDistance << std::endl;*/
+	std::cout << " > Horizontal distance: " << horizontalDistance << std::endl;/
 
 	//return horizontalDistance;
 
@@ -508,7 +428,7 @@ float Vision::getHorizontalDistance(Dir dir, int x, int y) {
 	float localAngle = distance / 686.0f;
 
 	return Math::tan(localAngle) * (realY + 0.062);
-}
+}*/
 
 float Vision::getAngle(Dir dir, int x, int y) {
 	int realX = x;
@@ -518,7 +438,7 @@ float Vision::getAngle(Dir dir, int x, int y) {
 
     /*float centerOffset = (float)(x - (Config::cameraWidth / 2));
     float distance = getDistance(dir, x, y);
-    float pixelsPerCm = dir == DIR_FRONT ? frontAngleLookup.getValue(distance) : rearAngleLookup.getValue(distance);
+    float pixelsPerCm = dir == FRONT ? frontAngleLookup.getValue(distance) : rearAngleLookup.getValue(distance);
     float horizontalDistance = (double)centerOffset / pixelsPerCm;
 	//return Math::tan(horizontalDistance / distance) * 180.0 / Math::PI;
 	*/
@@ -533,7 +453,7 @@ float Vision::getAngle(Dir dir, int x, int y) {
 	float centerOffset = (float)(realX - (Config::cameraWidth / 2.0f)),
 		angle = Math::degToRad(centerOffset / 11.5f);
 
-	if (dir == Dir::DIR_REAR) {
+	if (dir == Dir::REAR) {
 		if (angle < 0.0f) {
 			angle += Math::PI;
 		} else {
@@ -580,7 +500,7 @@ float Vision::getSurroundMetric(int x, int y, float radius, std::vector<std::str
 			senseX < 0
 			|| senseX > width - 1
 			|| senseY < 0
-			|| senseY > Config::maxSurroundSenseY
+			|| senseY > Config::surroundSenseThresholdY
 		) {
 			continue;
 		}
@@ -1146,7 +1066,7 @@ float Vision::getColorDistance(std::string colorName, int x1, int y1, int x2, in
 					img.drawMarker(x, y, 0, 200, 0);
 				}
 
-				return getDistance(Dir::DIR_FRONT, x, y);
+				return getDistance(Dir::FRONT, x, y);
 			} else {
 				if (debug) {
 					img.drawMarker(x, y, 200, 0, 0);
@@ -1165,31 +1085,30 @@ float Vision::getColorDistance(std::string colorName, int x1, int y1, int x2, in
 float Vision::getColorDistance(std::string colorName) {
 	float distanceA = getColorDistance(
 		colorName,
-		Config::cameraPathStartX, Config::cameraPathStartY,
+		Config::cameraWidth / 2, Config::colorDistanceStartY,
 		0, 0
 	);
 	float distanceB = getColorDistance(
 		colorName,
-		Config::cameraPathStartX, Config::cameraPathStartY,
+		Config::cameraWidth / 2, Config::colorDistanceStartY,
 		Config::cameraWidth / 2, 0
 	);
 	float distanceC = getColorDistance(
 		colorName,
-		Config::cameraPathStartX, Config::cameraPathStartY,
+		Config::cameraWidth / 2, Config::colorDistanceStartY,
 		Config::cameraWidth, 0
 	);
 
 	return Math::min(Math::min(distanceA, distanceB), distanceC);
 }
 
-bool Vision::isBallInWay(int goalY) {
+bool Vision::isBallInWay(ObjectList balls, int goalY) {
 	int startY = Config::cameraHeight - 100;
 	int halfWidth = Config::cameraWidth / 2;
-	const ObjectList& frontBalls = getFrontBalls();
 	Object* ball;
 	float checkWidth;
 
-	for (ObjectListItc it = frontBalls.begin(); it != frontBalls.end(); it++) {
+	for (ObjectListItc it = balls.begin(); it != balls.end(); it++) {
 		ball = *it;
 		checkWidth = ball->width * 2.0f;
 		
@@ -1202,12 +1121,6 @@ bool Vision::isBallInWay(int goalY) {
 	}
 
 	return false;
-
-	/*int step = 6;
-
-	for (int y = Config::cameraHeight - 50; y >= goalY; y -= step) {
-
-	}*/
 }
 
 float Vision::getBlockMetric(int x1, int y1, int blockWidth, int blockHeight, std::vector<std::string> validColors, int step) {
@@ -1479,12 +1392,14 @@ float Vision::getUndersideMetric(int x1, int y1, float distance, int blockWidth,
 		}
 	}*/
 
-	if (y1 > Config::whiteBlackMinY && !sawWhite && !sawBlack) {
-		return false;
+	// sure?
+	if (y1 > Config::undersideMetricBlackWhiteMinY && !sawWhite && !sawBlack) {
+		return 0.0f;
 	}
 
-	if (matches < Config::validGoalMinMatches) {
-		return false;
+	// sure?
+	if (matches < Config::undersideMetricValidGoalMinMatches) {
+		return 0.0f;
 	}
 
 	int points = matches + misses;
@@ -1511,272 +1426,34 @@ float Vision::getUndersideMetric(int x1, int y1, float distance, int blockWidth,
 
 void Vision::updateObstructions() {
 	float leftMetric = getBlockMetric(
-		Config::cameraWidth / 2 - Config::robotInWayWidth,
-		Config::robotInWayY,
-		Config::robotInWayWidth,
-		Config::robotInWayHeight,
+		Config::cameraWidth / 2 - Config::obstructionsSenseWidth,
+		Config::obstructionsStartY,
+		Config::obstructionsSenseWidth,
+		Config::obstructionsSenseHeight,
 		viewObstructedValidColors,
 		20
 	);
 
 	float rightMetric = getBlockMetric(
 		Config::cameraWidth / 2,
-		Config::robotInWayY,
-		Config::robotInWayWidth,
-		Config::robotInWayHeight,
+		Config::obstructionsStartY,
+		Config::obstructionsSenseWidth,
+		Config::obstructionsSenseHeight,
 		viewObstructedValidColors,
 		20
 	);
 
-	viewObstructed = false;
-	robotInWay = 0;
+	obstructionSide = Obstruction::NONE;
 
-	if (leftMetric < Config::viewObstructedThreshold && rightMetric < Config::viewObstructedThreshold) {
-		viewObstructed = true;
-	} else if (leftMetric < Config::viewObstructedThreshold) {
-		robotInWay = -1;
-	} else if (rightMetric < Config::viewObstructedThreshold) {
-		robotInWay = 1;
+	if (leftMetric < Config::obstructedThreshold && rightMetric < Config::obstructedThreshold) {
+		obstructionSide = Obstruction::BOTH;
+	} else if (leftMetric < Config::obstructedThreshold) {
+		obstructionSide = Obstruction::LEFT;
+	} else if (rightMetric < Config::obstructedThreshold) {
+		obstructionSide = Obstruction::RIGHT;
 	}
 }
 
 void Vision::updateColorDistances() {
 	blackDistance = getColorDistance("black");
-}
-
-unsigned char* Vision::getClassification(Dir dir) {
-	if (dir == Dir::DIR_FRONT) {
-		if (classificationFront == NULL) {
-			std::cout << "! Creating front classification buffer.. ";
-			classificationFront = new unsigned char[width * height * 3];
-			std::cout << "done!" << std::endl;
-		}
-
-		return classificationFront;
-	} else {
-		if (classificationRear == NULL) {
-			std::cout << "! Creating rear classification buffer.. ";
-			classificationRear = new unsigned char[width * height * 3];
-			std::cout << "done!" << std::endl;
-		}
-
-		return classificationRear;
-	}
-}
-
-ImageBuffer* Vision::classify(Dir dir) {
-	unsigned char* lastFrame = getLastFrame(dir);
-	unsigned char* classification = getClassification(dir);
-
-    if (lastFrame == NULL) {
-        return NULL;
-    }
-
-    blobber->classify((Blobber::Rgb*)classification, (Blobber::Pixel*)lastFrame);
-
-    img.width = width;
-    img.height = height;
-    img.data = classification;
-
-    return &img;
-}
-
-void Vision::setImage(unsigned char* image, int width, int height) {
-	img.width = width;
-    img.height = height;
-    img.data = image;
-}
-
-Object* Vision::getClosestBall(bool frontOnly) {
-	const ObjectList& frontBalls = getFrontBalls();
-	float closestDistance = 100.0f;
-	float distance;
-	Object* ball;
-	Object* closestBall = NULL;
-
-	for (ObjectListItc it = frontBalls.begin(); it != frontBalls.end(); it++) {
-		ball = *it;
-		distance = ball->behind ? ball->distance * 1.25f : ball->distance;
-		
-		if (closestBall == NULL || distance < closestDistance) {
-			closestBall = ball;
-			closestDistance = distance;
-		}
-	}
-
-	if (!frontOnly) {
-		const ObjectList& rearBalls = getRearBalls();
-
-		for (ObjectListItc it = rearBalls.begin(); it != rearBalls.end(); it++) {
-			ball = *it;
-			distance = ball->behind ? ball->distance * 1.25f : ball->distance;
-		
-			if (closestBall == NULL || distance < closestDistance) {
-				closestBall = ball;
-				closestDistance = distance;
-			}
-		}
-	}
-
-	return closestBall;
-
-	/*if (closestBall != NULL) {
-		lastClosestBall.copyFrom(closestBall);
-
-		return closestBall;
-	} else if (
-		lastClosestBall.width > 0
-		&& Util::duration(lastClosestBall.lastSeenTime) < Config::fakeBallLifetime
-	) {
-		//std::cout << "@ RETURNING FAKE CLOSEST BALL " << Util::duration(lastClosestBall.lastSeenTime) << std::endl;
-
-		return &lastClosestBall;
-	} else {
-		return NULL;
-	}*/
-}
-
-Object* Vision::getLargestGoal(Side side, bool frontOnly) {
-	const ObjectList& frontGoals = getFrontGoals();
-	float area;
-	float largestArea = 0.0f;
-	Object* goal;
-	Object* largestGoal = NULL;
-
-	for (ObjectListItc it = frontGoals.begin(); it != frontGoals.end(); it++) {
-		goal = *it;
-		
-		if (side != Side::UNKNOWN && goal->type != (int)side) {
-			continue;
-		}
-
-		//area = goal->area;
-		area = goal->width * goal->height;
-
-		if (largestGoal == NULL || area > largestArea) {
-			largestGoal = goal;
-			largestArea = area;
-		}
-	}
-
-	if (frontOnly != true) {
-		const ObjectList& rearGoals = getRearGoals();
-
-		for (ObjectListItc it = rearGoals.begin(); it != rearGoals.end(); it++) {
-			goal = *it;
-
-			if (side != Side::UNKNOWN && goal->type != (int)side) {
-				continue;
-			}
-
-			//area = goal->area;
-			area = goal->width * goal->height;
-		
-			if (largestGoal == NULL || area > largestArea) {
-				largestGoal = goal;
-				largestArea = area;
-			}
-		}
-	}
-
-	if (largestGoal != NULL) {
-		/*int minX, minY, maxX, maxY;
-		const ObjectList& goals = largestGoal->behind ? getRearGoals() : getFrontGoals();
-
-		for (ObjectListItc it = goals.begin(); it != goals.end(); it++) {
-			goal = *it;
-		
-			if (goal == largestGoal || !goal->intersects(largestGoal)) {
-				continue;
-			}
-
-			minX = Math::min(largestGoal->x - largestGoal->width / 2, goal->x - goal->width / 2);
-			maxX = Math::min(largestGoal->x + largestGoal->width / 2, goal->x + goal->width / 2);
-			minY = Math::min(largestGoal->y - largestGoal->height / 2, goal->y - goal->height / 2);
-			maxY = Math::min(largestGoal->y + largestGoal->height / 2, goal->y + goal->height / 2);
-
-			largestGoal->width = maxX - minX;
-			largestGoal->height = maxY - minY;
-			largestGoal->x = minX + largestGoal->width / 2;
-			largestGoal->y = minY + largestGoal->height / 2;
-		}*/
-
-		lastLargestGoal.copyFrom(largestGoal);
-
-		return largestGoal;
-	} else if (
-		lastLargestGoal.width > 0
-		&& lastLargestGoal.type == side
-		&& Util::duration(lastLargestGoal.lastSeenTime) < Config::fakeObjectLifetime
-		&& !frontOnly
-	) {
-		return &lastLargestGoal;
-	} else {
-		return NULL;
-	}
-}
-
-/*Object* Vision::getFurthestGoal(bool frontOnly) {
-	const ObjectList& frontGoals = getFrontGoals();
-	float furthestDistance = 0.0f;
-	Object* goal;
-	Object* furthestGoal = NULL;
-
-	for (ObjectListItc it = frontGoals.begin(); it != frontGoals.end(); it++) {
-		goal = *it;
-
-		if (furthestGoal == NULL || goal->distance > furthestDistance) {
-			furthestGoal = goal;
-			furthestDistance = goal->distance;
-		}
-	}
-
-	if (!frontOnly) {
-		const ObjectList& rearGoals = getRearGoals();
-
-		for (ObjectListItc it = rearGoals.begin(); it != rearGoals.end(); it++) {
-			goal = *it;
-
-			if (furthestGoal == NULL || goal->distance > furthestDistance) {
-				furthestGoal = goal;
-				furthestDistance = goal->distance;
-			}
-		}
-	}
-
-	if (furthestGoal != NULL) {
-		lastFurthestGoal.copyFrom(furthestGoal);
-
-		return furthestGoal;
-	} else if (
-		lastFurthestGoal.width > 0
-		&& Util::duration(lastFurthestGoal.lastSeenTime) < Config::fakeObjectLifetime
-	) {
-		return &lastFurthestGoal;
-	} else {
-		return NULL;
-	}
-}*/
-
-Object* Vision::getFurthestGoal(bool frontOnly) {
-	Object* largestYellow = getLargestGoal(Side::YELLOW, frontOnly);
-	Object* largestBlue = getLargestGoal(Side::BLUE, frontOnly);
-
-	if (largestYellow != NULL) {
-		if (largestBlue != NULL) {
-			if (largestYellow->distance > largestBlue->distance) {
-				return largestYellow;
-			} else {
-				return largestBlue;
-			}
-		} else {
-			return largestYellow;
-		}
-	} else {
-		if (largestBlue != NULL) {
-			return largestBlue;
-		} else {
-			return NULL;
-		}
-	}
 }

@@ -4,63 +4,6 @@
 
 #include <algorithm>
 
-void ImageBuffer::setPixelAt(int x, int y, int red, int green, int blue) {
-    if (data == NULL) {
-        return;
-    }
-
-	if (
-		x < 0
-		|| x > width - 1
-		|| y < 0
-		|| y > height - 1
-	) {
-		return;
-	}
-
-	if (swapRB) {
-		std::swap(red, blue);
-	}
-
-    int index = (x + y * width) * 3;
-
-    /*if (index + 2 >= width * height * 3 || index < 0) {
-        return;
-    }*/
-
-    data[index] = (char)red;
-    data[index + 1] = (char)green;
-    data[index + 2] = (char)blue;
-}
-
-void ImageBuffer::drawBox(int x, int y, int width, int height, int red, int green, int blue) {
-    for (int i = x; i < x + width; i++) {
-        setPixelAt(i, y, red, green, blue);
-    }
-
-    for (int i = x; i < x + width; i++) {
-        setPixelAt(i, y + height, red, green, blue);
-    }
-
-    for (int i = y; i < y + height; i++) {
-        setPixelAt(x, i, red, green, blue);
-    }
-
-    for (int i = y; i < y + height; i++) {
-        setPixelAt(x + width, i, red, green, blue);
-    }
-}
-
-void ImageBuffer::fillCircleCentered(int centerX, int centerY, int radius, int red, int green, int blue) {
-	for (int x = -radius; x < radius; x++) {
-		int height = (int)Math::sqrt((float)(radius * radius - x * x));
-
-		for (int y = -height; y < height; y++) {
-			setPixelAt(x + centerX, y + centerY, red, green, blue);
-		}
-	}
-}
-
 const unsigned char ImageBuffer::font[256][8] = {
     {0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00},	// 0x00
     {0x7E,0x81,0xA9,0x8D,0x8D,0xA9,0x81,0x7E},	// 0x01
@@ -320,7 +263,78 @@ const unsigned char ImageBuffer::font[256][8] = {
     {0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00} 	// 0xFF
 };
 
+void ImageBuffer::setPixelAt(int x, int y, int red, int green, int blue) {
+    if (data == NULL) {
+        return;
+    }
+
+	if (
+		x < 0
+		|| x > width - 1
+		|| y < 0
+		|| y > height - 1
+	) {
+		return;
+	}
+
+	if (swapRB) {
+		std::swap(red, blue);
+	}
+
+    int index = (x + y * width) * 3;
+
+    /*if (index + 2 >= width * height * 3 || index < 0) {
+        return;
+    }*/
+
+    data[index] = (char)red;
+    data[index + 1] = (char)green;
+    data[index + 2] = (char)blue;
+}
+
+void ImageBuffer::drawBox(int x, int y, int width, int height, int red, int green, int blue) {
+    if (data == NULL) {
+        return;
+    }
+	
+	for (int i = x; i < x + width; i++) {
+        setPixelAt(i, y, red, green, blue);
+    }
+
+    for (int i = x; i < x + width; i++) {
+        setPixelAt(i, y + height, red, green, blue);
+    }
+
+    for (int i = y; i < y + height; i++) {
+        setPixelAt(x, i, red, green, blue);
+    }
+
+    for (int i = y; i < y + height; i++) {
+        setPixelAt(x + width, i, red, green, blue);
+    }
+}
+
+void ImageBuffer::fillCircleCentered(int centerX, int centerY, int radius, int red, int green, int blue) {
+	if (data == NULL) {
+        return;
+    }
+	
+	for (int x = -radius; x < radius; x++) {
+		int height = (int)Math::sqrt((float)(radius * radius - x * x));
+
+		for (int y = -height; y < height; y++) {
+			setPixelAt(x + centerX, y + centerY, red, green, blue);
+		}
+	}
+}
+
+
+
 void ImageBuffer::drawChar(int imageX, int imageY, int index) {
+	if (data == NULL) {
+        return;
+    }
+
     int cols = 8;
     int rows = 8;
     const unsigned char* character = font[index];
@@ -342,6 +356,10 @@ void ImageBuffer::drawChar(int imageX, int imageY, int index) {
 }
 
 void ImageBuffer::drawText(int imageX, int imageY, std::string text) {
+	if (data == NULL) {
+        return;
+    }
+
     const char* str = text.c_str();
 
     for (unsigned int i = 0; i < text.size(); i++) {
@@ -350,6 +368,10 @@ void ImageBuffer::drawText(int imageX, int imageY, std::string text) {
 }
 
 void ImageBuffer::drawLine(int x1, int y1, int x2, int y2, int red, int green, int blue) {
+	if (data == NULL) {
+        return;
+    }
+
     int F, x, y;
 
     if (x1 > x2) {
@@ -468,6 +490,10 @@ void ImageBuffer::drawLine(int x1, int y1, int x2, int y2, int red, int green, i
 }
 
 void ImageBuffer::drawMarker(int x, int y, int red, int green, int blue, bool tiny) {
+	if (data == NULL) {
+        return;
+    }
+
 	if (tiny) {
 		setPixelAt(x, y, red, green, blue);
 	} else {

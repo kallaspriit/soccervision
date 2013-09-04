@@ -53,7 +53,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>include;$(XIMEAROOT)\API;lib\libyuv\include;lib\pthread\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;NOMINMAX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -72,7 +72,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <AdditionalIncludeDirectories>include;$(XIMEAROOT)\API;lib\libyuv\include;lib\pthread\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;NOMINMAX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
     </ClCompile>
     <Link>
@@ -95,11 +95,14 @@
     <ClInclude Include="include\FpsCounter.h" />
     <ClInclude Include="include\ImageBuffer.h" />
     <ClInclude Include="include\ImageProcessor.h" />
+    <ClInclude Include="include\LookupTable.h" />
     <ClInclude Include="include\Maths.h" />
     <ClInclude Include="include\Object.h" />
     <ClInclude Include="include\ProcessThread.h" />
     <ClInclude Include="include\Thread.h" />
     <ClInclude Include="include\Util.h" />
+    <ClInclude Include="include\Vision.h" />
+    <ClInclude Include="include\VisionResults.h" />
     <ClInclude Include="include\XimeaCamera.h" />
     <ClInclude Include="include\DisplayWindow.h" />
     <ClInclude Include="include\Gui.h" />
@@ -149,11 +152,14 @@
     <ClCompile Include="src\FpsCounter.cpp" />
     <ClCompile Include="src\ImageBuffer.cpp" />
     <ClCompile Include="src\ImageProcessor.cpp" />
+    <ClCompile Include="src\LookupTable.cpp" />
     <ClCompile Include="src\Maths.cpp" />
     <ClCompile Include="src\Object.cpp" />
     <ClCompile Include="src\ProcessThread.cpp" />
     <ClCompile Include="src\Thread.cpp" />
     <ClCompile Include="src\Util.cpp" />
+    <ClCompile Include="src\Vision.cpp" />
+    <ClCompile Include="src\VisionResults.cpp" />
     <ClCompile Include="src\XimeaCamera.cpp" />
     <ClCompile Include="src\DisplayWindow.cpp" />
     <ClCompile Include="src\Gui.cpp" />

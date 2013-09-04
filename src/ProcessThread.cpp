@@ -3,6 +3,7 @@
 #include "ImageProcessor.h"
 #include "DebugRenderer.h"
 #include "ImageBuffer.h"
+#include "Config.h"
 
 #include <iostream>
 
@@ -18,10 +19,12 @@ ProcessThread::ProcessThread(int width, int height) : Thread(), width(width), he
 
 	blobber = new Blobber();
 	blobber->initialize(width, height);
-	blobber->loadOptions("config/blobber.cfg");
+	blobber->loadOptions(Config::blobberConfigFilename);
 }
 
 ProcessThread::~ProcessThread() {
+	blobber->saveOptions(Config::blobberConfigFilename);
+
 	delete blobber;
 }
 
