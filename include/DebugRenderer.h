@@ -2,16 +2,18 @@
 #define DEBUGRENDERER_H
 
 #include "Object.h"
+#include "Blobber.h"
 
 class ImageBuffer;
 
 class DebugRenderer {
 	public:
-		static void render(unsigned char* image, const ObjectList& balls, const ObjectList& goals, bool swapRB = false);
-
-	private:
+		static void renderBlobs(ImageBuffer* img, Blobber::Blob* blobs, Blobber::Color color);
 		static void renderBalls(ImageBuffer* img, const ObjectList& balls);
 		static void renderGoals(ImageBuffer* img, const ObjectList& goals);
+
+	private:
+		
 };
 
-#endif
+#endif // DEBUGRENDERER_H

@@ -216,9 +216,9 @@ class Blobber {
             return map;
         }
 
-        Color* getColor(int color) {
+        /*Color* getColor(int color) {
             return &colors[color];
-        }
+        }*/
 
         int getColorId(std::string name) {
             for (int i = 0; i < colorCount; i++) {
@@ -238,6 +238,14 @@ class Blobber {
             }
 
             return NULL;
+        }
+		
+        Color* getColor(int index) {
+			if (index < 0 || index > colorCount - 1) {
+				return NULL;
+			}
+
+            return &colors[index];
         }
 
         Color* getColorAt(int x, int y);
