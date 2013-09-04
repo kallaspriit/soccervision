@@ -143,7 +143,7 @@ int main(int argc, char* argv[]) {
 		}
 
 		//std::cout << "! Total time: " << Util::timerEnd(startTime) << ", " << fpsCounter.getFps() << "FPS" << std::endl << std::endl;
-		std::cout << "@X " << fpsCounter->getFps() << "FPS" << std::endl;
+		std::cout << "@  " << fpsCounter->getFps() << "FPS" << std::endl;
 
 
 		fpsCounter->step();

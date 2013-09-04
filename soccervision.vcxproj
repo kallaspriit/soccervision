@@ -60,6 +60,9 @@
       <AdditionalLibraryDirectories>$(XIMEAROOT)\API\x86;lib\pthread\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>m3api.lib;pthreadVC2.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PostBuildEvent>
+      <Command>ECHO call "$(SolutionDir)push.bat"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -79,8 +82,7 @@
       <AdditionalDependencies>m3api.lib;pthreadVC2.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>git commit -a -m "Update"
-git push</Command>
+      <Command>ECHO call "$(SolutionDir)push.bat"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
