@@ -884,7 +884,7 @@ float Vision::getColorDistance(std::string colorName, int x1, int y1, int x2, in
     int pixelCounter = 0;
     int senseCounter = 0;
     int senseStep = 3;
-    const int maxSensePoints = 255;
+    const int maxSensePoints = 512;
     int senseX[maxSensePoints];
     int senseY[maxSensePoints];
 	int invalidSpree = 0;
@@ -1048,8 +1048,6 @@ float Vision::getColorDistance(std::string colorName, int x1, int y1, int x2, in
             }
         }
     }
-
-	std::cout << "! LINE " << x1 << "x" << y1 << " to " << x2 << "x" << y2 << ", " << senseCounter << " points" << std::endl;
 
 	int matches = 0;
     bool debug = img.data != NULL;
