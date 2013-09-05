@@ -3,22 +3,24 @@
 #include "Maths.h"
 #include "Util.h"
 
-void DebugRenderer::renderFPS(unsigned char* image, int fps, int width, int height) {
+void DebugRenderer::renderFPS(unsigned char* image, int fps, bool swapRB, int width, int height) {
 	ImageBuffer img = ImageBuffer();
 
 	img.data = image;
 	img.width = width;
 	img.height = height;
+	img.swapRB = swapRB;
 
 	img.drawText(20, 20, "FPS: " + Util::toString(fps));
 }
 
-void DebugRenderer::renderBlobs(unsigned char* image, Blobber* blobber, int width, int height) {
+void DebugRenderer::renderBlobs(unsigned char* image, Blobber* blobber, bool swapRB, int width, int height) {
 	ImageBuffer img = ImageBuffer();
 
 	img.data = image;
 	img.width = width;
 	img.height = height;
+	img.swapRB = swapRB;
 
 	for (int i = 0; i < blobber->getColorCount(); i++) {
 		Blobber::Color* color = blobber->getColor(i);
@@ -41,12 +43,13 @@ void DebugRenderer::renderBlobs(unsigned char* image, Blobber* blobber, int widt
 	}
 }
 
-void DebugRenderer::renderBalls(unsigned char* image, const ObjectList& balls, int width, int height) {
+void DebugRenderer::renderBalls(unsigned char* image, const ObjectList& balls, bool swapRB, int width, int height) {
 	ImageBuffer img = ImageBuffer();
 
 	img.data = image;
 	img.width = width;
 	img.height = height;
+	img.swapRB = swapRB;
 
 	Object* ball = NULL;
     char buf[256];
@@ -95,12 +98,13 @@ void DebugRenderer::renderBalls(unsigned char* image, const ObjectList& balls, i
     }*/
 }
 
-void DebugRenderer::renderGoals(unsigned char* image, const ObjectList& goals, int width, int height) {
+void DebugRenderer::renderGoals(unsigned char* image, const ObjectList& goals, bool swapRB, int width, int height) {
 	ImageBuffer img = ImageBuffer();
 
 	img.data = image;
 	img.width = width;
 	img.height = height;
+	img.swapRB = swapRB;
 
 	Object* goal = NULL;
     char buf[256];
