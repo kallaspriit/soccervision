@@ -1498,8 +1498,8 @@ Object* Vision::Results::getClosestBall(bool frontOnly) {
 }
 
 Object* Vision::Results::getLargestGoal(Side side, bool frontOnly) {
-	float area;
-	float largestArea = 0.0f;
+	int area;
+	int largestArea = 0;
 	Object* goal;
 	Object* largestGoal = NULL;
 
