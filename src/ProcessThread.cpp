@@ -76,8 +76,6 @@ void* ProcessThread::run() {
 		);
 		//std::cout << "  - ARGB > RGB: " << Util::timerEnd() << std::endl;
 
-		DebugRenderer::renderBlobs(classification, blobber);
-
 		vision->setDebugImage(rgb, width, height);
 	} else {
 		vision->setDebugImage(NULL, 0, 0);
@@ -86,8 +84,10 @@ void* ProcessThread::run() {
 	visionResult = vision->process();
 
 	if (debug) {
-		//DebugRenderer::renderBlobs(classification, blobber);
-		//DebugRenderer::renderBalls(rgb, visionResult->balls);
+		std::cout << "BALL BLOBS: " << blobber->getBlobCount("ball") << ", BALL COUNT: " << visionResult->balls.size() << std::endl;
+
+		DebugRenderer::renderBlobs(classification, blobber);
+		DebugRenderer::renderBalls(rgb, visionResult->balls);
 	}
 
 	done = true;
