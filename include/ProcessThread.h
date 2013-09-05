@@ -3,9 +3,9 @@
 
 #include "Thread.h"
 #include "Config.h"
+#include "Vision.h"
 
 class Blobber;
-class Vision;
 class VisionResults;
 
 class ProcessThread : public Thread {
@@ -27,7 +27,7 @@ public:
 
 	Blobber* blobber;
 	Vision* vision;
-	VisionResults* visionResults;
+	Vision::VisionResult* visionResult;
 
 	unsigned char* frame;
 	unsigned char* dataYUYV;

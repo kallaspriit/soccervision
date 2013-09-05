@@ -11,6 +11,7 @@
 #include <string>
 #include <vector>
 
+// TODO Do not search blobs for some colors (green, white etc)
 class Vision {
     public:
 		struct PathMetric {
@@ -32,9 +33,8 @@ class Vision {
         Vision(Blobber* blobber, Dir dir, int width, int height);
         ~Vision();
 
-		// make sure to destroy it!
 		void setDebugImage(unsigned char* image, int width, int height);
-        VisionResults* process();
+        VisionResult* process();
         Blobber::Color* getColorAt(int x, int y);
 		bool isViewObstructed() { return obstructionSide != Obstruction::NONE; }
 		Obstruction getObstruction() { return obstructionSide; }

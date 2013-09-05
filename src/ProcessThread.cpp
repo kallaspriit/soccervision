@@ -1,6 +1,5 @@
 #include "ProcessThread.h"
 #include "Blobber.h"
-#include "Vision.h"
 #include "ImageProcessor.h"
 #include "DebugRenderer.h"
 #include "ImageBuffer.h"
@@ -8,7 +7,7 @@
 
 #include <iostream>
 
-ProcessThread::ProcessThread(Blobber* blobber, Vision* vision) : Thread(), dir(dir), blobber(blobber), vision(vision), visionResults(NULL), classify(false), convertRGB(false), renderBlobs(false), done(true) {
+ProcessThread::ProcessThread(Blobber* blobber, Vision* vision) : Thread(), dir(dir), blobber(blobber), vision(vision), visionResult(NULL), classify(false), convertRGB(false), renderBlobs(false), done(true) {
 	frame = NULL;
 	width = blobber->getWidth();
 	height = blobber->getHeight();
@@ -22,9 +21,9 @@ ProcessThread::ProcessThread(Blobber* blobber, Vision* vision) : Thread(), dir(d
 }
 
 ProcessThread::~ProcessThread() {
-	if (visionResults != NULL) {
-		delete visionResults;
-		visionResults = NULL;
+	if (visionResult != NULL) {
+		delete visionResult;
+		visionResult = NULL;
 	}
 }
 
@@ -33,9 +32,9 @@ void* ProcessThread::run() {
 		return NULL;
 	}
 
-	if (visionResults != NULL) {
-		delete visionResults;
-		visionResults = NULL;
+	if (visionResult != NULL) {
+		delete visionResult;
+		visionResult = NULL;
 	}
 
 	done = false;
@@ -86,7 +85,7 @@ void* ProcessThread::run() {
 		vision->setDebugImage(rgb, width, height);
 	}
 
-	visionResults = vision->process();
+	visionResult = vision->process();
 
 	done = true;
 

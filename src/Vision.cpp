@@ -55,21 +55,21 @@ void Vision::setDebugImage(unsigned char* image, int width, int height) {
 	img.swapRB = true;
 }
 
-VisionResults* Vision::process() {
-	VisionResults* results = new VisionResults();
+Vision::VisionResult* Vision::process() {
+	VisionResult* result = new VisionResult();
 
-    results->balls = processBalls(dir);
-	results->goals = processGoals(dir);
+    result->balls = processBalls(dir);
+	result->goals = processGoals(dir);
 
 	if (dir == Dir::FRONT) {
 		updateObstructions();
 		updateColorDistances();
 	}
 
-	results->obstructionSide = obstructionSide;
-	results->blackDistance = blackDistance;
+	result->obstructionSide = obstructionSide;
+	result->blackDistance = blackDistance;
 
-	return results;
+	return result;
 }
 
 ObjectList Vision::processBalls(Dir dir) {
