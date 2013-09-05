@@ -87,7 +87,7 @@ void* ProcessThread::run() {
 
 	if (debug) {
 		//DebugRenderer::renderBlobs(classification, blobber);
-		DebugRenderer::renderBalls(rgb, visionResult->balls);
+		//DebugRenderer::renderBalls(rgb, visionResult->balls);
 	}
 
 	done = true;
