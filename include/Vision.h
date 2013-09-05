@@ -6,7 +6,6 @@
 #include "Object.h"
 #include "LookupTable.h"
 #include "Config.h"
-#include "VisionResults.h"
 
 #include <string>
 #include <vector>
@@ -23,18 +22,28 @@ class Vision {
 			bool out;
 		};
 
-		struct VisionResult {
+		struct Result {
 			ObjectList balls;
 			ObjectList goals;
 			Obstruction obstructionSide;
 			float blackDistance;
 		};
 
+		class Results {
+			public:
+				Object* getClosestBall(bool frontOnly = false);
+				Object* getLargestGoal(Side side, bool frontOnly = false);
+				Object* getFurthestGoal(bool frontOnly = false);
+
+				Vision::Result* front;
+				Vision::Result* rear;
+		};
+
         Vision(Blobber* blobber, Dir dir, int width, int height);
         ~Vision();
 
 		void setDebugImage(unsigned char* image, int width, int height);
-        VisionResult* process();
+        Result* process();
         Blobber::Color* getColorAt(int x, int y);
 		bool isViewObstructed() { return obstructionSide != Obstruction::NONE; }
 		Obstruction getObstruction() { return obstructionSide; }

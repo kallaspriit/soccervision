@@ -55,8 +55,8 @@ void Vision::setDebugImage(unsigned char* image, int width, int height) {
 	img.swapRB = true;
 }
 
-Vision::VisionResult* Vision::process() {
-	VisionResult* result = new VisionResult();
+Vision::Result* Vision::process() {
+	Result* result = new Result();
 
     result->balls = processBalls(dir);
 	result->goals = processGoals(dir);

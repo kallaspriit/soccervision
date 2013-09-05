@@ -6,7 +6,6 @@
 #include "Vision.h"
 
 class Blobber;
-class VisionResults;
 
 class ProcessThread : public Thread {
 
@@ -27,7 +26,7 @@ public:
 
 	Blobber* blobber;
 	Vision* vision;
-	Vision::VisionResult* visionResult;
+	Vision::Result* visionResult;
 
 	unsigned char* frame;
 	unsigned char* dataYUYV;

@@ -68,6 +68,8 @@ int main(int argc, char* argv[]) {
 	ProcessThread* processor1 = new ProcessThread(blobber1, vision1);
 	ProcessThread* processor2 = new ProcessThread(blobber2, vision2);
 
+	Vision::Results* visionResults = new Vision::Results();
+
 	int cameraSerial1 = 857735761;
 	int cameraSerial2 = 857769553;
 
@@ -141,7 +143,10 @@ int main(int argc, char* argv[]) {
 		processor1->join();
 		processor2->join();
 
-		// TODO Merge the vision results
+		visionResults->front = processor1->visionResult;
+		visionResults->rear = processor2->visionResult;
+
+		// TODO Visualize the vision results
 
 		if (debug) {
 			if (gotFrame1) {
