@@ -101,4 +101,11 @@ enum Dir {
     REAR = 2
 };
 
+enum Obstruction {
+	NONE = 0,
+	LEFT = 1,
+	RIGHT = 2,
+	BOTH = 3,
+};
+
 #endif // CONFIG_H

@@ -2,8 +2,7 @@
 #define VISIONRESULTS_H
 
 #include "Config.h"
-
-class Object;
+#include "Object.h"
 
 class VisionResults {
 
@@ -16,6 +15,11 @@ public:
 	Object* getClosestBall(bool frontOnly = false);
 	Object* getLargestGoal(Side side, bool frontOnly = false);
 	Object* getFurthestGoal(bool frontOnly = false);
+
+	ObjectList balls;
+	ObjectList goals;
+	Obstruction obstruction;
+	float blackDistance;
 
 private:
 

@@ -22,13 +22,6 @@ class Vision {
 			bool out;
 		};
 
-		enum Obstruction {
-			NONE = 0,
-			LEFT = 1,
-			RIGHT = 2,
-			BOTH = 3,
-		};
-
         Vision(Blobber* blobber, Dir dir, int width, int height);
         ~Vision();
 
