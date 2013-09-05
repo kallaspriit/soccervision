@@ -83,9 +83,9 @@ void* ProcessThread::run() {
 
 	visionResult = vision->process();
 
-	if (debug) {
-		std::cout << "BALL BLOBS: " << blobber->getBlobCount("ball") << ", BALL COUNT: " << visionResult->balls.size() << std::endl;
+	std::cout << "BALL BLOBS: " << blobber->getBlobCount("ball") << ", BALL COUNT: " << visionResult->balls.size() << std::endl;
 
+	if (debug) {
 		DebugRenderer::renderBlobs(classification, blobber);
 		DebugRenderer::renderBalls(rgb, visionResult->balls);
 	}

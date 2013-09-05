@@ -43,7 +43,7 @@ int main(int argc, char* argv[]) {
 	// config
 	int width = Config::cameraWidth;
 	int height = Config::cameraHeight;
-	bool debug = true;
+	bool debug = false;
 
 	Gui* gui = new Gui(instance);
 	FpsCounter* fpsCounter = new FpsCounter();
