@@ -52,7 +52,7 @@ namespace Config {
 	const int ballPathSenseThresholdY = cameraHeight - 80;
 
 	// color sense start Y
-	const int colorDistanceStartY = cameraHeight - 80;
+	const int colorDistanceStartY = cameraHeight;
 
 	// maximum ball surround metric sense radius
 	const int maxBallSenseRadius = 100;
