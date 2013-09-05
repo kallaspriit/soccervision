@@ -58,15 +58,16 @@ void Vision::setDebugImage(unsigned char* image, int width, int height) {
 VisionResults* Vision::process() {
 	VisionResults* results = new VisionResults();
 
-    ObjectList balls = processBalls(dir);
-	ObjectList goals = processGoals(dir);
+    results->balls = processBalls(dir);
+	results->goals = processGoals(dir);
 
 	if (dir == Dir::FRONT) {
 		updateObstructions();
 		updateColorDistances();
 	}
 
-	// TODO Populate the results..
+	results->obstructionSide = obstructionSide;
+	results->blackDistance = blackDistance;
 
 	return results;
 }

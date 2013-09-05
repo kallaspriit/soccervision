@@ -10,7 +10,7 @@ public:
 	VisionResults();
 	~VisionResults();
 
-	void merge(VisionResults other);
+	void merge(VisionResults* other);
 
 	Object* getClosestBall(bool frontOnly = false);
 	Object* getLargestGoal(Side side, bool frontOnly = false);
@@ -18,7 +18,7 @@ public:
 
 	ObjectList balls;
 	ObjectList goals;
-	Obstruction obstruction;
+	Obstruction obstructionSide;
 	float blackDistance;
 
 private:

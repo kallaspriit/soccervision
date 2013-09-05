@@ -22,6 +22,13 @@ class Vision {
 			bool out;
 		};
 
+		struct VisionResult {
+			ObjectList balls;
+			ObjectList goals;
+			Obstruction obstructionSide;
+			float blackDistance;
+		};
+
         Vision(Blobber* blobber, Dir dir, int width, int height);
         ~Vision();
 

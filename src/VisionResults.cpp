@@ -10,6 +10,10 @@ VisionResults::~VisionResults() {
 
 }
 
+void VisionResults::merge(VisionResults* other) {
+
+}
+
 Object* VisionResults::getClosestBall(bool frontOnly) {
 	return NULL;
 

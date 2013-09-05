@@ -177,8 +177,6 @@ int main(int argc, char* argv[]) {
 	delete fpsCounter;
 	delete gui;
 
-	//camera.open(857735761);
-
     std::cout << "-- Properly Terminated --" << std::endl;
 
     return 0;
