@@ -48,8 +48,8 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #define BLOBBER_MAX_COLORS     32
 
 // sets tweaked optimal values for image size
-#define BLOBBER_DEFAULT_WIDTH  640
-#define BLOBBER_DEFAULT_HEIGHT 512
+#define BLOBBER_DEFAULT_WIDTH  1280
+#define BLOBBER_DEFAULT_HEIGHT 1024
 
 // values may need tweaked, although these seem to work usually
 #define BLOBBER_MAX_RUNS     (BLOBBER_DEFAULT_WIDTH * BLOBBER_DEFAULT_HEIGHT) / 4
