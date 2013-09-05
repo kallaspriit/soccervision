@@ -1049,6 +1049,8 @@ float Vision::getColorDistance(std::string colorName, int x1, int y1, int x2, in
         }
     }
 
+	std::cout << "! LINE " << x1 << "x" << y1 << " to " << x2 << "x" << y2 << ", " << senseCounter << " points" << std::endl;
+
 	int matches = 0;
     bool debug = img.data != NULL;
 	int start = originalX1 < originalX2 ? 0 : senseCounter - 1;
@@ -1098,6 +1100,12 @@ float Vision::getColorDistance(std::string colorName) {
 		colorName,
 		Config::cameraWidth / 2, Config::colorDistanceStartY,
 		Config::cameraWidth, 0
+	);
+
+	getColorDistance(
+		colorName,
+		Config::cameraWidth - 10, 0,
+		Config::cameraWidth / 2 - 10, Config::colorDistanceStartY
 	);
 
 	return Math::min(Math::min(distanceA, distanceB), distanceC);
