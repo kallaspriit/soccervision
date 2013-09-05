@@ -1097,7 +1097,7 @@ float Vision::getColorDistance(std::string colorName) {
 	float distanceC = getColorDistance(
 		colorName,
 		Config::cameraWidth / 2, Config::colorDistanceStartY,
-		Config::cameraWidth / 2, 0
+		Config::cameraWidth, 0
 	);
 
 	return Math::min(Math::min(distanceA, distanceB), distanceC);
