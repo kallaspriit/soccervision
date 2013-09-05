@@ -20,9 +20,7 @@ public:
 	int height;
 	Dir dir;
 
-	bool classify;
-	bool convertRGB;
-	bool renderBlobs;
+	bool debug;
 
 	Blobber* blobber;
 	Vision* vision;

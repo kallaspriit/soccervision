@@ -1465,3 +1465,115 @@ void Vision::updateObstructions() {
 void Vision::updateColorDistances() {
 	blackDistance = getColorDistance("black");
 }
+
+Object* Vision::Results::getClosestBall(bool frontOnly) {
+	float closestDistance = 100.0f;
+	float distance;
+	Object* ball;
+	Object* closestBall = NULL;
+
+	for (ObjectListItc it = front->balls.begin(); it != front->balls.end(); it++) {
+		ball = *it;
+		distance = ball->behind ? ball->distance * 1.25f : ball->distance;
+		
+		if (closestBall == NULL || distance < closestDistance) {
+			closestBall = ball;
+			closestDistance = distance;
+		}
+	}
+
+	if (!frontOnly) {
+		for (ObjectListItc it = rear->balls.begin(); it != rear->balls.end(); it++) {
+			ball = *it;
+			distance = ball->behind ? ball->distance * 1.25f : ball->distance;
+		
+			if (closestBall == NULL || distance < closestDistance) {
+				closestBall = ball;
+				closestDistance = distance;
+			}
+		}
+	}
+
+	return closestBall;
+}
+
+Object* Vision::Results::getLargestGoal(Side side, bool frontOnly) {
+	float area;
+	float largestArea = 0.0f;
+	Object* goal;
+	Object* largestGoal = NULL;
+
+	for (ObjectListItc it = front->goals.begin(); it != front->goals.end(); it++) {
+		goal = *it;
+		
+		if (side != Side::UNKNOWN && goal->type != (int)side) {
+			continue;
+		}
+
+		//area = goal->area;
+		area = goal->width * goal->height;
+
+		if (largestGoal == NULL || area > largestArea) {
+			largestGoal = goal;
+			largestArea = area;
+		}
+	}
+
+	if (frontOnly != true) {
+		for (ObjectListItc it = rear->goals.begin(); it != rear->goals.end(); it++) {
+			goal = *it;
+
+			if (side != Side::UNKNOWN && goal->type != (int)side) {
+				continue;
+			}
+
+			//area = goal->area;
+			area = goal->width * goal->height;
+		
+			if (largestGoal == NULL || area > largestArea) {
+				largestGoal = goal;
+				largestArea = area;
+			}
+		}
+	}
+
+	if (largestGoal != NULL) {
+		//lastLargestGoal.copyFrom(largestGoal);
+
+		return largestGoal;
+	}/* else if (
+		lastLargestGoal.width > 0
+		&& lastLargestGoal.type == side
+		&& Util::duration(lastLargestGoal.lastSeenTime) < Config::fakeObjectLifetime
+		&& !frontOnly
+	) {
+		return &lastLargestGoal;
+	}*/ else {
+		return NULL;
+	}
+}
+
+Object* Vision::Results::getFurthestGoal(bool frontOnly) {
+	return NULL;
+
+	Object* largestYellow = getLargestGoal(Side::YELLOW, frontOnly);
+	Object* largestBlue = getLargestGoal(Side::BLUE, frontOnly);
+
+	if (largestYellow != NULL) {
+		if (largestBlue != NULL) {
+			if (largestYellow->distance > largestBlue->distance) {
+				return largestYellow;
+			} else {
+				return largestBlue;
+			}
+		} else {
+			return largestYellow;
+		}
+	} else {
+		if (largestBlue != NULL) {
+			return largestBlue;
+		} else {
+			return NULL;
+		}
+	}
+}

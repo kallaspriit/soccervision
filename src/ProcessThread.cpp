@@ -7,7 +7,7 @@
 
 #include <iostream>
 
-ProcessThread::ProcessThread(Blobber* blobber, Vision* vision) : Thread(), dir(dir), blobber(blobber), vision(vision), visionResult(NULL), classify(false), convertRGB(false), renderBlobs(false), done(true) {
+ProcessThread::ProcessThread(Blobber* blobber, Vision* vision) : Thread(), dir(dir), blobber(blobber), vision(vision), visionResult(NULL), debug(false), done(true) {
 	frame = NULL;
 	width = blobber->getWidth();
 	height = blobber->getHeight();
@@ -59,17 +59,11 @@ void* ProcessThread::run() {
 	blobber->processFrame((Blobber::Pixel*)dataYUYV);
 	//std::cout << "  - Process:     " << Util::timerEnd() << " (" << blobber->getBlobCount("ball") << " ball blobs)" << std::endl;
 
-	if (classify) {
+	if (debug) {
 		//Util::timerStart();
 		blobber->classify((Blobber::Rgb*)classification, (Blobber::Pixel*)dataYUYV);
 		//std::cout << "  - Blobber classify: " << Util::timerEnd() << std::endl;
 
-		if (renderBlobs) {
-			DebugRenderer::renderBlobs(classification, blobber);
-		}
-	}
-
-	if (convertRGB) {
 		//Util::timerStart();
 		ImageProcessor::YUYVToARGB(dataYUYV, argb, width, height);
 		//std::cout << "  - YUYV > ARGB: " << Util::timerEnd() << std::endl;
@@ -83,9 +77,16 @@ void* ProcessThread::run() {
 		//std::cout << "  - ARGB > RGB: " << Util::timerEnd() << std::endl;
 
 		vision->setDebugImage(rgb, width, height);
+	} else {
+		vision->setDebugImage(NULL, 0, 0);
 	}
 
 	visionResult = vision->process();
+
+	if (debug) {
+		DebugRenderer::renderBlobs(classification, blobber);
+		DebugRenderer::renderBalls(rgb, visionResult->balls);
+	}
 
 	done = true;
 

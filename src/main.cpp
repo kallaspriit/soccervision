@@ -102,9 +102,7 @@ int main(int argc, char* argv[]) {
 		gotFrame1 = false;
 		gotFrame2 = false;
 
-		processor1->classify = processor2->classify = debug;
-		processor1->convertRGB = processor2->convertRGB = debug;
-		processor1->renderBlobs = processor2->renderBlobs = debug;
+		processor1->debug = processor2->debug = debug;
 
 		//__int64 startTime = Util::timerStart();
 
