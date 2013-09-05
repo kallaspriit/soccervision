@@ -10,11 +10,12 @@
 #include <iostream>
 
 void setupCamera(XimeaCamera* camera) {
-	camera->setExposure(16000);
+	camera->setGain(6);
+	camera->setExposure(10000);
 	camera->setFormat(XI_RAW8);
 	camera->setAutoWhiteBalance(false);
 	camera->setAutoExposureGain(false);
-	camera->setQueueSize(12);
+	camera->setQueueSize(12); // affects anything?
 
 	std::cout << "Camera info:" << std::endl;
 	std::cout << "  > Name: " << camera->getName() << std::endl;
