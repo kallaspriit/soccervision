@@ -1089,7 +1089,7 @@ float Vision::getColorDistance(std::string colorName) {
 		Config::cameraWidth / 2, Config::colorDistanceStartY,
 		0, 0
 	);
-	float distanceB = getColorDistance(
+	/*float distanceB = getColorDistance(
 		colorName,
 		Config::cameraWidth / 2, Config::colorDistanceStartY,
 		Config::cameraWidth / 2, 0
@@ -1100,7 +1100,9 @@ float Vision::getColorDistance(std::string colorName) {
 		Config::cameraWidth, 0
 	);
 
-	return Math::min(Math::min(distanceA, distanceB), distanceC);
+	return Math::min(Math::min(distanceA, distanceB), distanceC);*/
+
+	return 0.0f;
 }
 
 bool Vision::isBallInWay(ObjectList balls, int goalY) {
