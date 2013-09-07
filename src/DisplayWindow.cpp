@@ -123,7 +123,7 @@ LRESULT DisplayWindow::handleMessage(HWND windowHandle, UINT msg, WPARAM wParam,
 
 		case WM_MOUSEWHEEL:
 			if (gui != NULL) {
-				delta = (short)GET_WHEEL_DELTA_WPARAM(lParam);
+				delta = (int)GET_WHEEL_DELTA_WPARAM(wParam);
 
 				std::cout << "DELTA: " << delta << std::endl;
 
