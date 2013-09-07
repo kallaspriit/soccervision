@@ -1,6 +1,7 @@
 #include "Gui.h"
 #include "XimeaCamera.h"
 #include "ProcessThread.h"
+#include "DebugRenderer.h"
 #include "Blobber.h"
 #include "Vision.h"
 #include "FpsCounter.h"
@@ -148,11 +149,15 @@ int main(int argc, char* argv[]) {
 
 		if (debug) {
 			if (gotFrame1) {
+				DebugRenderer::renderFPS(processor1->rgb, fpsCounter->getFps());
+
 				winRGB1->setImage(processor1->rgb, false);
 				winClassification1->setImage(processor1->classification, true);
 			}
 
 			if (gotFrame2) {
+				DebugRenderer::renderFPS(processor2->rgb, fpsCounter->getFps());
+
 				winRGB2->setImage(processor2->rgb, false);
 				winClassification2->setImage(processor2->classification, true);
 			}
