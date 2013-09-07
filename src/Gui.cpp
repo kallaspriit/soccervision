@@ -60,6 +60,14 @@ void Gui::addMouseListener(MouseListener* listener) {
 	mouseListeners.push_back(listener);
 }
 
+void Gui::onMouseMove(int x, int y) {
+
+}
+
+void Gui::onMouseClick(int x, int y) {
+
+}
+
 LRESULT CALLBACK WinProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 	switch(msg) {
 		case WM_CREATE:

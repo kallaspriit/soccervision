@@ -123,6 +123,9 @@
     <ClInclude Include="include\LookupTable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\MouseListener.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\DisplayWindow.cpp">

@@ -121,6 +121,7 @@
     <ClInclude Include="lib\libyuv\include\libyuv\scale_argb.h" />
     <ClInclude Include="lib\libyuv\include\libyuv\version.h" />
     <ClInclude Include="lib\libyuv\include\libyuv\video_common.h" />
+    <ClInclude Include="src\MouseListener.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="lib\libyuv\source\compare.cc" />

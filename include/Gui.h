@@ -5,6 +5,7 @@
 #include <windows.h>
 
 #include "DisplayWindow.h"
+#include "MouseListener.h"
 #include <vector>
 
 class Command;
@@ -12,21 +13,17 @@ class Vision;
 class SoccerBot;
 class ParticleFilterLocalizer;
 
-class Gui {
+class Gui : public MouseListener {
 
 public:
-	class MouseListener {
-	public:
-		void onMouseMove(int x, int y);
-		void onMouseClick(int x, int y);
-	};
-
     Gui(HINSTANCE instance);
     ~Gui();
 
 	DisplayWindow* createWindow(int width, int height, std::string name);
     bool update();
 	void addMouseListener(MouseListener* listener);
+	void onMouseMove(int x, int y);
+	void onMouseClick(int x, int y);
 
 private:
 	HINSTANCE instance;
