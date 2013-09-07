@@ -98,8 +98,6 @@ void Gui::setRearImages(unsigned char* rgb, unsigned char* classification) {
 }
 
 void Gui::onMouseMove(int x, int y, DisplayWindow* win) {
-	std::cout << "Mouse move to " << x << ", " << y << std::endl;
-
 	mouseX = x;
 	mouseY = y;
 }
