@@ -56,6 +56,10 @@ bool Gui::update() {
 	return true;
 }
 
+void Gui::addMouseListener(MouseListener* listener) {
+	mouseListeners.push_back(listener);
+}
+
 LRESULT CALLBACK WinProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 	switch(msg) {
 		case WM_CREATE:
