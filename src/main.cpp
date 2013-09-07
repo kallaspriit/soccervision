@@ -180,8 +180,6 @@ int main(int argc, char* argv[]) {
 	delete vision2;
 	delete camera1;
 	delete camera2;
-	delete winRGB1;
-	delete winRGB2;
 	delete fpsCounter;
 	delete gui;
 

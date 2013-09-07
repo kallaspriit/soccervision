@@ -42,11 +42,19 @@ Gui::Gui(HINSTANCE instance) : instance(instance) {
 }
 
 Gui::~Gui() {
-	
+	for (std::vector<DisplayWindow*>::const_iterator i = windows.begin(); i != windows.end(); i++) {
+		delete *i;
+	}
+
+	windows.clear();
 }
 
 DisplayWindow* Gui::createWindow(int width, int height, std::string name) {
-	return new DisplayWindow(instance, width, height, name, this);
+	DisplayWindow* window = new DisplayWindow(instance, width, height, name, this);
+
+	windows.push_back(window);
+
+	return window;
 }
 
 bool Gui::update() {

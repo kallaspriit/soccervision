@@ -33,6 +33,7 @@ private:
 	HINSTANCE instance;
 	MSG msg;
 	std::vector<MouseListener*> mouseListeners;
+	std::vector<DisplayWindow*> windows;
 	int mouseX;
 	int mouseY;
 	bool mouseDown;
