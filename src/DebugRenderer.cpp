@@ -154,5 +154,5 @@ void DebugRenderer::renderBrush(unsigned char* image, int x, int y, int radius, 
 	img.height = height;
 	img.swapRB = swapRB;
 
-	img.fillCircleCentered(x, y, radius);
+	img.drawCircle(x, y, radius);
 }

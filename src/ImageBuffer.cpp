@@ -314,7 +314,20 @@ void ImageBuffer::drawBox(int x, int y, int width, int height, int red, int gree
     }
 }
 
-void ImageBuffer::fillCircleCentered(int centerX, int centerY, int radius, int red, int green, int blue) {
+void ImageBuffer::drawCircle(int centerX, int centerY, int radius, int red, int green, int blue) {
+	if (data == NULL) {
+        return;
+    }
+	
+	for (int x = -radius; x < radius; x++) {
+		int height = (int)Math::sqrt((float)(radius * radius - x * x));
+
+		setPixelAt(x + centerX, centerY - height, red, green, blue);
+		setPixelAt(x + centerX, centerY + height, red, green, blue);
+	}
+}
+
+void ImageBuffer::fillCircle(int centerX, int centerY, int radius, int red, int green, int blue) {
 	if (data == NULL) {
         return;
     }
@@ -327,8 +340,6 @@ void ImageBuffer::fillCircleCentered(int centerX, int centerY, int radius, int r
 		}
 	}
 }
-
-
 
 void ImageBuffer::drawChar(int imageX, int imageY, int index) {
 	if (data == NULL) {
