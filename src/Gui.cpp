@@ -33,6 +33,8 @@ Gui::Gui(HINSTANCE instance) : instance(instance) {
 	}
 
 	ZeroMemory(&msg, sizeof(MSG));
+
+	addMouseListener(this);
 }
 
 Gui::~Gui() {
@@ -61,11 +63,17 @@ void Gui::addMouseListener(MouseListener* listener) {
 }
 
 void Gui::onMouseMove(int x, int y) {
-
+	std::cout << "Mouse move to " << x << ", " << y << std::endl;
 }
 
 void Gui::onMouseClick(int x, int y) {
+	std::cout << "Mouse click at " << x << ", " << y << std::endl;
+}
 
+void Gui::emitMouseClick(int x, int y) {
+	for (std::vector<MouseListener*>::const_iterator i = mouseListeners.begin(); i != mouseListeners.end(); i++) {
+		(*i)->onMouseClick(x, y);
+	}
 }
 
 LRESULT CALLBACK WinProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {

@@ -90,7 +90,7 @@ LRESULT DisplayWindow::handleMessage(HWND windowHandle, UINT msg, WPARAM wParam,
 				x = (short)LOWORD(lParam);
 				y = (short)HIWORD(lParam);
 
-				//gui->onMouseClick(x, y);
+				gui->emitMouseClick(x, y);
 			}
 		break;
 

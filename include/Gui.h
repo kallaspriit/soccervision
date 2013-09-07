@@ -24,6 +24,7 @@ public:
 	void addMouseListener(MouseListener* listener);
 	void onMouseMove(int x, int y);
 	void onMouseClick(int x, int y);
+	void emitMouseClick(int x, int y);
 
 private:
 	HINSTANCE instance;
