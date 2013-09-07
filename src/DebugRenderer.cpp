@@ -146,7 +146,7 @@ void DebugRenderer::renderGoals(unsigned char* image, const ObjectList& goals, b
     }
 }
 
-void DebugRenderer::renderBrush(unsigned char* image, int x, int y, int radius, bool swapRB, int width, int height) {
+void DebugRenderer::renderBrush(unsigned char* image, int x, int y, int radius, bool active, bool swapRB, int width, int height) {
 	ImageBuffer img = ImageBuffer();
 
 	img.data = image;
@@ -154,5 +154,5 @@ void DebugRenderer::renderBrush(unsigned char* image, int x, int y, int radius, 
 	img.height = height;
 	img.swapRB = swapRB;
 
-	img.drawCircle(x, y, radius);
+	img.drawCircle(x, y, radius, 255, active ? 0 : 255, active ? 0 : 255);
 }
