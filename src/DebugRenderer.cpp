@@ -145,3 +145,14 @@ void DebugRenderer::renderGoals(unsigned char* image, const ObjectList& goals, b
         img.drawText(goal->x - goal->width / 2 + 2, goal->y - goal->height / 2 - 9, buf);*/
     }
 }
+
+void DebugRenderer::renderBrush(unsigned char* image, int x, int y, int radius, bool swapRB, int width, int height) {
+	ImageBuffer img = ImageBuffer();
+
+	img.data = image;
+	img.width = width;
+	img.height = height;
+	img.swapRB = swapRB;
+
+	img.fillCircleCentered(x, y, radius);
+}

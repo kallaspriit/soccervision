@@ -141,8 +141,6 @@ int main(int argc, char* argv[]) {
 		visionResults->front = processor1->visionResult;
 		visionResults->rear = processor2->visionResult;
 
-		// TODO Visualize the vision results
-
 		if (debug) {
 			gui->setFPS(fpsCounter->getFps());
 

@@ -83,6 +83,8 @@ void Gui::addMouseListener(MouseListener* listener) {
 
 void Gui::setFrontImages(unsigned char* rgb, unsigned char* classification) {
 	DebugRenderer::renderFPS(rgb, fps, true);
+	DebugRenderer::renderBrush(rgb, mouseX, mouseY, brushRadius, true);
+	DebugRenderer::renderBrush(classification, mouseX, mouseY, brushRadius, false);
 
 	frontRGB->setImage(rgb, false);
 	frontClassification->setImage(classification, true);
