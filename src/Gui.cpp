@@ -105,15 +105,19 @@ void Gui::onMouseMove(int x, int y, DisplayWindow* win) {
 }
 
 void Gui::onMouseDown(int x, int y, DisplayWindow* win) {
-	std::cout << "Mouse down at " << x << ", " << y << std::endl;
-
 	mouseDown = true;
 }
 
 void Gui::onMouseUp(int x, int y, DisplayWindow* win) {
-	std::cout << "Mouse up at " << x << ", " << y << std::endl;
-
 	mouseDown = false;
+}
+
+void Gui::onMouseWheel(int delta, DisplayWindow* win) {
+	brushRadius += delta * 1;
+
+	if (brushRadius < 5) {
+		brushRadius = 5;
+	}
 }
 
 void Gui::emitMouseDown(int x, int y, DisplayWindow* win) {
@@ -131,6 +135,12 @@ void Gui::emitMouseUp(int x, int y, DisplayWindow* win) {
 void Gui::emitMouseMove(int x, int y, DisplayWindow* win) {
 	for (std::vector<MouseListener*>::const_iterator i = mouseListeners.begin(); i != mouseListeners.end(); i++) {
 		(*i)->onMouseMove(x, y, win);
+	}
+}
+
+void Gui::emitMouseWheel(int delta, DisplayWindow* win) {
+	for (std::vector<MouseListener*>::const_iterator i = mouseListeners.begin(); i != mouseListeners.end(); i++) {
+		(*i)->onMouseWheel(delta, win);
 	}
 }
 

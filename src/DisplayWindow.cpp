@@ -91,7 +91,7 @@ void DisplayWindow::setImage(unsigned char* image, bool rgb2bgr) {
 }
 
 LRESULT DisplayWindow::handleMessage(HWND windowHandle, UINT msg, WPARAM wParam, LPARAM lParam) {
-	int x, y;
+	int x, y, delta;
 
 	switch(msg) {
 		case WM_LBUTTONDOWN:
@@ -118,6 +118,14 @@ LRESULT DisplayWindow::handleMessage(HWND windowHandle, UINT msg, WPARAM wParam,
 				y = (short)GET_Y_LPARAM(lParam);
 
 				gui->emitMouseMove(x, y, this);
+			}
+		break;
+
+		case WM_MOUSEWHEEL:
+			if (gui != NULL) {
+				delta = (short)GET_WHEEL_DELTA_WPARAM(lParam);
+
+				gui->emitMouseWheel(delta, this);
 			}
 		break;
 
