@@ -113,7 +113,7 @@ void Gui::onMouseUp(int x, int y, DisplayWindow* win) {
 }
 
 void Gui::onMouseWheel(int delta, DisplayWindow* win) {
-	brushRadius += delta * 1;
+	brushRadius += delta / 120 * 10;
 
 	if (brushRadius < 5) {
 		brushRadius = 5;
