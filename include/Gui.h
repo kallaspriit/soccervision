@@ -22,9 +22,10 @@ public:
 	DisplayWindow* createWindow(int width, int height, std::string name);
     bool update();
 	void addMouseListener(MouseListener* listener);
-	void onMouseMove(int x, int y);
-	void onMouseClick(int x, int y);
-	void emitMouseClick(int x, int y);
+	void onMouseMove(int x, int y, DisplayWindow* win);
+	void onMouseClick(int x, int y, DisplayWindow* win);
+	void emitMouseClick(int x, int y, DisplayWindow* win);
+	void emitMouseMove(int x, int y, DisplayWindow* win);
 
 private:
 	HINSTANCE instance;

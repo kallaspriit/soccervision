@@ -90,7 +90,16 @@ LRESULT DisplayWindow::handleMessage(HWND windowHandle, UINT msg, WPARAM wParam,
 				x = (short)LOWORD(lParam);
 				y = (short)HIWORD(lParam);
 
-				gui->emitMouseClick(x, y);
+				gui->emitMouseClick(x, y, this);
+			}
+		break;
+
+		case WM_MOUSEMOVE:
+			if (gui != NULL) {
+				x = (short)LOWORD(lParam);
+				y = (short)HIWORD(lParam);
+
+				gui->emitMouseMove(x, y, this);
 			}
 		break;
 

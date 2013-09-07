@@ -62,17 +62,23 @@ void Gui::addMouseListener(MouseListener* listener) {
 	mouseListeners.push_back(listener);
 }
 
-void Gui::onMouseMove(int x, int y) {
+void Gui::onMouseMove(int x, int y, DisplayWindow* win) {
 	std::cout << "Mouse move to " << x << ", " << y << std::endl;
 }
 
-void Gui::onMouseClick(int x, int y) {
+void Gui::onMouseClick(int x, int y, DisplayWindow* win) {
 	std::cout << "Mouse click at " << x << ", " << y << std::endl;
 }
 
-void Gui::emitMouseClick(int x, int y) {
+void Gui::emitMouseClick(int x, int y, DisplayWindow* win) {
 	for (std::vector<MouseListener*>::const_iterator i = mouseListeners.begin(); i != mouseListeners.end(); i++) {
-		(*i)->onMouseClick(x, y);
+		(*i)->onMouseClick(x, y, win);
+	}
+}
+
+void Gui::emitMouseMove(int x, int y, DisplayWindow* win) {
+	for (std::vector<MouseListener*>::const_iterator i = mouseListeners.begin(); i != mouseListeners.end(); i++) {
+		(*i)->onMouseMove(x, y, win);
 	}
 }
 
