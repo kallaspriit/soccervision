@@ -35,6 +35,10 @@ Gui::Gui(HINSTANCE instance) : instance(instance) {
 	ZeroMemory(&msg, sizeof(MSG));
 
 	addMouseListener(this);
+	mouseX = 0;
+	mouseY = 0;
+	mouseDown = false;
+	brushRadius = 50;
 }
 
 Gui::~Gui() {
@@ -64,15 +68,32 @@ void Gui::addMouseListener(MouseListener* listener) {
 
 void Gui::onMouseMove(int x, int y, DisplayWindow* win) {
 	std::cout << "Mouse move to " << x << ", " << y << std::endl;
+
+	mouseX = x;
+	mouseY = y;
 }
 
-void Gui::onMouseClick(int x, int y, DisplayWindow* win) {
-	std::cout << "Mouse click at " << x << ", " << y << std::endl;
+void Gui::onMouseDown(int x, int y, DisplayWindow* win) {
+	std::cout << "Mouse down at " << x << ", " << y << std::endl;
+
+	mouseDown = true;
 }
 
-void Gui::emitMouseClick(int x, int y, DisplayWindow* win) {
+void Gui::onMouseUp(int x, int y, DisplayWindow* win) {
+	std::cout << "Mouse up at " << x << ", " << y << std::endl;
+
+	mouseDown = false;
+}
+
+void Gui::emitMouseDown(int x, int y, DisplayWindow* win) {
 	for (std::vector<MouseListener*>::const_iterator i = mouseListeners.begin(); i != mouseListeners.end(); i++) {
-		(*i)->onMouseClick(x, y, win);
+		(*i)->onMouseDown(x, y, win);
+	}
+}
+
+void Gui::emitMouseUp(int x, int y, DisplayWindow* win) {
+	for (std::vector<MouseListener*>::const_iterator i = mouseListeners.begin(); i != mouseListeners.end(); i++) {
+		(*i)->onMouseUp(x, y, win);
 	}
 }
 

@@ -42,12 +42,18 @@ DisplayWindow::DisplayWindow(HINSTANCE instance, int width, int height, std::str
 	windowDeviceHandle = GetDC(windowHandle);
 	bitmapDeviceHandle = CreateCompatibleDC(windowDeviceHandle);
 	bitmap = CreateCompatibleBitmap(windowDeviceHandle, width, height);
+
+	img = new ImageBuffer();
+	img->width = width;
+	img->height = height;
 }
 
 DisplayWindow::~DisplayWindow() {
 	DeleteObject(SelectObject(bitmapDeviceHandle, bitmap));
 	DeleteDC(bitmapDeviceHandle);
 	DeleteObject(bitmap);
+
+	delete img;
 }
 
 void DisplayWindow::setImage(unsigned char* image, bool rgb2bgr) {
@@ -62,6 +68,8 @@ void DisplayWindow::setImage(unsigned char* image, bool rgb2bgr) {
 
 		return;
 	}*/
+
+	img->data = image;
 
 	if (rgb2bgr) {
 		// BGR to RGB..
@@ -91,7 +99,16 @@ LRESULT DisplayWindow::handleMessage(HWND windowHandle, UINT msg, WPARAM wParam,
 				x = (short)LOWORD(lParam);
 				y = (short)HIWORD(lParam);
 
-				gui->emitMouseClick(x, y, this);
+				gui->emitMouseDown(x, y, this);
+			}
+		break;
+
+		case WM_LBUTTONUP:
+			if (gui != NULL) {
+				x = (short)LOWORD(lParam);
+				y = (short)HIWORD(lParam);
+
+				gui->emitMouseUp(x, y, this);
 			}
 		break;
 

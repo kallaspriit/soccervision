@@ -23,14 +23,20 @@ public:
     bool update();
 	void addMouseListener(MouseListener* listener);
 	void onMouseMove(int x, int y, DisplayWindow* win);
-	void onMouseClick(int x, int y, DisplayWindow* win);
-	void emitMouseClick(int x, int y, DisplayWindow* win);
+	void onMouseDown(int x, int y, DisplayWindow* win);
+	void onMouseUp(int x, int y, DisplayWindow* win);
+	void emitMouseDown(int x, int y, DisplayWindow* win);
+	void emitMouseUp(int x, int y, DisplayWindow* win);
 	void emitMouseMove(int x, int y, DisplayWindow* win);
 
 private:
 	HINSTANCE instance;
 	MSG msg;
 	std::vector<MouseListener*> mouseListeners;
+	int mouseX;
+	int mouseY;
+	bool mouseDown;
+	int brushRadius;
 };
 
 #endif // GUI_H
