@@ -2,6 +2,7 @@
 #include "Gui.h"
 
 #include <iostream>
+#include <Windowsx.h>
 
 DisplayWindow::DisplayWindow(HINSTANCE instance, int width, int height, std::string name, Gui* gui) : instance(instance), gui(gui), width(width), height(height), name(name), firstDraw(true) {
     windowHandle = CreateWindowEx(
@@ -96,8 +97,8 @@ LRESULT DisplayWindow::handleMessage(HWND windowHandle, UINT msg, WPARAM wParam,
 
 		case WM_MOUSEMOVE:
 			if (gui != NULL) {
-				x = (short)LOWORD(lParam);
-				y = (short)HIWORD(lParam);
+				x = (short)GET_X_LPARAM(lParam);
+				y = (short)GET_Y_LPARAM(lParam);
 
 				gui->emitMouseMove(x, y, this);
 			}
