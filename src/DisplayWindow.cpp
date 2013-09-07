@@ -125,6 +125,8 @@ LRESULT DisplayWindow::handleMessage(HWND windowHandle, UINT msg, WPARAM wParam,
 			if (gui != NULL) {
 				delta = (short)GET_WHEEL_DELTA_WPARAM(lParam);
 
+				std::cout << "DELTA: " << delta << std::endl;
+
 				gui->emitMouseWheel(delta, this);
 			}
 		break;
