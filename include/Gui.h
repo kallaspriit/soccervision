@@ -16,12 +16,15 @@ class ParticleFilterLocalizer;
 class Gui : public MouseListener {
 
 public:
-    Gui(HINSTANCE instance);
+    Gui(HINSTANCE instance, int width, int height);
     ~Gui();
 
 	DisplayWindow* createWindow(int width, int height, std::string name);
     bool update();
 	void addMouseListener(MouseListener* listener);
+	void setFPS(int fps) { this->fps = fps; };
+	void setFrontImages(unsigned char* rgb, unsigned char* classification);
+	void setRearImages(unsigned char* rgb, unsigned char* classification);
 	void onMouseMove(int x, int y, DisplayWindow* win);
 	void onMouseDown(int x, int y, DisplayWindow* win);
 	void onMouseUp(int x, int y, DisplayWindow* win);
@@ -34,6 +37,13 @@ private:
 	MSG msg;
 	std::vector<MouseListener*> mouseListeners;
 	std::vector<DisplayWindow*> windows;
+	DisplayWindow* frontRGB;
+	DisplayWindow* rearRGB;
+	DisplayWindow* frontClassification;
+	DisplayWindow* rearClassification;
+	int width;
+	int height;
+	int fps;
 	int mouseX;
 	int mouseY;
 	bool mouseDown;

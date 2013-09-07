@@ -1,10 +1,11 @@
 #include "Gui.h"
+#include "DebugRenderer.h"
 
 #include <iostream>
 
 LRESULT CALLBACK WinProc(HWND hWnd,UINT message,WPARAM wParam,LPARAM lParam);
 
-Gui::Gui(HINSTANCE instance) : instance(instance) {
+Gui::Gui(HINSTANCE instance, int width, int height) : instance(instance), width(width), height(height) {
 	WNDCLASSEX wClass;
 	ZeroMemory(&wClass, sizeof(WNDCLASSEX));
 
@@ -35,10 +36,16 @@ Gui::Gui(HINSTANCE instance) : instance(instance) {
 	ZeroMemory(&msg, sizeof(MSG));
 
 	addMouseListener(this);
+
 	mouseX = 0;
 	mouseY = 0;
 	mouseDown = false;
 	brushRadius = 50;
+
+	frontRGB = createWindow(width, height, "Camera 1 RGB");
+	rearRGB = createWindow(width, height, "Camera 2 RGB");
+	frontClassification = createWindow(width, height, "Camera 1 classification");
+	rearClassification = createWindow(width, height, "Camera 2 classification");
 }
 
 Gui::~Gui() {
@@ -72,6 +79,20 @@ bool Gui::update() {
 
 void Gui::addMouseListener(MouseListener* listener) {
 	mouseListeners.push_back(listener);
+}
+
+void Gui::setFrontImages(unsigned char* rgb, unsigned char* classification) {
+	DebugRenderer::renderFPS(rgb, fps, true);
+
+	frontRGB->setImage(rgb, false);
+	frontClassification->setImage(classification, true);
+}
+
+void Gui::setRearImages(unsigned char* rgb, unsigned char* classification) {
+	DebugRenderer::renderFPS(rgb, fps, true);
+
+	rearRGB->setImage(rgb, false);
+	rearClassification->setImage(classification, true);
 }
 
 void Gui::onMouseMove(int x, int y, DisplayWindow* win) {

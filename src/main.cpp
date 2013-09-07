@@ -46,12 +46,8 @@ int main(int argc, char* argv[]) {
 	int height = Config::cameraHeight;
 	bool debug = true;
 
-	Gui* gui = new Gui(instance);
+	Gui* gui = new Gui(instance, width, height);
 	FpsCounter* fpsCounter = new FpsCounter();
-	DisplayWindow* winRGB1 = gui->createWindow(1280, 1024, "Camera 1 RGB");
-	DisplayWindow* winRGB2 = gui->createWindow(1280, 1024, "Camera 2 RGB");
-	DisplayWindow* winClassification1 = gui->createWindow(1280, 1024, "Camera 1 Classification");
-	DisplayWindow* winClassification2 = gui->createWindow(1280, 1024, "Camera 2 Classification");
 
 	XimeaCamera* camera1 = new XimeaCamera();
 	XimeaCamera* camera2 = new XimeaCamera();
@@ -148,18 +144,14 @@ int main(int argc, char* argv[]) {
 		// TODO Visualize the vision results
 
 		if (debug) {
-			if (gotFrame1) {
-				DebugRenderer::renderFPS(processor1->rgb, fpsCounter->getFps(), true);
+			gui->setFPS(fpsCounter->getFps());
 
-				winRGB1->setImage(processor1->rgb, false);
-				winClassification1->setImage(processor1->classification, true);
+			if (gotFrame1) {
+				gui->setFrontImages(processor1->rgb, processor1->classification);
 			}
 
 			if (gotFrame2) {
-				DebugRenderer::renderFPS(processor2->rgb, fpsCounter->getFps(), true);
-
-				winRGB2->setImage(processor2->rgb, false);
-				winClassification2->setImage(processor2->classification, true);
+				gui->setFrontImages(processor1->rgb, processor1->classification);
 			}
 
 			gui->update();
