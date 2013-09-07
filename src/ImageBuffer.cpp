@@ -315,15 +315,28 @@ void ImageBuffer::drawBox(int x, int y, int width, int height, int red, int gree
 }
 
 void ImageBuffer::drawCircle(int centerX, int centerY, int radius, int red, int green, int blue) {
-	if (data == NULL) {
-        return;
-    }
-	
-	for (int x = -radius; x < radius; x++) {
-		int height = (int)Math::sqrt((float)(radius * radius - x * x));
+	int x = radius, y = 0;
+	int radiusError = 1 - x;
+ 
+	while(x >= y)
+	{
+		setPixelAt(x + centerX, y + centerY, red, green, blue);
+		setPixelAt(y + centerX, x + centerY, red, green, blue);
+		setPixelAt(-x + centerX, y + centerY, red, green, blue);
+		setPixelAt(-y + centerX, x + centerY, red, green, blue);
+		setPixelAt(-x + centerX, -y + centerY, red, green, blue);
+		setPixelAt(-y + centerX, -x + centerY, red, green, blue);
+		setPixelAt(x + centerX, -y + centerY, red, green, blue);
+		setPixelAt(y + centerX, -x + centerY, red, green, blue);
+ 
+		y++;
 
-		setPixelAt(x + centerX, centerY - height, red, green, blue);
-		setPixelAt(x + centerX, centerY + height, red, green, blue);
+		if(radiusError<0) {
+			radiusError += 2*y + 1;
+		} else {
+			x--;
+			radiusError += 2 * (y - x + 1);
+		}
 	}
 }
 
