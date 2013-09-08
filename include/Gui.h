@@ -23,8 +23,8 @@ public:
     bool update();
 	void addMouseListener(MouseListener* listener);
 	void setFPS(int fps) { this->fps = fps; };
-	void setFrontImages(unsigned char* rgb, unsigned char* classification);
-	void setRearImages(unsigned char* rgb, unsigned char* classification);
+	void setFrontImages(unsigned char* rgb, unsigned char* yuyv, unsigned char* classification);
+	void setRearImages(unsigned char* rgb, unsigned char* yuyv, unsigned char* classification);
 	void onMouseMove(int x, int y, DisplayWindow* win);
 	void onMouseDown(int x, int y, DisplayWindow* win);
 	void onMouseUp(int x, int y, DisplayWindow* win);
