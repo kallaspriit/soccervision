@@ -7,7 +7,7 @@
 
 LRESULT CALLBACK WinProc(HWND hWnd,UINT message,WPARAM wParam,LPARAM lParam);
 
-Gui::Gui(HINSTANCE instance, Blobber* blobberFront, Blobber* blobberRear, int width, int height) : instance(instance), blobberFront(blobberFront), blobberRear(blobberRear), width(width), height(height) {
+Gui::Gui(HINSTANCE instance, Blobber* blobberFront, Blobber* blobberRear, int width, int height) : instance(instance), blobberFront(blobberFront), blobberRear(blobberRear), width(width), height(height), activeWindow(NULL) {
 	WNDCLASSEX wClass;
 	ZeroMemory(&wClass, sizeof(WNDCLASSEX));
 
@@ -134,10 +134,12 @@ void Gui::setFrontImages(unsigned char* rgb, unsigned char* yuyv, unsigned char*
 	drawElements(rgb, width, height);
 	drawElements(classification, width, height);
 
-	if (!isMouseOverElement(mouseX, mouseY)) {
-		handleColorThresholding(dataY, dataU, dataV, rgb, classification);
-	} else {
-		handleElements();
+	if (activeWindow == frontClassification || activeWindow == frontRGB) {
+		if (!isMouseOverElement(mouseX, mouseY)) {
+			handleColorThresholding(dataY, dataU, dataV, rgb, classification);
+		} else {
+			handleElements();
+		}
 	}
 	
 	frontRGB->setImage(rgb, false);
@@ -150,10 +152,12 @@ void Gui::setRearImages(unsigned char* rgb, unsigned char* yuyv, unsigned char* 
 	drawElements(rgb, width, height);
 	drawElements(classification, width, height);
 
-	if (!isMouseOverElement(mouseX, mouseY)) {
-		handleColorThresholding(dataY, dataU, dataV, rgb, classification);
-	} else {
-		handleElements();
+	if (activeWindow == rearClassification || activeWindow == rearRGB) {
+		if (!isMouseOverElement(mouseX, mouseY)) {
+			handleColorThresholding(dataY, dataU, dataV, rgb, classification);
+		} else {
+			handleElements();
+		}
 	}
 
 	rearRGB->setImage(rgb, false);
@@ -235,16 +239,22 @@ void Gui::onElementClick(Element* element) {
 void Gui::onMouseMove(int x, int y, DisplayWindow* win) {
 	mouseX = x;
 	mouseY = y;
+
+	activeWindow = win;
 }
 
 void Gui::onMouseDown(int x, int y, MouseListener::MouseBtn btn, DisplayWindow* win) {
 	mouseDown = true;
 	mouseBtn = btn;
+
+	activeWindow = win;
 }
 
 void Gui::onMouseUp(int x, int y, MouseListener::MouseBtn btn, DisplayWindow* win) {
 	mouseDown = false;
 	mouseBtn = btn;
+
+	activeWindow = win;
 }
 
 void Gui::onMouseWheel(int delta, DisplayWindow* win) {
@@ -253,6 +263,8 @@ void Gui::onMouseWheel(int delta, DisplayWindow* win) {
 	if (brushRadius < 5) {
 		brushRadius = 5;
 	}
+
+	activeWindow = win;
 }
 
 void Gui::emitMouseDown(int x, int y, MouseListener::MouseBtn btn, DisplayWindow* win) {

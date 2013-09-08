@@ -83,6 +83,7 @@ private:
 	DisplayWindow* rearRGB;
 	DisplayWindow* frontClassification;
 	DisplayWindow* rearClassification;
+	DisplayWindow* activeWindow;
 	Blobber* blobberFront;
 	Blobber* blobberRear;
 	std::vector<Element*> elements;
