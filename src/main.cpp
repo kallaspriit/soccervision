@@ -149,7 +149,7 @@ int main(int argc, char* argv[]) {
 			}
 
 			if (gotFrame2) {
-				gui->setFrontImages(processor1->rgb, processor2->dataYUYV, processor1->dataY, processor1->dataU, processor1->dataV, processor1->classification);
+				gui->setRearImages(processor2->rgb, processor2->dataYUYV, processor2->dataY, processor2->dataU, processor2->dataV, processor2->classification);
 			}
 
 			gui->update();
