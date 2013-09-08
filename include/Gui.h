@@ -70,6 +70,8 @@ public:
 
 private:
 	void handleColorThresholding(unsigned char* dataY, unsigned char* dataU, unsigned char* dataV, unsigned char* rgb, unsigned char* classification);
+	void handleElements();
+	void onElementClick(Element* element);
 
 	HINSTANCE instance;
 	MSG msg;

@@ -126,6 +126,8 @@ void Gui::setFrontImages(unsigned char* rgb, unsigned char* yuyv, unsigned char*
 
 	if (!isMouseOverElement(mouseX, mouseY)) {
 		handleColorThresholding(dataY, dataU, dataV, rgb, classification);
+	} else {
+		handleElements();
 	}
 	
 	frontRGB->setImage(rgb, false);
@@ -140,6 +142,8 @@ void Gui::setRearImages(unsigned char* rgb, unsigned char* yuyv, unsigned char* 
 
 	if (!isMouseOverElement(mouseX, mouseY)) {
 		handleColorThresholding(dataY, dataU, dataV, rgb, classification);
+	} else {
+		handleElements();
 	}
 
 	rearRGB->setImage(rgb, false);
@@ -173,6 +177,30 @@ void Gui::handleColorThresholding(unsigned char* dataY, unsigned char* dataU, un
 		}
 
 		std::cout << "! Range: " << yuyvRange.minY << "-" << yuyvRange.maxY << " " << yuyvRange.minU << "-" << yuyvRange.maxU << " " << yuyvRange.minV << "-" << yuyvRange.maxV << std::endl;
+	}
+}
+
+void Gui::handleElements() {
+	if (!mouseDown) {
+		return;
+	}
+
+	Element* element;
+
+	for (std::vector<Element*>::const_iterator i = elements.begin(); i != elements.end(); i++) {
+		element = *i;
+
+		if (element->contains(mouseX, mouseY)) {
+			onElementClick(element);
+		}
+	}
+}
+
+void Gui::onElementClick(Element* element) {
+	Button* button = dynamic_cast<Button*>(element);
+
+	if (button != NULL) {
+		std::cout << "! Button clicked " << button->text << std::endl;
 	}
 }
 
