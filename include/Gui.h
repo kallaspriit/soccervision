@@ -38,12 +38,13 @@ public:
 			int width;
 			int type;
 			void* data;
+			bool active;
 
 		private:
 			int getWidth();
 			int getHeight();
 
-			bool active;
+			bool over;
 	};
 
     Gui(HINSTANCE instance, Blobber* blobberFront, Blobber* blobberRear, int width, int height);

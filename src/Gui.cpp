@@ -209,7 +209,7 @@ void Gui::emitMouseWheel(int delta, DisplayWindow* win) {
 	}
 }
 
-Gui::Button::Button(std::string text, int x, int y, int width, int type, void* data) : text(text), x(x), y(y), width(width), type(type), data(data) {
+Gui::Button::Button(std::string text, int x, int y, int width, int type, void* data) : text(text), x(x), y(y), width(width), type(type), data(data), over(false), active(false) {
 
 }
 
@@ -218,8 +218,8 @@ void Gui::Button::draw(unsigned char* image, int imageWidth, int imageHeight) {
 	img.height = imageHeight;
 	img.data = image;
 
-	img.drawBox(x, y, getWidth(), getHeight(), 255, active ? 0 : 255, active ? 0 : 255);
-	img.drawText(x + 6, y + 4, text);
+	img.drawBox(x, y, getWidth(), getHeight(), 255, over ? 0 : 255, over ? 0 : 255);
+	img.drawText(x + 6, y + 4, text, 255, over ? 0 : 255, over ? 0 : 255);
 }
 
 int Gui::Button::getWidth() {
@@ -235,7 +235,7 @@ int Gui::Button::getHeight() {
 }
 
 void Gui::Button::onMouseMove(int x, int y, DisplayWindow* win) {
-	active = contains(x, y);
+	over = contains(x, y);
 }
 
 bool Gui::Button::contains(int px, int py) {

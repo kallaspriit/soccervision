@@ -16,8 +16,8 @@ class ImageBuffer {
         }
 		void drawCircle(int centerX, int centerY, int radius, int red = 255, int green = 0, int blue = 0);
 		void fillCircle(int centerX, int centerY, int radius, int red = 255, int green = 0, int blue = 0);
-        void drawChar(int imageX, int imageY, int index);
-        void drawText(int imageX, int imageY, std::string text);
+        void drawChar(int imageX, int imageY, int index, int red = 255, int green = 0, int blue = 0);
+        void drawText(int imageX, int imageY, std::string text, int red = 255, int green = 0, int blue = 0);
         void drawLine(int x1, int y1, int x2, int y2, int red = 255, int green = 0, int blue = 0);
         void drawMarker(int x, int y, int red = 255, int green = 0, int blue = 0, bool tiny = false);
 

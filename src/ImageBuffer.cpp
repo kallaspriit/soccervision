@@ -354,7 +354,7 @@ void ImageBuffer::fillCircle(int centerX, int centerY, int radius, int red, int 
 	}
 }
 
-void ImageBuffer::drawChar(int imageX, int imageY, int index) {
+void ImageBuffer::drawChar(int imageX, int imageY, int index, int red, int green, int blue) {
 	if (data == NULL) {
         return;
     }
@@ -373,13 +373,13 @@ void ImageBuffer::drawChar(int imageX, int imageY, int index) {
             row = character[x];
 
             if (row & (1 << y)) {
-                setPixelAt(imageX + x, imageY - y + 8);
+                setPixelAt(imageX + x, imageY - y + 8, red, green, blue);
             }
         }
     }
 }
 
-void ImageBuffer::drawText(int imageX, int imageY, std::string text) {
+void ImageBuffer::drawText(int imageX, int imageY, std::string text, int red, int green, int blue) {
 	if (data == NULL) {
         return;
     }
@@ -387,7 +387,7 @@ void ImageBuffer::drawText(int imageX, int imageY, std::string text) {
     const char* str = text.c_str();
 
     for (unsigned int i = 0; i < text.size(); i++) {
-        drawChar(imageX + i * 9, imageY, str[i]);
+        drawChar(imageX + i * 9, imageY, str[i], red, green, blue);
     }
 }
 
