@@ -90,30 +90,26 @@ ImageProcessor::YUYV* ImageProcessor::getYuyvPixelAt(unsigned char* image, int w
     return pixel;
 }
 
-ImageProcessor::YUYVRange ImageProcessor::extractColorRange(unsigned char* image, int width, int height, std::string colorName, int centerX, int centerY, int brushRadius, float stdDev) {
+ImageProcessor::YUYVRange ImageProcessor::extractColorRange(unsigned char* image, int imageWidth, int imageHeight, std::string colorName, int centerX, int centerY, int brushRadius, float stdDev) {
 	int Y, U, V;
 	std::vector<float> yValues;
 	std::vector<float> uValues;
 	std::vector<float> vValues;
 
-	std::cout << "extractColorRange " << width <<  "x" << height << ", " << centerX << "x" << centerY << ", " << brushRadius << ", " << stdDev << std::endl;
-	
 	for (int x = -brushRadius; x < brushRadius; x++) {
 		int height = (int)::sqrt(brushRadius * brushRadius - x * x);
 
 		for (int y = -height; y < height; y++) {
 			if (
-				x + centerX < 0
-				|| x + centerX > width - 1
+				   x + centerX < 0
+				|| x + centerX > imageWidth - 1
 				|| y + centerY < 0
-				|| y + centerY > height -1
+				|| y + centerY > imageHeight - 1
 			) {
-				//std::cout << "Skip pixel at " << (x + centerX) << "x" << (y + centerY) << std::endl;
-
 				continue;
 			}
 
-			YUYV* pixel = getYuyvPixelAt(image, width, height, x + centerX, y + centerY);
+			YUYV* pixel = getYuyvPixelAt(image, imageWidth, imageHeight, x + centerX, y + centerY);
 
 			if (pixel != NULL) {
 				Y = (pixel->y1 + pixel->y2) / 2;
@@ -125,10 +121,8 @@ ImageProcessor::YUYVRange ImageProcessor::extractColorRange(unsigned char* image
 				yValues.push_back((float)Y);
 				uValues.push_back((float)U);
 				vValues.push_back((float)V);
-
-				std::cout << "Y: " << Y << std::endl;
 			} else {
-				std::cout << "Didn't get pixel at " << (x + centerX) << "x" << (y + centerY) << std::endl;
+				std::cout << "- Didn't get pixel at " << (x + centerX) << "x" << (y + centerY) << std::endl;
 			}
 		}
 	}
