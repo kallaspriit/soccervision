@@ -48,6 +48,9 @@ Gui::Gui(HINSTANCE instance, Blobber* blobberFront, Blobber* blobberRear, int wi
 	rearRGB = createWindow(width, height, "Camera 2 RGB");
 	frontClassification = createWindow(width, height, "Camera 1 classification");
 	rearClassification = createWindow(width, height, "Camera 2 classification");
+
+	Button* btn = createButton("Test button", 20, 40);
+	Button* btn2 = createButton("Other button", 20, 60);
 }
 
 Gui::~Gui() {
@@ -64,6 +67,20 @@ DisplayWindow* Gui::createWindow(int width, int height, std::string name) {
 	windows.push_back(window);
 
 	return window;
+}
+
+Gui::Button* Gui::createButton(std::string text, int x, int y, int width, int type, void* data) {
+	Button* button = new Button(text, x, y, width, type, data);
+
+	elements.push_back(button);
+
+	return button;
+}
+
+void Gui::drawElements(unsigned char* image, int width, int height) {
+	for (std::vector<Element*>::const_iterator i = elements.begin(); i != elements.end(); i++) {
+		(*i)->draw(image, width, height);
+	}
 }
 
 bool Gui::update() {
@@ -87,6 +104,9 @@ void Gui::setFrontImages(unsigned char* rgb, unsigned char* yuyv, unsigned char*
 	DebugRenderer::renderFPS(rgb, fps, true);
 
 	handleColorThresholding(dataY, dataU, dataV, rgb, classification);
+
+	drawElements(rgb, width, height);
+	drawElements(classification, width, height);
 	
 	frontRGB->setImage(rgb, false);
 	frontClassification->setImage(classification, true);
@@ -96,6 +116,9 @@ void Gui::setRearImages(unsigned char* rgb, unsigned char* yuyv, unsigned char* 
 	DebugRenderer::renderFPS(rgb, fps, true);
 
 	handleColorThresholding(dataY, dataU, dataV, rgb, classification);
+
+	drawElements(rgb, width, height);
+	drawElements(classification, width, height);
 
 	rearRGB->setImage(rgb, false);
 	rearClassification->setImage(classification, true);
@@ -176,6 +199,24 @@ void Gui::emitMouseWheel(int delta, DisplayWindow* win) {
 	for (std::vector<MouseListener*>::const_iterator i = mouseListeners.begin(); i != mouseListeners.end(); i++) {
 		(*i)->onMouseWheel(delta, win);
 	}
+}
+
+Gui::Button::Button(std::string text, int x, int y, int width, int type, void* data) : text(text), x(x), y(y), width(width), type(type), data(data) {
+
+}
+
+void Gui::Button::draw(unsigned char* image, int width, int height) {
+	img.width = width;
+	img.height = height;
+	img.data = image;
+
+	int renderWidth = width;
+
+	if (width == 0) {
+		renderWidth = text.size() * 10;
+	}
+
+	img.drawBox(x, y, renderWidth, 20);
 }
 
 LRESULT CALLBACK WinProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {

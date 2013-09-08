@@ -5,8 +5,10 @@
 #include <windows.h>
 
 #include "DisplayWindow.h"
+#include "ImageBuffer.h"
 #include "MouseListener.h"
 #include <vector>
+#include <string>
 
 class Command;
 class Vision;
@@ -16,10 +18,31 @@ class ParticleFilterLocalizer;
 class Gui : public MouseListener {
 
 public:
+	class Element : public MouseListener {
+		public:
+			virtual void draw(unsigned char* image, int width, int height) = 0;
+			ImageBuffer img;
+	};
+
+	class Button : public Element {
+		public:
+			Button(std::string text, int x, int y, int width = 0, int type = 0, void* data = NULL);
+			void draw(unsigned char* image, int width, int height);
+
+			std::string text;
+			int x;
+			int y;
+			int width;
+			int type;
+			void* data;
+	};
+
     Gui(HINSTANCE instance, Blobber* blobberFront, Blobber* blobberRear, int width, int height);
     ~Gui();
 
 	DisplayWindow* createWindow(int width, int height, std::string name);
+	Button* createButton(std::string text, int x, int y, int width = 0, int type = 0, void* data = NULL);
+	void drawElements(unsigned char* image, int width, int height);
     bool update();
 	void addMouseListener(MouseListener* listener);
 	void setFPS(int fps) { this->fps = fps; };
@@ -47,6 +70,7 @@ private:
 	DisplayWindow* rearClassification;
 	Blobber* blobberFront;
 	Blobber* blobberRear;
+	std::vector<Element*> elements;
 	int width;
 	int height;
 	int fps;
