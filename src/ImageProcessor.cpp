@@ -108,7 +108,7 @@ ImageProcessor::YUYVRange ImageProcessor::extractColorRange(unsigned char* image
 				|| y + centerY < 0
 				|| y + centerY > height -1
 			) {
-				std::cout << "Skip pixel at " << (x + centerX) << "x" << (y + centerY) << std::endl;
+				//std::cout << "Skip pixel at " << (x + centerX) << "x" << (y + centerY) << std::endl;
 
 				continue;
 			}
