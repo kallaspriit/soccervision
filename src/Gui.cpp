@@ -213,11 +213,11 @@ void Gui::Button::draw(unsigned char* image, int imageWidth, int imageHeight) {
 	int renderWidth = width;
 
 	if (width == 0) {
-		renderWidth = text.length() * 10;
+		renderWidth = text.length() * 9 + 6 *2;
 	}
 
 	img.drawBox(x, y, renderWidth, 16);
-	img.drawText(x, y + 4, text);
+	img.drawText(x + 6, y + 4, text);
 }
 
 LRESULT CALLBACK WinProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
