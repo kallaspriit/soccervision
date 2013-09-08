@@ -310,7 +310,7 @@ void ImageBuffer::drawBox(int x, int y, int width, int height, int red, int gree
     }
 
     for (int i = y; i < y + height; i++) {
-        setPixelAt(x + width, i, red, green, blue);
+        setPixelAt(x + width - 1, i, red, green, blue);
     }
 }
 
