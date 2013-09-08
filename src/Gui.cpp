@@ -41,6 +41,7 @@ Gui::Gui(HINSTANCE instance, Blobber* blobberFront, Blobber* blobberRear, int wi
 	mouseX = 0;
 	mouseY = 0;
 	mouseDown = false;
+	rightMouseBtn = false;
 	brushRadius = 50;
 
 	frontRGB = createWindow(width, height, "Camera 1 RGB");
@@ -95,11 +96,19 @@ void Gui::setFrontImages(unsigned char* rgb, unsigned char* yuyv, unsigned char*
 
 		ImageProcessor::YUYVRange yuyvRange = ImageProcessor::extractColorRange(dataY, dataU, dataV, width, height, mouseX, mouseY, brushRadius, stdDev);
 	
-		blobberFront->getColor("green")->addThreshold(
-			yuyvRange.minY, yuyvRange.maxY,
-			yuyvRange.minU, yuyvRange.maxU,
-			yuyvRange.minV, yuyvRange.maxV
-		);
+		if (rightMouseBtn) {
+			blobberFront->getColor("green")->substractThreshold(
+				yuyvRange.minY, yuyvRange.maxY,
+				yuyvRange.minU, yuyvRange.maxU,
+				yuyvRange.minV, yuyvRange.maxV
+			);
+		} else {
+			blobberFront->getColor("green")->addThreshold(
+				yuyvRange.minY, yuyvRange.maxY,
+				yuyvRange.minU, yuyvRange.maxU,
+				yuyvRange.minV, yuyvRange.maxV
+			);
+		}
 
 		std::cout << "! Range: " << yuyvRange.minY << "-" << yuyvRange.maxY << " " << yuyvRange.minU << "-" << yuyvRange.maxU << " " << yuyvRange.minV << "-" << yuyvRange.maxV << std::endl;
 	}
@@ -119,10 +128,12 @@ void Gui::onMouseMove(int x, int y, DisplayWindow* win) {
 
 void Gui::onMouseDown(int x, int y, MouseListener::MouseBtn btn, DisplayWindow* win) {
 	mouseDown = true;
+	rightMouseBtn = btn == MouseListener::MouseBtn::RIGHT ? true : false;
 }
 
 void Gui::onMouseUp(int x, int y, MouseListener::MouseBtn btn, DisplayWindow* win) {
 	mouseDown = false;
+	rightMouseBtn = false;
 }
 
 void Gui::onMouseWheel(int delta, DisplayWindow* win) {

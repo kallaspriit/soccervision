@@ -51,6 +51,7 @@ private:
 	int mouseX;
 	int mouseY;
 	bool mouseDown;
+	bool rightMouseBtn;
 	int brushRadius;
 };
 
