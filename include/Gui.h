@@ -7,6 +7,7 @@
 #include "DisplayWindow.h"
 #include "ImageBuffer.h"
 #include "MouseListener.h"
+#include "Config.h"
 #include <vector>
 #include <string>
 
@@ -21,7 +22,7 @@ public:
 	class Element : public MouseListener {
 		public:
 			Element();
-			virtual void draw(unsigned char* image, int imageWidth, int imageHeight) = 0;
+			virtual void draw(unsigned char* image, int imageWidth = Config::cameraWidth, int imageHeight = Config::cameraHeight, bool swapRB = false) = 0;
 			virtual bool contains(int x, int y) { return false; };
 			ImageBuffer img;
 			double lastInteractionTime;
@@ -30,7 +31,7 @@ public:
 	class Button : public Element {
 		public:
 			Button(std::string text, int x, int y, int width = 0, int type = 0, void* data = NULL);
-			void draw(unsigned char* image, int imageWidth, int imageHeight);
+			void draw(unsigned char* image, int imageWidth = Config::cameraWidth, int imageHeight = Config::cameraHeight, bool swapRB = false);
 			bool contains(int x, int y);
 			void onMouseMove(int x, int y, DisplayWindow* win);
 

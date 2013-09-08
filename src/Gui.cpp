@@ -233,6 +233,24 @@ void Gui::onElementClick(Element* element) {
 		}
 
 		button->lastInteractionTime = Util::millitime();
+
+		Element* el;
+		Button* btn;
+
+		for (std::vector<Element*>::const_iterator i = elements.begin(); i != elements.end(); i++) {
+			el = *i;
+			btn = dynamic_cast<Button*>(el);
+
+			if (btn == NULL) {
+				continue;
+			}
+
+			if (btn == button) {
+				btn->active = true;
+			} else {
+				btn->active = false;
+			}
+		}
 	}
 }
 
@@ -299,13 +317,19 @@ Gui::Button::Button(std::string text, int x, int y, int width, int type, void* d
 
 }
 
-void Gui::Button::draw(unsigned char* image, int imageWidth, int imageHeight) {
+void Gui::Button::draw(unsigned char* image, int imageWidth, int imageHeight, bool swapRB) {
 	img.width = imageWidth;
 	img.height = imageHeight;
 	img.data = image;
+	img.swapRB = swapRB;
 
-	img.drawBox(x, y, getWidth(), getHeight(), 255, over ? 0 : 255, over ? 0 : 255);
-	img.drawText(x + 6, y + 4, text, 255, over ? 0 : 255, over ? 0 : 255);
+	if (active) {
+		img.fillBox(x, y, getWidth(), getHeight(), 255, 0, 0);
+		img.drawText(x + 6, y + 4, text, 255, 255, 255);
+	} else {
+		img.drawBox(x, y, getWidth(), getHeight(), 255, over ? 0 : 255, over ? 0 : 255);
+		img.drawText(x + 6, y + 4, text, 255, over ? 0 : 255, over ? 0 : 255);
+	}
 }
 
 int Gui::Button::getWidth() {

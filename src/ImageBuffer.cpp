@@ -314,6 +314,18 @@ void ImageBuffer::drawBox(int x, int y, int width, int height, int red, int gree
     }
 }
 
+void ImageBuffer::fillBox(int x, int y, int width, int height, int red, int green, int blue) {
+    if (data == NULL) {
+        return;
+    }
+
+	for (int px = x; px < x + width; px++) {
+		for (int py = y; py < y + height; py++) {
+			setPixelAt(px, py, red, green, blue);
+		}
+	}
+}
+
 void ImageBuffer::drawCircle(int centerX, int centerY, int radius, int red, int green, int blue) {
 	int x = radius, y = 0;
 	int radiusError = 1 - x;
