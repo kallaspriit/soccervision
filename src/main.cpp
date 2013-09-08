@@ -145,11 +145,11 @@ int main(int argc, char* argv[]) {
 			gui->setFPS(fpsCounter->getFps());
 
 			if (gotFrame1) {
-				gui->setFrontImages(processor1->rgb, processor1->dataYUYV, processor1->classification);
+				gui->setFrontImages(processor1->rgb, processor1->dataYUYV, processor1->dataY, processor1->dataU, processor1->dataV, processor1->classification);
 			}
 
 			if (gotFrame2) {
-				gui->setFrontImages(processor1->rgb, processor2->dataYUYV, processor1->classification);
+				gui->setFrontImages(processor1->rgb, processor2->dataYUYV, processor1->dataY, processor1->dataU, processor1->dataV, processor1->classification);
 			}
 
 			gui->update();

@@ -61,7 +61,7 @@ void ImageProcessor::ARGBToRGB24(unsigned char* input, unsigned char* output, in
 	);
 }
 
-ImageProcessor::YUYV* ImageProcessor::getYuyvPixelAt(unsigned char* image, int width, int height, int x, int y) {
+ImageProcessor::YUYV* ImageProcessor::getYuyvPixelAt(unsigned char* dataY, unsigned char* dataU, unsigned char* dataV, int width, int height, int x, int y) {
 	if (
 		x < 0
 		|| x > width - 1
@@ -82,15 +82,15 @@ ImageProcessor::YUYV* ImageProcessor::getYuyvPixelAt(unsigned char* image, int w
 
 	int stride = width * 1;
 
-	pixel->y1 = image[yPos];
-	pixel->u = image[uvPos];
-	pixel->y2 = image[yPos];
-	pixel->v = image[uvPos];
+	pixel->y1 = dataY[yPos];
+	pixel->u = dataU[uvPos];
+	pixel->y2 = dataY[yPos];
+	pixel->v = dataV[uvPos];
 
     return pixel;
 }
 
-ImageProcessor::YUYVRange ImageProcessor::extractColorRange(unsigned char* image, int imageWidth, int imageHeight, int centerX, int centerY, int brushRadius, float stdDev) {
+ImageProcessor::YUYVRange ImageProcessor::extractColorRange(unsigned char* dataY, unsigned char* dataU, unsigned char* dataV, int imageWidth, int imageHeight, int centerX, int centerY, int brushRadius, float stdDev) {
 	int Y, U, V;
 	std::vector<float> yValues;
 	std::vector<float> uValues;
@@ -109,7 +109,7 @@ ImageProcessor::YUYVRange ImageProcessor::extractColorRange(unsigned char* image
 				continue;
 			}
 
-			YUYV* pixel = getYuyvPixelAt(image, imageWidth, imageHeight, x + centerX, y + centerY);
+			YUYV* pixel = getYuyvPixelAt(dataY, dataU, dataV, imageWidth, imageHeight, x + centerX, y + centerY);
 
 			if (pixel != NULL) {
 				Y = (pixel->y1 + pixel->y2) / 2;

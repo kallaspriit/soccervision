@@ -28,6 +28,9 @@ public:
 
 	unsigned char* frame;
 	unsigned char* dataYUYV;
+	unsigned char* dataY;
+    unsigned char* dataU;
+    unsigned char* dataV;
 	unsigned char* classification;
 	unsigned char* rgb;
 
@@ -35,9 +38,6 @@ private:
 	void* run();
 
 	bool done;
-	unsigned char* dataY;
-    unsigned char* dataU;
-    unsigned char* dataV;
 	unsigned char* argb;
 };
 

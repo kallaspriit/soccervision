@@ -22,8 +22,8 @@ public:
 	static void I420ToYUYV(unsigned char* inputY, unsigned char* inputU, unsigned char* inputV, unsigned char* output, int width, int height);
 	static void YUYVToARGB(unsigned char* input, unsigned char* output, int width, int height);
 	static void ARGBToRGB24(unsigned char* input, unsigned char* output, int width, int height);
-	static YUYV* getYuyvPixelAt(unsigned char* image, int width, int height, int x, int y);
-	static YUYVRange extractColorRange(unsigned char* image, int imageWidth, int imageHeight, int centerX, int centerY, int brushRadius, float stdDev);
+	static YUYV* getYuyvPixelAt(unsigned char* dataY, unsigned char* dataU, unsigned char* dataV, int width, int height, int x, int y);
+	static YUYVRange extractColorRange(unsigned char* dataY, unsigned char* dataU, unsigned char* dataV, int imageWidth, int imageHeight, int centerX, int centerY, int brushRadius, float stdDev);
 };
 
 #endif // IMAGEPROCESSOR_H

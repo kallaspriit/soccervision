@@ -82,7 +82,7 @@ void Gui::addMouseListener(MouseListener* listener) {
 	mouseListeners.push_back(listener);
 }
 
-void Gui::setFrontImages(unsigned char* rgb, unsigned char* yuyv, unsigned char* classification) {
+void Gui::setFrontImages(unsigned char* rgb, unsigned char* yuyv, unsigned char* dataY, unsigned char* dataU, unsigned char* dataV, unsigned char* classification) {
 	DebugRenderer::renderFPS(rgb, fps, true);
 	DebugRenderer::renderBrush(rgb, mouseX, mouseY, brushRadius, mouseDown, true);
 	DebugRenderer::renderBrush(classification, mouseX, mouseY, brushRadius, mouseDown, false);
@@ -91,7 +91,9 @@ void Gui::setFrontImages(unsigned char* rgb, unsigned char* yuyv, unsigned char*
 	frontClassification->setImage(classification, true);
 
 	if (mouseDown) {
-		ImageProcessor::YUYVRange yuyvRange = ImageProcessor::extractColorRange(yuyv, width, height, mouseX, mouseY, brushRadius, 1.0f);
+		float stdDev = 2.0f;
+
+		ImageProcessor::YUYVRange yuyvRange = ImageProcessor::extractColorRange(dataY, dataU, dataV, width, height, mouseX, mouseY, brushRadius, stdDev);
 	
 		blobberFront->getColor("green")->setThreshold(
 			yuyvRange.minY, yuyvRange.maxY,
@@ -103,7 +105,7 @@ void Gui::setFrontImages(unsigned char* rgb, unsigned char* yuyv, unsigned char*
 	}
 }
 
-void Gui::setRearImages(unsigned char* rgb, unsigned char* yuyv, unsigned char* classification) {
+void Gui::setRearImages(unsigned char* rgb, unsigned char* yuyv, unsigned char* dataY, unsigned char* dataU, unsigned char* dataV, unsigned char* classification) {
 	DebugRenderer::renderFPS(rgb, fps, true);
 
 	rearRGB->setImage(rgb, false);
