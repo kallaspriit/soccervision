@@ -1,6 +1,7 @@
 #include "Gui.h"
 #include "DebugRenderer.h"
 #include "ImageProcessor.h"
+#include "Util.h"
 
 #include <iostream>
 
@@ -175,8 +176,6 @@ void Gui::handleColorThresholding(unsigned char* dataY, unsigned char* dataU, un
 		} else if (mouseBtn == MouseListener::MouseBtn::MIDDLE) {
 			blobberFront->clearColor(color);
 		}
-
-		std::cout << "! Range: " << yuyvRange.minY << "-" << yuyvRange.maxY << " " << yuyvRange.minU << "-" << yuyvRange.maxU << " " << yuyvRange.minV << "-" << yuyvRange.maxV << std::endl;
 	}
 }
 
@@ -200,7 +199,11 @@ void Gui::onElementClick(Element* element) {
 	Button* button = dynamic_cast<Button*>(element);
 
 	if (button != NULL) {
-		std::cout << "! Button clicked " << button->text << std::endl;
+		if (Util::duration(button->lastInteractionTime) > 200) {
+			std::cout << "! Button clicked " << button->text << std::endl;
+
+			button->lastInteractionTime = Util::millitime();
+		}
 	}
 }
 
@@ -251,7 +254,11 @@ void Gui::emitMouseWheel(int delta, DisplayWindow* win) {
 	}
 }
 
-Gui::Button::Button(std::string text, int x, int y, int width, int type, void* data) : text(text), x(x), y(y), width(width), type(type), data(data), over(false), active(false) {
+Gui::Element::Element() : lastInteractionTime(0) {
+
+}
+
+Gui::Button::Button(std::string text, int x, int y, int width, int type, void* data) : Element(), text(text), x(x), y(y), width(width), type(type), data(data), over(false), active(false) {
 
 }
 

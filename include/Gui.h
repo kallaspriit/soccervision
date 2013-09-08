@@ -20,9 +20,11 @@ class Gui : public MouseListener {
 public:
 	class Element : public MouseListener {
 		public:
+			Element();
 			virtual void draw(unsigned char* image, int imageWidth, int imageHeight) = 0;
 			virtual bool contains(int x, int y) { return false; };
 			ImageBuffer img;
+			double lastInteractionTime;
 	};
 
 	class Button : public Element {
