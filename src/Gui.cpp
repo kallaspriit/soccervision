@@ -205,9 +205,9 @@ Gui::Button::Button(std::string text, int x, int y, int width, int type, void* d
 
 }
 
-void Gui::Button::draw(unsigned char* image, int width, int height) {
-	img.width = width;
-	img.height = height;
+void Gui::Button::draw(unsigned char* image, int imageWidth, int imageHeight) {
+	img.width = imageWidth;
+	img.height = imageHeight;
 	img.data = image;
 
 	int renderWidth = width;
@@ -216,8 +216,8 @@ void Gui::Button::draw(unsigned char* image, int width, int height) {
 		renderWidth = text.length() * 10;
 	}
 
-	img.drawBox(x, y, renderWidth, 20);
-	img.drawText(x, y, text);
+	img.drawBox(x, y, renderWidth, 16);
+	img.drawText(x, y + 4, text);
 }
 
 LRESULT CALLBACK WinProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {

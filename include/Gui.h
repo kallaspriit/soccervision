@@ -20,14 +20,14 @@ class Gui : public MouseListener {
 public:
 	class Element : public MouseListener {
 		public:
-			virtual void draw(unsigned char* image, int width, int height) = 0;
+			virtual void draw(unsigned char* image, int imageWidth, int imageHeight) = 0;
 			ImageBuffer img;
 	};
 
 	class Button : public Element {
 		public:
 			Button(std::string text, int x, int y, int width = 0, int type = 0, void* data = NULL);
-			void draw(unsigned char* image, int width, int height);
+			void draw(unsigned char* image, int imageWidth, int imageHeight);
 
 			std::string text;
 			int x;
