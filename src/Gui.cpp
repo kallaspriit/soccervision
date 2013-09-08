@@ -199,11 +199,13 @@ void Gui::onElementClick(Element* element) {
 	Button* button = dynamic_cast<Button*>(element);
 
 	if (button != NULL) {
-		if (Util::duration(button->lastInteractionTime) > 200) {
-			std::cout << "! Button clicked " << button->text << std::endl;
-
-			button->lastInteractionTime = Util::millitime();
+		if (Util::duration(button->lastInteractionTime) < 0.2) {
+			return;
 		}
+
+		std::cout << "! Button clicked " << button->text << std::endl;
+
+		button->lastInteractionTime = Util::millitime();
 	}
 }
 
