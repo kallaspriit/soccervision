@@ -51,7 +51,7 @@ private:
 	int mouseX;
 	int mouseY;
 	bool mouseDown;
-	bool rightMouseBtn;
+	MouseListener::MouseBtn mouseBtn;
 	int brushRadius;
 };
 

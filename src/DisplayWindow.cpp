@@ -130,6 +130,24 @@ LRESULT DisplayWindow::handleMessage(HWND windowHandle, UINT msg, WPARAM wParam,
 			}
 		break;
 
+		case WM_MBUTTONDOWN:
+			if (gui != NULL) {
+				x = (short)LOWORD(lParam);
+				y = (short)HIWORD(lParam);
+
+				gui->emitMouseDown(x, y, MouseListener::MouseBtn::MIDDLE, this);
+			}
+		break;
+
+		case WM_MBUTTONUP:
+			if (gui != NULL) {
+				x = (short)LOWORD(lParam);
+				y = (short)HIWORD(lParam);
+
+				gui->emitMouseUp(x, y, MouseListener::MouseBtn::MIDDLE, this);
+			}
+		break;
+
 		case WM_MOUSEMOVE:
 			if (gui != NULL) {
 				x = (short)GET_X_LPARAM(lParam);

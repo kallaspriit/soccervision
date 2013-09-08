@@ -41,7 +41,7 @@ Gui::Gui(HINSTANCE instance, Blobber* blobberFront, Blobber* blobberRear, int wi
 	mouseX = 0;
 	mouseY = 0;
 	mouseDown = false;
-	rightMouseBtn = false;
+	mouseBtn = MouseListener::MouseBtn::LEFT;
 	brushRadius = 50;
 
 	frontRGB = createWindow(width, height, "Camera 1 RGB");
@@ -93,20 +93,27 @@ void Gui::setFrontImages(unsigned char* rgb, unsigned char* yuyv, unsigned char*
 
 	if (mouseDown) {
 		float stdDev = 2.0f;
+		std::string color = "green";
 
 		ImageProcessor::YUYVRange yuyvRange = ImageProcessor::extractColorRange(dataY, dataU, dataV, width, height, mouseX, mouseY, brushRadius, stdDev);
 	
-		if (rightMouseBtn) {
-			blobberFront->getColor("green")->substractThreshold(
+		if (mouseBtn == MouseListener::MouseBtn::LEFT) {
+			blobberFront->getColor(color)->addThreshold(
 				yuyvRange.minY, yuyvRange.maxY,
 				yuyvRange.minU, yuyvRange.maxU,
 				yuyvRange.minV, yuyvRange.maxV
 			);
-		} else {
-			blobberFront->getColor("green")->addThreshold(
+		} else if (mouseBtn == MouseListener::MouseBtn::RIGHT) {
+			blobberFront->getColor(color)->substractThreshold(
 				yuyvRange.minY, yuyvRange.maxY,
 				yuyvRange.minU, yuyvRange.maxU,
 				yuyvRange.minV, yuyvRange.maxV
+			);
+		} else if (mouseBtn == MouseListener::MouseBtn::MIDDLE) {
+			blobberFront->getColor(color)->setThreshold(
+				0, 0,
+				0, 0,
+				0, 0
 			);
 		}
 
@@ -128,12 +135,12 @@ void Gui::onMouseMove(int x, int y, DisplayWindow* win) {
 
 void Gui::onMouseDown(int x, int y, MouseListener::MouseBtn btn, DisplayWindow* win) {
 	mouseDown = true;
-	rightMouseBtn = btn == MouseListener::MouseBtn::RIGHT ? true : false;
+	mouseBtn = btn;
 }
 
 void Gui::onMouseUp(int x, int y, MouseListener::MouseBtn btn, DisplayWindow* win) {
 	mouseDown = false;
-	rightMouseBtn = false;
+	mouseBtn = btn;
 }
 
 void Gui::onMouseWheel(int delta, DisplayWindow* win) {
