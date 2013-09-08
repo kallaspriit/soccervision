@@ -59,6 +59,12 @@ Gui::~Gui() {
 	}
 
 	windows.clear();
+
+	for (std::vector<Element*>::const_iterator i = elements.begin(); i != elements.end(); i++) {
+		delete *i;
+	}
+
+	elements.clear();
 }
 
 DisplayWindow* Gui::createWindow(int width, int height, std::string name) {
@@ -71,6 +77,8 @@ DisplayWindow* Gui::createWindow(int width, int height, std::string name) {
 
 Gui::Button* Gui::createButton(std::string text, int x, int y, int width, int type, void* data) {
 	Button* button = new Button(text, x, y, width, type, data);
+
+	addMouseListener(button);
 
 	elements.push_back(button);
 
@@ -210,14 +218,31 @@ void Gui::Button::draw(unsigned char* image, int imageWidth, int imageHeight) {
 	img.height = imageHeight;
 	img.data = image;
 
-	int renderWidth = width;
-
-	if (width == 0) {
-		renderWidth = text.length() * 9 + 6 *2;
-	}
-
-	img.drawBox(x, y, renderWidth, 16);
+	img.drawBox(x, y, getWidth(), getHeight(), 255, active ? 0 : 255, active ? 0 : 255);
 	img.drawText(x + 6, y + 4, text);
+}
+
+int Gui::Button::getWidth() {
+	if (width != 0) {
+		return width;
+	} else {
+		return text.length() * 9 + 6 * 2;
+	}
+}
+
+int Gui::Button::getHeight() {
+	return 16;
+}
+
+void Gui::Button::onMouseMove(int x, int y, DisplayWindow* win) {
+	active = contains(x, y);
+}
+
+bool Gui::Button::contains(int px, int py) {
+	return px >= x
+		&& px <= x + getWidth()
+		&& py >= y
+		&& py <= y + getHeight();
 }
 
 LRESULT CALLBACK WinProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {

@@ -21,6 +21,7 @@ public:
 	class Element : public MouseListener {
 		public:
 			virtual void draw(unsigned char* image, int imageWidth, int imageHeight) = 0;
+			virtual bool contains(int x, int y) { return false; };
 			ImageBuffer img;
 	};
 
@@ -28,6 +29,8 @@ public:
 		public:
 			Button(std::string text, int x, int y, int width = 0, int type = 0, void* data = NULL);
 			void draw(unsigned char* image, int imageWidth, int imageHeight);
+			bool contains(int x, int y);
+			void onMouseMove(int x, int y, DisplayWindow* win);
 
 			std::string text;
 			int x;
@@ -35,6 +38,12 @@ public:
 			int width;
 			int type;
 			void* data;
+
+		private:
+			int getWidth();
+			int getHeight();
+
+			bool active;
 	};
 
     Gui(HINSTANCE instance, Blobber* blobberFront, Blobber* blobberRear, int width, int height);
