@@ -110,11 +110,7 @@ void Gui::setFrontImages(unsigned char* rgb, unsigned char* yuyv, unsigned char*
 				yuyvRange.minV, yuyvRange.maxV
 			);
 		} else if (mouseBtn == MouseListener::MouseBtn::MIDDLE) {
-			blobberFront->getColor(color)->setThreshold(
-				0, 0,
-				0, 0,
-				0, 0
-			);
+			blobberFront->clearColor(color);
 		}
 
 		std::cout << "! Range: " << yuyvRange.minY << "-" << yuyvRange.maxY << " " << yuyvRange.minU << "-" << yuyvRange.maxU << " " << yuyvRange.minV << "-" << yuyvRange.maxV << std::endl;
