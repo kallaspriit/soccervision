@@ -56,6 +56,10 @@ Gui::Gui(HINSTANCE instance, Blobber* blobberFront, Blobber* blobberRear, int wi
 		color = blobberFront->getColor(i);
 
 		createButton(color->name, 20, 40 + i * 20, 200, 1);
+
+		if (i == 0) {
+			selectedColorName = color->name;
+		}
 	}
 }
 
@@ -162,24 +166,23 @@ void Gui::handleColorThresholding(unsigned char* dataY, unsigned char* dataU, un
 
 	if (mouseDown) {
 		float stdDev = 2.0f;
-		std::string color = "green";
 
 		ImageProcessor::YUYVRange yuyvRange = ImageProcessor::extractColorRange(dataY, dataU, dataV, width, height, mouseX, mouseY, brushRadius, stdDev);
 	
 		if (mouseBtn == MouseListener::MouseBtn::LEFT) {
-			blobberFront->getColor(color)->addThreshold(
+			blobberFront->getColor(selectedColorName)->addThreshold(
 				yuyvRange.minY, yuyvRange.maxY,
 				yuyvRange.minU, yuyvRange.maxU,
 				yuyvRange.minV, yuyvRange.maxV
 			);
 		} else if (mouseBtn == MouseListener::MouseBtn::RIGHT) {
-			blobberFront->getColor(color)->substractThreshold(
+			blobberFront->getColor(selectedColorName)->substractThreshold(
 				yuyvRange.minY, yuyvRange.maxY,
 				yuyvRange.minU, yuyvRange.maxU,
 				yuyvRange.minV, yuyvRange.maxV
 			);
 		} else if (mouseBtn == MouseListener::MouseBtn::MIDDLE) {
-			blobberFront->clearColor(color);
+			blobberFront->clearColor(selectedColorName);
 		}
 	}
 }
@@ -208,7 +211,11 @@ void Gui::onElementClick(Element* element) {
 			return;
 		}
 
-		std::cout << "! Button clicked " << button->text << std::endl;
+		//std::cout << "! Button '" << button->text << "' clicked" << std::endl;
+
+		if (button->type == 1) {
+			selectedColorName = button->text;
+		}
 
 		button->lastInteractionTime = Util::millitime();
 	}

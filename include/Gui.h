@@ -86,6 +86,7 @@ private:
 	Blobber* blobberFront;
 	Blobber* blobberRear;
 	std::vector<Element*> elements;
+	std::string selectedColorName;
 	int width;
 	int height;
 	int fps;
