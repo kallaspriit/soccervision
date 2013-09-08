@@ -95,6 +95,8 @@ ImageProcessor::YUYVRange ImageProcessor::extractColorRange(unsigned char* image
 	std::vector<float> yValues;
 	std::vector<float> uValues;
 	std::vector<float> vValues;
+
+	std::cout << "extractColorRange " << width <<  "x" << height << ", " << centerX << "x" << centerY << ", " << brushRadius << ", " << stdDev << std::endl;
 	
 	for (int x = -brushRadius; x < brushRadius; x++) {
 		int height = (int)::sqrt(brushRadius * brushRadius - x * x);
