@@ -2,6 +2,7 @@
 #include "Maths.h"
 
 #include <vector>
+#include <iostream>
 
 void ImageProcessor::bayerRGGBToI420(unsigned char* input, unsigned char* outputY, unsigned char* outputU, unsigned char* outputV, int width, int height) {
 	int strideY = width;
@@ -60,7 +61,7 @@ void ImageProcessor::ARGBToRGB24(unsigned char* input, unsigned char* output, in
 	);
 }
 
-ImageProcessor::YUYV* ImageProcessor::getPixelAt(unsigned char* image, int width, int height, int x, int y) {
+ImageProcessor::YUYV* ImageProcessor::getYuyvPixelAt(unsigned char* image, int width, int height, int x, int y) {
 	if (
 		x < 0
 		|| x > width - 1
@@ -108,7 +109,7 @@ ImageProcessor::YUYVRange ImageProcessor::extractColorRange(unsigned char* image
 				continue;
 			}
 
-			YUYV* pixel = getPixelAt(image, width, height, x + centerX, y + centerY);
+			YUYV* pixel = getYuyvPixelAt(image, width, height, x + centerX, y + centerY);
 
 			Y = (pixel->y1 + pixel->y2) / 2;
 			U = pixel->u;
@@ -119,6 +120,8 @@ ImageProcessor::YUYVRange ImageProcessor::extractColorRange(unsigned char* image
 			yValues.push_back((float)Y);
 			uValues.push_back((float)U);
 			vValues.push_back((float)V);
+
+			std::cout << "Y: " << Y << std::endl;
 		}
 	}
 
