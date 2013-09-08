@@ -85,11 +85,25 @@ void Gui::addMouseListener(MouseListener* listener) {
 
 void Gui::setFrontImages(unsigned char* rgb, unsigned char* yuyv, unsigned char* dataY, unsigned char* dataU, unsigned char* dataV, unsigned char* classification) {
 	DebugRenderer::renderFPS(rgb, fps, true);
-	DebugRenderer::renderBrush(rgb, mouseX, mouseY, brushRadius, mouseDown, true);
-	DebugRenderer::renderBrush(classification, mouseX, mouseY, brushRadius, mouseDown, false);
 
+	handleColorThresholding(dataY, dataU, dataV, rgb, classification);
+	
 	frontRGB->setImage(rgb, false);
 	frontClassification->setImage(classification, true);
+}
+
+void Gui::setRearImages(unsigned char* rgb, unsigned char* yuyv, unsigned char* dataY, unsigned char* dataU, unsigned char* dataV, unsigned char* classification) {
+	DebugRenderer::renderFPS(rgb, fps, true);
+
+	handleColorThresholding(dataY, dataU, dataV, rgb, classification);
+
+	rearRGB->setImage(rgb, false);
+	rearClassification->setImage(classification, true);
+}
+
+void Gui::handleColorThresholding(unsigned char* dataY, unsigned char* dataU, unsigned char* dataV, unsigned char* rgb, unsigned char* classification) {
+	DebugRenderer::renderBrush(rgb, mouseX, mouseY, brushRadius, mouseDown, true);
+	DebugRenderer::renderBrush(classification, mouseX, mouseY, brushRadius, mouseDown, false);
 
 	if (mouseDown) {
 		float stdDev = 2.0f;
@@ -115,13 +129,6 @@ void Gui::setFrontImages(unsigned char* rgb, unsigned char* yuyv, unsigned char*
 
 		std::cout << "! Range: " << yuyvRange.minY << "-" << yuyvRange.maxY << " " << yuyvRange.minU << "-" << yuyvRange.maxU << " " << yuyvRange.minV << "-" << yuyvRange.maxV << std::endl;
 	}
-}
-
-void Gui::setRearImages(unsigned char* rgb, unsigned char* yuyv, unsigned char* dataY, unsigned char* dataU, unsigned char* dataV, unsigned char* classification) {
-	DebugRenderer::renderFPS(rgb, fps, true);
-
-	rearRGB->setImage(rgb, false);
-	rearClassification->setImage(classification, true);
 }
 
 void Gui::onMouseMove(int x, int y, DisplayWindow* win) {

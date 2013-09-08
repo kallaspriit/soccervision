@@ -35,6 +35,8 @@ public:
 	void emitMouseWheel(int delta, DisplayWindow* win);
 
 private:
+	void handleColorThresholding(unsigned char* dataY, unsigned char* dataU, unsigned char* dataV, unsigned char* rgb, unsigned char* classification);
+
 	HINSTANCE instance;
 	MSG msg;
 	std::vector<MouseListener*> mouseListeners;
