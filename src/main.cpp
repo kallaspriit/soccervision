@@ -44,7 +44,7 @@ int main(int argc, char* argv[]) {
 	// config
 	int width = Config::cameraWidth;
 	int height = Config::cameraHeight;
-	bool debug = true;
+	bool debug = false;
 
 	XimeaCamera* camera1 = new XimeaCamera();
 	XimeaCamera* camera2 = new XimeaCamera();
