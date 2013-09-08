@@ -108,22 +108,28 @@ ImageProcessor::YUYVRange ImageProcessor::extractColorRange(unsigned char* image
 				|| y + centerY < 0
 				|| y + centerY > height -1
 			) {
+				std::cout << "Skip pixel at " << (x + centerX) << "x" << (y + centerY) << std::endl;
+
 				continue;
 			}
 
 			YUYV* pixel = getYuyvPixelAt(image, width, height, x + centerX, y + centerY);
 
-			Y = (pixel->y1 + pixel->y2) / 2;
-			U = pixel->u;
-			V = pixel->v;
+			if (pixel != NULL) {
+				Y = (pixel->y1 + pixel->y2) / 2;
+				U = pixel->u;
+				V = pixel->v;
 
-			delete pixel;
+				delete pixel;
 
-			yValues.push_back((float)Y);
-			uValues.push_back((float)U);
-			vValues.push_back((float)V);
+				yValues.push_back((float)Y);
+				uValues.push_back((float)U);
+				vValues.push_back((float)V);
 
-			std::cout << "Y: " << Y << std::endl;
+				std::cout << "Y: " << Y << std::endl;
+			} else {
+				std::cout << "Didn't get pixel at " << (x + centerX) << "x" << (y + centerY) << std::endl;
+			}
 		}
 	}
 
