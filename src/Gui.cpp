@@ -50,8 +50,13 @@ Gui::Gui(HINSTANCE instance, Blobber* blobberFront, Blobber* blobberRear, int wi
 	frontClassification = createWindow(width, height, "Camera 1 classification");
 	rearClassification = createWindow(width, height, "Camera 2 classification");
 
-	Button* btn = createButton("Test button", 20, 40);
-	Button* btn2 = createButton("Other button", 20, 60);
+	Blobber::Color* color;
+
+	for (int i = 0; i < blobberFront->getColorCount(); i++) {
+		color = blobberFront->getColor(i);
+
+		createButton(color->name, 20, 40 + i * 20, 200, 1);
+	}
 }
 
 Gui::~Gui() {
