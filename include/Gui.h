@@ -26,11 +26,11 @@ public:
 	void setFrontImages(unsigned char* rgb, unsigned char* yuyv, unsigned char* dataY, unsigned char* dataU, unsigned char* dataV, unsigned char* classification);
 	void setRearImages(unsigned char* rgb, unsigned char* yuyv, unsigned char* dataY, unsigned char* dataU, unsigned char* dataV, unsigned char* classification);
 	void onMouseMove(int x, int y, DisplayWindow* win);
-	void onMouseDown(int x, int y, DisplayWindow* win);
-	void onMouseUp(int x, int y, DisplayWindow* win);
+	void onMouseDown(int x, int y, MouseListener::MouseBtn btn, DisplayWindow* win);
+	void onMouseUp(int x, int y, MouseListener::MouseBtn btn, DisplayWindow* win);
 	void onMouseWheel(int delta, DisplayWindow* win);
-	void emitMouseDown(int x, int y, DisplayWindow* win);
-	void emitMouseUp(int x, int y, DisplayWindow* win);
+	void emitMouseDown(int x, int y, MouseListener::MouseBtn btn, DisplayWindow* win);
+	void emitMouseUp(int x, int y, MouseListener::MouseBtn btn, DisplayWindow* win);
 	void emitMouseMove(int x, int y, DisplayWindow* win);
 	void emitMouseWheel(int delta, DisplayWindow* win);
 

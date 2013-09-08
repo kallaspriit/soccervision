@@ -95,7 +95,7 @@ void Gui::setFrontImages(unsigned char* rgb, unsigned char* yuyv, unsigned char*
 
 		ImageProcessor::YUYVRange yuyvRange = ImageProcessor::extractColorRange(dataY, dataU, dataV, width, height, mouseX, mouseY, brushRadius, stdDev);
 	
-		blobberFront->getColor("green")->setThreshold(
+		blobberFront->getColor("green")->addThreshold(
 			yuyvRange.minY, yuyvRange.maxY,
 			yuyvRange.minU, yuyvRange.maxU,
 			yuyvRange.minV, yuyvRange.maxV
@@ -117,11 +117,11 @@ void Gui::onMouseMove(int x, int y, DisplayWindow* win) {
 	mouseY = y;
 }
 
-void Gui::onMouseDown(int x, int y, DisplayWindow* win) {
+void Gui::onMouseDown(int x, int y, MouseListener::MouseBtn btn, DisplayWindow* win) {
 	mouseDown = true;
 }
 
-void Gui::onMouseUp(int x, int y, DisplayWindow* win) {
+void Gui::onMouseUp(int x, int y, MouseListener::MouseBtn btn, DisplayWindow* win) {
 	mouseDown = false;
 }
 
@@ -133,15 +133,15 @@ void Gui::onMouseWheel(int delta, DisplayWindow* win) {
 	}
 }
 
-void Gui::emitMouseDown(int x, int y, DisplayWindow* win) {
+void Gui::emitMouseDown(int x, int y, MouseListener::MouseBtn btn, DisplayWindow* win) {
 	for (std::vector<MouseListener*>::const_iterator i = mouseListeners.begin(); i != mouseListeners.end(); i++) {
-		(*i)->onMouseDown(x, y, win);
+		(*i)->onMouseDown(x, y, btn, win);
 	}
 }
 
-void Gui::emitMouseUp(int x, int y, DisplayWindow* win) {
+void Gui::emitMouseUp(int x, int y, MouseListener::MouseBtn btn, DisplayWindow* win) {
 	for (std::vector<MouseListener*>::const_iterator i = mouseListeners.begin(); i != mouseListeners.end(); i++) {
-		(*i)->onMouseUp(x, y, win);
+		(*i)->onMouseUp(x, y, btn, win);
 	}
 }
 
