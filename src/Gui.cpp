@@ -175,14 +175,25 @@ void Gui::handleColorThresholding(unsigned char* dataY, unsigned char* dataU, un
 				yuyvRange.minU, yuyvRange.maxU,
 				yuyvRange.minV, yuyvRange.maxV
 			);
+			blobberRear->getColor(selectedColorName)->addThreshold(
+				yuyvRange.minY, yuyvRange.maxY,
+				yuyvRange.minU, yuyvRange.maxU,
+				yuyvRange.minV, yuyvRange.maxV
+			);
 		} else if (mouseBtn == MouseListener::MouseBtn::RIGHT) {
 			blobberFront->getColor(selectedColorName)->substractThreshold(
 				yuyvRange.minY, yuyvRange.maxY,
 				yuyvRange.minU, yuyvRange.maxU,
 				yuyvRange.minV, yuyvRange.maxV
 			);
+			blobberRear->getColor(selectedColorName)->substractThreshold(
+				yuyvRange.minY, yuyvRange.maxY,
+				yuyvRange.minU, yuyvRange.maxU,
+				yuyvRange.minV, yuyvRange.maxV
+			);
 		} else if (mouseBtn == MouseListener::MouseBtn::MIDDLE) {
 			blobberFront->clearColor(selectedColorName);
+			blobberRear->clearColor(selectedColorName);
 		}
 	}
 }
