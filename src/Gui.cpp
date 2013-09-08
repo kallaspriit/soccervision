@@ -91,6 +91,16 @@ void Gui::drawElements(unsigned char* image, int width, int height) {
 	}
 }
 
+bool Gui::isMouseOverElement(int x, int y) {
+	for (std::vector<Element*>::const_iterator i = elements.begin(); i != elements.end(); i++) {
+		if ((*i)->contains(x, y)) {
+			return true;
+		}
+	}
+
+	return false;
+}
+
 bool Gui::update() {
 	while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE) != 0) {
 		TranslateMessage(&msg);
@@ -111,10 +121,12 @@ void Gui::addMouseListener(MouseListener* listener) {
 void Gui::setFrontImages(unsigned char* rgb, unsigned char* yuyv, unsigned char* dataY, unsigned char* dataU, unsigned char* dataV, unsigned char* classification) {
 	DebugRenderer::renderFPS(rgb, fps, true);
 
-	handleColorThresholding(dataY, dataU, dataV, rgb, classification);
-
 	drawElements(rgb, width, height);
 	drawElements(classification, width, height);
+
+	if (!isMouseOverElement(mouseX, mouseY)) {
+		handleColorThresholding(dataY, dataU, dataV, rgb, classification);
+	}
 	
 	frontRGB->setImage(rgb, false);
 	frontClassification->setImage(classification, true);
@@ -123,10 +135,12 @@ void Gui::setFrontImages(unsigned char* rgb, unsigned char* yuyv, unsigned char*
 void Gui::setRearImages(unsigned char* rgb, unsigned char* yuyv, unsigned char* dataY, unsigned char* dataU, unsigned char* dataV, unsigned char* classification) {
 	DebugRenderer::renderFPS(rgb, fps, true);
 
-	handleColorThresholding(dataY, dataU, dataV, rgb, classification);
-
 	drawElements(rgb, width, height);
 	drawElements(classification, width, height);
+
+	if (!isMouseOverElement(mouseX, mouseY)) {
+		handleColorThresholding(dataY, dataU, dataV, rgb, classification);
+	}
 
 	rearRGB->setImage(rgb, false);
 	rearClassification->setImage(classification, true);

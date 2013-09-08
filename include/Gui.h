@@ -53,6 +53,7 @@ public:
 	DisplayWindow* createWindow(int width, int height, std::string name);
 	Button* createButton(std::string text, int x, int y, int width = 0, int type = 0, void* data = NULL);
 	void drawElements(unsigned char* image, int width, int height);
+	bool isMouseOverElement(int x, int y);
     bool update();
 	void addMouseListener(MouseListener* listener);
 	void setFPS(int fps) { this->fps = fps; };
