@@ -10,13 +10,13 @@
 
 class Command;
 class Vision;
-class SoccerBot;
+class Blobber;
 class ParticleFilterLocalizer;
 
 class Gui : public MouseListener {
 
 public:
-    Gui(HINSTANCE instance, int width, int height);
+    Gui(HINSTANCE instance, Blobber* blobberFront, Blobber* blobberRear, int width, int height);
     ~Gui();
 
 	DisplayWindow* createWindow(int width, int height, std::string name);
@@ -43,6 +43,8 @@ private:
 	DisplayWindow* rearRGB;
 	DisplayWindow* frontClassification;
 	DisplayWindow* rearClassification;
+	Blobber* blobberFront;
+	Blobber* blobberRear;
 	int width;
 	int height;
 	int fps;

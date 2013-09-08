@@ -1,11 +1,12 @@
 #include "Gui.h"
 #include "DebugRenderer.h"
+#include "ImageProcessor.h"
 
 #include <iostream>
 
 LRESULT CALLBACK WinProc(HWND hWnd,UINT message,WPARAM wParam,LPARAM lParam);
 
-Gui::Gui(HINSTANCE instance, int width, int height) : instance(instance), width(width), height(height) {
+Gui::Gui(HINSTANCE instance, Blobber* blobberFront, Blobber* blobberRear, int width, int height) : instance(instance), blobberFront(blobberFront), blobberRear(blobberRear), width(width), height(height) {
 	WNDCLASSEX wClass;
 	ZeroMemory(&wClass, sizeof(WNDCLASSEX));
 
@@ -88,6 +89,12 @@ void Gui::setFrontImages(unsigned char* rgb, unsigned char* classification) {
 
 	frontRGB->setImage(rgb, false);
 	frontClassification->setImage(classification, true);
+
+	if (mouseDown) {
+		ImageProcessor::YUYVRange yuyvRange = ImageProcessor::extractColorRange(classification, width, height, "green", mouseX, mouseY, brushRadius, 1.0f);
+	
+		std::cout << "! Range: " << yuyvRange.minY << "-" << yuyvRange.maxY << " " << yuyvRange.minU << "-" << yuyvRange.maxU << " " << yuyvRange.minV << "-" << yuyvRange.maxV << std::endl;
+	}
 }
 
 void Gui::setRearImages(unsigned char* rgb, unsigned char* classification) {

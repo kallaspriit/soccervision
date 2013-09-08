@@ -46,9 +46,6 @@ int main(int argc, char* argv[]) {
 	int height = Config::cameraHeight;
 	bool debug = true;
 
-	Gui* gui = new Gui(instance, width, height);
-	FpsCounter* fpsCounter = new FpsCounter();
-
 	XimeaCamera* camera1 = new XimeaCamera();
 	XimeaCamera* camera2 = new XimeaCamera();
 
@@ -61,6 +58,9 @@ int main(int argc, char* argv[]) {
 	blobber2->initialize(width, height);
 	blobber2->loadOptions(Config::blobberConfigFilename);
 	Vision* vision2 = new Vision(blobber2, Dir::REAR, width, height);
+
+	Gui* gui = new Gui(instance, blobber1, blobber2, width, height);
+	FpsCounter* fpsCounter = new FpsCounter();
 
 	ProcessThread* processor1 = new ProcessThread(blobber1, vision1);
 	ProcessThread* processor2 = new ProcessThread(blobber2, vision2);
