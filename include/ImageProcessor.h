@@ -2,7 +2,6 @@
 #define IMAGEPROCESSOR_H
 
 #include <libyuv.h>
-#include <string>
 
 class ImageProcessor {
 
@@ -24,7 +23,7 @@ public:
 	static void YUYVToARGB(unsigned char* input, unsigned char* output, int width, int height);
 	static void ARGBToRGB24(unsigned char* input, unsigned char* output, int width, int height);
 	static YUYV* getYuyvPixelAt(unsigned char* image, int width, int height, int x, int y);
-	static YUYVRange extractColorRange(unsigned char* image, int imageWidth, int imageHeight, std::string colorName, int centerX, int centerY, int brushRadius, float stdDev);
+	static YUYVRange extractColorRange(unsigned char* image, int imageWidth, int imageHeight, int centerX, int centerY, int brushRadius, float stdDev);
 };
 
 #endif // IMAGEPROCESSOR_H

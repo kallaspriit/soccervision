@@ -91,8 +91,14 @@ void Gui::setFrontImages(unsigned char* rgb, unsigned char* classification) {
 	frontClassification->setImage(classification, true);
 
 	if (mouseDown) {
-		ImageProcessor::YUYVRange yuyvRange = ImageProcessor::extractColorRange(classification, width, height, "green", mouseX, mouseY, brushRadius, 1.0f);
+		ImageProcessor::YUYVRange yuyvRange = ImageProcessor::extractColorRange(classification, width, height, mouseX, mouseY, brushRadius, 1.0f);
 	
+		blobberFront->getColor("green")->addThreshold(
+			yuyvRange.minY, yuyvRange.maxY,
+			yuyvRange.minU, yuyvRange.maxU,
+			yuyvRange.minV, yuyvRange.maxV
+		);
+
 		std::cout << "! Range: " << yuyvRange.minY << "-" << yuyvRange.maxY << " " << yuyvRange.minU << "-" << yuyvRange.maxU << " " << yuyvRange.minV << "-" << yuyvRange.maxV << std::endl;
 	}
 }

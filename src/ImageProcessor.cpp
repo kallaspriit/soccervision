@@ -90,7 +90,7 @@ ImageProcessor::YUYV* ImageProcessor::getYuyvPixelAt(unsigned char* image, int w
     return pixel;
 }
 
-ImageProcessor::YUYVRange ImageProcessor::extractColorRange(unsigned char* image, int imageWidth, int imageHeight, std::string colorName, int centerX, int centerY, int brushRadius, float stdDev) {
+ImageProcessor::YUYVRange ImageProcessor::extractColorRange(unsigned char* image, int imageWidth, int imageHeight, int centerX, int centerY, int brushRadius, float stdDev) {
 	int Y, U, V;
 	std::vector<float> yValues;
 	std::vector<float> uValues;
