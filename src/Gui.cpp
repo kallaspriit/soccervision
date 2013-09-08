@@ -93,7 +93,7 @@ void Gui::setFrontImages(unsigned char* rgb, unsigned char* yuyv, unsigned char*
 	if (mouseDown) {
 		ImageProcessor::YUYVRange yuyvRange = ImageProcessor::extractColorRange(yuyv, width, height, mouseX, mouseY, brushRadius, 1.0f);
 	
-		blobberFront->getColor("green")->addThreshold(
+		blobberFront->getColor("green")->setThreshold(
 			yuyvRange.minY, yuyvRange.maxY,
 			yuyvRange.minU, yuyvRange.maxU,
 			yuyvRange.minV, yuyvRange.maxV
