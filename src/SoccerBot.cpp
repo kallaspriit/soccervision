@@ -72,7 +72,7 @@ void SoccerBot::run() {
 
 	while (running) {
 		gotFrontFrame = gotRearFrame = false;
-		frontProcessor->debug = rearProcessor->debug = debugVision || showGui;
+		//frontProcessor->debug = rearProcessor->debug = debugVision || showGui;
 
 		gotFrontFrame = fetchFrame(frontCamera, frontProcessor);
 		gotRearFrame = fetchFrame(rearCamera, rearProcessor);
@@ -135,9 +135,9 @@ void SoccerBot::run() {
 			gui->update();
 		}
 
-		//if (fpsCounter->frameNumber % 60) {
+		if (fpsCounter->frameNumber % 60 == 0) {
 			std::cout << "! FPS: " << fpsCounter->getFps() << std::endl;
-		//}
+		}
 	}
 }
 
