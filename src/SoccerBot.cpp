@@ -78,32 +78,8 @@ void SoccerBot::run() {
 		gotFrontFrame = gotRearFrame = false;
 		frontProcessor->debug = rearProcessor->debug = debugVision || showGui;
 
-		//gotFrontFrame = fetchFrame(frontCamera, frontProcessor);
-		//gotRearFrame = fetchFrame(rearCamera, rearProcessor);
-
-		if (frontCamera->isAcquisitioning()) {
-			frame = frontCamera->getFrame();
-
-			if (frame != NULL) {
-				if (frame->fresh) {
-					frontProcessor->setFrame(frame->data);
-
-					gotFrontFrame = true;
-				}
-			}
-		}
-
-		if (rearCamera->isAcquisitioning()) {
-			frame = rearCamera->getFrame();
-
-			if (frame != NULL) {
-				if (frame->fresh) {
-					rearProcessor->setFrame(frame->data);
-
-					gotRearFrame = true;
-				}
-			}
-		}
+		gotFrontFrame = fetchFrame(frontCamera, frontProcessor);
+		gotRearFrame = fetchFrame(rearCamera, rearProcessor);
 
 		if (!gotFrontFrame && !gotRearFrame) {
 			std::cout << "- Didn't get any frames from either of the cameras" << std::endl;
@@ -113,7 +89,16 @@ void SoccerBot::run() {
 
 		fpsCounter->step();
 
-		if (gotFrontFrame) {
+		frontProcessor->start();
+		rearProcessor->start();
+
+		frontProcessor->join();
+		rearProcessor->join();
+
+		visionResults->front = frontProcessor->visionResult;
+		visionResults->rear = rearProcessor->visionResult;
+
+		/*if (gotFrontFrame) {
 			frontProcessor->start();
 		} else {
 			std::cout << "- No image from front camera" << std::endl;
@@ -133,7 +118,7 @@ void SoccerBot::run() {
 		if (gotRearFrame) {
 			rearProcessor->join();
 			visionResults->rear = rearProcessor->visionResult;
-		}
+		}*/
 
 		if (showGui) {
 			if (gui == NULL) {

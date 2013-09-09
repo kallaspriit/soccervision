@@ -22,7 +22,7 @@ int main(int argc, char* argv[]) {
     }
 
 	if (!showGui) {
-        std::cout << "! Start with 'gui' option to show GUI" << std::endl;
+        std::cout << "  > Start with 'gui' option to show GUI" << std::endl;
     }
 
 	SoccerBot* soccerBot = new SoccerBot();
