@@ -27,6 +27,7 @@ SoccerBot::~SoccerBot() {
 	delete fpsCounter;
 	delete frontProcessor;
 	delete rearProcessor;
+	delete visionResults;
 	delete frontVision;
 	delete rearVision;
 	delete frontBlobber;
@@ -160,6 +161,8 @@ void SoccerBot::setupVision() {
 
 	frontVision = new Vision(frontBlobber, Dir::FRONT, Config::cameraWidth, Config::cameraHeight);
 	rearVision = new Vision(rearBlobber, Dir::REAR, Config::cameraWidth, Config::cameraHeight);
+
+	visionResults = new Vision::Results();
 }
 
 void SoccerBot::setupProcessors() {
