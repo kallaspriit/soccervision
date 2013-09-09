@@ -61,7 +61,7 @@
       <AdditionalDependencies>m3api.lib;pthreadVC2.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>call "$(SolutionDir)push.bat"</Command>
+      <Command>call "$(SolutionDir)post-build.bat"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -82,7 +82,7 @@
       <AdditionalDependencies>m3api.lib;pthreadVC2.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>call "$(SolutionDir)push.bat"</Command>
+      <Command>call "$(SolutionDir)post-build.bat"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
