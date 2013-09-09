@@ -49,11 +49,7 @@ bool Object::contains(Object* other) const {
 	return bx1 >= ax1 && bx2 <= ax2 && by1 >= ay1 && by2 <= ay2;
 }
 
-Object* Object::mergeWith(Object* other, int margin) const {
-	if (!intersects(other, margin)) {
-		return NULL;
-	}
-
+Object* Object::mergeWith(Object* other) const {
 	Object* merged = new Object();
 
 	merged->copyFrom(this);
@@ -100,8 +96,12 @@ std::vector<Object*> Object::mergeOverlapping(const std::vector<Object*>& set, i
 				continue;
 			}
 
-			// TODO This is likely a memory leak
-			mergedObject = object1->mergeWith(object2, margin);
+			if (!object1->intersects(object2, margin)) {
+				continue;
+			}
+
+			// TODO This is a memory leak
+			mergedObject = object1->mergeWith(object2);
 
 			if (mergedObject != NULL) {
 				object1->processed = true;

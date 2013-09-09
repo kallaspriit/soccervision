@@ -29,6 +29,14 @@ void DebugRenderer::renderBlobs(unsigned char* image, Blobber* blobber, bool swa
 			continue;
 		}
 
+		if (
+			strcmp(color->name, "ball") != 0
+			&& strcmp(color->name, "yellow-goal") != 0
+			&& strcmp(color->name, "blue-goal") != 0
+		) {
+			continue;
+		}
+
 		Blobber::Blob* blob = blobber->getBlobs(color->name);
 
 		while (blob != NULL) {

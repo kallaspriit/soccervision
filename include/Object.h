@@ -9,7 +9,7 @@ class Object {
 		void copyFrom(const Object* other);
 		bool intersects(Object* other, int margin = 0) const;
 		bool contains(Object* other) const;
-		Object* mergeWith(Object* other, int margin = 0) const;
+		Object* mergeWith(Object* other) const;
 
 		static std::vector<Object*> mergeOverlapping(const std::vector<Object*>& set, int margin = 0, bool requireSameType = false);
 
