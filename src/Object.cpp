@@ -73,13 +73,14 @@ Object* Object::mergeWith(Object* other) const {
 std::vector<Object*> Object::mergeOverlapping(const std::vector<Object*>& set, int margin, bool requireSameType) {
 	ObjectList stack(set);
 	ObjectList individuals;
+	ObjectList garbage;
 
 	while (stack.size() > 0) {
 		Object* object1 = stack.back();
 		Object* mergedObject = NULL;
 		stack.pop_back();
 
-		if (object1 == NULL || object1->processed) {
+		if (object1->processed) {
 			continue;
 		}
 
@@ -88,7 +89,7 @@ std::vector<Object*> Object::mergeOverlapping(const std::vector<Object*>& set, i
 		for (ObjectListItc it = stack.begin(); it != stack.end(); it++) {
 			Object* object2 = *it;
 
-			if (object2 == NULL || object2 == object1 || object1->processed || object2->processed) {
+			if (object2 == object1 || object1->processed || object2->processed) {
 				continue;
 			}
 
@@ -108,13 +109,9 @@ std::vector<Object*> Object::mergeOverlapping(const std::vector<Object*>& set, i
 				mergedObject->processed = false;
 				merged = true;
 
-				delete object1;
-				object1 = NULL;
-
-				delete object2;
-				object2 = NULL;
-
 				stack.push_back(mergedObject);
+				garbage.push_back(object1);
+				garbage.push_back(object2);
 
 				break;
 			}
@@ -124,6 +121,12 @@ std::vector<Object*> Object::mergeOverlapping(const std::vector<Object*>& set, i
 			individuals.push_back(object1);
 		}
 	}
+
+	for (ObjectListItc it = garbage.begin(); it != garbage.end(); it++) {
+		delete *it;
+	}
+
+	garbage.clear();
 
 	return individuals;
 }
