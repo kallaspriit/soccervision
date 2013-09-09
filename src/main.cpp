@@ -1,8 +1,22 @@
+// memory leak detection
+#define ANALYZE_MEMORY
+
+#ifdef ANALYZE_MEMORY
+#include <stdlib.h>
+#include <crtdbg.h>
+#define DEBUG_NEW new(_NORMAL_BLOCK, __FILE__, __LINE__)
+#define new DEBUG_NEW
+#endif
+
 #include "SoccerBot.h"
 
 #include <iostream>
 
 int main(int argc, char* argv[]) {
+	#ifdef ANALYZE_MEMORY
+	_CrtSetDbgFlag ( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF );
+	#endif
+
 	bool showGui = false;
 
 	if (argc > 0) {
