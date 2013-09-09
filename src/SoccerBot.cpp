@@ -5,6 +5,7 @@
 #include "Gui.h"
 #include "FpsCounter.h"
 #include "Config.h"
+#include "Util.h"
 
 #include <iostream>
 
@@ -71,8 +72,10 @@ void SoccerBot::run() {
 	bool gotFrontFrame, gotRearFrame;
 
 	while (running) {
+		__int64 startTime = Util::timerStart();
+
 		gotFrontFrame = gotRearFrame = false;
-		//frontProcessor->debug = rearProcessor->debug = debugVision || showGui;
+		frontProcessor->debug = rearProcessor->debug = debugVision || showGui;
 
 		gotFrontFrame = fetchFrame(frontCamera, frontProcessor);
 		gotRearFrame = fetchFrame(rearCamera, rearProcessor);
@@ -138,6 +141,8 @@ void SoccerBot::run() {
 		if (fpsCounter->frameNumber % 60 == 0) {
 			std::cout << "! FPS: " << fpsCounter->getFps() << std::endl;
 		}
+
+		std::cout << "! Total time: " << Util::timerEnd(startTime) << std::endl;
 	}
 }
 
