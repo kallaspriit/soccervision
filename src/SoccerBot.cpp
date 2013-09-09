@@ -191,11 +191,11 @@ void SoccerBot::setupCameras() {
 	frontCamera = new XimeaCamera();
 	rearCamera = new XimeaCamera();
 
-	setupCamera("Front", frontCamera);
-	setupCamera("Rear", rearCamera);
-
 	frontCamera->open(Config::frontCameraSerial);
 	rearCamera->open(Config::rearCameraSerial);
+
+	setupCamera("Front", frontCamera);
+	setupCamera("Rear", rearCamera);
 }
 
 void SoccerBot::setupGui() {
@@ -213,4 +213,14 @@ void SoccerBot::setupCamera(std::string name, XimeaCamera* camera) {
 	camera->setAutoWhiteBalance(false);
 	camera->setAutoExposureGain(false);
 	camera->setQueueSize(12); // TODO Affects anything?
+
+	std::cout << name << " camera info:" << std::endl;
+	std::cout << "  > Name: " << camera->getName() << std::endl;
+	std::cout << "  > Type: " << camera->getDeviceType() << std::endl;
+	std::cout << "  > API version: " << camera->getApiVersion() << std::endl;
+	std::cout << "  > Driver version: " << camera->getDriverVersion() << std::endl;
+	std::cout << "  > Serial number: " << camera->getSerialNumber() << std::endl;
+	std::cout << "  > Color: " << (camera->supportsColor() ? "yes" : "no") << std::endl;
+	std::cout << "  > Framerate: " << camera->getFramerate() << std::endl;
+	std::cout << "  > Available bandwidth: " << camera->getAvailableBandwidth() << std::endl;
 }
