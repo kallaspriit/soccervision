@@ -109,6 +109,12 @@ std::vector<Object*> Object::mergeOverlapping(const std::vector<Object*>& set, i
 				mergedObject->processed = false;
 				merged = true;
 
+				delete object1;
+				object1 = NULL;
+
+				delete object2;
+				object2 = NULL;
+
 				stack.push_back(mergedObject);
 
 				break;
