@@ -7,6 +7,7 @@ class FpsCounter {
         void step();
         bool isChanged();
         int getFps();
+		int frameNumber;
 
     private:
         int interval;

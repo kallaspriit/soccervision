@@ -5,6 +5,10 @@
 
 namespace Config {
 
+	// camera serials
+	const int frontCameraSerial = 857735761;
+	const int rearCameraSerial = 857735761;
+
 	// camera resolution
 	const int cameraWidth = 1280;
 	const int cameraHeight = 1024;

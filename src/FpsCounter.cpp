@@ -4,11 +4,14 @@
 FpsCounter::FpsCounter(int interval) : interval(interval), firstInterval(true) {
     startTime = -1;
     frames = 0;
+	frameNumber = 0;
     fps = 0;
     changed = false;
 }
 
 void FpsCounter::step() {
+	frameNumber++;
+
     if (startTime == -1) {
         startTime = Util::millitime();
         frames = 1;

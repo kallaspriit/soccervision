@@ -56,7 +56,7 @@ Gui::Gui(HINSTANCE instance, Blobber* blobberFront, Blobber* blobberRear, int wi
 	for (int i = 0; i < blobberFront->getColorCount(); i++) {
 		color = blobberFront->getColor(i);
 
-		button = createButton(color->name, 20, 40 + i * 18, 200, 1);
+		button = createButton(color->name, 20, 40 + i * 18, 160, 1);
 
 		if (i == 0) {
 			selectedColorName = color->name;

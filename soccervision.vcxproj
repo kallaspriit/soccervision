@@ -97,6 +97,7 @@
     <ClInclude Include="include\Maths.h" />
     <ClInclude Include="include\Object.h" />
     <ClInclude Include="include\ProcessThread.h" />
+    <ClInclude Include="include\SoccerBot.h" />
     <ClInclude Include="include\Thread.h" />
     <ClInclude Include="include\Util.h" />
     <ClInclude Include="include\Vision.h" />
@@ -154,6 +155,7 @@
     <ClCompile Include="src\Maths.cpp" />
     <ClCompile Include="src\Object.cpp" />
     <ClCompile Include="src\ProcessThread.cpp" />
+    <ClCompile Include="src\SoccerBot.cpp" />
     <ClCompile Include="src\Thread.cpp" />
     <ClCompile Include="src\Util.cpp" />
     <ClCompile Include="src\Vision.cpp" />
@@ -161,6 +163,9 @@
     <ClCompile Include="src\DisplayWindow.cpp" />
     <ClCompile Include="src\Gui.cpp" />
     <ClCompile Include="src\main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

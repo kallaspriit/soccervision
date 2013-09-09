@@ -59,7 +59,7 @@ public:
 	bool isMouseOverElement(int x, int y);
     bool update();
 	void addMouseListener(MouseListener* listener);
-	void setFPS(int fps) { this->fps = fps; };
+	void setFps(int fps) { this->fps = fps; };
 	void setFrontImages(unsigned char* rgb, unsigned char* yuyv, unsigned char* dataY, unsigned char* dataU, unsigned char* dataV, unsigned char* classification);
 	void setRearImages(unsigned char* rgb, unsigned char* yuyv, unsigned char* dataY, unsigned char* dataU, unsigned char* dataV, unsigned char* classification);
 	void onMouseMove(int x, int y, DisplayWindow* win);

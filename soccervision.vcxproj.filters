@@ -126,6 +126,9 @@
     <ClInclude Include="src\MouseListener.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\SoccerBot.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\DisplayWindow.cpp">
@@ -239,5 +242,11 @@
     <ClCompile Include="src\LookupTable.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\SoccerBot.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
 </Project>
