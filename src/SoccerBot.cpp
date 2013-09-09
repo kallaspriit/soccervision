@@ -70,7 +70,6 @@ void SoccerBot::run() {
 	}
 
 	bool gotFrontFrame, gotRearFrame;
-	const BaseCamera::Frame* frame = NULL;
 
 	while (running) {
 		//__int64 startTime = Util::timerStart();
@@ -89,16 +88,7 @@ void SoccerBot::run() {
 
 		fpsCounter->step();
 
-		frontProcessor->start();
-		rearProcessor->start();
-
-		frontProcessor->join();
-		rearProcessor->join();
-
-		visionResults->front = frontProcessor->visionResult;
-		visionResults->rear = rearProcessor->visionResult;
-
-		/*if (gotFrontFrame) {
+		if (gotFrontFrame) {
 			frontProcessor->start();
 		} else {
 			std::cout << "- No image from front camera" << std::endl;
@@ -118,7 +108,7 @@ void SoccerBot::run() {
 		if (gotRearFrame) {
 			rearProcessor->join();
 			visionResults->rear = rearProcessor->visionResult;
-		}*/
+		}
 
 		if (showGui) {
 			if (gui == NULL) {
@@ -201,11 +191,11 @@ void SoccerBot::setupCameras() {
 	frontCamera = new XimeaCamera();
 	rearCamera = new XimeaCamera();
 
-	frontCamera->open(Config::frontCameraSerial);
-	rearCamera->open(Config::rearCameraSerial);
-
 	setupCamera("Front", frontCamera);
 	setupCamera("Rear", rearCamera);
+
+	frontCamera->open(Config::frontCameraSerial);
+	rearCamera->open(Config::rearCameraSerial);
 }
 
 void SoccerBot::setupGui() {
