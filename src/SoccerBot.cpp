@@ -22,6 +22,10 @@ SoccerBot::SoccerBot() :
 SoccerBot::~SoccerBot() {
 	frontBlobber->saveOptions(Config::blobberConfigFilename);
 
+	if (gui != NULL) {
+		delete gui;
+	}
+
 	delete frontCamera;
 	delete rearCamera;
 	delete fpsCounter;
@@ -83,10 +87,14 @@ void SoccerBot::run() {
 
 		if (gotFrontFrame) {
 			frontProcessor->start();
+		} else {
+			std::cout << "- No image from front camera" << std::endl;
 		}
 
 		if (gotRearFrame) {
 			rearProcessor->start();
+		} else {
+			std::cout << "- No image from rear camera" << std::endl;
 		}
 
 		if (gotFrontFrame) {
