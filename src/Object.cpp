@@ -100,6 +100,7 @@ std::vector<Object*> Object::mergeOverlapping(const std::vector<Object*>& set, i
 				continue;
 			}
 
+			// TODO This is likely a memory leak
 			mergedObject = object1->mergeWith(object2, margin);
 
 			if (mergedObject != NULL) {

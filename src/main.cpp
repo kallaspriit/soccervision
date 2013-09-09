@@ -44,7 +44,7 @@ int main(int argc, char* argv[]) {
 	// config
 	int width = Config::cameraWidth;
 	int height = Config::cameraHeight;
-	bool debug = false;
+	bool debug = true;
 
 	XimeaCamera* camera1 = new XimeaCamera();
 	XimeaCamera* camera2 = new XimeaCamera();
@@ -85,7 +85,7 @@ int main(int argc, char* argv[]) {
 	}
 
 	setupCamera(camera1);
-	setupCamera(camera2);
+	//setupCamera(camera2);
 
 	std::cout << "! Capturing frames" << std::endl;
 
