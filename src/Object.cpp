@@ -79,7 +79,7 @@ std::vector<Object*> Object::mergeOverlapping(const std::vector<Object*>& set, i
 		Object* mergedObject = NULL;
 		stack.pop_back();
 
-		if (object1->processed) {
+		if (object1 == NULL || object1->processed) {
 			continue;
 		}
 
@@ -88,7 +88,7 @@ std::vector<Object*> Object::mergeOverlapping(const std::vector<Object*>& set, i
 		for (ObjectListItc it = stack.begin(); it != stack.end(); it++) {
 			Object* object2 = *it;
 
-			if (object2 == object1 || object1->processed || object2->processed) {
+			if (object2 == NULL || object2 == object1 || object1->processed || object2->processed) {
 				continue;
 			}
 
