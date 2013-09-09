@@ -56,7 +56,7 @@ Gui::Gui(HINSTANCE instance, Blobber* blobberFront, Blobber* blobberRear, int wi
 	for (int i = 0; i < blobberFront->getColorCount(); i++) {
 		color = blobberFront->getColor(i);
 
-		button = createButton(color->name, 20, 40 + i * 16, 200, 1);
+		button = createButton(color->name, 20, 40 + i * 18, 200, 1);
 
 		if (i == 0) {
 			selectedColorName = color->name;
@@ -327,7 +327,8 @@ void Gui::Button::draw(unsigned char* image, int imageWidth, int imageHeight, bo
 
 	if (active) {
 		img.fillBox(x, y, getWidth(), getHeight(), 255, 0, 0);
-		img.drawText(x + 6, y + 4, text, 0, 0, 0);
+		img.drawBox(x, y, getWidth(), getHeight(), 255, over ? 0 : 255, over ? 0 : 255);
+		img.drawText(x + 6, y + 4, text, 255, 255, 255);
 	} else {
 		img.drawBox(x, y, getWidth(), getHeight(), 255, over ? 0 : 255, over ? 0 : 255);
 		img.drawText(x + 6, y + 4, text, 255, over ? 0 : 255, over ? 0 : 255);
