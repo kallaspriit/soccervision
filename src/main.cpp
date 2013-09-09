@@ -16,7 +16,7 @@
 int main(int argc, char* argv[]) {
 	#ifdef _DEBUG
 		std::cout << "! Memory leak detection is enabled" << std::endl;
-		_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+		//_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 		_CrtSetReportMode(_CRT_ERROR, _CRTDBG_MODE_DEBUG);
 	#endif
 
@@ -56,6 +56,11 @@ int main(int argc, char* argv[]) {
 	soccerBot = NULL;
 
 	std::cout << "-- Properly Terminated --" << std::endl;
+
+	#ifdef _DEBUG
+		std::cout << "! Memory leaks report:" << std::endl;
+		_CrtDumpMemoryLeaks();
+	#endif
 
     return 0;
 }
