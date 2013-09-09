@@ -70,15 +70,40 @@ void SoccerBot::run() {
 	}
 
 	bool gotFrontFrame, gotRearFrame;
+	const BaseCamera::Frame* frame = NULL;
 
 	while (running) {
-		__int64 startTime = Util::timerStart();
+		//__int64 startTime = Util::timerStart();
 
 		gotFrontFrame = gotRearFrame = false;
 		frontProcessor->debug = rearProcessor->debug = debugVision || showGui;
 
-		gotFrontFrame = fetchFrame(frontCamera, frontProcessor);
-		gotRearFrame = fetchFrame(rearCamera, rearProcessor);
+		//gotFrontFrame = fetchFrame(frontCamera, frontProcessor);
+		//gotRearFrame = fetchFrame(rearCamera, rearProcessor);
+
+		if (frontCamera->isAcquisitioning()) {
+			frame = frontCamera->getFrame();
+
+			if (frame != NULL) {
+				if (frame->fresh) {
+					frontProcessor->setFrame(frame->data);
+
+					gotFrontFrame = true;
+				}
+			}
+		}
+
+		if (rearCamera->isAcquisitioning()) {
+			frame = rearCamera->getFrame();
+
+			if (frame != NULL) {
+				if (frame->fresh) {
+					rearProcessor->setFrame(frame->data);
+
+					gotRearFrame = true;
+				}
+			}
+		}
 
 		if (!gotFrontFrame && !gotRearFrame) {
 			std::cout << "- Didn't get any frames from either of the cameras" << std::endl;
@@ -142,7 +167,7 @@ void SoccerBot::run() {
 			std::cout << "! FPS: " << fpsCounter->getFps() << std::endl;
 		}
 
-		std::cout << "! Total time: " << Util::timerEnd(startTime) << std::endl;
+		//std::cout << "! Total time: " << Util::timerEnd(startTime) << std::endl;
 	}
 }
 
