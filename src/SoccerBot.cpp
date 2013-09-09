@@ -40,6 +40,8 @@ SoccerBot::~SoccerBot() {
 	delete rearVision;
 	delete frontBlobber;
 	delete rearBlobber;
+
+	std::cout << "! Resources freed" << std::endl;
 }
 
 void SoccerBot::setup() {
@@ -50,6 +52,10 @@ void SoccerBot::setup() {
 	setupFpsCounter();
 	setupCameras();
 	setupSignalHandler();
+
+	if (showGui) {
+		setupGui();
+	}
 }
 
 void SoccerBot::run() {
@@ -86,7 +92,7 @@ void SoccerBot::run() {
 		gotFrontFrame = fetchFrame(frontCamera, frontProcessor);
 		gotRearFrame = fetchFrame(rearCamera, rearProcessor);
 
-		if (!gotFrontFrame && !gotRearFrame) {
+		if (!gotFrontFrame && !gotRearFrame && fpsCounter->frameNumber > 0) {
 			std::cout << "- Didn't get any frames from either of the cameras" << std::endl;
 
 			continue;
