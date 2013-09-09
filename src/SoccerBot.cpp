@@ -74,7 +74,7 @@ void SoccerBot::run() {
 	bool gotFrontFrame, gotRearFrame;
 
 	while (running) {
-		//__int64 startTime = Util::timerStart();
+		__int64 startTime = Util::timerStart();
 
 		gotFrontFrame = gotRearFrame = false;
 		frontProcessor->debug = rearProcessor->debug = debugVision || showGui;
@@ -92,14 +92,10 @@ void SoccerBot::run() {
 
 		if (gotFrontFrame) {
 			frontProcessor->start();
-		} else {
-			std::cout << "- No image from front camera" << std::endl;
 		}
 
 		if (gotRearFrame) {
 			rearProcessor->start();
-		} else {
-			std::cout << "- No image from rear camera" << std::endl;
 		}
 
 		if (gotFrontFrame) {
@@ -144,7 +140,7 @@ void SoccerBot::run() {
 			std::cout << "! FPS: " << fpsCounter->getFps() << std::endl;
 		}
 
-		//std::cout << "! Total time: " << Util::timerEnd(startTime) << std::endl;
+		std::cout << "! Total time: " << Util::timerEnd(startTime) << std::endl;
 	}
 }
 
