@@ -19,6 +19,9 @@ int main(int argc, char* argv[]) {
 		_CrtSetReportMode(_CRT_ERROR, _CRTDBG_MODE_DEBUG);
 	#endif
 
+	// test memory leak
+	char* leak = new char[1000];
+
 	bool showGui = false;
 
 	if (argc > 0) {
