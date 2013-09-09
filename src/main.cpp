@@ -59,7 +59,10 @@ int main(int argc, char* argv[]) {
 
 	#ifdef _DEBUG
 		std::cout << "! Memory leaks report:" << std::endl;
-		_CrtDumpMemoryLeaks();
+		if (!_CrtDumpMemoryLeaks()) {
+			std::cout << "  > none detected" << std::endl;
+		}
+
 	#endif
 
     return 0;
