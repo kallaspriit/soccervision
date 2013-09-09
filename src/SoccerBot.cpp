@@ -21,6 +21,8 @@ SoccerBot::SoccerBot() :
 }
 
 SoccerBot::~SoccerBot() {
+	std::cout << "! Releasing all resources" << std::endl;
+
 	frontBlobber->saveOptions(Config::blobberConfigFilename);
 
 	if (gui != NULL) {
@@ -163,6 +165,8 @@ bool SoccerBot::fetchFrame(XimeaCamera* camera, ProcessThread* processor) {
 }
 
 void SoccerBot::setupVision() {
+	std::cout << "! Setting up vision.. ";
+
 	frontBlobber = new Blobber();
 	rearBlobber = new Blobber();
 
@@ -176,18 +180,42 @@ void SoccerBot::setupVision() {
 	rearVision = new Vision(rearBlobber, Dir::REAR, Config::cameraWidth, Config::cameraHeight);
 
 	visionResults = new Vision::Results();
+
+	std::cout << "done!" << std::endl;
 }
 
 void SoccerBot::setupProcessors() {
+	std::cout << "! Setting up processor threads.. ";
+
 	frontProcessor = new ProcessThread(frontBlobber, frontVision);
 	rearProcessor = new ProcessThread(rearBlobber, rearVision);
+
+	std::cout << "done!" << std::endl;
 }
 
 void SoccerBot::setupFpsCounter() {
+	std::cout << "! Setting up fps counter.. ";
+
 	fpsCounter = new FpsCounter();
+
+	std::cout << "done!" << std::endl;
+}
+
+void SoccerBot::setupGui() {
+	std::cout << "! Setting up GUI.. ";
+
+	gui = new Gui(
+		GetModuleHandle(0),
+		frontBlobber, rearBlobber,
+		Config::cameraWidth, Config::cameraHeight
+	);
+
+	std::cout << "done!" << std::endl;
 }
 
 void SoccerBot::setupCameras() {
+	std::cout << "! Setting up cameras" << std::endl;
+
 	frontCamera = new XimeaCamera();
 	rearCamera = new XimeaCamera();
 
@@ -196,14 +224,8 @@ void SoccerBot::setupCameras() {
 
 	setupCamera("Front", frontCamera);
 	setupCamera("Rear", rearCamera);
-}
 
-void SoccerBot::setupGui() {
-	gui = new Gui(
-		GetModuleHandle(0),
-		frontBlobber, rearBlobber,
-		Config::cameraWidth, Config::cameraHeight
-	);
+	std::cout << "! Cameras ready" << std::endl;
 }
 
 void SoccerBot::setupCamera(std::string name, XimeaCamera* camera) {
@@ -214,7 +236,7 @@ void SoccerBot::setupCamera(std::string name, XimeaCamera* camera) {
 	camera->setAutoExposureGain(false);
 	camera->setQueueSize(12); // TODO Affects anything?
 
-	std::cout << name << " camera info:" << std::endl;
+	std::cout << "! " << name << " camera info:" << std::endl;
 	std::cout << "  > Name: " << camera->getName() << std::endl;
 	std::cout << "  > Type: " << camera->getDeviceType() << std::endl;
 	std::cout << "  > API version: " << camera->getApiVersion() << std::endl;
