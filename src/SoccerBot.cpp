@@ -85,27 +85,27 @@ void SoccerBot::run() {
 
 		fpsCounter->step();
 
-		//if (gotFrontFrame) {
+		if (gotFrontFrame) {
 			frontProcessor->start();
-		//} else {
-		//	std::cout << "- No image from front camera" << std::endl;
-		//}
+		} else {
+			std::cout << "- No image from front camera" << std::endl;
+		}
 
-		//if (gotRearFrame) {
+		if (gotRearFrame) {
 			rearProcessor->start();
-		//} else {
-		//	std::cout << "- No image from rear camera" << std::endl;
-		//}
+		} else {
+			std::cout << "- No image from rear camera" << std::endl;
+		}
 
-		//if (gotFrontFrame) {
+		if (gotFrontFrame) {
 			frontProcessor->join();
 			visionResults->front = frontProcessor->visionResult;
-		//}
+		}
 
-		//if (gotRearFrame) {
+		if (gotRearFrame) {
 			rearProcessor->join();
 			visionResults->rear = rearProcessor->visionResult;
-		//}
+		}
 
 		if (showGui) {
 			if (gui == NULL) {
@@ -135,9 +135,9 @@ void SoccerBot::run() {
 			gui->update();
 		}
 
-		if (fpsCounter->frameNumber % 60) {
+		//if (fpsCounter->frameNumber % 60) {
 			std::cout << "! FPS: " << fpsCounter->getFps() << std::endl;
-		}
+		//}
 	}
 }
 
