@@ -97,6 +97,7 @@
     <ClInclude Include="include\Maths.h" />
     <ClInclude Include="include\Object.h" />
     <ClInclude Include="include\ProcessThread.h" />
+    <ClInclude Include="include\SignalHandler.h" />
     <ClInclude Include="include\SoccerBot.h" />
     <ClInclude Include="include\Thread.h" />
     <ClInclude Include="include\Util.h" />
@@ -155,6 +156,7 @@
     <ClCompile Include="src\Maths.cpp" />
     <ClCompile Include="src\Object.cpp" />
     <ClCompile Include="src\ProcessThread.cpp" />
+    <ClCompile Include="src\SignalHandler.cpp" />
     <ClCompile Include="src\SoccerBot.cpp" />
     <ClCompile Include="src\Thread.cpp" />
     <ClCompile Include="src\Util.cpp" />

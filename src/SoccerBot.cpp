@@ -4,6 +4,7 @@
 #include "ProcessThread.h"
 #include "Gui.h"
 #include "FpsCounter.h"
+#include "SignalHandler.h"
 #include "Config.h"
 #include "Util.h"
 
@@ -48,9 +49,12 @@ void SoccerBot::setup() {
 	setupProcessors();
 	setupFpsCounter();
 	setupCameras();
+	setupSignalHandler();
 }
 
 void SoccerBot::run() {
+	std::cout << "! Starting main loop" << std::endl;
+
 	running = true;
 
 	if (frontCamera->isOpened()) {
@@ -74,7 +78,7 @@ void SoccerBot::run() {
 	bool gotFrontFrame, gotRearFrame;
 
 	while (running) {
-		__int64 startTime = Util::timerStart();
+		//__int64 startTime = Util::timerStart();
 
 		gotFrontFrame = gotRearFrame = false;
 		frontProcessor->debug = rearProcessor->debug = debugVision || showGui;
@@ -140,8 +144,14 @@ void SoccerBot::run() {
 			std::cout << "! FPS: " << fpsCounter->getFps() << std::endl;
 		}
 
-		std::cout << "! Total time: " << Util::timerEnd(startTime) << std::endl;
+		if (SignalHandler::exitRequested) {
+			running = false;
+		}
+
+		//std::cout << "! Total time: " << Util::timerEnd(startTime) << std::endl;
 	}
+
+	std::cout << "! Main loop ended" << std::endl;
 }
 
 bool SoccerBot::fetchFrame(XimeaCamera* camera, ProcessThread* processor) {
@@ -241,4 +251,8 @@ void SoccerBot::setupCamera(std::string name, XimeaCamera* camera) {
 	std::cout << "  > Color: " << (camera->supportsColor() ? "yes" : "no") << std::endl;
 	std::cout << "  > Framerate: " << camera->getFramerate() << std::endl;
 	std::cout << "  > Available bandwidth: " << camera->getAvailableBandwidth() << std::endl;
+}
+
+void SoccerBot::setupSignalHandler() {
+	SignalHandler::setup();
 }

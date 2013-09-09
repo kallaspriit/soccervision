@@ -23,6 +23,7 @@ public:
 	void setupProcessors();
 	void setupFpsCounter();
 	void setupCameras();
+	void setupSignalHandler();
 	void setupGui();
 
 	bool debugVision;
