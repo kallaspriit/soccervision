@@ -56,7 +56,7 @@ Gui::Gui(HINSTANCE instance, Blobber* blobberFront, Blobber* blobberRear, int wi
 	for (int i = 0; i < blobberFront->getColorCount(); i++) {
 		color = blobberFront->getColor(i);
 
-		button = createButton(color->name, 20, 40 + i * 20, 200, 1);
+		button = createButton(color->name, 20, 40 + i * 16, 200, 1);
 
 		if (i == 0) {
 			selectedColorName = color->name;
@@ -97,9 +97,9 @@ Gui::Button* Gui::createButton(std::string text, int x, int y, int width, int ty
 	return button;
 }
 
-void Gui::drawElements(unsigned char* image, int width, int height) {
+void Gui::drawElements(unsigned char* image, int width, int height, bool swapRB) {
 	for (std::vector<Element*>::const_iterator i = elements.begin(); i != elements.end(); i++) {
-		(*i)->draw(image, width, height);
+		(*i)->draw(image, width, height, swapRB);
 	}
 }
 
@@ -133,8 +133,8 @@ void Gui::addMouseListener(MouseListener* listener) {
 void Gui::setFrontImages(unsigned char* rgb, unsigned char* yuyv, unsigned char* dataY, unsigned char* dataU, unsigned char* dataV, unsigned char* classification) {
 	DebugRenderer::renderFPS(rgb, fps, true);
 
-	drawElements(rgb, width, height);
-	drawElements(classification, width, height);
+	drawElements(rgb, width, height, true);
+	drawElements(classification, width, height, false);
 
 	if (activeWindow == frontClassification || activeWindow == frontRGB) {
 		if (!isMouseOverElement(mouseX, mouseY)) {
@@ -151,8 +151,8 @@ void Gui::setFrontImages(unsigned char* rgb, unsigned char* yuyv, unsigned char*
 void Gui::setRearImages(unsigned char* rgb, unsigned char* yuyv, unsigned char* dataY, unsigned char* dataU, unsigned char* dataV, unsigned char* classification) {
 	DebugRenderer::renderFPS(rgb, fps, true);
 
-	drawElements(rgb, width, height);
-	drawElements(classification, width, height);
+	drawElements(rgb, width, height, true);
+	drawElements(classification, width, height, false);
 
 	if (activeWindow == rearClassification || activeWindow == rearRGB) {
 		if (!isMouseOverElement(mouseX, mouseY)) {
