@@ -25,6 +25,14 @@ ProcessThread::~ProcessThread() {
 		delete visionResult;
 		visionResult = NULL;
 	}
+
+	delete dataY;
+	delete dataU;
+	delete dataV;
+	delete dataYUYV;
+	delete classification;
+	delete argb;
+	delete rgb;
 }
 
 void* ProcessThread::run() {
