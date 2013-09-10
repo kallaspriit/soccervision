@@ -47,14 +47,14 @@ SoccerBot::~SoccerBot() {
 void SoccerBot::setup() {
 	 std::cout << "-- Initializing --" << std::endl;
 
-	setupVision();
-	setupProcessors();
-	setupFpsCounter();
-	setupCameras();
-	setupSignalHandler();
+	//setupVision();
+	//setupProcessors();
+	//setupFpsCounter();
+	//setupCameras();
+	//setupSignalHandler();
 
 	if (showGui) {
-		setupGui();
+	//	setupGui();
 	}
 }
 
