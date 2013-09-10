@@ -26,20 +26,17 @@ SoccerBot::~SoccerBot() {
 
 	frontBlobber->saveOptions(Config::blobberConfigFilename);
 
-	if (gui != NULL) {
-		delete gui;
-	}
-
-	delete frontCamera;
-	delete rearCamera;
-	delete fpsCounter;
-	delete frontProcessor;
-	delete rearProcessor;
-	delete visionResults;
-	delete frontVision;
-	delete rearVision;
-	delete frontBlobber;
-	delete rearBlobber;
+	if (gui != NULL) delete gui; gui = NULL;
+	if (frontCamera != NULL) delete frontCamera; frontCamera = NULL;
+	if (rearCamera != NULL) delete rearCamera; rearCamera = NULL;
+	if (fpsCounter != NULL) delete fpsCounter; fpsCounter = NULL;
+	if (frontProcessor != NULL) delete frontProcessor; frontProcessor = NULL;
+	if (rearProcessor != NULL) delete rearProcessor; rearProcessor = NULL;
+	if (visionResults != NULL) delete visionResults; visionResults = NULL;
+	if (frontVision != NULL) delete frontVision; frontVision = NULL;
+	if (rearVision != NULL) delete rearVision; rearVision = NULL;
+	if (frontBlobber != NULL) delete frontBlobber; frontBlobber = NULL;
+	if (rearBlobber != NULL) delete rearBlobber; rearBlobber = NULL;
 
 	std::cout << "! Resources freed" << std::endl;
 }
