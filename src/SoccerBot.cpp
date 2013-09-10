@@ -49,7 +49,7 @@ void SoccerBot::setup() {
 	setupSignalHandler();
 
 	if (showGui) {
-	//	setupGui();
+		setupGui();
 	}
 }
 
