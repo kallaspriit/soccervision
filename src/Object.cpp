@@ -123,7 +123,7 @@ std::vector<Object*> Object::mergeOverlapping(const std::vector<Object*>& set, i
 	}
 
 	for (ObjectListItc it = garbage.begin(); it != garbage.end(); it++) {
-		delete *it;
+		//delete *it;
 	}
 
 	garbage.clear();
