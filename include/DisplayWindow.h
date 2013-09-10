@@ -1,7 +1,7 @@
 #ifndef DISPLAY_H
 #define DISPLAY_H
 
-#include "ImageBuffer.h"
+#include "Canvas.h"
 #include <Windows.h>
 #include <string>
 
@@ -25,7 +25,7 @@ class DisplayWindow {
 		HDC windowDeviceHandle;
 		HDC bitmapDeviceHandle;
 		HBITMAP bitmap;
-		ImageBuffer* img;
+		Canvas* img;
 		Gui* gui;
         int width;
         int height;

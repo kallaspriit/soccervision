@@ -1,10 +1,10 @@
 #include "DebugRenderer.h"
-#include "ImageBuffer.h"
+#include "Canvas.h"
 #include "Maths.h"
 #include "Util.h"
 
 void DebugRenderer::renderFPS(unsigned char* image, int fps, bool swapRB, int width, int height) {
-	ImageBuffer img = ImageBuffer();
+	Canvas img = Canvas();
 
 	img.data = image;
 	img.width = width;
@@ -15,7 +15,7 @@ void DebugRenderer::renderFPS(unsigned char* image, int fps, bool swapRB, int wi
 }
 
 void DebugRenderer::renderBlobs(unsigned char* image, Blobber* blobber, bool swapRB, int width, int height) {
-	ImageBuffer img = ImageBuffer();
+	Canvas img = Canvas();
 
 	img.data = image;
 	img.width = width;
@@ -52,7 +52,7 @@ void DebugRenderer::renderBlobs(unsigned char* image, Blobber* blobber, bool swa
 }
 
 void DebugRenderer::renderBalls(unsigned char* image, const ObjectList& balls, bool swapRB, int width, int height) {
-	ImageBuffer img = ImageBuffer();
+	Canvas img = Canvas();
 
 	img.data = image;
 	img.width = width;
@@ -107,7 +107,7 @@ void DebugRenderer::renderBalls(unsigned char* image, const ObjectList& balls, b
 }
 
 void DebugRenderer::renderGoals(unsigned char* image, const ObjectList& goals, bool swapRB, int width, int height) {
-	ImageBuffer img = ImageBuffer();
+	Canvas img = Canvas();
 
 	img.data = image;
 	img.width = width;
@@ -155,7 +155,7 @@ void DebugRenderer::renderGoals(unsigned char* image, const ObjectList& goals, b
 }
 
 void DebugRenderer::renderBrush(unsigned char* image, int x, int y, int radius, bool active, bool swapRB, int width, int height) {
-	ImageBuffer img = ImageBuffer();
+	Canvas img = Canvas();
 
 	img.data = image;
 	img.width = width;

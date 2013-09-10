@@ -91,7 +91,7 @@
     <ClInclude Include="include\Config.h" />
     <ClInclude Include="include\DebugRenderer.h" />
     <ClInclude Include="include\FpsCounter.h" />
-    <ClInclude Include="include\ImageBuffer.h" />
+    <ClInclude Include="include\Canvas.h" />
     <ClInclude Include="include\ImageProcessor.h" />
     <ClInclude Include="include\LookupTable.h" />
     <ClInclude Include="include\Maths.h" />
@@ -150,7 +150,7 @@
     <ClCompile Include="src\Blobber.cpp" />
     <ClCompile Include="src\DebugRenderer.cpp" />
     <ClCompile Include="src\FpsCounter.cpp" />
-    <ClCompile Include="src\ImageBuffer.cpp" />
+    <ClCompile Include="src\Canvas.cpp" />
     <ClCompile Include="src\ImageProcessor.cpp" />
     <ClCompile Include="src\LookupTable.cpp" />
     <ClCompile Include="src\Maths.cpp" />

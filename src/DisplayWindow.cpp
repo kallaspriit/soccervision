@@ -43,7 +43,7 @@ DisplayWindow::DisplayWindow(HINSTANCE instance, int width, int height, std::str
 	bitmapDeviceHandle = CreateCompatibleDC(windowDeviceHandle);
 	bitmap = CreateCompatibleBitmap(windowDeviceHandle, width, height);
 
-	img = new ImageBuffer();
+	img = new Canvas();
 	img->width = width;
 	img->height = height;
 }

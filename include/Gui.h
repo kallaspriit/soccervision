@@ -5,7 +5,7 @@
 #include <windows.h>
 
 #include "DisplayWindow.h"
-#include "ImageBuffer.h"
+#include "Canvas.h"
 #include "MouseListener.h"
 #include "Config.h"
 #include <vector>
@@ -24,7 +24,7 @@ public:
 			Element();
 			virtual void draw(unsigned char* image, int imageWidth = Config::cameraWidth, int imageHeight = Config::cameraHeight, bool swapRB = false) = 0;
 			virtual bool contains(int x, int y) { return false; };
-			ImageBuffer img;
+			Canvas img;
 			double lastInteractionTime;
 	};
 

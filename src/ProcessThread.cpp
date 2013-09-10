@@ -2,7 +2,7 @@
 #include "Blobber.h"
 #include "ImageProcessor.h"
 #include "DebugRenderer.h"
-#include "ImageBuffer.h"
+#include "Canvas.h"
 #include "Config.h"
 
 #include <iostream>

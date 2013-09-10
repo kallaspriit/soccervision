@@ -5,7 +5,7 @@
 #include "Config.h"
 #include "Blobber.h"
 
-class ImageBuffer;
+class Canvas;
 
 class DebugRenderer {
 	public:

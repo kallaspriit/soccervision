@@ -2,7 +2,7 @@
 #define VISION_H
 
 #include "Blobber.h"
-#include "ImageBuffer.h"
+#include "Canvas.h"
 #include "Object.h"
 #include "LookupTable.h"
 #include "Config.h"
@@ -78,7 +78,7 @@ class Vision {
 		void updateColorDistances();
 
 		Dir dir;
-		ImageBuffer img;
+		Canvas img;
         Blobber* blobber;
         LookupTable frontDistanceLookup;
         LookupTable rearDistanceLookup;
