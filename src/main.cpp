@@ -55,7 +55,7 @@ int main(int argc, char* argv[]) {
 	soccerBot->showGui = showGui;
 
 	soccerBot->setup();
-	//soccerBot->run();
+	soccerBot->run();
 
 	delete soccerBot;
 	soccerBot = NULL;
