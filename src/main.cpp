@@ -25,9 +25,6 @@ int main(int argc, char* argv[]) {
 		_CrtSetReportFile(_CRT_ASSERT, _CRTDBG_FILE_STDOUT);
 	#endif
 
-	// test memory leak
-	char* leak = new char[3];
-
 	bool showGui = false;
 
 	if (argc > 0) {
@@ -59,14 +56,6 @@ int main(int argc, char* argv[]) {
 
 	delete soccerBot;
 	soccerBot = NULL;
-
-	/*#ifdef _DEBUG
-	if (_CrtDumpMemoryLeaks()) {
-		std::cout << "- Some memory leaks were found" << std::endl;
-	} else {
-		std::cout << "! No memory leaks detected, wohooo!" << std::endl;
-	}
-	#endif*/
 
 	std::cout << "-- Properly Terminated --" << std::endl << std::endl;
 
