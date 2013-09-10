@@ -50,6 +50,8 @@ Gui::Gui(HINSTANCE instance, Blobber* blobberFront, Blobber* blobberRear, int wi
 	frontClassification = createWindow(width, height, "Camera 1 classification");
 	rearClassification = createWindow(width, height, "Camera 2 classification");
 
+	selectedColorName = "";
+
 	Blobber::Color* color;
 	Button* button;
 
@@ -58,10 +60,10 @@ Gui::Gui(HINSTANCE instance, Blobber* blobberFront, Blobber* blobberRear, int wi
 
 		button = createButton(color->name, 20, 40 + i * 18, 160, 1);
 
-		if (i == 0) {
+		/*if (i == 0) {
 			selectedColorName = color->name;
 			button->active = true;
-		}
+		}*/
 	}
 }
 
@@ -138,7 +140,9 @@ void Gui::setFrontImages(unsigned char* rgb, unsigned char* yuyv, unsigned char*
 
 	if (activeWindow == frontClassification || activeWindow == frontRGB) {
 		if (!isMouseOverElement(mouseX, mouseY)) {
-			handleColorThresholding(dataY, dataU, dataV, rgb, classification);
+			if (selectedColorName.length() > 0) {
+				handleColorThresholding(dataY, dataU, dataV, rgb, classification);
+			}
 		} else {
 			handleElements();
 		}
@@ -156,7 +160,9 @@ void Gui::setRearImages(unsigned char* rgb, unsigned char* yuyv, unsigned char* 
 
 	if (activeWindow == rearClassification || activeWindow == rearRGB) {
 		if (!isMouseOverElement(mouseX, mouseY)) {
-			handleColorThresholding(dataY, dataU, dataV, rgb, classification);
+			if (selectedColorName.length() > 0) {
+				handleColorThresholding(dataY, dataU, dataV, rgb, classification);
+			}
 		} else {
 			handleElements();
 		}
@@ -222,6 +228,7 @@ void Gui::handleElements() {
 
 void Gui::onElementClick(Element* element) {
 	Button* button = dynamic_cast<Button*>(element);
+	bool unset = false;
 
 	if (button != NULL) {
 		if (Util::duration(button->lastInteractionTime) < 0.2) {
@@ -231,7 +238,12 @@ void Gui::onElementClick(Element* element) {
 		//std::cout << "! Button '" << button->text << "' clicked" << std::endl;
 
 		if (button->type == 1) {
-			selectedColorName = button->text;
+			if (button->text != selectedColorName) {
+				selectedColorName = button->text;
+			} else {
+				selectedColorName = "";
+				unset = true;
+			}
 		}
 
 		button->lastInteractionTime = Util::millitime();
@@ -248,7 +260,7 @@ void Gui::onElementClick(Element* element) {
 			}
 
 			if (btn == button) {
-				btn->active = true;
+				btn->active = unset ? false : true;
 			} else {
 				btn->active = false;
 			}

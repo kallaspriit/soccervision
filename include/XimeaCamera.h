@@ -57,7 +57,6 @@ public:
     void setFloatParam(const char* name, float value);
 
 private:
-
     XI_IMG image;
 	Frame frame;
     HANDLE device;
