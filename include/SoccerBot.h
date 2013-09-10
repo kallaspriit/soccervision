@@ -46,6 +46,7 @@ private:
 	Vision::Results* visionResults;
 
 	bool running;
+
 };
 
 #endif // SOCCERBOT_H

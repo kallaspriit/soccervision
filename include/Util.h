@@ -9,72 +9,74 @@
 #include <iterator>
 
 class Util {
-    public:
-        static void yuyvToRgb(int width, int height, unsigned char *data, unsigned char *out);
-        static std::string base64Encode(const unsigned char* data, unsigned int len);
-        static void jpegEncode(const unsigned char* input, void* output, int &bufferSize, int width, int height, int channelCount = 3);
-        static double millitime();
-        static double duration(double start);
-        static float signum(float value);
-        static float limit(float num, float min, float max);
-        static size_t strpos(const std::string& haystack, const std::string &needle);
-        static bool replace(std::string& str, const std::string& from, const std::string& to);
-		static void sleep(int milliseconds) { Sleep(milliseconds); }
-		static __int64 timerStart();
-		static double timerEnd(__int64 startTime = -1);
-		static void correctCameraPoint(int& x, int& y);
-		static void confineField(float& x, float& y);
-        //static std::string exec(const std::string& cmd);
-        //static std::string getWorkingDirectory();
 
-        static inline int rgbToInt(int red, int green, int blue) {
-            int rgb = red;
-            rgb = (rgb << 8) + green;
-            rgb = (rgb << 8) + blue;
+public:
+    static void yuyvToRgb(int width, int height, unsigned char *data, unsigned char *out);
+    static std::string base64Encode(const unsigned char* data, unsigned int len);
+    static void jpegEncode(const unsigned char* input, void* output, int &bufferSize, int width, int height, int channelCount = 3);
+    static double millitime();
+    static double duration(double start);
+    static float signum(float value);
+    static float limit(float num, float min, float max);
+    static size_t strpos(const std::string& haystack, const std::string &needle);
+    static bool replace(std::string& str, const std::string& from, const std::string& to);
+	static void sleep(int milliseconds) { Sleep(milliseconds); }
+	static __int64 timerStart();
+	static double timerEnd(__int64 startTime = -1);
+	static void correctCameraPoint(int& x, int& y);
+	static void confineField(float& x, float& y);
+    //static std::string exec(const std::string& cmd);
+    //static std::string getWorkingDirectory();
 
-            return rgb;
-        }
+    static inline int rgbToInt(int red, int green, int blue) {
+        int rgb = red;
+        rgb = (rgb << 8) + green;
+        rgb = (rgb << 8) + blue;
 
-        static inline void intToRgb(int rgb, int& red, int& green, int& blue) {
-            red = (rgb >> 16) & 0xFF;
-            green = (rgb >> 8) & 0xFF;
-            blue = rgb & 0xFF;
-        }
+        return rgb;
+    }
 
-        template <class T>
-        static inline std::string toString(const T& t) {
-            std::stringstream ss;
-            ss << t;
+    static inline void intToRgb(int rgb, int& red, int& green, int& blue) {
+        red = (rgb >> 16) & 0xFF;
+        green = (rgb >> 8) & 0xFF;
+        blue = rgb & 0xFF;
+    }
 
-            return ss.str();
-        }
+    template <class T>
+    static inline std::string toString(const T& t) {
+        std::stringstream ss;
+        ss << t;
 
-        template <class T>
-        static inline std::string toString(std::vector<T> vec) {
-            std::stringstream ss;
+        return ss.str();
+    }
 
-            std::copy(vec.begin(), vec.end(), std::ostream_iterator<T>(ss, ", "));
-            std::string result = ss.str();
+    template <class T>
+    static inline std::string toString(std::vector<T> vec) {
+        std::stringstream ss;
 
-            return "[" + result.substr(0, result.length() - 2) + "]";
-        }
+        std::copy(vec.begin(), vec.end(), std::ostream_iterator<T>(ss, ", "));
+        std::string result = ss.str();
 
-        static inline int toInt(const std::string str) {
-            return atoi(str.c_str());
-        }
+        return "[" + result.substr(0, result.length() - 2) + "]";
+    }
 
-        static inline float toFloat(const std::string str) {
-            return (float)atof(str.c_str());
-        }
+    static inline int toInt(const std::string str) {
+        return atoi(str.c_str());
+    }
 
-		static inline double toDouble(const std::string str) {
-            return (double)atof(str.c_str());
-        }
+    static inline float toFloat(const std::string str) {
+        return (float)atof(str.c_str());
+    }
 
-    private:
-        static const std::string base64Chars;
-		static double queryPerformanceFrequency;
-		static __int64 timerStartCount;
+	static inline double toDouble(const std::string str) {
+        return (double)atof(str.c_str());
+    }
+
+private:
+    static const std::string base64Chars;
+	static double queryPerformanceFrequency;
+	static __int64 timerStartCount;
+
 };
 
 #endif // UTIL_H

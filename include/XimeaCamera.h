@@ -65,6 +65,7 @@ private:
 	bool acquisitioning;
 	int serialNumber;
     int lastFrameNumber;
+
 };
 
 #endif // XIMEACAMERA_H

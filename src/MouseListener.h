@@ -1,6 +1,8 @@
 #ifndef MOUSELISTENER_H
 #define MOUSELISTENER_H
 
+class DisplayWindow;
+
 class MouseListener {
 
 public:
@@ -14,6 +16,7 @@ public:
 	virtual void onMouseDown(int x, int y, MouseBtn btn, DisplayWindow* win) {}
 	virtual void onMouseUp(int x, int y, MouseBtn btn, DisplayWindow* win) {}
 	virtual void onMouseWheel(int delta, DisplayWindow* win) {}
+
 };
 
 #endif // MOUSELISTENER_H

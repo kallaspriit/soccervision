@@ -24,6 +24,7 @@ public:
 	static void ARGBToRGB24(unsigned char* input, unsigned char* output, int width, int height);
 	static YUYV* getYuyvPixelAt(unsigned char* dataY, unsigned char* dataU, unsigned char* dataV, int width, int height, int x, int y);
 	static YUYVRange extractColorRange(unsigned char* dataY, unsigned char* dataU, unsigned char* dataV, int imageWidth, int imageHeight, int centerX, int centerY, int brushRadius, float stdDev);
+
 };
 
 #endif // IMAGEPROCESSOR_H

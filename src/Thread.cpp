@@ -1,77 +1,59 @@
-/*
-   thread.cpp
-
-   Definition of a Java style thread class in C++.
-
-   ------------------------------------------
-
-   Copyright © 2013  [Vic Hargrave - http://vichargrave.com]
-
-   Licensed under the Apache License, Version 2.0 (the "License");
-   you may not use this file except in compliance with the License.
-   You may obtain a copy of the License at
-
-       http://www.apache.org/licenses/LICENSE-2.0
-
-   Unless required by applicable law or agreed to in writing, software
-   distributed under the License is distributed on an "AS IS" BASIS,
-   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-   See the License for the specific language governing permissions and
-   limitations under the License.
-*/
-
 #include "Thread.h"
 
-static void* runThread(void* arg)
-{
+static void* runThread(void* arg) {
     return ((Thread*)arg)->run();
 }
 
-Thread::Thread() : m_running(0), m_detached(0) {}
+Thread::Thread() : running(0), detached(0) {}
 
-Thread::~Thread()
-{
-    if (m_running == 1 && m_detached == 0) {
-        pthread_detach(m_tid);
-    }
-    if (m_running == 1) {
-        pthread_cancel(m_tid);
+Thread::~Thread() {
+    if (running) {
+		if (!detached) {
+			pthread_detach(handle);
+		}
+
+        pthread_cancel(handle);
     }
 }
 
-int Thread::start()
-{
-    int result = pthread_create(&m_tid, NULL, runThread, this);
+int Thread::start() {
+    int result = pthread_create(&handle, NULL, runThread, this);
+
     if (result == 0) {
-        m_running = 1;
+        running = true;
     }
+
     return result;
 }
 
-int Thread::join()
-{
+int Thread::join() {
     int result = -1;
-    if (m_running == 1) {
-        result = pthread_join(m_tid, NULL);
+
+    if (running) {
+        result = pthread_join(handle, NULL);
+
         if (result == 0) {
-            m_detached = 0;
+            detached = false;
         }
     }
+
     return result;
 }
 
-int Thread::detach()
-{
+int Thread::detach() {
     int result = -1;
-    if (m_running == 1 && m_detached == 0) {
-        result = pthread_detach(m_tid);
+
+    if (running && !detached) {
+        result = pthread_detach(handle);
+
         if (result == 0) {
-            m_detached = 1;
+            detached = 1;
         }
     }
+
     return result;
 }
 
 pthread_t Thread::self() {
-    return m_tid;
+    return handle;
 }

@@ -39,6 +39,7 @@ private:
 
 	bool done;
 	unsigned char* argb;
+
 };
 
 #endif // PROCESSTHREAD_H
