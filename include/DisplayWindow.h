@@ -25,7 +25,7 @@ class DisplayWindow {
 		HDC windowDeviceHandle;
 		HDC bitmapDeviceHandle;
 		HBITMAP bitmap;
-		Canvas* img;
+		Canvas* canvas;
 		Gui* gui;
         int width;
         int height;

@@ -78,7 +78,7 @@ class Vision {
 		void updateColorDistances();
 
 		Dir dir;
-		Canvas img;
+		Canvas canvas;
         Blobber* blobber;
         LookupTable frontDistanceLookup;
         LookupTable rearDistanceLookup;

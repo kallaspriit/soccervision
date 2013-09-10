@@ -320,18 +320,18 @@ Gui::Button::Button(std::string text, int x, int y, int width, int type, void* d
 }
 
 void Gui::Button::draw(unsigned char* image, int imageWidth, int imageHeight, bool swapRB) {
-	img.width = imageWidth;
-	img.height = imageHeight;
-	img.data = image;
-	img.swapRB = swapRB;
+	canvas.width = imageWidth;
+	canvas.height = imageHeight;
+	canvas.data = image;
+	canvas.swapRB = swapRB;
 
 	if (active) {
-		img.fillBox(x, y, getWidth(), getHeight(), 255, 0, 0);
-		img.drawBox(x, y, getWidth(), getHeight(), 255, over ? 0 : 255, over ? 0 : 255);
-		img.drawText(x + 6, y + 4, text, 255, 255, 255);
+		canvas.fillBox(x, y, getWidth(), getHeight(), 255, 0, 0);
+		canvas.drawBox(x, y, getWidth(), getHeight(), 255, over ? 0 : 255, over ? 0 : 255);
+		canvas.drawText(x + 6, y + 4, text, 255, 255, 255);
 	} else {
-		img.drawBox(x, y, getWidth(), getHeight(), 255, over ? 0 : 255, over ? 0 : 255);
-		img.drawText(x + 6, y + 4, text, 255, over ? 0 : 255, over ? 0 : 255);
+		canvas.drawBox(x, y, getWidth(), getHeight(), 255, over ? 0 : 255, over ? 0 : 255);
+		canvas.drawText(x + 6, y + 4, text, 255, over ? 0 : 255, over ? 0 : 255);
 	}
 }
 

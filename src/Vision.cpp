@@ -49,10 +49,10 @@ Vision::~Vision() {
 }
 
 void Vision::setDebugImage(unsigned char* image, int width, int height) {
-	img.data = image;
-	img.width = width;
-	img.height = height;
-	img.swapRB = true;
+	canvas.data = image;
+	canvas.width = width;
+	canvas.height = height;
+	canvas.swapRB = true;
 }
 
 Vision::Result* Vision::process() {
@@ -482,7 +482,7 @@ float Vision::getSurroundMetric(int x, int y, int radius, std::vector<std::strin
 	int misses = 0;
     int points = radius * 2;
     bool requiredColorFound = false;
-    bool debug = img.data != NULL;
+    bool debug = canvas.data != NULL;
 
 	int start = 0;
 	int sensePoints = points;
@@ -516,7 +516,7 @@ float Vision::getSurroundMetric(int x, int y, int radius, std::vector<std::strin
                 matches++;
 
                 if (debug) {
-                    img.drawMarker(senseX, senseY, 0, 200, 0);
+                    canvas.drawMarker(senseX, senseY, 0, 200, 0);
                 }
             } else {
 				misses++;
@@ -530,11 +530,11 @@ float Vision::getSurroundMetric(int x, int y, int radius, std::vector<std::strin
 				misses++;
 
 				if (debug) {
-					img.drawMarker(senseX, senseY, 200, 0, 0);
+					canvas.drawMarker(senseX, senseY, 200, 0, 0);
 				}
 			} else {
 				if (debug) {
-					img.drawMarker(senseX, senseY, 128, 128, 128);
+					canvas.drawMarker(senseX, senseY, 128, 128, 128);
 				}
 			}
         }
@@ -738,7 +738,7 @@ Vision::PathMetric Vision::getPathMetric(int x1, int y1, int x2, int y2, std::ve
     int matches = 0;
 	int blacksInRow = 0;
 	int maxBlacksInRow = 10;
-    bool debug = img.data != NULL;
+    bool debug = canvas.data != NULL;
     bool requiredColorFound = false;
 	bool sawGreen = false;
 	bool sawWhite = false;
@@ -783,13 +783,13 @@ Vision::PathMetric Vision::getPathMetric(int x1, int y1, int x2, int y2, std::ve
 					sawGreen = true;
 
 					if (debug) {
-						img.drawMarker(x, y, 0, 128, 0);
+						canvas.drawMarker(x, y, 0, 128, 0);
 					}
 				} else if ((sawWhite || firstColor == "white") && previousBlack >= 2) {
 					crossingGreenWhiteBlackGreen = true;
 
 					if (debug) {
-						img.drawMarker(x, y, 128, 0, 0);
+						canvas.drawMarker(x, y, 128, 0, 0);
 					}
 
 					break;
@@ -798,7 +798,7 @@ Vision::PathMetric Vision::getPathMetric(int x1, int y1, int x2, int y2, std::ve
 				sawWhite = true;
 
 				if (debug) {
-					img.drawMarker(x, y, 128, 128, 128);
+					canvas.drawMarker(x, y, 128, 128, 128);
 
 					continue;
 				}
@@ -825,13 +825,13 @@ Vision::PathMetric Vision::getPathMetric(int x1, int y1, int x2, int y2, std::ve
 				invalidSpree = 0;
 
                 if (debug) {
-                    img.drawMarker(x, y, 0, 200, 0);
+                    canvas.drawMarker(x, y, 0, 200, 0);
                 }
             } else {
 				invalidSpree++;
 
 				if (debug) {
-                    img.drawMarker(x, y, 200, 0, 0);
+                    canvas.drawMarker(x, y, 200, 0, 0);
                 }
 			}
 
@@ -840,7 +840,7 @@ Vision::PathMetric Vision::getPathMetric(int x1, int y1, int x2, int y2, std::ve
             }
         } else {
             if (debug) {
-                img.drawMarker(x, y, 200, 0, 0);
+                canvas.drawMarker(x, y, 200, 0, 0);
             }
 
 			invalidSpree++;
@@ -1053,7 +1053,7 @@ float Vision::getColorDistance(std::string colorName, int x1, int y1, int x2, in
     }
 
 	int matches = 0;
-    bool debug = img.data != NULL;
+    bool debug = canvas.data != NULL;
 	int start = originalX1 < originalX2 ? 0 : senseCounter - 1;
 	int step = originalX1 < originalX2 ? 1 : -1;
 
@@ -1067,18 +1067,18 @@ float Vision::getColorDistance(std::string colorName, int x1, int y1, int x2, in
 			
 			if (strcmp(color->name, colorName.c_str()) == 0) {
 				if (debug) {
-					img.drawMarker(x, y, 0, 200, 0);
+					canvas.drawMarker(x, y, 0, 200, 0);
 				}
 
 				return getDistance(Dir::FRONT, x, y);
 			} else {
 				if (debug) {
-					img.drawMarker(x, y, 200, 0, 0);
+					canvas.drawMarker(x, y, 200, 0, 0);
 				}
 			}
 		} else {
 			if (debug) {
-                img.drawMarker(x, y, 64, 64, 64);
+                canvas.drawMarker(x, y, 64, 64, 64);
             }
 		}
 	}
@@ -1134,7 +1134,7 @@ bool Vision::isBallInWay(ObjectList balls, int goalY) {
 }
 
 float Vision::getBlockMetric(int x1, int y1, int blockWidth, int blockHeight, std::vector<std::string> validColors, int step) {
-	bool debug = img.data != NULL;
+	bool debug = canvas.data != NULL;
 	int matches = 0;
 	int misses = 0;
 
@@ -1147,20 +1147,20 @@ float Vision::getBlockMetric(int x1, int y1, int blockWidth, int blockHeight, st
 					matches++;
 
 					if (debug) {
-						img.drawMarker(x, y, 0, 200, 0);
+						canvas.drawMarker(x, y, 0, 200, 0);
 					}
 				} else {
 					misses++;
 
 					if (debug) {
-						img.drawMarker(x, y, 200, 0, 0);
+						canvas.drawMarker(x, y, 200, 0, 0);
 					}
 				}
 			} else {
 				misses++;
 
 				if (debug) {
-					img.drawMarker(x, y, 200, 0, 0);
+					canvas.drawMarker(x, y, 200, 0, 0);
 				}
 			}
 		}
@@ -1181,7 +1181,7 @@ float Vision::getUndersideMetric(int x1, int y1, float distance, int blockWidth,
 }
 
 float Vision::getUndersideMetric(int x1, int y1, float distance, int blockWidth, int blockHeight, std::string targetColor, std::string targetColor2, std::vector<std::string> validColors, int& minValidX, int& minValidY, int& maxValidX, int& maxValidY, bool expand) {
-	bool debug = img.data != NULL;
+	bool debug = canvas.data != NULL;
 	int xStep = 6;
 	int yStep = 6;
 	int gapStep = 3;
@@ -1218,7 +1218,7 @@ float Vision::getUndersideMetric(int x1, int y1, float distance, int blockWidth,
 
 			if (color == NULL || (strcmp(color->name, targetColorName) != 0 && strcmp(color->name, targetColorName2) != 0)) {
 				if (debug) {
-					img.drawMarker(x, y, 64, 64, 64);
+					canvas.drawMarker(x, y, 64, 64, 64);
 				}
 
 				continue;
@@ -1241,7 +1241,7 @@ float Vision::getUndersideMetric(int x1, int y1, float distance, int blockWidth,
 			}
 
 			if (debug) {
-				img.drawMarker(x, y, 255, 255, 255);
+				canvas.drawMarker(x, y, 255, 255, 255);
 			}
 
 			//std::cout << "! DOWN FROM " << (y + yStep) << " to " << y + blockHeight << std::endl;
@@ -1261,11 +1261,11 @@ float Vision::getUndersideMetric(int x1, int y1, float distance, int blockWidth,
 					}
 
 					if (debug) {
-						img.drawMarker(x, senseY, 0, 0, 0);
+						canvas.drawMarker(x, senseY, 0, 0, 0);
 					}
 				} else {
 					if (debug) {
-						img.drawMarker(x, senseY, 255, 255, 255);
+						canvas.drawMarker(x, senseY, 255, 255, 255);
 					}
 
 					sawGreenOrBlack = false;
@@ -1318,26 +1318,26 @@ float Vision::getUndersideMetric(int x1, int y1, float distance, int blockWidth,
 								lastColorName = std::string(color->name);
 
 								if (debug) {
-									img.drawMarker(x, gapY, 0, 200, 0, true);
+									canvas.drawMarker(x, gapY, 0, 200, 0, true);
 								}
 							} else {
 								runMisses++;
 
 								if (debug) {
-									img.drawMarker(x, gapY, 200, 0, 0, true);
+									canvas.drawMarker(x, gapY, 200, 0, 0, true);
 								}
 							}
 						} else {
 							// allow one invalid color after white/black
 							if (lastColorName != "black" && lastColorName != "white") {
-								img.drawMarker(x, gapY, 100, 0, 0, true);
+								canvas.drawMarker(x, gapY, 100, 0, 0, true);
 
 								runMisses++;
 							} else {
 								lastColorName = "";
 
 								if (debug) {
-									img.drawMarker(x, gapY, 255, 255, 0, true);
+									canvas.drawMarker(x, gapY, 255, 255, 0, true);
 								}
 							}
 						}
@@ -1364,8 +1364,8 @@ float Vision::getUndersideMetric(int x1, int y1, float distance, int blockWidth,
 		int expandX = 60;
 
 		if (debug) {
-			img.drawBox(minValidX, minValidY, maxValidX - minValidX, maxValidY - minValidY, 255, 0, 0);
-			//img.drawBox(maxValidX, 0, Config::cameraWidth - maxValidX, Math::min(maxValidY + 60, Config::cameraHeight - 1), 255, 255, 255);
+			canvas.drawBox(minValidX, minValidY, maxValidX - minValidX, maxValidY - minValidY, 255, 0, 0);
+			//canvas.drawBox(maxValidX, 0, Config::cameraWidth - maxValidX, Math::min(maxValidY + 60, Config::cameraHeight - 1), 255, 255, 255);
 		}
 
 		for (int y = 0; y < Math::min(maxValidY + expandY, Config::cameraHeight - 1); y += yStep) {
@@ -1381,19 +1381,19 @@ float Vision::getUndersideMetric(int x1, int y1, float distance, int blockWidth,
 					if (y > maxValidY) maxValidY = y;
 
 					if (debug) {
-						img.drawMarker(x, y, 255, 255, 255);
+						canvas.drawMarker(x, y, 255, 255, 255);
 					}
 				} else {
 					gap++;
 
 					if (debug) {
-						img.drawMarker(x, y, 200, 0, 0);
+						canvas.drawMarker(x, y, 200, 0, 0);
 					}
 				}
 
 				if (gap > maxGap) {
 					if (debug) {
-						img.drawMarker(x, y, 100, 0, 0);
+						canvas.drawMarker(x, y, 100, 0, 0);
 					}
 
 					break;

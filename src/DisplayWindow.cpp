@@ -43,9 +43,9 @@ DisplayWindow::DisplayWindow(HINSTANCE instance, int width, int height, std::str
 	bitmapDeviceHandle = CreateCompatibleDC(windowDeviceHandle);
 	bitmap = CreateCompatibleBitmap(windowDeviceHandle, width, height);
 
-	img = new Canvas();
-	img->width = width;
-	img->height = height;
+	canvas = new Canvas();
+	canvas->width = width;
+	canvas->height = height;
 }
 
 DisplayWindow::~DisplayWindow() {
@@ -53,7 +53,7 @@ DisplayWindow::~DisplayWindow() {
 	DeleteDC(bitmapDeviceHandle);
 	DeleteObject(bitmap);
 
-	delete img;
+	delete canvas;
 }
 
 void DisplayWindow::setImage(unsigned char* image, bool rgb2bgr) {
@@ -69,7 +69,7 @@ void DisplayWindow::setImage(unsigned char* image, bool rgb2bgr) {
 		return;
 	}*/
 
-	img->data = image;
+	canvas->data = image;
 
 	if (rgb2bgr) {
 		// BGR to RGB..
