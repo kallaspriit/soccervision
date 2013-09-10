@@ -26,7 +26,7 @@ int main(int argc, char* argv[]) {
 	#endif
 
 	// test memory leak
-	//char* leak = new char(1000);
+	char* leak = new char(1000);
 
 	bool showGui = false;
 
