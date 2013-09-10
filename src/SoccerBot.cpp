@@ -45,7 +45,7 @@ void SoccerBot::setup() {
 	setupVision();
 	setupProcessors();
 	setupFpsCounter();
-	//setupCameras();
+	setupCameras();
 	setupSignalHandler();
 
 	if (showGui) {
