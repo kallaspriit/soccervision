@@ -14,6 +14,7 @@ class DebugRenderer {
 		static void renderBalls(unsigned char* image, const ObjectList& balls, bool swapRB = false, int width = Config::cameraWidth, int height = Config::cameraHeight);
 		static void renderGoals(unsigned char* image, const ObjectList& goals, bool swapRB = false, int width = Config::cameraWidth, int height = Config::cameraHeight);
 		static void renderBrush(unsigned char* image, int x, int y, int radius, bool active, bool swapRB = false, int width = Config::cameraWidth, int height = Config::cameraHeight);
+		static void renderObstructions(unsigned char* image, Obstruction obstruction, bool swapRB = false, int width = Config::cameraWidth, int height = Config::cameraHeight);
 
 	private:
 		

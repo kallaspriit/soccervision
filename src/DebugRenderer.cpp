@@ -94,7 +94,7 @@ void DebugRenderer::renderBalls(unsigned char* image, const ObjectList& balls, b
     }
 
 	// TEMP - draw centerline
-	canvas.drawLine(canvas.width / 2, 0, canvas.width / 2, canvas.height);
+	//canvas.drawLine(canvas.width / 2, 0, canvas.width / 2, canvas.height);
 	//canvas.fillCircleCentered(Config::cameraWidth / 2, Config::cameraHeight / 2, 100, 0, 0, 255);
 
     /*Blobber::Blob* blob = blobber->getBlobs("ball");
@@ -163,4 +163,25 @@ void DebugRenderer::renderBrush(unsigned char* image, int x, int y, int radius, 
 	canvas.swapRB = swapRB;
 
 	canvas.drawCircle(x, y, radius, 255, active ? 0 : 255, active ? 0 : 255);
+}
+
+void DebugRenderer::renderObstructions(unsigned char* image, Obstruction obstruction, bool swapRB, int width, int height) {
+	Canvas canvas = Canvas();
+
+	canvas.data = image;
+	canvas.width = width;
+	canvas.height = height;
+	canvas.swapRB = swapRB;
+
+	if (obstruction == Obstruction::BOTH || obstruction == Obstruction::LEFT) {
+		canvas.fillBox(width / 2 - 20, height - 40, 20, 40, 200, 0, 0);
+	} else {
+		canvas.fillBox(width / 2 - 20, height - 40, 20, 40, 0, 200, 0);
+	}
+
+	if (obstruction == Obstruction::BOTH || obstruction == Obstruction::RIGHT) {
+		canvas.fillBox(width / 2, height - 40, 20, 40, 200, 0, 0);
+	} else {
+		canvas.fillBox(width / 2, height - 40, 20, 40, 0, 200, 0);
+	}
 }
