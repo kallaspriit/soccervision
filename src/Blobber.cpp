@@ -927,8 +927,16 @@ bool Blobber::disable(unsigned opt) {
 }
 
 void Blobber::close() {
-    if(map) delete(map);
-    map = NULL;
+    if (map) delete(map); map = NULL;
+
+	for (int i = 0; i < BLOBBER_MAX_COLORS; i++) {
+        if (blobList[i] != NULL) {
+			delete blobList[i];
+			blobList[i] = NULL;
+		}
+    }
+
+	clear();
 }
 
 
