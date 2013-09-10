@@ -43,7 +43,7 @@ void SoccerBot::setup() {
 	 std::cout << "-- Initializing --" << std::endl;
 
 	//setupVision();
-	//setupProcessors();
+	setupProcessors();
 	setupFpsCounter();
 	//setupCameras();
 	setupSignalHandler();
