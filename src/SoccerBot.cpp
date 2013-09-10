@@ -233,10 +233,21 @@ void SoccerBot::setupCameras() {
 	frontCamera->open(Config::frontCameraSerial);
 	rearCamera->open(Config::rearCameraSerial);
 
-	setupCamera("Front", frontCamera);
-	setupCamera("Rear", rearCamera);
+	if (frontCamera->isOpened()) {
+		setupCamera("Front", frontCamera);
+	} else {
+		std::cout << "- Opening front camera failed" << std::endl;
+	}
 
-	std::cout << "! Cameras ready" << std::endl;
+	if (rearCamera->isOpened()) {
+		setupCamera("Rear", rearCamera);
+	} else {
+		std::cout << "- Opening rear camera failed" << std::endl;
+	}
+
+	if (!frontCamera->isOpened() && !rearCamera->isOpened()) {
+		std::cout << "! Neither of the cameras could be opened" << std::endl;
+	}
 }
 
 void SoccerBot::setupCamera(std::string name, XimeaCamera* camera) {
