@@ -23,8 +23,6 @@ bool XimeaCamera::open(int serial) {
     xiGetNumberDevices(&deviceCount);
 
     if (deviceCount == 0) {
-        std::cout << "- Failed to detect any cameras" << std::endl;
-
         return false;
     }
 
@@ -58,8 +56,6 @@ bool XimeaCamera::open(int serial) {
     }
 
     if (!found) {
-        std::cout << "- No camera with serial #" << serial << " could be found" << std::endl;
-
         return false;
     }
 
@@ -147,8 +143,6 @@ void XimeaCamera::stopAcquisition() {
 
 void XimeaCamera::close() {
     if (!opened) {
-		std::cout << "- Unable to close camera, not opened" << std::endl;
-
 		return;
 	}
 
