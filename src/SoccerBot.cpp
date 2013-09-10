@@ -76,6 +76,10 @@ void SoccerBot::run() {
 
 		while (running) {
 			Sleep(100);
+
+			if (SignalHandler::exitRequested) {
+				running = false;
+			}
 		}
 
 		return;
