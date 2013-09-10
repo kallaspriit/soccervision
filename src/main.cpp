@@ -60,7 +60,7 @@ int main(int argc, char* argv[]) {
 	delete soccerBot;
 	soccerBot = NULL;
 
-	std::cout << "-- Properly Terminated --" << std::endl;
+	std::cout << "-- Properly Terminated --" << std::endl << std::endl;
 
     return 0;
 }

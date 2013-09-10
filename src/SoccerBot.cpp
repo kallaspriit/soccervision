@@ -40,8 +40,6 @@ SoccerBot::~SoccerBot() {
 }
 
 void SoccerBot::setup() {
-	std::cout << "-- Initializing --" << std::endl;
-
 	setupVision();
 	setupProcessors();
 	setupFpsCounter();
