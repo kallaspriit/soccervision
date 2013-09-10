@@ -95,6 +95,7 @@ void* ProcessThread::run() {
 		DebugRenderer::renderBlobs(classification, blobber);
 		DebugRenderer::renderBalls(rgb, visionResult->balls, true);
 		DebugRenderer::renderObstructions(rgb, visionResult->obstructionSide, true);
+		// TODO Show whether a ball is in the way
 	}
 
 	done = true;

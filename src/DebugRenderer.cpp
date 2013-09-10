@@ -174,14 +174,14 @@ void DebugRenderer::renderObstructions(unsigned char* image, Obstruction obstruc
 	canvas.swapRB = swapRB;
 
 	if (obstruction == Obstruction::BOTH || obstruction == Obstruction::LEFT) {
-		canvas.fillBox(width / 2 - 20, height - 40, 20, 40, 200, 0, 0);
+		canvas.fillBox(width / 2 - 20, height - 80, 20, 40, 200, 0, 0);
 	} else {
-		canvas.fillBox(width / 2 - 20, height - 40, 20, 40, 0, 200, 0);
+		canvas.fillBox(width / 2 - 20, height - 80, 20, 40, 0, 200, 0);
 	}
 
 	if (obstruction == Obstruction::BOTH || obstruction == Obstruction::RIGHT) {
-		canvas.fillBox(width / 2, height - 40, 20, 40, 200, 0, 0);
+		canvas.fillBox(width / 2, height - 80, 20, 40, 200, 0, 0);
 	} else {
-		canvas.fillBox(width / 2, height - 40, 20, 40, 0, 200, 0);
+		canvas.fillBox(width / 2, height - 80, 20, 40, 0, 200, 0);
 	}
 }
