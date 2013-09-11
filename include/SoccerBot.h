@@ -9,6 +9,7 @@ class Blobber;
 class ProcessThread;
 class Gui;
 class FpsCounter;
+class Robot;
 
 class SoccerBot {
 
@@ -23,6 +24,7 @@ public:
 	void setupProcessors();
 	void setupFpsCounter();
 	void setupCameras();
+	void setupRobot();
 	void setupSignalHandler();
 	void setupGui();
 
@@ -44,6 +46,7 @@ private:
 	Gui* gui;
 	FpsCounter* fpsCounter;
 	Vision::Results* visionResults;
+	Robot* robot;
 
 	bool running;
 

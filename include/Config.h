@@ -85,6 +85,63 @@ namespace Config {
 	const int obstructionsSenseHeight = 150;
 	const float obstructedThreshold = 0.5f;
 
+	// robot wheen angles
+	const float robotWheelAngle1 = -135.0f;
+	const float robotWheelAngle2 = -45.0f;
+	const float robotWheelAngle3 = 45.0f;
+	const float robotWheelAngle4 = 135.0f;
+
+	// distance between two robot wheels diagonally
+	const float robotWheelOffset = 0.1170f;
+
+	// radius of a wheel
+	const float robotWheelRadius = 0.034f;
+
+	// robot starting position on the field
+	const float robotStartX = 0.125f;
+	const float robotStartY = 0.125f;
+
+	// in how many seconds to spin around the dribbler
+	const float robotSpinAroundDribblerPeriod = 2.0f;
+	
+	// in how big of a radius to spin around the dribbler
+	const float robotSpinAroundDribblerRadius = 0.1f;
+
+	// how fast to drive forward while spinning around the dribbler
+	const float robotSpinAroundDribblerForwardSpeed = 0.2f;
+
+	// fluid movement steps
+	const float robotfluidSpeedStep = 1.5f;
+	const float robotfluidOmegaStep = 6.28f;
+
+	// how fast to spin the dribbler
+	const int robotDribblerSpeed = 100;
+
+	// for how many frames must the real wheel speed vary considerably from target speed to be considered stalled
+	const int robotWheelStalledThreshold = 60;
+
+	// how long the ball needs to be in the dribbler to be considered stable (seconds)
+	const double ballInDribblerThreshold = 0.2;
+
+	// how long must the ball have not been detected to be considered lost (seconds)
+	const double dribblerBallLostThreshold = 0.0;
+
+	// omega threshold for the robot to be considered not spinning any more
+	const float rotationStoppedOmegaThreshold = 0.25f;
+
+	// multiplier to act against robot spinning
+	const float rotationCancelMultiplier = 0.3f;
+
+	// multipler to jump robot by certain angle
+	const float jumpAngleStopMultiplier = 1.0f;
+
+	// particle filter robot localizer parameters
+	const int robotLocalizerParticleCount = 1000;
+	const float robotLocalizerForwardNoise = 0.25f;
+	const float robotLocalizerTurnNoise = 0.3f; // 45deg
+	const float robotLocalizerDistanceNoise = 0.35f;
+	const float robotLocalizerAngleNoise = 0.2f; // ~~11deg
+
 	// configuration filenames
 	const std::string blobberConfigFilename = "config/blobber.cfg";
 	const std::string frontDistanceLookupFilename = "config/distance-front.cfg";

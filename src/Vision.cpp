@@ -478,6 +478,7 @@ Blobber::Color* Vision::getColorAt(int x, int y) {
     return blobber->getColorAt(x, y);
 }
 
+// TODO When scanning the underside then some on the topside are also still created
 float Vision::getSurroundMetric(int x, int y, int radius, std::vector<std::string> validColors, std::string requiredColor, int side, bool allowNone) {
 	int matches = 0;
 	int misses = 0;

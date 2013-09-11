@@ -7,6 +7,7 @@
 #include "SignalHandler.h"
 #include "Config.h"
 #include "Util.h"
+#include "Robot.h"
 
 #include <iostream>
 
@@ -15,7 +16,7 @@ SoccerBot::SoccerBot() :
 	frontBlobber(NULL), rearBlobber(NULL),
 	frontVision(NULL), rearVision(NULL),
 	frontProcessor(NULL), rearProcessor(NULL),
-	gui(NULL), fpsCounter(NULL), visionResults(NULL),
+	gui(NULL), fpsCounter(NULL), visionResults(NULL), robot(NULL),
 	running(false), debugVision(false), showGui(false)
 {
 
@@ -25,6 +26,7 @@ SoccerBot::~SoccerBot() {
 	std::cout << "! Releasing all resources" << std::endl;
 
 	if (gui != NULL) delete gui; gui = NULL;
+	if (robot != NULL) delete robot; robot = NULL;
 	if (frontCamera != NULL) delete frontCamera; frontCamera = NULL;
 	if (rearCamera != NULL) delete rearCamera; rearCamera = NULL;
 	if (fpsCounter != NULL) delete fpsCounter; fpsCounter = NULL;
@@ -44,6 +46,7 @@ void SoccerBot::setup() {
 	setupProcessors();
 	setupFpsCounter();
 	setupCameras();
+	setupRobot();
 	setupSignalHandler();
 
 	if (showGui) {
@@ -246,6 +249,14 @@ void SoccerBot::setupCameras() {
 	if (!frontCamera->isOpened() && !rearCamera->isOpened()) {
 		std::cout << "! Neither of the cameras could be opened" << std::endl;
 	}
+}
+
+void SoccerBot::setupRobot() {
+	std::cout << "! Setting up the robot.. ";
+
+	robot = new Robot();
+
+	std::cout << "done!" << std::endl;
 }
 
 void SoccerBot::setupCamera(std::string name, XimeaCamera* camera) {
