@@ -2,6 +2,7 @@
 #define SOCCERBOT_H
 
 #include "Vision.h"
+#include "Controller.h"
 #include <string>
 
 class XimeaCamera;
@@ -25,6 +26,7 @@ public:
 	void setupFpsCounter();
 	void setupCameras();
 	void setupRobot();
+	void setupControllers();
 	void setupSignalHandler();
 	void setupGui();
 
@@ -47,6 +49,8 @@ private:
 	FpsCounter* fpsCounter;
 	Vision::Results* visionResults;
 	Robot* robot;
+	Controller* activeController;
+	ControllerMap controllers;
 
 	bool running;
 

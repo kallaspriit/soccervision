@@ -16,7 +16,7 @@ SoccerBot::SoccerBot() :
 	frontBlobber(NULL), rearBlobber(NULL),
 	frontVision(NULL), rearVision(NULL),
 	frontProcessor(NULL), rearProcessor(NULL),
-	gui(NULL), fpsCounter(NULL), visionResults(NULL), robot(NULL),
+	gui(NULL), fpsCounter(NULL), visionResults(NULL), robot(NULL), activeController(NULL),
 	running(false), debugVision(false), showGui(false)
 {
 
@@ -47,6 +47,7 @@ void SoccerBot::setup() {
 	setupFpsCounter();
 	setupCameras();
 	setupRobot();
+	setupControllers();
 	setupSignalHandler();
 
 	if (showGui) {
@@ -255,6 +256,14 @@ void SoccerBot::setupRobot() {
 	std::cout << "! Setting up the robot.. ";
 
 	robot = new Robot();
+
+	std::cout << "done!" << std::endl;
+}
+
+void SoccerBot::setupControllers() {
+	std::cout << "! Setting up controllers.. ";
+
+	// TODO Add some, select active one
 
 	std::cout << "done!" << std::endl;
 }

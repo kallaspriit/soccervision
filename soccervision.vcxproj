@@ -91,6 +91,7 @@
     <ClInclude Include="include\Coilgun.h" />
     <ClInclude Include="include\Command.h" />
     <ClInclude Include="include\Config.h" />
+    <ClInclude Include="include\Controller.h" />
     <ClInclude Include="include\DebugRenderer.h" />
     <ClInclude Include="include\Dribbler.h" />
     <ClInclude Include="include\FpsCounter.h" />
