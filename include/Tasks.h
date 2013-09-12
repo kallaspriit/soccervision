@@ -2,6 +2,7 @@
 #define TASKS_H
 
 #include "Maths.h"
+#include <deque>
 
 #include <string>
 
@@ -180,5 +181,8 @@ class DriveForTask : public Task {
 		double endTime;
 		double currentTime;
 };
+
+typedef std::deque<Task*> TaskQueue;
+typedef std::deque<Task*>::const_iterator TaskQueueIt;
 
 #endif // TASKS_H

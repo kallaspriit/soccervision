@@ -10,38 +10,39 @@
 #include <vector>
 
 // TODO Move this into the actual class
-struct Landmark {
-    Landmark(std::string name, float x, float y) : name(name), x(x), y(y) {}
-
-    std::string name;
-    float x;
-    float y;
-};
-
-struct Particle {
-    Particle(float x, float y, float orientation, float probability) : x(x), y(y), orientation(orientation), probability(probability) {}
-
-    float x;
-    float y;
-    float orientation;
-    float probability;
-};
-
-struct Measurement {
-	Measurement() : distance(-1), angle(0) {}
-	Measurement(float distance, float angle) : distance(distance), angle(angle) {}
-
-	float distance;
-	float angle;
-};
-
-typedef std::map<std::string, Landmark*> LandmarkMap;
-typedef std::vector<Particle*> ParticleList;
-typedef std::map<std::string, Measurement> Measurements;
 
 class ParticleFilterLocalizer : public Localizer {
 
 public:
+	struct Landmark {
+		Landmark(std::string name, float x, float y) : name(name), x(x), y(y) {}
+
+		std::string name;
+		float x;
+		float y;
+	};
+
+	struct Particle {
+		Particle(float x, float y, float orientation, float probability) : x(x), y(y), orientation(orientation), probability(probability) {}
+
+		float x;
+		float y;
+		float orientation;
+		float probability;
+	};
+
+	struct Measurement {
+		Measurement() : distance(-1), angle(0) {}
+		Measurement(float distance, float angle) : distance(distance), angle(angle) {}
+
+		float distance;
+		float angle;
+	};
+
+	typedef std::map<std::string, Landmark*> LandmarkMap;
+	typedef std::vector<Particle*> ParticleList;
+	typedef std::map<std::string, Measurement> Measurements;
+
 	ParticleFilterLocalizer(int particleCount = Config::robotLocalizerParticleCount, float forwardNoise = Config::robotLocalizerForwardNoise, float turnNoise = Config::robotLocalizerTurnNoise, float distanceSenseNoise = Config::robotLocalizerDistanceNoise, float angleSenseNoise = Config::robotLocalizerAngleNoise);
     ~ParticleFilterLocalizer();
 

@@ -2,7 +2,7 @@
 #include "Wheel.h"
 #include "Dribbler.h"
 #include "Coilgun.h"
-#include "ParticleFilterLocalizer.h"
+#include "Odometer.h"
 #include "Util.h"
 #include "Tasks.h"
 #include "Config.h"
@@ -11,24 +11,16 @@
 #include <map>
 #include <sstream>
 
-Robot::Robot() : wheelFL(NULL), wheelFR(NULL), wheelRL(NULL), wheelRR(NULL), coilgun(NULL), robotLocalizer(NULL), visionResults(NULL) {
-	wheelAngles[0] = Math::degToRad(Config::robotWheelAngle1);
-    wheelAngles[1] = Math::degToRad(Config::robotWheelAngle2);
-    wheelAngles[2] = Math::degToRad(Config::robotWheelAngle3);
-    wheelAngles[3] = Math::degToRad(Config::robotWheelAngle4);
-
+Robot::Robot() : wheelFL(NULL), wheelFR(NULL), wheelRL(NULL), wheelRR(NULL), coilgun(NULL), robotLocalizer(NULL), odometer(NULL), visionResults(NULL) {
     targetOmega = 0;
     targetDir = Math::Vector(0, 0);
-    wheelOffset = Config::robotWheelOffset;
-    wheelRadius = Config::robotWheelRadius;
-    wheelRadiusInv = 1.0f / wheelRadius;
-
+   
 	fluidTargetX = 0.0f;
 	fluidTargetY = 0.0f;
 	fluidTargetOmega = 0.0f;
 
-    x = Config::robotStartX;
-    y = Config::robotStartY;
+    x = 0.0f;
+    y = 0.0f;
     orientation = 0.0f;
 
     lastCommandTime = -1;
@@ -45,6 +37,7 @@ Robot::~Robot() {
     if (wheelFL != NULL) delete wheelFL; wheelFL = NULL;
 	if (coilgun != NULL) delete coilgun; coilgun = NULL;
 	if (dribbler != NULL) delete dribbler; dribbler = NULL;
+	if (odometer != NULL) delete odometer; odometer = NULL;
 	if (robotLocalizer != NULL) delete robotLocalizer; robotLocalizer = NULL;
 
     while (tasks.size() > 0) {
@@ -58,38 +51,11 @@ void Robot::setup() {
     setupWheels();
 	setupDribbler();
 	setupCoilgun();
+	setupOdometer();
 	setupLocalizer();
 }
 
 void Robot::setupWheels() {
-	omegaMatrix = Math::Matrix4x3(
-        -Math::sin(wheelAngles[0]), Math::cos(wheelAngles[0]), wheelOffset,
-		-Math::sin(wheelAngles[1]), Math::cos(wheelAngles[1]), wheelOffset,
-		-Math::sin(wheelAngles[2]), Math::cos(wheelAngles[2]), wheelOffset,
-		-Math::sin(wheelAngles[3]), Math::cos(wheelAngles[3]), wheelOffset
-    );
-    omegaMatrixInvA = Math::Matrix3x3(
-        -Math::sin(wheelAngles[0]), Math::cos(wheelAngles[0]), wheelOffset,
-		-Math::sin(wheelAngles[1]), Math::cos(wheelAngles[1]), wheelOffset,
-		-Math::sin(wheelAngles[2]), Math::cos(wheelAngles[2]), wheelOffset
-    ).getInversed();
-    omegaMatrixInvB = Math::Matrix3x3(
-        -Math::sin(wheelAngles[0]), Math::cos(wheelAngles[0]), wheelOffset,
-		-Math::sin(wheelAngles[1]), Math::cos(wheelAngles[1]), wheelOffset,
-		-Math::sin(wheelAngles[3]), Math::cos(wheelAngles[3]), wheelOffset
-    ).getInversed();
-    omegaMatrixInvC = Math::Matrix3x3(
-        -Math::sin(wheelAngles[0]), Math::cos(wheelAngles[0]), wheelOffset,
-		-Math::sin(wheelAngles[2]), Math::cos(wheelAngles[2]), wheelOffset,
-		-Math::sin(wheelAngles[3]), Math::cos(wheelAngles[3]), wheelOffset
-    ).getInversed();
-    omegaMatrixInvD = Math::Matrix3x3(
-		-Math::sin(wheelAngles[1]), Math::cos(wheelAngles[1]), wheelOffset,
-		-Math::sin(wheelAngles[2]), Math::cos(wheelAngles[2]), wheelOffset,
-		-Math::sin(wheelAngles[3]), Math::cos(wheelAngles[3]), wheelOffset
-    ).getInversed();
-
-    // positive omega means that FL turns to the left and all others follow the same direction
     wheelFL = new Wheel(1);
     wheelFR = new Wheel(2);
     wheelRL = new Wheel(3);
@@ -102,6 +68,17 @@ void Robot::setupDribbler() {
 
 void Robot::setupCoilgun() {
 	coilgun = new Coilgun();
+}
+
+void Robot::setupOdometer() {
+	odometer = new Odometer(
+		Config::robotWheelAngle1,
+		Config::robotWheelAngle2,
+		Config::robotWheelAngle3,
+		Config::robotWheelAngle4,
+		Config::robotWheelOffset,
+		Config::robotWheelRadius
+	);
 }
 
 void Robot::setupLocalizer() {
@@ -126,9 +103,14 @@ void Robot::step(float dt, Vision::Results* visionResults) {
     lastDt = dt;
     totalTime += dt;
 
-	updateMovement();
+	movement = odometer->calculateMovement(
+		wheelFL->getRealOmega(),
+		wheelFR->getRealOmega(),
+		wheelRL->getRealOmega(),
+		wheelRR->getRealOmega()
+	);
 
-	// TODO move the odometer to seperate class
+	// this is basically odometer localizer
 	orientation = Math::floatModulus(orientation + movement.omega * dt, Math::TWO_PI);
 
     if (orientation < 0.0f) {
@@ -141,7 +123,7 @@ void Robot::step(float dt, Vision::Results* visionResults) {
     x += globalVelocityX * dt;
     y += globalVelocityY * dt;
 
-	// using localization
+	// particle filter localizer
 	/*updateMeasurements();
 
 	robotLocalizer->update(measurements);
@@ -168,7 +150,6 @@ void Robot::step(float dt, Vision::Results* visionResults) {
     wheelFR->step(dt);
     wheelRL->step(dt);
     wheelRR->step(dt);
-
 	dribbler->step(dt);
 	coilgun->step(dt);
 
@@ -191,6 +172,7 @@ void Robot::setTargetDir(float x, float y, float omega, bool fluid) {
 	fluidMovement = fluid;
 
 	if (fluidMovement) {
+		// TODO Do it acceleration based (multiply diff) or perhaps remove
 		if (fluidTargetX < x) {
 			fluidTargetX = Math::min(fluidTargetX + Config::robotfluidSpeedStep * lastDt, x);
 		} else {
@@ -319,105 +301,12 @@ void Robot::handleTasks(float dt) {
 }
 
 void Robot::updateWheelSpeeds() {
-    Math::Matrix3x1 targetMatrix(
-        targetDir.x,
-        targetDir.y,
-        targetOmega
-    );
+	Odometer::WheelSpeeds wheelSpeeds = odometer->calculateWheelSpeeds(targetDir.x, targetDir.y, targetOmega);
 
-    Math::Matrix4x1 resultMatrix = omegaMatrix
-        .getMultiplied(wheelRadiusInv)
-        .getMultiplied(targetMatrix);
-
-    wheelRL->setTargetOmega(-resultMatrix.a11);
-    wheelFL->setTargetOmega(-resultMatrix.a21);
-    wheelFR->setTargetOmega(-resultMatrix.a31);
-    wheelRR->setTargetOmega(-resultMatrix.a41);
-}
-
-void Robot::updateMovement() {
-    Math::Matrix3x1 wheelMatrixA = Math::Matrix3x1(
-        wheelRL->getRealOmega(),
-        wheelFL->getRealOmega(),
-        wheelFR->getRealOmega()
-    );
-    Math::Matrix3x1 wheelMatrixB = Math::Matrix3x1(
-        wheelRL->getRealOmega(),
-        wheelFL->getRealOmega(),
-        wheelRR->getRealOmega()
-    );
-    Math::Matrix3x1 wheelMatrixC = Math::Matrix3x1(
-        wheelRL->getRealOmega(),
-        wheelFR->getRealOmega(),
-        wheelRR->getRealOmega()
-    );
-    Math::Matrix3x1 wheelMatrixD = Math::Matrix3x1(
-        wheelFL->getRealOmega(),
-        wheelFR->getRealOmega(),
-        wheelRR->getRealOmega()
-    );
-
-    Math::Matrix3x1 movementA = omegaMatrixInvA.getMultiplied(wheelMatrixA).getMultiplied(wheelRadius);
-    Math::Matrix3x1 movementB = omegaMatrixInvB.getMultiplied(wheelMatrixB).getMultiplied(wheelRadius);
-    Math::Matrix3x1 movementC = omegaMatrixInvC.getMultiplied(wheelMatrixC).getMultiplied(wheelRadius);
-    Math::Matrix3x1 movementD = omegaMatrixInvD.getMultiplied(wheelMatrixD).getMultiplied(wheelRadius);
-
-    float avgVelocityX = -(movementA.a11 + movementB.a11 + movementC.a11 + movementD.a11) / 4.0f;
-    float avgVelocityY = -(movementA.a21 + movementB.a21 + movementC.a21 + movementD.a21) / 4.0f;
-    float avgOmega = -(movementA.a31 + movementB.a31 + movementC.a31 + movementD.a31) / 4.0f;
-
-    float avgDiffA = Math::abs(movementA.a11 - avgVelocityX) + Math::abs(movementA.a21 - avgVelocityY) + Math::abs(movementA.a31 - avgOmega);
-    float avgDiffB = Math::abs(movementB.a11 - avgVelocityX) + Math::abs(movementB.a21 - avgVelocityY) + Math::abs(movementB.a31 - avgOmega);
-    float avgDiffC = Math::abs(movementC.a11 - avgVelocityX) + Math::abs(movementC.a21 - avgVelocityY) + Math::abs(movementC.a31 - avgOmega);
-    float avgDiffD = Math::abs(movementD.a11 - avgVelocityX) + Math::abs(movementD.a21 - avgVelocityY) + Math::abs(movementD.a31 - avgOmega);
-
-    float diffs[] = {avgDiffA, avgDiffB, avgDiffC, avgDiffD};
-    float largestDiff = 0;
-    int largestDiffIndex = -1;
-
-    for (int i = 0; i < 4; i++) {
-        if (diffs[i] > largestDiff) {
-            largestDiff = diffs[i];
-            largestDiffIndex = i;
-        }
-    }
-
-    if (largestDiffIndex != -1) {
-        switch (largestDiffIndex) {
-            case 0:
-                avgVelocityX = -(movementB.a11 + movementC.a11 + movementD.a11) / 3.0f;
-                avgVelocityY = -(movementB.a21 + movementC.a21 + movementD.a21) / 3.0f;
-                avgOmega = -(movementB.a31 + movementC.a31 + movementD.a31) / 3.0f;
-            break;
-
-            case 1:
-                avgVelocityX = -(movementA.a11 + movementC.a11 + movementD.a11) / 3.0f;
-                avgVelocityY = -(movementA.a21 + movementC.a21 + movementD.a21) / 3.0f;
-                avgOmega = -(movementA.a31 + movementC.a31 + movementD.a31) / 3.0f;
-            break;
-
-            case 2:
-                avgVelocityX = -(movementA.a11 + movementB.a11 + movementD.a11) / 3.0f;
-                avgVelocityY = -(movementA.a21 + movementB.a21 + movementD.a21) / 3.0f;
-                avgOmega = -(movementA.a31 + movementB.a31 + movementD.a31) / 3.0f;
-            break;
-
-            case 3:
-                avgVelocityX = -(movementA.a11 + movementB.a11 + movementC.a11) / 3.0f;
-                avgVelocityY = -(movementA.a21 + movementB.a21 + movementC.a21) / 3.0f;
-                avgOmega = -(movementA.a31 + movementB.a31 + movementC.a31) / 3.0f;
-            break;
-        }
-    }
-
-	movement.velocityX = avgVelocityX;
-	movement.velocityY = avgVelocityY;
-	movement.omega = avgOmega;
-
-	Math::Vector velocityVector(movement.velocityX, movement.velocityY);
-
-	lastVelocity = velocity;
-	velocity = velocityVector.getLength() / lastDt;
+	wheelFL->setTargetOmega(wheelSpeeds.FL);
+	wheelFR->setTargetOmega(wheelSpeeds.FR);
+    wheelRL->setTargetOmega(wheelSpeeds.RL);
+    wheelRR->setTargetOmega(wheelSpeeds.RR);
 }
 
 void Robot::updateMeasurements() {
@@ -427,10 +316,10 @@ void Robot::updateMeasurements() {
 	Object* blueGoal = visionResults->getLargestGoal(Side::BLUE);
 
 	if (yellowGoal != NULL) {
-		measurements["yellow-center"] = Measurement(yellowGoal->distance, yellowGoal->angle);
+		measurements["yellow-center"] = ParticleFilterLocalizer::Measurement(yellowGoal->distance, yellowGoal->angle);
 	}
 
 	if (blueGoal != NULL) {
-		measurements["blue-center"] = Measurement(blueGoal->distance, blueGoal->angle);
+		measurements["blue-center"] = ParticleFilterLocalizer::Measurement(blueGoal->distance, blueGoal->angle);
 	}
 }

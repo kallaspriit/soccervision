@@ -97,10 +97,6 @@ namespace Config {
 	// radius of a wheel
 	const float robotWheelRadius = 0.034f;
 
-	// robot starting position on the field
-	const float robotStartX = 0.125f;
-	const float robotStartY = 0.125f;
-
 	// in how many seconds to spin around the dribbler
 	const float robotSpinAroundDribblerPeriod = 2.0f;
 	
