@@ -7,7 +7,7 @@
 
 LRESULT CALLBACK WinProc(HWND hWnd,UINT message,WPARAM wParam,LPARAM lParam);
 
-Gui::Gui(HINSTANCE instance, Blobber* blobberFront, Blobber* blobberRear, int width, int height) : instance(instance), blobberFront(blobberFront), blobberRear(blobberRear), width(width), height(height), activeWindow(NULL) {
+Gui::Gui(HINSTANCE instance, Blobber* blobberFront, Blobber* blobberRear, int width, int height) : instance(instance), blobberFront(blobberFront), blobberRear(blobberRear), width(width), height(height), activeWindow(NULL), quitRequested(false) {
 	WNDCLASSEX wClass;
 	ZeroMemory(&wClass, sizeof(WNDCLASSEX));
 
@@ -53,18 +53,14 @@ Gui::Gui(HINSTANCE instance, Blobber* blobberFront, Blobber* blobberRear, int wi
 	selectedColorName = "";
 
 	Blobber::Color* color;
-	Button* button;
 
 	for (int i = 0; i < blobberFront->getColorCount(); i++) {
 		color = blobberFront->getColor(i);
 
-		button = createButton(color->name, 20, 40 + i * 18, 160, 1);
-
-		/*if (i == 0) {
-			selectedColorName = color->name;
-			button->active = true;
-		}*/
+		createButton(color->name, 20, 40 + i * 18, 160, 1);
 	}
+
+	createButton("Quit", Config::cameraWidth - 80, 20, 60, 2);
 }
 
 Gui::~Gui() {
@@ -235,35 +231,39 @@ void Gui::onElementClick(Element* element) {
 			return;
 		}
 
-		//std::cout << "! Button '" << button->text << "' clicked" << std::endl;
-
-		if (button->type == 1) {
-			if (button->text != selectedColorName) {
-				selectedColorName = button->text;
-			} else {
-				selectedColorName = "";
-				unset = true;
-			}
-		}
-
 		button->lastInteractionTime = Util::millitime();
 
-		Element* el;
-		Button* btn;
+		if (button->type == 1) {
+			//std::cout << "! Button '" << button->text << "' clicked" << std::endl;
 
-		for (std::vector<Element*>::const_iterator i = elements.begin(); i != elements.end(); i++) {
-			el = *i;
-			btn = dynamic_cast<Button*>(el);
-
-			if (btn == NULL) {
-				continue;
+			if (button->type == 1) {
+				if (button->text != selectedColorName) {
+					selectedColorName = button->text;
+				} else {
+					selectedColorName = "";
+					unset = true;
+				}
 			}
 
-			if (btn == button) {
-				btn->active = unset ? false : true;
-			} else {
-				btn->active = false;
+			Element* el;
+			Button* btn;
+
+			for (std::vector<Element*>::const_iterator i = elements.begin(); i != elements.end(); i++) {
+				el = *i;
+				btn = dynamic_cast<Button*>(el);
+
+				if (btn == NULL) {
+					continue;
+				}
+
+				if (btn == button) {
+					btn->active = unset ? false : true;
+				} else {
+					btn->active = false;
+				}
 			}
+		} else if (button->type == 2) {
+			quitRequested = true;
 		}
 	}
 }

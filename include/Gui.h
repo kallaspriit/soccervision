@@ -58,6 +58,7 @@ public:
 	void drawElements(unsigned char* image, int width, int height, bool swapRB = false);
 	bool isMouseOverElement(int x, int y);
     bool update();
+	bool isQuitRequested() { return quitRequested; }
 	void addMouseListener(MouseListener* listener);
 	void setFps(int fps) { this->fps = fps; };
 	void setFrontImages(unsigned char* rgb, unsigned char* yuyv, unsigned char* dataY, unsigned char* dataU, unsigned char* dataV, unsigned char* classification);
@@ -95,6 +96,7 @@ private:
 	int mouseX;
 	int mouseY;
 	bool mouseDown;
+	bool quitRequested;
 	MouseListener::MouseBtn mouseBtn;
 	int brushRadius;
 };

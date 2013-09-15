@@ -26,6 +26,13 @@ SoccerBot::SoccerBot() :
 SoccerBot::~SoccerBot() {
 	std::cout << "! Releasing all resources" << std::endl;
 
+	for (std::map<std::string, Controller*>::iterator it = controllers.begin(); it != controllers.end(); it++) {
+        delete it->second;
+    }
+
+    controllers.clear();
+    activeController = NULL;
+
 	if (gui != NULL) delete gui; gui = NULL;
 	if (robot != NULL) delete robot; robot = NULL;
 	if (frontCamera != NULL) delete frontCamera; frontCamera = NULL;
@@ -146,6 +153,10 @@ void SoccerBot::run() {
 			}
 
 			gui->update();
+
+			if (gui->isQuitRequested()) {
+				running = false;
+			}
 		}
 
 		if (fpsCounter->frameNumber % 60 == 0) {
