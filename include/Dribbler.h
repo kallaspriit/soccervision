@@ -20,7 +20,6 @@ public:
 	void step(float dt);
 
 private:
-	int serialId;
 	int speed;
 	bool ballDetected;
 	double ballInDribblerTime;

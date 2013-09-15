@@ -269,6 +269,8 @@ void SoccerBot::setupRobot() {
 
 	robot = new Robot();
 
+	robot->setup();
+
 	std::cout << "done!" << std::endl;
 }
 
