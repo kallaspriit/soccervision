@@ -165,6 +165,9 @@
     <ClInclude Include="include\Controller.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\ManualController.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\DisplayWindow.cpp">
@@ -309,6 +312,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Odometer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ManualController.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

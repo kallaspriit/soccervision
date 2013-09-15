@@ -8,6 +8,7 @@
 #include "Config.h"
 #include "Util.h"
 #include "Robot.h"
+#include "ManualController.h"
 
 #include <iostream>
 
@@ -263,7 +264,7 @@ void SoccerBot::setupRobot() {
 void SoccerBot::setupControllers() {
 	std::cout << "! Setting up controllers.. ";
 
-	// TODO Add some, select active one
+	controllers["manual"] = new ManualController(robot);
 
 	std::cout << "done!" << std::endl;
 }
