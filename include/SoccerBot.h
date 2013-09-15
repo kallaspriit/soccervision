@@ -30,6 +30,11 @@ public:
 	void setupSignalHandler();
 	void setupGui();
 
+	void addController(std::string name, Controller* controller);
+    Controller* getController(std::string name);
+    bool setController(std::string name);
+    std::string getActiveControllerName();
+
 	bool debugVision;
 	bool showGui;
 
@@ -51,7 +56,9 @@ private:
 	Robot* robot;
 	Controller* activeController;
 	ControllerMap controllers;
+	std::string activeControllerName;
 
+	bool controllerRequested;
 	bool running;
 
 };

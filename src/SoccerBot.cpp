@@ -18,7 +18,7 @@ SoccerBot::SoccerBot() :
 	frontVision(NULL), rearVision(NULL),
 	frontProcessor(NULL), rearProcessor(NULL),
 	gui(NULL), fpsCounter(NULL), visionResults(NULL), robot(NULL), activeController(NULL),
-	running(false), debugVision(false), showGui(false)
+	running(false), debugVision(false), showGui(false), controllerRequested(false)
 {
 
 }
@@ -264,7 +264,9 @@ void SoccerBot::setupRobot() {
 void SoccerBot::setupControllers() {
 	std::cout << "! Setting up controllers.. ";
 
-	controllers["manual"] = new ManualController(robot);
+	addController("manual", new ManualController(robot));
+
+	setController("manual");
 
 	std::cout << "done!" << std::endl;
 }
@@ -290,4 +292,54 @@ void SoccerBot::setupCamera(std::string name, XimeaCamera* camera) {
 
 void SoccerBot::setupSignalHandler() {
 	SignalHandler::setup();
+}
+
+void SoccerBot::addController(std::string name, Controller* controller) {
+    controllers[name] = controller;
+}
+
+Controller* SoccerBot::getController(std::string name) {
+    std::map<std::string, Controller*>::iterator result = controllers.find(name);
+
+    if (result == controllers.end()) {
+        return NULL;
+    }
+
+    return result->second;
+}
+
+bool SoccerBot::setController(std::string name) {
+    if (name == "") {
+		if (activeController != NULL) {
+			activeController->onExit();
+		}
+
+		activeController = NULL;
+		activeControllerName = "";
+		controllerRequested = true;
+
+		return true;
+	} else {
+		std::map<std::string, Controller*>::iterator result = controllers.find(name);
+		
+		if (result != controllers.end()) {
+			if (activeController != NULL) {
+				activeController->onExit();
+			}
+
+			activeController = result->second;
+			activeControllerName = name;
+			activeController->onEnter();
+
+			controllerRequested = true;
+
+			return true;
+		} else {
+			return false;
+		}
+    }
+}
+
+std::string SoccerBot::getActiveControllerName() {
+	return activeControllerName;
 }
