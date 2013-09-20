@@ -30,6 +30,10 @@ void Server::setPort(int port) {
 	this->port = port;
 }
 
+void Server::broadcast(std::string message) {
+	ws->broadcast(message);
+}
+
 Server::Client* Server::getClientByConnection(websocketpp::connection_hdl connection) {
 	int id;
 	Client* client;
@@ -90,6 +94,8 @@ void Server::onSocketMessage(std::string message, websocketpp::connection_hdl co
 
 		return;
 	}
+
+	messages.push(message);
 	
 	std::cout << "! Server client #" << client->id << " sent message: " << message << std::endl;
 }

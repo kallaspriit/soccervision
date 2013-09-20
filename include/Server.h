@@ -5,7 +5,7 @@
 #include "WebSocketServer.h"
 
 #include <string>
-#include <vector>
+#include <stack>
 #include <map>
 
 class Server : public Thread, WebSocketServer::Listener {
@@ -18,8 +18,7 @@ public:
 		websocketpp::connection_hdl connection;
 	};
 
-	typedef std::vector<std::string> Messages;
-	typedef Messages::iterator MessagesIt;
+	typedef std::stack<std::string> Messages;
 	typedef std::map<int, Client*> Clients;
 	typedef Clients::iterator ClientsIt;
 
@@ -27,6 +26,7 @@ public:
 	~Server();
 
 	void setPort(int port);
+	void broadcast(std::string message);
 	Client* getClientByConnection(websocketpp::connection_hdl connection);
 
 private:
