@@ -1,5 +1,4 @@
 #include "SoccerBot.h"
-#include "Server.h"
 #include "XimeaCamera.h"
 #include "Vision.h"
 #include "ProcessThread.h"
@@ -97,6 +96,8 @@ void SoccerBot::run() {
 
 	while (running) {
 		//__int64 startTime = Util::timerStart();
+
+		handleServerMessages();
 
 		gotFrontFrame = gotRearFrame = false;
 		frontProcessor->debug = rearProcessor->debug = debugVision || showGui;
@@ -361,4 +362,18 @@ bool SoccerBot::setController(std::string name) {
 
 std::string SoccerBot::getActiveControllerName() {
 	return activeControllerName;
+}
+
+void SoccerBot::handleServerMessages() {
+	Server::Message* message;
+
+	while ((message = server->popLastMessage()) != NULL) {
+		handleServerMessage(message);
+
+		delete message;
+	}
+}
+
+void SoccerBot::handleServerMessage(Server::Message* message) {
+	std::cout << "SOCCERBOT HANDLE MESSAGE FROM " << message->client->id << ": " << message->content << std::endl;
 }

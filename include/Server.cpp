@@ -23,6 +23,15 @@ Server::~Server() {
 
 	clients.clear();
 
+	Message* message;
+
+	while (messages.size() > 0) {
+		message = messages.top();
+		messages.pop();
+
+		delete message;
+	}
+
 	if (ws != NULL) delete ws; ws = NULL;
 }
 
@@ -34,14 +43,20 @@ void Server::broadcast(std::string message) {
 	ws->broadcast(message);
 }
 
-std::string Server::popLastMesage() {
+bool Server::gotMessages() {
+	boost::mutex::scoped_lock lock(messagesMutex);
+
+	return messages.size() > 0;
+}
+
+Server::Message* Server::popLastMessage() {
 	boost::mutex::scoped_lock lock(messagesMutex);
 	
 	if (messages.size() == 0) {
-		return "";
+		return NULL;
 	}
 
-	std::string message = messages.top();
+	Message* message = messages.top();
 
 	messages.pop();
 
@@ -110,7 +125,7 @@ void Server::onSocketMessage(std::string message, websocketpp::connection_hdl co
 	}
 
 	boost::mutex::scoped_lock lock(messagesMutex);
-	messages.push(message);
+	messages.push(new Message(client, this, message));
 	
 	std::cout << "! Server client #" << client->id << " sent message: " << message << std::endl;
 }

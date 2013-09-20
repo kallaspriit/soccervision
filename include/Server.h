@@ -19,7 +19,15 @@ public:
 		websocketpp::connection_hdl connection;
 	};
 
-	typedef std::stack<std::string> Messages;
+	struct Message {
+		Message(Client* client, Server* server, std::string content) : client(client), server(server), content(content) {}
+
+		Client* client;
+		Server* server;
+		std::string content;
+	};
+
+	typedef std::stack<Message*> Messages;
 	typedef std::map<int, Client*> Clients;
 	typedef Clients::iterator ClientsIt;
 
@@ -28,7 +36,8 @@ public:
 
 	void setPort(int port);
 	void broadcast(std::string message);
-	std::string popLastMesage();
+	bool gotMessages();
+	Message* popLastMessage();
 	Client* getClientByConnection(websocketpp::connection_hdl connection);
 
 private:

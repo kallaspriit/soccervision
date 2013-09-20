@@ -3,6 +3,7 @@
 
 #include "Vision.h"
 #include "Controller.h"
+#include "Server.h"
 #include <string>
 
 class XimeaCamera;
@@ -11,7 +12,6 @@ class ProcessThread;
 class Gui;
 class FpsCounter;
 class Robot;
-class Server;
 
 class SoccerBot {
 
@@ -36,6 +36,9 @@ public:
     Controller* getController(std::string name);
     bool setController(std::string name);
     std::string getActiveControllerName();
+
+	void handleServerMessages();
+	void handleServerMessage(Server::Message* message);
 
 	bool debugVision;
 	bool showGui;
