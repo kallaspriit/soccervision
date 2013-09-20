@@ -34,6 +34,20 @@ void Server::broadcast(std::string message) {
 	ws->broadcast(message);
 }
 
+std::string Server::popLastMesage() {
+	boost::mutex::scoped_lock lock(messagesMutex);
+	
+	if (messages.size() == 0) {
+		return "";
+	}
+
+	std::string message = messages.top();
+
+	messages.pop();
+
+	return message;
+}
+
 Server::Client* Server::getClientByConnection(websocketpp::connection_hdl connection) {
 	int id;
 	Client* client;

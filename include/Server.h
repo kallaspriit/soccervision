@@ -28,6 +28,7 @@ public:
 
 	void setPort(int port);
 	void broadcast(std::string message);
+	std::string popLastMesage();
 	Client* getClientByConnection(websocketpp::connection_hdl connection);
 
 private:
