@@ -398,9 +398,9 @@ void SoccerBot::handleServerMessage(Server::Message* message) {
 void SoccerBot::handleSetController(Command::Parameters parameters) {
 	std::string name = parameters[0];
 
-	std::cout << "! Requested changing controller to: " << name << std::endl;
-
-	if (!setController(name)) {
-		std::cout << "- Failed setting controller to " << name << std::endl;
+	if (setController(name)) {
+		std::cout << "+ Changed controller to: '" << name << "'" << std::endl;
+	} else {
+		std::cout << "- Failed setting controller to '" << name << "'" << std::endl;
 	}
 }
