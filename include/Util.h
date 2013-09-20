@@ -25,6 +25,7 @@ public:
 	static double timerEnd(__int64 startTime = -1);
 	static void correctCameraPoint(int& x, int& y);
 	static void confineField(float& x, float& y);
+	static std::string json(std::string id, std::string payload);
     //static std::string exec(const std::string& cmd);
     //static std::string getWorkingDirectory();
 

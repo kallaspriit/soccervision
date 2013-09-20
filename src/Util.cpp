@@ -268,3 +268,14 @@ void Util::confineField(float& x, float& y) {
 		y = Config::fieldHeight + Config::confineMargin;
 	}
 }
+
+std::string Util::json(std::string id, std::string payload) {
+	std::stringstream stream;
+
+    stream << "{";
+    stream << "\"id\":\"" << id << "\",";
+    stream << "\"payload\":" << payload;
+    stream << "}";
+
+    return stream.str();
+}

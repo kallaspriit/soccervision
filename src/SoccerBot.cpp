@@ -398,7 +398,7 @@ void SoccerBot::handleServerMessage(Server::Message* message) {
 }
 
 void SoccerBot::handleGetController(Server::Message* message) {
-	message->respond(activeControllerName);
+	message->respond(Util::json("controller", activeControllerName));
 }
 
 void SoccerBot::handleSetController(Command::Parameters parameters) {
