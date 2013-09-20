@@ -25,11 +25,11 @@ void* Server::run() {
 }
 
 void Server::onSocketOpen(websocketpp::connection_hdl connection) {
-	std::cout << "CLIENT CONNECTED" << std::endl;
-
 	int id = clientCounter++;
 
 	clients[id] = new Client(id, connection);
+
+	std::cout << "! Server client # " << id << " connected" << std::endl;
 }
 
 void Server::onSocketClose(websocketpp::connection_hdl connection) {
@@ -41,6 +41,8 @@ void Server::onSocketClose(websocketpp::connection_hdl connection) {
 	for (ClientsIt it = clients.begin(); it != clients.end(); it++) {
 		id = it->first;
 		client = it->second;
+
+		std::cout << "CHECK #" << id << std::endl;
 
 		if (client->connection.lock() == connection.lock()) {
 			std::cout << "CLIENT #" << id << " DISCONNECTED" << std::endl;
