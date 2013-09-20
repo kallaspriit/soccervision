@@ -312,6 +312,7 @@ void SoccerBot::setupSignalHandler() {
 
 void SoccerBot::setupServer() {
 	server = new Server();
+	server->start();
 }
 
 void SoccerBot::addController(std::string name, Controller* controller) {
