@@ -6,11 +6,22 @@
 
 #include <string>
 #include <vector>
+#include <map>
 
 class Server : public Thread, WebSocketServer::Listener {
 
 public:
+	struct Client {
+		Client(int id, websocketpp::connection_hdl connection) : id(id), connection(connection) {}
+
+		int id;
+		websocketpp::connection_hdl connection;
+	};
+
 	typedef std::vector<std::string> Messages;
+	typedef Messages::iterator MessagesIt;
+	typedef std::map<int, Client*> Clients;
+	typedef Clients::iterator ClientsIt;
 
 	Server();
 	~Server();
@@ -25,6 +36,8 @@ private:
 
 	WebSocketServer* ws;
 	int port;
+	int clientCounter;
+	Clients clients;
 	Messages messages;
 };
 

@@ -230,15 +230,13 @@ void SoccerBot::setupFpsCounter() {
 }
 
 void SoccerBot::setupGui() {
-	std::cout << "! Setting up GUI.. ";
+	std::cout << "! Setting up GUI" << std::endl;
 
 	gui = new Gui(
 		GetModuleHandle(0),
 		frontBlobber, rearBlobber,
 		Config::cameraWidth, Config::cameraHeight
 	);
-
-	std::cout << "done!" << std::endl;
 }
 
 void SoccerBot::setupCameras() {
