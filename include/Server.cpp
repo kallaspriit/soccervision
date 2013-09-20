@@ -16,6 +16,8 @@ void Server::setPort(int port) {
 }
 
 void* Server::run() {
+	std::cout << "! Starting web socket server on port " << port << std::endl;
+
 	ws->listen(port);
 
 	return NULL;
