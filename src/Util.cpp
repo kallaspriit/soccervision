@@ -270,12 +270,11 @@ void Util::confineField(float& x, float& y) {
 }
 
 std::string Util::json(std::string id, std::string payload) {
-	std::stringstream stream;
+	if (payload == "" || payload == "null") {
+		payload = "null";
+	} else {
+		payload = "\"" + payload + "\"";
+	}
 
-    stream << "{";
-    stream << "\"id\":\"" << id << "\",";
-    stream << "\"payload\":" << payload;
-    stream << "}";
-
-    return stream.str();
+	return "{\"id\":\"" + id + "\",\"payload\":" + payload + "}";
 }
