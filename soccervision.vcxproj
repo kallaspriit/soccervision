@@ -52,12 +52,12 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>include;$(XIMEAROOT)\API;lib\libyuv\include;lib\pthread\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;NOMINMAX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>include;$(BOOSTROOT);$(XIMEAROOT)\API;$(WEBSOCKETPPROOT);lib\libyuv\include;lib\pthread\include;lib\websocketpp;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;NOMINMAX;WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(XIMEAROOT)\API\x86;lib\pthread\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(XIMEAROOT)\API\x86;$(BOOSTROOT)\stage\lib;lib\pthread\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>m3api.lib;pthreadVC2.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
@@ -70,15 +70,16 @@
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>include;$(XIMEAROOT)\API;lib\libyuv\include;lib\pthread\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;NOMINMAX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>include;$(BOOSTROOT);$(XIMEAROOT)\API;$(WEBSOCKETPPROOT);lib\libyuv\include;lib\pthread\include;lib\websocketpp;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;NOMINMAX;WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>$(XIMEAROOT)\API\x86;lib\pthread\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(XIMEAROOT)\API\x86;$(BOOSTROOT)\stage\lib;lib\pthread\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>m3api.lib;pthreadVC2.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
@@ -113,6 +114,7 @@
     <ClInclude Include="include\Thread.h" />
     <ClInclude Include="include\Util.h" />
     <ClInclude Include="include\Vision.h" />
+    <ClInclude Include="include\WebSocketServer.h" />
     <ClInclude Include="include\Wheel.h" />
     <ClInclude Include="include\XimeaCamera.h" />
     <ClInclude Include="include\DisplayWindow.h" />
@@ -182,6 +184,7 @@
     <ClCompile Include="src\Thread.cpp" />
     <ClCompile Include="src\Util.cpp" />
     <ClCompile Include="src\Vision.cpp" />
+    <ClCompile Include="src\WebSocketServer.cpp" />
     <ClCompile Include="src\Wheel.cpp" />
     <ClCompile Include="src\XimeaCamera.cpp" />
     <ClCompile Include="src\DisplayWindow.cpp" />

@@ -168,6 +168,9 @@
     <ClInclude Include="include\ManualController.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\WebSocketServer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\DisplayWindow.cpp">
@@ -315,6 +318,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\ManualController.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\WebSocketServer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
