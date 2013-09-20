@@ -21,6 +21,7 @@ public:
 
 	struct Message {
 		Message(Client* client, Server* server, std::string content) : client(client), server(server), content(content) {}
+		void respond(std::string response);
 
 		Client* client;
 		Server* server;
@@ -36,6 +37,7 @@ public:
 
 	void setPort(int port);
 	void broadcast(std::string message);
+	void send(websocketpp::connection_hdl connection, std::string message) { ws->send(connection, message); }
 	bool gotMessages();
 	Message* popLastMessage();
 	Client* getClientByConnection(websocketpp::connection_hdl connection);

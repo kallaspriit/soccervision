@@ -54,6 +54,10 @@ void WebSocketServer::broadcast(std::string message) {
 	}
 }
 
+void WebSocketServer::send(websocketpp::connection_hdl connection, std::string message) {
+	server->send(connection, message, websocketpp::frame::opcode::TEXT);
+}
+
 void WebSocketServer::onOpen(websocketpp::connection_hdl connection) {
 	connections.insert(connection);
 

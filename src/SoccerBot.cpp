@@ -384,7 +384,9 @@ void SoccerBot::handleServerMessage(Server::Message* message) {
 			activeController == NULL
 			|| (!activeController->handleCommand(command) && !activeController->handleRequest(message->content))
 		) {
-			if (command.name == "set-controller") {
+			if (command.name == "get-controller") {
+				handleGetController(command.parameters, message);
+			} else if (command.name == "set-controller") {
 				handleSetController(command.parameters);
 			} else {
 				std::cout << "- Unsupported command: " << command.name << std::endl;
@@ -393,6 +395,10 @@ void SoccerBot::handleServerMessage(Server::Message* message) {
 	} else {
 		std::cout << "- Message '" << message->content << "' is not a valid command" << std::endl;
 	}
+}
+
+void SoccerBot::handleGetController(Command::Parameters parameters, Server::Message* message) {
+	message->respond(activeControllerName);
 }
 
 void SoccerBot::handleSetController(Command::Parameters parameters) {

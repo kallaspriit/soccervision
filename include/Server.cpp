@@ -35,6 +35,10 @@ Server::~Server() {
 	if (ws != NULL) delete ws; ws = NULL;
 }
 
+void Server::Message::respond(std::string response) {
+	server->send(client->connection, response);
+}
+
 void Server::setPort(int port) {
 	this->port = port;
 }

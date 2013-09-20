@@ -32,6 +32,7 @@ public:
 	void stop();
 	void addListener(Listener* listener);
 	void broadcast(std::string message);
+	void send(websocketpp::connection_hdl connection, std::string message);
 	
 private:
 	void onOpen(websocketpp::connection_hdl connection);

@@ -40,6 +40,7 @@ public:
 
 	void handleServerMessages();
 	void handleServerMessage(Server::Message* message);
+	void handleGetController(Command::Parameters parameters, Server::Message* message);
 	void handleSetController(Command::Parameters parameters);
 
 	bool debugVision;
