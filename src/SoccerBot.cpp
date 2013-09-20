@@ -385,7 +385,7 @@ void SoccerBot::handleServerMessage(Server::Message* message) {
 			|| (!activeController->handleCommand(command) && !activeController->handleRequest(message->content))
 		) {
 			if (command.name == "get-controller") {
-				handleGetController(command.parameters, message);
+				handleGetController(message);
 			} else if (command.name == "set-controller") {
 				handleSetController(command.parameters);
 			} else {
@@ -397,7 +397,7 @@ void SoccerBot::handleServerMessage(Server::Message* message) {
 	}
 }
 
-void SoccerBot::handleGetController(Command::Parameters parameters, Server::Message* message) {
+void SoccerBot::handleGetController(Server::Message* message) {
 	message->respond(activeControllerName);
 }
 
