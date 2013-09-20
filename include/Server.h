@@ -4,6 +4,7 @@
 #include "Thread.h"
 #include "WebSocketServer.h"
 
+#include <boost/thread/mutex.hpp>
 #include <string>
 #include <stack>
 #include <map>
@@ -40,6 +41,7 @@ private:
 	int clientCounter;
 	Clients clients;
 	Messages messages;
+	mutable boost::mutex messagesMutex;
 };
 
 #endif

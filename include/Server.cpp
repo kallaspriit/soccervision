@@ -95,6 +95,7 @@ void Server::onSocketMessage(std::string message, websocketpp::connection_hdl co
 		return;
 	}
 
+	boost::mutex::scoped_lock lock(messagesMutex);
 	messages.push(message);
 	
 	std::cout << "! Server client #" << client->id << " sent message: " << message << std::endl;
