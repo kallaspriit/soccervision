@@ -11,6 +11,7 @@ class ProcessThread;
 class Gui;
 class FpsCounter;
 class Robot;
+class Server;
 
 class SoccerBot {
 
@@ -29,6 +30,7 @@ public:
 	void setupControllers();
 	void setupSignalHandler();
 	void setupGui();
+	void setupServer();
 
 	void addController(std::string name, Controller* controller);
     Controller* getController(std::string name);
@@ -53,6 +55,7 @@ private:
 	Gui* gui;
 	FpsCounter* fpsCounter;
 	Vision::Results* visionResults;
+	Server* server;
 	Robot* robot;
 	Controller* activeController;
 	ControllerMap controllers;

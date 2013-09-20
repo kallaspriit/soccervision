@@ -1,4 +1,5 @@
 #include "SoccerBot.h"
+#include "Server.h"
 #include "XimeaCamera.h"
 #include "Vision.h"
 #include "ProcessThread.h"
@@ -17,7 +18,7 @@ SoccerBot::SoccerBot() :
 	frontBlobber(NULL), rearBlobber(NULL),
 	frontVision(NULL), rearVision(NULL),
 	frontProcessor(NULL), rearProcessor(NULL),
-	gui(NULL), fpsCounter(NULL), visionResults(NULL), robot(NULL), activeController(NULL),
+	gui(NULL), fpsCounter(NULL), visionResults(NULL), robot(NULL), activeController(NULL), server(NULL),
 	running(false), debugVision(false), showGui(false), controllerRequested(false)
 {
 
@@ -34,6 +35,7 @@ SoccerBot::~SoccerBot() {
     activeController = NULL;
 
 	if (gui != NULL) delete gui; gui = NULL;
+	if (server != NULL) delete server; server = NULL;
 	if (robot != NULL) delete robot; robot = NULL;
 	if (frontCamera != NULL) delete frontCamera; frontCamera = NULL;
 	if (rearCamera != NULL) delete rearCamera; rearCamera = NULL;
@@ -57,6 +59,7 @@ void SoccerBot::setup() {
 	setupRobot();
 	setupControllers();
 	setupSignalHandler();
+	setupServer();
 
 	if (showGui) {
 		setupGui();
@@ -305,6 +308,10 @@ void SoccerBot::setupCamera(std::string name, XimeaCamera* camera) {
 
 void SoccerBot::setupSignalHandler() {
 	SignalHandler::setup();
+}
+
+void SoccerBot::setupServer() {
+	server = new Server();
 }
 
 void SoccerBot::addController(std::string name, Controller* controller) {
