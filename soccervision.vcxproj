@@ -108,6 +108,7 @@
     <ClInclude Include="include\ParticleFilterLocalizer.h" />
     <ClInclude Include="include\ProcessThread.h" />
     <ClInclude Include="include\Robot.h" />
+    <ClInclude Include="include\Server.h" />
     <ClInclude Include="include\SignalHandler.h" />
     <ClInclude Include="include\SoccerBot.h" />
     <ClInclude Include="include\Tasks.h" />
@@ -140,6 +141,7 @@
     <ClInclude Include="src\MouseListener.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="include\Server.cpp" />
     <ClCompile Include="lib\libyuv\source\compare.cc" />
     <ClCompile Include="lib\libyuv\source\compare_neon.cc" />
     <ClCompile Include="lib\libyuv\source\convert.cc" />
