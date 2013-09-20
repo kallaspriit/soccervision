@@ -53,8 +53,8 @@ void InfoBoard::step(float dt) {
         if (Command::isValid(message)) {
             Command cmd = Command::parse(message);
 
-            if (cmd.name == "goal" && cmd.params.size() == 1) {
-				int sideValue = Util::toInt(cmd.params[0]);
+            if (cmd.name == "goal" && cmd.parameters.size() == 1) {
+				int sideValue = Util::toInt(cmd.parameters[0]);
 				bool sideChanged = false;
 
 				if (sideValue == 0 && targetSide != Side::BLUE) {
@@ -72,8 +72,8 @@ void InfoBoard::step(float dt) {
 						(*it)->onTargetSideChange(targetSide);
 					}
 				}
-			} else if (cmd.name == "start" && cmd.params.size() == 1) {
-				int startValue = Util::toInt(cmd.params[0]);
+			} else if (cmd.name == "start" && cmd.parameters.size() == 1) {
+				int startValue = Util::toInt(cmd.parameters[0]);
 				bool goChanged = false;
 
 				if (startValue == 0 && (!goReceived || goRequested != false)) {

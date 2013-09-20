@@ -19,13 +19,13 @@ bool ManualController::handleRequest(std::string request) {
 }
 
 bool ManualController::handleCommand(const Command& cmd) {
-    if (cmd.name == "target-vector" && cmd.params.size() == 3) {
+    if (cmd.name == "target-vector" && cmd.parameters.size() == 3) {
         handleTargetVectorCommand(cmd);
-    } else if (cmd.name == "target-dir" && cmd.params.size() == 3) {
+    } else if (cmd.name == "target-dir" && cmd.parameters.size() == 3) {
         handleTargetDirCommand(cmd);
-    } else if (cmd.name == "set-dribbler" && cmd.params.size() == 1) {
+    } else if (cmd.name == "set-dribbler" && cmd.parameters.size() == 1) {
         handleSetDribblerCommand(cmd);
-    } else if (cmd.name == "kick" && cmd.params.size() == 1) {
+    } else if (cmd.name == "kick" && cmd.parameters.size() == 1) {
         handleKickCommand(cmd);
     } else {
         return false;
@@ -35,29 +35,29 @@ bool ManualController::handleCommand(const Command& cmd) {
 }
 
 void ManualController::handleTargetVectorCommand(const Command& cmd) {
-    float x = Util::toFloat(cmd.params[0]);
-    float y = Util::toFloat(cmd.params[1]);
-    float omega = Util::toFloat(cmd.params[2]);
+    float x = Util::toFloat(cmd.parameters[0]);
+    float y = Util::toFloat(cmd.parameters[1]);
+    float omega = Util::toFloat(cmd.parameters[2]);
 
     robot->setTargetDir(x, y, omega);
 }
 
 void ManualController::handleTargetDirCommand(const Command& cmd) {
-    Math::Deg dir = Math::Deg(Util::toFloat(cmd.params[0]));
-    float speed = Util::toFloat(cmd.params[1]);
-    float omega = Util::toFloat(cmd.params[2]);
+    Math::Deg dir = Math::Deg(Util::toFloat(cmd.parameters[0]));
+    float speed = Util::toFloat(cmd.parameters[1]);
+    float omega = Util::toFloat(cmd.parameters[2]);
 
     robot->setTargetDir(dir, speed, omega);
 }
 
 void ManualController::handleSetDribblerCommand(const Command& cmd) {
-    int strength = Util::toInt(cmd.params[0]);
+    int strength = Util::toInt(cmd.parameters[0]);
 
 	robot->getDribbler()->setSpeed(strength);
 }
 
 void ManualController::handleKickCommand(const Command& cmd) {
-    int strength = Util::toInt(cmd.params[0]);
+    int strength = Util::toInt(cmd.parameters[0]);
 
 	robot->getCoilgun()->kick(strength);
 }

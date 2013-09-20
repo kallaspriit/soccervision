@@ -375,5 +375,24 @@ void SoccerBot::handleServerMessages() {
 }
 
 void SoccerBot::handleServerMessage(Server::Message* message) {
-	std::cout << "SOCCERBOT HANDLE MESSAGE FROM " << message->client->id << ": " << message->content << std::endl;
+	std::cout << "! Request from " << message->client->id << ": " << message->content << std::endl;
+
+	if (Command::isValid(message->content)) {
+        Command command = Command::parse(message->content);
+
+        if (
+			activeController == NULL
+			|| (!activeController->handleCommand(command) && !activeController->handleRequest(message->content))
+		) {
+			if (command.name == "set-controller") {
+				handleSetController(command.parameters);
+			}
+		}
+	}
+}
+
+void SoccerBot::handleSetController(Command::Parameters parameters) {
+	std::string name = parameters[0];
+
+	std::cout << "! Requested changing controller to: " << name << std::endl;
 }

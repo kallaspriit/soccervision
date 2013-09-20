@@ -56,8 +56,8 @@ void Wheel::step(float dt) {
         if (Command::isValid(message)) {
             Command cmd = Command::parse(message);
 
-            if (cmd.name == "s" && cmd.params.size() == 1) {
-                realOmega = speedToOmega(Util::toInt(cmd.params[0]));
+            if (cmd.name == "s" && cmd.parameters.size() == 1) {
+                realOmega = speedToOmega(Util::toInt(cmd.parameters[0]));
 
 				if (Math::abs(targetOmega) > Math::PI && Math::abs(targetOmega / realOmega) > 2.0f) {
 					stallCounter++;

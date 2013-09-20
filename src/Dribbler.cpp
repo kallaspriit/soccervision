@@ -36,7 +36,7 @@ void Dribbler::step(float dt) {
             Command cmd = Command::parse(message);
 
             if (cmd.name == "b") {
-                ballDetected = cmd.params[0] == "1" ? true : false;
+                ballDetected = cmd.parameters[0] == "1" ? true : false;
 			}
 		}
 	}

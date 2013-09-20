@@ -7,13 +7,15 @@
 class Command {
 
 public:
-    Command(std::string name, std::vector<std::string> params) : name(name), params(params) {};
+	typedef std::vector<std::string> Parameters;
+
+    Command(std::string name, Parameters parameters) : name(name), parameters(parameters) {};
 
     static bool isValid(std::string input);
     static Command parse(std::string input);
 
     std::string name;
-    std::vector<std::string> params;
+    Parameters parameters;
 
 };
 

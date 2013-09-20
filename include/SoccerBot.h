@@ -4,6 +4,7 @@
 #include "Vision.h"
 #include "Controller.h"
 #include "Server.h"
+#include "Command.h"
 #include <string>
 
 class XimeaCamera;
@@ -39,6 +40,7 @@ public:
 
 	void handleServerMessages();
 	void handleServerMessage(Server::Message* message);
+	void handleSetController(Command::Parameters parameters);
 
 	bool debugVision;
 	bool showGui;

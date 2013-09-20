@@ -127,5 +127,5 @@ void Server::onSocketMessage(std::string message, websocketpp::connection_hdl co
 	boost::mutex::scoped_lock lock(messagesMutex);
 	messages.push(new Message(client, this, message));
 	
-	std::cout << "! Server client #" << client->id << " sent message: " << message << std::endl;
+	//std::cout << "! Server client #" << client->id << " sent message: " << message << std::endl;
 }
