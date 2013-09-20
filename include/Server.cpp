@@ -4,6 +4,8 @@
 
 Server::Server() : ws(NULL) {
 	ws = new WebSocketServer();
+	ws->addListener(this);
+
 	port = 9002;
 	clientCounter = 0;
 }
