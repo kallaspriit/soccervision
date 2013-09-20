@@ -27,6 +27,7 @@ public:
 	~Server();
 
 	void setPort(int port);
+	Client* getClientByConnection(websocketpp::connection_hdl connection);
 
 private:
 	void* run();

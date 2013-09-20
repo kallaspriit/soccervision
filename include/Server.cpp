@@ -11,11 +11,39 @@ Server::Server() : ws(NULL) {
 }
 
 Server::~Server() {
+	ws->stop();
+
+	Client* client;
+
+	for (ClientsIt it = clients.begin(); it != clients.end(); it++) {
+		client = it->second;
+
+		delete client;
+	}
+
+	clients.clear();
+
 	if (ws != NULL) delete ws; ws = NULL;
 }
 
 void Server::setPort(int port) {
 	this->port = port;
+}
+
+Server::Client* Server::getClientByConnection(websocketpp::connection_hdl connection) {
+	int id;
+	Client* client;
+
+	for (ClientsIt it = clients.begin(); it != clients.end(); it++) {
+		id = it->first;
+		client = it->second;
+
+		if (client->connection.lock() == connection.lock()) {
+			return client;
+		}
+	}
+
+	return NULL;
 }
 
 void* Server::run() {
@@ -35,8 +63,6 @@ void Server::onSocketOpen(websocketpp::connection_hdl connection) {
 }
 
 void Server::onSocketClose(websocketpp::connection_hdl connection) {
-	std::cout << "CLIENT DISCONNECTED" << std::endl;
-
 	int id;
 	Client* client;
 
@@ -44,18 +70,26 @@ void Server::onSocketClose(websocketpp::connection_hdl connection) {
 		id = it->first;
 		client = it->second;
 
-		std::cout << "CHECK #" << id << std::endl;
-
 		if (client->connection.lock() == connection.lock()) {
-			std::cout << "CLIENT #" << id << " DISCONNECTED" << std::endl;
+			std::cout << "! Server client #" << id << " disconnected" << std::endl;
 
 			clients.erase(it);
 
-			break;
+			return;
 		}
 	}
+
+	std::cout << "- Unknown server client disconnected" << std::endl;
 }
 
 void Server::onSocketMessage(std::string message, websocketpp::connection_hdl connection, websocketpp::server<websocketpp::config::asio>::message_ptr msg) {
-	std::cout << "CLIENT MESSAGE: " << message << std::endl;
+	Client* client = getClientByConnection(connection);
+
+	if (client == NULL) {
+		std::cout << "- Unknown client sent message: " << message << std::endl;
+
+		return;
+	}
+	
+	std::cout << "! Server client #" << client->id << " sent message: " << message << std::endl;
 }

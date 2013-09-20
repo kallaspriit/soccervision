@@ -55,8 +55,6 @@ void WebSocketServer::broadcast(std::string message) {
 }
 
 void WebSocketServer::onOpen(websocketpp::connection_hdl connection) {
-	std::cout << "CONNECTION OPENED" << std::endl;
-
 	connections.insert(connection);
 
 	for (ListenersIt it = listeners.begin(); it != listeners.end(); it++) {
@@ -65,8 +63,6 @@ void WebSocketServer::onOpen(websocketpp::connection_hdl connection) {
 }
 
 void WebSocketServer::onClose(websocketpp::connection_hdl connection) {
-	std::cout << "CONNECTION CLOSED" << std::endl;
-
 	connections.erase(connection);
 
 	for (ListenersIt it = listeners.begin(); it != listeners.end(); it++) {
@@ -75,8 +71,6 @@ void WebSocketServer::onClose(websocketpp::connection_hdl connection) {
 }
 
 void WebSocketServer::onMessage(websocketpp::connection_hdl connection, websocketpp::server<websocketpp::config::asio>::message_ptr msg) {
-	std::cout << "MESSAGE RECEIVED: " << msg->get_payload() << std::endl;
-
 	for (ListenersIt it = listeners.begin(); it != listeners.end(); it++) {
 		(*it)->onSocketMessage(msg->get_payload(), connection, msg);
 	}
