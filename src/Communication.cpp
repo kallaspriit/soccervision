@@ -74,26 +74,9 @@ void Communication::start() {
 
 	socket = new udp::socket(ioService, udp::endpoint(udp::v4(), port));
 
-	//size_t messageLength;
+	send("gs"); // TODO Remove test
 
 	receiveNext();
-
-	/*while (running) {
-		try {
-			// TODO Remove test
-			socket->send_to(boost::asio::buffer("gs"), *iterator);
-
-			messageLength = socket->receive_from(boost::asio::buffer(message, 1024), endpoint);
-			std::cout << "< ";
-			std::cout.write(message, messageLength);
-			std::cout << "\n";
-
-			boost::mutex::scoped_lock lock(messagesMutex);
-			messages.push(std::string(message, messageLength));
-		} catch (std::exception& e) {
-			std::cout << "- Communication receive error: " << e.what() << std::endl;
-		}
-	}*/
 }
 
 void Communication::receiveNext() {
@@ -138,8 +121,6 @@ void Communication::onSend(const boost::system::error_code& error, size_t bytesS
 }
 
 void Communication::close() {
-	std::cout << "@ CLOSING COM" << std::endl;
-
 	running = false;
 
 	if (socket != NULL) {
