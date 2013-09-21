@@ -39,10 +39,13 @@ void Communication::send(std::string message) {
 
 	message += "\n";
 
+	request[message.size()] = 0;
+	memcpy(request, message.c_str(), message.size());
+
 	try {
 		socket->async_send_to(
 			//boost::asio::buffer(message + "\n"), *iterator,
-			boost::asio::buffer(message.data(), message.length()), remoteEndpoint,
+			boost::asio::buffer(request, message.length()), remoteEndpoint,
 			boost::bind(
 				&Communication::onSend,
 				this,
