@@ -80,8 +80,6 @@ void Communication::start() {
 }
 
 void Communication::receiveNext() {
-	send("gs"); // TODO Remove test
-
 	std::cout << "@ RECEIVING NEXT" << std::endl;
 
 	try {
