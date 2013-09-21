@@ -72,3 +72,11 @@ void* Communication::run() {
 
 	return NULL;
 }
+
+void Communication::close() {
+	if (socket != NULL) {
+		socket->close();
+	}
+
+	running = false;
+}

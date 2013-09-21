@@ -21,7 +21,7 @@ public:
 	void send(std::string message);
 	bool gotMessages();
 	std::string popLastMessage();
-	void close() { running = false; }
+	void close();
 
 private:
 	void* run();
