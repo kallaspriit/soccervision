@@ -10,7 +10,7 @@ void TurnByTask::onStart(Robot& robot, float dt) {
 	targetAngle = Math::floatModulus(startAngle + turnAngle, Math::TWO_PI);
 	dir = turnAngle < 0.0f ? -1.0f : 1.0f;
 	startTime = -1;
-	maxTurnTime = Math::abs(turnAngle / speed) * 1.5;
+	maxTurnTime = Math::abs(turnAngle / speed) * 1.5f;
 	diff = -1;
 }
 
