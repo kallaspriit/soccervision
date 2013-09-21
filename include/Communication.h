@@ -25,11 +25,16 @@ public:
 
 private:
 	void* run();
+	void onReceive(const boost::system::error_code& error, size_t bytesReceived);
+	void onSend(const boost::system::error_code& error, size_t bytesSent);
+	void receiveNext();
 
 	std::string host;
 	int port;
+	char message[1024];
 	char request[1024];
 	udp::socket* socket;
+	udp::endpoint endpoint;
 	udp::resolver::iterator iterator;
 	Messages messages;
 	bool running;
