@@ -25,14 +25,6 @@ void Communication::send(std::string message) {
 		return;
 	}
 
-	//socket->send_to(boost::asio::buffer(message), *iterator);
-
-	std::cout << "@ SENDING: " << message << std::endl;
-
-	/*udp::resolver resolver(ioService);
-	udp::resolver::query query(udp::v4(), host, Util::toString(port));
-	iterator = resolver.resolve(query);*/
-
 	boost::asio::ip::udp::endpoint remoteEndpoint = boost::asio::ip::udp::endpoint(
 		boost::asio::ip::address::from_string(host),
 		port
@@ -45,7 +37,6 @@ void Communication::send(std::string message) {
 
 	try {
 		socket->async_send_to(
-			//boost::asio::buffer(message + "\n"), *iterator,
 			boost::asio::buffer(request, message.length()), remoteEndpoint,
 			boost::bind(
 				&Communication::onSend,
@@ -95,8 +86,6 @@ void* Communication::run() {
 
 void Communication::receiveNext() {
 	std::cout << "@ RECEIVING NEXT" << std::endl;
-
-	send("gs");
 
 	try {
 		socket->async_receive_from(
