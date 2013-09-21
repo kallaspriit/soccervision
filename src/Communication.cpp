@@ -45,8 +45,6 @@ void Communication::send(std::string message) {
 	} catch (std::exception& e) {
 		std::cout << "- Communication send error: " << e.what() << std::endl;
 	}
-
-	receiveNext();
 }
 
 bool Communication::gotMessages() {
@@ -76,9 +74,9 @@ void Communication::start() {
 
 	socket = new udp::socket(ioService, udp::endpoint(udp::v4(), port));
 
-	receiveNext();
-
 	ioService.run();
+
+	receiveNext();
 }
 
 void Communication::receiveNext() {
@@ -109,7 +107,9 @@ void Communication::onReceive(const boost::system::error_code& error, size_t byt
 
 		boost::mutex::scoped_lock lock(messagesMutex);
 		messages.push(std::string(message, bytesReceived));
-	} else if (running) {
+	}
+
+	if (running) {
 		receiveNext();
 	}
 }
