@@ -121,14 +121,13 @@ void Communication::onSend(const boost::system::error_code& error, size_t bytesS
 }
 
 void Communication::close() {
+	running = false;
+
 	if (socket != NULL) {
 		try {
-			socket->cancel();
 			socket->close();
 		} catch (std::exception& e) {
 			std::cout << "- Communication close error: " << e.what() << std::endl;
 		}
 	}
-
-	running = false;
 }
