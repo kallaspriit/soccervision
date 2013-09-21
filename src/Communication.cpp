@@ -45,7 +45,7 @@ void* Communication::run() {
 
 	boost::asio::io_service ioService;
 	
-	socket = new udp::socket(ioService, udp::endpoint(udp::v4(), port));
+	socket = new udp::socket(ioService, udp::endpoint(udp::v4(), 0));
 
 	udp::resolver resolver(ioService);
 	udp::resolver::query query(udp::v4(), host, Util::toString(port));
