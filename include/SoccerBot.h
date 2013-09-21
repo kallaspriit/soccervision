@@ -13,6 +13,7 @@ class ProcessThread;
 class Gui;
 class FpsCounter;
 class Robot;
+class Communication;
 
 class SoccerBot {
 
@@ -32,6 +33,7 @@ public:
 	void setupSignalHandler();
 	void setupGui();
 	void setupServer();
+	void setupCommunication();
 
 	void addController(std::string name, Controller* controller);
     Controller* getController(std::string name);
@@ -42,6 +44,9 @@ public:
 	void handleServerMessage(Server::Message* message);
 	void handleGetController(Server::Message* message);
 	void handleSetController(Command::Parameters parameters);
+
+	void handleCommunicationMessages();
+	void handleCommunicationMessage(std::string message);
 
 	std::string getStateJSON();
 
@@ -66,6 +71,7 @@ private:
 	Server* server;
 	Robot* robot;
 	Controller* activeController;
+	Communication* com;
 	ControllerMap controllers;
 	std::string activeControllerName;
 

@@ -1,6 +1,7 @@
 #include "SoccerBot.h"
 #include "XimeaCamera.h"
 #include "Vision.h"
+#include "Communication.h"
 #include "ProcessThread.h"
 #include "Gui.h"
 #include "FpsCounter.h"
@@ -19,7 +20,7 @@ SoccerBot::SoccerBot() :
 	frontBlobber(NULL), rearBlobber(NULL),
 	frontVision(NULL), rearVision(NULL),
 	frontProcessor(NULL), rearProcessor(NULL),
-	gui(NULL), fpsCounter(NULL), visionResults(NULL), robot(NULL), activeController(NULL), server(NULL),
+	gui(NULL), fpsCounter(NULL), visionResults(NULL), robot(NULL), activeController(NULL), server(NULL), com(NULL),
 	running(false), playing(false), debugVision(false), showGui(false), controllerRequested(false),
 	dt(0.01666f), lastStepTime(0.0f), totalTime(0.0f),
 	targetSide(Side::UNKNOWN)
@@ -50,11 +51,13 @@ SoccerBot::~SoccerBot() {
 	if (rearVision != NULL) delete rearVision; rearVision = NULL;
 	if (frontBlobber != NULL) delete frontBlobber; frontBlobber = NULL;
 	if (rearBlobber != NULL) delete rearBlobber; rearBlobber = NULL;
+	if (com != NULL) delete com; com = NULL;
 
 	std::cout << "! Resources freed" << std::endl;
 }
 
 void SoccerBot::setup() {
+	setupCommunication();
 	setupVision();
 	setupProcessors();
 	setupFpsCounter();
@@ -335,6 +338,11 @@ void SoccerBot::setupServer() {
 	server->start();
 }
 
+void SoccerBot::setupCommunication() {
+	com = new Communication();
+	com->start();
+}
+
 void SoccerBot::addController(std::string name, Controller* controller) {
     controllers[name] = controller;
 }
@@ -430,6 +438,18 @@ void SoccerBot::handleSetController(Command::Parameters parameters) {
 	} else {
 		std::cout << "- Failed setting controller to '" << name << "'" << std::endl;
 	}
+}
+
+void SoccerBot::handleCommunicationMessages() {
+	std::string message;
+
+	while ((message = com->popLastMessage()) != "") {
+		handleCommunicationMessage(message);
+	}
+}
+
+void SoccerBot::handleCommunicationMessage(std::string message) {
+	std::cout << "< COM: " << message << std::endl;
 }
 
 std::string SoccerBot::getStateJSON() {
