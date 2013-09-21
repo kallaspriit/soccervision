@@ -53,13 +53,17 @@ void* Communication::run() {
 	running = true;
 
 	while (running) {
-		messageLength = socket->receive_from(boost::asio::buffer(message, 1024), endpoint);
-		std::cout << "< ";
-		std::cout.write(message, messageLength);
-		std::cout << "\n";
+		try {
+			messageLength = socket->receive_from(boost::asio::buffer(message, 1024), endpoint);
+			std::cout << "< ";
+			std::cout.write(message, messageLength);
+			std::cout << "\n";
 
-		boost::mutex::scoped_lock lock(messagesMutex);
-		messages.push(message);
+			boost::mutex::scoped_lock lock(messagesMutex);
+			messages.push(message);
+		} catch (std::exception& e) {
+			std::cout << "- Communicatio error: " << e.what() << std::endl;
+		}
 	}
 
 	return NULL;

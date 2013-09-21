@@ -1,5 +1,5 @@
 // memory leak detection
-#ifdef _DEBUG
+/*#ifdef _DEBUG
 	#define _CRTDBG_MAP_ALLOC
 	#include <stdlib.h>
 	#include <crtdbg.h>
@@ -7,14 +7,14 @@
 		#define DBG_NEW new ( _NORMAL_BLOCK , __FILE__ , __LINE__ )
 		#define new DBG_NEW
 	#endif
-#endif
+#endif*/
 
 #include "SoccerBot.h"
 
 #include <iostream>
 
 int main(int argc, char* argv[]) {
-	#ifdef _DEBUG
+	/*#ifdef _DEBUG
 		std::cout << "! Memory leak detection is enabled" << std::endl;
 		_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 		_CrtSetReportMode(_CRT_WARN, _CRTDBG_MODE_FILE);
@@ -23,7 +23,7 @@ int main(int argc, char* argv[]) {
 		_CrtSetReportFile(_CRT_ERROR, _CRTDBG_FILE_STDOUT);
 		_CrtSetReportMode(_CRT_ASSERT, _CRTDBG_MODE_FILE);
 		_CrtSetReportFile(_CRT_ASSERT, _CRTDBG_FILE_STDOUT);
-	#endif
+	#endif*/
 
 	bool showGui = false;
 
