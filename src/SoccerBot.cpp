@@ -454,6 +454,7 @@ void SoccerBot::handleCommunicationMessages() {
 	}
 
 	com->send("speeds:0:0:0:" + Util::toString(t) + ":0");
+	com->send(x > 0 ? "target:0" : "target:1");
 
 	std::string message;
 
