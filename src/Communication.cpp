@@ -26,6 +26,8 @@ void Communication::send(std::string message) {
 
 	//socket->send_to(boost::asio::buffer(message), *iterator);
 
+	std::cout << "@ SENDING: " << message << std::endl;
+
 	udp::resolver resolver(ioService);
 	udp::resolver::query query(udp::v4(), host, Util::toString(port));
 	iterator = resolver.resolve(query);
@@ -95,6 +97,8 @@ void Communication::start() {
 }
 
 void Communication::receiveNext() {
+	std::cout << "@ RECEIVING NEXT" << std::endl;
+
 	try {
 		socket->async_receive_from(
 			boost::asio::buffer(message, 1024), endpoint,
@@ -111,8 +115,10 @@ void Communication::receiveNext() {
 }
 
 void Communication::onReceive(const boost::system::error_code& error, size_t bytesReceived) {
+	std::cout << "@ onReceive: " << bytesReceived << ", " << error << std::endl;
+
 	if (!error && bytesReceived > 0) {
-		std::cout << "< RECEIVED: ";
+		std::cout << "@ RECEIVED: ";
 		std::cout.write(message, bytesReceived);
 		std::cout << "\n";
 
@@ -124,12 +130,16 @@ void Communication::onReceive(const boost::system::error_code& error, size_t byt
 }
 
 void Communication::onSend(const boost::system::error_code& error, size_t bytesSent) {
+	std::cout << "@ onSend: " << bytesSent << ", " << error << std::endl;
+
 	if (running) {
 		receiveNext();
 	}
 }
 
 void Communication::close() {
+	std::cout << "@ CLOSING COM" << std::endl;
+
 	running = false;
 
 	if (socket != NULL) {
