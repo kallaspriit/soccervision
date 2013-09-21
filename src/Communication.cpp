@@ -26,10 +26,14 @@ void Communication::send(std::string message) {
 
 	//socket->send_to(boost::asio::buffer(message), *iterator);
 
+	udp::resolver resolver(ioService);
+	udp::resolver::query query(udp::v4(), host, Util::toString(port));
+	iterator = resolver.resolve(query);
+
 	try {
 		socket->async_send_to(
-			  boost::asio::buffer(message), *iterator,
-			  boost::bind(
+			boost::asio::buffer(message), *iterator,
+			boost::bind(
 				&Communication::onSend,
 				this,
 				boost::asio::placeholders::error,
@@ -64,17 +68,11 @@ std::string Communication::popLastMessage() {
 void Communication::start() {
 	std::cout << "! Starting communication socket connection to " << host << ":" << port << std::endl;
 
-	boost::asio::io_service ioService;
-	
+	running = true;
+
 	socket = new udp::socket(ioService, udp::endpoint(udp::v4(), 0));
 
-	udp::resolver resolver(ioService);
-	udp::resolver::query query(udp::v4(), host, Util::toString(port));
-	iterator = resolver.resolve(query);
-
 	//size_t messageLength;
-
-	running = true;
 
 	receiveNext();
 
