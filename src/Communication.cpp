@@ -59,6 +59,9 @@ void* Communication::run() {
 
 	while (running) {
 		try {
+			// TODO Remove test
+			socket->send_to(boost::asio::buffer("gs"), *iterator);
+
 			messageLength = socket->receive_from(boost::asio::buffer(message, 1024), endpoint);
 			std::cout << "< ";
 			std::cout.write(message, messageLength);
