@@ -5,8 +5,12 @@ Communication::Communication(std::string host, std::string port) : host(host), p
 }
 
 Communication::~Communication() {
+	std::cout << "! Closing communication link.. ";
+
 	close();
 	join();
+
+	std::cout << "done!" << std::endl;
 
 	if (socket != NULL) delete socket; socket = NULL;
 }

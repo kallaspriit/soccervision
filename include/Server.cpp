@@ -11,8 +11,12 @@ Server::Server() : ws(NULL) {
 }
 
 Server::~Server() {
+	std::cout << "! Closing web socket server.. ";
+
 	close();
 	join();
+
+	std::cout << "done!" << std::endl;
 
 	Client* client;
 
