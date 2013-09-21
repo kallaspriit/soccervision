@@ -74,8 +74,6 @@ void Communication::start() {
 
 	socket = new udp::socket(ioService, udp::endpoint(udp::v4(), port));
 
-	send("gs"); // TODO Remove
-
 	receiveNext();
 
 	ioService.run();
@@ -83,6 +81,8 @@ void Communication::start() {
 
 void Communication::receiveNext() {
 	std::cout << "@ RECEIVING NEXT" << std::endl;
+
+	send("gs"); // TODO Remove
 
 	try {
 		socket->async_receive_from(
