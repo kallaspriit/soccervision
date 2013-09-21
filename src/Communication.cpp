@@ -74,6 +74,8 @@ void Communication::start() {
 
 	socket = new udp::socket(ioService, udp::endpoint(udp::v4(), port));
 
+	send("gs"); // TODO Remove
+
 	receiveNext();
 
 	ioService.run();
