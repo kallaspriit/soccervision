@@ -66,7 +66,7 @@ void* Communication::run() {
 			boost::mutex::scoped_lock lock(messagesMutex);
 			messages.push(message);
 		} catch (std::exception& e) {
-			std::cout << "- Communicatio error: " << e.what() << std::endl;
+			std::cout << "- Communication receive error: " << e.what() << std::endl;
 		}
 	}
 
@@ -75,7 +75,11 @@ void* Communication::run() {
 
 void Communication::close() {
 	if (socket != NULL) {
-		socket->close();
+		try {
+			socket->close();
+		} catch (std::exception& e) {
+			std::cout << "- Communication close error: " << e.what() << std::endl;
+		}
 	}
 
 	running = false;
