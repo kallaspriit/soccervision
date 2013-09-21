@@ -34,7 +34,7 @@ void Communication::send(std::string message) {
 
 	try {
 		socket->async_send_to(
-			boost::asio::buffer(message + "\r\n"), *iterator,
+			boost::asio::buffer(message + "\n"), *iterator,
 			boost::bind(
 				&Communication::onSend,
 				this,
@@ -74,12 +74,14 @@ void Communication::start() {
 
 	socket = new udp::socket(ioService, udp::endpoint(udp::v4(), port));
 
-	send("gs"); // TODO Remove test
-
 	receiveNext();
+
+	ioService.run();
 }
 
 void Communication::receiveNext() {
+	send("gs"); // TODO Remove test
+
 	std::cout << "@ RECEIVING NEXT" << std::endl;
 
 	try {
