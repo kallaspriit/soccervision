@@ -54,6 +54,7 @@
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>include;$(BOOSTROOT);$(XIMEAROOT)\API;$(WEBSOCKETPPROOT);lib\libyuv\include;lib\pthread\include;lib\websocketpp;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;NOMINMAX;WIN32;_WIN32_WINNT=0x0601;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
