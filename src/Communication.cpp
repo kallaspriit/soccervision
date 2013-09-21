@@ -45,6 +45,8 @@ void Communication::send(std::string message) {
 	} catch (std::exception& e) {
 		std::cout << "- Communication send error: " << e.what() << std::endl;
 	}
+
+	receiveNext();
 }
 
 bool Communication::gotMessages() {
@@ -81,8 +83,6 @@ void Communication::start() {
 
 void Communication::receiveNext() {
 	std::cout << "@ RECEIVING NEXT" << std::endl;
-
-	send("gs"); // TODO Remove
 
 	try {
 		socket->async_receive_from(
