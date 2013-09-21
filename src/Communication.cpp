@@ -11,7 +11,6 @@ Communication::~Communication() {
 	std::cout << "! Closing communication link.. ";
 
 	close();
-	join();
 
 	std::cout << "done!" << std::endl;
 
@@ -19,17 +18,27 @@ Communication::~Communication() {
 }
 
 void Communication::send(std::string message) {
+	if (!running) {
+		std::cout << "- Unable to send communication message '" << message << "', connection not open" << std::endl;
+
+		return;
+	}
+
 	//socket->send_to(boost::asio::buffer(message), *iterator);
 
-	socket->async_send_to(
-          boost::asio::buffer(message), *iterator,
-          boost::bind(
-			&Communication::onSend,
-			this,
-            boost::asio::placeholders::error,
-            boost::asio::placeholders::bytes_transferred
-		)
-	);
+	try {
+		socket->async_send_to(
+			  boost::asio::buffer(message), *iterator,
+			  boost::bind(
+				&Communication::onSend,
+				this,
+				boost::asio::placeholders::error,
+				boost::asio::placeholders::bytes_transferred
+			)
+		);
+	} catch (std::exception& e) {
+		std::cout << "- Communication send error: " << e.what() << std::endl;
+	}
 }
 
 bool Communication::gotMessages() {
@@ -52,7 +61,7 @@ std::string Communication::popLastMessage() {
 	return message;
 }
 
-void* Communication::run() {
+void Communication::start() {
 	std::cout << "! Starting communication socket connection to " << host << ":" << port << std::endl;
 
 	boost::asio::io_service ioService;
@@ -85,20 +94,22 @@ void* Communication::run() {
 			std::cout << "- Communication receive error: " << e.what() << std::endl;
 		}
 	}*/
-
-	return NULL;
 }
 
 void Communication::receiveNext() {
-	socket->async_receive_from(
-        boost::asio::buffer(message, 1024), endpoint,
-        boost::bind(
-			&Communication::onReceive,
-			this,
-			boost::asio::placeholders::error,
-			boost::asio::placeholders::bytes_transferred
-		)
-	);
+	try {
+		socket->async_receive_from(
+			boost::asio::buffer(message, 1024), endpoint,
+			boost::bind(
+				&Communication::onReceive,
+				this,
+				boost::asio::placeholders::error,
+				boost::asio::placeholders::bytes_transferred
+			)
+		);
+	} catch (std::exception& e) {
+		std::cout << "- Communication receive error: " << e.what() << std::endl;
+	}
 }
 
 void Communication::onReceive(const boost::system::error_code& error, size_t bytesReceived) {

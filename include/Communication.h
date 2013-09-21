@@ -1,8 +1,6 @@
 #ifndef COMMUNICATION_H
 #define COMMUNICATION_H
 
-#include "Thread.h"
-
 #include <boost/thread/mutex.hpp>
 #include <boost/asio.hpp>
 #include <string>
@@ -10,7 +8,7 @@
 
 using boost::asio::ip::udp;
 
-class Communication : public Thread {
+class Communication {
 
 public:
 	typedef std::stack<std::string> Messages;
@@ -21,10 +19,10 @@ public:
 	void send(std::string message);
 	bool gotMessages();
 	std::string popLastMessage();
+	void start();
 	void close();
 
 private:
-	void* run();
 	void onReceive(const boost::system::error_code& error, size_t bytesReceived);
 	void onSend(const boost::system::error_code& error, size_t bytesSent);
 	void receiveNext();
