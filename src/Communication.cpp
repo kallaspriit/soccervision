@@ -11,6 +11,7 @@ Communication::~Communication() {
 	std::cout << "! Closing communication link.. ";
 
 	close();
+	join();
 
 	std::cout << "done!" << std::endl;
 
