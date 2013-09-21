@@ -43,6 +43,8 @@ public:
 	void handleGetController(Server::Message* message);
 	void handleSetController(Command::Parameters parameters);
 
+	std::string getStateJSON();
+
 	bool debugVision;
 	bool showGui;
 
@@ -69,6 +71,11 @@ private:
 
 	bool controllerRequested;
 	bool running;
+	bool playing;
+	Side targetSide;
+	float dt;
+	float lastStepTime;
+	float totalTime;
 
 };
 

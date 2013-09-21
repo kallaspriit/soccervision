@@ -128,10 +128,10 @@ std::string Util::base64Encode(const unsigned char* data, unsigned int length) {
     jpge::compress_image_to_jpeg_file_in_memory(output, bufferSize, width, height, channelCount, input);
 }*/
 
-double Util::millitime() {
+float Util::millitime() {
 	//return (double)GetTickCount() / 1000.0;
 	//return ((double)clock() / (double)CLOCKS_PER_SEC);
-	return timeGetTime() / 1000.0;
+	return (float)timeGetTime() / 1000.0f;
 
 	//return time(0) * 1000.0;
 
@@ -151,12 +151,8 @@ double Util::millitime() {
     //return mtime / 1000;
 }
 
-double Util::duration(double start) {
-    double diff = Util::millitime() - start;
-
-    //std::cout << "diff:" << diff << "\n";
-
-    return diff;
+float Util::duration(float start) {
+    return Util::millitime() - start;
 }
 
 float Util::signum(float value) {

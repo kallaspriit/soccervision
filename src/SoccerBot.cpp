@@ -8,6 +8,8 @@
 #include "Config.h"
 #include "Util.h"
 #include "Robot.h"
+#include "Dribbler.h"
+#include "Wheel.h"
 #include "ManualController.h"
 
 #include <iostream>
@@ -18,7 +20,9 @@ SoccerBot::SoccerBot() :
 	frontVision(NULL), rearVision(NULL),
 	frontProcessor(NULL), rearProcessor(NULL),
 	gui(NULL), fpsCounter(NULL), visionResults(NULL), robot(NULL), activeController(NULL), server(NULL),
-	running(false), debugVision(false), showGui(false), controllerRequested(false)
+	running(false), playing(false), debugVision(false), showGui(false), controllerRequested(false),
+	dt(0.01666f), lastStepTime(0.0f), totalTime(0.0f),
+	targetSide(Side::UNKNOWN)
 {
 
 }
@@ -93,9 +97,20 @@ void SoccerBot::run() {
 	}
 
 	bool gotFrontFrame, gotRearFrame;
+	float time;
 
 	while (running) {
 		//__int64 startTime = Util::timerStart();
+
+		time = Util::millitime();
+
+		if (lastStepTime != 0.0f) {
+			dt = lastStepTime - time;
+		} else {
+			dt = 1.0f / 60.0f;
+		}
+
+		totalTime += dt;
 
 		handleServerMessages();
 
@@ -170,6 +185,12 @@ void SoccerBot::run() {
 		if (SignalHandler::exitRequested) {
 			running = false;
 		}
+
+		if (server != NULL) {
+			server->broadcast(Util::json("state", getStateJSON()));
+		}
+
+		lastStepTime = time;
 
 		//std::cout << "! Total time: " << Util::timerEnd(startTime) << std::endl;
 	}
@@ -409,4 +430,193 @@ void SoccerBot::handleSetController(Command::Parameters parameters) {
 	} else {
 		std::cout << "- Failed setting controller to '" << name << "'" << std::endl;
 	}
+}
+
+std::string SoccerBot::getStateJSON() {
+	std::stringstream stream;
+
+    Math::Position pos = robot->getPosition();
+
+    stream << "{";
+
+    // general robot info
+    stream << "\"x\":" << pos.x << ",";
+    stream << "\"y\":" << pos.y << ",";
+    stream << "\"orientation\":" << pos.orientation << ",";
+    stream << "\"dt\":" << dt << ",";
+    //stream << "\"load\":" << lastStepLoad << ",";
+    //stream << "\"duration\":" << lastStepDuration << ",";
+	//stream << "\"isError\":" << (infoBoard->isError() ? "true" : "false") << ",";
+	//stream << "\"isViewObstructed\":" << (vision->isViewObstructed() ? "true" : "false") << ",";
+	//stream << "\"robotInWay\":" << vision->getRobotInWay() << ",";
+    stream << "\"totalTime\":" << totalTime << ",";
+	stream << "\"gotBall\":" << robot->getDribbler()->gotBall() << ",";
+
+    // wheels
+    stream << "\"wheelFL\": {";
+	stream << "\"stalled\":" << (robot->getWheelFL()->isStalled() ? "true" : "false") << ",";
+    stream << "\"targetOmega\":" << robot->getWheelFL()->getTargetOmega() << ",";
+    stream << "\"realOmega\":" << robot->getWheelFL()->getRealOmega();
+    stream << "},";
+
+    // front right wheel
+    stream << "\"wheelFR\": {";
+	stream << "\"stalled\":" << (robot->getWheelFR()->isStalled() ? "true" : "false") << ",";
+    stream << "\"targetOmega\":" << robot->getWheelFR()->getTargetOmega() << ",";
+    stream << "\"realOmega\":" << robot->getWheelFR()->getRealOmega();
+    stream << "},";
+
+    // rear left wheel
+    stream << "\"wheelRL\": {";
+	stream << "\"stalled\":" << (robot->getWheelRL()->isStalled() ? "true" : "false") << ",";
+    stream << "\"targetOmega\":" << robot->getWheelRL()->getTargetOmega() << ",";
+    stream << "\"realOmega\":" << robot->getWheelRL()->getRealOmega();
+    stream << "},";
+
+    // rear right wheel
+    stream << "\"wheelRR\": {";
+	stream << "\"stalled\":" << (robot->getWheelRR()->isStalled() ? "true" : "false") << ",";
+    stream << "\"targetOmega\":" << robot->getWheelRR()->getTargetOmega() << ",";
+    stream << "\"realOmega\":" << robot->getWheelRR()->getRealOmega();
+    stream << "},";
+
+    // tasks
+    stream << "\"tasks\": [";
+
+    TaskQueue tasks = robot->getTasks();
+    bool first = true;
+
+    for (TaskQueueIt it = tasks.begin(); it != tasks.end(); it++) {
+        Task* task = *it;
+
+        if (!first) {
+            stream << ",";
+        } else {
+            first = false;
+        }
+
+        stream << "{";
+        stream << "\"started\": " << (task->isStarted() ? "true" : "false") << ",";
+        stream << "\"percentage\": " << task->getPercentage() << ",";
+        stream << "\"status\": \"" << task->toString() << "\"";
+        stream << "}";
+    }
+
+    stream << "],";
+
+	/*
+	// balls
+	ObjectList* balls = NULL;
+	ObjectList frontBalls = vision->getFrontBalls();
+	ObjectList rearBalls = vision->getRearBalls();
+	Object* ball;
+
+	first = true;
+
+	stream << "\"balls\": [";
+
+	for (int i = 0; i < 2; i++) {
+		balls = i == 0 ? &frontBalls : &rearBalls;
+
+		for (ObjectListItc it = balls->begin(); it != balls->end(); it++) {
+			ball = *it;
+
+			if (!first) {
+				stream << ",";
+			} else {
+				first = false;
+			}
+
+			stream << "{";
+			stream << "\"x\": " << ball->x << ",";
+			stream << "\"y\": " << ball->y << ",";
+			stream << "\"width\": " << ball->width << ",";
+			stream << "\"height\": " << ball->height << ",";
+			stream << "\"distance\": " << ball->distance << ",";
+			stream << "\"angle\": " << ball->angle << ",";
+			stream << "\"camera\": \"" << (i == 0 ? "front" : "rear") << "\"";
+			stream << "}";
+		}
+	}
+
+	stream << "],";
+
+	// goals
+	ObjectList* goals = NULL;
+	ObjectList frontGoals = vision->getFrontGoals();
+	ObjectList rearGoals = vision->getRearGoals();
+	Object* goal;
+
+	first = true;
+
+	stream << "\"goals\": [";
+
+	for (int i = 0; i < 2; i++) {
+		goals = i == 0 ? &frontGoals : &rearGoals;
+		
+		for (ObjectListItc it = goals->begin(); it != goals->end(); it++) {
+			goal = *it;
+
+			if (!first) {
+				stream << ",";
+			} else {
+				first = false;
+			}
+
+			stream << "{";
+			stream << "\"x\": " << goal->x << ",";
+			stream << "\"y\": " << goal->y << ",";
+			stream << "\"width\": " << goal->width << ",";
+			stream << "\"height\": " << goal->height << ",";
+			stream << "\"distance\": " << goal->distance << ",";
+			stream << "\"angle\": " << goal->angle << ",";
+			stream << "\"camera\": \"" << (i == 0 ? "front" : "rear") << "\"";
+			stream << "}";
+		}
+	}
+
+	stream << "],";
+	*/
+
+	/*
+	stream << "\"measurements\": {";
+
+	const Measurements measurements = robot->getMeasurements();
+
+	first = true;
+
+	for (Measurements::const_iterator it = measurements.begin(); it != measurements.end(); it++) {
+		if (!first) {
+			stream << ",";
+		} else {
+			first = false;
+		}
+
+		stream << "\"" + it->first + "\": \"" + Util::toString(it->second) + "\"";
+	}
+
+	stream << "},";
+	*/
+
+	if (activeController != NULL) {
+		stream << "\"controllerName\": \"" + activeControllerName + "\",";
+		std::string controllerInfo = activeController->getJSON();
+
+		if (controllerInfo.length() > 0) {
+			stream << "\"controllerState\": " << controllerInfo << ",";
+		} else {
+			stream << "\"controllerState\": null,";
+		}
+	} else {
+		stream << "\"controllerName\": null,";
+		stream << "\"controllerState\": null,";
+	}
+
+	stream << "\"fps\":" << fpsCounter->getFps()  << ",";
+	stream << "\"targetGoal\":" << targetSide << ",";
+	stream << "\"playing\":" << (playing ? "1" : "0");
+
+    stream << "}";
+
+    return stream.str();
 }
