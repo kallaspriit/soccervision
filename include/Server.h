@@ -38,6 +38,7 @@ public:
 	void setPort(int port);
 	void broadcast(std::string message);
 	void send(websocketpp::connection_hdl connection, std::string message) { ws->send(connection, message); }
+	void close();
 	bool gotMessages();
 	Message* popLastMessage();
 	Client* getClientByConnection(websocketpp::connection_hdl connection);

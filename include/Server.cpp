@@ -11,7 +11,8 @@ Server::Server() : ws(NULL) {
 }
 
 Server::~Server() {
-	ws->stop();
+	close();
+	join();
 
 	Client* client;
 
@@ -45,6 +46,12 @@ void Server::setPort(int port) {
 
 void Server::broadcast(std::string message) {
 	ws->broadcast(message);
+}
+
+void Server::close() {
+	if (ws != NULL) {
+		ws->stop();
+	}
 }
 
 bool Server::gotMessages() {

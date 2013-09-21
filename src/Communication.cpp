@@ -1,15 +1,18 @@
 #include "Communication.h"
 
-#include <boost/asio.hpp>
-
-using boost::asio::ip::udp;
-
-Communication::Communication(std::string host, std::string port) : host(host), port(port) {
+Communication::Communication(std::string host, std::string port) : host(host), port(port), running(false), socket(NULL) {
 
 }
 
 Communication::~Communication() {
+	close();
+	join();
 
+	if (socket != NULL) delete socket; socket = NULL;
+}
+
+void Communication::send(std::string message) {
+	socket->send_to(boost::asio::buffer(message), *iterator);
 }
 
 bool Communication::gotMessages() {
@@ -37,23 +40,20 @@ void* Communication::run() {
 
 	boost::asio::io_service ioService;
 	
-	udp::socket socket(ioService, udp::endpoint(udp::v4(), 0));
+	socket = new udp::socket(ioService, udp::endpoint(udp::v4(), 0));
 
 	udp::resolver resolver(ioService);
 	udp::resolver::query query(udp::v4(), host, port);
-	udp::resolver::iterator iterator = resolver.resolve(query);
+	iterator = resolver.resolve(query);
 
 	size_t messageLength;
 	udp::endpoint endpoint;
 	char message[1024];
 
-	while (true) {
-		/*std::cout << "> ";
-		std::cin.getline(request, 1024);
-		size_t requestLength = strlen(request);
-		socket.send_to(boost::asio::buffer(request, requestLength), *iterator);*/
+	running = true;
 
-		messageLength = socket.receive_from(boost::asio::buffer(message, 1024), endpoint);
+	while (running) {
+		messageLength = socket->receive_from(boost::asio::buffer(message, 1024), endpoint);
 		std::cout << "< ";
 		std::cout.write(message, messageLength);
 		std::cout << "\n";
