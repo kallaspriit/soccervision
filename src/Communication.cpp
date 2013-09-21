@@ -1,6 +1,7 @@
 #include "Communication.h"
+#include "Util.h"
 
-Communication::Communication(std::string host, std::string port) : host(host), port(port), running(false), socket(NULL) {
+Communication::Communication(std::string host, int port) : host(host), port(port), running(false), socket(NULL) {
 
 }
 
@@ -44,10 +45,10 @@ void* Communication::run() {
 
 	boost::asio::io_service ioService;
 	
-	socket = new udp::socket(ioService, udp::endpoint(udp::v4(), 0));
+	socket = new udp::socket(ioService, udp::endpoint(udp::v4(), port));
 
 	udp::resolver resolver(ioService);
-	udp::resolver::query query(udp::v4(), host, port);
+	udp::resolver::query query(udp::v4(), host, Util::toString(port));
 	iterator = resolver.resolve(query);
 
 	size_t messageLength;
