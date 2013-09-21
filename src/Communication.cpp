@@ -78,7 +78,7 @@ std::string Communication::popLastMessage() {
 	return message;
 }
 
-void Communication::start() {
+void* Communication::run() {
 	std::cout << "! Starting communication socket connection to " << host << ":" << port << std::endl;
 
 	running = true;
@@ -88,6 +88,8 @@ void Communication::start() {
 	receiveNext();
 
 	ioService.run();
+
+	return NULL;
 }
 
 void Communication::receiveNext() {
