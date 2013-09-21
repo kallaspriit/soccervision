@@ -34,7 +34,7 @@ void Communication::send(std::string message) {
 
 	try {
 		socket->async_send_to(
-			boost::asio::buffer(message + "\n"), *iterator,
+			boost::asio::buffer(message + "\n\r"), *iterator,
 			boost::bind(
 				&Communication::onSend,
 				this,
