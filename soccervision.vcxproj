@@ -91,6 +91,7 @@
     <ClInclude Include="include\Blobber.h" />
     <ClInclude Include="include\Coilgun.h" />
     <ClInclude Include="include\Command.h" />
+    <ClInclude Include="include\Communication.h" />
     <ClInclude Include="include\Config.h" />
     <ClInclude Include="include\Controller.h" />
     <ClInclude Include="include\DebugRenderer.h" />
@@ -166,6 +167,7 @@
     <ClCompile Include="src\Blobber.cpp" />
     <ClCompile Include="src\Coilgun.cpp" />
     <ClCompile Include="src\Command.cpp" />
+    <ClCompile Include="src\Communication.cpp" />
     <ClCompile Include="src\DebugRenderer.cpp" />
     <ClCompile Include="src\Dribbler.cpp" />
     <ClCompile Include="src\FpsCounter.cpp" />
