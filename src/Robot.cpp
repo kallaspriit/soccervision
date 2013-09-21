@@ -162,7 +162,7 @@ void Robot::step(float dt, Vision::Results* visionResults) {
 
         stop();
 
-        lastCommandTime = -1;
+        lastCommandTime = -1.0f;
     }
 
 	frameTargetSpeedSet = false;

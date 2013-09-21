@@ -80,9 +80,9 @@ private:
 	float velocity;
 	float lastVelocity;
 
-	double lastCommandTime;
+	float lastCommandTime;
     float lastDt;
-    double totalTime;
+    float totalTime;
 	bool coilgunCharged;
 	bool autostop;
 
