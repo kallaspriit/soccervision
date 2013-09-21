@@ -9,6 +9,10 @@ namespace Config {
 	const int frontCameraSerial = 857735761;
 	const int rearCameraSerial = 857769553;
 
+	// ethernet communication host and port
+	const std::string communicationHost = "192.168.4.1";
+	const int communicationPort = 8042;
+
 	// camera resolution
 	const int cameraWidth = 1280;
 	const int cameraHeight = 1024;

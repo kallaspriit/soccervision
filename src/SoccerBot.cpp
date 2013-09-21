@@ -340,7 +340,7 @@ void SoccerBot::setupServer() {
 }
 
 void SoccerBot::setupCommunication() {
-	com = new Communication();
+	com = new Communication(Config::communicationHost, Config::communicationPort);
 	com->start();
 }
 
