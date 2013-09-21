@@ -85,8 +85,6 @@ void* Communication::run() {
 }
 
 void Communication::receiveNext() {
-	//std::cout << "@ RECEIVING NEXT" << std::endl;
-
 	try {
 		socket->async_receive_from(
 			boost::asio::buffer(message, 1024), endpoint,
@@ -103,13 +101,7 @@ void Communication::receiveNext() {
 }
 
 void Communication::onReceive(const boost::system::error_code& error, size_t bytesReceived) {
-	//std::cout << "@ onReceive: " << bytesReceived << ", " << error << std::endl;
-
 	if (!error && bytesReceived > 0) {
-		std::cout << "@ RECEIVED: ";
-		std::cout.write(message, bytesReceived);
-		std::cout << "\n";
-
 		boost::mutex::scoped_lock lock(messagesMutex);
 		messages.push(std::string(message, bytesReceived));
 	}
@@ -120,8 +112,6 @@ void Communication::onReceive(const boost::system::error_code& error, size_t byt
 }
 
 void Communication::onSend(const boost::system::error_code& error, size_t bytesSent) {
-	//std::cout << "@ onSend: " << bytesSent << ", " << error << std::endl;
-
 	if (running) {
 		receiveNext();
 	}
