@@ -272,7 +272,7 @@ void Robot::jumpAngle(float angle, float speed) {
 	addTask(new JumpAngleTask(angle, speed));
 }
 
-void Robot::setTargetDirFor(float x, float y, float omega, double duration) {
+void Robot::setTargetDirFor(float x, float y, float omega, float duration) {
 	addTask(new DriveForTask(x, y, omega, duration));
 }
 

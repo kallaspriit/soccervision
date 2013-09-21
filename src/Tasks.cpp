@@ -10,7 +10,7 @@ void TurnByTask::onStart(Robot& robot, float dt) {
 	targetAngle = Math::floatModulus(startAngle + turnAngle, Math::TWO_PI);
 	dir = turnAngle < 0.0f ? -1.0f : 1.0f;
 	startTime = -1;
-	maxTurnTime = (double)Math::abs(turnAngle / speed) * 1.5;
+	maxTurnTime = Math::abs(turnAngle / speed) * 1.5;
 	diff = -1;
 }
 
@@ -492,7 +492,7 @@ float DriveForTask::getPercentage() {
         return 0.0f;
     }
 
-	double timeRemaining = endTime - currentTime;
+	float timeRemaining = endTime - currentTime;
 
 	return (float)(100.0 - (timeRemaining * 100.0 / duration));
 }

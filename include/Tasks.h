@@ -43,8 +43,8 @@ class TurnByTask : public Task {
         float targetAngle;
         float diff;
 		float dir;
-		double startTime;
-		double maxTurnTime;
+		float startTime;
+		float maxTurnTime;
 };
 
 class DriveToTask : public Task {
@@ -136,7 +136,7 @@ class StopRotationTask : public Task {
 		float startOmega;
 		float currentOmega;
 		float diff;
-		double startTime;
+		float startTime;
 };
 
 class JumpAngleTask : public Task {
@@ -161,7 +161,7 @@ class JumpAngleTask : public Task {
 
 class DriveForTask : public Task {
     public:
-        DriveForTask(float x, float y, float omega, double duration) : Task(), x(x), y(y), omega(omega), duration(duration) {}
+        DriveForTask(float x, float y, float omega, float duration) : Task(), x(x), y(y), omega(omega), duration(duration) {}
 
 		void setOmega(float newOmega) { omega = newOmega; }
 
@@ -173,13 +173,13 @@ class DriveForTask : public Task {
         std::string toString();
 
 	private:
-		double duration;
+		float duration;
 		float x;
 		float y;
 		float omega;
-		double startTime;
-		double endTime;
-		double currentTime;
+		float startTime;
+		float endTime;
+		float currentTime;
 };
 
 typedef std::deque<Task*> TaskQueue;
