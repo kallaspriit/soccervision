@@ -55,7 +55,7 @@ public:
     void drivePath(const Math::PositionQueue positions, float speed = 1.0f);
 	void stopRotation();
 	void jumpAngle(float angle = 0.35f, float speed = 13.0f);
-	void setTargetDirFor(float x, float y, float omega, double duration);
+	void setTargetDirFor(float x, float y, float omega, float duration);
 
     void addTask(Task* task) { tasks.push_back(task); }
     Task* getCurrentTask();
