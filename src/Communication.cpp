@@ -72,7 +72,7 @@ void Communication::start() {
 
 	running = true;
 
-	socket = new udp::socket(ioService, udp::endpoint(udp::v4(), 0));
+	socket = new udp::socket(ioService, udp::endpoint(udp::v4(), port));
 
 	//size_t messageLength;
 
