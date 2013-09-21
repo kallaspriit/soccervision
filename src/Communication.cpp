@@ -85,7 +85,7 @@ void* Communication::run() {
 }
 
 void Communication::receiveNext() {
-	std::cout << "@ RECEIVING NEXT" << std::endl;
+	//std::cout << "@ RECEIVING NEXT" << std::endl;
 
 	try {
 		socket->async_receive_from(
@@ -103,7 +103,7 @@ void Communication::receiveNext() {
 }
 
 void Communication::onReceive(const boost::system::error_code& error, size_t bytesReceived) {
-	std::cout << "@ onReceive: " << bytesReceived << ", " << error << std::endl;
+	//std::cout << "@ onReceive: " << bytesReceived << ", " << error << std::endl;
 
 	if (!error && bytesReceived > 0) {
 		std::cout << "@ RECEIVED: ";
@@ -120,7 +120,7 @@ void Communication::onReceive(const boost::system::error_code& error, size_t byt
 }
 
 void Communication::onSend(const boost::system::error_code& error, size_t bytesSent) {
-	std::cout << "@ onSend: " << bytesSent << ", " << error << std::endl;
+	//std::cout << "@ onSend: " << bytesSent << ", " << error << std::endl;
 
 	if (running) {
 		receiveNext();
