@@ -442,6 +442,8 @@ void SoccerBot::handleSetController(Command::Parameters parameters) {
 }
 
 void SoccerBot::handleCommunicationMessages() {
+	com->send("gs"); // TODO Remove test
+
 	std::string message;
 
 	while ((message = com->popLastMessage()) != "") {
