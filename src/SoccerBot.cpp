@@ -57,7 +57,6 @@ SoccerBot::~SoccerBot() {
 }
 
 void SoccerBot::setup() {
-	setupCommunication();
 	setupVision();
 	setupProcessors();
 	setupFpsCounter();
@@ -70,6 +69,8 @@ void SoccerBot::setup() {
 	if (showGui) {
 		setupGui();
 	}
+
+	setupCommunication();
 }
 
 void SoccerBot::run() {
@@ -443,6 +444,16 @@ void SoccerBot::handleSetController(Command::Parameters parameters) {
 
 void SoccerBot::handleCommunicationMessages() {
 	com->send("gs"); // TODO Remove test
+
+	if (x == 0) x = 1;
+
+	t += x;
+
+	if (Math::abs(t) >= 255) {
+		x *= -1;
+	}
+
+	com->send("<speeds:0:0:" + Util::toString(t) + ":0:0");
 
 	std::string message;
 

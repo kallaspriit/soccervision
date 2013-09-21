@@ -83,6 +83,8 @@ private:
 	float lastStepTime;
 	float totalTime;
 
+	int t;
+	int x;
 };
 
 #endif // SOCCERBOT_H
