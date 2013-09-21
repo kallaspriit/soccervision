@@ -82,6 +82,8 @@ void Communication::start() {
 void Communication::receiveNext() {
 	std::cout << "@ RECEIVING NEXT" << std::endl;
 
+	send("gs");
+
 	try {
 		socket->async_receive_from(
 			boost::asio::buffer(message, 1024), endpoint,
