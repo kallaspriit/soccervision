@@ -268,7 +268,7 @@ void Util::confineField(float& x, float& y) {
 std::string Util::json(std::string id, std::string payload) {
 	if (payload == "" || payload == "null") {
 		payload = "null";
-	} else {
+	} else if (payload.substr(0, 1) != "{" && payload.substr(0, 1) != "[") {
 		payload = "\"" + payload + "\"";
 	}
 
