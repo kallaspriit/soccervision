@@ -100,7 +100,7 @@ void Robot::setupLocalizer() {
 void Robot::step(float dt, Vision::Results* visionResults) {
 	this->visionResults = visionResults;
 
-	com->send("gs");
+	//com->send("gs");
 
     lastDt = dt;
     totalTime += dt;
