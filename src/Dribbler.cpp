@@ -41,10 +41,11 @@ void Dribbler::step(float dt) {
 bool Dribbler::gotBall() const {
 	//return ballDetected;
 
-	if (
-		ballInDribblerTime >= Config::ballInDribblerThreshold
-		&& ballLostTime <= Config::dribblerBallLostThreshold
-	) {
+	if (ballDetected && ballInDribblerTime >= Config::ballInDribblerThreshold) {
+		return true;
+	}
+
+	if (!ballDetected && ballLostTime <= Config::dribblerBallLostThreshold) {
 		return true;
 	}
 
