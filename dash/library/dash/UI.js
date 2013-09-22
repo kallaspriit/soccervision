@@ -868,7 +868,7 @@ Dash.UI.prototype.showState = function(index) {
 	dash.renderer.renderState(state);
 	
 	this.showTasksQueue(state);
-	//this.showStateStats(state); // @TEMP
+	this.showStateStats(state); // @TEMP
 };
 
 Dash.UI.prototype.showCurrentStateInfo = function() {
@@ -976,7 +976,8 @@ Dash.UI.prototype.showStateStats = function(state) {
 	this.showControllerState(state.controllerState);
 
 	if (
-		state.controllerState.particleLocalizer !== null
+		state.controllerState !== null
+		&& state.controllerState.particleLocalizer !== null
 		&& typeof(state.controllerState.particleLocalizer) !== 'undefined'
 		&& typeof(state.controllerState.particleLocalizer.particles) !== 'undefined'
 	) {

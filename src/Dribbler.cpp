@@ -60,8 +60,6 @@ bool Dribbler::handleCommand(const Command& cmd) {
 			ballDetected = false;
 		}
 
-		std::cout << "@ DRIBBLER BALL: " << (ballDetected ? "yes" : "no") << std::endl;
-
 		return true;
 	}
 
