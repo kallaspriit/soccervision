@@ -25,6 +25,8 @@ void Communication::send(std::string message) {
 		return;
 	}
 
+	std::cout << "> " << message << std::endl;
+
 	message += "\n";
 
 	request[message.size()] = 0;
@@ -102,6 +104,8 @@ void Communication::receiveNext() {
 
 void Communication::onReceive(const boost::system::error_code& error, size_t bytesReceived) {
 	if (!error && bytesReceived > 0) {
+		std::cout << "< " << std::string(message, bytesReceived) << std::endl;
+
 		boost::mutex::scoped_lock lock(messagesMutex);
 		messages.push(std::string(message, bytesReceived));
 	}
