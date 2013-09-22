@@ -323,7 +323,7 @@ void Gui::emitMouseWheel(int delta, DisplayWindow* win) {
 	}
 }
 
-Gui::Element::Element() : lastInteractionTime(0) {
+Gui::Element::Element() : lastInteractionTime(0.0) {
 
 }
 

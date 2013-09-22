@@ -25,7 +25,7 @@ public:
 			virtual void draw(unsigned char* image, int imageWidth = Config::cameraWidth, int imageHeight = Config::cameraHeight, bool swapRB = false) = 0;
 			virtual bool contains(int x, int y) { return false; };
 			Canvas canvas;
-			float lastInteractionTime;
+			double lastInteractionTime;
 	};
 
 	class Button : public Element {

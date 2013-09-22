@@ -492,7 +492,7 @@ float DriveForTask::getPercentage() {
         return 0.0f;
     }
 
-	float timeRemaining = endTime - currentTime;
+	double timeRemaining = endTime - currentTime;
 
 	return (float)(100.0 - (timeRemaining * 100.0 / duration));
 }

@@ -151,7 +151,7 @@ double Util::millitime() {
     //return mtime / 1000;
 }
 
-float Util::duration(float start) {
+double Util::duration(double start) {
     return Util::millitime() - start;
 }
 

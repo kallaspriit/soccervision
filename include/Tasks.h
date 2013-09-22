@@ -43,7 +43,7 @@ class TurnByTask : public Task {
         float targetAngle;
         float diff;
 		float dir;
-		float startTime;
+		double startTime;
 		float maxTurnTime;
 };
 
@@ -136,7 +136,7 @@ class StopRotationTask : public Task {
 		float startOmega;
 		float currentOmega;
 		float diff;
-		float startTime;
+		double startTime;
 };
 
 class JumpAngleTask : public Task {
@@ -177,9 +177,9 @@ class DriveForTask : public Task {
 		float x;
 		float y;
 		float omega;
-		float startTime;
-		float endTime;
-		float currentTime;
+		double startTime;
+		double endTime;
+		double currentTime;
 };
 
 typedef std::deque<Task*> TaskQueue;

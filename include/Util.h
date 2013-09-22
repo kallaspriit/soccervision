@@ -15,7 +15,7 @@ public:
     static std::string base64Encode(const unsigned char* data, unsigned int len);
     static void jpegEncode(const unsigned char* input, void* output, int &bufferSize, int width, int height, int channelCount = 3);
     static double millitime();
-    static float duration(float start);
+    static double duration(double start);
     static float signum(float value);
     static float limit(float num, float min, float max);
     static size_t strpos(const std::string& haystack, const std::string &needle);
