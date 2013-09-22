@@ -195,6 +195,12 @@ void SoccerBot::run() {
 			server->broadcast(Util::json("state", getStateJSON()));
 		}
 
+		if (activeController != NULL) {
+			activeController->step(dt, visionResults);
+		}
+
+		robot->step(dt, visionResults);
+
 		lastStepTime = time;
 
 		//std::cout << "! Total time: " << Util::timerEnd(startTime) << std::endl;
