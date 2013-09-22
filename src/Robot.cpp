@@ -100,7 +100,8 @@ void Robot::setupLocalizer() {
 void Robot::step(float dt, Vision::Results* visionResults) {
 	this->visionResults = visionResults;
 
-	//com->send("gs");
+	// request for wheel speeds
+	com->send("gs");
 
     lastDt = dt;
     totalTime += dt;
@@ -337,9 +338,11 @@ void Robot::handleCommunicationMessage(std::string message) {
 bool Robot::handleCommand(const Command& cmd) {
 	bool handled = false;
 
-	if (dribbler->handleCommand(cmd)) {
-		handled = true;
-	}
+	if (wheelFL->handleCommand(cmd)) handled = true;
+	if (wheelFR->handleCommand(cmd)) handled = true;
+	if (wheelRL->handleCommand(cmd)) handled = true;
+	if (wheelRR->handleCommand(cmd)) handled = true;
+	if (dribbler->handleCommand(cmd)) handled = true;
 
 	return handled;
 }

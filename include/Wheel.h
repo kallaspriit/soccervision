@@ -1,9 +1,11 @@
 #ifndef WHEEL_H
 #define WHEEL_H
 
+#include "Command.h"
+
 #include <string>
 
-class Wheel {
+class Wheel : public Command::Listener {
 
 public:
     Wheel(int id);
@@ -15,6 +17,7 @@ public:
 	bool isReady() const { return false; } // TODO Implement connection
 	bool isStalled();
     void step(float dt);
+	bool handleCommand(const Command& cmd);
 
     static float omegaToSpeed(float omega);
     static float speedToOmega(float speed);

@@ -189,7 +189,7 @@ Dash.Renderer.prototype.renderState = function(state) {
 	
 	//this.drawRuler();
 	
-	/*this.drawRobot(
+	this.drawRobot(
 		dash.config.robot.radius,
 		state.targetSide == 1 ? '#00F' : '#DD0',
 		state.x,
@@ -197,13 +197,14 @@ Dash.Renderer.prototype.renderState = function(state) {
 		state.orientation
 	);
 		
-	this.drawRobot(
+	/*this.drawRobot(
 		dash.config.robot.radius,
 		'#CCC',
 		-0.4,
 		0.4,
 		state.gyroOrientation
 	);*/
+
 	if (state.controllerState !== null) {
 		/*if (state.controllerState.odometerLocalizer !== null && typeof(state.controllerState.odometerLocalizer) === 'object') {
 			this.drawRobot(
@@ -268,8 +269,8 @@ Dash.Renderer.prototype.renderState = function(state) {
 
 	this.drawMarkers();
 		
-	/*this.wheelGraphs.FL.render.apply(this.wheelGraphs.FL, [state, 'wheelFL']);
+	this.wheelGraphs.FL.render.apply(this.wheelGraphs.FL, [state, 'wheelFL']);
 	this.wheelGraphs.FR.render.apply(this.wheelGraphs.FR, [state, 'wheelFR']);
 	this.wheelGraphs.RL.render.apply(this.wheelGraphs.RL, [state, 'wheelRL']);
-	this.wheelGraphs.RR.render.apply(this.wheelGraphs.RR, [state, 'wheelRR']);*/
+	this.wheelGraphs.RR.render.apply(this.wheelGraphs.RR, [state, 'wheelRR']);
 };

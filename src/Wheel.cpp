@@ -80,6 +80,17 @@ void Wheel::step(float dt) {
 	*/
 }
 
+bool Wheel::handleCommand(const Command& cmd) {
+	if (cmd.name == "speeds") {
+		
+		std::cout << "@ GOT SPEEDS FOR #" << id << ": " << Util::toString(cmd.parameters) << std::endl;
+
+		return true;
+	}
+
+	return false;
+}
+
 /*std::string Wheel::getStateJSON() const {
     std::stringstream stream;
 
