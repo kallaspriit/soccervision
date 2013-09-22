@@ -7,7 +7,7 @@
 #include "Util.h"
 
 ManualController::ManualController(Robot* robot, Communication* com) : Controller(robot, com) {
-	
+	targetSide = Side::UNKNOWN;
 };
 
 void ManualController::step(float dt, Vision::Results* visionResults) {
@@ -19,7 +19,9 @@ bool ManualController::handleRequest(std::string request) {
 }
 
 bool ManualController::handleCommand(const Command& cmd) {
-    if (cmd.name == "target-vector" && cmd.parameters.size() == 3) {
+    if (cmd.name == "toggle-side") {
+        handleToggleSideCommand();
+    } else if (cmd.name == "target-vector" && cmd.parameters.size() == 3) {
         handleTargetVectorCommand(cmd);
     } else if (cmd.name == "target-dir" && cmd.parameters.size() == 3) {
         handleTargetDirCommand(cmd);
@@ -40,6 +42,16 @@ void ManualController::handleCommunicationMessage(std::string message) {
 
 		handleCommand(command);
 	}
+}
+
+void ManualController::handleToggleSideCommand() {
+	if (targetSide == Side::BLUE) {
+		targetSide = Side::YELLOW;
+	} else {
+		targetSide = Side::BLUE;
+	}
+
+	com->send("target:" + Util::toString(targetSide));
 }
 
 void ManualController::handleTargetVectorCommand(const Command& cmd) {

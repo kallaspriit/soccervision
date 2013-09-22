@@ -16,6 +16,7 @@ public:
 	Side getTargetSide() { return targetSide; }
 	std::string getJSON();
 
+    void handleToggleSideCommand();
     void handleTargetVectorCommand(const Command& cmd);
     void handleTargetDirCommand(const Command& cmd);
     void handleSetDribblerCommand(const Command& cmd);
