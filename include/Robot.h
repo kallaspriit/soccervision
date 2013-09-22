@@ -64,17 +64,18 @@ public:
     Task* getCurrentTask();
     TaskQueue getTasks() { return tasks; }
 	Odometer::Movement getMovement() { return movement; }
-	Wheel* getWheelFL() const { return wheelFL; }
-    Wheel* getWheelFR() const { return wheelFR; }
-    Wheel* getWheelRL() const { return wheelRL; }
-    Wheel* getWheelRR() const { return wheelRR; }
-	Dribbler* getDribbler() const { return dribbler; }
-	Coilgun* getCoilgun() const { return coilgun; }
-	Localizer* getRobotLocalizer() { return robotLocalizer; }
 	const ParticleFilterLocalizer::Measurements& getMeasurements() const { return measurements; } // TODO Here?
 
 	void handleCommunicationMessage(std::string message);
 	bool handleCommand(const Command& cmd);
+
+	Wheel* wheelFL;
+    Wheel* wheelFR;
+    Wheel* wheelRL;
+    Wheel* wheelRR;
+	Dribbler* dribbler;
+	Coilgun* coilgun;
+	ParticleFilterLocalizer* robotLocalizer;
 	
 private:
     void updateWheelSpeeds();
@@ -103,18 +104,10 @@ private:
 	float fluidTargetY;
 	float fluidTargetOmega;
 
-    Wheel* wheelFL;
-    Wheel* wheelFR;
-    Wheel* wheelRL;
-    Wheel* wheelRR;
-	Dribbler* dribbler;
-	Coilgun* coilgun;
-
 	Communication* com;
 	Vision::Results* visionResults;
 	Odometer* odometer;
 	Odometer::Movement movement;
-    ParticleFilterLocalizer* robotLocalizer;
 	ParticleFilterLocalizer::Measurements measurements;
 };
 

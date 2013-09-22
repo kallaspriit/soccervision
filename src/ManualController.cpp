@@ -9,6 +9,7 @@
 ManualController::ManualController(Robot* robot, Communication* com) : Controller(robot, com) {
 	targetSide = Side::UNKNOWN;
 	dir = 1;
+	speed = 0;
 };
 
 void ManualController::step(float dt, Vision::Results* visionResults) {
@@ -16,11 +17,15 @@ void ManualController::step(float dt, Vision::Results* visionResults) {
 
 	speed += dir;
 
-	if (Math::abs((float)speed) > 255) {
+	if ((int)Math::abs((float)speed) > 255) {
 		dir *= -1;
 	}
 
-	robot->getWheelFL()->setTargetOmega(Wheel::speedToOmega(speed));
+	robot->wheelFL->setTargetSpeed(speed);
+	robot->wheelFR->setTargetSpeed(speed);
+	robot->wheelRL->setTargetSpeed(speed);
+	robot->wheelRR->setTargetSpeed(speed);
+	robot->dribbler->setTargetSpeed(speed);
 }
 
 bool ManualController::handleRequest(std::string request) {
@@ -82,13 +87,13 @@ void ManualController::handleTargetDirCommand(const Command& cmd) {
 void ManualController::handleSetDribblerCommand(const Command& cmd) {
     float targetOmega = Util::toFloat(cmd.parameters[0]);
 
-	robot->getDribbler()->setTargetOmega(targetOmega);
+	robot->dribbler->setTargetOmega(targetOmega);
 }
 
 void ManualController::handleKickCommand(const Command& cmd) {
     int strength = Util::toInt(cmd.parameters[0]);
 
-	robot->getCoilgun()->kick(strength);
+	robot->coilgun->kick(strength);
 }
 
 std::string ManualController::getJSON() {

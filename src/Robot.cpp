@@ -101,7 +101,7 @@ void Robot::step(float dt, Vision::Results* visionResults) {
 	this->visionResults = visionResults;
 
 	// request for wheel speeds
-	com->send("gs");
+	//com->send("gs");
 
 	// send target speeds
 	com->send("speeds:"

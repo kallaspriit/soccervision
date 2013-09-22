@@ -488,34 +488,34 @@ std::string SoccerBot::getStateJSON() {
 	//stream << "\"isViewObstructed\":" << (vision->isViewObstructed() ? "true" : "false") << ",";
 	//stream << "\"robotInWay\":" << vision->getRobotInWay() << ",";
     stream << "\"totalTime\":" << totalTime << ",";
-	stream << "\"gotBall\":" << robot->getDribbler()->gotBall() << ",";
+	stream << "\"gotBall\":" << robot->dribbler->gotBall() << ",";
 
     // wheels
     stream << "\"wheelFL\": {";
-	stream << "\"stalled\":" << (robot->getWheelFL()->isStalled() ? "true" : "false") << ",";
-    stream << "\"targetOmega\":" << robot->getWheelFL()->getTargetOmega() << ",";
-    stream << "\"realOmega\":" << robot->getWheelFL()->getRealOmega();
+	stream << "\"stalled\":" << (robot->wheelFL->isStalled() ? "true" : "false") << ",";
+    stream << "\"targetOmega\":" << robot->wheelFL->getTargetOmega() << ",";
+    stream << "\"realOmega\":" << robot->wheelFL->getRealOmega();
     stream << "},";
 
     // front right wheel
     stream << "\"wheelFR\": {";
-	stream << "\"stalled\":" << (robot->getWheelFR()->isStalled() ? "true" : "false") << ",";
-    stream << "\"targetOmega\":" << robot->getWheelFR()->getTargetOmega() << ",";
-    stream << "\"realOmega\":" << robot->getWheelFR()->getRealOmega();
+	stream << "\"stalled\":" << (robot->wheelFR->isStalled() ? "true" : "false") << ",";
+    stream << "\"targetOmega\":" << robot->wheelFR->getTargetOmega() << ",";
+    stream << "\"realOmega\":" << robot->wheelFR->getRealOmega();
     stream << "},";
 
     // rear left wheel
     stream << "\"wheelRL\": {";
-	stream << "\"stalled\":" << (robot->getWheelRL()->isStalled() ? "true" : "false") << ",";
-    stream << "\"targetOmega\":" << robot->getWheelRL()->getTargetOmega() << ",";
-    stream << "\"realOmega\":" << robot->getWheelRL()->getRealOmega();
+	stream << "\"stalled\":" << (robot->wheelRL->isStalled() ? "true" : "false") << ",";
+    stream << "\"targetOmega\":" << robot->wheelRL->getTargetOmega() << ",";
+    stream << "\"realOmega\":" << robot->wheelRL->getRealOmega();
     stream << "},";
 
     // rear right wheel
     stream << "\"wheelRR\": {";
-	stream << "\"stalled\":" << (robot->getWheelRR()->isStalled() ? "true" : "false") << ",";
-    stream << "\"targetOmega\":" << robot->getWheelRR()->getTargetOmega() << ",";
-    stream << "\"realOmega\":" << robot->getWheelRR()->getRealOmega();
+	stream << "\"stalled\":" << (robot->wheelRR->isStalled() ? "true" : "false") << ",";
+    stream << "\"targetOmega\":" << robot->wheelRR->getTargetOmega() << ",";
+    stream << "\"realOmega\":" << robot->wheelRR->getRealOmega();
     stream << "},";
 
     // tasks

@@ -18,7 +18,7 @@ void Wheel::setTargetOmega(float omega) {
 }
 
 void Wheel::setTargetSpeed(int speed) {
-    setTargetOmega(speedToOmega(speed));
+    setTargetOmega(speedToOmega((float)speed));
 }
 
 float Wheel::getTargetOmega() const {
