@@ -34,6 +34,10 @@ bool ManualController::handleCommand(const Command& cmd) {
     return true;
 }
 
+void ManualController::handleCommunicationMessage(std::string message) {
+	std::cout << "@ MANUAL CONTROLLER COM: " << message << std::endl;
+}
+
 void ManualController::handleTargetVectorCommand(const Command& cmd) {
     float x = Util::toFloat(cmd.parameters[0]);
     float y = Util::toFloat(cmd.parameters[1]);

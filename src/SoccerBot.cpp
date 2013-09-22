@@ -453,7 +453,11 @@ void SoccerBot::handleCommunicationMessages() {
 void SoccerBot::handleCommunicationMessage(std::string message) {
 	std::cout << "@ SOCCERBOT COM: " << message << std::endl;
 
-	robot->onCommunicationMessage(message);
+	robot->handleCommunicationMessage(message);
+
+	if (activeController != NULL) {
+		activeController->handleCommunicationMessage(message);
+	}
 }
 
 std::string SoccerBot::getStateJSON() {

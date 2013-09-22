@@ -138,9 +138,6 @@
     <ClInclude Include="include\Dribbler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\InfoBoard.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\Robot.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -300,9 +297,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Dribbler.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\InfoBoard.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Robot.cpp">

@@ -1,8 +1,8 @@
 #ifndef CONTROLLER_H
 #define CONTROLLER_H
 
-#include "InfoBoard.h"
 #include "Vision.h"
+#include "Communication.h"
 
 #include <string>
 #include <map>
@@ -10,7 +10,7 @@
 class Robot;
 class Command;
 
-class Controller : public InfoBoardListener {
+class Controller : public Communication::Listener {
 
 public:
     Controller(Robot* robot) : robot(robot) {}
@@ -18,8 +18,7 @@ public:
 	virtual void onExit() {}
 	virtual bool handleRequest(std::string request) { return false; }
 	virtual bool handleCommand(const Command& cmd) { return false; }
-	virtual void onGoRequestedChange(bool isGoRequested) {}
-	virtual void onTargetSideChange(Side newTargetSide) {}
+	virtual void handleCommunicationMessage(std::string message) {}
 	virtual void step(float dt, Vision::Results* visionResults) = 0;
 	virtual std::string getJSON() { return "null"; }
 

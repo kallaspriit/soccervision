@@ -11,6 +11,7 @@ public:
 
     bool handleRequest(std::string request);
     bool handleCommand(const Command& cmd);
+	void handleCommunicationMessage(std::string message);
     void step(float dt, Vision::Results* visionResults);
 	std::string getJSON();
 

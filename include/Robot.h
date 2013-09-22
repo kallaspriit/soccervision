@@ -72,7 +72,7 @@ public:
 	Localizer* getRobotLocalizer() { return robotLocalizer; }
 	const ParticleFilterLocalizer::Measurements& getMeasurements() const { return measurements; } // TODO Here?
 
-	void onCommunicationMessage(std::string message);
+	void handleCommunicationMessage(std::string message);
 	
 private:
     void updateWheelSpeeds();

@@ -324,6 +324,6 @@ void Robot::updateMeasurements() {
 	}
 }
 
-void Robot::onCommunicationMessage(std::string message) {
+void Robot::handleCommunicationMessage(std::string message) {
 	std::cout << "@ ROBOT COM: " << message << std::endl;
 }

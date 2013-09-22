@@ -17,7 +17,7 @@ public:
 	class Listener {
 
 	public:
-		virtual void onCommunicationMessage(std::string message) = 0;
+		virtual void handleCommunicationMessage(std::string message) = 0;
 
 	};
 
