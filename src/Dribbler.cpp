@@ -35,7 +35,7 @@ void Dribbler::step(float dt) {
 		}
 	}
 
-	std::cout << "ballInDribblerTime: " << ballInDribblerTime << ", ballLostTime: " << ballLostTime << std::endl;
+	std::cout << "ballInDribblerTime: " << ballInDribblerTime << ", ballLostTime: " << ballLostTime << ", got ball: " << (gotBall() ? "yes" : "no") << std::endl;
 }
 
 bool Dribbler::gotBall() const {
