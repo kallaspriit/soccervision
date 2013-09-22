@@ -488,7 +488,7 @@ std::string SoccerBot::getStateJSON() {
 	//stream << "\"isViewObstructed\":" << (vision->isViewObstructed() ? "true" : "false") << ",";
 	//stream << "\"robotInWay\":" << vision->getRobotInWay() << ",";
     stream << "\"totalTime\":" << totalTime << ",";
-	stream << "\"gotBall\":" << robot->dribbler->gotBall() << ",";
+	stream << "\"gotBall\":" << (robot->dribbler->gotBall() ? "true" : "false") << ",";
 
     // wheels
     stream << "\"wheelFL\": {";
@@ -647,12 +647,12 @@ std::string SoccerBot::getStateJSON() {
 		}
 
 		stream << "\"targetSide\":" << activeController->getTargetSide() << ",";
-		stream << "\"playing\":" << (activeController->isPlaying() ? "1" : "0") << ",";
+		stream << "\"playing\":" << (activeController->isPlaying() ? "true" : "false") << ",";
 	} else {
 		stream << "\"controllerName\": null,";
 		stream << "\"controllerState\": null,";
 		stream << "\"targetSide\":" << Side::UNKNOWN << ",";
-		stream << "\"playing\":0,";
+		stream << "\"playing\":false,";
 	}
 
 	stream << "\"fps\":" << fpsCounter->getFps();

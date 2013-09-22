@@ -165,7 +165,8 @@ void Robot::step(float dt, Vision::Results* visionResults) {
 	dribbler->step(dt);
 	coilgun->step(dt);
 
-	if (autostop) {
+	// TODO Review this..
+	/*if (autostop) {
 		if (!frameTargetSpeedSet) {
 			stop();
 		}
@@ -175,7 +176,7 @@ void Robot::step(float dt, Vision::Results* visionResults) {
         stop();
 
         lastCommandTime = -1.0f;
-    }
+    }*/
 
 	frameTargetSpeedSet = false;
 }
