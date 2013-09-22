@@ -205,7 +205,6 @@ void SoccerBot::run() {
 			running = false;
 		}
 
-		std::cout << "! dt: " << dt << ", time: " << time << std::endl;
 		//std::cout << "! Total time: " << Util::timerEnd(startTime) << std::endl;
 	}
 

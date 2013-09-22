@@ -103,8 +103,21 @@ void Robot::step(float dt, Vision::Results* visionResults) {
 	lastDt = dt;
     totalTime += dt;
 
-	// request for wheel speeds
-	//com->send("gs");
+	if (!coilgunCharged) {
+		coilgun->charge();
+
+		coilgunCharged = true;
+	}
+
+    handleTasks(dt);
+    updateWheelSpeeds();
+
+    wheelFL->step(dt);
+    wheelFR->step(dt);
+    wheelRL->step(dt);
+    wheelRR->step(dt);
+	coilgun->step(dt);
+	dribbler->step(dt);
 
 	// send target speeds
 	com->send("speeds:"
@@ -121,6 +134,8 @@ void Robot::step(float dt, Vision::Results* visionResults) {
 		wheelRL->getRealOmega(),
 		wheelRR->getRealOmega()
 	);
+
+	std::cout << "@ MOVEMENT: " << movement.velocityX << "x" << movement.velocityY << std::endl;
 
 	// this is basically odometer localizer
 	orientation = Math::floatModulus(orientation + movement.omega * dt, Math::TWO_PI);
@@ -149,21 +164,6 @@ void Robot::step(float dt, Vision::Results* visionResults) {
 
     //std::cout << "Vx: " << movement.velocityX << "; Vy: " << movement.velocityY << "; omega: " << movement.omega << std::endl;
 
-	if (!coilgunCharged) {
-		coilgun->charge();
-
-		coilgunCharged = true;
-	}
-
-    handleTasks(dt);
-    updateWheelSpeeds();
-
-    wheelFL->step(dt);
-    wheelFR->step(dt);
-    wheelRL->step(dt);
-    wheelRR->step(dt);
-	coilgun->step(dt);
-	dribbler->step(dt);
 
 	// TODO Review this..
 	/*if (autostop) {

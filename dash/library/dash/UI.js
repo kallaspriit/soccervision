@@ -928,8 +928,8 @@ Dash.UI.prototype.showTasksQueue = function(state) {
 };
 
 Dash.UI.prototype.showStateStats = function(state) {
-	$('#time').html(Dash.Util.round(state.totalTime, 1) + 's (' + Dash.Util.round(state.dt * 1000, 1) + 'ms / ' + Dash.Util.round(state.duration * 1000, 2) + 'ms)');
-	$('#load > SPAN').css('width', Math.ceil(state.load) + '%');
+	$('#time').html(Dash.Util.round(state.totalTime, 1) + 's / ' + Dash.Util.round(state.dt * 1000, 1) + 'ms / ' + state.fps + 'FPS');
+	//$('#load > SPAN').css('width', Math.ceil(state.load) + '%');
 	
 	if (state.gotBall) {
 		$('#ball-indicator').addClass('got-ball');
@@ -937,7 +937,7 @@ Dash.UI.prototype.showStateStats = function(state) {
 		$('#ball-indicator').removeClass('got-ball');
 	}
 	
-	$('#fps-indicator').html(state.fps + ' FPS');
+	//$('#fps-indicator').html(state.fps + ' FPS');
 	
 	if ($('#blobber-view').is(':visible')) {
 		this.blobberView.render(state);
