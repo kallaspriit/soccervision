@@ -109,7 +109,7 @@ void SoccerBot::run() {
 		time = Util::millitime();
 
 		if (lastStepTime != 0.0f) {
-			dt = lastStepTime - time;
+			dt = time - lastStepTime;
 		} else {
 			dt = 1.0f / 60.0f;
 		}
