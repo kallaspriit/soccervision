@@ -57,6 +57,7 @@ SoccerBot::~SoccerBot() {
 }
 
 void SoccerBot::setup() {
+	setupCommunication();
 	setupVision();
 	setupProcessors();
 	setupFpsCounter();
@@ -69,14 +70,15 @@ void SoccerBot::setup() {
 	if (showGui) {
 		setupGui();
 	}
-
-	setupCommunication();
 }
 
 void SoccerBot::run() {
 	std::cout << "! Starting main loop" << std::endl;
 
 	running = true;
+
+	com->start();
+	server->start();
 
 	if (frontCamera->isOpened()) {
 		frontCamera->startAcquisition();
@@ -343,12 +345,10 @@ void SoccerBot::setupSignalHandler() {
 
 void SoccerBot::setupServer() {
 	server = new Server();
-	server->start();
 }
 
 void SoccerBot::setupCommunication() {
 	com = new Communication(Config::communicationHost, Config::communicationPort);
-	com->start();
 }
 
 void SoccerBot::addController(std::string name, Controller* controller) {
