@@ -27,7 +27,7 @@ private:
 
 	// TODO Remove these tests
 	int dir;
-	int speed;
+	float speed;
 
 };
 
