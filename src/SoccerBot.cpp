@@ -443,19 +443,6 @@ void SoccerBot::handleSetController(Command::Parameters parameters) {
 }
 
 void SoccerBot::handleCommunicationMessages() {
-	com->send("gs"); // TODO Remove test
-
-	if (x == 0) x = 1;
-
-	t += x;
-
-	if (Math::abs(t) >= 255) {
-		x *= -1;
-	}
-
-	com->send("speeds:0:0:0:" + Util::toString(t) + ":0");
-	com->send(x > 0 ? "target:0" : "target:1");
-
 	std::string message;
 
 	while ((message = com->popLastMessage()) != "") {
@@ -464,7 +451,9 @@ void SoccerBot::handleCommunicationMessages() {
 }
 
 void SoccerBot::handleCommunicationMessage(std::string message) {
-	std::cout << "< COM: " << message << std::endl;
+	std::cout << "@ SOCCERBOT COM: " << message << std::endl;
+
+	robot->onCommunicationMessage(message);
 }
 
 std::string SoccerBot::getStateJSON() {

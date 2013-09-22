@@ -6,6 +6,7 @@
 #include <boost/thread/mutex.hpp>
 #include <boost/asio.hpp>
 #include <string>
+#include <vector>
 #include <stack>
 
 using boost::asio::ip::udp;
@@ -13,6 +14,13 @@ using boost::asio::ip::udp;
 class Communication : public Thread {
 
 public:
+	class Listener {
+
+	public:
+		virtual void onCommunicationMessage(std::string message) = 0;
+
+	};
+
 	typedef std::stack<std::string> Messages;
 
     Communication(std::string host = "127.0.0.1", int port = 8042);

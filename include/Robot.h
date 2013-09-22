@@ -7,6 +7,7 @@
 #include "ParticleFilterLocalizer.h"
 #include "Vision.h"
 #include "Tasks.h"
+#include "Communication.h"
 
 #include <string>
 
@@ -14,8 +15,9 @@ class Wheel;
 class Dribbler;
 class Coilgun;
 class Task;
+class Communication;
 
-class Robot {
+class Robot : public Communication::Listener {
 
 public:
     Robot();
@@ -69,6 +71,8 @@ public:
 	Coilgun* getCoilgun() const { return coilgun; }
 	Localizer* getRobotLocalizer() { return robotLocalizer; }
 	const ParticleFilterLocalizer::Measurements& getMeasurements() const { return measurements; } // TODO Here?
+
+	void onCommunicationMessage(std::string message);
 	
 private:
     void updateWheelSpeeds();

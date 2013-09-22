@@ -323,3 +323,7 @@ void Robot::updateMeasurements() {
 		measurements["blue-center"] = ParticleFilterLocalizer::Measurement(blueGoal->distance, blueGoal->angle);
 	}
 }
+
+void Robot::onCommunicationMessage(std::string message) {
+	std::cout << "@ ROBOT COM: " << message << std::endl;
+}
