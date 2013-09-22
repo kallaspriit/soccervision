@@ -21,7 +21,7 @@ class Communication;
 class Robot : public Communication::Listener, public Command::Listener {
 
 public:
-    Robot();
+    Robot(Communication* com);
     ~Robot();
 
     void setup();
@@ -110,6 +110,7 @@ private:
 	Dribbler* dribbler;
 	Coilgun* coilgun;
 
+	Communication* com;
 	Vision::Results* visionResults;
 	Odometer* odometer;
 	Odometer::Movement movement;

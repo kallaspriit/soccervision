@@ -111,7 +111,7 @@ void Server::onSocketOpen(websocketpp::connection_hdl connection) {
 
 	clients[id] = new Client(id, connection);
 
-	std::cout << "! Server client # " << id << " connected" << std::endl;
+	std::cout << "! Server client #" << id << " connected" << std::endl;
 }
 
 void Server::onSocketClose(websocketpp::connection_hdl connection) {

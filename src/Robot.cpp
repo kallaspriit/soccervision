@@ -11,7 +11,7 @@
 #include <map>
 #include <sstream>
 
-Robot::Robot() : wheelFL(NULL), wheelFR(NULL), wheelRL(NULL), wheelRR(NULL), coilgun(NULL), robotLocalizer(NULL), odometer(NULL), visionResults(NULL) {
+Robot::Robot(Communication* com) : com(com), wheelFL(NULL), wheelFR(NULL), wheelRL(NULL), wheelRR(NULL), coilgun(NULL), robotLocalizer(NULL), odometer(NULL), visionResults(NULL) {
     targetOmega = 0;
     targetDir = Math::Vector(0, 0);
    
@@ -99,6 +99,8 @@ void Robot::setupLocalizer() {
 
 void Robot::step(float dt, Vision::Results* visionResults) {
 	this->visionResults = visionResults;
+
+	com->send("gs");
 
     lastDt = dt;
     totalTime += dt;
