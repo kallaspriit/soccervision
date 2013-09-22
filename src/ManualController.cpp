@@ -8,10 +8,19 @@
 
 ManualController::ManualController(Robot* robot, Communication* com) : Controller(robot, com) {
 	targetSide = Side::UNKNOWN;
+	dir = 1;
 };
 
 void ManualController::step(float dt, Vision::Results* visionResults) {
 	robot->setAutostop(false);
+
+	speed += dir;
+
+	if (Math::abs((float)speed) > 255) {
+		dir *= -1;
+	}
+
+	robot->getWheelFL()->setTargetOmega(Wheel::speedToOmega(speed));
 }
 
 bool ManualController::handleRequest(std::string request) {

@@ -193,6 +193,7 @@ void SoccerBot::run() {
 		}
 
 		if (server != NULL) {
+			// TODO Only broadcast if some client requested it
 			server->broadcast(Util::json("state", getStateJSON()));
 		}
 

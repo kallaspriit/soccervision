@@ -25,6 +25,10 @@ public:
 private:
 	Side targetSide;
 
+	// TODO Remove these tests
+	int dir;
+	int speed;
+
 };
 
 #endif // MANUALCONTROLLER_H

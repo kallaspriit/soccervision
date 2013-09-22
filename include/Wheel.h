@@ -11,7 +11,9 @@ public:
     Wheel(int id);
 
     virtual void setTargetOmega(float omega);
+    virtual void setTargetSpeed(int speed);
     virtual float getTargetOmega() const;
+    virtual float getTargetSpeed() const;
     virtual float getRealOmega() const;
 	virtual bool isStalled();
     virtual void step(float dt);

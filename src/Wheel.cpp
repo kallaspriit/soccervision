@@ -6,7 +6,7 @@
 
 #include <iostream>
 
-const float Wheel::pidFrequency = 62.5f;
+const float Wheel::pidFrequency = 60.0f;
 const float Wheel::ticksPerRevolution = 64.0f * 18.75f;
 
 Wheel::Wheel(int id) : id(id), targetOmega(0), realOmega(0), stallCounter(0) {
@@ -17,8 +17,16 @@ void Wheel::setTargetOmega(float omega) {
     targetOmega = omega;
 }
 
+void Wheel::setTargetSpeed(int speed) {
+    setTargetOmega(speedToOmega(speed));
+}
+
 float Wheel::getTargetOmega() const {
     return targetOmega;
+}
+
+float Wheel::getTargetSpeed() const {
+    return omegaToSpeed(targetOmega);
 }
 
 float Wheel::getRealOmega() const {
