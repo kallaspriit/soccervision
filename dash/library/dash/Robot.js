@@ -52,7 +52,7 @@ Dash.Robot.prototype.setTargetDir = function(x, y, omega) {
 	//dash.dbg.log('! Robot target', x, y, omega);
 	
 	if (this.socket.isOpen()) {
-		this.socket.send('<target-vector:' + x + ',' + y + ',' + omega + '>');
+		this.socket.send('<target-vector:' + x + ':' + y + ':' + omega + '>');
 	}
 };
 
@@ -67,7 +67,7 @@ Dash.Robot.prototype.turnBy = function(angle, speed) {
 	
 	dash.dbg.log('! Turning by ' + Dash.Util.radToDeg(angle) + '°');
 	
-	dash.socket.send('<test-turn-by:' + angle + ',' + speed + '>');
+	dash.socket.send('<test-turn-by:' + angle + ':' + speed + '>');
 };
 
 Dash.Robot.prototype.driveTo = function(x, y, orientation, speed) {
@@ -75,7 +75,7 @@ Dash.Robot.prototype.driveTo = function(x, y, orientation, speed) {
 	
 	dash.dbg.log('! Driving to ' + x + 'x' + y + ' @ ' + Dash.Util.radToDeg(orientation) + '°');
 	
-	dash.socket.send('<test-drive-to:' + x + ',' + y + ',' + orientation + ',' + speed + '>');
+	dash.socket.send('<test-drive-to:' + x + ':' + y + ':' + orientation + ':' + speed + '>');
 };
 
 Dash.Robot.prototype.driveFacing = function(targetX, targetY, faceX, faceY, speed) {
@@ -83,7 +83,7 @@ Dash.Robot.prototype.driveFacing = function(targetX, targetY, faceX, faceY, spee
 	
 	dash.dbg.log('! Driving to ' + targetX + 'x' + targetY + ' facing ' + faceX + 'x' + faceY);
 	
-	dash.socket.send('<test-drive-facing:' + targetX + ',' + targetY + ',' + faceX + ',' + faceY + ',' + speed + '>');
+	dash.socket.send('<test-drive-facing:' + targetX + ':' + targetY + ':' + faceX + ':' + faceY + ':' + speed + '>');
 };
 
 Dash.Robot.prototype.testRectangle = function() {

@@ -15,13 +15,13 @@ ManualController::ManualController(Robot* robot, Communication* com) : Controlle
 void ManualController::step(float dt, Vision::Results* visionResults) {
 	robot->setAutostop(false);
 
-	speed += (float)dir * 0.1f;
+	/*speed += (float)dir * 0.1f;
 
 	if (Math::abs((float)speed) > 25.0f) {
 		dir *= -1;
 	}
 
-	robot->setTargetDir(0.0f, 0.0f, (float)speed);
+	robot->setTargetDir(0.0f, 0.0f, (float)speed);*/
 }
 
 bool ManualController::handleRequest(std::string request) {

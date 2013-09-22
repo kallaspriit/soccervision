@@ -129,9 +129,6 @@ void SoccerBot::run() {
 			continue;
 		}
 
-		handleServerMessages();
-		handleCommunicationMessages();
-
 		fpsCounter->step();
 
 		if (gotFrontFrame) {
@@ -187,6 +184,9 @@ void SoccerBot::run() {
 		if (fpsCounter->frameNumber % 60 == 0) {
 			std::cout << "! FPS: " << fpsCounter->getFps() << std::endl;
 		}
+
+		handleServerMessages();
+		handleCommunicationMessages();
 
 		if (activeController != NULL) {
 			activeController->step(dt, visionResults);

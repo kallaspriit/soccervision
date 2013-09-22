@@ -585,7 +585,7 @@ Dash.UI.prototype.initControls = function() {
 			green = $('#camera-green').val(),
 			blue = $('#camera-blue').val();
 		
-		dash.socket.send('<camera-set-white-balance:' + red + ',' + green + ',' + blue + '>');
+		dash.socket.send('<camera-set-white-balance:' + red + ':' + green + ':' + blue + '>');
 	});
 	
 	$('#camera-luminosity-gamma').slider('change', function(value) {
@@ -604,7 +604,7 @@ Dash.UI.prototype.initControls = function() {
 			v = $('#blobber-v').val().replace(' ', ','),
 			mergeThreshold = $('#blobber-merge-threshold').val();
 		
-		dash.socket.send('<set-blobber-calibration:' + selectedClass + ',' + y + ',' + u + ',' + v + ',' + mergeThreshold + '>');
+		dash.socket.send('<set-blobber-calibration:' + selectedClass + ':' + y + ':' + u + ':' + v + ':' + mergeThreshold + '>');
 	});
 	
 	$('#frame-img, #frame-classification, #frame-canvas').bind('contextmenu', function(e) {
@@ -633,7 +633,7 @@ Dash.UI.prototype.initControls = function() {
 			break;
 		}
 			
-		dash.socket.send('<blobber-threshold:' + color + ',' + x + ',' + y + ',' + mode + ',' + brush + ',' + stdev + '>');
+		dash.socket.send('<blobber-threshold:' + color + ':' + x + ':' + y + ':' + mode + ':' + brush + ':' + stdev + '>');
 		dash.socket.send('<get-frame>');
 		
 		e.preventDefault();
