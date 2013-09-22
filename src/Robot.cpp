@@ -135,7 +135,7 @@ void Robot::step(float dt, Vision::Results* visionResults) {
 		wheelRR->getRealOmega()
 	);
 
-	std::cout << "@ MOVEMENT: " << movement.velocityX << "x" << movement.velocityY << std::endl;
+	std::cout << "@ MOVEMENT: " << movement.velocityX << "x" << movement.velocityY << " @ " << wheelFL->getRealOmega() << ", " << wheelFR->getRealOmega() << ", " << wheelRL->getRealOmega() << ", " << wheelRR->getRealOmega() << ", " << std::endl;
 
 	// this is basically odometer localizer
 	orientation = Math::floatModulus(orientation + movement.omega * dt, Math::TWO_PI);
