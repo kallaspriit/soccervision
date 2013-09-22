@@ -24,8 +24,8 @@ public:
 private:
 	int speed;
 	bool ballDetected;
-	double ballInDribblerTime;
-	double ballLostTime;
+	float ballInDribblerTime;
+	float ballLostTime;
 
 };
 

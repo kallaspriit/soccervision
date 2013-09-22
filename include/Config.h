@@ -121,10 +121,10 @@ namespace Config {
 	const int robotWheelStalledThreshold = 60;
 
 	// how long the ball needs to be in the dribbler to be considered stable (seconds)
-	const double ballInDribblerThreshold = 0.2;
+	const float ballInDribblerThreshold = 0.2f;
 
 	// how long must the ball have not been detected to be considered lost (seconds)
-	const double dribblerBallLostThreshold = 0.0;
+	const float dribblerBallLostThreshold = 0.0f;
 
 	// omega threshold for the robot to be considered not spinning any more
 	const float rotationStoppedOmegaThreshold = 0.25f;
