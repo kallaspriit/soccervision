@@ -78,7 +78,7 @@ private:
 	bool controllerRequested;
 	bool running;
 	float dt;
-	float lastStepTime;
+	double lastStepTime;
 	float totalTime;
 };
 

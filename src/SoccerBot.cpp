@@ -22,7 +22,7 @@ SoccerBot::SoccerBot() :
 	frontProcessor(NULL), rearProcessor(NULL),
 	gui(NULL), fpsCounter(NULL), visionResults(NULL), robot(NULL), activeController(NULL), server(NULL), com(NULL),
 	running(false), debugVision(false), showGui(false), controllerRequested(false),
-	dt(0.01666f), lastStepTime(0.0f), totalTime(0.0f)
+	dt(0.01666f), lastStepTime(0.0), totalTime(0.0f)
 {
 
 }
@@ -102,23 +102,20 @@ void SoccerBot::run() {
 	}
 
 	bool gotFrontFrame, gotRearFrame;
-	float time;
+	double time;
 
 	while (running) {
 		//__int64 startTime = Util::timerStart();
 
 		time = Util::millitime();
 
-		if (lastStepTime != 0.0f) {
-			dt = time - lastStepTime;
+		if (lastStepTime != 0.0) {
+			dt = (float)(time - lastStepTime);
 		} else {
 			dt = 1.0f / 60.0f;
 		}
 
 		totalTime += dt;
-
-		handleServerMessages();
-		handleCommunicationMessages();
 
 		gotFrontFrame = gotRearFrame = false;
 		frontProcessor->debug = rearProcessor->debug = debugVision || showGui;
@@ -131,6 +128,9 @@ void SoccerBot::run() {
 
 			continue;
 		}
+
+		handleServerMessages();
+		handleCommunicationMessages();
 
 		fpsCounter->step();
 
@@ -205,7 +205,7 @@ void SoccerBot::run() {
 			running = false;
 		}
 
-		std::cout << "! dt: " << dt << std::endl;
+		std::cout << "! dt: " << dt << ", time: " << time << std::endl;
 		//std::cout << "! Total time: " << Util::timerEnd(startTime) << std::endl;
 	}
 
