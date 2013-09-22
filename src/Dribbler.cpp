@@ -35,7 +35,7 @@ void Dribbler::step(float dt) {
 		}
 	}
 
-	std::cout << "ballInDribblerTime: " << ballInDribblerTime << ", ballLostTime: " << ballLostTime << ", got ball: " << (gotBall() ? "yes" : "no") << std::endl;
+	//std::cout << "ballInDribblerTime: " << ballInDribblerTime << ", ballLostTime: " << ballLostTime << ", got ball: " << (gotBall() ? "yes" : "no") << std::endl;
 }
 
 bool Dribbler::gotBall() const {
@@ -59,6 +59,8 @@ bool Dribbler::handleCommand(const Command& cmd) {
 		} else {
 			ballDetected = false;
 		}
+
+		std::cout << "@ BALL DETECTED: " << ballDetected << std::endl;
 
 		return true;
 	}
