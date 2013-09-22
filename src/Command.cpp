@@ -22,18 +22,17 @@ Command Command::parse(std::string input) {
 
         std::string paramsBody = body.substr(colonPos + 1);
 
-        size_t commaPos;
         std::string param;
 
         while (true) {
-            commaPos = Util::strpos(paramsBody, ",");
+            colonPos = Util::strpos(paramsBody, ":");
 
-            if (commaPos == std::string::npos) {
+            if (colonPos == std::string::npos) {
                 break;
             }
 
-            param = paramsBody.substr(0, commaPos);
-            paramsBody = paramsBody.substr(commaPos + 1);
+            param = paramsBody.substr(0, colonPos);
+            paramsBody = paramsBody.substr(colonPos + 1);
 
             params.push_back(param);
         }
