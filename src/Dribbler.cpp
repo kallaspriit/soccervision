@@ -39,9 +39,9 @@ void Dribbler::step(float dt) {
 }
 
 bool Dribbler::gotBall() const {
-	//return ballDetected;
+	return ballDetected;
 
-	if (ballDetected && ballInDribblerTime >= Config::ballInDribblerThreshold) {
+	/*if (ballDetected && ballInDribblerTime >= Config::ballInDribblerThreshold) {
 		return true;
 	}
 
@@ -49,7 +49,7 @@ bool Dribbler::gotBall() const {
 		return true;
 	}
 
-	return false;
+	return false;*/
 }
 
 bool Dribbler::handleCommand(const Command& cmd) {
