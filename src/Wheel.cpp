@@ -42,46 +42,11 @@ bool Wheel::isStalled() {
 }
 
 void Wheel::step(float dt) {
-	/*
-    // write speed and request speed
-    //serial->write("sd" + Util::toString(omegaToSpeed(targetOmega)) + "\ngs1\n");
-    serial->write("sd" + Util::toString(omegaToSpeed(targetOmega)) + "\ngs0\ns\n");
-    //serial->writeln("sd" + Util::toString(omegaToSpeed(targetOmega)));
-
-    std::string message;
-
-    //int i = 0;
-
-	double currentTime = Util::millitime();
-
-    while (serial->available() > 0) {
-        message = serial->read();
-
-        if (Command::isValid(message)) {
-            Command cmd = Command::parse(message);
-
-            if (cmd.name == "s" && cmd.parameters.size() == 1) {
-                realOmega = speedToOmega(Util::toInt(cmd.parameters[0]));
-
-				if (Math::abs(targetOmega) > Math::PI && Math::abs(targetOmega / realOmega) > 2.0f) {
-					stallCounter++;
-				} else {
-					stallCounter = 0;
-				}
-            }
-
-			lastMessageTime = currentTime;
-        }
-    }
-
-	if (lastMessageTime != -1.0 && onceOpened && currentTime - lastMessageTime > 1.0f) {
-		std::cout << "- Wheel #" << id << " seems to have lost connection" << std::endl;
-
-		realOmega = 0.0f;
-
-		//serial->reconnect();
+	if (Math::abs(targetOmega) > Math::PI && Math::abs(targetOmega / realOmega) > 2.0f) {
+		stallCounter++;
+	} else {
+		stallCounter = 0;
 	}
-	*/
 }
 
 bool Wheel::handleCommand(const Command& cmd) {

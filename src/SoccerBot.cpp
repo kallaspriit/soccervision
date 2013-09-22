@@ -188,22 +188,22 @@ void SoccerBot::run() {
 			std::cout << "! FPS: " << fpsCounter->getFps() << std::endl;
 		}
 
-		if (SignalHandler::exitRequested) {
-			running = false;
-		}
-
-		if (server != NULL) {
-			// TODO Only broadcast if some client requested it
-			server->broadcast(Util::json("state", getStateJSON()));
-		}
-
 		if (activeController != NULL) {
 			activeController->step(dt, visionResults);
 		}
 
 		robot->step(dt, visionResults);
 
+		if (server != NULL) {
+			// TODO Only broadcast if some client requested it
+			server->broadcast(Util::json("state", getStateJSON()));
+		}
+
 		lastStepTime = time;
+
+		if (SignalHandler::exitRequested) {
+			running = false;
+		}
 
 		//std::cout << "! Total time: " << Util::timerEnd(startTime) << std::endl;
 	}

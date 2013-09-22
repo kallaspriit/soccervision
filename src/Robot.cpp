@@ -100,6 +100,9 @@ void Robot::setupLocalizer() {
 void Robot::step(float dt, Vision::Results* visionResults) {
 	this->visionResults = visionResults;
 
+	lastDt = dt;
+    totalTime += dt;
+
 	// request for wheel speeds
 	//com->send("gs");
 
@@ -111,9 +114,6 @@ void Robot::step(float dt, Vision::Results* visionResults) {
 		+ Util::toString(wheelFL->getTargetSpeed()) + ":"
 		+ Util::toString(wheelRL->getTargetSpeed())
 	);
-
-    lastDt = dt;
-    totalTime += dt;
 
 	movement = odometer->calculateMovement(
 		wheelFL->getRealOmega(),
