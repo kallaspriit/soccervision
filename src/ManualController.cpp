@@ -71,9 +71,9 @@ void ManualController::handleTargetDirCommand(const Command& cmd) {
 }
 
 void ManualController::handleSetDribblerCommand(const Command& cmd) {
-    int strength = Util::toInt(cmd.parameters[0]);
+    float targetOmega = Util::toFloat(cmd.parameters[0]);
 
-	robot->getDribbler()->setSpeed(strength);
+	robot->getDribbler()->setTargetOmega(targetOmega);
 }
 
 void ManualController::handleKickCommand(const Command& cmd) {

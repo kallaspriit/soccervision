@@ -9,6 +9,13 @@ namespace Config {
 	const int frontCameraSerial = 857735761;
 	const int rearCameraSerial = 857769553;
 
+	// indexes of motors according to the communication messages
+	const int wheelFLId = 3;
+	const int wheelFRId = 1;
+	const int wheelRLId = 4;
+	const int wheelRRId = 0;
+	const int dribblerId = 2;
+
 	// ethernet communication host and port
 	const std::string communicationHost = "192.168.4.1";
 	const int communicationPort = 8042;
@@ -115,7 +122,7 @@ namespace Config {
 	const float robotfluidOmegaStep = 6.28f;
 
 	// how fast to spin the dribbler
-	const int robotDribblerSpeed = 100;
+	const float robotDribblerNormalOmega = 3.14f;
 
 	// for how many frames must the real wheel speed vary considerably from target speed to be considered stalled
 	const int robotWheelStalledThreshold = 60;

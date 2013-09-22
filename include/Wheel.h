@@ -9,28 +9,23 @@ class Wheel : public Command::Listener {
 
 public:
     Wheel(int id);
-    ~Wheel();
 
-    void setTargetOmega(float omega);
-    float getTargetOmega() const;
-    float getRealOmega() const;
-	bool isReady() const { return false; } // TODO Implement connection
-	bool isStalled();
-    void step(float dt);
-	bool handleCommand(const Command& cmd);
+    virtual void setTargetOmega(float omega);
+    virtual float getTargetOmega() const;
+    virtual float getRealOmega() const;
+	virtual bool isStalled();
+    virtual void step(float dt);
+	virtual bool handleCommand(const Command& cmd);
 
     static float omegaToSpeed(float omega);
     static float speedToOmega(float speed);
 
     //std::string getStateJSON() const;
 
-private:
+protected:
     int id;
     float targetOmega;
     float realOmega;
-    bool ready;
-	bool onceOpened;
-	double lastMessageTime;
 	int stallCounter;
 
     static const float pidFrequency;

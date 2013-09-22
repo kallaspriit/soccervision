@@ -56,14 +56,14 @@ void Robot::setup() {
 }
 
 void Robot::setupWheels() {
-    wheelFL = new Wheel(1);
-    wheelFR = new Wheel(2);
-    wheelRL = new Wheel(3);
-    wheelRR = new Wheel(4);
+    wheelFL = new Wheel(Config::wheelFLId);
+    wheelFR = new Wheel(Config::wheelFRId);
+    wheelRL = new Wheel(Config::wheelRLId);
+    wheelRR = new Wheel(Config::wheelRRId);
 }
 
 void Robot::setupDribbler() {
-	dribbler = new Dribbler();
+	dribbler = new Dribbler(Config::dribblerId);
 }
 
 void Robot::setupCoilgun() {

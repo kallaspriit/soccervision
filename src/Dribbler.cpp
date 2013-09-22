@@ -4,23 +4,13 @@
 
 #include <iostream>
 
-Dribbler::Dribbler() : speed(0), ballDetected(false), ballInDribblerTime(0.0), ballLostTime(-1.0) {
+Dribbler::Dribbler(int id) : Wheel(id), ballDetected(false), ballInDribblerTime(0.0), ballLostTime(-1.0) {
 
 };
 
-Dribbler::~Dribbler() {
-
-}
-
-void Dribbler::setSpeed(int newSpeed) {
-	speed = newSpeed;
-}
-
-void Dribbler::stop() {
-	speed = 0;
-}
-
 void Dribbler::step(float dt) {
+	Wheel::step(dt);
+
 	if (ballDetected) {
 		ballInDribblerTime += dt;
 
@@ -53,6 +43,8 @@ bool Dribbler::gotBall() const {
 }
 
 bool Dribbler::handleCommand(const Command& cmd) {
+	Wheel::handleCommand(cmd);
+
 	if (cmd.name == "ball") {
 		if (cmd.parameters[0] == "1") {
 			ballDetected = true;

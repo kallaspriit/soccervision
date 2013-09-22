@@ -2,27 +2,27 @@
 #define DRIBBLER_H
 
 #include "Config.h"
-#include "Command.h"
+#include "Wheel.h"
 
-class Dribbler : public Command::Listener {
+class Dribbler : public Wheel {
 
 public:
-	Dribbler();
-	~Dribbler();
+	Dribbler(int id);
 
-	void setSpeed(int speed = 255);
-	void start() { setSpeed(Config::robotDribblerSpeed); }
-	void stop();
-	bool isActive() const { return speed > 0; }
+	void start() { setTargetOmega(Config::robotDribblerNormalOmega); }
+	void stop() { setTargetOmega(0); }
+	bool isActive() const { return targetOmega > 0; }
 	bool gotBall() const;
-	bool isReady() { return false; } // TODO Implement connection
 	bool handleCommand(const Command& cmd);
 	double getBallInDribblerTime() { return ballInDribblerTime; }
 	double getBallLostTime() { return ballLostTime; }
 	void step(float dt);
 
 private:
-	int speed;
+	int id;
+	float targetOmega;
+    float realOmega;
+	int stallCounter;
 	bool ballDetected;
 	float ballInDribblerTime;
 	float ballLostTime;

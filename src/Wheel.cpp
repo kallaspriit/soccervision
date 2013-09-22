@@ -9,11 +9,7 @@
 const float Wheel::pidFrequency = 62.5f;
 const float Wheel::ticksPerRevolution = 64.0f * 18.75f;
 
-Wheel::Wheel(int id) : id(id), targetOmega(0), realOmega(0), ready(false), onceOpened(false), lastMessageTime(-1.0), stallCounter(0) {
-    
-}
-
-Wheel::~Wheel() {
+Wheel::Wheel(int id) : id(id), targetOmega(0), realOmega(0), stallCounter(0) {
     
 }
 
@@ -82,8 +78,7 @@ void Wheel::step(float dt) {
 
 bool Wheel::handleCommand(const Command& cmd) {
 	if (cmd.name == "speeds") {
-		
-		std::cout << "@ GOT SPEEDS FOR #" << id << ": " << Util::toString(cmd.parameters) << std::endl;
+		realOmega = speedToOmega(Util::toInt(cmd.parameters[id]));
 
 		return true;
 	}
