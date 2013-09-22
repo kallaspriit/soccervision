@@ -305,7 +305,7 @@ void SoccerBot::setupRobot() {
 void SoccerBot::setupControllers() {
 	std::cout << "! Setting up controllers.. ";
 
-	addController("manual", new ManualController(robot));
+	addController("manual", new ManualController(robot, com));
 
 	setController("manual");
 
@@ -451,13 +451,17 @@ void SoccerBot::handleCommunicationMessages() {
 }
 
 void SoccerBot::handleCommunicationMessage(std::string message) {
-	std::cout << "@ SOCCERBOT COM: " << message << std::endl;
-
 	robot->handleCommunicationMessage(message);
 
 	if (activeController != NULL) {
 		activeController->handleCommunicationMessage(message);
 	}
+
+	/*if (Command::isValid(message)) {
+        Command command = Command::parse(message);
+
+		// do something?
+	}*/
 }
 
 std::string SoccerBot::getStateJSON() {

@@ -21,26 +21,6 @@ void Dribbler::stop() {
 }
 
 void Dribbler::step(float dt) {
-	/*if (!serial->isOpen()) {
-		return;
-	}
-
-	serial->writeln("gb\nwl" + Util::toString(speed));
-
-	std::string message;
-
-    while (serial->available() > 0) {
-        message = serial->read();
-
-        if (Command::isValid(message)) {
-            Command cmd = Command::parse(message);
-
-            if (cmd.name == "b") {
-                ballDetected = cmd.parameters[0] == "1" ? true : false;
-			}
-		}
-	}
-
 	if (ballDetected) {
 		ballInDribblerTime += dt;
 
@@ -53,7 +33,7 @@ void Dribbler::step(float dt) {
 		if (ballLostTime >= Config::dribblerBallLostThreshold) {
 			ballInDribblerTime = 0.0;
 		}
-	}*/
+	}
 }
 
 bool Dribbler::gotBall() const {
@@ -63,6 +43,20 @@ bool Dribbler::gotBall() const {
 		ballInDribblerTime >= Config::ballInDribblerThreshold
 		&& ballLostTime <= Config::dribblerBallLostThreshold
 	) {
+		return true;
+	}
+
+	return false;
+}
+
+bool Dribbler::handleCommand(const Command& cmd) {
+	if (cmd.name == "ball") {
+		if (cmd.parameters[0] == "1") {
+			ballDetected = true;
+		} else {
+			ballDetected = false;
+		}
+
 		return true;
 	}
 

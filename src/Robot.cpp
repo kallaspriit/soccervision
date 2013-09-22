@@ -325,5 +325,19 @@ void Robot::updateMeasurements() {
 }
 
 void Robot::handleCommunicationMessage(std::string message) {
-	std::cout << "@ ROBOT COM: " << message << std::endl;
+	if (Command::isValid(message)) {
+        Command command = Command::parse(message);
+
+		handleCommand(command);
+	}
+}
+
+bool Robot::handleCommand(const Command& cmd) {
+	bool handled = false;
+
+	if (dribbler->handleCommand(cmd)) {
+		handled = true;
+	}
+
+	return handled;
 }

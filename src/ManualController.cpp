@@ -6,7 +6,7 @@
 #include "Coilgun.h"
 #include "Util.h"
 
-ManualController::ManualController(Robot* robot) : Controller(robot) {
+ManualController::ManualController(Robot* robot, Communication* com) : Controller(robot, com) {
 	
 };
 
@@ -35,7 +35,11 @@ bool ManualController::handleCommand(const Command& cmd) {
 }
 
 void ManualController::handleCommunicationMessage(std::string message) {
-	std::cout << "@ MANUAL CONTROLLER COM: " << message << std::endl;
+	if (Command::isValid(message)) {
+        Command command = Command::parse(message);
+
+		handleCommand(command);
+	}
 }
 
 void ManualController::handleTargetVectorCommand(const Command& cmd) {

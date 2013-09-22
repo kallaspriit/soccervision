@@ -2,8 +2,9 @@
 #define DRIBBLER_H
 
 #include "Config.h"
+#include "Command.h"
 
-class Dribbler {
+class Dribbler : public Command::Listener {
 
 public:
 	Dribbler();
@@ -15,6 +16,7 @@ public:
 	bool isActive() const { return speed > 0; }
 	bool gotBall() const;
 	bool isReady() { return false; } // TODO Implement connection
+	bool handleCommand(const Command& cmd);
 	double getBallInDribblerTime() { return ballInDribblerTime; }
 	double getBallLostTime() { return ballLostTime; }
 	void step(float dt);

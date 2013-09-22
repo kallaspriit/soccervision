@@ -3,6 +3,7 @@
 
 #include "Vision.h"
 #include "Communication.h"
+#include "Command.h"
 
 #include <string>
 #include <map>
@@ -10,10 +11,10 @@
 class Robot;
 class Command;
 
-class Controller : public Communication::Listener {
+class Controller : public Communication::Listener, public Command::Listener {
 
 public:
-    Controller(Robot* robot) : robot(robot) {}
+    Controller(Robot* robot, Communication* com) : robot(robot), com(com) {}
 	virtual void onEnter() {}
 	virtual void onExit() {}
 	virtual bool handleRequest(std::string request) { return false; }
@@ -24,6 +25,7 @@ public:
 
 protected:
     Robot* robot;
+	Communication* com;
 
 };
 

@@ -8,6 +8,7 @@
 #include "Vision.h"
 #include "Tasks.h"
 #include "Communication.h"
+#include "Command.h"
 
 #include <string>
 
@@ -17,7 +18,7 @@ class Coilgun;
 class Task;
 class Communication;
 
-class Robot : public Communication::Listener {
+class Robot : public Communication::Listener, public Command::Listener {
 
 public:
     Robot();
@@ -73,6 +74,7 @@ public:
 	const ParticleFilterLocalizer::Measurements& getMeasurements() const { return measurements; } // TODO Here?
 
 	void handleCommunicationMessage(std::string message);
+	bool handleCommand(const Command& cmd);
 	
 private:
     void updateWheelSpeeds();
