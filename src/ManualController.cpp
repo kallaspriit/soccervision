@@ -21,11 +21,7 @@ void ManualController::step(float dt, Vision::Results* visionResults) {
 		dir *= -1;
 	}
 
-	robot->wheelFL->setTargetSpeed(speed);
-	robot->wheelFR->setTargetSpeed(speed);
-	robot->wheelRL->setTargetSpeed(speed);
-	robot->wheelRR->setTargetSpeed(speed);
-	robot->dribbler->setTargetSpeed(speed);
+	robot->setTargetDir(0.0f, 0.0f, (float)speed / 5.0f);
 }
 
 bool ManualController::handleRequest(std::string request) {

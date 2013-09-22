@@ -15,8 +15,6 @@ Wheel::Wheel(int id) : id(id), targetOmega(0), realOmega(0), stallCounter(0) {
 
 void Wheel::setTargetOmega(float omega) {
     targetOmega = omega;
-
-	std::cout << "@ SET TARGET #" << id << ": " << targetOmega << std::endl;
 }
 
 void Wheel::setTargetSpeed(int speed) {
@@ -44,8 +42,6 @@ bool Wheel::isStalled() {
 }
 
 void Wheel::step(float dt) {
-	std::cout << "@ STEP #" << id << ": " << targetOmega << std::endl;
-
 	if (Math::abs(targetOmega) > Math::PI && Math::abs(targetOmega / realOmega) > 2.0f) {
 		stallCounter++;
 	} else {

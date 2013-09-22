@@ -182,7 +182,7 @@ void Robot::step(float dt, Vision::Results* visionResults) {
 }
 
 void Robot::setTargetDir(float x, float y, float omega, bool fluid) {
-	std::cout << "! Setting robot target direction: " << x << "x" << y << " @ " << omega << (fluid ? " (fluid)" : "") << std::endl;
+	//std::cout << "! Setting robot target direction: " << x << "x" << y << " @ " << omega << (fluid ? " (fluid)" : "") << std::endl;
 
 	fluidMovement = fluid;
 
@@ -243,7 +243,7 @@ bool Robot::isStalled() {
 }
 
 void Robot::stop() {
-	std::cout << "! Stopping robot" << std::endl;
+	//std::cout << "! Stopping robot" << std::endl;
 
 	setTargetDir(0, 0, 0, fluidMovement);
 	dribbler->stop();
@@ -319,6 +319,8 @@ void Robot::handleTasks(float dt) {
 
 void Robot::updateWheelSpeeds() {
 	Odometer::WheelSpeeds wheelSpeeds = odometer->calculateWheelSpeeds(targetDir.x, targetDir.y, targetOmega);
+
+	//std::cout << "! Updating wheel speeds: " << wheelSpeeds.FL << ", " << wheelSpeeds.FR << ", " << wheelSpeeds.RL << ", " << wheelSpeeds.RR << std::endl;
 
 	wheelFL->setTargetOmega(wheelSpeeds.FL);
 	wheelFR->setTargetOmega(wheelSpeeds.FR);
