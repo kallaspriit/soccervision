@@ -36,7 +36,7 @@ private:
 	boost::asio::io_service ioService;
 	udp::socket* socket;
 	udp::endpoint endpoint;
-	udp::resolver::iterator iterator;
+	boost::asio::ip::udp::endpoint remoteEndpoint;
 	Messages messages;
 	bool running;
 	mutable boost::mutex messagesMutex;
