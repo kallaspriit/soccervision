@@ -21,9 +21,8 @@ SoccerBot::SoccerBot() :
 	frontVision(NULL), rearVision(NULL),
 	frontProcessor(NULL), rearProcessor(NULL),
 	gui(NULL), fpsCounter(NULL), visionResults(NULL), robot(NULL), activeController(NULL), server(NULL), com(NULL),
-	running(false), playing(false), debugVision(false), showGui(false), controllerRequested(false),
-	dt(0.01666f), lastStepTime(0.0f), totalTime(0.0f),
-	targetSide(Side::UNKNOWN)
+	running(false), debugVision(false), showGui(false), controllerRequested(false),
+	dt(0.01666f), lastStepTime(0.0f), totalTime(0.0f)
 {
 
 }
@@ -645,14 +644,17 @@ std::string SoccerBot::getStateJSON() {
 		} else {
 			stream << "\"controllerState\": null,";
 		}
+
+		stream << "\"targetSide\":" << activeController->getTargetSide() << ",";
+		stream << "\"playing\":" << (activeController->isPlaying() ? "1" : "0") << ",";
 	} else {
 		stream << "\"controllerName\": null,";
 		stream << "\"controllerState\": null,";
+		stream << "\"targetSide\":" << Side::UNKNOWN << ",";
+		stream << "\"playing\":0,";
 	}
 
-	stream << "\"fps\":" << fpsCounter->getFps()  << ",";
-	stream << "\"targetGoal\":" << targetSide << ",";
-	stream << "\"playing\":" << (playing ? "1" : "0");
+	stream << "\"fps\":" << fpsCounter->getFps();
 
     stream << "}";
 

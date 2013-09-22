@@ -77,8 +77,6 @@ private:
 
 	bool controllerRequested;
 	bool running;
-	bool playing;
-	Side targetSide;
 	float dt;
 	float lastStepTime;
 	float totalTime;

@@ -4,6 +4,7 @@
 #include "Vision.h"
 #include "Communication.h"
 #include "Command.h"
+#include "Config.h"
 
 #include <string>
 #include <map>
@@ -20,6 +21,8 @@ public:
 	virtual bool handleRequest(std::string request) { return false; }
 	virtual bool handleCommand(const Command& cmd) { return false; }
 	virtual void handleCommunicationMessage(std::string message) {}
+	virtual Side getTargetSide() { return Side::UNKNOWN; }
+	virtual bool isPlaying() { return false; }
 	virtual void step(float dt, Vision::Results* visionResults) = 0;
 	virtual std::string getJSON() { return "null"; }
 
