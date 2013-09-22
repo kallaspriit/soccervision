@@ -33,7 +33,7 @@ bool ManualController::handleRequest(std::string request) {
 }
 
 bool ManualController::handleCommand(const Command& cmd) {
-    /*if (cmd.name == "toggle-side") {
+    if (cmd.name == "toggle-side") {
         handleToggleSideCommand();
     } else if (cmd.name == "target-vector" && cmd.parameters.size() == 3) {
         handleTargetVectorCommand(cmd);
@@ -45,7 +45,7 @@ bool ManualController::handleCommand(const Command& cmd) {
         handleKickCommand(cmd);
     } else {
         return false;
-    }*/
+    }
 
     return true;
 }

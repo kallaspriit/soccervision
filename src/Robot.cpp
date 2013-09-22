@@ -162,8 +162,8 @@ void Robot::step(float dt, Vision::Results* visionResults) {
     wheelFR->step(dt);
     wheelRL->step(dt);
     wheelRR->step(dt);
-	dribbler->step(dt);
 	coilgun->step(dt);
+	dribbler->step(dt);
 
 	// TODO Review this..
 	/*if (autostop) {
@@ -182,6 +182,8 @@ void Robot::step(float dt, Vision::Results* visionResults) {
 }
 
 void Robot::setTargetDir(float x, float y, float omega, bool fluid) {
+	std::cout << "! Setting robot target direction: " << x << "x" << y << " @ " << omega << (fluid ? " (fluid)" : "") << std::endl;
+
 	fluidMovement = fluid;
 
 	if (fluidMovement) {
@@ -241,6 +243,8 @@ bool Robot::isStalled() {
 }
 
 void Robot::stop() {
+	std::cout << "! Stopping robot" << std::endl;
+
 	setTargetDir(0, 0, 0, fluidMovement);
 	dribbler->stop();
 }
