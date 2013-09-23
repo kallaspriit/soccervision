@@ -16,6 +16,10 @@ void ManualController::onEnter() {
 	com->send("reset");
 }
 
+void ManualController::onExit() {
+	com->send("reset");
+}
+
 void ManualController::step(float dt, Vision::Results* visionResults) {
 	robot->setAutostop(false);
 

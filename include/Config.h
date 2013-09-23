@@ -24,6 +24,9 @@ namespace Config {
 	const int cameraWidth = 1280;
 	const int cameraHeight = 1024;
 
+	// default startup controller name
+	const std::string defaultController = "manual";
+
 	// constants for camera correction
 	const float cameraCorrectionK = 0.00000049f;
 	const float cameraCorrectionZoom = 0.969f;

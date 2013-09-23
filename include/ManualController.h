@@ -11,6 +11,7 @@ public:
 	ManualController(Robot* robot, Communication* com);
 
 	void onEnter();
+	void onExit();
     bool handleRequest(std::string request);
     bool handleCommand(const Command& cmd);
 	void handleCommunicationMessage(std::string message);

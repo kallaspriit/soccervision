@@ -80,7 +80,11 @@ void SoccerBot::run() {
 	server->start();
 
 	com->send("reset");
-	//com->send("target:2");
+
+	// TODO Dont need this once reset starts working
+	com->send("target:2");
+
+	setController(Config::defaultController);
 
 	if (frontCamera->isOpened()) {
 		frontCamera->startAcquisition();
@@ -317,8 +321,6 @@ void SoccerBot::setupControllers() {
 	std::cout << "! Setting up controllers.. ";
 
 	addController("manual", new ManualController(robot, com));
-
-	setController("manual");
 
 	std::cout << "done!" << std::endl;
 }
