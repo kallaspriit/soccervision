@@ -62,20 +62,6 @@ void ManualController::handleToggleSideCommand() {
 		return;
 	}
 
-	running = !running;
-
-	if (running) {
-		com->send("go:1");
-	} else {
-		com->send("go:0");
-	}
-}
-
-void ManualController::handleToggleGoCommand() {
-	if (!toggleGoBtn.toggle()) {
-		return;
-	}
-
 	if (targetSide == Side::BLUE) {
 		targetSide = Side::YELLOW;
 	} else {
@@ -83,6 +69,20 @@ void ManualController::handleToggleGoCommand() {
 	}
 
 	com->send("target:" + Util::toString(targetSide));
+}
+
+void ManualController::handleToggleGoCommand() {
+	if (!toggleGoBtn.toggle()) {
+		return;
+	}
+
+	running = !running;
+
+	if (running) {
+		com->send("go:1");
+	} else {
+		com->send("go:0");
+	}
 }
 
 void ManualController::handleTargetVectorCommand(const Command& cmd) {

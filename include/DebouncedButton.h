@@ -4,7 +4,7 @@
 class DebouncedButton {
 
 public:
-	DebouncedButton(float period = 0.25f);
+	DebouncedButton(float period = 0.1f);
 
 	bool toggle();
 
