@@ -30,9 +30,10 @@ void Communication::send(std::string message) {
 	while (!queuedMessages.empty()) {
 		std::cout << "! Sending queued message: " << queuedMessages.front() << ", size: " << queuedMessages.size() << std::endl;
 
-		send(queuedMessages.front());
-
+		std::string queuedMessage = queuedMessages.front();
 		queuedMessages.pop();
+
+		send(queuedMessage);
 	}
 
 	//std::cout << "> " << message << std::endl;
