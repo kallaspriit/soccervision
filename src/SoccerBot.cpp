@@ -260,6 +260,8 @@ void SoccerBot::broadcastFrame(unsigned char* rgb, unsigned char* classification
 	std::string base64Classification = Util::base64Encode(jpegBuffer, jpegBufferSize);
 
 	std::string frameResponse = Util::json("frame", "{\"rgb\": \"" + base64Rgb + "\",\"classification\": \"" + base64Classification + "\"}");
+
+	server->broadcast(frameResponse);
 }
 
 void SoccerBot::setupVision() {
