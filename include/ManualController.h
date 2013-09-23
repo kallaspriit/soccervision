@@ -10,6 +10,7 @@ class ManualController : public Controller {
 public:
 	ManualController(Robot* robot, Communication* com);
 
+	void onEnter();
     bool handleRequest(std::string request);
     bool handleCommand(const Command& cmd);
 	void handleCommunicationMessage(std::string message);

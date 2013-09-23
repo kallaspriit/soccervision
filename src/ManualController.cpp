@@ -13,6 +13,10 @@ ManualController::ManualController(Robot* robot, Communication* com) : Controlle
 	speed = 0;
 };
 
+void ManualController::onEnter() {
+	com->send("reset");
+}
+
 void ManualController::step(float dt, Vision::Results* visionResults) {
 	robot->setAutostop(false);
 
