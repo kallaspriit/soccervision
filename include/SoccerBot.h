@@ -57,6 +57,7 @@ public:
 private:
 	void setupCamera(std::string name, XimeaCamera* camera);
 	bool fetchFrame(XimeaCamera* camera, ProcessThread* processor);
+	void broadcastFrame(unsigned char* rgb, unsigned char* classification);
 
 	XimeaCamera* frontCamera;
 	XimeaCamera* rearCamera;
@@ -82,6 +83,8 @@ private:
 	float dt;
 	double lastStepTime;
 	float totalTime;
+
+	unsigned char* jpegBuffer;
 };
 
 #endif // SOCCERBOT_H

@@ -51,6 +51,7 @@ SoccerBot::~SoccerBot() {
 	if (frontBlobber != NULL) delete frontBlobber; frontBlobber = NULL;
 	if (rearBlobber != NULL) delete rearBlobber; rearBlobber = NULL;
 	if (com != NULL) delete com; com = NULL;
+	if (jpegBuffer != NULL) delete jpegBuffer; jpegBuffer = NULL;
 
 	std::cout << "! Resources freed" << std::endl;
 }
@@ -186,7 +187,8 @@ void SoccerBot::run() {
 		}
 
 		if (frameRequested) {
-			server->broadcast("FRAME");
+			// TODO Add camera choice
+			broadcastFrame(frontProcessor->rgb, frontProcessor->classification);
 
 			frameRequested = false;
 		}
@@ -235,6 +237,14 @@ bool SoccerBot::fetchFrame(XimeaCamera* camera, ProcessThread* processor) {
 	}
 
 	return false;
+}
+
+void SoccerBot::broadcastFrame(unsigned char* rgb, unsigned char* classification) {
+	if (jpegBuffer == NULL) {
+		std::cout << "! Creating frame JPEG buffer of " << Config::jpegBufferSize << " bytes.. ";
+        jpegBuffer = new unsigned char[Config::jpegBufferSize];
+		std::cout << "done!" << std::endl;
+    }
 }
 
 void SoccerBot::setupVision() {

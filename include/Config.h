@@ -27,6 +27,9 @@ namespace Config {
 	// default startup controller name
 	const std::string defaultController = "manual";
 
+	// how big of a buffer to allocate for generating jpeg images
+	const int jpegBufferSize = 1000 * 1024;
+
 	// constants for camera correction
 	const float cameraCorrectionK = 0.00000049f;
 	const float cameraCorrectionZoom = 0.969f;
@@ -162,9 +165,9 @@ namespace Config {
 } // namespace Config
 
 enum Side {
+	BLUE = 0,
     YELLOW = 1,
-    BLUE = 2,
-	UNKNOWN = 3
+	UNKNOWN = 2
 };
 
 enum Dir {
