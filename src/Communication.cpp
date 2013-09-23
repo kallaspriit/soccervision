@@ -27,8 +27,8 @@ void Communication::send(std::string message) {
 		return;
 	}
 
-	while (queuedMessages.size() > 0) {
-		std::cout << "! Sending queued message: " << queuedMessages.front() << std::endl;
+	while (!queuedMessages.empty()) {
+		std::cout << "! Sending queued message: " << queuedMessages.front() << ", size: " << queuedMessages.size() << std::endl;
 
 		send(queuedMessages.front());
 
