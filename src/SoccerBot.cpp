@@ -21,7 +21,7 @@ SoccerBot::SoccerBot() :
 	frontVision(NULL), rearVision(NULL),
 	frontProcessor(NULL), rearProcessor(NULL),
 	gui(NULL), fpsCounter(NULL), visionResults(NULL), robot(NULL), activeController(NULL), server(NULL), com(NULL),
-	running(false), debugVision(false), showGui(false), controllerRequested(false),
+	running(false), debugVision(false), showGui(false), controllerRequested(false), frameRequested(false),
 	dt(0.01666f), lastStepTime(0.0), totalTime(0.0f)
 {
 
@@ -122,7 +122,7 @@ void SoccerBot::run() {
 		totalTime += dt;
 
 		gotFrontFrame = gotRearFrame = false;
-		frontProcessor->debug = rearProcessor->debug = debugVision || showGui;
+		frontProcessor->debug = rearProcessor->debug = debugVision || showGui || frameRequested;
 
 		gotFrontFrame = fetchFrame(frontCamera, frontProcessor);
 		gotRearFrame = fetchFrame(rearCamera, rearProcessor);
@@ -183,6 +183,12 @@ void SoccerBot::run() {
 			if (gui->isQuitRequested()) {
 				running = false;
 			}
+		}
+
+		if (frameRequested) {
+			server->broadcast("FRAME");
+
+			frameRequested = false;
 		}
 
 		if (fpsCounter->frameNumber % 60 == 0) {
@@ -424,9 +430,11 @@ void SoccerBot::handleServerMessage(Server::Message* message) {
 			|| (!activeController->handleCommand(command) && !activeController->handleRequest(message->content))
 		) {
 			if (command.name == "get-controller") {
-				handleGetController(message);
+				handleGetControllerCommand(message);
 			} else if (command.name == "set-controller") {
-				handleSetController(command.parameters, message);
+				handleSetControllerCommand(command.parameters, message);
+			} else if (command.name == "get-frame") {
+				handleGetFrameCommand();
 			} else {
 				std::cout << "- Unsupported command: " << command.name << std::endl;
 			}
@@ -436,11 +444,11 @@ void SoccerBot::handleServerMessage(Server::Message* message) {
 	}
 }
 
-void SoccerBot::handleGetController(Server::Message* message) {
+void SoccerBot::handleGetControllerCommand(Server::Message* message) {
 	message->respond(Util::json("controller", activeControllerName));
 }
 
-void SoccerBot::handleSetController(Command::Parameters parameters, Server::Message* message) {
+void SoccerBot::handleSetControllerCommand(Command::Parameters parameters, Server::Message* message) {
 	std::string name = parameters[0];
 
 	if (setController(name)) {
@@ -450,6 +458,10 @@ void SoccerBot::handleSetController(Command::Parameters parameters, Server::Mess
 	}
 
 	message->respond(Util::json("controller", activeControllerName));
+}
+
+void SoccerBot::handleGetFrameCommand() {
+	frameRequested = true;
 }
 
 void SoccerBot::handleCommunicationMessages() {

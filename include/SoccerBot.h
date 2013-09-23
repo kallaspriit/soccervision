@@ -42,8 +42,9 @@ public:
 
 	void handleServerMessages();
 	void handleServerMessage(Server::Message* message);
-	void handleGetController(Server::Message* message);
-	void handleSetController(Command::Parameters parameters, Server::Message* message);
+	void handleGetControllerCommand(Server::Message* message);
+	void handleSetControllerCommand(Command::Parameters parameters, Server::Message* message);
+	void handleGetFrameCommand();
 
 	void handleCommunicationMessages();
 	void handleCommunicationMessage(std::string message);
@@ -77,6 +78,7 @@ private:
 
 	bool controllerRequested;
 	bool running;
+	bool frameRequested;
 	float dt;
 	double lastStepTime;
 	float totalTime;
