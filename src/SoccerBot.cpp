@@ -205,10 +205,6 @@ void SoccerBot::run() {
 			running = false;
 		}
 
-		if (dt > 0.2f) {
-			std::cout << "DT: " << dt << std::endl;
-		}
-
 		//std::cout << "! Total time: " << Util::timerEnd(startTime) << std::endl;
 	}
 
