@@ -21,7 +21,7 @@ SoccerBot::SoccerBot() :
 	frontBlobber(NULL), rearBlobber(NULL),
 	frontVision(NULL), rearVision(NULL),
 	frontProcessor(NULL), rearProcessor(NULL),
-	gui(NULL), fpsCounter(NULL), visionResults(NULL), robot(NULL), activeController(NULL), server(NULL), com(NULL),
+	gui(NULL), fpsCounter(NULL), visionResults(NULL), robot(NULL), activeController(NULL), server(NULL), com(NULL), jpegBuffer(NULL),
 	running(false), debugVision(false), showGui(false), controllerRequested(false), frameRequested(false),
 	dt(0.01666f), lastStepTime(0.0), totalTime(0.0f)
 {
