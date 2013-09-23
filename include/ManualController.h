@@ -3,6 +3,7 @@
 
 #include "Controller.h"
 #include "Vision.h"
+#include "DebouncedButton.h"
 
 class ManualController : public Controller {
 
@@ -17,6 +18,7 @@ public:
 	std::string getJSON();
 
     void handleToggleSideCommand();
+    void handleToggleGoCommand();
     void handleTargetVectorCommand(const Command& cmd);
     void handleTargetDirCommand(const Command& cmd);
     void handleSetDribblerCommand(const Command& cmd);
@@ -24,6 +26,9 @@ public:
 
 private:
 	Side targetSide;
+	bool running;
+	DebouncedButton toggleSideBtn;
+	DebouncedButton toggleGoBtn;
 
 	// TODO Remove these tests
 	int dir;

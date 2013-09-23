@@ -95,6 +95,7 @@
     <ClInclude Include="include\Communication.h" />
     <ClInclude Include="include\Config.h" />
     <ClInclude Include="include\Controller.h" />
+    <ClInclude Include="include\DebouncedButton.h" />
     <ClInclude Include="include\DebugRenderer.h" />
     <ClInclude Include="include\Dribbler.h" />
     <ClInclude Include="include\FpsCounter.h" />
@@ -168,6 +169,7 @@
     <ClCompile Include="src\Coilgun.cpp" />
     <ClCompile Include="src\Command.cpp" />
     <ClCompile Include="src\Communication.cpp" />
+    <ClCompile Include="src\DebouncedButton.cpp" />
     <ClCompile Include="src\DebugRenderer.cpp" />
     <ClCompile Include="src\Dribbler.cpp" />
     <ClCompile Include="src\FpsCounter.cpp" />

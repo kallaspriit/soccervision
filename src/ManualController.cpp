@@ -8,6 +8,7 @@
 
 ManualController::ManualController(Robot* robot, Communication* com) : Controller(robot, com) {
 	targetSide = Side::UNKNOWN;
+	running = false;
 	dir = 1;
 	speed = 0;
 };
@@ -31,6 +32,8 @@ bool ManualController::handleRequest(std::string request) {
 bool ManualController::handleCommand(const Command& cmd) {
     if (cmd.name == "toggle-side") {
         handleToggleSideCommand();
+    } else if (cmd.name == "toggle-go") {
+        handleToggleGoCommand();
     } else if (cmd.name == "target-vector" && cmd.parameters.size() == 3) {
         handleTargetVectorCommand(cmd);
     } else if (cmd.name == "target-dir" && cmd.parameters.size() == 3) {
@@ -55,6 +58,24 @@ void ManualController::handleCommunicationMessage(std::string message) {
 }
 
 void ManualController::handleToggleSideCommand() {
+	if (!toggleSideBtn.toggle()) {
+		return;
+	}
+
+	running = !running;
+
+	if (running) {
+		com->send("go:1");
+	} else {
+		com->send("go:0");
+	}
+}
+
+void ManualController::handleToggleGoCommand() {
+	if (!toggleGoBtn.toggle()) {
+		return;
+	}
+
 	if (targetSide == Side::BLUE) {
 		targetSide = Side::YELLOW;
 	} else {
