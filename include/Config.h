@@ -28,7 +28,7 @@ namespace Config {
 	const std::string defaultController = "manual";
 
 	// how big of a buffer to allocate for generating jpeg images
-	const int jpegBufferSize = 5000 * 1024;
+	const int jpegBufferSize = 10000 * 1024;
 
 	// constants for camera correction
 	const float cameraCorrectionK = 0.00000049f;
