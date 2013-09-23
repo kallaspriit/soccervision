@@ -426,7 +426,7 @@ void SoccerBot::handleServerMessage(Server::Message* message) {
 			if (command.name == "get-controller") {
 				handleGetController(message);
 			} else if (command.name == "set-controller") {
-				handleSetController(command.parameters);
+				handleSetController(command.parameters, message);
 			} else {
 				std::cout << "- Unsupported command: " << command.name << std::endl;
 			}
@@ -440,7 +440,7 @@ void SoccerBot::handleGetController(Server::Message* message) {
 	message->respond(Util::json("controller", activeControllerName));
 }
 
-void SoccerBot::handleSetController(Command::Parameters parameters) {
+void SoccerBot::handleSetController(Command::Parameters parameters, Server::Message* message) {
 	std::string name = parameters[0];
 
 	if (setController(name)) {
@@ -448,6 +448,8 @@ void SoccerBot::handleSetController(Command::Parameters parameters) {
 	} else {
 		std::cout << "- Failed setting controller to '" << name << "'" << std::endl;
 	}
+
+	message->respond(Util::json("controller", activeControllerName));
 }
 
 void SoccerBot::handleCommunicationMessages() {

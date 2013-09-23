@@ -43,7 +43,7 @@ public:
 	void handleServerMessages();
 	void handleServerMessage(Server::Message* message);
 	void handleGetController(Server::Message* message);
-	void handleSetController(Command::Parameters parameters);
+	void handleSetController(Command::Parameters parameters, Server::Message* message);
 
 	void handleCommunicationMessages();
 	void handleCommunicationMessage(std::string message);
