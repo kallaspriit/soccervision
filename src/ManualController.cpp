@@ -6,9 +6,8 @@
 #include "Coilgun.h"
 #include "Util.h"
 
-ManualController::ManualController(Robot* robot, Communication* com) : Controller(robot, com), toggleGoBtn(0.5f) {
+ManualController::ManualController(Robot* robot, Communication* com) : Controller(robot, com) {
 	targetSide = Side::UNKNOWN;
-	running = false;
 	dir = 1;
 	speed = 0;
 };
@@ -36,8 +35,6 @@ bool ManualController::handleRequest(std::string request) {
 bool ManualController::handleCommand(const Command& cmd) {
     if (cmd.name == "toggle-side") {
         handleToggleSideCommand();
-    } else if (cmd.name == "toggle-go") {
-        handleToggleGoCommand();
     } else if (cmd.name == "target-vector" && cmd.parameters.size() == 3) {
         handleTargetVectorCommand(cmd);
     } else if (cmd.name == "target-dir" && cmd.parameters.size() == 3) {
@@ -73,20 +70,6 @@ void ManualController::handleToggleSideCommand() {
 	}
 
 	com->send("target:" + Util::toString(targetSide));
-}
-
-void ManualController::handleToggleGoCommand() {
-	if (!toggleGoBtn.toggle()) {
-		return;
-	}
-
-	running = !running;
-
-	if (running) {
-		com->send("go:1");
-	} else {
-		com->send("go:0");
-	}
 }
 
 void ManualController::handleTargetVectorCommand(const Command& cmd) {

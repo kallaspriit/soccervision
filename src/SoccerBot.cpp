@@ -79,6 +79,9 @@ void SoccerBot::run() {
 	com->start();
 	server->start();
 
+	com->send("reset");
+	//com->send("target:2");
+
 	if (frontCamera->isOpened()) {
 		frontCamera->startAcquisition();
 	}
