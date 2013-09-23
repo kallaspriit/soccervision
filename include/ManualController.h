@@ -10,12 +10,13 @@ class ManualController : public Controller {
 public:
 	ManualController(Robot* robot, Communication* com);
 
-	void onEnter();
-	void onExit();
+	void onEnter() { reset(); }
+	void onExit() { reset(); }
     bool handleRequest(std::string request);
     bool handleCommand(const Command& cmd);
 	void handleCommunicationMessage(std::string message);
     void step(float dt, Vision::Results* visionResults);
+	void reset();
 	Side getTargetSide() { return targetSide; }
 	std::string getJSON();
 
@@ -28,10 +29,6 @@ public:
 private:
 	Side targetSide;
 	DebouncedButton toggleSideBtn;
-
-	// TODO Remove these tests
-	int dir;
-	float speed;
 
 };
 

@@ -20,16 +20,12 @@ Communication::~Communication() {
 
 void Communication::send(std::string message) {
 	if (!running) {
-		std::cout << "- Unable to send communication message '" << message << "', connection not open" << std::endl;
-
 		queuedMessages.push(message);
 
 		return;
 	}
 
 	while (!queuedMessages.empty()) {
-		std::cout << "! Sending queued message: " << queuedMessages.front() << ", size: " << queuedMessages.size() << std::endl;
-
 		std::string queuedMessage = queuedMessages.front();
 		queuedMessages.pop();
 

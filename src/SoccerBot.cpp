@@ -81,9 +81,6 @@ void SoccerBot::run() {
 
 	com->send("reset");
 
-	// TODO Dont need this once reset starts working
-	com->send("target:2");
-
 	setController(Config::defaultController);
 
 	if (frontCamera->isOpened()) {
