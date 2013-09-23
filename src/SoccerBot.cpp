@@ -215,6 +215,8 @@ void SoccerBot::run() {
 
 		if (SignalHandler::exitRequested) {
 			running = false;
+
+			com->send("reset");
 		}
 
 		//std::cout << "! Total time: " << Util::timerEnd(startTime) << std::endl;
