@@ -22,7 +22,17 @@ void Communication::send(std::string message) {
 	if (!running) {
 		std::cout << "- Unable to send communication message '" << message << "', connection not open" << std::endl;
 
+		queuedMessages.push(message);
+
 		return;
+	}
+
+	while (queuedMessages.size() > 0) {
+		send(queuedMessages.front());
+
+		std::cout << "! Sending queued message: " << queuedMessages.front() << std::endl;
+
+		queuedMessages.pop();
 	}
 
 	//std::cout << "> " << message << std::endl;

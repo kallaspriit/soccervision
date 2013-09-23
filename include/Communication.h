@@ -8,6 +8,7 @@
 #include <string>
 #include <vector>
 #include <stack>
+#include <queue>
 
 using boost::asio::ip::udp;
 
@@ -46,6 +47,7 @@ private:
 	udp::endpoint endpoint;
 	boost::asio::ip::udp::endpoint remoteEndpoint;
 	Messages messages;
+	std::queue<std::string> queuedMessages;
 	bool running;
 	mutable boost::mutex messagesMutex;
 };
