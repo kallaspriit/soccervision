@@ -6,7 +6,7 @@
 #include "Coilgun.h"
 #include "Util.h"
 
-ManualController::ManualController(Robot* robot, Communication* com) : Controller(robot, com) {
+ManualController::ManualController(Robot* robot, Communication* com) : Controller(robot, com), toggleGoBtn(0.5f) {
 	targetSide = Side::UNKNOWN;
 	running = false;
 	dir = 1;
