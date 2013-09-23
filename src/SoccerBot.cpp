@@ -12,6 +12,7 @@
 #include "Dribbler.h"
 #include "Wheel.h"
 #include "ManualController.h"
+#include "ImageProcessor.h"
 
 #include <iostream>
 
@@ -242,11 +243,23 @@ bool SoccerBot::fetchFrame(XimeaCamera* camera, ProcessThread* processor) {
 }
 
 void SoccerBot::broadcastFrame(unsigned char* rgb, unsigned char* classification) {
+	int jpegBufferSize = Config::jpegBufferSize;
+
 	if (jpegBuffer == NULL) {
-		std::cout << "! Creating frame JPEG buffer of " << Config::jpegBufferSize << " bytes.. ";
+		std::cout << "! Creating frame JPEG buffer of " << jpegBufferSize << " bytes.. ";
         jpegBuffer = new unsigned char[Config::jpegBufferSize];
 		std::cout << "done!" << std::endl;
     }
+
+	ImageProcessor::rgbToJpeg(rgb, jpegBuffer, jpegBufferSize, Config::cameraWidth, Config::cameraHeight);
+	std::string base64Rgb = Util::base64Encode(jpegBuffer, jpegBufferSize);
+
+	jpegBufferSize = Config::jpegBufferSize;
+
+	ImageProcessor::rgbToJpeg(classification, jpegBuffer, jpegBufferSize, Config::cameraWidth, Config::cameraHeight);
+	std::string base64Classification = Util::base64Encode(jpegBuffer, jpegBufferSize);
+
+	std::string frameResponse = Util::json("frame", "{\"rgb\": \"" + base64Rgb + "\",\"classification\": \"" + base64Classification + "\"}");
 }
 
 void SoccerBot::setupVision() {

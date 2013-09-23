@@ -52,7 +52,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>include;$(BOOSTROOT);$(XIMEAROOT)\API;$(WEBSOCKETPPROOT);lib\libyuv\include;lib\pthread\include;lib\websocketpp;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>include;$(BOOSTROOT);$(XIMEAROOT)\API;$(WEBSOCKETPPROOT);lib\libyuv\include;lib\pthread\include;lib\websocketpp;lib\jpeg;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;NOMINMAX;WIN32;_WIN32_WINNT=0x0601;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
@@ -71,7 +71,7 @@
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>include;$(BOOSTROOT);$(XIMEAROOT)\API;$(WEBSOCKETPPROOT);lib\libyuv\include;lib\pthread\include;lib\websocketpp;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>include;$(BOOSTROOT);$(XIMEAROOT)\API;$(WEBSOCKETPPROOT);lib\libyuv\include;lib\pthread\include;lib\websocketpp;lib\jpeg;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;NOMINMAX;WIN32;_WIN32_WINNT=0x0601;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
@@ -122,6 +122,7 @@
     <ClInclude Include="include\XimeaCamera.h" />
     <ClInclude Include="include\DisplayWindow.h" />
     <ClInclude Include="include\Gui.h" />
+    <ClInclude Include="lib\jpeg\jpge.h" />
     <ClInclude Include="lib\libyuv\include\libyuv.h" />
     <ClInclude Include="lib\libyuv\include\libyuv\basic_types.h" />
     <ClInclude Include="lib\libyuv\include\libyuv\compare.h" />
@@ -144,6 +145,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="include\Server.cpp" />
+    <ClCompile Include="lib\jpeg\jpge.cpp" />
     <ClCompile Include="lib\libyuv\source\compare.cc" />
     <ClCompile Include="lib\libyuv\source\compare_neon.cc" />
     <ClCompile Include="lib\libyuv\source\convert.cc" />

@@ -11,9 +11,7 @@
 class Util {
 
 public:
-    static void yuyvToRgb(int width, int height, unsigned char *data, unsigned char *out);
     static std::string base64Encode(const unsigned char* data, unsigned int len);
-    static void jpegEncode(const unsigned char* input, void* output, int &bufferSize, int width, int height, int channelCount = 3);
     static double millitime();
     static double duration(double start);
     static float signum(float value);
@@ -26,8 +24,6 @@ public:
 	static void correctCameraPoint(int& x, int& y);
 	static void confineField(float& x, float& y);
 	static std::string json(std::string id, std::string payload);
-    //static std::string exec(const std::string& cmd);
-    //static std::string getWorkingDirectory();
 
     static inline int rgbToInt(int red, int green, int blue) {
         int rgb = red;

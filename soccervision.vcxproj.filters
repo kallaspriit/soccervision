@@ -16,6 +16,9 @@
     <Filter Include="libyuv">
       <UniqueIdentifier>{3f722816-5db7-4323-bfb8-22d4ef089a6b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="jpeg">
+      <UniqueIdentifier>{6d198e33-2214-4b25-97ce-77de58a272b5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\DisplayWindow.h">
@@ -177,6 +180,9 @@
     <ClInclude Include="include\DebouncedButton.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="lib\jpeg\jpge.h">
+      <Filter>jpeg</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\DisplayWindow.cpp">
@@ -334,6 +340,9 @@
     </ClCompile>
     <ClCompile Include="src\DebouncedButton.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\jpeg\jpge.cpp">
+      <Filter>jpeg</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

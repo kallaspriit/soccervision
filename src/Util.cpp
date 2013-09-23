@@ -1,63 +1,12 @@
 #include "Util.h"
 #include "Config.h"
-//#include "jpge.h"
-
-//#include <math.h>
 #include <iostream>
-//#include <sys/time.h>
 #include <ctime>
-//#include <stdlib.h>
 #include <stdio.h>
 #include <Windows.h>
 
 double Util::queryPerformanceFrequency = 0;
 __int64 Util::timerStartCount = 0;
-
-void Util::yuyvToRgb(int width, int height, unsigned char *data, unsigned char *out) {
-    int w2 = width / 2;
-
-    for(int x=0; x<w2; x++) {
-        for(int y=0; y<height; y++) {
-            int i = (y*w2+x)*4;
-            int y0 = data[i];
-            int u = data[i+1];
-            int y1 = data[i+2];
-            int v = data[i+3];
-
-            int r = (int)(y0 + (1.370705 * (v-128)));
-            int g = (int)(y0 - (0.698001 * (v-128)) - (0.337633 * (u-128)));
-            int b = (int)(y0 + (1.732446 * (u-128)));
-
-            if(r > 255) r = 255;
-            if(g > 255) g = 255;
-            if(b > 255) b = 255;
-            if(r < 0) r = 0;
-            if(g < 0) g = 0;
-            if(b < 0) b = 0;
-
-            i = (y*width+2*x)*3;
-
-            out[i] = (unsigned char)(r);
-            out[i+1] = (unsigned char)(g);
-            out[i+2] = (unsigned char)(b);
-
-            r = (int)(y1 + (1.370705 * (v-128)));
-            g = (int)(y1 - (0.698001 * (v-128)) - (0.337633 * (u-128)));
-            b = (int)(y1 + (1.732446 * (u-128)));
-
-            if(r > 255) r = 255;
-            if(g > 255) g = 255;
-            if(b > 255) b = 255;
-            if(r < 0) r = 0;
-            if(g < 0) g = 0;
-            if(b < 0) b = 0;
-
-            out[i+3] = (unsigned char)(r);
-            out[i+4] = (unsigned char)(g);
-            out[i+5] = (unsigned char)(b);
-        }
-    }
-}
 
 __int64 Util::timerStart() {
 	LARGE_INTEGER li;
@@ -124,31 +73,8 @@ std::string Util::base64Encode(const unsigned char* data, unsigned int length) {
     return ret;
 }
 
-/*void Util::jpegEncode(const unsigned char* input, void* output, int &bufferSize, int width, int height, int channelCount) {
-    jpge::compress_image_to_jpeg_file_in_memory(output, bufferSize, width, height, channelCount, input);
-}*/
-
 double Util::millitime() {
-	//return (double)GetTickCount() / 1000.0;
-	//return ((double)clock() / (double)CLOCKS_PER_SEC);
 	return (double)timeGetTime() / 1000.0;
-
-	//return time(0) * 1000.0;
-
-    /*timeval timeOfDay;
-
-    gettimeofday(&timeOfDay, 0);
-
-    long seconds  = timeOfDay.tv_sec;
-    long useconds = timeOfDay.tv_usec;
-
-    return (double)seconds + (double)useconds / 1000000.0d;*/
-
-    //long mtime = (seconds * 1000 + useconds / 1000.0) + 0.5;
-
-    //std::cout << "mtime:" << mtime << "\n";
-
-    //return mtime / 1000;
 }
 
 double Util::duration(double start) {
@@ -204,38 +130,6 @@ bool Util::replace(std::string& str, const std::string& from, const std::string&
 
     return true;
 }
-
-/*std::string Util::exec(const std::string& cmd) {
-    FILE* pipe = popen(cmd.c_str(), "r");
-
-    if (!pipe) {
-        return "ERROR";
-    }
-
-    char buffer[128];
-    std::string result = "";
-
-    while (!feof(pipe)) {
-        if (fgets(buffer, 128, pipe) != NULL) {
-            result += buffer;
-        }
-    }
-
-    pclose(pipe);
-
-    return result;
-}*/
-
-/*std::string Util::getWorkingDirectory() {
-    char stackBuffer[255];
-
-    if (getcwd(stackBuffer, sizeof(stackBuffer)) != NULL) {
-        return stackBuffer;
-    } else {
-        return "ERROR";
-    }
-}
-*/
 
 void Util::correctCameraPoint(int& x, int& y) {
 	float k = Config::cameraCorrectionK;
