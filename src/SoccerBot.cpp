@@ -125,6 +125,7 @@ void SoccerBot::run() {
 
 		gotFrontFrame = gotRearFrame = false;
 		frontProcessor->debug = rearProcessor->debug = debugVision || showGui || frameRequested;
+		frontProcessor->rgbSwapRB = rearProcessor->rgbSwapRB = showGui;
 
 		gotFrontFrame = fetchFrame(frontCamera, frontProcessor);
 		gotRearFrame = fetchFrame(rearCamera, rearProcessor);

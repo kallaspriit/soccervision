@@ -21,6 +21,8 @@ public:
 	Dir dir;
 
 	bool debug;
+	bool rgbSwapRB;
+	bool classificationSwapRB;
 
 	Blobber* blobber;
 	Vision* vision;

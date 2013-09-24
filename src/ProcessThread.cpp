@@ -7,7 +7,7 @@
 
 #include <iostream>
 
-ProcessThread::ProcessThread(Blobber* blobber, Vision* vision) : Thread(), dir(dir), blobber(blobber), vision(vision), visionResult(NULL), debug(false), done(true) {
+ProcessThread::ProcessThread(Blobber* blobber, Vision* vision) : Thread(), dir(dir), blobber(blobber), vision(vision), visionResult(NULL), debug(false), done(true), rgbSwapRB(false), classificationSwapRB(false) {
 	frame = NULL;
 	width = blobber->getWidth();
 	height = blobber->getHeight();
@@ -92,10 +92,10 @@ void* ProcessThread::run() {
 	visionResult = vision->process();
 
 	if (debug) {
-		DebugRenderer::renderBlobs(classification, blobber);
-		DebugRenderer::renderBalls(rgb, visionResult->balls, true);
-		DebugRenderer::renderGoals(rgb, visionResult->goals, true);
-		DebugRenderer::renderObstructions(rgb, visionResult->obstructionSide, true);
+		DebugRenderer::renderBlobs(classification, blobber, classificationSwapRB);
+		DebugRenderer::renderBalls(rgb, visionResult->balls, rgbSwapRB);
+		DebugRenderer::renderGoals(rgb, visionResult->goals, rgbSwapRB);
+		DebugRenderer::renderObstructions(rgb, visionResult->obstructionSide, rgbSwapRB);
 		// TODO Show whether a ball is in the way
 	}
 
