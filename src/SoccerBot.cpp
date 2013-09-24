@@ -155,6 +155,13 @@ void SoccerBot::run() {
 			visionResults->rear = rearProcessor->visionResult;
 		}
 
+		if (frameRequested) {
+			// TODO Add camera choice
+			broadcastFrame(frontProcessor->rgb, frontProcessor->classification);
+
+			frameRequested = false;
+		}
+
 		if (showGui) {
 			if (gui == NULL) {
 				setupGui();
@@ -185,13 +192,6 @@ void SoccerBot::run() {
 			if (gui->isQuitRequested()) {
 				running = false;
 			}
-		}
-
-		if (frameRequested) {
-			// TODO Add camera choice
-			broadcastFrame(frontProcessor->rgb, frontProcessor->classification);
-
-			frameRequested = false;
 		}
 
 		if (fpsCounter->frameNumber % 60 == 0) {
