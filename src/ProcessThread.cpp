@@ -7,7 +7,7 @@
 
 #include <iostream>
 
-ProcessThread::ProcessThread(Blobber* blobber, Vision* vision) : Thread(), dir(dir), blobber(blobber), vision(vision), visionResult(NULL), debug(false), done(true), rgbSwapRB(false), classificationSwapRB(false) {
+ProcessThread::ProcessThread(Blobber* blobber, Vision* vision) : Thread(), dir(dir), blobber(blobber), vision(vision), visionResult(NULL), debug(false), done(true) {
 	frame = NULL;
 	width = blobber->getWidth();
 	height = blobber->getHeight();

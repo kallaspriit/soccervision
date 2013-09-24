@@ -52,7 +52,6 @@ void Vision::setDebugImage(unsigned char* image, int width, int height) {
 	canvas.data = image;
 	canvas.width = width;
 	canvas.height = height;
-	canvas.swapRB = true;
 }
 
 Vision::Result* Vision::process() {
