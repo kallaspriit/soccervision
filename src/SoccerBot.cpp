@@ -255,7 +255,7 @@ void SoccerBot::broadcastFrame(unsigned char* rgb, unsigned char* classification
 	unsigned char blue;
  
 	// swap blue and red..
-	for (int i = 0; i < Config::cameraWidth * Config::cameraHeight * 3; i += 3) {
+	for (int i = 0; i < Config::cameraWidth * Config::cameraHeight; i += 3) {
 		blue = rgb[i];
 		rgb[i] = rgb[i + 2];
 		rgb[i + 2] = blue;
