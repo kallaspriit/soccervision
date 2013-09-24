@@ -63,8 +63,8 @@ void ImageProcessor::ARGBToRGB24(unsigned char* input, unsigned char* output, in
 	);
 }
 
-void ImageProcessor::rgbToJpeg(unsigned char* input, unsigned char* output, int& bufferSize, int width, int height) {
-	jpge::compress_image_to_jpeg_file_in_memory(output, bufferSize, width, height, 3, input);
+bool ImageProcessor::rgbToJpeg(unsigned char* input, unsigned char* output, int& bufferSize, int width, int height, int channels) {
+	return jpge::compress_image_to_jpeg_file_in_memory(output, bufferSize, width, height, channels, input);
 }
 
 ImageProcessor::YUYV* ImageProcessor::getYuyvPixelAt(unsigned char* dataY, unsigned char* dataU, unsigned char* dataV, int width, int height, int x, int y) {

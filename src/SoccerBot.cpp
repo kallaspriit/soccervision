@@ -190,7 +190,7 @@ void SoccerBot::run() {
 
 		if (frameRequested) {
 			// TODO Add camera choice
-			broadcastFrame(frontProcessor->rgb, frontProcessor->classification);
+			broadcastFrame(frontProcessor->argb, frontProcessor->classification);
 
 			frameRequested = false;
 		}
@@ -252,14 +252,23 @@ void SoccerBot::broadcastFrame(unsigned char* rgb, unsigned char* classification
 		std::cout << "done!" << std::endl;
     }
 
-	ImageProcessor::rgbToJpeg(rgb, jpegBuffer, jpegBufferSize, Config::cameraWidth, Config::cameraHeight);
+	if (!ImageProcessor::rgbToJpeg(rgb, jpegBuffer, jpegBufferSize, Config::cameraWidth, Config::cameraHeight, 4)) {
+		std::cout << "- Converting RGB image to JPEG failed, probably need to increase buffer size" << std::endl;
+
+		return;
+	}
+
 	std::string base64Rgb = Util::base64Encode(jpegBuffer, jpegBufferSize);
 
 	jpegBufferSize = Config::jpegBufferSize;
 
-	ImageProcessor::rgbToJpeg(classification, jpegBuffer, jpegBufferSize, Config::cameraWidth, Config::cameraHeight);
-	std::string base64Classification = Util::base64Encode(jpegBuffer, jpegBufferSize);
+	if (!ImageProcessor::rgbToJpeg(classification, jpegBuffer, jpegBufferSize, Config::cameraWidth, Config::cameraHeight)) {
+		std::cout << "- Converting classification image to JPEG failed, probably need to increase buffer size" << std::endl;
 
+		return;
+	}
+
+	std::string base64Classification = Util::base64Encode(jpegBuffer, jpegBufferSize);
 	std::string frameResponse = Util::json("frame", "{\"rgb\": \"" + base64Rgb + "\",\"classification\": \"" + base64Classification + "\"}");
 
 	server->broadcast(frameResponse);

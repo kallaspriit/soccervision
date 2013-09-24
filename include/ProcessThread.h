@@ -34,14 +34,13 @@ public:
     unsigned char* dataU;
     unsigned char* dataV;
 	unsigned char* classification;
+	unsigned char* argb;
 	unsigned char* rgb;
 
 private:
 	void* run();
 
 	bool done;
-	unsigned char* argb;
-
 };
 
 #endif // PROCESSTHREAD_H
