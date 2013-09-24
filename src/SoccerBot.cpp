@@ -512,7 +512,7 @@ void SoccerBot::handleGetFrameCommand() {
 }
 
 void SoccerBot::handleCameraChoiceCommand(Command::Parameters parameters) {
-	debugCameraDir = Util::toInt(parameters[0]) == 0 ? Dir::REAR : Dir::FRONT;
+	debugCameraDir = Util::toInt(parameters[0]) == 2 ? Dir::REAR : Dir::FRONT;
 
 	std::cout << "! Debugging now from " << (debugCameraDir == Dir::FRONT ? "front" : "rear") << " camera" << std::endl;
 }

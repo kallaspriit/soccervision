@@ -237,7 +237,7 @@ Dash.UI.prototype.initSocket = function() {
 			dash.socket.open(dash.config.socket.host, dash.config.socket.port);
 		}, 1000);
 		
-		$('#controller-choice OPTIONS:eq[0]').trigger('select');
+		$('#controller-choice OPTION:eq(0)').trigger('select');
 	});
 	
 	dash.socket.bind(Dash.Socket.Event.ERROR, function(e) {
