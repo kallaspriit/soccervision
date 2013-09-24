@@ -844,6 +844,10 @@ Dash.UI.prototype.addState = function(state) {
 	}
 	
 	this.states.push(state);
+
+	if (this.states.length > 100) {
+		this.states.shift();
+	}
 	
 	this.stateSlider.slider('max', this.states.length);
 	

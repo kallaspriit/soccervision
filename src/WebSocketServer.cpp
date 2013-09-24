@@ -50,12 +50,16 @@ void WebSocketServer::addListener(Listener* listener) {
 
 void WebSocketServer::broadcast(std::string message) {
 	for (ConnectionsIt it = connections.begin(); it != connections.end(); it++) {
-		server->send(*it, message, websocketpp::frame::opcode::TEXT);
+		send(*it, message);
 	}
 }
 
 void WebSocketServer::send(websocketpp::connection_hdl connection, std::string message) {
-	server->send(connection, message, websocketpp::frame::opcode::TEXT);
+	try {
+		server->send(connection, message, websocketpp::frame::opcode::TEXT);
+	} catch (...) {
+		std::cout << "! Sending server message '" << message << "' failed" << std::endl;
+	}
 }
 
 void WebSocketServer::onOpen(websocketpp::connection_hdl connection) {
