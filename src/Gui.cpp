@@ -129,10 +129,10 @@ void Gui::addMouseListener(MouseListener* listener) {
 }
 
 void Gui::setFrontImages(unsigned char* rgb, unsigned char* yuyv, unsigned char* dataY, unsigned char* dataU, unsigned char* dataV, unsigned char* classification) {
-	DebugRenderer::renderFPS(rgb, fps, true);
+	DebugRenderer::renderFPS(rgb, fps);
 
-	drawElements(rgb, width, height, true);
-	drawElements(classification, width, height, false);
+	drawElements(rgb, width, height);
+	drawElements(classification, width, height);
 
 	if (activeWindow == frontClassification || activeWindow == frontRGB) {
 		if (!isMouseOverElement(mouseX, mouseY)) {
@@ -149,10 +149,10 @@ void Gui::setFrontImages(unsigned char* rgb, unsigned char* yuyv, unsigned char*
 }
 
 void Gui::setRearImages(unsigned char* rgb, unsigned char* yuyv, unsigned char* dataY, unsigned char* dataU, unsigned char* dataV, unsigned char* classification) {
-	DebugRenderer::renderFPS(rgb, fps, true);
+	DebugRenderer::renderFPS(rgb, fps);
 
-	drawElements(rgb, width, height, true);
-	drawElements(classification, width, height, false);
+	drawElements(rgb, width, height);
+	drawElements(classification, width, height);
 
 	if (activeWindow == rearClassification || activeWindow == rearRGB) {
 		if (!isMouseOverElement(mouseX, mouseY)) {

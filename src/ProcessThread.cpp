@@ -93,10 +93,10 @@ void* ProcessThread::run() {
 	visionResult = vision->process();
 
 	if (debug) {
-		DebugRenderer::renderBlobs(classification, blobber, classificationSwapRB);
-		DebugRenderer::renderBalls(rgb, visionResult->balls, rgbSwapRB);
-		DebugRenderer::renderGoals(rgb, visionResult->goals, rgbSwapRB);
-		DebugRenderer::renderObstructions(rgb, visionResult->obstructionSide, rgbSwapRB);
+		DebugRenderer::renderBlobs(classification, blobber);
+		DebugRenderer::renderBalls(rgb, visionResult->balls);
+		DebugRenderer::renderGoals(rgb, visionResult->goals);
+		DebugRenderer::renderObstructions(rgb, visionResult->obstructionSide);
 		// TODO Show whether a ball is in the way
 	}
 
