@@ -3,24 +3,22 @@
 #include "Maths.h"
 #include "Util.h"
 
-void DebugRenderer::renderFPS(unsigned char* image, int fps, bool swapRB, int width, int height) {
+void DebugRenderer::renderFPS(unsigned char* image, int fps, int width, int height) {
 	Canvas canvas = Canvas();
 
 	canvas.data = image;
 	canvas.width = width;
 	canvas.height = height;
-	canvas.swapRB = swapRB;
 
 	canvas.drawText(20, 20, "FPS: " + Util::toString(fps));
 }
 
-void DebugRenderer::renderBlobs(unsigned char* image, Blobber* blobber, bool swapRB, int width, int height) {
+void DebugRenderer::renderBlobs(unsigned char* image, Blobber* blobber, int width, int height) {
 	Canvas canvas = Canvas();
 
 	canvas.data = image;
 	canvas.width = width;
 	canvas.height = height;
-	canvas.swapRB = swapRB;
 
 	for (int i = 0; i < blobber->getColorCount(); i++) {
 		Blobber::Color* color = blobber->getColor(i);
@@ -51,13 +49,12 @@ void DebugRenderer::renderBlobs(unsigned char* image, Blobber* blobber, bool swa
 	}
 }
 
-void DebugRenderer::renderBalls(unsigned char* image, const ObjectList& balls, bool swapRB, int width, int height) {
+void DebugRenderer::renderBalls(unsigned char* image, const ObjectList& balls, int width, int height) {
 	Canvas canvas = Canvas();
 
 	canvas.data = image;
 	canvas.width = width;
 	canvas.height = height;
-	canvas.swapRB = swapRB;
 
 	Object* ball = NULL;
     char buf[256];
@@ -106,13 +103,12 @@ void DebugRenderer::renderBalls(unsigned char* image, const ObjectList& balls, b
     }*/
 }
 
-void DebugRenderer::renderGoals(unsigned char* image, const ObjectList& goals, bool swapRB, int width, int height) {
+void DebugRenderer::renderGoals(unsigned char* image, const ObjectList& goals, int width, int height) {
 	Canvas canvas = Canvas();
 
 	canvas.data = image;
 	canvas.width = width;
 	canvas.height = height;
-	canvas.swapRB = swapRB;
 
 	Object* goal = NULL;
     char buf[256];
@@ -154,24 +150,22 @@ void DebugRenderer::renderGoals(unsigned char* image, const ObjectList& goals, b
     }
 }
 
-void DebugRenderer::renderBrush(unsigned char* image, int x, int y, int radius, bool active, bool swapRB, int width, int height) {
+void DebugRenderer::renderBrush(unsigned char* image, int x, int y, int radius, bool active, int width, int height) {
 	Canvas canvas = Canvas();
 
 	canvas.data = image;
 	canvas.width = width;
 	canvas.height = height;
-	canvas.swapRB = swapRB;
 
 	canvas.drawCircle(x, y, radius, 255, active ? 0 : 255, active ? 0 : 255);
 }
 
-void DebugRenderer::renderObstructions(unsigned char* image, Obstruction obstruction, bool swapRB, int width, int height) {
+void DebugRenderer::renderObstructions(unsigned char* image, Obstruction obstruction, int width, int height) {
 	Canvas canvas = Canvas();
 
 	canvas.data = image;
 	canvas.width = width;
 	canvas.height = height;
-	canvas.swapRB = swapRB;
 
 	if (obstruction == Obstruction::BOTH || obstruction == Obstruction::LEFT) {
 		canvas.fillBox(width / 2 - 20, height - 80, 20, 40, 200, 0, 0);

@@ -277,10 +277,6 @@ void Canvas::setPixelAt(int x, int y, int red, int green, int blue) {
 		return;
 	}
 
-	if (swapRB) {
-		std::swap(red, blue);
-	}
-
     int index = (x + y * width) * 3;
 
     /*if (index + 2 >= width * height * 3 || index < 0) {

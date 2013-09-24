@@ -95,9 +95,9 @@ Gui::Button* Gui::createButton(std::string text, int x, int y, int width, int ty
 	return button;
 }
 
-void Gui::drawElements(unsigned char* image, int width, int height, bool swapRB) {
+void Gui::drawElements(unsigned char* image, int width, int height) {
 	for (std::vector<Element*>::const_iterator i = elements.begin(); i != elements.end(); i++) {
-		(*i)->draw(image, width, height, swapRB);
+		(*i)->draw(image, width, height);
 	}
 }
 
@@ -331,11 +331,10 @@ Gui::Button::Button(std::string text, int x, int y, int width, int type, void* d
 
 }
 
-void Gui::Button::draw(unsigned char* image, int imageWidth, int imageHeight, bool swapRB) {
+void Gui::Button::draw(unsigned char* image, int imageWidth, int imageHeight) {
 	canvas.width = imageWidth;
 	canvas.height = imageHeight;
 	canvas.data = image;
-	canvas.swapRB = swapRB;
 
 	if (active) {
 		canvas.fillBox(x, y, getWidth(), getHeight(), 255, 0, 0);

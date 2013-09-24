@@ -22,7 +22,7 @@ public:
 	class Element : public MouseListener {
 		public:
 			Element();
-			virtual void draw(unsigned char* image, int imageWidth = Config::cameraWidth, int imageHeight = Config::cameraHeight, bool swapRB = false) = 0;
+			virtual void draw(unsigned char* image, int imageWidth = Config::cameraWidth, int imageHeight = Config::cameraHeight) = 0;
 			virtual bool contains(int x, int y) { return false; };
 			Canvas canvas;
 			double lastInteractionTime;
@@ -31,7 +31,7 @@ public:
 	class Button : public Element {
 		public:
 			Button(std::string text, int x, int y, int width = 0, int type = 0, void* data = NULL);
-			void draw(unsigned char* image, int imageWidth = Config::cameraWidth, int imageHeight = Config::cameraHeight, bool swapRB = false);
+			void draw(unsigned char* image, int imageWidth = Config::cameraWidth, int imageHeight = Config::cameraHeight);
 			bool contains(int x, int y);
 			void onMouseMove(int x, int y, DisplayWindow* win);
 
@@ -55,7 +55,7 @@ public:
 
 	DisplayWindow* createWindow(int width, int height, std::string name);
 	Button* createButton(std::string text, int x, int y, int width = 0, int type = 0, void* data = NULL);
-	void drawElements(unsigned char* image, int width, int height, bool swapRB = false);
+	void drawElements(unsigned char* image, int width, int height);
 	bool isMouseOverElement(int x, int y);
     bool update();
 	bool isQuitRequested() { return quitRequested; }
