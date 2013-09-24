@@ -559,7 +559,7 @@ void SoccerBot::handleBlobberClearCommand(Command::Parameters parameters) {
 void SoccerBot::handleScreenshotCommand() {
 	std::cout << "! Storing screenshot" << std::endl;
 
-	ImageProcessor::saveBitmap(frontProcessor->frame, "screenshot.scs", Config::cameraWidth * Config::cameraHeight * 3);
+	ImageProcessor::saveBitmap(frontProcessor->frame, "screenshot.scs", Config::cameraWidth * Config::cameraHeight * 4);
 }
 
 void SoccerBot::handleCommunicationMessages() {
