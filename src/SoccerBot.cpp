@@ -235,6 +235,8 @@ bool SoccerBot::fetchFrame(XimeaCamera* camera, ProcessThread* processor) {
 	if (camera->isAcquisitioning()) {
 		const BaseCamera::Frame* frame = camera->getFrame();
 
+		std::cout << "Frame size: " << frame->size << std::endl;
+
 		if (frame != NULL) {
 			if (frame->fresh) {
 				processor->setFrame(frame->data);
@@ -482,6 +484,8 @@ void SoccerBot::handleServerMessage(Server::Message* message) {
                 handleBlobberThresholdCommand(command.parameters);
             } else if (command.name == "blobber-clear") {
                 handleBlobberClearCommand(command.parameters);
+            } else if (command.name == "screenshot") {
+                handleScreenshotCommand();
             } else {
 				std::cout << "- Unsupported command: " << command.name << std::endl;
 			}
@@ -553,6 +557,11 @@ void SoccerBot::handleBlobberClearCommand(Command::Parameters parameters) {
 		frontBlobber->clearColors();
 		rearBlobber->clearColors();
 	}
+}
+void SoccerBot::handleScreenshotCommand() {
+	std::cout << "! Storing screenshot" << std::endl;
+
+	//ImageProcessor::saveBitmap(frontProcessor->frame, "screenshot.scs", 
 }
 
 void SoccerBot::handleCommunicationMessages() {

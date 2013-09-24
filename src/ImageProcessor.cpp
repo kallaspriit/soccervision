@@ -5,6 +5,7 @@
 
 #include <vector>
 #include <iostream>
+#include <fstream>
 
 void ImageProcessor::bayerRGGBToI420(unsigned char* input, unsigned char* outputY, unsigned char* outputU, unsigned char* outputV, int width, int height) {
 	int strideY = width;
@@ -159,4 +160,9 @@ ImageProcessor::YUYVRange ImageProcessor::extractColorRange(unsigned char* dataY
 	range.maxV = (int)(vMean + (float)vStdDev * stdDev);
 
 	return range;
+}
+
+void ImageProcessor::saveBitmap(unsigned char* data, std::string filename, int size) {
+	std::ofstream file("screenshot.bin", std::ios::binary);
+	file.write((char*)data, size);
 }
