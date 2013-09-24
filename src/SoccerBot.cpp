@@ -23,7 +23,8 @@ SoccerBot::SoccerBot() :
 	frontProcessor(NULL), rearProcessor(NULL),
 	gui(NULL), fpsCounter(NULL), visionResults(NULL), robot(NULL), activeController(NULL), server(NULL), com(NULL), jpegBuffer(NULL),
 	running(false), debugVision(false), showGui(false), controllerRequested(false), frameRequested(false),
-	dt(0.01666f), lastStepTime(0.0), totalTime(0.0f)
+	dt(0.01666f), lastStepTime(0.0), totalTime(0.0f),
+	debugCameraDir(Dir::FRONT)
 {
 
 }
@@ -157,7 +158,11 @@ void SoccerBot::run() {
 
 		if (frameRequested) {
 			// TODO Add camera choice
-			broadcastFrame(frontProcessor->rgb, frontProcessor->classification);
+			if (debugCameraDir == Dir::FRONT) {
+				broadcastFrame(frontProcessor->rgb, frontProcessor->classification);
+			} else {
+				broadcastFrame(rearProcessor->rgb, rearProcessor->classification);
+			}
 
 			frameRequested = false;
 		}
@@ -471,7 +476,11 @@ void SoccerBot::handleServerMessage(Server::Message* message) {
 				handleSetControllerCommand(command.parameters, message);
 			} else if (command.name == "get-frame") {
 				handleGetFrameCommand();
-			} else {
+			} else if (command.name == "camera-choice") {
+                handleCameraChoiceCommand(command.parameters);
+            } else if (command.name == "blobber-threshold") {
+                handleBlobberThresholdCommand(command.parameters);
+            } else {
 				std::cout << "- Unsupported command: " << command.name << std::endl;
 			}
 		}
@@ -498,6 +507,38 @@ void SoccerBot::handleSetControllerCommand(Command::Parameters parameters, Serve
 
 void SoccerBot::handleGetFrameCommand() {
 	frameRequested = true;
+}
+
+void SoccerBot::handleCameraChoiceCommand(Command::Parameters parameters) {
+	debugCameraDir = Util::toInt(parameters[0]) == 1 ? Dir::REAR : Dir::FRONT;
+
+	std::cout << "! Debugging now from " << (debugCameraDir == Dir::FRONT ? "front" : "rear") << " camera" << std::endl;
+}
+
+void SoccerBot::handleBlobberThresholdCommand(Command::Parameters parameters) {
+	std::string selectedColorName = parameters[0];
+    int centerX = Util::toInt(parameters[1]);
+    int centerY = Util::toInt(parameters[2]);
+    int mode = Util::toInt(parameters[3]);
+    int brushRadius = Util::toInt(parameters[4]);
+    float stdDev = Util::toFloat(parameters[5]);
+
+	unsigned char* dataY = debugCameraDir == Dir::FRONT ? frontProcessor->dataY : rearProcessor->dataY;
+	unsigned char* dataU = debugCameraDir == Dir::FRONT ? frontProcessor->dataU : rearProcessor->dataU;
+	unsigned char* dataV = debugCameraDir == Dir::FRONT ? frontProcessor->dataV : rearProcessor->dataV;
+
+	ImageProcessor::YUYVRange yuyvRange = ImageProcessor::extractColorRange(dataY, dataU, dataV, Config::cameraWidth, Config::cameraHeight, centerX, centerY, brushRadius, stdDev);
+
+	frontBlobber->getColor(selectedColorName)->addThreshold(
+		yuyvRange.minY, yuyvRange.maxY,
+		yuyvRange.minU, yuyvRange.maxU,
+		yuyvRange.minV, yuyvRange.maxV
+	);
+	rearBlobber->getColor(selectedColorName)->addThreshold(
+		yuyvRange.minY, yuyvRange.maxY,
+		yuyvRange.minU, yuyvRange.maxU,
+		yuyvRange.minV, yuyvRange.maxV
+	);
 }
 
 void SoccerBot::handleCommunicationMessages() {

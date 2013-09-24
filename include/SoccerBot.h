@@ -45,6 +45,8 @@ public:
 	void handleGetControllerCommand(Server::Message* message);
 	void handleSetControllerCommand(Command::Parameters parameters, Server::Message* message);
 	void handleGetFrameCommand();
+	void handleCameraChoiceCommand(Command::Parameters parameters);
+	void handleBlobberThresholdCommand(Command::Parameters parameters);
 
 	void handleCommunicationMessages();
 	void handleCommunicationMessage(std::string message);
@@ -83,6 +85,7 @@ private:
 	float dt;
 	double lastStepTime;
 	float totalTime;
+	Dir debugCameraDir;
 
 	unsigned char* jpegBuffer;
 };
