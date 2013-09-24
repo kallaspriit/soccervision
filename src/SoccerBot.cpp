@@ -235,8 +235,6 @@ bool SoccerBot::fetchFrame(XimeaCamera* camera, ProcessThread* processor) {
 	if (camera->isAcquisitioning()) {
 		const BaseCamera::Frame* frame = camera->getFrame();
 
-		std::cout << "Frame size: " << frame->size << std::endl;
-
 		if (frame != NULL) {
 			if (frame->fresh) {
 				processor->setFrame(frame->data);
@@ -561,7 +559,7 @@ void SoccerBot::handleBlobberClearCommand(Command::Parameters parameters) {
 void SoccerBot::handleScreenshotCommand() {
 	std::cout << "! Storing screenshot" << std::endl;
 
-	//ImageProcessor::saveBitmap(frontProcessor->frame, "screenshot.scs", 
+	ImageProcessor::saveBitmap(frontProcessor->frame, "screenshot.scs", Config::cameraWidth * Config::cameraHeight * 3);
 }
 
 void SoccerBot::handleCommunicationMessages() {
