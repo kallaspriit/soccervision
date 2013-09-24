@@ -144,7 +144,7 @@ void Gui::setFrontImages(unsigned char* rgb, unsigned char* yuyv, unsigned char*
 		}
 	}
 	
-	frontRGB->setImage(rgb, false);
+	frontRGB->setImage(rgb, true);
 	frontClassification->setImage(classification, true);
 }
 
@@ -164,7 +164,7 @@ void Gui::setRearImages(unsigned char* rgb, unsigned char* yuyv, unsigned char* 
 		}
 	}
 
-	rearRGB->setImage(rgb, false);
+	rearRGB->setImage(rgb, true);
 	rearClassification->setImage(classification, true);
 }
 

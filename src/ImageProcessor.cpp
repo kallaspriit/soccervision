@@ -52,7 +52,7 @@ void ImageProcessor::YUYVToARGB(unsigned char* input, unsigned char* output, int
 	);
 }
 
-void ImageProcessor::ARGBToRGB24(unsigned char* input, unsigned char* output, int width, int height) {
+void ImageProcessor::ARGBToBGR(unsigned char* input, unsigned char* output, int width, int height) {
 	int inputStride = width * 4;
 	int outputStride = width * 3;
 
