@@ -77,7 +77,8 @@ void* ProcessThread::run() {
 		//std::cout << "  - YUYV > ARGB: " << Util::timerEnd() << std::endl;
 
 		//Util::timerStart();
-		ImageProcessor::ARGBToRGB24(
+		//ImageProcessor::ARGBToRGB24(
+		ImageProcessor::ARGBToRGB(
 			argb,
 			rgb,
 			width, height

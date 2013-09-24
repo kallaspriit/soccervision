@@ -63,6 +63,17 @@ void ImageProcessor::ARGBToRGB24(unsigned char* input, unsigned char* output, in
 	);
 }
 
+void ImageProcessor::ARGBToRGB(unsigned char* input, unsigned char* output, int width, int height) {
+	int inputStride = width * 4;
+	int outputStride = width * 3;
+
+	libyuv::ARGBToRAW(
+		input, inputStride,
+		output, outputStride,
+		width, height
+	);
+}
+
 bool ImageProcessor::rgbToJpeg(unsigned char* input, unsigned char* output, int& bufferSize, int width, int height, int channels) {
 	return jpge::compress_image_to_jpeg_file_in_memory(output, bufferSize, width, height, channels, input);
 }
