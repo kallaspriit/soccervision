@@ -252,14 +252,14 @@ void SoccerBot::broadcastFrame(unsigned char* rgb, unsigned char* classification
 		std::cout << "done!" << std::endl;
     }
 
-	unsigned char blue;
+	/*unsigned char blue;
  
 	// swap blue and red..
-	for (int i = 0; i < Config::cameraWidth * Config::cameraHeight; i += 3) {
+	for (int i = 0; i < Config::cameraWidth * Config::cameraHeight * 3; i += 3) {
 		blue = rgb[i];
 		rgb[i] = rgb[i + 2];
 		rgb[i + 2] = blue;
-	}
+	}*/
 
 	if (!ImageProcessor::rgbToJpeg(rgb, jpegBuffer, jpegBufferSize, Config::cameraWidth, Config::cameraHeight)) {
 		std::cout << "- Converting RGB image to JPEG failed, probably need to increase buffer size" << std::endl;
