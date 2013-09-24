@@ -163,6 +163,11 @@ ImageProcessor::YUYVRange ImageProcessor::extractColorRange(unsigned char* dataY
 }
 
 void ImageProcessor::saveBitmap(unsigned char* data, std::string filename, int size) {
-	std::ofstream file("screenshot.bin", std::ios::binary);
+	std::ofstream file(filename, std::ios::binary);
 	file.write((char*)data, size);
+}
+
+void ImageProcessor::loadBitmap(std::string filename, unsigned char* buffer, int size) {
+	std::ifstream file(filename, std::ios::in|std::ios::binary);
+	file.read((char*)buffer, size);
 }

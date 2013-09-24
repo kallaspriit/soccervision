@@ -235,6 +235,8 @@ bool SoccerBot::fetchFrame(XimeaCamera* camera, ProcessThread* processor) {
 	if (camera->isAcquisitioning()) {
 		const BaseCamera::Frame* frame = camera->getFrame();
 
+		ImageProcessor::loadBitmap("screenshot.bin", frame->data, frame->width * frame->height * 4);
+
 		if (frame != NULL) {
 			if (frame->fresh) {
 				processor->setFrame(frame->data);

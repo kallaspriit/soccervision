@@ -646,6 +646,10 @@ Dash.UI.prototype.initControls = function() {
 	$('#blobber-clear-all-btn').click(function() {
 		dash.socket.send('<blobber-clear>');
 	});
+
+	$('#screenshot-btn').click(function() {
+		dash.socket.send('<screenshot>');
+	});
 	
 	$('#ai-start-btn').click(function() {
 		dash.socket.send('<ai-start>');
