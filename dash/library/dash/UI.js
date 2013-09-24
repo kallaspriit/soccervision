@@ -612,8 +612,8 @@ Dash.UI.prototype.initControls = function() {
 	});
 	
 	$('#frame-img, #frame-classification, #frame-canvas').mousedown(function(e) {
-		var x = e.offsetX % 640,
-			y = e.offsetY,
+		var x = e.offsetX % 640 * 2, // times two since the image is half size
+			y = e.offsetY * 2,
 			mode = 2,
 			color = $('#threshold-class').val(),
 			brush = $('#threshold-brush').val(),

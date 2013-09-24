@@ -47,6 +47,7 @@ public:
 	void handleGetFrameCommand();
 	void handleCameraChoiceCommand(Command::Parameters parameters);
 	void handleBlobberThresholdCommand(Command::Parameters parameters);
+	void handleBlobberClearCommand(Command::Parameters parameters);
 
 	void handleCommunicationMessages();
 	void handleCommunicationMessage(std::string message);

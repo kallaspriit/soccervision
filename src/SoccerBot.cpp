@@ -480,6 +480,8 @@ void SoccerBot::handleServerMessage(Server::Message* message) {
                 handleCameraChoiceCommand(command.parameters);
             } else if (command.name == "blobber-threshold") {
                 handleBlobberThresholdCommand(command.parameters);
+            } else if (command.name == "blobber-clear") {
+                handleBlobberClearCommand(command.parameters);
             } else {
 				std::cout << "- Unsupported command: " << command.name << std::endl;
 			}
@@ -510,7 +512,7 @@ void SoccerBot::handleGetFrameCommand() {
 }
 
 void SoccerBot::handleCameraChoiceCommand(Command::Parameters parameters) {
-	debugCameraDir = Util::toInt(parameters[0]) == 1 ? Dir::REAR : Dir::FRONT;
+	debugCameraDir = Util::toInt(parameters[0]) == 0 ? Dir::REAR : Dir::FRONT;
 
 	std::cout << "! Debugging now from " << (debugCameraDir == Dir::FRONT ? "front" : "rear") << " camera" << std::endl;
 }
@@ -539,6 +541,18 @@ void SoccerBot::handleBlobberThresholdCommand(Command::Parameters parameters) {
 		yuyvRange.minU, yuyvRange.maxU,
 		yuyvRange.minV, yuyvRange.maxV
 	);
+}
+
+void SoccerBot::handleBlobberClearCommand(Command::Parameters parameters) {
+	if (parameters.size() == 1) {
+		std::string color = parameters[0];
+
+		frontBlobber->clearColor(color);
+		rearBlobber->clearColor(color);
+	} else {
+		frontBlobber->clearColors();
+		rearBlobber->clearColors();
+	}
 }
 
 void SoccerBot::handleCommunicationMessages() {
