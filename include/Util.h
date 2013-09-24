@@ -24,6 +24,7 @@ public:
 	static void correctCameraPoint(int& x, int& y);
 	static void confineField(float& x, float& y);
 	static std::string json(std::string id, std::string payload);
+	static std::vector<std::string> Util::getFilesInDir(std::string path);
 
     static inline int rgbToInt(int red, int green, int blue) {
         int rgb = red;

@@ -161,6 +161,7 @@ namespace Config {
 	const std::string rearDistanceLookupFilename = "config/distance-rear.cfg";
 	const std::string frontAngleLookupFilename = "config/angle-front.cfg";
 	const std::string rearAngleLookupFilename = "config/angle-rear.cfg";
+	const std::string screenshotsDirectory = "screenshots";
 
 } // namespace Config
 

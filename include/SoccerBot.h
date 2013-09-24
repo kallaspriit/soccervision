@@ -84,12 +84,15 @@ private:
 	bool controllerRequested;
 	bool running;
 	bool frameRequested;
+	bool useScreenshot;
 	float dt;
 	double lastStepTime;
 	float totalTime;
 	Dir debugCameraDir;
 
 	unsigned char* jpegBuffer;
+	unsigned char* screenshotBufferFront;
+	unsigned char* screenshotBufferRear;
 };
 
 #endif // SOCCERBOT_H

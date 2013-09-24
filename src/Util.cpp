@@ -4,6 +4,9 @@
 #include <ctime>
 #include <stdio.h>
 #include <Windows.h>
+#include <tchar.h> 
+#include <stdio.h>
+#include <strsafe.h>
 
 double Util::queryPerformanceFrequency = 0;
 __int64 Util::timerStartCount = 0;
@@ -167,4 +170,35 @@ std::string Util::json(std::string id, std::string payload) {
 	}
 
 	return "{\"id\":\"" + id + "\",\"payload\":" + payload + "}";
+}
+
+std::vector<std::string> Util::getFilesInDir(std::string path){
+	std::vector<std::string> files;
+
+	TCHAR szDir[MAX_PATH];
+	HANDLE hFind = INVALID_HANDLE_VALUE;
+	WIN32_FIND_DATA ffd;
+	LARGE_INTEGER filesize;
+
+	StringCchCopy(szDir, MAX_PATH, path.c_str());
+	StringCchCat(szDir, MAX_PATH, TEXT("\\*"));
+
+	hFind = FindFirstFile(szDir, &ffd);
+
+	if (INVALID_HANDLE_VALUE == hFind) {
+		return files;
+	}
+
+	do {
+		if (ffd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
+			// directory ffd.cFileName
+		} else {
+			filesize.LowPart = ffd.nFileSizeLow;
+			filesize.HighPart = ffd.nFileSizeHigh;
+			
+			files.push_back(ffd.cFileName);
+		}
+	} while (FindNextFile(hFind, &ffd) != 0);
+
+	return files;
 }

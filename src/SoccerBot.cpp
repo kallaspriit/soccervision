@@ -21,8 +21,9 @@ SoccerBot::SoccerBot() :
 	frontBlobber(NULL), rearBlobber(NULL),
 	frontVision(NULL), rearVision(NULL),
 	frontProcessor(NULL), rearProcessor(NULL),
-	gui(NULL), fpsCounter(NULL), visionResults(NULL), robot(NULL), activeController(NULL), server(NULL), com(NULL), jpegBuffer(NULL),
-	running(false), debugVision(false), showGui(false), controllerRequested(false), frameRequested(false),
+	gui(NULL), fpsCounter(NULL), visionResults(NULL), robot(NULL), activeController(NULL), server(NULL), com(NULL),
+	jpegBuffer(NULL), screenshotBufferFront(NULL), screenshotBufferRear(NULL),
+	running(false), debugVision(false), showGui(false), controllerRequested(false), frameRequested(false), useScreenshot(false),
 	dt(0.01666f), lastStepTime(0.0), totalTime(0.0f),
 	debugCameraDir(Dir::FRONT)
 {
@@ -71,6 +72,15 @@ void SoccerBot::setup() {
 
 	if (showGui) {
 		setupGui();
+	}
+
+	// TODO Move this
+	std::cout << "! Screenshot files:" << std::endl;
+
+	std::vector<std::string> screenshotFiles = Util::getFilesInDir(Config::screenshotsDirectory);
+
+	for (std::vector<std::string>::const_iterator it = screenshotFiles.begin(); it != screenshotFiles.end(); it++) {
+		std::cout << "  > " << (*it) << std::endl;
 	}
 }
 
@@ -235,7 +245,7 @@ bool SoccerBot::fetchFrame(XimeaCamera* camera, ProcessThread* processor) {
 	if (camera->isAcquisitioning()) {
 		const BaseCamera::Frame* frame = camera->getFrame();
 
-		ImageProcessor::loadBitmap("screenshot.bin", frame->data, frame->width * frame->height * 4);
+		//ImageProcessor::loadBitmap("screenshot.bin", frame->data, frame->width * frame->height * 4);
 
 		if (frame != NULL) {
 			if (frame->fresh) {
