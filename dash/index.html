@@ -45,6 +45,9 @@
 			<div class="modal" id="state-info"></div>
 			<div class="modal" id="camera-view">
 				<div id="camera-view-controls">
+					<select name="stream-choice" id="stream-choice">
+						<option value="" selected="selected">Live stream</option>
+					</select>
 					<select name="camera-choice" id="camera-choice">
 						<option value="1" selected="selected">Front</option>
 						<option value="2">Rear</option>
@@ -79,6 +82,7 @@
 					</select>
 					<button id="blobber-clear-current-btn">Clear Current</button>
 					<button id="blobber-clear-all-btn">Clear All</button>
+					<input type="text" id="screenshot-filename" value="screenshot"/>
 					<button id="screenshot-btn">Screenshot</button>
 				</div>
 				<img id="frame-img" src="" width="640" height="512"/>

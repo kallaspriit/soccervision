@@ -162,9 +162,15 @@ ImageProcessor::YUYVRange ImageProcessor::extractColorRange(unsigned char* dataY
 	return range;
 }
 
-void ImageProcessor::saveBitmap(unsigned char* data, std::string filename, int size) {
-	std::ofstream file(filename, std::ios::binary);
-	file.write((char*)data, size);
+bool ImageProcessor::saveBitmap(unsigned char* data, std::string filename, int size) {
+	try {
+		std::ofstream file(filename, std::ios::binary);
+		file.write((char*)data, size);
+
+		return true;
+	} catch (...) {
+		return false;
+	}
 }
 
 bool ImageProcessor::loadBitmap(std::string filename, unsigned char* buffer, int size) {
@@ -176,4 +182,8 @@ bool ImageProcessor::loadBitmap(std::string filename, unsigned char* buffer, int
 	} catch (...) {
 		return false;
 	}
+}
+
+bool ImageProcessor::saveJPEG(unsigned char* data, std::string filename, int width, int height, int channels) {
+	return jpge::compress_image_to_jpeg_file(filename.c_str(), width, height, channels, data);
 }

@@ -506,7 +506,7 @@ void SoccerBot::handleServerMessage(Server::Message* message) {
             } else if (command.name == "blobber-clear") {
                 handleBlobberClearCommand(command.parameters);
             } else if (command.name == "screenshot") {
-                handleScreenshotCommand();
+                handleScreenshotCommand(command.parameters);
             } else {
 				std::cout << "- Unsupported command: " << command.name << std::endl;
 			}
@@ -579,10 +579,19 @@ void SoccerBot::handleBlobberClearCommand(Command::Parameters parameters) {
 		rearBlobber->clearColors();
 	}
 }
-void SoccerBot::handleScreenshotCommand() {
-	std::cout << "! Storing screenshot" << std::endl;
+void SoccerBot::handleScreenshotCommand(Command::Parameters parameters) {
+	std::string name = parameters[0];
 
-	ImageProcessor::saveBitmap(frontProcessor->frame, "screenshot.scs", Config::cameraWidth * Config::cameraHeight * 4);
+	std::cout << "! Storing screenshot: " << name << std::endl;
+
+	ImageProcessor::saveBitmap(frontProcessor->frame, Config::screenshotsDirectory + "/" + name + "-front.scr", Config::cameraWidth * Config::cameraHeight * 4);
+	ImageProcessor::saveBitmap(rearProcessor->frame, Config::screenshotsDirectory + "/" + name + "-rear.scr", Config::cameraWidth * Config::cameraHeight * 4);
+	
+	ImageProcessor::saveJPEG(frontProcessor->rgb, Config::screenshotsDirectory + "/" + name + "-rgb-front.jpeg", Config::cameraWidth, Config::cameraHeight, 3);
+	ImageProcessor::saveJPEG(frontProcessor->classification, Config::screenshotsDirectory + "/" + name + "-classification-front.jpeg", Config::cameraWidth, Config::cameraHeight, 3);
+
+	ImageProcessor::saveJPEG(rearProcessor->rgb, Config::screenshotsDirectory + "/" + name + "-rgb-rear.jpeg", Config::cameraWidth, Config::cameraHeight, 3);
+	ImageProcessor::saveJPEG(rearProcessor->classification, Config::screenshotsDirectory + "/" + name + "-classification-rear.jpeg", Config::cameraWidth, Config::cameraHeight, 3);
 }
 
 void SoccerBot::handleCommunicationMessages() {
