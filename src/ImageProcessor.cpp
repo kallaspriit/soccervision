@@ -167,7 +167,13 @@ void ImageProcessor::saveBitmap(unsigned char* data, std::string filename, int s
 	file.write((char*)data, size);
 }
 
-void ImageProcessor::loadBitmap(std::string filename, unsigned char* buffer, int size) {
-	std::ifstream file(filename, std::ios::in|std::ios::binary);
-	file.read((char*)buffer, size);
+bool ImageProcessor::loadBitmap(std::string filename, unsigned char* buffer, int size) {
+	try {
+		std::ifstream file(filename, std::ios::in|std::ios::binary);
+		file.read((char*)buffer, size);
+
+		return true;
+	} catch (...) {
+		return false;
+	}
 }

@@ -834,6 +834,8 @@ Dash.UI.prototype.addState = function(state) {
 	/*if (this.states.length >= 100000) {
 		this.states = [];
 	}*/
+
+	var full = false;
 	
 	state.index = this.states.length;
 	
@@ -842,18 +844,19 @@ Dash.UI.prototype.addState = function(state) {
 	} else {
 		state.previous = null;
 	}
-	
-	this.states.push(state);
 
-	if (this.states.length > 100) {
+	if (this.states.length >= 10000) {
 		this.states.shift();
+		full = true;
 	}
+
+	this.states.push(state);
 	
 	this.stateSlider.slider('max', this.states.length);
 	
 	this.stateCountWrap.html(this.states.length);
 	
-	if (this.states.length == 1 || this.currentStateIndex == this.states.length - 2) {
+	if (this.states.length == 1 || this.currentStateIndex == this.states.length - 2 || (full && this.currentStateIndex == this.states.length - 1)) {
 		this.showState(this.states.length - 1);
 	}
 };

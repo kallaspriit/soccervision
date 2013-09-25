@@ -116,6 +116,7 @@
     <ClInclude Include="include\Tasks.h" />
     <ClInclude Include="include\Thread.h" />
     <ClInclude Include="include\Util.h" />
+    <ClInclude Include="include\VirtualCamera.h" />
     <ClInclude Include="include\Vision.h" />
     <ClInclude Include="include\WebSocketServer.h" />
     <ClInclude Include="include\Wheel.h" />
@@ -190,6 +191,7 @@
     <ClCompile Include="src\Tasks.cpp" />
     <ClCompile Include="src\Thread.cpp" />
     <ClCompile Include="src\Util.cpp" />
+    <ClCompile Include="src\VirtualCamera.cpp" />
     <ClCompile Include="src\Vision.cpp" />
     <ClCompile Include="src\WebSocketServer.cpp" />
     <ClCompile Include="src\Wheel.cpp" />

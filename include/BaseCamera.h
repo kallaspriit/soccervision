@@ -15,12 +15,12 @@ public:
     };
 
 	virtual Frame* getFrame() = 0;
-	virtual bool open(int serial = 0) = 0;
-	virtual bool isOpened() = 0;
-	virtual bool isAcquisitioning() = 0;
-	virtual void startAcquisition() = 0;
-    virtual void stopAcquisition() = 0;
-	virtual void close() = 0;
+	virtual bool open(int serial = 0) { return true; }
+	virtual bool isOpened() { return true; }
+	virtual bool isAcquisitioning() { return true; }
+	virtual void startAcquisition() {}
+	virtual void stopAcquisition() {}
+	virtual void close() {}
 
 };
 

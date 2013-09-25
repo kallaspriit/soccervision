@@ -29,7 +29,7 @@ public:
 	static YUYV* getYuyvPixelAt(unsigned char* dataY, unsigned char* dataU, unsigned char* dataV, int width, int height, int x, int y);
 	static YUYVRange extractColorRange(unsigned char* dataY, unsigned char* dataU, unsigned char* dataV, int imageWidth, int imageHeight, int centerX, int centerY, int brushRadius, float stdDev);
 	static void saveBitmap(unsigned char* data, std::string filename, int size);
-	static void loadBitmap(std::string filename, unsigned char* buffer, int size);
+	static bool loadBitmap(std::string filename, unsigned char* buffer, int size);
 
 };
 

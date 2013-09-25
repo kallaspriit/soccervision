@@ -183,6 +183,9 @@
     <ClInclude Include="lib\jpeg\jpge.h">
       <Filter>jpeg</Filter>
     </ClInclude>
+    <ClInclude Include="include\VirtualCamera.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\DisplayWindow.cpp">
@@ -343,6 +346,9 @@
     </ClCompile>
     <ClCompile Include="lib\jpeg\jpge.cpp">
       <Filter>jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="src\VirtualCamera.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
