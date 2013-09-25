@@ -525,6 +525,8 @@ void SoccerBot::handleServerMessage(Server::Message* message) {
 				handleGetFrameCommand();
 			} else if (command.name == "camera-choice" && command.parameters.size() == 1) {
                 handleCameraChoiceCommand(command.parameters);
+            } else if (command.name == "stream-choice" && command.parameters.size() == 1) {
+                handleStreamChoiceCommand(command.parameters);
             } else if (command.name == "blobber-threshold" && command.parameters.size() == 6) {
                 handleBlobberThresholdCommand(command.parameters);
             } else if (command.name == "blobber-clear" && command.parameters.size() == 1) {
@@ -566,6 +568,31 @@ void SoccerBot::handleCameraChoiceCommand(Command::Parameters parameters) {
 	debugCameraDir = Util::toInt(parameters[0]) == 2 ? Dir::REAR : Dir::FRONT;
 
 	std::cout << "! Debugging now from " << (debugCameraDir == Dir::FRONT ? "front" : "rear") << " camera" << std::endl;
+}
+
+void SoccerBot::handleStreamChoiceCommand(Command::Parameters parameters) {
+	std::string requestedStream = parameters[0];
+
+	if (requestedStream == "") {
+		std::cout << "! Switching to live stream" << std::endl;
+
+		frontCamera = ximeaFrontCamera;
+		rearCamera = ximeaRearCamera;
+	} else {
+		bool frontSuccess = virtualFrontCamera->loadImage(Config::screenshotsDirectory + "/" + requestedStream + "-front.scr", Config::cameraWidth * Config::cameraHeight * 4);
+		bool rearSuccess = virtualFrontCamera->loadImage(Config::screenshotsDirectory + "/" + requestedStream + "-rear.scr", Config::cameraWidth * Config::cameraHeight * 4);
+
+		if (!frontSuccess || !rearSuccess) {
+			std::cout << "- Loading screenshot '" << requestedStream << "' failed" << std::endl;
+
+			return;
+		}
+
+		std::cout << "! Switching to screenshot stream: " << requestedStream << std::endl;
+
+		frontCamera = virtualFrontCamera;
+		rearCamera = virtualRearCamera;
+	}
 }
 
 void SoccerBot::handleBlobberThresholdCommand(Command::Parameters parameters) {

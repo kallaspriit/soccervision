@@ -666,6 +666,10 @@ Dash.UI.prototype.initControls = function() {
 	$('#camera-choice').change(function() {
 		dash.socket.send('<camera-choice:' + $(this).val()+ '>');
 	});
+
+	$('#stream-choice').change(function() {
+		dash.socket.send('<stream-choice:' + $(this).val()+ '>');
+	});
 };
 
 Dash.UI.prototype.initBlobberView = function() {

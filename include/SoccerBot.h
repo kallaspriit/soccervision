@@ -47,6 +47,7 @@ public:
 	void handleGetControllerCommand(Server::Message* message);
 	void handleSetControllerCommand(Command::Parameters parameters, Server::Message* message);
 	void handleGetFrameCommand();
+	void handleStreamChoiceCommand(Command::Parameters parameters);
 	void handleCameraChoiceCommand(Command::Parameters parameters);
 	void handleBlobberThresholdCommand(Command::Parameters parameters);
 	void handleBlobberClearCommand(Command::Parameters parameters);
