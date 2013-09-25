@@ -394,6 +394,9 @@ void SoccerBot::setupCameras() {
 		std::cout << "! Neither of the cameras could be opened" << std::endl;
 	}
 
+	virtualFrontCamera = new VirtualCamera();
+	virtualRearCamera = new VirtualCamera();
+
 	frontCamera = ximeaFrontCamera;
 	rearCamera = ximeaRearCamera;
 }
