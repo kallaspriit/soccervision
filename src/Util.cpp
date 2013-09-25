@@ -101,12 +101,12 @@ float Util::limit(float num, float min, float max) {
     return num;
 }
 
-size_t Util::strpos(const std::string &haystack, const std::string &needle) {
+int Util::strpos(const std::string &haystack, const std::string &needle) {
     int inputLength = haystack.length();
     int needleLength = needle.length();
 
     if (inputLength == 0 || needleLength == 0) {
-        return std::string::npos;
+        return -1;
     }
 
     for (int i = 0, j = 0; i < inputLength; j = 0, i++) {
@@ -119,7 +119,7 @@ size_t Util::strpos(const std::string &haystack, const std::string &needle) {
         }
     }
 
-    return std::string::npos;
+    return -1;
 }
 
 bool Util::replace(std::string& str, const std::string& from, const std::string& to) {

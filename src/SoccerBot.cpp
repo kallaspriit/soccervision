@@ -16,6 +16,7 @@
 #include "ImageProcessor.h"
 
 #include <iostream>
+#include <algorithm>
 
 SoccerBot::SoccerBot() :
 	frontCamera(NULL), rearCamera(NULL),
@@ -80,15 +81,6 @@ void SoccerBot::setup() {
 
 	if (showGui) {
 		setupGui();
-	}
-
-	// TODO Move this
-	std::cout << "! Screenshot files:" << std::endl;
-
-	std::vector<std::string> screenshotFiles = Util::getFilesInDir(Config::screenshotsDirectory);
-
-	for (std::vector<std::string>::const_iterator it = screenshotFiles.begin(); it != screenshotFiles.end(); it++) {
-		std::cout << "  > " << (*it) << std::endl;
 	}
 }
 
@@ -296,6 +288,36 @@ void SoccerBot::broadcastFrame(unsigned char* rgb, unsigned char* classification
 	std::string frameResponse = Util::json("frame", "{\"rgb\": \"" + base64Rgb + "\",\"classification\": \"" + base64Classification + "\"}");
 
 	server->broadcast(frameResponse);
+}
+
+void SoccerBot::broadcastScreenshots() {
+	std::vector<std::string> screenshotFiles = Util::getFilesInDir(Config::screenshotsDirectory);
+	std::vector<std::string> screenshotNames;
+	std::string filename;
+	std::string screenshotName;
+	int dashPos;
+
+	std::cout << "! Screenshot files:" << std::endl;
+
+	for (std::vector<std::string>::const_iterator it = screenshotFiles.begin(); it != screenshotFiles.end(); it++) {
+		filename = *it;
+
+		std::cout << "  > " << filename << std::endl;
+
+		dashPos = Util::strpos(filename, "-");
+
+		if (dashPos != -1) {
+			screenshotName = filename.substr(0, dashPos);
+
+			if (std::find(screenshotNames.begin(), screenshotNames.end(), screenshotName) == screenshotNames.end()) {
+				screenshotNames.push_back(screenshotName);
+
+				std::cout << "    + " << screenshotName << std::endl;
+			} else {
+				std::cout << "    - " << screenshotName << std::endl;
+			}
+		}
+	}
 }
 
 void SoccerBot::setupVision() {
@@ -507,6 +529,8 @@ void SoccerBot::handleServerMessage(Server::Message* message) {
                 handleBlobberClearCommand(command.parameters);
             } else if (command.name == "screenshot" && command.parameters.size() == 1) {
                 handleScreenshotCommand(command.parameters);
+            } else if (command.name == "list-screenshots") {
+                handleListScreenshotsCommand(message);
             } else {
 				std::cout << "- Unsupported command: " << command.name << " " << Util::toString(command.parameters) << std::endl;
 			}
@@ -579,6 +603,7 @@ void SoccerBot::handleBlobberClearCommand(Command::Parameters parameters) {
 		rearBlobber->clearColors();
 	}
 }
+
 void SoccerBot::handleScreenshotCommand(Command::Parameters parameters) {
 	std::string name = parameters[0];
 
@@ -592,6 +617,10 @@ void SoccerBot::handleScreenshotCommand(Command::Parameters parameters) {
 
 	ImageProcessor::saveJPEG(rearProcessor->rgb, Config::screenshotsDirectory + "/" + name + "-rgb-rear.jpeg", Config::cameraWidth, Config::cameraHeight, 3);
 	ImageProcessor::saveJPEG(rearProcessor->classification, Config::screenshotsDirectory + "/" + name + "-classification-rear.jpeg", Config::cameraWidth, Config::cameraHeight, 3);
+}
+
+void SoccerBot::handleListScreenshotsCommand(Server::Message* message) {
+	broadcastScreenshots();
 }
 
 void SoccerBot::handleCommunicationMessages() {

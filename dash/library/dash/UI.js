@@ -654,7 +654,7 @@ Dash.UI.prototype.initControls = function() {
 	});
 
 	$('#screenshot-btn').click(function() {
-		dash.socket.send('<screenshot:' + $('#screenshot-filename').val() + '>');
+		dash.socket.send('<screenshot:' + $('#screenshot-filename').val().replace('-', '_') + '>');
 	});
 	
 	$('#ai-start-btn').click(function() {

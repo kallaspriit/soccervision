@@ -51,6 +51,7 @@ public:
 	void handleBlobberThresholdCommand(Command::Parameters parameters);
 	void handleBlobberClearCommand(Command::Parameters parameters);
 	void handleScreenshotCommand(Command::Parameters parameters);
+	void handleListScreenshotsCommand(Server::Message* message);
 
 	void handleCommunicationMessages();
 	void handleCommunicationMessage(std::string message);
@@ -64,6 +65,7 @@ private:
 	void setupXimeaCamera(std::string name, XimeaCamera* camera);
 	bool fetchFrame(BaseCamera* camera, ProcessThread* processor);
 	void broadcastFrame(unsigned char* rgb, unsigned char* classification);
+	void broadcastScreenshots();
 
 	BaseCamera* frontCamera;
 	BaseCamera* rearCamera;
