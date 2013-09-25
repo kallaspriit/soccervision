@@ -584,7 +584,7 @@ void SoccerBot::handleStreamChoiceCommand(Command::Parameters parameters) {
 	} else {
 		try {
 			bool frontSuccess = virtualFrontCamera->loadImage(Config::screenshotsDirectory + "/" + requestedStream + "-front.scr", Config::cameraWidth * Config::cameraHeight * 4);
-			bool rearSuccess = virtualFrontCamera->loadImage(Config::screenshotsDirectory + "/" + requestedStream + "-rear.scr", Config::cameraWidth * Config::cameraHeight * 4);
+			bool rearSuccess = virtualRearCamera->loadImage(Config::screenshotsDirectory + "/" + requestedStream + "-rear.scr", Config::cameraWidth * Config::cameraHeight * 4);
 
 			if (!frontSuccess || !rearSuccess) {
 				std::cout << "- Loading screenshot '" << requestedStream << "' failed" << std::endl;
