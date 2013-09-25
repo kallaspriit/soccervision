@@ -579,19 +579,25 @@ void SoccerBot::handleStreamChoiceCommand(Command::Parameters parameters) {
 		frontCamera = ximeaFrontCamera;
 		rearCamera = ximeaRearCamera;
 	} else {
-		bool frontSuccess = virtualFrontCamera->loadImage(Config::screenshotsDirectory + "/" + requestedStream + "-front.scr", Config::cameraWidth * Config::cameraHeight * 4);
-		bool rearSuccess = virtualFrontCamera->loadImage(Config::screenshotsDirectory + "/" + requestedStream + "-rear.scr", Config::cameraWidth * Config::cameraHeight * 4);
+		try {
+			bool frontSuccess = virtualFrontCamera->loadImage(Config::screenshotsDirectory + "/" + requestedStream + "-front.scr", Config::cameraWidth * Config::cameraHeight * 4);
+			bool rearSuccess = virtualFrontCamera->loadImage(Config::screenshotsDirectory + "/" + requestedStream + "-rear.scr", Config::cameraWidth * Config::cameraHeight * 4);
 
-		if (!frontSuccess || !rearSuccess) {
-			std::cout << "- Loading screenshot '" << requestedStream << "' failed" << std::endl;
+			if (!frontSuccess || !rearSuccess) {
+				std::cout << "- Loading screenshot '" << requestedStream << "' failed" << std::endl;
 
-			return;
+				return;
+			}
+
+			std::cout << "! Switching to screenshot stream: " << requestedStream << std::endl;
+
+			frontCamera = virtualFrontCamera;
+			rearCamera = virtualRearCamera;
+		} catch (std::exception& e) {
+			std::cout << "- Failed to load screenshot: " << requestedStream << " (" << e.what() << ")" << std::endl;
+		} catch (...) {
+			std::cout << "- Failed to load screenshot: " << requestedStream << std::endl;
 		}
-
-		std::cout << "! Switching to screenshot stream: " << requestedStream << std::endl;
-
-		frontCamera = virtualFrontCamera;
-		rearCamera = virtualRearCamera;
 	}
 }
 
