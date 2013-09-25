@@ -7,7 +7,9 @@
 #include "Command.h"
 #include <string>
 
+class BaseCamera;
 class XimeaCamera;
+class VirtualCamera;
 class Blobber;
 class ProcessThread;
 class Gui;
@@ -59,12 +61,16 @@ public:
 	bool showGui;
 
 private:
-	void setupCamera(std::string name, XimeaCamera* camera);
-	bool fetchFrame(XimeaCamera* camera, ProcessThread* processor);
+	void setupXimeaCamera(std::string name, XimeaCamera* camera);
+	bool fetchFrame(BaseCamera* camera, ProcessThread* processor);
 	void broadcastFrame(unsigned char* rgb, unsigned char* classification);
 
-	XimeaCamera* frontCamera;
-	XimeaCamera* rearCamera;
+	BaseCamera* frontCamera;
+	BaseCamera* rearCamera;
+	XimeaCamera* ximeaFrontCamera;
+	XimeaCamera* ximeaRearCamera;
+	VirtualCamera* virtualFrontCamera;
+	VirtualCamera* virtualRearCamera;
 	Blobber* frontBlobber;
 	Blobber* rearBlobber;
 	Vision* frontVision;

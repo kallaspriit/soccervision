@@ -1,5 +1,6 @@
 #include "SoccerBot.h"
 #include "XimeaCamera.h"
+#include "VirtualCamera.h"
 #include "Vision.h"
 #include "Communication.h"
 #include "ProcessThread.h"
@@ -18,6 +19,8 @@
 
 SoccerBot::SoccerBot() :
 	frontCamera(NULL), rearCamera(NULL),
+	ximeaFrontCamera(NULL), ximeaRearCamera(NULL),
+	virtualFrontCamera(NULL), virtualRearCamera(NULL),
 	frontBlobber(NULL), rearBlobber(NULL),
 	frontVision(NULL), rearVision(NULL),
 	frontProcessor(NULL), rearProcessor(NULL),
@@ -43,8 +46,10 @@ SoccerBot::~SoccerBot() {
 	if (gui != NULL) delete gui; gui = NULL;
 	if (server != NULL) delete server; server = NULL;
 	if (robot != NULL) delete robot; robot = NULL;
-	if (frontCamera != NULL) delete frontCamera; frontCamera = NULL;
-	if (rearCamera != NULL) delete rearCamera; rearCamera = NULL;
+	if (ximeaFrontCamera != NULL) delete ximeaFrontCamera; ximeaFrontCamera = NULL;
+	if (ximeaRearCamera != NULL) delete ximeaRearCamera; ximeaRearCamera = NULL;
+	if (virtualFrontCamera != NULL) delete virtualFrontCamera; virtualFrontCamera = NULL;
+	if (virtualRearCamera != NULL) delete virtualRearCamera; virtualRearCamera = NULL;
 	if (fpsCounter != NULL) delete fpsCounter; fpsCounter = NULL;
 	if (frontProcessor != NULL) frontBlobber->saveOptions(Config::blobberConfigFilename); delete frontProcessor; frontProcessor = NULL;
 	if (rearProcessor != NULL) delete rearProcessor; rearProcessor = NULL;
@@ -55,6 +60,9 @@ SoccerBot::~SoccerBot() {
 	if (rearBlobber != NULL) delete rearBlobber; rearBlobber = NULL;
 	if (com != NULL) delete com; com = NULL;
 	if (jpegBuffer != NULL) delete jpegBuffer; jpegBuffer = NULL;
+
+	frontCamera = NULL;
+	rearCamera = NULL;
 
 	std::cout << "! Resources freed" << std::endl;
 }
@@ -241,7 +249,7 @@ void SoccerBot::run() {
 	std::cout << "! Main loop ended" << std::endl;
 }
 
-bool SoccerBot::fetchFrame(XimeaCamera* camera, ProcessThread* processor) {
+bool SoccerBot::fetchFrame(BaseCamera* camera, ProcessThread* processor) {
 	if (camera->isAcquisitioning()) {
 		const BaseCamera::Frame* frame = camera->getFrame();
 
@@ -340,27 +348,30 @@ void SoccerBot::setupGui() {
 void SoccerBot::setupCameras() {
 	std::cout << "! Setting up cameras" << std::endl;
 
-	frontCamera = new XimeaCamera();
-	rearCamera = new XimeaCamera();
+	ximeaFrontCamera = new XimeaCamera();
+	ximeaRearCamera = new XimeaCamera();
 
-	frontCamera->open(Config::frontCameraSerial);
-	rearCamera->open(Config::rearCameraSerial);
+	ximeaFrontCamera->open(Config::frontCameraSerial);
+	ximeaRearCamera->open(Config::rearCameraSerial);
 
-	if (frontCamera->isOpened()) {
-		setupCamera("Front", frontCamera);
+	if (ximeaFrontCamera->isOpened()) {
+		setupXimeaCamera("Front", ximeaFrontCamera);
 	} else {
 		std::cout << "- Opening front camera failed" << std::endl;
 	}
 
-	if (rearCamera->isOpened()) {
-		setupCamera("Rear", rearCamera);
+	if (ximeaRearCamera->isOpened()) {
+		setupXimeaCamera("Rear", ximeaRearCamera);
 	} else {
 		std::cout << "- Opening rear camera failed" << std::endl;
 	}
 
-	if (!frontCamera->isOpened() && !rearCamera->isOpened()) {
+	if (!ximeaFrontCamera->isOpened() && !ximeaRearCamera->isOpened()) {
 		std::cout << "! Neither of the cameras could be opened" << std::endl;
 	}
+
+	frontCamera = ximeaFrontCamera;
+	rearCamera = ximeaRearCamera;
 }
 
 void SoccerBot::setupRobot() {
@@ -381,7 +392,7 @@ void SoccerBot::setupControllers() {
 	std::cout << "done!" << std::endl;
 }
 
-void SoccerBot::setupCamera(std::string name, XimeaCamera* camera) {
+void SoccerBot::setupXimeaCamera(std::string name, XimeaCamera* camera) {
 	camera->setGain(6);
 	camera->setExposure(10000);
 	camera->setFormat(XI_RAW8);
