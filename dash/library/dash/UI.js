@@ -13,7 +13,6 @@ Dash.UI = function() {
 	this.frameCanvas = null;
 	this.currentStateIndex = 0;
 	this.repeatedLogCount = 0;
-	this.screenshotsRequested = false;
 };
 
 Dash.UI.prototype = new Dash.Bindable();
@@ -485,12 +484,7 @@ Dash.UI.prototype.initControls = function() {
 		dash.ui.showModal('camera-view');
 		
 		dash.socket.send('<get-frame>');
-
-		if (!this.screenshotsRequested) {
-			dash.socket.send('<list-screenshots>');
-
-			this.screenshotsRequested = true;
-		}
+		dash.socket.send('<list-screenshots>');
 	});
 	
 	$('#show-blobber-btn').click(function() {

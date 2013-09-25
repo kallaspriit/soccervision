@@ -52,10 +52,10 @@ public:
     static inline std::string toString(std::vector<T> vec) {
         std::stringstream ss;
 
-        std::copy(vec.begin(), vec.end(), std::ostream_iterator<T>(ss, ", "));
+        std::copy(vec.begin(), vec.end(), std::ostream_iterator<T>(ss, "\", \""));
         std::string result = ss.str();
 
-        return "[" + result.substr(0, result.length() - 2) + "]";
+        return "[\"" + result.substr(0, result.length() - 2) + "\"]";
     }
 
     static inline int toInt(const std::string str) {

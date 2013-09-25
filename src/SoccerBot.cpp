@@ -297,12 +297,12 @@ void SoccerBot::broadcastScreenshots() {
 	std::string screenshotName;
 	int dashPos;
 
-	std::cout << "! Screenshot files:" << std::endl;
+	std::cout << "! Screenshots:" << std::endl;
 
 	for (std::vector<std::string>::const_iterator it = screenshotFiles.begin(); it != screenshotFiles.end(); it++) {
 		filename = *it;
 
-		std::cout << "  > " << filename << std::endl;
+		//std::cout << "  > " << filename << std::endl;
 
 		dashPos = Util::strpos(filename, "-");
 
@@ -312,12 +312,14 @@ void SoccerBot::broadcastScreenshots() {
 			if (std::find(screenshotNames.begin(), screenshotNames.end(), screenshotName) == screenshotNames.end()) {
 				screenshotNames.push_back(screenshotName);
 
-				std::cout << "    + " << screenshotName << std::endl;
-			} else {
-				std::cout << "    - " << screenshotName << std::endl;
+				std::cout << "  > " << screenshotName << std::endl;
 			}
 		}
 	}
+
+	std::string response = Util::json("screenshots", Util::toString(screenshotNames));
+
+	server->broadcast(response);
 }
 
 void SoccerBot::setupVision() {
