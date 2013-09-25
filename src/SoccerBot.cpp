@@ -285,7 +285,7 @@ void SoccerBot::broadcastFrame(unsigned char* rgb, unsigned char* classification
 	}
 
 	std::string base64Classification = Util::base64Encode(jpegBuffer, jpegBufferSize);
-	std::string frameResponse = Util::json("frame", "{\"rgb\": \"" + base64Rgb + "\",\"classification\": \"" + base64Classification + "\"}");
+	std::string frameResponse = Util::json("frame", "{\"rgb\": \"" + base64Rgb + "\",\"classification\": \"" + base64Classification + "\",\"activeStream\":\"" + activeStreamName + "\"}");
 
 	server->broadcast(frameResponse);
 }
@@ -581,6 +581,8 @@ void SoccerBot::handleStreamChoiceCommand(Command::Parameters parameters) {
 
 		frontCamera = ximeaFrontCamera;
 		rearCamera = ximeaRearCamera;
+
+		activeStreamName = requestedStream;
 	} else {
 		try {
 			bool frontSuccess = virtualFrontCamera->loadImage(Config::screenshotsDirectory + "/" + requestedStream + "-front.scr", Config::cameraWidth * Config::cameraHeight * 4);
@@ -596,6 +598,8 @@ void SoccerBot::handleStreamChoiceCommand(Command::Parameters parameters) {
 
 			frontCamera = virtualFrontCamera;
 			rearCamera = virtualRearCamera;
+
+			activeStreamName = requestedStream;
 		} catch (std::exception& e) {
 			std::cout << "- Failed to load screenshot: " << requestedStream << " (" << e.what() << ")" << std::endl;
 		} catch (...) {

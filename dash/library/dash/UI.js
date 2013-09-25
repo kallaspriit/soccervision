@@ -824,6 +824,7 @@ Dash.UI.prototype.handleFrameMessage = function(frame) {
 	
 	$('#frame-img').attr('src', 'data:image/jpeg;base64,' + frame.rgb);
 	$('#frame-classification').attr('src', 'data:image/jpeg;base64,' + frame.classification);
+	$('#')
 
 	dash.socket.send('<get-frame>');
 };
@@ -836,6 +837,10 @@ Dash.UI.prototype.handleScreenshotsMessage = function(screenshots) {
 	select.find('OPTION:gt(0)').remove();
 
 	for (i = 0; i < screenshots.length; i++) {
+		if (screenshots[i] === '') {
+			continue;
+		}
+
 		select.append('<option value="' + screenshots[i] + '">' + screenshots[i] + '</option>');
 	}
 };

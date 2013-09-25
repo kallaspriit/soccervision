@@ -89,6 +89,7 @@ private:
 	Communication* com;
 	ControllerMap controllers;
 	std::string activeControllerName;
+	std::string activeStreamName;
 
 	bool controllerRequested;
 	bool running;
