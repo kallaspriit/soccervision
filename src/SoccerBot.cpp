@@ -495,20 +495,20 @@ void SoccerBot::handleServerMessage(Server::Message* message) {
 		) {
 			if (command.name == "get-controller") {
 				handleGetControllerCommand(message);
-			} else if (command.name == "set-controller") {
+			} else if (command.name == "set-controller" && command.parameters.size() == 1) {
 				handleSetControllerCommand(command.parameters, message);
 			} else if (command.name == "get-frame") {
 				handleGetFrameCommand();
-			} else if (command.name == "camera-choice") {
+			} else if (command.name == "camera-choice" && command.parameters.size() == 1) {
                 handleCameraChoiceCommand(command.parameters);
-            } else if (command.name == "blobber-threshold") {
+            } else if (command.name == "blobber-threshold" && command.parameters.size() == 6) {
                 handleBlobberThresholdCommand(command.parameters);
-            } else if (command.name == "blobber-clear") {
+            } else if (command.name == "blobber-clear" && command.parameters.size() == 1) {
                 handleBlobberClearCommand(command.parameters);
-            } else if (command.name == "screenshot") {
+            } else if (command.name == "screenshot" && command.parameters.size() == 1) {
                 handleScreenshotCommand(command.parameters);
             } else {
-				std::cout << "- Unsupported command: " << command.name << std::endl;
+				std::cout << "- Unsupported command: " << command.name << " " << Util::toString(command.parameters) << std::endl;
 			}
 		}
 	} else {
