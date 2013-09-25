@@ -755,6 +755,10 @@ Dash.UI.prototype.handleMessage = function(message) {
 		case 'frame':
 			this.handleFrameMessage(message.payload);
 		break;
+
+		case 'screenshots':
+			this.handleScreenshotsMessage(message.payload);
+		break;
 		
 		default:
 			dash.dbg.log('- Unsupported message received: ' + message.id);
@@ -818,6 +822,18 @@ Dash.UI.prototype.handleFrameMessage = function(frame) {
 	$('#frame-classification').attr('src', 'data:image/jpeg;base64,' + frame.classification);
 
 	dash.socket.send('<get-frame>');
+};
+
+
+Dash.UI.prototype.handleScreenshotsMessage = function(screenshots) {
+	var select = $('#stream-choice'),
+		i;
+
+	select.find('OPTION:gt(0)').remove();
+
+	for (i = 0; i < screenshots.length; i++) {
+		select.append('<option value="' + screenshots[i] + '">' + screenshots[i] + '</option>');
+	}
 };
 
 Dash.UI.prototype.showModal = function(id) {

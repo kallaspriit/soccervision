@@ -619,6 +619,8 @@ void SoccerBot::handleScreenshotCommand(Command::Parameters parameters) {
 
 	ImageProcessor::saveJPEG(rearProcessor->rgb, Config::screenshotsDirectory + "/" + name + "-rgb-rear.jpeg", Config::cameraWidth, Config::cameraHeight, 3);
 	ImageProcessor::saveJPEG(rearProcessor->classification, Config::screenshotsDirectory + "/" + name + "-classification-rear.jpeg", Config::cameraWidth, Config::cameraHeight, 3);
+
+	broadcastScreenshots();
 }
 
 void SoccerBot::handleListScreenshotsCommand(Server::Message* message) {
