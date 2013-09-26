@@ -186,6 +186,9 @@
     <ClInclude Include="include\VirtualCamera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\OffensiveAI.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\DisplayWindow.cpp">
@@ -348,6 +351,9 @@
       <Filter>jpeg</Filter>
     </ClCompile>
     <ClCompile Include="src\VirtualCamera.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\OffensiveAI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

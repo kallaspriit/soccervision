@@ -4,6 +4,7 @@
 #include "Controller.h"
 #include "Vision.h"
 #include "DebouncedButton.h"
+#include "Config.h"
 
 class ManualController : public Controller {
 

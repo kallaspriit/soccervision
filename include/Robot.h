@@ -18,6 +18,7 @@ class Coilgun;
 class Task;
 class Communication;
 
+// TODO Move localizer into controller
 class Robot : public Communication::Listener, public Command::Listener {
 
 public:

@@ -92,9 +92,5 @@ void ManualController::handleKickCommand(const Command& cmd) {
 }
 
 std::string ManualController::getJSON() {
-	std::stringstream stream;
-
-    stream << "null";
-
-    return stream.str();
+	return "null";
 }

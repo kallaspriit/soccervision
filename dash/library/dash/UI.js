@@ -669,6 +669,8 @@ Dash.UI.prototype.initControls = function() {
 
 	$('#stream-choice').change(function() {
 		dash.socket.send('<stream-choice:' + $(this).val()+ '>');
+
+		self.applyScreenshotState();
 	});
 };
 
@@ -680,6 +682,16 @@ Dash.UI.prototype.initBlobberView = function() {
 Dash.UI.prototype.initFrameCanvas = function() {
 	this.frameCanvas = new Dash.FrameCanvas();
 	this.frameCanvas.init();
+};
+
+Dash.UI.prototype.applyScreenshotState = function() {
+	if ($('#stream-choice').val() === '') {
+		$('#screenshot-filename').attr('disabled', false);
+		$('#screenshot-btn').attr('disabled', false);
+	} else {
+		$('#screenshot-filename').attr('disabled', 'disabled');
+		$('#screenshot-btn').attr('disabled', 'disabled');
+	}
 };
 
 Dash.UI.prototype.toggleTargetSide = function() {
@@ -824,7 +836,10 @@ Dash.UI.prototype.handleFrameMessage = function(frame) {
 	
 	$('#frame-img').attr('src', 'data:image/jpeg;base64,' + frame.rgb);
 	$('#frame-classification').attr('src', 'data:image/jpeg;base64,' + frame.classification);
-	$('#')
+	$('#stream-choice OPTION.selected').attr('selected', false);
+	$('#stream-choice OPTION[value=' + frame.activeStream + ']').attr('selected', 'selected');
+
+	this.applyScreenshotState();
 
 	dash.socket.send('<get-frame>');
 };
