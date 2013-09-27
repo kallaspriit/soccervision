@@ -160,13 +160,13 @@ void OffensiveAI::IdleState::step(float dt, float totalDuration, float stateDura
 
 // find ball
 void OffensiveAI::FindBallState::onEnter() {
-	std::cout << "! Enter find ball state" << std::endl;
+	
 }
 
 void OffensiveAI::FindBallState::onExit() {
-	std::cout << "! Exit find ball state" << std::endl;
+	
 }
 
 void OffensiveAI::FindBallState::step(float dt, float totalDuration, float stateDuration) {
-	std::cout << "! Step find ball state: " << dt << ", " << totalDuration << ", " << stateDuration << std::endl;
+	//std::cout << "! Step find ball state: " << dt << ", " << totalDuration << ", " << stateDuration << std::endl;
 }
