@@ -151,7 +151,7 @@ std::string OffensiveAI::getJSON() {
 
 	stream << "{";
 	stream << "\"Target side\": \"" << (targetSide == Side::BLUE ? "blue" : targetSide == Side::YELLOW ? "yellow" : "not chosen") << "\",";
-	stream << "\"Running\": " << (running ? "yes" : "no") << ",";
+	stream << "\"Running\": \"" << (running ? "yes" : "no") << "\",";
 	stream << "\"Current state\": \"" << currentStateName << "\",";
 	stream << "\"State duration\": \"" << currentStateDuration << "\",";
 	stream << "\"Total duration\": \"" << totalDuration << "\"";
