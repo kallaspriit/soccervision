@@ -29,8 +29,6 @@ public:
 
 	public:
 		IdleState(OffensiveAI* ai) : State(ai) {}
-		void onEnter();
-		void onExit();
 		void step(float dt, float totalDuration, float stateDuration);
 
 	};

@@ -104,12 +104,6 @@ void OffensiveAI::handleToggleGoCommand() {
 	}
 
 	running = !running;
-
-	if (running) {
-		setState("find-ball");
-	} else {
-		setState("idle");
-	}
 }
 
 void OffensiveAI::handleCommunicationMessage(std::string message) {
@@ -149,18 +143,10 @@ std::string OffensiveAI::getJSON() {
 }
 
 // idle
-void OffensiveAI::IdleState::onEnter() {
-	std::cout << "! Enter idle state" << std::endl;
-}
-
-void OffensiveAI::IdleState::onExit() {
-	std::cout << "! Exit idle state" << std::endl;
-}
-
 void OffensiveAI::IdleState::step(float dt, float totalDuration, float stateDuration) {
-	std::cout << "! Step idle state: " << dt << ", " << totalDuration << ", " << stateDuration << std::endl;
-
-	ai->setState("find-ball");
+	if (ai->running) {
+		ai->setState("find-ball");
+	}
 }
 
 
