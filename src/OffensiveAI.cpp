@@ -69,14 +69,10 @@ void OffensiveAI::setState(std::string state) {
 }
 
 bool OffensiveAI::handleRequest(std::string request) {
-	std::cout << "! Offensive AI request: " << request << std::endl;
-
 	return false;
 }
 
 bool OffensiveAI::handleCommand(const Command& cmd) {
-	std::cout << "! Offensive AI command: " << cmd.name << " " << Util::toString(cmd.parameters) << std::endl;
-
 	if (cmd.name == "toggle-side") {
         handleToggleSideCommand();
     } else if (cmd.name == "toggle-go") {
@@ -111,7 +107,11 @@ void OffensiveAI::handleToggleGoCommand() {
 }
 
 void OffensiveAI::handleCommunicationMessage(std::string message) {
+	if (Command::isValid(message)) {
+        Command command = Command::parse(message);
 
+		handleCommand(command);
+	}
 }
 
 void OffensiveAI::step(float dt, Vision::Results* visionResults) {

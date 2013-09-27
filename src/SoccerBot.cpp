@@ -513,7 +513,7 @@ void SoccerBot::handleServerMessages() {
 }
 
 void SoccerBot::handleServerMessage(Server::Message* message) {
-	std::cout << "! Request from " << message->client->id << ": " << message->content << std::endl;
+	//std::cout << "! Request from " << message->client->id << ": " << message->content << std::endl;
 
 	if (Command::isValid(message->content)) {
         Command command = Command::parse(message->content);
