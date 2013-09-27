@@ -59,6 +59,7 @@ public:
 	void handleCommunicationMessage(std::string message);
     void step(float dt, Vision::Results* visionResults);
 	void reset();
+	bool isPlaying() { return running; }
 	Side getTargetSide() { return targetSide; }
 	std::string getJSON();
 

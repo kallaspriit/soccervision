@@ -998,7 +998,7 @@ Dash.UI.prototype.showStateStats = function(state) {
 	
 	if (state.targetSide == 1) {
 		$('#status').addClass('yellow');
-	} else if (state.targetSide == 2) {
+	} else if (state.targetSide == 0) {
 		$('#status').addClass('blue');
 	}
 	
