@@ -709,12 +709,16 @@ Dash.UI.prototype.toggleTargetSide = function() {
 };
 
 Dash.UI.prototype.setController = function(name) {
-	$('.ctrl').each(function() {
+	/*$('.ctrl').each(function() {
 		if ($(this).hasClass(name + '-ctrl')) {
 			$(this).show();
 		} else {
 			$(this).hide();
 		}
+	});*/
+
+	$('.ctrl').each(function() {
+		$(this).hide();
 	});
 	
 	this.robot.setController(name);
@@ -787,10 +791,17 @@ Dash.UI.prototype.handleMessage = function(message) {
 Dash.UI.prototype.handleControllerMessage = function(controller) {
 	dash.dbg.log('! Received active controller: ' + controller);
 	
-	$('#controller-choice')
-		.val(controller);
+	$('#controller-choice').val(controller);
 		
 	this.robot.controller = controller;
+
+	$('.ctrl').each(function() {
+		if ($(this).hasClass(controller + '-ctrl')) {
+			$(this).show();
+		} else {
+			$(this).hide();
+		}
+	});
 };
 
 Dash.UI.prototype.handleStateMessage = function(state) {

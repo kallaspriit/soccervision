@@ -1,6 +1,6 @@
 Dash.Robot = function(socket) {
 	this.socket = socket;
-	this.controller = 'manual';
+	this.controller = null;
 	this.dribblerActive = false;
 };
 

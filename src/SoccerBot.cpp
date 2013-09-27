@@ -552,6 +552,8 @@ void SoccerBot::handleServerMessage(Server::Message* message) {
 }
 
 void SoccerBot::handleGetControllerCommand(Server::Message* message) {
+	std::cout << "! Client #" << message->client->id << " requested controller, sending: " << activeControllerName << std::endl;
+
 	message->respond(Util::json("controller", activeControllerName));
 }
 

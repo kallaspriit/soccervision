@@ -14,8 +14,12 @@ void TestController::step(float dt, Vision::Results* visionResults) {
 
 bool TestController::handleCommand(const Command& cmd) {
     if (cmd.name == "test-find-ball") {
-        
-    }
+        // TODO Handle..
+
+		return true;
+    } else {
+		return false;
+	}
 
     return true;
 }
