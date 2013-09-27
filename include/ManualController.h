@@ -13,7 +13,6 @@ public:
 
 	void onEnter() { reset(); }
 	void onExit() { reset(); }
-    bool handleRequest(std::string request);
     bool handleCommand(const Command& cmd);
     void handleTargetVectorCommand(const Command& cmd);
     void handleTargetDirCommand(const Command& cmd);

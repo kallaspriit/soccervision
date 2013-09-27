@@ -18,10 +18,6 @@ void ManualController::step(float dt, Vision::Results* visionResults) {
 	robot->setAutostop(false);
 }
 
-bool ManualController::handleRequest(std::string request) {
-    return false;
-}
-
 bool ManualController::handleCommand(const Command& cmd) {
     if (cmd.name == "target-vector" && cmd.parameters.size() == 3) {
         handleTargetVectorCommand(cmd);

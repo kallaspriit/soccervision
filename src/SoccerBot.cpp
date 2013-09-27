@@ -13,6 +13,7 @@
 #include "Dribbler.h"
 #include "Wheel.h"
 #include "ManualController.h"
+#include "TestController.h"
 #include "OffensiveAI.h"
 #include "ImageProcessor.h"
 
@@ -416,6 +417,7 @@ void SoccerBot::setupControllers() {
 	std::cout << "! Setting up controllers.. ";
 
 	addController("manual", new ManualController(robot, com));
+	addController("test", new TestController(robot, com));
 	addController("offensive-ai", new OffensiveAI(robot, com));
 
 	std::cout << "done!" << std::endl;
