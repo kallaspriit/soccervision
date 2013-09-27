@@ -89,13 +89,19 @@ void OffensiveAI::handleToggleSideCommand() {
 		return;
 	}
 
-	if (targetSide == Side::BLUE) {
-		targetSide = Side::YELLOW;
-	} else {
-		targetSide = Side::BLUE;
-	}
+	if (!running) {
+		if (targetSide == Side::BLUE) {
+			targetSide = Side::YELLOW;
+		} else {
+			targetSide = Side::BLUE;
+		}
 
-	com->send("target:" + Util::toString(targetSide));
+		std::cout << "! Now targeting " << (targetSide == Side::BLUE ? "blue" : "yellow") << " side" << std::endl;
+
+		com->send("target:" + Util::toString(targetSide));
+	} else {
+		std::cout << "- Side can't be changed while running" << std::endl;
+	}
 }
 
 void OffensiveAI::handleToggleGoCommand() {
