@@ -115,6 +115,10 @@ void OffensiveAI::handleCommunicationMessage(std::string message) {
 }
 
 void OffensiveAI::step(float dt, Vision::Results* visionResults) {
+	if (!running && currentStateName != startStateName) {
+		setState(startStateName);
+	}
+
 	currentStateDuration += dt;
 	totalDuration += dt;
 
