@@ -103,7 +103,11 @@ void OffensiveAI::handleToggleGoCommand() {
 		return;
 	}
 
-	running = !running;
+	if (running || targetSide != Side::UNKNOWN) {
+		running = !running;
+	} else {
+		std::cout << "- Choose target side before requesting start" << std::endl;
+	}
 }
 
 void OffensiveAI::handleCommunicationMessage(std::string message) {
