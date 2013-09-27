@@ -15,17 +15,16 @@ public:
 	void onExit() { reset(); }
     bool handleRequest(std::string request);
     bool handleCommand(const Command& cmd);
+	void handleToggleSideCommand();
+    void handleTargetVectorCommand(const Command& cmd);
+    void handleTargetDirCommand(const Command& cmd);
+    void handleSetDribblerCommand(const Command& cmd);
+    void handleKickCommand(const Command& cmd);
 	void handleCommunicationMessage(std::string message);
     void step(float dt, Vision::Results* visionResults);
 	void reset();
 	Side getTargetSide() { return targetSide; }
 	std::string getJSON();
-
-    void handleToggleSideCommand();
-    void handleTargetVectorCommand(const Command& cmd);
-    void handleTargetDirCommand(const Command& cmd);
-    void handleSetDribblerCommand(const Command& cmd);
-    void handleKickCommand(const Command& cmd);
 
 private:
 	Side targetSide;
