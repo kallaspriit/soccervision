@@ -73,6 +73,7 @@ private:
 	States states;
 	State* currentState;
 	std::string currentStateName;
+	std::string startStateName;
 	bool running;
 	float totalDuration;
 	float currentStateDuration;

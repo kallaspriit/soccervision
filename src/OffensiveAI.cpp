@@ -7,6 +7,8 @@
 #include "Util.h"
 
 OffensiveAI::OffensiveAI(Robot* robot, Communication* com) : Controller(robot, com), targetSide(Side::UNKNOWN), currentState(NULL), running(false), totalDuration(0.0f), currentStateDuration(0.0f) {
+	startStateName = "idle";
+	
 	setupStates();
 };
 
@@ -19,12 +21,14 @@ OffensiveAI::~OffensiveAI() {
 }
 
 void OffensiveAI::reset() {
+	std::cout << "! Reset offensive AI" << std::endl;
+
 	com->send("reset");
 	targetSide = Side::UNKNOWN;
 	totalDuration = 0.0f;
 	currentStateDuration = 0.0f;
-
-	setState("idle");
+	currentState = NULL;
+	currentStateName = "";
 }
 
 void OffensiveAI::onEnter() {
@@ -49,7 +53,11 @@ void OffensiveAI::setState(std::string state) {
 	State* newState = states[state];
 
 	if (currentState != NULL) {
+		std::cout << "! Switched offensive AI state from " << currentStateName << " to " << state << std::endl;
+
 		currentState->onExit();
+	} else {
+		std::cout << "! Set initial offensive AI state to " << state << std::endl;
 	}
 
 	currentStateDuration = 0.0f;
@@ -112,6 +120,10 @@ void OffensiveAI::step(float dt, Vision::Results* visionResults) {
 	currentStateDuration += dt;
 	totalDuration += dt;
 
+	if (currentState == NULL) {
+		setState(startStateName);
+	}
+
 	if (currentState != NULL) {
 		currentState->step(dt, totalDuration, currentStateDuration);
 	}
@@ -120,8 +132,6 @@ void OffensiveAI::step(float dt, Vision::Results* visionResults) {
 void OffensiveAI::setupStates() {
 	states["idle"] = new IdleState(this);
 	states["find-ball"] = new FindBallState(this);
-
-	setState("idle");
 }
 
 std::string OffensiveAI::getJSON() {
