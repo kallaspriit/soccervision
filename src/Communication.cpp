@@ -40,6 +40,11 @@ void Communication::send(std::string message) {
 	memcpy(request, message.c_str(), message.size());
 
 	try {
+		boost::asio::ip::udp::endpoint remoteEndpoint = boost::asio::ip::udp::endpoint(
+			boost::asio::ip::address::from_string(host),
+			port
+		);
+
 		socket->async_send_to(
 			boost::asio::buffer(request, message.length()), remoteEndpoint,
 			boost::bind(
@@ -81,10 +86,10 @@ void* Communication::run() {
 
 	socket = new udp::socket(ioService, udp::endpoint(udp::v4(), port));
 
-	remoteEndpoint = boost::asio::ip::udp::endpoint(
+	/*remoteEndpoint = boost::asio::ip::udp::endpoint(
 		boost::asio::ip::address::from_string(host),
 		port
-	);
+	);*/
 
 	receiveNext();
 

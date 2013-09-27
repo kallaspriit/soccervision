@@ -45,7 +45,7 @@ private:
 	boost::asio::io_service ioService;
 	udp::socket* socket;
 	udp::endpoint endpoint;
-	boost::asio::ip::udp::endpoint remoteEndpoint;
+	//boost::asio::ip::udp::endpoint remoteEndpoint;
 	Messages messages;
 	std::queue<std::string> queuedMessages;
 	bool running;

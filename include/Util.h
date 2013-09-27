@@ -50,6 +50,10 @@ public:
 
     template <class T>
     static inline std::string toString(std::vector<T> vec) {
+		if (vec.size() == 0) {
+			return "[]";
+		}
+
         std::stringstream ss;
 
         std::copy(vec.begin(), vec.end(), std::ostream_iterator<T>(ss, "\", \""));

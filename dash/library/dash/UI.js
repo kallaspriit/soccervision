@@ -788,8 +788,7 @@ Dash.UI.prototype.handleControllerMessage = function(controller) {
 	dash.dbg.log('! Received active controller: ' + controller);
 	
 	$('#controller-choice')
-		.val(controller)
-		.trigger('change');
+		.val(controller);
 		
 	this.robot.controller = controller;
 };
