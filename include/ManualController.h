@@ -15,7 +15,6 @@ public:
 	void onExit() { reset(); }
     bool handleRequest(std::string request);
     bool handleCommand(const Command& cmd);
-	void handleToggleSideCommand();
     void handleTargetVectorCommand(const Command& cmd);
     void handleTargetDirCommand(const Command& cmd);
     void handleSetDribblerCommand(const Command& cmd);
@@ -23,12 +22,7 @@ public:
 	void handleCommunicationMessage(std::string message);
     void step(float dt, Vision::Results* visionResults);
 	void reset();
-	Side getTargetSide() { return targetSide; }
 	std::string getJSON();
-
-private:
-	Side targetSide;
-	DebouncedButton toggleSideBtn;
 
 };
 
