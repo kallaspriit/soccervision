@@ -187,7 +187,7 @@ void DebugRenderer::renderObjectHighlight(unsigned char* image, Object* object, 
 	canvas.width = width;
 	canvas.height = height;
 
-	canvas.drawBoxCentered(object->x - 2, object->y - 2, object->width + 4, object->height + 4, red, green, blue);
+	canvas.drawBoxCentered(object->x - 2, object->y - 2, object->width + 6, object->height + 6, red, green, blue);
 	canvas.drawLine(object->x - object->width / 2, object->y - object->height / 2, object->x + object->width / 2, object->y + object->height / 2, red, green, blue);
     canvas.drawLine(object->x - object->width / 2, object->y + object->height / 2, object->x + object->width / 2, object->y - object->height / 2, red, green, blue);
 }
