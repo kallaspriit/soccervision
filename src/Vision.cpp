@@ -852,8 +852,8 @@ Vision::PathMetric Vision::getPathMetric(int x1, int y1, int x2, int y2, std::ve
         y = senseY[i];
 
 		distance = getDistance(dir, x, y);
-		distance1 = Math::round(distance, 2);
-		distance2 = Math::round(distance, 1);
+		distance1 = Math::round(distance, 3);
+		distance2 = Math::round(distance, 2);
 		
 		if (distance1 != distance2) {
 			continue;
