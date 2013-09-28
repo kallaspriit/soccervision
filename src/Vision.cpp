@@ -846,6 +846,7 @@ Vision::PathMetric Vision::getPathMetric(int x1, int y1, int x2, int y2, std::ve
 	int step = originalX1 < originalX2 ? 1 : -1;
 	float distanceStep = 0.05f;
 	float distance1, distance2;
+	int distanceRow;
 
     for (int i = start; (originalX1 < originalX2 ? i < senseCounter : i >= 0); i += step) {
         x = senseX[i];
@@ -853,8 +854,9 @@ Vision::PathMetric Vision::getPathMetric(int x1, int y1, int x2, int y2, std::ve
 
 		distance1 = getDistance(dir, x, y);
 		distance2 = Math::round(distance1 / distanceStep, 0) * distanceStep;
+		distanceRow = getPixelRowAt(dir, distance2);
 
-		if (Math::abs(distance1 - distance2) > distanceStep / 2) {
+		if ((int)Math::abs((float)(y - distanceRow)) > 5) {
 			continue;
 		}
 
