@@ -210,5 +210,6 @@ void DebugRenderer::renderGrid(unsigned char* image, Vision* vision, int width, 
 		pixelRow = vision->getPixelRowAt(vision->getDir(), distance);
 
 		canvas.drawLine(0, pixelRow, width, pixelRow, 128, 128, 128);
+		canvas.drawText(10, pixelRow - 10, Util::toString(distance), 128, 128, 128);
 	}
 }
