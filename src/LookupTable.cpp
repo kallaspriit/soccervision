@@ -189,7 +189,6 @@ bool LookupTable::load(std::string filename, float valueDiff) {
     };
 
 	fclose(in);
-	delete buf;
 
     return true;
 }

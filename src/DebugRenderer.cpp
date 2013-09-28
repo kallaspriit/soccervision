@@ -205,7 +205,7 @@ void DebugRenderer::renderGrid(unsigned char* image, Vision* vision, int width, 
 	float step = 0.1f;
 	float distance;
 	int pixelRow;
-	int counter;
+	int counter = 0;
 
 	for (distance = minDistance; distance < maxDistance; distance += step) {
 		pixelRow = vision->getPixelRowAt(vision->getDir(), distance);
