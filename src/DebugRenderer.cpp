@@ -210,7 +210,7 @@ void DebugRenderer::renderGrid(unsigned char* image, Vision* vision, int width, 
 	//float distanceX;
 	int pixelRow;
 	int counter = 0;
-	int px, py, lastTextY = 0;
+	int px, py, lastTextY = Config::cameraHeight;
 	Math::Point screenCoords;
 
 	for (distanceY = minDistanceY; distanceY < maxDistanceY; distanceY += stepY) {
