@@ -566,6 +566,8 @@ void SoccerBot::handleServerMessage(Server::Message* message) {
 				handleGetFrameCommand();
 			} else if (command.name == "camera-choice" && command.parameters.size() == 1) {
                 handleCameraChoiceCommand(command.parameters);
+            } else if (command.name == "camera-adjust" && command.parameters.size() == 2) {
+                handleCameraAdjustCommand(command.parameters);
             } else if (command.name == "stream-choice" && command.parameters.size() == 1) {
                 handleStreamChoiceCommand(command.parameters);
             } else if (command.name == "blobber-threshold" && command.parameters.size() == 6) {
@@ -611,6 +613,13 @@ void SoccerBot::handleCameraChoiceCommand(Command::Parameters parameters) {
 	debugCameraDir = Util::toInt(parameters[0]) == 2 ? Dir::REAR : Dir::FRONT;
 
 	std::cout << "! Debugging now from " << (debugCameraDir == Dir::FRONT ? "front" : "rear") << " camera" << std::endl;
+}
+
+void SoccerBot::handleCameraAdjustCommand(Command::Parameters parameters) {
+	Config::cameraCorrectionK = Util::toFloat(parameters[0]);
+	Config::cameraCorrectionZoom = Util::toFloat(parameters[1]);
+
+	std::cout << "! Adjust camera correction k: " << Config::cameraCorrectionK << ", zoom: " << Config::cameraCorrectionZoom << std::endl;
 }
 
 void SoccerBot::handleStreamChoiceCommand(Command::Parameters parameters) {

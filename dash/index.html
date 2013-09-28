@@ -53,6 +53,7 @@
 						<option value="2">Rear</option>
 					</select>
 					<select name="threshold-class" id="threshold-class">
+						<option value="" selected="selected">-- Select color --</option>
 						<option value="green">Green</option>
 						<option value="white">White</option>
 						<option value="black">Black</option>
@@ -60,7 +61,7 @@
 						<option value="yellow-goal-wide">Yellow goal wide</option>
 						<option value="blue-goal">Blue goal</option>
 						<option value="blue-goal-wide">Blue goal wide</option>
-						<option value="ball" selected="selected">Ball</option>
+						<option value="ball">Ball</option>
 					</select>
 					<select name="threshold-brush" id="threshold-brush">
 						<option value="0">Brush: 0</option>
@@ -84,8 +85,8 @@
 					<button id="blobber-clear-all-btn">Clear All</button>
 					<input type="text" id="screenshot-filename" value="screenshot"/>
 					<button id="screenshot-btn">Screenshot</button>
-					<input type="text" id="camera-k" disabled="disabled"/>
-					<input type="text" id="camera-zoom" disabled="disabled"/>
+					<input type="text" id="camera-k" style="width: 60px;" disabled="disabled"/>
+					<input type="text" id="camera-zoom" style="width: 60px;" disabled="disabled"/>
 				</div>
 				<img id="frame-img" src="" width="640" height="512"/>
 				<img id="frame-classification" src="" width="640" height="512"/>

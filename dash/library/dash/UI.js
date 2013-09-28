@@ -622,6 +622,10 @@ Dash.UI.prototype.initControls = function() {
 			color = $('#threshold-class').val(),
 			brush = $('#threshold-brush').val(),
 			stdev = $('#threshold-stdev').val();
+
+		if (color === '') {
+			return;
+		}
 		
 		switch (e.which) {
 			case 1:
@@ -675,6 +679,13 @@ Dash.UI.prototype.initControls = function() {
 		dash.socket.send('<stream-choice:' + $(this).val()+ '>');
 
 		self.applyScreenshotState();
+	});
+
+	$('#camera-k, #camera-zoom').keyup(function() {
+		var k = parseInt($('#camera-k').val()) / 1000000000,
+			zoom = parseInt($('#camera-zoom').val()) / 1000;
+
+		dash.socket.send('<camera-adjust:' + k + ':' + zoom + '>');
 	});
 };
 
@@ -848,6 +859,11 @@ Dash.UI.prototype.handleFrameMessage = function(frame) {
 	$('#frame-classification').attr('src', 'data:image/jpeg;base64,' + frame.classification);
 	$('#stream-choice OPTION.selected').attr('selected', false);
 	$('#stream-choice OPTION[value=' + frame.activeStream + ']').attr('selected', 'selected');
+
+	if (!$('#camera-k').is(':focus')) {
+		$('#camera-k').val(parseInt(parseFloat(frame.cameraK) * 1000000000)).attr('disabled', false);
+		$('#camera-zoom').val(parseFloat(parseInt(parseFloat(frame.cameraZoom) * 1000))).attr('disabled', false);
+	}
 
 	this.applyScreenshotState();
 

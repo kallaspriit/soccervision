@@ -49,6 +49,7 @@ public:
 	void handleGetFrameCommand();
 	void handleStreamChoiceCommand(Command::Parameters parameters);
 	void handleCameraChoiceCommand(Command::Parameters parameters);
+	void handleCameraAdjustCommand(Command::Parameters parameters);
 	void handleBlobberThresholdCommand(Command::Parameters parameters);
 	void handleBlobberClearCommand(Command::Parameters parameters);
 	void handleScreenshotCommand(Command::Parameters parameters);
