@@ -16,9 +16,6 @@ public:
 
 	public:
 		State(OffensiveAI* ai) : BaseAI::State(ai), ai(ai) {}
-		virtual void onEnter() {}
-		virtual void onExit() {}
-		virtual void step(float dt, float totalDuration, float stateDuration) = 0;
 
 	protected:
 		OffensiveAI* ai;
