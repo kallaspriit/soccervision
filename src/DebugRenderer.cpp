@@ -206,12 +206,27 @@ void DebugRenderer::renderGrid(unsigned char* image, Vision* vision, int width, 
 	float distance;
 	int pixelRow;
 	int counter = 0;
+	int px, py;
 
 	for (distance = minDistance; distance < maxDistance; distance += step) {
 		pixelRow = vision->getPixelRowAt(vision->getDir(), distance);
 
-		canvas.drawLine(0, pixelRow, width, pixelRow, 128, 128, 128);
-		canvas.drawText(10 + (counter % 10) * 30, pixelRow + 1, Util::toString(distance), 128, 128, 128);
+		for (int x = 0; x < Config::cameraHeight; x++) {
+			px = x;
+			py = pixelRow;
+
+			Util::correctCameraPoint(px, py);
+
+			canvas.setPixelAt(px, py, 128, 128, 128);
+		}
+
+		px = 10 + (counter % 10) * 30;
+		py = pixelRow + 1;
+
+		Util::correctCameraPoint(px, py);
+
+		//canvas.drawLine(0, pixelRow, width, pixelRow, 128, 128, 128);
+		canvas.drawText(px, py, Util::toString(distance), 128, 128, 128);
 
 		counter++;
 	}
