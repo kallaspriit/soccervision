@@ -860,7 +860,7 @@ Dash.UI.prototype.handleFrameMessage = function(frame) {
 	$('#stream-choice OPTION.selected').attr('selected', false);
 	$('#stream-choice OPTION[value=' + frame.activeStream + ']').attr('selected', 'selected');
 
-	if (!$('#camera-k').is(':focus')) {
+	if (!$('#camera-k').is(':focus') && !$('#camera-zoom').is(':focus')) {
 		$('#camera-k').val(parseInt(parseFloat(frame.cameraK) * 1000000000)).attr('disabled', false);
 		$('#camera-zoom').val(parseFloat(parseInt(parseFloat(frame.cameraZoom) * 1000))).attr('disabled', false);
 	}
