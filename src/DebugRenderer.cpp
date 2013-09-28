@@ -64,8 +64,8 @@ void DebugRenderer::renderBalls(unsigned char* image, const ObjectList& balls, i
         ball = *it;
 
         canvas.drawBoxCentered(ball->x, ball->y, ball->width, ball->height);
-		canvas.drawLine(ball->x - ball->width / 2, ball->y - ball->height / 2, ball->x + ball->width / 2, ball->y + ball->height / 2);
-        canvas.drawLine(ball->x - ball->width / 2, ball->y + ball->height / 2, ball->x + ball->width / 2, ball->y - ball->height / 2);
+		//canvas.drawLine(ball->x - ball->width / 2, ball->y - ball->height / 2, ball->x + ball->width / 2, ball->y + ball->height / 2);
+        //canvas.drawLine(ball->x - ball->width / 2, ball->y + ball->height / 2, ball->x + ball->width / 2, ball->y - ball->height / 2);
 
 		sprintf(buf, "%.2fm  %.1f deg", ball->distance, Math::radToDeg(ball->angle));
         canvas.drawText(ball->x - ball->width / 2 + 2, ball->y - ball->height / 2 - 19, buf);
@@ -178,4 +178,16 @@ void DebugRenderer::renderObstructions(unsigned char* image, Obstruction obstruc
 	} else {
 		canvas.fillBox(width / 2, height - 80, 20, 40, 0, 200, 0);
 	}
+}
+
+void DebugRenderer::renderObjectHighlight(unsigned char* image, Object* object, int width, int height) {
+	Canvas canvas = Canvas();
+
+	canvas.data = image;
+	canvas.width = width;
+	canvas.height = height;
+
+	canvas.drawBoxCentered(object->x - 1, object->y - 1, object->width + 2, object->height + 2);
+	canvas.drawLine(object->x - object->width / 2, object->y - object->height / 2, object->x + object->width / 2, object->y + object->height / 2);
+    canvas.drawLine(object->x - object->width / 2, object->y + object->height / 2, object->x + object->width / 2, object->y - object->height / 2);
 }

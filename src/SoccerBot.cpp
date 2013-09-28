@@ -2,6 +2,7 @@
 #include "XimeaCamera.h"
 #include "VirtualCamera.h"
 #include "Vision.h"
+#include "DebugRenderer.h"
 #include "Communication.h"
 #include "ProcessThread.h"
 #include "Gui.h"
@@ -122,6 +123,7 @@ void SoccerBot::run() {
 
 	bool gotFrontFrame, gotRearFrame;
 	double time;
+	double debugging;
 
 	while (running) {
 		//__int64 startTime = Util::timerStart();
@@ -137,7 +139,7 @@ void SoccerBot::run() {
 		totalTime += dt;
 
 		gotFrontFrame = gotRearFrame = false;
-		frontProcessor->debug = rearProcessor->debug = debugVision || showGui || frameRequested;
+		debugging = frontProcessor->debug = rearProcessor->debug = debugVision || showGui || frameRequested;
 
 		gotFrontFrame = fetchFrame(frontCamera, frontProcessor);
 		gotRearFrame = fetchFrame(rearCamera, rearProcessor);
@@ -166,6 +168,19 @@ void SoccerBot::run() {
 		if (gotRearFrame) {
 			rearProcessor->join();
 			visionResults->rear = rearProcessor->visionResult;
+		}
+
+		if (debugging) {
+			Object* closestBall = visionResults->getClosestBall();
+
+			if (closestBall != NULL) {
+				if (!closestBall->behind) {
+					DebugRenderer::renderObjectHighlight(frontProcessor->rgb, closestBall);
+				} else {
+					DebugRenderer::renderObjectHighlight(rearProcessor->rgb, closestBall);
+				}
+			}
+			//DebugRenderer::highlightObject(
 		}
 
 		if (frameRequested) {
