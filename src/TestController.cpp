@@ -35,8 +35,8 @@ bool TestController::handleCommand(const Command& cmd) {
         handleToggleGoCommand();
     } else if (cmd.name == "stop" ||cmd.name == "toggle-side") {
         handleResetCommand();
-    } else if (cmd.name == "test-watch-ball") {
-        setState("watch-ball");
+    } else if (cmd.name.substr(0, 4) == "run-") {
+        setState(cmd.name.substr(4));
 
 		running = true;
     } else {
