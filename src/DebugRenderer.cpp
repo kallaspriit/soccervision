@@ -211,7 +211,7 @@ void DebugRenderer::renderGrid(unsigned char* image, Vision* vision, int width, 
 	for (distance = minDistance; distance < maxDistance; distance += step) {
 		pixelRow = vision->getPixelRowAt(vision->getDir(), distance);
 
-		for (int x = 0; x < Config::cameraHeight; x++) {
+		for (int x = 0; x < Config::cameraWidth; x++) {
 			px = x;
 			py = pixelRow;
 
