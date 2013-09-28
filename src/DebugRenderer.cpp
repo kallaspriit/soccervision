@@ -64,8 +64,8 @@ void DebugRenderer::renderBalls(unsigned char* image, const ObjectList& balls, i
         ball = *it;
 
         canvas.drawBoxCentered(ball->x, ball->y, ball->width, ball->height);
-		//canvas.drawLine(ball->x - ball->width / 2, ball->y - ball->height / 2, ball->x + ball->width / 2, ball->y + ball->height / 2);
-        //canvas.drawLine(ball->x - ball->width / 2, ball->y + ball->height / 2, ball->x + ball->width / 2, ball->y - ball->height / 2);
+		canvas.drawLine(ball->x - ball->width / 2, ball->y - ball->height / 2, ball->x + ball->width / 2, ball->y + ball->height / 2);
+        canvas.drawLine(ball->x - ball->width / 2, ball->y + ball->height / 2, ball->x + ball->width / 2, ball->y - ball->height / 2);
 
 		sprintf(buf, "%.2fm  %.1f deg", ball->distance, Math::radToDeg(ball->angle));
         canvas.drawText(ball->x - ball->width / 2 + 2, ball->y - ball->height / 2 - 19, buf);

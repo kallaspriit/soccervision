@@ -180,6 +180,25 @@ void SoccerBot::run() {
 					DebugRenderer::renderObjectHighlight(rearProcessor->rgb, closestBall);
 				}
 			}
+
+			Object* largestBlueGoal = visionResults->getLargestGoal(Side::BLUE);
+			Object* largestYellowGoal = visionResults->getLargestGoal(Side::YELLOW);
+
+			if (largestBlueGoal != NULL) {
+				if (!largestBlueGoal->behind) {
+					DebugRenderer::renderObjectHighlight(frontProcessor->rgb, largestBlueGoal);
+				} else {
+					DebugRenderer::renderObjectHighlight(rearProcessor->rgb, largestBlueGoal);
+				}
+			}
+
+			if (largestYellowGoal != NULL) {
+				if (!largestYellowGoal->behind) {
+					DebugRenderer::renderObjectHighlight(frontProcessor->rgb, largestYellowGoal);
+				} else {
+					DebugRenderer::renderObjectHighlight(rearProcessor->rgb, largestYellowGoal);
+				}
+			}
 			//DebugRenderer::highlightObject(
 		}
 
