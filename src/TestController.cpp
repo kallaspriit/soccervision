@@ -14,15 +14,17 @@ void TestController::setupStates() {
 }
 
 void TestController::step(float dt, Vision::Results* visionResults) {
-	currentStateDuration += dt;
-	totalDuration += dt;
-
 	if (currentState == NULL) {
 		setState("idle");
 	}
 
-	if (currentState != NULL && running) {
-		currentState->step(dt, totalDuration, currentStateDuration);
+	if (running) {
+		currentStateDuration += dt;
+		totalDuration += dt;
+
+		if (currentState != NULL) {
+			currentState->step(dt, totalDuration, currentStateDuration);
+		}
 	}
 }
 
