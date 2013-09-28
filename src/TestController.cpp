@@ -25,6 +25,8 @@ void TestController::step(float dt, Vision::Results* visionResults) {
 		if (currentState != NULL) {
 			currentState->step(dt, totalDuration, currentStateDuration);
 		}
+	} else {
+		robot->stop();
 	}
 }
 
