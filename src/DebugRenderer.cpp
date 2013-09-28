@@ -180,14 +180,14 @@ void DebugRenderer::renderObstructions(unsigned char* image, Obstruction obstruc
 	}
 }
 
-void DebugRenderer::renderObjectHighlight(unsigned char* image, Object* object, int width, int height) {
+void DebugRenderer::renderObjectHighlight(unsigned char* image, Object* object, int red, int green, int blue, int width, int height) {
 	Canvas canvas = Canvas();
 
 	canvas.data = image;
 	canvas.width = width;
 	canvas.height = height;
 
-	canvas.drawBoxCentered(object->x - 1, object->y - 1, object->width + 2, object->height + 2);
-	canvas.drawLine(object->x - object->width / 2, object->y - object->height / 2, object->x + object->width / 2, object->y + object->height / 2);
-    canvas.drawLine(object->x - object->width / 2, object->y + object->height / 2, object->x + object->width / 2, object->y - object->height / 2);
+	canvas.drawBoxCentered(object->x - 2, object->y - 2, object->width + 4, object->height + 4, red, green, blue);
+	canvas.drawLine(object->x - object->width / 2, object->y - object->height / 2, object->x + object->width / 2, object->y + object->height / 2, red, green, blue);
+    canvas.drawLine(object->x - object->width / 2, object->y + object->height / 2, object->x + object->width / 2, object->y - object->height / 2, red, green, blue);
 }
