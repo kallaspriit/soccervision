@@ -75,16 +75,14 @@ float LookupTable::getInverseValue(float search) {
     float lastKey = -1.0f;
     float lastValue = -1.0f;
 
-    LookupMapIt finalIt = (map.end())--;
-
-	std::cout << "@ Search inverse for " << search << std::endl;
+	//std::cout << "@ Search inverse for " << search << std::endl;
 
     for (LookupMapIt it = map.begin(); it != map.end(); it++) {
         key = it->first;
         value = it->second;
 
         if (value == search) {
-			std::cout << "  > Found exact match: " << key << std::endl;
+			//std::cout << "  > Found exact match: " << key << std::endl;
 
             return key;
         }
@@ -103,14 +101,14 @@ float LookupTable::getInverseValue(float search) {
 			float share = (lastValue - search) / valueDiff;
 			float result = lastKey * share + key * (1.0f - share);
 
-			std::cout << "  > value1: " << value1 << std::endl;
+			/*std::cout << "  > value1: " << value1 << std::endl;
 			std::cout << "  > value2: " << value2 << std::endl;
 			std::cout << "  > valueDiff: " << valueDiff << std::endl;
 			std::cout << "  > key1: " << key1 << std::endl;
 			std::cout << "  > key2: " << key2 << std::endl;
 			std::cout << "  > keyDiff: " << keyDiff << std::endl;
 			std::cout << "  > share: " << share << std::endl;
-			std::cout << "  > result: " << result << std::endl << std::endl;
+			std::cout << "  > result: " << result << std::endl << std::endl;*/
 
 			return result;
 			
@@ -165,7 +163,7 @@ float LookupTable::getInverseValue(float search) {
         lastValue = it->second;
     }
 
-	std::cout << "  > No match, returning " << lastKey << std::endl << std::endl;
+	//std::cout << "  > No match, returning " << lastKey << std::endl << std::endl;
 
     return lastKey;
 }
@@ -189,6 +187,9 @@ bool LookupTable::load(std::string filename, float valueDiff) {
             addValue(key, value + valueDiff);
         }
     };
+
+	fclose(in);
+	delete buf;
 
     return true;
 }

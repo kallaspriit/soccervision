@@ -201,15 +201,18 @@ void DebugRenderer::renderGrid(unsigned char* image, Vision* vision, int width, 
 	canvas.height = height;
 
 	float minDistance = 0.0f;
-	float maxDistance = 6.0f;
+	float maxDistance = 4.6f;
 	float step = 0.1f;
 	float distance;
 	int pixelRow;
+	int counter;
 
 	for (distance = minDistance; distance < maxDistance; distance += step) {
 		pixelRow = vision->getPixelRowAt(vision->getDir(), distance);
 
 		canvas.drawLine(0, pixelRow, width, pixelRow, 128, 128, 128);
-		canvas.drawText(10, pixelRow - 10, Util::toString(distance), 128, 128, 128);
+		canvas.drawText(10 + (counter % 10) * 30, pixelRow + 1, Util::toString(distance), 128, 128, 128);
+
+		counter++;
 	}
 }
