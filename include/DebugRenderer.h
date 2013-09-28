@@ -6,6 +6,7 @@
 #include "Blobber.h"
 
 class Canvas;
+class Vision;
 
 class DebugRenderer {
 
@@ -17,7 +18,7 @@ public:
 	static void renderBrush(unsigned char* image, int x, int y, int radius, bool active, int width = Config::cameraWidth, int height = Config::cameraHeight);
 	static void renderObstructions(unsigned char* image, Obstruction obstruction, int width = Config::cameraWidth, int height = Config::cameraHeight);
 	static void renderObjectHighlight(unsigned char* image, Object* object, int red = 255, int green = 255, int blue = 255, int width = Config::cameraWidth, int height = Config::cameraHeight);
-
+	static void renderGrid(unsigned char* image, Vision* vision, int width = Config::cameraWidth, int height = Config::cameraHeight);
 };
 
 #endif // DEBUGRENDERER_H

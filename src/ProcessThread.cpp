@@ -93,6 +93,7 @@ void* ProcessThread::run() {
 	visionResult = vision->process();
 
 	if (debug) {
+		DebugRenderer::renderGrid(rgb, vision);
 		DebugRenderer::renderBlobs(classification, blobber);
 		DebugRenderer::renderBalls(rgb, visionResult->balls);
 		DebugRenderer::renderGoals(rgb, visionResult->goals);

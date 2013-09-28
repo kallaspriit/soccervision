@@ -456,6 +456,18 @@ float Vision::getDistance(Dir dir, int x, int y) {
 	return Math::max(distance + Config::distanceCorrection, 0.01f);
 }
 
+int Vision::getPixelRowAt(Dir dir, float distance) {
+	int pixelRow;
+
+	if (dir == FRONT) {
+		pixelRow = frontDistanceLookup.getInverseValue(distance);
+    } else {
+        pixelRow = rearDistanceLookup.getInverseValue(distance);
+    }
+
+	return (int)Math::min(Math::max((float)pixelRow, 0.0f), (float)(Config::cameraHeight - 1));
+}
+
 /*float Vision::getHorizontalDistance(Dir dir, int x, int y) {
 	/float measurementPixels = 150;
 	float distance = getDistance(dir, x, y);

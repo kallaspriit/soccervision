@@ -17,6 +17,7 @@ public:
     bool load(std::string filename, float valueDiff = 0.0f);
 
     float getValue(float search);
+	float getInverseValue(float search);
 
 private:
     LookupMap map;

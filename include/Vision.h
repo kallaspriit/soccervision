@@ -47,11 +47,13 @@ public:
     Blobber::Color* getColorAt(int x, int y);
 	bool isViewObstructed() { return obstructionSide != Obstruction::NONE; }
 	Obstruction getObstruction() { return obstructionSide; }
+	Dir getDir() { return dir; }
 	bool isBallInWay(ObjectList balls, int goalY);
 	float getBlackDistance() { return blackDistance; }
     float getDistance(Dir dir, int x, int y);
 	//float getHorizontalDistance(Dir dir, int x, int y);
     float getAngle(Dir dir, int x, int y);
+	int getPixelRowAt(Dir dir, float distance);
 
 private:
 	ObjectList processBalls(Dir dir);

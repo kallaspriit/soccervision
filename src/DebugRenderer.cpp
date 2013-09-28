@@ -1,6 +1,7 @@
 #include "DebugRenderer.h"
 #include "Canvas.h"
 #include "Maths.h"
+#include "Vision.h"
 #include "Util.h"
 
 void DebugRenderer::renderFPS(unsigned char* image, int fps, int width, int height) {
@@ -190,4 +191,24 @@ void DebugRenderer::renderObjectHighlight(unsigned char* image, Object* object, 
 	canvas.drawBoxCentered(object->x, object->y, object->width + 4, object->height + 4, red, green, blue);
 	canvas.drawLine(object->x - object->width / 2, object->y - object->height / 2, object->x + object->width / 2, object->y + object->height / 2, red, green, blue);
     canvas.drawLine(object->x - object->width / 2, object->y + object->height / 2, object->x + object->width / 2, object->y - object->height / 2, red, green, blue);
+}
+
+void DebugRenderer::renderGrid(unsigned char* image, Vision* vision, int width, int height) {
+	Canvas canvas = Canvas();
+
+	canvas.data = image;
+	canvas.width = width;
+	canvas.height = height;
+
+	float minDistance = 0.0f;
+	float maxDistance = 6.0f;
+	float step = 0.5f;
+	float distance;
+	int pixelRow;
+
+	for (distance = minDistance; distance < maxDistance; distance += step) {
+		pixelRow = vision->getPixelRowAt(vision->getDir(), distance);
+
+		canvas.drawLine(0, pixelRow, width, pixelRow, 128, 128, 128);
+	}
 }
