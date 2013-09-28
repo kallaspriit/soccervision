@@ -248,7 +248,7 @@ bool Vision::isValidGoal(Object* goal, Side side) {
 			Config::cameraWidth / 2,
 			Config::goalPathSenseStartY,
 			goal->x,
-			goal->y + (float)goal->height,
+			goal->y + goal->height,
 			validGoalPathColors
 			//,"green"
 		);
