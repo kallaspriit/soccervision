@@ -144,7 +144,7 @@ void Util::correctCameraPoint(int& x, int& y) {
 	float krd2 = k * (centerOffsetX * centerOffsetX + centerOffsetY * centerOffsetY);
 	float magnifacationFactor = 1.0f / (1.0f + krd2);
 
-	x = (int)(zoom * centerOffsetX / magnifacationFactor + centerX),
+	x = (int)(zoom * centerOffsetX / magnifacationFactor + centerX);
 	y = (int)(zoom * centerOffsetY / magnifacationFactor + centerY);
 }
 
