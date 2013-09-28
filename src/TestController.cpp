@@ -31,6 +31,12 @@ void TestController::step(float dt, Vision::Results* visionResults) {
 bool TestController::handleCommand(const Command& cmd) {
     if (cmd.name == "toggle-go") {
         handleToggleGoCommand();
+    } else if (cmd.name == "stop" ||cmd.name == "toggle-side") {
+        handleResetCommand();
+    } else if (cmd.name == "test-watch-ball") {
+        setState("watch-ball");
+
+		running = true;
     } else {
 		return false;
 	}
@@ -44,6 +50,22 @@ void TestController::handleToggleGoCommand() {
 	}
 
 	running = !running;
+
+	std::cout << "! " << (running ? "Starting test" : "Pausing test") << std::endl;
+}
+
+void TestController::handleResetCommand() {
+	if (!resetBtn.toggle()) {
+		return;
+	}
+
+	std::cout << "! Resetting test controller" << std::endl;
+
+	running = false;
+	totalDuration = 0.0f;
+	currentStateDuration = 0.0f;
+
+	setState(currentStateName);
 }
 
 std::string TestController::getJSON() {

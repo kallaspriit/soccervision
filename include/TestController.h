@@ -42,6 +42,7 @@ public:
 
     bool handleCommand(const Command& cmd);
 	void handleToggleGoCommand();
+	void handleResetCommand();
     void step(float dt, Vision::Results* visionResults);
 	std::string getJSON();
 
@@ -49,6 +50,7 @@ private:
 	void setupStates();
 
 	DebouncedButton toggleGoBtn;
+	DebouncedButton resetBtn;
 	bool running;
 
 };
