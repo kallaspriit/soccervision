@@ -844,27 +844,20 @@ Vision::PathMetric Vision::getPathMetric(int x1, int y1, int x2, int y2, std::ve
 
 	int start = originalX1 < originalX2 ? 0 : senseCounter - 1;
 	int step = originalX1 < originalX2 ? 1 : -1;
-	int distanceStep = 0.05f;
-	int currentDistance = 0.0f;
-	int currentDistanceRow;
+	//int distanceStep = 0.05f;
+	float distance, distance1, distance2;
 
     for (int i = start; (originalX1 < originalX2 ? i < senseCounter : i >= 0); i += step) {
         x = senseX[i];
         y = senseY[i];
 
-		currentDistanceRow = getPixelRowAt(dir, currentDistance);
-
-		while (currentDistanceRow > y) {
-			currentDistance += distanceStep;
-
-			currentDistanceRow = getPixelRowAt(dir, currentDistance);
-		}
-
-		if (Math::abs(currentDistanceRow - y) > 5) {
+		distance = getDistance(dir, x, y);
+		distance1 = Math::round(distance, 2);
+		distance2 = Math::round(distance, 1);
+		
+		if (distance1 != distance2) {
 			continue;
 		}
-
-		currentDistance += distanceStep;
 
         Blobber::Color* color = getColorAt(x, y);
 
