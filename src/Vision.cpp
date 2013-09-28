@@ -1175,7 +1175,7 @@ float Vision::getColorDistance(std::string colorName, int x1, int y1, int x2, in
 			if (strcmp(color->name, colorName.c_str()) == 0) {
 				if (debug) {
 					//canvas.drawMarker(x, y, 0, 200, 0);
-					canvas.drawBox(x - 4, y - 4, 8, 8, 0, 100, 0);
+					canvas.fillBox(x - 5, y - 5, 10, 10, 255, 0, 0);
 				}
 
 				return getDistance(Dir::FRONT, x, y);
