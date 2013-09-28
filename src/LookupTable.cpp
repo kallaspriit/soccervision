@@ -101,7 +101,7 @@ float LookupTable::getInverseValue(float search) {
 			float key2 = lastKey;
 			float keyDiff = Math::abs(key1 - key2);
 			float share = (lastValue - search) / valueDiff;
-			float result = lastValue * share + value * (1.0f - share);
+			float result = lastKey * share + key * (1.0f - share);
 
 			std::cout << "  > value1: " << value1 << std::endl;
 			std::cout << "  > value2: " << value2 << std::endl;

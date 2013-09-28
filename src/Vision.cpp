@@ -460,9 +460,9 @@ int Vision::getPixelRowAt(Dir dir, float distance) {
 	int pixelRow;
 
 	if (dir == FRONT) {
-		pixelRow = frontDistanceLookup.getInverseValue(distance);
+		pixelRow = (int)frontDistanceLookup.getInverseValue(distance);
     } else {
-        pixelRow = rearDistanceLookup.getInverseValue(distance);
+        pixelRow = (int)rearDistanceLookup.getInverseValue(distance);
     }
 
 	return (int)Math::min(Math::max((float)pixelRow, 0.0f), (float)(Config::cameraHeight - 1));
