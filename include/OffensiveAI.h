@@ -79,4 +79,4 @@ private:
 
 };
 
-#endif
+#endif // OFFENSIVEAI_H

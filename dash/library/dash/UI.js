@@ -215,9 +215,9 @@ Dash.UI.prototype.initSocket = function() {
 		$('.live-only').removeAttr('disabled');
 		$('#rebuild-btn').text('Rebuild');
 		
-		window.setTimeout(function() {
+		//window.setTimeout(function() {
 			dash.socket.send('<get-controller>');
-		}, 2000);
+		//}, 2000);
 	});
 	
 	dash.socket.bind(Dash.Socket.Event.CLOSE, function(e) {
@@ -651,14 +651,14 @@ Dash.UI.prototype.initControls = function() {
 		dash.socket.send('<screenshot:' + $('#screenshot-filename').val().replace('-', '_') + '>');
 	});
 	
-	$('#ai-start-btn').click(function() {
-		dash.socket.send('<ai-start>');
+	$('#ai-toggle-go-btn').click(function() {
+		dash.socket.send('<toggle-go>');
 	});
-	
-	$('#ai-stop-btn').click(function() {
-		dash.socket.send('<ai-stop>');
+
+	$('#ai-toggle-side-btn').click(function() {
+		dash.socket.send('<toggle-side>');
 	});
-	
+
 	$('#status').click(function() {
 		self.toggleTargetSide();
 	});
@@ -700,12 +700,8 @@ Dash.UI.prototype.toggleTargetSide = function() {
 	}
 	
 	var lastState = this.states[this.states.length - 1];
-	
-	if (parseInt(lastState.targetSide) == 1) {
-		dash.socket.send('<ai-target-side:2>');
-	} else {
-		dash.socket.send('<ai-target-side:1>');
-	}
+
+	dash.socket.send('<toggle-side>');
 };
 
 Dash.UI.prototype.setController = function(name) {
@@ -905,6 +901,14 @@ Dash.UI.prototype.addState = function(state) {
 	this.stateSlider.slider('max', this.states.length);
 	
 	this.stateCountWrap.html(this.states.length);
+
+	if (state.playing) {
+		$('#ai-toggle-go-btn').html('Stop');
+		$('#ai-toggle-side-btn').attr('disabled', 'disabled');
+	} else {
+		$('#ai-toggle-go-btn').html('Start');
+		$('#ai-toggle-side-btn').attr('disabled', false);
+	}
 	
 	if (this.states.length == 1 || this.currentStateIndex == this.states.length - 2 || (full && this.currentStateIndex == this.states.length - 1)) {
 		this.showState(this.states.length - 1);
