@@ -283,7 +283,7 @@ bool Vision::isValidBall(Object* ball, Dir dir) {
 	int ballRadius = getBallRadius(ball->width, ball->height);
 	int senseRadius = getBallSenseRadius(ballRadius, ball->distance);
 
-	/*if (ball->y + ballRadius < Config::surroundSenseThresholdY) {
+	if (ball->y + ballRadius < Config::surroundSenseThresholdY) {
 		float surroundMetric = getSurroundMetric(
 			ball->x,
 			ball->y + ballRadius,
@@ -300,7 +300,7 @@ bool Vision::isValidBall(Object* ball, Dir dir) {
 
 			return false;
 		}
-	}*/
+	}
 
 	if (ball->y + ballRadius < Config::ballPathSenseThresholdY) {
 		PathMetric pathMetric = getPathMetric(
