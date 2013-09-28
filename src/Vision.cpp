@@ -1174,18 +1174,19 @@ float Vision::getColorDistance(std::string colorName, int x1, int y1, int x2, in
 			
 			if (strcmp(color->name, colorName.c_str()) == 0) {
 				if (debug) {
-					canvas.drawMarker(x, y, 0, 200, 0);
+					//canvas.drawMarker(x, y, 0, 200, 0);
+					canvas.drawBox(x - 4, y - 4, 8, 8, 0, 100, 0);
 				}
 
 				return getDistance(Dir::FRONT, x, y);
 			} else {
 				if (debug) {
-					canvas.drawMarker(x, y, 200, 0, 0);
+					//canvas.drawMarker(x, y, 200, 0, 0);
 				}
 			}
 		} else {
 			if (debug) {
-                canvas.drawMarker(x, y, 64, 64, 64);
+                //canvas.drawMarker(x, y, 64, 64, 64);
             }
 		}
 	}
