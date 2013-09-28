@@ -392,7 +392,7 @@ int Vision::getBallRadius(int width, int height) {
 }
 
 int Vision::getBallSenseRadius(int ballRadius, float distance) {
-	return (int)Math::min((float)ballRadius * 1.35f * Math::max(distance / 2.0f, 1.0f) + 10.0f, (float)Config::maxBallSenseRadius);
+	return (int)Math::min((float)ballRadius * 1.5f * Math::max(distance / 2.0f, 1.0f) + 10.0f, (float)Config::maxBallSenseRadius);
 }
 
 int Vision::getPixelsBelow(int startX, int startY, std::vector<std::string> validColors, int allowedWrongPixels) {
