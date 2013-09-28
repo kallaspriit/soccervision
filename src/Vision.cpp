@@ -135,6 +135,11 @@ ObjectList Vision::processBalls(Dir dir) {
 		if (isValidBall(ball, dir)) {
 			int extendHeightBelow = getPixelsBelow(ball->x, ball->y + ball->height / 2, validColorsBelowBall);
 
+			if (extendHeightBelow > 0) {
+				ball->y += extendHeightBelow / 2;
+				ball->height += extendHeightBelow;
+			}
+
 			ball->distance = getDistance(dir, ball->x, ball->y + ball->height / 2);
 			ball->angle = getAngle(dir, ball->x, ball->y + ball->height / 2);
 			filteredBalls.push_back(ball);
