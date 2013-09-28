@@ -1,7 +1,7 @@
 #ifndef OFFENSIVEAI_H
 #define OFFENSIVEAI_H
 
-#include "Controller.h"
+#include "BaseAI.h"
 #include "Vision.h"
 #include "DebouncedButton.h"
 #include "Config.h"
@@ -9,13 +9,13 @@
 #include <string>
 #include <map>
 
-class OffensiveAI : public Controller {
+class OffensiveAI : public BaseAI {
 
 public:
-	class State {
+	class State : public BaseAI::State {
 
 	public:
-		State(OffensiveAI* ai) : ai(ai) {}
+		State(OffensiveAI* ai) : BaseAI::State(ai), ai(ai) {}
 		virtual void onEnter() {}
 		virtual void onExit() {}
 		virtual void step(float dt, float totalDuration, float stateDuration) = 0;
@@ -43,20 +43,14 @@ public:
 
 	};
 
-	typedef std::map<std::string, State*> States;
-	typedef States::iterator StatesIt;
-
 	OffensiveAI(Robot* robot, Communication* com);
-	~OffensiveAI();
 
 	void onEnter();
 	void onExit();
-	void setState(std::string state);
     bool handleRequest(std::string request);
     bool handleCommand(const Command& cmd);
 	void handleToggleSideCommand();
 	void handleToggleGoCommand();
-	void handleCommunicationMessage(std::string message);
     void step(float dt, Vision::Results* visionResults);
 	void reset();
 	bool isPlaying() { return running; }
@@ -67,15 +61,10 @@ private:
 	void setupStates();
 
 	Side targetSide;
+	std::string startStateName;
 	DebouncedButton toggleSideBtn;
 	DebouncedButton toggleGoBtn;
-	States states;
-	State* currentState;
-	std::string currentStateName;
-	std::string startStateName;
 	bool running;
-	float totalDuration;
-	float currentStateDuration;
 
 };
 

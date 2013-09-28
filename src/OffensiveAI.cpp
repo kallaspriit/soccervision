@@ -6,19 +6,11 @@
 #include "Coilgun.h"
 #include "Util.h"
 
-OffensiveAI::OffensiveAI(Robot* robot, Communication* com) : Controller(robot, com), targetSide(Side::UNKNOWN), currentState(NULL), running(false), totalDuration(0.0f), currentStateDuration(0.0f) {
+OffensiveAI::OffensiveAI(Robot* robot, Communication* com) : BaseAI(robot, com), targetSide(Side::UNKNOWN), running(false) {
 	startStateName = "idle";
 	
 	setupStates();
 };
-
-OffensiveAI::~OffensiveAI() {
-	for (StatesIt it = states.begin(); it != states.end(); it++) {
-		delete it->second;
-	}
-
-	states.clear();
-}
 
 void OffensiveAI::reset() {
 	std::cout << "! Reset offensive AI" << std::endl;
@@ -41,31 +33,6 @@ void OffensiveAI::onExit() {
 	std::cout << "! Stopping offensive AI algorithm" << std::endl;
 
 	reset();
-}
-
-void OffensiveAI::setState(std::string state) {
-	if (states.find(state) == states.end()) {
-		std::cout << "- Invalid state '" << state << "' requested" << std::endl;
-
-		return;
-	}
-
-	State* newState = states[state];
-
-	if (currentState != NULL) {
-		std::cout << "! Switched offensive AI state from " << currentStateName << " to " << state << std::endl;
-
-		currentState->onExit();
-	} else {
-		std::cout << "! Set initial offensive AI state to " << state << std::endl;
-	}
-
-	currentStateDuration = 0.0f;
-
-	newState->onEnter();
-
-	currentState = newState;
-	currentStateName = state;
 }
 
 bool OffensiveAI::handleRequest(std::string request) {
@@ -113,14 +80,6 @@ void OffensiveAI::handleToggleGoCommand() {
 		running = !running;
 	} else {
 		std::cout << "- Choose target side before requesting start" << std::endl;
-	}
-}
-
-void OffensiveAI::handleCommunicationMessage(std::string message) {
-	if (Command::isValid(message)) {
-        Command command = Command::parse(message);
-
-		handleCommand(command);
 	}
 }
 
