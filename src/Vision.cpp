@@ -1,12 +1,12 @@
 #include "Vision.h"
 #include "Config.h"
-#include "Maths.h"
 #include "Util.h"
 
 #include <iostream>
 #include <algorithm>
 
 Vision::Vision(Blobber* blobber, Dir dir, int width, int height) : blobber(blobber), dir(dir), width(width), height(height), obstructionSide(Obstruction::NONE), blackDistance(-1.0f) {
+	// TODO Does vision need both lookup tables any more?
 	frontDistanceLookup.load(Config::frontDistanceLookupFilename/*, 0.13f*/);
 	rearDistanceLookup.load(Config::rearDistanceLookupFilename);
 	frontAngleLookup.load(Config::frontAngleLookupFilename);
@@ -388,7 +388,7 @@ int Vision::getGoalMaxInvalidSpree(int y) {
 }*/
 
 int Vision::getBallRadius(int width, int height) {
-	return (int)(Math::min((float)width, (float)height) / 2.0f);
+	return (int)(Math::max((float)width, (float)height) / 2.0f);
 }
 
 int Vision::getBallSenseRadius(int ballRadius, float distance) {
@@ -468,6 +468,10 @@ int Vision::getPixelRowAt(Dir dir, float distance) {
 	return (int)Math::min(Math::max((float)pixelRow, 0.0f), (float)(Config::cameraHeight - 1));
 }
 
+// TODO Implement..
+Math::Point Vision::getScreenCoords(Dir dir, float distanceX, float distanceY) {
+	return Math::Point(0, 0);
+}
 /*float Vision::getHorizontalDistance(Dir dir, int x, int y) {
 	/float measurementPixels = 150;
 	float distance = getDistance(dir, x, y);

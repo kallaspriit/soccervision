@@ -203,13 +203,18 @@ void DebugRenderer::renderGrid(unsigned char* image, Vision* vision, int width, 
 	float minDistanceY = 0.0f;
 	float maxDistanceY = 4.6f;
 	float stepY = 0.1f;
-	float distance;
+	float minDistanceX = -4.0f;
+	float maxDistanceX = 4.0f;
+	float stepX = 0.1f;
+	float distanceY;
+	float distanceX;
 	int pixelRow;
 	int counter = 0;
 	int px, py;
+	Math::Point screenCoords;
 
-	for (distance = minDistanceY; distance < maxDistanceY; distance += stepY) {
-		pixelRow = vision->getPixelRowAt(vision->getDir(), distance);
+	for (distanceY = minDistanceY; distanceY < maxDistanceY; distanceY += stepY) {
+		pixelRow = vision->getPixelRowAt(vision->getDir(), distanceY);
 
 		for (int x = 0; x < Config::cameraWidth; x++) {
 			px = x;
@@ -227,16 +232,18 @@ void DebugRenderer::renderGrid(unsigned char* image, Vision* vision, int width, 
 		Util::correctCameraPoint(px, py);
 
 		//canvas.drawLine(0, pixelRow, width, pixelRow, 128, 128, 128);
-		canvas.drawText(px, py, Util::toString(distance), 128, 128, 128);
+		canvas.drawText(px, py, Util::toString(distanceY), 128, 128, 128);
+
+		/*for (distanceX = minDistanceX; distanceX < maxDistanceX; distanceX += stepX) {
+			for (int y = 0; y < Config::cameraHeight; y++) {
+				screenCoords = vision->getScreenCoords(vision->getDir(), distanceX, distanceY);
+			}
+		}*/
 
 		counter++;
 	}
 
-	float minDistanceX = -4.0f;
-	float maxDistanceX = 4.0f;
-	float stepX = 0.1f;
+	
 
-	for (distance = minDistanceX; distance < maxDistanceX; distance += stepX) {
-
-	}
+	
 }

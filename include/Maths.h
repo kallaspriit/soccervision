@@ -291,6 +291,7 @@ class Rad : public Angle {
 
 struct Point {
     Point(float x, float y) : x(x), y(y) {}
+    Point() : x(0), y(0) {}
     Point getRotated(float angle) const;
 
     float x;

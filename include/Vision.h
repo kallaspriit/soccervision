@@ -6,6 +6,7 @@
 #include "Object.h"
 #include "LookupTable.h"
 #include "Config.h"
+#include "Maths.h"
 
 #include <string>
 #include <vector>
@@ -54,6 +55,7 @@ public:
 	//float getHorizontalDistance(Dir dir, int x, int y);
     float getAngle(Dir dir, int x, int y);
 	int getPixelRowAt(Dir dir, float distance);
+	Math::Point getScreenCoords(Dir dir, float distanceX, float distanceY);
 
 private:
 	ObjectList processBalls(Dir dir);
