@@ -616,10 +616,10 @@ void SoccerBot::handleCameraChoiceCommand(Command::Parameters parameters) {
 }
 
 void SoccerBot::handleCameraAdjustCommand(Command::Parameters parameters) {
-	Config::cameraCorrectionK = Util::toFloat(parameters[0]);
-	Config::cameraCorrectionZoom = Util::toFloat(parameters[1]);
+	Util::cameraCorrectionK = Util::toFloat(parameters[0]);
+	Util::cameraCorrectionZoom = Util::toFloat(parameters[1]);
 
-	std::cout << "! Adjust camera correction k: " << Config::cameraCorrectionK << ", zoom: " << Config::cameraCorrectionZoom << std::endl;
+	std::cout << "! Adjust camera correction k: " << Util::cameraCorrectionK << ", zoom: " << Util::cameraCorrectionZoom << std::endl;
 }
 
 void SoccerBot::handleStreamChoiceCommand(Command::Parameters parameters) {

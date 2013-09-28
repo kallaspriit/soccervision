@@ -10,6 +10,8 @@
 
 double Util::queryPerformanceFrequency = 0;
 __int64 Util::timerStartCount = 0;
+float Util::cameraCorrectionK = Config::cameraCorrectionK;
+float Util::cameraCorrectionZoom = Config::cameraCorrectionZoom;
 
 __int64 Util::timerStart() {
 	LARGE_INTEGER li;

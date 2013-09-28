@@ -74,11 +74,15 @@ public:
         return (double)atof(str.c_str());
     }
 
+	// these can be modified on the fly
+	static float cameraCorrectionK;
+	static float cameraCorrectionZoom;
+
 private:
     static const std::string base64Chars;
 	static double queryPerformanceFrequency;
 	static __int64 timerStartCount;
-
+	
 };
 
 #endif // UTIL_H
