@@ -662,7 +662,7 @@ Vision::PathMetric Vision::getPathMetric(int x1, int y1, int x2, int y2, std::ve
     int pixelCounter = 0;
     int senseCounter = 0;
     int senseStep = 3;
-    const int maxSensePoints = 255;
+    const int maxSensePoints = 512;
     int senseX[maxSensePoints];
     int senseY[maxSensePoints];
 	int invalidSpree = 0;
