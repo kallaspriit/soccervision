@@ -844,6 +844,7 @@ Vision::PathMetric Vision::getPathMetric(int x1, int y1, int x2, int y2, std::ve
 
 	int start = originalX1 < originalX2 ? 0 : senseCounter - 1;
 	int step = originalX1 < originalX2 ? 1 : -1;
+	int sampleCount = 0;
 	float distanceStep = 0.05f;
 	float distance1, distance2;
 
@@ -860,6 +861,8 @@ Vision::PathMetric Vision::getPathMetric(int x1, int y1, int x2, int y2, std::ve
 				continue;
 			}
 		}
+
+		sampleCount++;
 
 		Blobber::Color* color = getColorAt(x, y);
 
@@ -966,7 +969,7 @@ Vision::PathMetric Vision::getPathMetric(int x1, int y1, int x2, int y2, std::ve
 		return PathMetric(1.0f, 0, true, false);
 	}
 
-	float percentage = (float)matches / (float)senseCounter;
+	float percentage = (float)matches / (float)sampleCount;
 	bool validColorFound = requiredColor == "" || requiredColorFound;
 
 	return PathMetric(percentage, longestInvalidSpree, validColorFound, crossingGreenWhiteBlackGreen || tooManyBlacksInRow);
