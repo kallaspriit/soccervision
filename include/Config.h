@@ -78,7 +78,7 @@ namespace Config {
 	const int colorDistanceStartY = cameraHeight - 160;
 
 	// maximum ball surround metric sense radius
-	const int maxBallSenseRadius = 100;
+	const int maxBallSenseRadius = 250;
 
 	// ball is considered to be in the goal if it's surrounded by goal colors by more than this
 	const float ballInGoalSurroundThreshold = 0.5f;
