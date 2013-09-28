@@ -145,7 +145,7 @@ void SoccerBot::run() {
 		gotRearFrame = fetchFrame(rearCamera, rearProcessor);
 
 		if (!gotFrontFrame && !gotRearFrame && fpsCounter->frameNumber > 0) {
-			std::cout << "- Didn't get any frames from either of the cameras" << std::endl;
+			//std::cout << "- Didn't get any frames from either of the cameras" << std::endl;
 
 			continue;
 		}
