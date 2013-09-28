@@ -248,10 +248,21 @@ bool Vision::isValidGoal(Object* goal, Side side) {
 			Config::cameraWidth / 2,
 			Config::goalPathSenseStartY,
 			goal->x,
-			goal->y + goal->height,
+			goal->y + goal->height / 2,
 			validGoalPathColors
 			//,"green"
 		);
+
+		if (
+			pathMetric.percentage < Config::minValidGoalPathThreshold
+			|| pathMetric.out
+			//|| !pathMetric.validColorFound
+			//|| pathMetric.invalidSpree > getBallMaxInvalidSpree(ball->y + ball->height / 2)
+		) {
+			//std::cout << "@ BALL PATH FAILS: " << pathMetric.percentage << " VS " << Config::validBallPathThreshold << ", OUT: " << (pathMetric.out ? "YES" : "NO") << std::endl;
+
+			return false;
+		}
 	}
 
 	if (goal->area < Config::goalMinArea) {
