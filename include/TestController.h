@@ -46,6 +46,8 @@ public:
 	std::string getJSON();
 
 private:
+	void setupStates();
+
 	DebouncedButton toggleGoBtn;
 	bool running;
 
