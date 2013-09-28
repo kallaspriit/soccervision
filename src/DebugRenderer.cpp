@@ -64,8 +64,8 @@ void DebugRenderer::renderBalls(unsigned char* image, const ObjectList& balls, i
         ball = *it;
 
         canvas.drawBoxCentered(ball->x, ball->y, ball->width, ball->height);
-		canvas.drawLine(ball->x - ball->width / 2, ball->y - ball->height / 2, ball->x + ball->width / 2, ball->y + ball->height / 2);
-        canvas.drawLine(ball->x - ball->width / 2, ball->y + ball->height / 2, ball->x + ball->width / 2, ball->y - ball->height / 2);
+		//canvas.drawLine(ball->x - ball->width / 2, ball->y - ball->height / 2, ball->x + ball->width / 2, ball->y + ball->height / 2);
+        //canvas.drawLine(ball->x - ball->width / 2, ball->y + ball->height / 2, ball->x + ball->width / 2, ball->y - ball->height / 2);
 
 		sprintf(buf, "%.2fm  %.1f deg", ball->distance, Math::radToDeg(ball->angle));
         canvas.drawText(ball->x - ball->width / 2 + 2, ball->y - ball->height / 2 - 19, buf);
@@ -128,8 +128,8 @@ void DebugRenderer::renderGoals(unsigned char* image, const ObjectList& goals, i
 		}
 
         canvas.drawBoxCentered(goal->x, goal->y, goal->width, goal->height, r, g, b);
-		canvas.drawLine(goal->x - goal->width / 2, goal->y - goal->height / 2, goal->x + goal->width / 2, goal->y + goal->height / 2, r, g, b);
-        canvas.drawLine(goal->x - goal->width / 2, goal->y + goal->height / 2, goal->x + goal->width / 2, goal->y - goal->height / 2, r, g, b);
+		//canvas.drawLine(goal->x - goal->width / 2, goal->y - goal->height / 2, goal->x + goal->width / 2, goal->y + goal->height / 2, r, g, b);
+        //canvas.drawLine(goal->x - goal->width / 2, goal->y + goal->height / 2, goal->x + goal->width / 2, goal->y - goal->height / 2, r, g, b);
 
         sprintf(buf, "%.2fm %.1f deg", goal->distance, Math::radToDeg(goal->angle));
         canvas.drawText(goal->x - goal->width / 2 + 2, goal->y + goal->height / 2 + 2, buf, r, g, b);

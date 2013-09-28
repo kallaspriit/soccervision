@@ -175,9 +175,9 @@ void SoccerBot::run() {
 
 			if (closestBall != NULL) {
 				if (!closestBall->behind) {
-					DebugRenderer::renderObjectHighlight(frontProcessor->rgb, closestBall);
+					DebugRenderer::renderObjectHighlight(frontProcessor->rgb, closestBall, 255, 0, 0);
 				} else {
-					DebugRenderer::renderObjectHighlight(rearProcessor->rgb, closestBall);
+					DebugRenderer::renderObjectHighlight(rearProcessor->rgb, closestBall, 255, 0, 0);
 				}
 			}
 
@@ -186,17 +186,17 @@ void SoccerBot::run() {
 
 			if (largestBlueGoal != NULL) {
 				if (!largestBlueGoal->behind) {
-					DebugRenderer::renderObjectHighlight(frontProcessor->rgb, largestBlueGoal);
+					DebugRenderer::renderObjectHighlight(frontProcessor->rgb, largestBlueGoal, 0, 0, 255);
 				} else {
-					DebugRenderer::renderObjectHighlight(rearProcessor->rgb, largestBlueGoal);
+					DebugRenderer::renderObjectHighlight(rearProcessor->rgb, largestBlueGoal, 0, 0, 255);
 				}
 			}
 
 			if (largestYellowGoal != NULL) {
 				if (!largestYellowGoal->behind) {
-					DebugRenderer::renderObjectHighlight(frontProcessor->rgb, largestYellowGoal);
+					DebugRenderer::renderObjectHighlight(frontProcessor->rgb, largestYellowGoal, 255, 255, 0);
 				} else {
-					DebugRenderer::renderObjectHighlight(rearProcessor->rgb, largestYellowGoal);
+					DebugRenderer::renderObjectHighlight(rearProcessor->rgb, largestYellowGoal, 255, 255, 0);
 				}
 			}
 			//DebugRenderer::highlightObject(
