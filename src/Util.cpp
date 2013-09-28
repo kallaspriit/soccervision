@@ -137,10 +137,10 @@ bool Util::replace(std::string& str, const std::string& from, const std::string&
 void Util::correctCameraPoint(int& x, int& y) {
 	float k = Config::cameraCorrectionK;
 	float zoom = Config::cameraCorrectionZoom;
-	float centerX = Config::cameraWidth / 2.0f - 0.5f;
-	float centerY = Config::cameraHeight / 2.0f - 0.5f;
-	float centerOffsetX = x - centerX;
-	float centerOffsetY = y - centerY;
+	float centerX = (float)Config::cameraWidth / 2.0f - 0.5f;
+	float centerY = (float)Config::cameraHeight / 2.0f - 0.5f;
+	float centerOffsetX = (float)x - centerX;
+	float centerOffsetY = (float)y - centerY;
 	float krd2 = k * (centerOffsetX * centerOffsetX + centerOffsetY * centerOffsetY);
 	float magnifacationFactor = 1.0f / (1.0f + krd2);
 
