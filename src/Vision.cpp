@@ -851,14 +851,17 @@ Vision::PathMetric Vision::getPathMetric(int x1, int y1, int x2, int y2, std::ve
         x = senseX[i];
         y = senseY[i];
 
-		distance1 = getDistance(dir, x, y);
-		distance2 = Math::round(distance1 / distanceStep, 0) * distanceStep;
+		if (y > Config::cameraHeight / 3) {
+			// sample less points near by and more in the distance
+			distance1 = getDistance(dir, x, y);
+			distance2 = Math::round(distance1 / distanceStep, 0) * distanceStep;
 
-		if (Math::abs(distance1 - distance2) > distanceStep / 5.0f) {
-			continue;
+			if (Math::abs(distance1 - distance2) > distanceStep / 5.0f) {
+				continue;
+			}
 		}
 
-        Blobber::Color* color = getColorAt(x, y);
+		Blobber::Color* color = getColorAt(x, y);
 
         if (color != NULL) {
 			if (firstColor == "") {
