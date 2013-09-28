@@ -220,7 +220,8 @@ void DebugRenderer::renderGrid(unsigned char* image, Vision* vision, int width, 
 			canvas.setPixelAt(px, py, 128, 128, 128);
 		}
 
-		px = 10 + (counter % 10) * 30;
+		//px = 10 + (counter % 10) * 30;
+		px = Config::cameraWidth / 2 - 15;
 		py = pixelRow + 1;
 
 		Util::correctCameraPoint(px, py);
