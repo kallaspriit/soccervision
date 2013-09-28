@@ -243,6 +243,17 @@ bool Vision::isValidGoal(Object* goal, Side side) {
 		goal->y = y1 + goal->height / 2;
 	}*/
 
+	if (goal->y + goal->height < Config::goalPathSenseStartY) {
+		PathMetric pathMetric = getPathMetric(
+			Config::cameraWidth / 2,
+			Config::goalPathSenseStartY,
+			goal->x,
+			goal->y + (float)goal->height,
+			validGoalPathColors
+			//,"green"
+		);
+	}
+
 	if (goal->area < Config::goalMinArea) {
 		//std::cout << "@ GOAL INVALID MIN AREA: " << goal->area << " VS " << Config::goalMinArea << std::endl;
 
@@ -302,10 +313,10 @@ bool Vision::isValidBall(Object* ball, Dir dir) {
 		}
 	}
 
-	if (ball->y + ballRadius < Config::ballPathSenseThresholdY) {
+	if (ball->y + ballRadius < Config::ballPathSenseStartY) {
 		PathMetric pathMetric = getPathMetric(
 			Config::cameraWidth / 2,
-			Config::ballPathSenseThresholdY,
+			Config::ballPathSenseStartY,
 			ball->x,
 			(int)((float)ball->y + (float)ballRadius * 0.25f + (float)senseRadius),
 			//ball->y + ballRadius + senseRadius / 2 + 6,

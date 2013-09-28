@@ -207,7 +207,7 @@ void DebugRenderer::renderGrid(unsigned char* image, Vision* vision, int width, 
 	float maxDistanceX = 4.0f;
 	float stepX = 0.1f;
 	float distanceY;
-	float distanceX;
+	//float distanceX;
 	int pixelRow;
 	int counter = 0;
 	int px, py;
