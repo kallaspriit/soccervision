@@ -210,7 +210,7 @@ void DebugRenderer::renderGrid(unsigned char* image, Vision* vision, int width, 
 	//float distanceX;
 	int pixelRow;
 	int counter = 0;
-	int px, py;
+	int px, py, lastTextY = 0;
 	Math::Point screenCoords;
 
 	for (distanceY = minDistanceY; distanceY < maxDistanceY; distanceY += stepY) {
@@ -231,8 +231,11 @@ void DebugRenderer::renderGrid(unsigned char* image, Vision* vision, int width, 
 
 		Util::correctCameraPoint(px, py);
 
-		//canvas.drawLine(0, pixelRow, width, pixelRow, 128, 128, 128);
-		canvas.drawText(px, py, Util::toString(distanceY), 128, 128, 128);
+		if (py - lastTextY >= 10) {
+			canvas.drawText(px, py, Util::toString(distanceY), 128, 128, 128);
+
+			lastTextY = py;
+		}
 
 		/*for (distanceX = minDistanceX; distanceX < maxDistanceX; distanceX += stepX) {
 			for (int y = 0; y < Config::cameraHeight; y++) {
