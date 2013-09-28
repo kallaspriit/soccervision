@@ -40,6 +40,9 @@ Vision::Vision(Blobber* blobber, Dir dir, int width, int height) : blobber(blobb
     //validGoalPathColors.push_back("yellow-goal");
     //validGoalPathColors.push_back("blue-goal");
 
+	validColorsBelowBall.push_back("none");
+	validColorsBelowBall.push_back("black");
+
 	goalColors.push_back("yellow-goal");
     goalColors.push_back("blue-goal");
 }
@@ -130,6 +133,8 @@ ObjectList Vision::processBalls(Dir dir) {
 		Object* ball = *it;
 
 		if (isValidBall(ball, dir)) {
+			int extendHeightBelow = getPixelsBelow(ball->x, ball->y + ball->height / 2, validColorsBelowBall);
+
 			ball->distance = getDistance(dir, ball->x, ball->y + ball->height / 2);
 			ball->angle = getAngle(dir, ball->x, ball->y + ball->height / 2);
 			filteredBalls.push_back(ball);
@@ -383,6 +388,49 @@ int Vision::getBallRadius(int width, int height) {
 
 int Vision::getBallSenseRadius(int ballRadius, float distance) {
 	return (int)Math::min((float)ballRadius * 1.35f * Math::max(distance / 2.0f, 1.0f) + 10.0f, (float)Config::maxBallSenseRadius);
+}
+
+int Vision::getPixelsBelow(int startX, int startY, std::vector<std::string> validColors, int allowedWrongPixels) {
+	int wrongPixelCount = 0;
+	int validPixelCount = 0;
+	int senseX = startX;
+	bool unsegmentedAllowed = find(validColors.begin(), validColors.end(), std::string("none")) != validColors.end();
+	bool debug = canvas.data != NULL;
+	Blobber::Color* color;
+
+	for (int senseY = startY + 1; senseY < height; senseY++) {
+		color = getColorAt(senseX, senseY);
+
+		if (color == NULL) {
+			if (unsegmentedAllowed) {
+				validPixelCount++;
+
+				if (debug) canvas.drawMarker(senseX, senseY, 0, 128, 0);
+			} else {
+				wrongPixelCount++;
+
+				if (debug) canvas.drawMarker(senseX, senseY, 128, 0, 0);
+			}
+		} else {
+			if (find(validColors.begin(), validColors.end(), std::string(color->name)) != validColors.end()) {
+				validPixelCount++;
+
+				if (debug) canvas.drawMarker(senseX, senseY, 0, 128, 0);
+			} else {
+				wrongPixelCount++;
+
+				if (debug) canvas.drawMarker(senseX, senseY, 128, 0, 0);
+			}
+		}
+
+		if (wrongPixelCount > allowedWrongPixels) {
+			if (debug) canvas.drawMarker(senseX, senseY, 255, 0, 0);
+
+			break;
+		}
+	}
+
+	return validPixelCount;
 }
 
 float Vision::getDistance(Dir dir, int x, int y) {

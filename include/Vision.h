@@ -69,6 +69,7 @@ private:
 	bool isBallInGoal(Object* ball, Dir dir);
 	int getBallRadius(int width, int height);
 	int getBallSenseRadius(int ballRadius, float distance);
+	int getPixelsBelow(int x, int y, std::vector<std::string> validColors, int allowedWrongPixels = 3);
 	/*int getBallMaxInvalidSpree(int y);
 	int getGoalMaxInvalidSpree(int y);*/
 	void updateObstructions();
@@ -84,6 +85,7 @@ private:
     std::vector<std::string> validBallBgColors;
     std::vector<std::string> validBallPathColors;
     std::vector<std::string> validGoalPathColors;
+    std::vector<std::string> validColorsBelowBall;
     std::vector<std::string> viewObstructedValidColors;
     std::vector<std::string> goalColors;
     int width;
