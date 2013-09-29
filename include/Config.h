@@ -6,8 +6,8 @@
 namespace Config {
 
 	// camera serials
-	const int frontCameraSerial = 857735761;
-	const int rearCameraSerial = 857769553;
+	const int frontCameraSerial = 857769553;
+	const int rearCameraSerial = 857735761;
 
 	// indexes of motors according to the communication messages
 	const int wheelFLId = 0;
