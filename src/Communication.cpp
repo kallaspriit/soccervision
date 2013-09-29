@@ -32,7 +32,7 @@ void Communication::send(std::string message) {
 		send(queuedMessage);
 	}
 
-	//std::cout << "> " << message << std::endl;
+	std::cout << "> " << message << std::endl;
 
 	message += "\n";
 
