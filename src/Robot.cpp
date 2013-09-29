@@ -28,6 +28,8 @@ Robot::Robot(Communication* com) : com(com), wheelFL(NULL), wheelFR(NULL), wheel
 	frameTargetSpeedSet = false;
 	coilgunCharged = false;
 	autostop = true;
+
+	setPosition(Config::fieldWidth / 2.0f, Config::fieldHeight / 2.0f, 0.0f);
 }
 
 Robot::~Robot() {
@@ -136,7 +138,7 @@ void Robot::step(float dt, Vision::Results* visionResults) {
 	);
 
 	// this is basically odometer localizer
-	orientation = Math::floatModulus(orientation + movement.omega * dt, Math::TWO_PI);
+	/*orientation = Math::floatModulus(orientation + movement.omega * dt, Math::TWO_PI);
 
     if (orientation < 0.0f) {
         orientation += Math::TWO_PI;
@@ -146,19 +148,19 @@ void Robot::step(float dt, Vision::Results* visionResults) {
     float globalVelocityY = movement.velocityX * Math::sin(orientation) + movement.velocityY * Math::cos(orientation);
 
     x += globalVelocityX * dt;
-    y += globalVelocityY * dt;
+    y += globalVelocityY * dt;*/
 
 	// particle filter localizer
-	/*updateMeasurements();
+	updateMeasurements();
 
 	robotLocalizer->update(measurements);
-	robotLocalizer->move(movement.velocityX, movement.velocityY, movement.omega, dt/, measurements.size() == 0 ? true : false/);
+	robotLocalizer->move(movement.velocityX, movement.velocityY, movement.omega, dt, measurements.size() == 0 ? true : false);
 
 	Math::Position position = robotLocalizer->getPosition();
 
 	x = position.x;
 	y = position.y;
-	orientation = position.orientation;*/
+	orientation = position.orientation;
 
     //std::cout << "Vx: " << movement.velocityX << "; Vy: " << movement.velocityY << "; omega: " << movement.omega << std::endl;
 
