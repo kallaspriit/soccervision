@@ -121,11 +121,11 @@ void Robot::step(float dt, Vision::Results* visionResults) {
 
 	// send target speeds
 	com->send("speeds:"
-		+ Util::toString(wheelRR->getTargetSpeed()) + ":"
-		+ Util::toString(wheelFR->getTargetSpeed()) + ":"
-		+ Util::toString(dribbler->getTargetSpeed()) + ":"
 		+ Util::toString(wheelFL->getTargetSpeed()) + ":"
-		+ Util::toString(wheelRL->getTargetSpeed())
+		+ Util::toString(wheelFR->getTargetSpeed()) + ":"
+		+ Util::toString(wheelRL->getTargetSpeed()) + ":"
+		+ Util::toString(wheelRR->getTargetSpeed()) + ":"
+		+ Util::toString(dribbler->getTargetSpeed())
 	);
 
 	movement = odometer->calculateMovement(
