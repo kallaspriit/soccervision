@@ -28,8 +28,6 @@ Robot::Robot(Communication* com) : com(com), wheelFL(NULL), wheelFR(NULL), wheel
 	frameTargetSpeedSet = false;
 	coilgunCharged = false;
 	autostop = true;
-
-	setPosition(Config::fieldWidth / 2.0f, Config::fieldHeight / 2.0f, 0.0f);
 }
 
 Robot::~Robot() {
@@ -55,11 +53,11 @@ void Robot::setup() {
 	setupDribbler();
 	setupCoilgun();
 	setupOdometer();
+
+	setPosition(Config::fieldWidth / 2.0f, Config::fieldHeight / 2.0f, 0.0f);
 }
 
 void Robot::setupLocalizer() {
-	std::cout << "! Setting up localizer.. ";
-
 	robotLocalizer = new ParticleFilterLocalizer();
 
 	robotLocalizer->addLandmark(
@@ -73,8 +71,6 @@ void Robot::setupLocalizer() {
 		Config::fieldWidth,
 		Config::fieldHeight / 2.0f
 	);
-
-	std::cout << "done!" << std::endl;
 }
 
 void Robot::setupWheels() {
