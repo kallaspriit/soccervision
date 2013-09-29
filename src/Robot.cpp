@@ -57,6 +57,26 @@ void Robot::setup() {
 	setupOdometer();
 }
 
+void Robot::setupLocalizer() {
+	std::cout << "! Setting up localizer.. ";
+
+	robotLocalizer = new ParticleFilterLocalizer();
+
+	robotLocalizer->addLandmark(
+		"yellow-center",
+		0.0f,
+		Config::fieldHeight / 2.0f
+	);
+
+	robotLocalizer->addLandmark(
+		"blue-center",
+		Config::fieldWidth,
+		Config::fieldHeight / 2.0f
+	);
+
+	std::cout << "done!" << std::endl;
+}
+
 void Robot::setupWheels() {
     wheelFL = new Wheel(Config::wheelFLId);
     wheelFR = new Wheel(Config::wheelFRId);
@@ -80,22 +100,6 @@ void Robot::setupOdometer() {
 		Config::robotWheelAngle4,
 		Config::robotWheelOffset,
 		Config::robotWheelRadius
-	);
-}
-
-void Robot::setupLocalizer() {
-	robotLocalizer = new ParticleFilterLocalizer();
-
-	robotLocalizer->addLandmark(
-		"yellow-center",
-		0.0f,
-		Config::fieldHeight / 2.0f
-	);
-
-	robotLocalizer->addLandmark(
-		"blue-center",
-		Config::fieldWidth,
-		Config::fieldHeight / 2.0f
 	);
 }
 
