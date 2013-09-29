@@ -6,7 +6,7 @@
 #include "Coilgun.h"
 #include "Util.h"
 
-ManualController::ManualController(Robot* robot, Communication* com) : Controller(robot, com) {
+ManualController::ManualController(Robot* robot, Communication* com) : Controller(robot, com), lastCommandTime(0.0) {
 
 };
 
@@ -16,6 +16,13 @@ void ManualController::reset() {
 
 void ManualController::step(float dt, Vision::Results* visionResults) {
 	robot->setAutostop(false);
+
+	double time = Util::millitime();
+
+	// emergency stop
+	if (time - lastCommandTime > 0.2) {
+		robot->stop();
+	}
 }
 
 bool ManualController::handleCommand(const Command& cmd) {
@@ -48,6 +55,8 @@ void ManualController::handleTargetVectorCommand(const Command& cmd) {
     float omega = Util::toFloat(cmd.parameters[2]);
 
     robot->setTargetDir(x, y, omega);
+
+	lastCommandTime = Util::millitime();
 }
 
 void ManualController::handleTargetDirCommand(const Command& cmd) {
@@ -56,6 +65,8 @@ void ManualController::handleTargetDirCommand(const Command& cmd) {
     float omega = Util::toFloat(cmd.parameters[2]);
 
     robot->setTargetDir(dir, speed, omega);
+
+	lastCommandTime = Util::millitime();
 }
 
 void ManualController::handleSetDribblerCommand(const Command& cmd) {

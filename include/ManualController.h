@@ -23,6 +23,9 @@ public:
 	void reset();
 	std::string getJSON();
 
+private:
+	double lastCommandTime;
+
 };
 
 #endif // MANUALCONTROLLER_H
