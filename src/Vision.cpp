@@ -1615,23 +1615,25 @@ Object* Vision::Results::getLargestGoal(Side side, bool frontOnly) {
 	Object* goal;
 	Object* largestGoal = NULL;
 
-	for (ObjectListItc it = front->goals.begin(); it != front->goals.end(); it++) {
-		goal = *it;
+	if (front != NULL) {
+		for (ObjectListItc it = front->goals.begin(); it != front->goals.end(); it++) {
+			goal = *it;
 		
-		if (side != Side::UNKNOWN && goal->type != (int)side) {
-			continue;
-		}
+			if (side != Side::UNKNOWN && goal->type != (int)side) {
+				continue;
+			}
 
-		//area = goal->area;
-		area = goal->width * goal->height;
+			//area = goal->area;
+			area = goal->width * goal->height;
 
-		if (largestGoal == NULL || area > largestArea) {
-			largestGoal = goal;
-			largestArea = area;
+			if (largestGoal == NULL || area > largestArea) {
+				largestGoal = goal;
+				largestArea = area;
+			}
 		}
 	}
 
-	if (frontOnly != true) {
+	if (rear != NULL && frontOnly != true) {
 		for (ObjectListItc it = rear->goals.begin(); it != rear->goals.end(); it++) {
 			goal = *it;
 
