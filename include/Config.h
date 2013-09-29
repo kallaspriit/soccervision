@@ -10,11 +10,11 @@ namespace Config {
 	const int rearCameraSerial = 857769553;
 
 	// indexes of motors according to the communication messages
-	const int wheelFLId = 3;
+	const int wheelFLId = 0;
 	const int wheelFRId = 1;
-	const int wheelRLId = 4;
-	const int wheelRRId = 0;
-	const int dribblerId = 2;
+	const int wheelRLId = 2;
+	const int wheelRRId = 3;
+	const int dribblerId = 4;
 
 	// ethernet communication host and port
 	const std::string communicationHost = "192.168.4.1";
