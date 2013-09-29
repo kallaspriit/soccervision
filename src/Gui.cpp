@@ -169,8 +169,8 @@ void Gui::setRearImages(unsigned char* rgb, unsigned char* yuyv, unsigned char* 
 }
 
 void Gui::handleColorThresholding(unsigned char* dataY, unsigned char* dataU, unsigned char* dataV, unsigned char* rgb, unsigned char* classification) {
-	DebugRenderer::renderBrush(rgb, mouseX, mouseY, brushRadius, mouseDown, true);
-	DebugRenderer::renderBrush(classification, mouseX, mouseY, brushRadius, mouseDown, false);
+	DebugRenderer::renderBrush(rgb, mouseX, mouseY, brushRadius, mouseDown);
+	DebugRenderer::renderBrush(classification, mouseX, mouseY, brushRadius, mouseDown);
 
 	if (mouseDown) {
 		float stdDev = 2.0f;
