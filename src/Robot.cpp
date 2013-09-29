@@ -50,11 +50,11 @@ Robot::~Robot() {
 }
 
 void Robot::setup() {
+	setupLocalizer();
     setupWheels();
 	setupDribbler();
 	setupCoilgun();
 	setupOdometer();
-	setupLocalizer();
 }
 
 void Robot::setupWheels() {
