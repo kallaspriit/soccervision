@@ -20,7 +20,7 @@ void ManualController::step(float dt, Vision::Results* visionResults) {
 	double time = Util::millitime();
 
 	// emergency stop
-	if (time - lastCommandTime > 0.2) {
+	if (time - lastCommandTime > 0.5) {
 		robot->stop();
 	}
 }

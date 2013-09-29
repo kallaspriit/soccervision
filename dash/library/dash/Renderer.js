@@ -267,7 +267,7 @@ Dash.Renderer.prototype.renderState = function(state) {
 		}
 	}
 
-	//this.drawMarkers();
+	this.drawMarkers();
 		
 	this.wheelGraphs.FL.render.apply(this.wheelGraphs.FL, [state, 'wheelFL']);
 	this.wheelGraphs.FR.render.apply(this.wheelGraphs.FR, [state, 'wheelFR']);
