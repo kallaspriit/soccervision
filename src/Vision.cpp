@@ -469,9 +469,9 @@ float Vision::getDistance(Dir dir, int x, int y) {
 	float distance;
 
     if (dir == FRONT) {
-		distance = frontDistanceLookup.getValue(realY);
+		distance = frontDistanceLookup.getValue((float)realY);
     } else {
-        distance = rearDistanceLookup.getValue(realY);
+        distance = rearDistanceLookup.getValue((float)realY);
     }
 
 	return Math::max(distance + Config::distanceCorrection, 0.01f);
