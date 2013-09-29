@@ -72,14 +72,14 @@ void DebugRenderer::renderBalls(unsigned char* image, const ObjectList& balls, i
         canvas.drawText(ball->x - ball->width / 2 + 2, ball->y - ball->height / 2 - 22, buf);
 
 		correctedX = ball->x;
-		correctedY = ball->y;
+		correctedY = ball->y + ball->height / 2;
 
 		Util::correctCameraPoint(correctedX, correctedY);
 
-		sprintf(buf, "%d x %d", correctedX, correctedY + ball->height / 2);
+		sprintf(buf, "%d x %d", correctedX, correctedY);
         canvas.drawText(ball->x - ball->width / 2 + 2, ball->y - ball->height / 2 - 12, buf);
 
-        int boxArea = ball->width * ball->height;
+        //int boxArea = ball->width * ball->height;
 
 		/*if (boxArea == 0) {
 			continue;

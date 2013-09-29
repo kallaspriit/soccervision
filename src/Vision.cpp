@@ -466,13 +466,12 @@ float Vision::getDistance(Dir dir, int x, int y) {
 
 	Util::correctCameraPoint(realX, realY);
 
-	float yCorrection = 0;
 	float distance;
 
     if (dir == FRONT) {
-		distance = frontDistanceLookup.getValue(realY - yCorrection);
+		distance = frontDistanceLookup.getValue(realY);
     } else {
-        distance = rearDistanceLookup.getValue(realY - yCorrection);
+        distance = rearDistanceLookup.getValue(realY);
     }
 
 	return Math::max(distance + Config::distanceCorrection, 0.01f);
