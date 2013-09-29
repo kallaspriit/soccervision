@@ -53,10 +53,10 @@ Odometer::WheelSpeeds Odometer::calculateWheelSpeeds(float targetDirX, float tar
         .getMultiplied(targetMatrix);
 
 	return WheelSpeeds(
-		-resultMatrix.a21,
-		-resultMatrix.a31,
-		-resultMatrix.a11,
-		-resultMatrix.a41
+		resultMatrix.a21,
+		resultMatrix.a31,
+		resultMatrix.a11,
+		resultMatrix.a41
 	);
 }
 
@@ -110,27 +110,27 @@ Odometer::Movement Odometer::calculateMovement(float omegaFL, float omegaFR, flo
     if (largestDiffIndex != -1) {
         switch (largestDiffIndex) {
             case 0:
-                avgVelocityX = -(movementB.a11 + movementC.a11 + movementD.a11) / 3.0f;
-                avgVelocityY = -(movementB.a21 + movementC.a21 + movementD.a21) / 3.0f;
-                avgOmega = -(movementB.a31 + movementC.a31 + movementD.a31) / 3.0f;
+                avgVelocityX = (movementB.a11 + movementC.a11 + movementD.a11) / 3.0f;
+                avgVelocityY = (movementB.a21 + movementC.a21 + movementD.a21) / 3.0f;
+                avgOmega = (movementB.a31 + movementC.a31 + movementD.a31) / 3.0f;
             break;
 
             case 1:
-                avgVelocityX = -(movementA.a11 + movementC.a11 + movementD.a11) / 3.0f;
-                avgVelocityY = -(movementA.a21 + movementC.a21 + movementD.a21) / 3.0f;
-                avgOmega = -(movementA.a31 + movementC.a31 + movementD.a31) / 3.0f;
+                avgVelocityX = (movementA.a11 + movementC.a11 + movementD.a11) / 3.0f;
+                avgVelocityY = (movementA.a21 + movementC.a21 + movementD.a21) / 3.0f;
+                avgOmega = (movementA.a31 + movementC.a31 + movementD.a31) / 3.0f;
             break;
 
             case 2:
-                avgVelocityX = -(movementA.a11 + movementB.a11 + movementD.a11) / 3.0f;
-                avgVelocityY = -(movementA.a21 + movementB.a21 + movementD.a21) / 3.0f;
-                avgOmega = -(movementA.a31 + movementB.a31 + movementD.a31) / 3.0f;
+                avgVelocityX = (movementA.a11 + movementB.a11 + movementD.a11) / 3.0f;
+                avgVelocityY = (movementA.a21 + movementB.a21 + movementD.a21) / 3.0f;
+                avgOmega = (movementA.a31 + movementB.a31 + movementD.a31) / 3.0f;
             break;
 
             case 3:
-                avgVelocityX = -(movementA.a11 + movementB.a11 + movementC.a11) / 3.0f;
-                avgVelocityY = -(movementA.a21 + movementB.a21 + movementC.a21) / 3.0f;
-                avgOmega = -(movementA.a31 + movementB.a31 + movementC.a31) / 3.0f;
+                avgVelocityX = (movementA.a11 + movementB.a11 + movementC.a11) / 3.0f;
+                avgVelocityY = (movementA.a21 + movementB.a21 + movementC.a21) / 3.0f;
+                avgOmega = (movementA.a31 + movementB.a31 + movementC.a31) / 3.0f;
             break;
         }
     }
