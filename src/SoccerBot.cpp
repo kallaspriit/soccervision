@@ -572,7 +572,7 @@ void SoccerBot::handleServerMessage(Server::Message* message) {
                 handleStreamChoiceCommand(command.parameters);
             } else if (command.name == "blobber-threshold" && command.parameters.size() == 6) {
                 handleBlobberThresholdCommand(command.parameters);
-            } else if (command.name == "blobber-clear" && command.parameters.size() == 1) {
+            } else if (command.name == "blobber-clear" && (command.parameters.size() == 0 || command.parameters.size() == 1)) {
                 handleBlobberClearCommand(command.parameters);
             } else if (command.name == "screenshot" && command.parameters.size() == 1) {
                 handleScreenshotCommand(command.parameters);
