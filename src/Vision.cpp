@@ -1582,17 +1582,19 @@ Object* Vision::Results::getClosestBall(bool frontOnly) {
 	Object* ball;
 	Object* closestBall = NULL;
 
-	for (ObjectListItc it = front->balls.begin(); it != front->balls.end(); it++) {
-		ball = *it;
-		distance = ball->behind ? ball->distance * 1.25f : ball->distance;
+	if (front != NULL) {
+		for (ObjectListItc it = front->balls.begin(); it != front->balls.end(); it++) {
+			ball = *it;
+			distance = ball->behind ? ball->distance * 1.25f : ball->distance;
 		
-		if (closestBall == NULL || distance < closestDistance) {
-			closestBall = ball;
-			closestDistance = distance;
+			if (closestBall == NULL || distance < closestDistance) {
+				closestBall = ball;
+				closestDistance = distance;
+			}
 		}
 	}
 
-	if (!frontOnly) {
+	if (rear != NULL && !frontOnly) {
 		for (ObjectListItc it = rear->balls.begin(); it != rear->balls.end(); it++) {
 			ball = *it;
 			distance = ball->behind ? ball->distance * 1.25f : ball->distance;

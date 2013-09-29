@@ -854,7 +854,13 @@ Dash.UI.prototype.handleFrameMessage = function(frame) {
 	if (!$('#camera-view').is(':visible')) {
 		return;
 	}
-	
+
+	$('#frame-img').attr('src', '');
+	$('#frame-img').attr('width', '0');
+	$('#frame-img').attr('height', '0');
+	$('#frame-img').attr('width', '640');
+	$('#frame-img').attr('height', '512');
+
 	$('#frame-img').attr('src', 'data:image/jpeg;base64,' + frame.rgb);
 	$('#frame-classification').attr('src', 'data:image/jpeg;base64,' + frame.classification);
 	$('#stream-choice OPTION.selected').attr('selected', false);

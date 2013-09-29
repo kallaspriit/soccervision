@@ -32,6 +32,7 @@ public:
 
 	class Results {
 		public:
+			Results() : front(NULL), rear(NULL) {}
 			Object* getClosestBall(bool frontOnly = false);
 			Object* getLargestGoal(Side side, bool frontOnly = false);
 			Object* getFurthestGoal(bool frontOnly = false);
