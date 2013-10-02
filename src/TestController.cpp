@@ -84,7 +84,7 @@ std::string TestController::getJSON() {
 }
 
 void TestController::WatchBallState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration) {
-	Object* ball = visionResults->getClosestBall();
+	Object* ball = visionResults->getClosestBall(true);
 
 	if (ball == NULL) {
 		ai->com->send("error:1");
