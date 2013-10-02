@@ -4,7 +4,7 @@
 #include "Command.h"
 #include "Util.h"
 
-TestController::TestController(Robot* robot, Communication* com) : BaseAI(robot, com), running(false), manualSpeedX(0.0f), manualSpeedY(0.0f), manualOmega(0.0f) {
+TestController::TestController(Robot* robot, Communication* com) : BaseAI(robot, com), running(false), manualSpeedX(0.0f), manualSpeedY(0.0f), manualOmega(0.0f), blueGoalDistance(0.0f), yellowGoalDistance(0.0f) {
 	setupStates();
 };
 
@@ -17,6 +17,8 @@ void TestController::setupStates() {
 }
 
 void TestController::step(float dt, Vision::Results* visionResults) {
+	updateGoalDistances(visionResults);
+	
 	if (currentState == NULL) {
 		setState("idle");
 	}
@@ -93,6 +95,14 @@ void TestController::handleDriveToCommand(const Command& cmd) {
 	setState("drive-to");
 }
 
+void TestController::updateGoalDistances(Vision::Results* visionResults) {
+	Object* blueGoal = visionResults->getLargestGoal(Side::BLUE);
+	Object* yellowGoal = visionResults->getLargestGoal(Side::YELLOW);
+	
+	blueGoalDistance = blueGoal != NULL ? blueGoal->distance : 0.0f;
+	yellowGoalDistance = yellowGoal != NULL ? yellowGoal->distance : 0.0f;
+}
+
 std::string TestController::getJSON() {
 	std::stringstream stream;
 
@@ -100,7 +110,9 @@ std::string TestController::getJSON() {
 	stream << "\"Running\": \"" << (running ? "yes" : "no") << "\",";
 	stream << "\"Current state\": \"" << currentStateName << "\",";
 	stream << "\"State duration\": \"" << currentStateDuration << "\",";
-	stream << "\"Total duration\": \"" << totalDuration << "\"";
+	stream << "\"Total duration\": \"" << totalDuration << "\",";
+	stream << "\"blueGoalDistance\": " << blueGoalDistance << ",";
+	stream << "\"yellowGoalDistance\": " << yellowGoalDistance;
 	stream << "}";
 
 	return stream.str();

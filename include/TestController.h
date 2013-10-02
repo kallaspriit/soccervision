@@ -77,6 +77,7 @@ public:
 
 private:
 	void setupStates();
+	void updateGoalDistances(Vision::Results* visionResults);
 
 	DebouncedButton toggleGoBtn;
 	DebouncedButton resetBtn;
@@ -84,6 +85,8 @@ private:
 	float manualSpeedX;
 	float manualSpeedY;
 	float manualOmega;
+	float blueGoalDistance;
+	float yellowGoalDistance;
 
 };
 
