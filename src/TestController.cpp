@@ -118,6 +118,10 @@ std::string TestController::getJSON() {
 	return stream.str();
 }
 
+void TestController::IdleState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration) {
+	robot->setTargetDir(ai->manualSpeedX, ai->manualSpeedY, ai->manualOmega);
+}
+
 void TestController::WatchBallState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration) {
 	Object* ball = visionResults->getClosestBall(true);
 

@@ -23,7 +23,7 @@ public:
 
 	public:
 		IdleState(TestController* ai) : State(ai) {}
-		void step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration) {}
+		void step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration);
 
 	};
 

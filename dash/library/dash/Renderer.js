@@ -323,6 +323,13 @@ Dash.Renderer.prototype.renderState = function(state) {
 
 			this.drawPath(state, 'particleLocalizer', '#060');
 		}
+
+		if (state.controllerState.blueGoalDistance || state.controllerState.yellowGoalDistance) {
+			this.drawIntersections(
+				state.controllerState.yellowGoalDistance,
+				state.controllerState.blueGoalDistance
+			);
+		}
 	}
 
 	this.drawMarkers();
