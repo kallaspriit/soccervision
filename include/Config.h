@@ -135,7 +135,7 @@ namespace Config {
 	const float robotDribblerNormalOmega = 3.14f;
 	
 	// proportional multiplier for looking at object, multiplied by object angle
-	const float lookAtP = 4.0f;
+	const float lookAtP = 6.0f;
 
 	// maximum omega to apply to look at an object
 	const float lookAtMaxOmega = 3.0f * 3.14f;

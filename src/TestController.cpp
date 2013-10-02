@@ -95,6 +95,8 @@ void TestController::WatchBallState::step(float dt, Vision::Results* visionResul
 	Object* ball = visionResults->getClosestBall(true);
 
 	if (ball == NULL) {
+		robot->setTargetDir(ai->manualSpeedX, ai->manualSpeedY, ai->manualOmega);
+
 		return;
 	}
 
@@ -106,6 +108,8 @@ void TestController::WatchGoalState::step(float dt, Vision::Results* visionResul
 	Object* goal = visionResults->getLargestGoal(Side::BLUE, true);
 
 	if (goal == NULL) {
+		robot->setTargetDir(ai->manualSpeedX, ai->manualSpeedY, ai->manualOmega);
+
 		return;
 	}
 
