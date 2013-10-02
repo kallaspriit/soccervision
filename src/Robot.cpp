@@ -15,16 +15,11 @@ Robot::Robot(Communication* com) : com(com), wheelFL(NULL), wheelFR(NULL), wheel
     targetOmega = 0;
     targetDir = Math::Vector(0, 0);
    
-	fluidTargetX = 0.0f;
-	fluidTargetY = 0.0f;
-	fluidTargetOmega = 0.0f;
-
     x = 0.0f;
     y = 0.0f;
     orientation = 0.0f;
 
     lastCommandTime = -1;
-	fluidMovement = false;
 	frameTargetSpeedSet = false;
 	coilgunCharged = false;
 	autostop = true;
@@ -181,49 +176,23 @@ void Robot::step(float dt, Vision::Results* visionResults) {
 	frameTargetSpeedSet = false;
 }
 
-void Robot::setTargetDir(float x, float y, float omega, bool fluid) {
-	//std::cout << "! Setting robot target direction: " << x << "x" << y << " @ " << omega << (fluid ? " (fluid)" : "") << std::endl;
+void Robot::setTargetDir(float x, float y, float omega) {
+	//std::cout << "! Setting robot target direction: " << x << "x" << y << " @ " << omega << std::endl;
 
-	fluidMovement = fluid;
-
-	if (fluidMovement) {
-		// TODO Do it acceleration based (multiply diff) or perhaps remove
-		if (fluidTargetX < x) {
-			fluidTargetX = Math::min(fluidTargetX + Config::robotfluidSpeedStep * lastDt, x);
-		} else {
-			fluidTargetX = Math::max(fluidTargetX - Config::robotfluidSpeedStep * lastDt, x);
-		}
-
-		if (fluidTargetY < y) {
-			fluidTargetY = Math::min(fluidTargetY + Config::robotfluidSpeedStep * lastDt, y);
-		} else {
-			fluidTargetY = Math::max(fluidTargetY - Config::robotfluidSpeedStep * lastDt, y);
-		}
-
-		if (fluidTargetOmega < omega) {
-			fluidTargetOmega = Math::min(fluidTargetOmega + Config::robotfluidOmegaStep * lastDt, omega);
-		} else {
-			fluidTargetOmega = Math::max(fluidTargetOmega - Config::robotfluidOmegaStep * lastDt, omega);
-		}
-
-		targetDir = Math::Vector(fluidTargetX, fluidTargetY);
-		targetOmega = fluidTargetOmega;
-	} else {
-		targetDir = Math::Vector(x, y);
-		targetOmega = omega;
-	}
+	targetDir = Math::Vector(x, y);
+	targetOmega = omega;
 
     lastCommandTime = Util::millitime();
 	frameTargetSpeedSet = true;
 }
 
-void Robot::setTargetDir(const Math::Angle& dir, float speed, float omega, bool fluid) {
+void Robot::setTargetDir(const Math::Angle& dir, float speed, float omega) {
     Math::Vector dirVector = Math::Vector::createForwardVec(dir.rad(), speed);
 
-    setTargetDir(dirVector.x, dirVector.y, omega, fluid);
+    setTargetDir(dirVector.x, dirVector.y, omega);
 }
 
-void Robot::spinAroundDribbler(bool reverse, float period, float radius, float forwardSpeed, bool fluid) {
+void Robot::spinAroundDribbler(bool reverse, float period, float radius, float forwardSpeed) {
 	float speed = (2 * Math::PI * radius) / period;
 	float omega = (2 * Math::PI) / period;
 
@@ -232,7 +201,7 @@ void Robot::spinAroundDribbler(bool reverse, float period, float radius, float f
 		omega *= -1.0f;
 	}
 
-	setTargetDir(forwardSpeed, -speed, omega, fluid);
+	setTargetDir(forwardSpeed, -speed, omega);
 }
 
 bool Robot::isStalled() {
@@ -245,7 +214,7 @@ bool Robot::isStalled() {
 void Robot::stop() {
 	//std::cout << "! Stopping robot" << std::endl;
 
-	setTargetDir(0, 0, 0, fluidMovement);
+	setTargetDir(0, 0, 0);
 	dribbler->stop();
 }
 
@@ -263,6 +232,14 @@ Task* Robot::getCurrentTask() {
     }
 
     return tasks.front();
+}
+
+void Robot::lookAt(Object* object) {
+    if (object == NULL) {
+		return;
+	}
+
+	setTargetOmega(Math::limit(object->angle * Config::lookAtP, Config::lookAtMaxOmega));
 }
 
 void Robot::turnBy(float angle, float speed) {

@@ -95,12 +95,9 @@ void TestController::WatchBallState::step(float dt, Vision::Results* visionResul
 	Object* ball = visionResults->getClosestBall(true);
 
 	if (ball == NULL) {
-		ai->com->send("error:1");
-
 		return;
 	}
 
-	ai->com->send("error:0");
-
-	robot->setTargetDir(ai->manualSpeedX, ai->manualSpeedY, ball->angle * 3.0f);
+	robot->setTargetDir(ai->manualSpeedX, ai->manualSpeedY);
+	robot->lookAt(ball);
 }

@@ -133,6 +133,12 @@ namespace Config {
 
 	// how fast to spin the dribbler
 	const float robotDribblerNormalOmega = 3.14f;
+	
+	// proportional multiplier for looking at object, multiplied by object angle
+	const float lookAtP = 4.0f;
+
+	// maximum omega to apply to look at an object
+	const float lookAtMaxOmega = 3.0f * 3.14f;
 
 	// for how many frames must the real wheel speed vary considerably from target speed to be considered stalled
 	const int robotWheelStalledThreshold = 60;

@@ -45,14 +45,16 @@ public:
 	bool hasTasks() { return getCurrentTask() != NULL; }
 
 	inline void setAutostop(bool mode) { autostop = mode; }
-    void setTargetDir(float x, float y, float omega = 0.0f, bool fluid = false);
-    void setTargetDir(const Math::Angle& dir, float speed = 1.0f, float omega = 0.0f, bool fluid = false);
-	void spinAroundDribbler(bool reverse = false, float period = Config::robotSpinAroundDribblerPeriod, float radius = Config::robotSpinAroundDribblerRadius, float forwardSpeed = Config::robotSpinAroundDribblerForwardSpeed, bool fluid = false);
+    void setTargetDir(float x, float y, float omega = 0.0f);
+    void setTargetDir(const Math::Angle& dir, float speed = 1.0f, float omega = 0.0f);
+	void setTargetOmega(float omega) { targetOmega = omega; }
+	void spinAroundDribbler(bool reverse = false, float period = Config::robotSpinAroundDribblerPeriod, float radius = Config::robotSpinAroundDribblerRadius, float forwardSpeed = Config::robotSpinAroundDribblerForwardSpeed);
     void setPosition(float x, float y, float orientation);
 	void stop();
 	void clearTasks() { tasks.clear(); }
     void handleTasks(float dt);
 
+	void lookAt(Object* object);
 	void turnBy(float angle, float speed = 1.0f);
     void driveTo(float x, float y, float orientation, float speed = 1.0f);
     void driveFacing(float targetX, float targetY, float faceX, float faceY, float speed = 1.0f);
@@ -98,12 +100,6 @@ private:
 	Math::Vector targetDir;
     float targetOmega;
 	bool frameTargetSpeedSet;
-
-	// TODO Still need this?
-	bool fluidMovement;
-	float fluidTargetX;
-	float fluidTargetY;
-	float fluidTargetOmega;
 
 	Communication* com;
 	Vision::Results* visionResults;
