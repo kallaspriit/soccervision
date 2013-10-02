@@ -23,7 +23,7 @@ public:
 
 	public:
 		IdleState(TestController* ai) : State(ai) {}
-		void step(float dt, float totalDuration, float stateDuration) {}
+		void step(float dt, Vision::Results* visionResults, float totalDuration, float stateDuration) {}
 
 	};
 
@@ -33,7 +33,7 @@ public:
 		WatchBallState(TestController* ai) : State(ai) {}
 		void onEnter();
 		void onExit();
-		void step(float dt, float totalDuration, float stateDuration);
+		void step(float dt, Vision::Results* visionResults, float totalDuration, float stateDuration);
 
 	};
 
