@@ -39,6 +39,7 @@ public:
 	TestController(Robot* robot, Communication* com);
 
     bool handleCommand(const Command& cmd);
+	void handleTargetVectorCommand(const Command& cmd);
 	void handleToggleGoCommand();
 	void handleResetCommand();
     void step(float dt, Vision::Results* visionResults);
@@ -50,6 +51,9 @@ private:
 	DebouncedButton toggleGoBtn;
 	DebouncedButton resetBtn;
 	bool running;
+	float manualSpeedX;
+	float manualSpeedY;
+	float manualOmega;
 
 };
 

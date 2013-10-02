@@ -4,7 +4,7 @@
 #include "Command.h"
 #include "Util.h"
 
-TestController::TestController(Robot* robot, Communication* com) : BaseAI(robot, com), running(false) {
+TestController::TestController(Robot* robot, Communication* com) : BaseAI(robot, com), running(false), manualSpeedX(0.0f), manualSpeedY(0.0f), manualOmega(0.0f) {
 	setupStates();
 };
 
@@ -31,7 +31,9 @@ void TestController::step(float dt, Vision::Results* visionResults) {
 }
 
 bool TestController::handleCommand(const Command& cmd) {
-    if (cmd.name == "toggle-go") {
+	if (cmd.name == "target-vector" && cmd.parameters.size() == 3) {
+        handleTargetVectorCommand(cmd);
+    } else if (cmd.name == "toggle-go") {
         handleToggleGoCommand();
     } else if (cmd.name == "stop" ||cmd.name == "toggle-side") {
         handleResetCommand();
@@ -44,6 +46,12 @@ bool TestController::handleCommand(const Command& cmd) {
 	}
 
     return true;
+}
+
+void TestController::handleTargetVectorCommand(const Command& cmd) {
+    manualSpeedX = Util::toFloat(cmd.parameters[0]);
+    manualSpeedY = Util::toFloat(cmd.parameters[1]);
+    manualOmega = Util::toFloat(cmd.parameters[2]);
 }
 
 void TestController::handleToggleGoCommand() {
@@ -94,5 +102,5 @@ void TestController::WatchBallState::step(float dt, Vision::Results* visionResul
 
 	ai->com->send("error:0");
 
-	robot->setTargetDir(0, 0, ball->angle * 3.0f);
+	robot->setTargetDir(ai->manualSpeedX, ai->manualSpeedY, ball->angle * 3.0f);
 }

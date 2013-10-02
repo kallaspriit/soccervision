@@ -45,7 +45,7 @@ Dash.Robot.prototype.setDribbler = function(speed) {
 };
 
 Dash.Robot.prototype.setTargetDir = function(x, y, omega) {
-	if (this.controller != 'manual') {
+	if (this.controller != 'manual' && this.controller != 'test') {
 		return;
 	}
 	
