@@ -2,6 +2,10 @@ Dash.Renderer = function(id) {
 	this.id = id || 'canvas';
 	this.element = null;
 	this.c = null;
+	this.renderDriveTo = false;
+	this.driveToOrientation = 0.0;
+	this.mouseX = 0;
+	this.mouseY = 0;
 	
 	this.wheelGraphs = {
 		FL: null,
@@ -44,6 +48,48 @@ Dash.Renderer.prototype.init = function() {
 	for (var name in this.wheelGraphs) {
 		this.wheelGraphs[name].init();
 	}
+
+	$('#' + this.id).mousemove(function(e) {
+		this.mouseX = e.offsetX;
+		this.mouseY = e.offsetY;
+	}.bind(this));
+
+	$('#' + this.id).mousemove(function(e) {
+		this.mouseX = e.offsetX;
+		this.mouseY = e.offsetY;
+	}.bind(this));
+
+	$('#' + this.id).click(function(e) {
+		if (this.renderDriveTo) {
+			var mouseX = e.offsetX,
+				mouseY = e.offsetY,
+				pos = this.mouseToWorldCoords(mouseX, mouseY);
+
+			dash.ui.driveTo(pos.x, pos.y, this.driveToOrientation);
+
+			this.renderDriveTo = false;
+		}
+	}.bind(this));
+
+	$('#' + this.id).mousewheel(function(event, delta, deltaX, deltaY) {
+		if (!this.renderDriveTo) {
+			return;
+		}
+
+		this.driveToOrientation -= delta * Math.PI / 8.0;
+	}.bind(this));
+};
+
+Dash.Renderer.prototype.mouseToWorldCoords = function(mouseX, mouseY) {
+	return {
+		x: mouseX / this.canvasToWorldRatio + this.fieldOffsetX,
+		y: mouseY / this.canvasToWorldRatio + this.fieldOffsetY
+	}
+};
+
+Dash.Renderer.prototype.showDriveTo = function() {
+	this.renderDriveTo = true;
+	this.driveToOrientation = 0.0;
 };
 
 Dash.Renderer.prototype.drawRobot = function(radius, color, x, y, orientation) {
@@ -184,6 +230,18 @@ Dash.Renderer.prototype.drawMarker = function(x, y) {
 	this.c.restore();
 };
 
+Dash.Renderer.prototype.drawDriveTo = function(x, y) {
+	var pos = this.mouseToWorldCoords(this.mouseX, this.mouseY);
+
+	this.drawRobot(
+		dash.config.robot.radius,
+		'rgba(255, 0, 0, 0.5)',
+		pos.x,
+		pos.y,
+		this.driveToOrientation
+	);
+};
+
 Dash.Renderer.prototype.renderState = function(state) {
 	this.c.clearRect(-1, -1, this.width + 1, this.height + 1);
 	
@@ -268,6 +326,10 @@ Dash.Renderer.prototype.renderState = function(state) {
 	}
 
 	this.drawMarkers();
+
+	if (this.renderDriveTo) {
+		this.drawDriveTo();
+	}
 		
 	this.wheelGraphs.FL.render.apply(this.wheelGraphs.FL, [state, 'wheelFL']);
 	this.wheelGraphs.FR.render.apply(this.wheelGraphs.FR, [state, 'wheelFR']);

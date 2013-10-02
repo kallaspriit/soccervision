@@ -512,7 +512,11 @@ Dash.UI.prototype.initControls = function() {
 	$('#stop-btn').click(function() {
 		dash.socket.send('<stop>');
 	});
-	
+
+	$('#drive-to-btn').click(function() {
+		dash.renderer.showDriveTo();
+	});
+
 	$(window).keydown(function(e) {
 		if (e.keyCode == 27) {
 			dash.socket.send('<stop>');
@@ -717,6 +721,10 @@ Dash.UI.prototype.toggleTargetSide = function() {
 	var lastState = this.states[this.states.length - 1];
 
 	dash.socket.send('<toggle-side>');
+};
+
+Dash.UI.prototype.driveTo = function(x, y, orientation) {
+	dash.socket.send('<drive-to:' + x + ':' + y+ ':' + orientation + '>');
 };
 
 Dash.UI.prototype.setController = function(name) {

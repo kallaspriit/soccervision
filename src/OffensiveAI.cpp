@@ -128,11 +128,11 @@ void OffensiveAI::IdleState::step(float dt, Vision::Results* visionResults, Robo
 
 
 // find ball
-void OffensiveAI::FindBallState::onEnter() {
+void OffensiveAI::FindBallState::onEnter(Robot* robot) {
 	
 }
 
-void OffensiveAI::FindBallState::onExit() {
+void OffensiveAI::FindBallState::onExit(Robot* robot) {
 	
 }
 

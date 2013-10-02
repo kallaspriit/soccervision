@@ -13,6 +13,7 @@ void TestController::setupStates() {
 	states["watch-ball"] = new WatchBallState(this);
 	states["watch-goal"] = new WatchGoalState(this);
 	states["spin-around-dribbler"] = new SpinAroundDribblerState(this);
+	states["drive-to"] = new DriveToState(this);
 }
 
 void TestController::step(float dt, Vision::Results* visionResults) {
@@ -39,6 +40,8 @@ bool TestController::handleCommand(const Command& cmd) {
         handleToggleGoCommand();
     } else if (cmd.name == "stop" ||cmd.name == "toggle-side") {
         handleResetCommand();
+    } else if (cmd.name == "drive-to" && cmd.parameters.size() == 3) {
+        handleDriveToCommand(cmd);
     } else if (cmd.name.substr(0, 4) == "run-") {
         setState(cmd.name.substr(4));
 
@@ -78,6 +81,16 @@ void TestController::handleResetCommand() {
 	currentStateDuration = 0.0f;
 
 	setState(currentStateName);
+}
+
+void TestController::handleDriveToCommand(const Command& cmd) {
+	DriveToState* state = (DriveToState*)states["drive-to"];
+
+	state->x = Util::toFloat(cmd.parameters[0]);
+	state->y = Util::toFloat(cmd.parameters[1]);
+	state->orientation = Util::toFloat(cmd.parameters[2]);
+
+	setState("drive-to");
 }
 
 std::string TestController::getJSON() {
@@ -121,4 +134,12 @@ void TestController::WatchGoalState::step(float dt, Vision::Results* visionResul
 
 void TestController::SpinAroundDribblerState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration) {
 	robot->spinAroundDribbler();
+}
+
+void TestController::DriveToState::onEnter(Robot* robot) {
+	robot->driveTo(x, y, orientation);
+}
+
+void TestController::DriveToState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration) {
+	
 }

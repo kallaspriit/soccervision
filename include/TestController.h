@@ -51,6 +51,19 @@ public:
 
 	};
 
+	class DriveToState : public State {
+
+	public:
+		DriveToState(TestController* ai) : State(ai), x(Config::fieldWidth / 2.0f), y(Config::fieldHeight / 2.0f), orientation(0.0f) {}
+		void onEnter(Robot* robot);
+		void step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration);
+
+		float x;
+		float y;
+		float orientation;
+
+	};
+
 	
 	TestController(Robot* robot, Communication* com);
 
@@ -58,6 +71,7 @@ public:
 	void handleTargetVectorCommand(const Command& cmd);
 	void handleToggleGoCommand();
 	void handleResetCommand();
+	void handleDriveToCommand(const Command& cmd);
     void step(float dt, Vision::Results* visionResults);
 	std::string getJSON();
 
