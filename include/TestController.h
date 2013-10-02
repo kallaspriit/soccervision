@@ -43,6 +43,14 @@ public:
 
 	};
 
+	class SpinAroundDribblerState : public State {
+
+	public:
+		SpinAroundDribblerState(TestController* ai) : State(ai) {}
+		void step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration);
+
+	};
+
 	
 	TestController(Robot* robot, Communication* com);
 

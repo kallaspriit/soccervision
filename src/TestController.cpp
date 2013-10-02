@@ -12,6 +12,7 @@ void TestController::setupStates() {
 	states["idle"] = new IdleState(this);
 	states["watch-ball"] = new WatchBallState(this);
 	states["watch-goal"] = new WatchGoalState(this);
+	states["spin-around-dribbler"] = new SpinAroundDribblerState(this);
 }
 
 void TestController::step(float dt, Vision::Results* visionResults) {
@@ -116,4 +117,8 @@ void TestController::WatchGoalState::step(float dt, Vision::Results* visionResul
 
 	robot->setTargetDir(ai->manualSpeedX, ai->manualSpeedY);
 	robot->lookAt(goal);
+}
+
+void TestController::SpinAroundDribblerState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration) {
+	robot->spinAroundDribbler();
 }
