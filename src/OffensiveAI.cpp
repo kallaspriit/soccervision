@@ -96,7 +96,7 @@ void OffensiveAI::step(float dt, Vision::Results* visionResults) {
 	}
 
 	if (currentState != NULL) {
-		currentState->step(dt, visionResults, totalDuration, currentStateDuration);
+		currentState->step(dt, visionResults, robot, totalDuration, currentStateDuration);
 	}
 }
 
@@ -120,7 +120,7 @@ std::string OffensiveAI::getJSON() {
 }
 
 // idle
-void OffensiveAI::IdleState::step(float dt, Vision::Results* visionResults, float totalDuration, float stateDuration) {
+void OffensiveAI::IdleState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration) {
 	if (ai->running) {
 		ai->setState("find-ball");
 	}
@@ -136,6 +136,6 @@ void OffensiveAI::FindBallState::onExit() {
 	
 }
 
-void OffensiveAI::FindBallState::step(float dt, Vision::Results* visionResults, float totalDuration, float stateDuration) {
+void OffensiveAI::FindBallState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration) {
 	//std::cout << "! Step find ball state: " << dt << ", " << totalDuration << ", " << stateDuration << std::endl;
 }

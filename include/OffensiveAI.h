@@ -26,7 +26,7 @@ public:
 
 	public:
 		IdleState(OffensiveAI* ai) : State(ai) {}
-		void step(float dt, Vision::Results* visionResults, float totalDuration, float stateDuration);
+		void step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration);
 
 	};
 
@@ -36,7 +36,7 @@ public:
 		FindBallState(OffensiveAI* ai) : State(ai) {}
 		void onEnter();
 		void onExit();
-		void step(float dt, Vision::Results* visionResults, float totalDuration, float stateDuration);
+		void step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration);
 
 	};
 

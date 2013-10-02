@@ -23,7 +23,7 @@ void TestController::step(float dt, Vision::Results* visionResults) {
 		totalDuration += dt;
 
 		if (currentState != NULL) {
-			currentState->step(dt, visionResults, totalDuration, currentStateDuration);
+			currentState->step(dt, visionResults, robot, totalDuration, currentStateDuration);
 		}
 	} else {
 		robot->stop();
@@ -83,15 +83,6 @@ std::string TestController::getJSON() {
 	return stream.str();
 }
 
-// watch ball
-void TestController::WatchBallState::onEnter() {
-	
-}
-
-void TestController::WatchBallState::onExit() {
-	
-}
-
-void TestController::WatchBallState::step(float dt, Vision::Results* visionResults, float totalDuration, float stateDuration) {
+void TestController::WatchBallState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration) {
 	//Object* ball = visionResults->getClosestBall();
 }

@@ -18,7 +18,7 @@ public:
 		State(BaseAI* ai) : ai(ai) {}
 		virtual void onEnter() {}
 		virtual void onExit() {}
-		virtual void step(float dt, Vision::Results* visionResults, float totalDuration, float stateDuration) = 0;
+		virtual void step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration) = 0;
 
 	protected:
 		BaseAI* ai;
