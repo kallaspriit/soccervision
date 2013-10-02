@@ -239,6 +239,7 @@ void Robot::lookAt(Object* object) {
 		return;
 	}
 
+	// TODO Consider PID
 	setTargetOmega(Math::limit(object->angle * Config::lookAtP, Config::lookAtMaxOmega));
 }
 

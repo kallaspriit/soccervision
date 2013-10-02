@@ -101,3 +101,14 @@ void TestController::WatchBallState::step(float dt, Vision::Results* visionResul
 	robot->setTargetDir(ai->manualSpeedX, ai->manualSpeedY);
 	robot->lookAt(ball);
 }
+
+void TestController::WatchGoalState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration) {
+	Object* goal = visionResults->getLargestGoal(Side::BLUE, true);
+
+	if (goal == NULL) {
+		return;
+	}
+
+	robot->setTargetDir(ai->manualSpeedX, ai->manualSpeedY);
+	robot->lookAt(goal);
+}

@@ -35,6 +35,14 @@ public:
 
 	};
 
+	class WatchGoalState : public State {
+
+	public:
+		WatchGoalState(TestController* ai) : State(ai) {}
+		void step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration);
+
+	};
+
 	
 	TestController(Robot* robot, Communication* com);
 
