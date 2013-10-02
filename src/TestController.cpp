@@ -11,6 +11,7 @@ TestController::TestController(Robot* robot, Communication* com) : BaseAI(robot,
 void TestController::setupStates() {
 	states["idle"] = new IdleState(this);
 	states["watch-ball"] = new WatchBallState(this);
+	states["watch-goal"] = new WatchGoalState(this);
 }
 
 void TestController::step(float dt, Vision::Results* visionResults) {
