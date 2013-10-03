@@ -91,6 +91,7 @@
     <ClInclude Include="include\BaseAI.h" />
     <ClInclude Include="include\BaseCamera.h" />
     <ClInclude Include="include\Blobber.h" />
+    <ClInclude Include="include\CameraTranslator.h" />
     <ClInclude Include="include\Coilgun.h" />
     <ClInclude Include="include\Command.h" />
     <ClInclude Include="include\Communication.h" />

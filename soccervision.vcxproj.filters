@@ -191,6 +191,9 @@
     <ClInclude Include="include\BaseAI.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\CameraTranslator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\DisplayWindow.cpp">
