@@ -21,6 +21,8 @@ void TestController::step(float dt, Vision::Results* visionResults) {
 	
 	if (currentState == NULL) {
 		setState("idle");
+
+		running = true;
 	}
 
 	if (running) {
