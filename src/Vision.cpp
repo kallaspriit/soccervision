@@ -1,11 +1,12 @@
 #include "Vision.h"
 #include "Config.h"
+#include "CameraTranslator.h"
 #include "Util.h"
 
 #include <iostream>
 #include <algorithm>
 
-Vision::Vision(Blobber* blobber, Dir dir, int width, int height) : blobber(blobber), dir(dir), width(width), height(height), obstructionSide(Obstruction::NONE), blackDistance(-1.0f) {
+Vision::Vision(Blobber* blobber, CameraTranslator* cameraTranslator, Dir dir, int width, int height) : blobber(blobber), cameraTranslator(cameraTranslator), dir(dir), width(width), height(height), obstructionSide(Obstruction::NONE), blackDistance(-1.0f) {
 	// TODO Does vision need both lookup tables any more?
 	frontDistanceLookup.load(Config::frontDistanceLookupFilename/*, 0.13f*/);
 	rearDistanceLookup.load(Config::rearDistanceLookupFilename);

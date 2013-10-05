@@ -16,6 +16,7 @@ class Gui;
 class FpsCounter;
 class Robot;
 class Communication;
+class CameraTranslator;
 
 class SoccerBot {
 
@@ -79,6 +80,8 @@ private:
 	Blobber* rearBlobber;
 	Vision* frontVision;
 	Vision* rearVision;
+	CameraTranslator* frontCameraTranslator;
+	CameraTranslator* rearCameraTranslator;
 	ProcessThread* frontProcessor;
 	ProcessThread* rearProcessor;
 	Gui* gui;

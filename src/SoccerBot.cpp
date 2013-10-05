@@ -1,6 +1,7 @@
 #include "SoccerBot.h"
 #include "XimeaCamera.h"
 #include "VirtualCamera.h"
+#include "CameraTranslator.h"
 #include "Vision.h"
 #include "DebugRenderer.h"
 #include "Communication.h"
@@ -28,6 +29,7 @@ SoccerBot::SoccerBot() :
 	frontBlobber(NULL), rearBlobber(NULL),
 	frontVision(NULL), rearVision(NULL),
 	frontProcessor(NULL), rearProcessor(NULL),
+	frontCameraTranslator(NULL), rearCameraTranslator(NULL),
 	gui(NULL), fpsCounter(NULL), visionResults(NULL), robot(NULL), activeController(NULL), server(NULL), com(NULL),
 	jpegBuffer(NULL), screenshotBufferFront(NULL), screenshotBufferRear(NULL),
 	running(false), debugVision(false), showGui(false), controllerRequested(false), frameRequested(false), useScreenshot(false),
@@ -54,6 +56,8 @@ SoccerBot::~SoccerBot() {
 	if (ximeaRearCamera != NULL) delete ximeaRearCamera; ximeaRearCamera = NULL;
 	if (virtualFrontCamera != NULL) delete virtualFrontCamera; virtualFrontCamera = NULL;
 	if (virtualRearCamera != NULL) delete virtualRearCamera; virtualRearCamera = NULL;
+	if (frontCameraTranslator != NULL) delete frontCameraTranslator; frontCameraTranslator = NULL;
+	if (rearCameraTranslator != NULL) delete rearCameraTranslator; rearCameraTranslator = NULL;
 	if (fpsCounter != NULL) delete fpsCounter; fpsCounter = NULL;
 	if (frontProcessor != NULL) frontBlobber->saveOptions(Config::blobberConfigFilename); delete frontProcessor; frontProcessor = NULL;
 	if (rearProcessor != NULL) delete rearProcessor; rearProcessor = NULL;
@@ -370,8 +374,23 @@ void SoccerBot::setupVision() {
 	frontBlobber->loadOptions(Config::blobberConfigFilename);
 	rearBlobber->loadOptions(Config::blobberConfigFilename);
 
-	frontVision = new Vision(frontBlobber, Dir::FRONT, Config::cameraWidth, Config::cameraHeight);
-	rearVision = new Vision(rearBlobber, Dir::REAR, Config::cameraWidth, Config::cameraHeight);
+	frontCameraTranslator = new CameraTranslator();
+	rearCameraTranslator = new CameraTranslator();
+
+	frontCameraTranslator->setConstants(
+		-66.1f, 245500.0f, 184.5f,
+		-0.20595885508962161f, 0.22994404138684341f, -0.26415340162084772f,
+		0.0, Config::cameraWidth, Config::cameraHeight
+	);
+
+	rearCameraTranslator->setConstants(
+		23.5f, 186800.0f, 140.1f,
+		-0.28313396671146590f, 0.49589037600405639, -0.70222022918250182f,
+		0.0, Config::cameraWidth, Config::cameraHeight
+	);
+
+	frontVision = new Vision(frontBlobber, frontCameraTranslator, Dir::FRONT, Config::cameraWidth, Config::cameraHeight);
+	rearVision = new Vision(rearBlobber, rearCameraTranslator, Dir::REAR, Config::cameraWidth, Config::cameraHeight);
 
 	visionResults = new Vision::Results();
 

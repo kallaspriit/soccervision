@@ -11,6 +11,8 @@
 #include <string>
 #include <vector>
 
+class CameraTranslator;
+
 class Vision {
 
 public:
@@ -41,7 +43,7 @@ public:
 			Vision::Result* rear;
 	};
 
-    Vision(Blobber* blobber, Dir dir, int width, int height);
+    Vision(Blobber* blobber, CameraTranslator* cameraTranslator, Dir dir, int width, int height);
     ~Vision();
 
 	void setDebugImage(unsigned char* image, int width, int height);
@@ -83,6 +85,7 @@ private:
 	Dir dir;
 	Canvas canvas;
     Blobber* blobber;
+	CameraTranslator* cameraTranslator;
     LookupTable frontDistanceLookup;
     LookupTable rearDistanceLookup;
     LookupTable frontAngleLookup;
