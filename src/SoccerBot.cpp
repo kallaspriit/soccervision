@@ -394,6 +394,7 @@ void SoccerBot::setupVision() {
 		12.0f, Config::cameraWidth, Config::cameraHeight
 	);
 
+	// TODO Remove this test
 	for (int x = 0; x <= Config::cameraWidth; x += Config::cameraWidth / 2) {
 		for (int y = 0; y <= Config::cameraHeight; y+= Config::cameraHeight / 2) {
 			CameraTranslator::CameraPosition distorted = rearCameraTranslator->distort(x, y);
