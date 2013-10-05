@@ -34,6 +34,7 @@ bool ManualController::handleCommand(const Command& cmd) {
         handleKickCommand(cmd);
     } else if (cmd.name == "reset-position") {
 		robot->setPosition(Config::fieldWidth / 2.0f, Config::fieldHeight / 2.0f, 0.0f);
+		robot->setPosition(0.0f, Config::fieldHeight / 2.0f, 0.0f);
     } else {
         return false;
     }
