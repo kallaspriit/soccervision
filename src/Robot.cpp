@@ -159,7 +159,54 @@ void Robot::step(float dt, Vision::Results* visionResults) {
     stream << "\"localizerOrientation\":" << localizerPosition.orientation << ",";
 	stream << "\"odometerX\":" << odometerPosition.x << ",";
     stream << "\"odometerY\":" << odometerPosition.y << ",";
-    stream << "\"odometerOrientation\":" << odometerPosition.orientation;
+    stream << "\"odometerOrientation\":" << odometerPosition.orientation << ",";
+    stream << "\"gotBall\":" << (dribbler->gotBall() ? "true" : "false") << ",";
+
+    stream << "\"wheelFL\": {";
+	stream << "\"stalled\":" << (wheelFL->isStalled() ? "true" : "false") << ",";
+    stream << "\"targetOmega\":" << wheelFL->getTargetOmega() << ",";
+    stream << "\"realOmega\":" << wheelFL->getRealOmega();
+    stream << "},";
+
+    stream << "\"wheelFR\": {";
+	stream << "\"stalled\":" << (wheelFR->isStalled() ? "true" : "false") << ",";
+    stream << "\"targetOmega\":" << wheelFR->getTargetOmega() << ",";
+    stream << "\"realOmega\":" << wheelFR->getRealOmega();
+    stream << "},";
+
+    stream << "\"wheelRL\": {";
+	stream << "\"stalled\":" << (wheelRL->isStalled() ? "true" : "false") << ",";
+    stream << "\"targetOmega\":" << wheelRL->getTargetOmega() << ",";
+    stream << "\"realOmega\":" << wheelRL->getRealOmega();
+    stream << "},";
+
+    stream << "\"wheelRR\": {";
+	stream << "\"stalled\":" << (wheelRR->isStalled() ? "true" : "false") << ",";
+    stream << "\"targetOmega\":" << wheelRR->getTargetOmega() << ",";
+    stream << "\"realOmega\":" << wheelRR->getRealOmega();
+    stream << "},";
+
+	stream << "\"tasks\": [";
+
+    bool first = true;
+
+    for (TaskQueueIt it = tasks.begin(); it != tasks.end(); it++) {
+        Task* task = *it;
+
+        if (!first) {
+            stream << ",";
+        } else {
+            first = false;
+        }
+
+        stream << "{";
+        stream << "\"started\": " << (task->isStarted() ? "true" : "false") << ",";
+        stream << "\"percentage\": " << task->getPercentage() << ",";
+        stream << "\"status\": \"" << task->toString() << "\"";
+        stream << "}";
+    }
+
+    stream << "]";
 
 	json = stream.str();
 

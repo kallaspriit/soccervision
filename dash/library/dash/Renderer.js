@@ -250,9 +250,9 @@ Dash.Renderer.prototype.renderState = function(state) {
 	this.drawRobot(
 		dash.config.robot.radius,
 		state.targetSide == 1 ? '#00F' : state.targetSide == 0 ? '#DD0' : '#CCC',
-		state.x,
-		state.y,
-		state.orientation
+		state.robot.x,
+		state.robot.y,
+		state.robot.orientation
 	);
 		
 	/*this.drawRobot(
@@ -338,8 +338,8 @@ Dash.Renderer.prototype.renderState = function(state) {
 		this.drawDriveTo();
 	}
 		
-	this.wheelGraphs.FL.render.apply(this.wheelGraphs.FL, [state, 'wheelFL']);
-	this.wheelGraphs.FR.render.apply(this.wheelGraphs.FR, [state, 'wheelFR']);
-	this.wheelGraphs.RL.render.apply(this.wheelGraphs.RL, [state, 'wheelRL']);
-	this.wheelGraphs.RR.render.apply(this.wheelGraphs.RR, [state, 'wheelRR']);
+	this.wheelGraphs.FL.render.apply(this.wheelGraphs.FL, [state.robot, 'wheelFL']);
+	this.wheelGraphs.FR.render.apply(this.wheelGraphs.FR, [state.robot, 'wheelFR']);
+	this.wheelGraphs.RL.render.apply(this.wheelGraphs.RL, [state.robot, 'wheelRL']);
+	this.wheelGraphs.RR.render.apply(this.wheelGraphs.RR, [state.robot, 'wheelRR']);
 };
