@@ -45,6 +45,7 @@ bool TestController::handleCommand(const Command& cmd) {
     } else if (cmd.name == "stop") {
         handleResetCommand();
 		setState("idle");
+		running = true;
     } else if (cmd.name == "toggle-side") {
         handleResetCommand();
     } else if (cmd.name == "drive-to" && cmd.parameters.size() == 3) {
