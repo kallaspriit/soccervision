@@ -7,12 +7,6 @@
 #include <algorithm>
 
 Vision::Vision(Blobber* blobber, CameraTranslator* cameraTranslator, Dir dir, int width, int height) : blobber(blobber), cameraTranslator(cameraTranslator), dir(dir), width(width), height(height), obstructionSide(Obstruction::NONE), blackDistance(-1.0f) {
-	// TODO Does vision need both lookup tables any more?
-	frontDistanceLookup.load(Config::frontDistanceLookupFilename/*, 0.13f*/);
-	rearDistanceLookup.load(Config::rearDistanceLookupFilename);
-	frontAngleLookup.load(Config::frontAngleLookupFilename);
-    rearAngleLookup.load(Config::rearAngleLookupFilename);
-
     validBallBgColors.push_back("green");
     validBallBgColors.push_back("white");
     validBallBgColors.push_back("black");

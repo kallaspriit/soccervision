@@ -86,10 +86,6 @@ private:
 	Canvas canvas;
     Blobber* blobber;
 	CameraTranslator* cameraTranslator;
-    LookupTable frontDistanceLookup;
-    LookupTable rearDistanceLookup;
-    LookupTable frontAngleLookup;
-    LookupTable rearAngleLookup;
     std::vector<std::string> validBallBgColors;
     std::vector<std::string> validBallPathColors;
     std::vector<std::string> validGoalPathColors;
