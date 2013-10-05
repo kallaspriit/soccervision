@@ -1,6 +1,8 @@
 #include "CameraTranslator.h"
 #include "Maths.h"
 
+#include <iostream>
+
 CameraTranslator::WorldPosition CameraTranslator::getWorldPosition(int cameraX, int cameraY) {
 	//CameraTranslator::CameraPosition undistorted = CameraTranslator::undistort(cameraX, cameraY);
 	CameraTranslator::CameraPosition undistorted = CameraTranslator::CameraPosition(cameraX, cameraY);
@@ -53,6 +55,8 @@ CameraTranslator::CameraPosition CameraTranslator::undistort(int x, int y) {
 		this->k1 * pow(r, 2) +
 		this->k2 * pow(r, 4) + 
 		this->k3 * pow(r, 6);
+
+	std::cout << "@ UNDISTORT dx: " << dx << ", dy: " << dy << ", r: " << r << ", multiplier: " << multipler << std::endl;
 
 	return CameraPosition(
 		(int)Math::round(dx * multipler, 0),
