@@ -136,7 +136,7 @@ bool Util::replace(std::string& str, const std::string& from, const std::string&
     return true;
 }
 
-void Util::correctCameraPoint(int& x, int& y) {
+/*void Util::correctCameraPoint(int& x, int& y) {
 	float k = cameraCorrectionK;
 	float zoom = cameraCorrectionZoom;
 	float centerX = (float)Config::cameraWidth / 2.0f/* - 0.5f*/;
@@ -148,7 +148,7 @@ void Util::correctCameraPoint(int& x, int& y) {
 
 	x = (int)(zoom * centerOffsetX / magnifacationFactor + centerX);
 	y = (int)(zoom * centerOffsetY / magnifacationFactor + centerY);
-}
+}*/
 
 void Util::confineField(float& x, float& y) {
 	if (x < -Config::confineMargin) {

@@ -49,6 +49,7 @@ public:
 	void setDebugImage(unsigned char* image, int width, int height);
     Result* process();
     Blobber::Color* getColorAt(int x, int y);
+	CameraTranslator* getCameraTranslator() { return cameraTranslator; }
 	bool isViewObstructed() { return obstructionSide != Obstruction::NONE; }
 	Obstruction getObstruction() { return obstructionSide; }
 	Dir getDir() { return dir; }

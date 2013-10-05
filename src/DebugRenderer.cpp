@@ -1,4 +1,5 @@
 #include "DebugRenderer.h"
+#include "CameraTranslator.h"
 #include "Canvas.h"
 #include "Maths.h"
 #include "Vision.h"
@@ -74,7 +75,7 @@ void DebugRenderer::renderBalls(unsigned char* image, const ObjectList& balls, i
 		correctedX = ball->x;
 		correctedY = ball->y + ball->height / 2;
 
-		Util::correctCameraPoint(correctedX, correctedY);
+		//Util::correctCameraPoint(correctedX, correctedY);
 
 		sprintf(buf, "%d x %d", correctedX, correctedY);
         canvas.drawText(ball->x - ball->width / 2 + 2, ball->y - ball->height / 2 - 12, buf);
@@ -220,9 +221,9 @@ void DebugRenderer::renderGrid(unsigned char* image, Vision* vision, int width, 
 			px = x;
 			py = pixelRow;
 
-			Util::correctCameraPoint(px, py);
+			CameraTranslator::CameraPosition distorted = vision->getCameraTranslator()->distort(px, py);
 
-			canvas.setPixelAt(px, py, 128, 128, 128);
+			canvas.setPixelAt(distorted.x, distorted.y, 128, 128, 128);
 		}
 
 		//px = 10 + (counter % 10) * 30;
