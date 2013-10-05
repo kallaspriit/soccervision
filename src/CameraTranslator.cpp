@@ -17,8 +17,8 @@ CameraTranslator::WorldPosition CameraTranslator::getWorldPosition(int cameraX, 
 }
 
 CameraTranslator::CameraPosition CameraTranslator::getCameraPosition(float worldX, float worldY) {
-	float pixelVerticalCoord = this->B / (worldY - this->A);
-	float pixelRight = worldX * pixelVerticalCoord / this->C;
+	float pixelVerticalCoord = this->B / ((worldY / 1000.0f) - this->A);
+	float pixelRight = (worldX / 1000.0f) * pixelVerticalCoord / this->C;
 
 	float cameraY = pixelVerticalCoord + this->horizon;
 	float cameraX = pixelRight + this->cameraWidth / 2;
