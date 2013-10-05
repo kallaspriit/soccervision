@@ -216,7 +216,7 @@ void DebugRenderer::renderGrid(unsigned char* image, Vision* vision, int width, 
 	CameraTranslator::CameraPosition distorted;
 	CameraTranslator::CameraPosition undistorted;
 
-	for (distanceY = minDistanceY; distanceY < maxDistanceY; distanceY += stepY) {
+	for (distanceY = minDistanceY; distanceY <= maxDistanceY; distanceY += stepY) {
 		y = vision->getPixelRowAt(distanceY);
 
 		for (x = 0; x < Config::cameraWidth; x += 3) {
@@ -225,7 +225,7 @@ void DebugRenderer::renderGrid(unsigned char* image, Vision* vision, int width, 
 
 			canvas.setPixelAt(distorted.x, distorted.y, 128, 128, 128);
 			canvas.setPixelAt(undistorted.x, undistorted.y, 128, 0, 0);
-			canvas.setPixelAt(x, distorted.y, 0, 0, 128);
+			canvas.setPixelAt(x, y, 0, 0, 128);
 		}
 
 		//px = 10 + (counter % 10) * 30;
