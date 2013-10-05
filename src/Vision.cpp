@@ -466,9 +466,9 @@ int Vision::getPixelRowAt(float distance) {
 
 	return (int)Math::min(Math::max((float)pixelRow, 0.0f), (float)(Config::cameraHeight - 1));*/
 
-	CameraTranslator::CameraPosition pos = cameraTranslator->getCameraPosition(distance, 0);
+	CameraTranslator::CameraPosition pos = cameraTranslator->getCameraPosition(0, distance);
 
-	return pos.x;
+	return pos.y;
 }
 
 // TODO Implement..

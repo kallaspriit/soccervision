@@ -121,8 +121,6 @@ std::string TestController::getJSON() {
 }
 
 void TestController::IdleState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration) {
-	std::cout << "@ IDLE: " << ai->manualSpeedX << ", " << ai->manualSpeedY << ", " << ai->manualOmega << std::endl;
-	
 	robot->setTargetDir(ai->manualSpeedX, ai->manualSpeedY, ai->manualOmega);
 }
 
