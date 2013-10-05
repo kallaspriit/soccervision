@@ -54,11 +54,11 @@ public:
 	Dir getDir() { return dir; }
 	bool isBallInWay(ObjectList balls, int goalY);
 	float getBlackDistance() { return blackDistance; }
-    float getDistance(Dir dir, int x, int y);
+    float getDistance(int x, int y);
 	//float getHorizontalDistance(Dir dir, int x, int y);
-    float getAngle(Dir dir, int x, int y);
-	int getPixelRowAt(Dir dir, float distance);
-	Math::Point getScreenCoords(Dir dir, float distanceX, float distanceY);
+    float getAngle(int x, int y);
+	int getPixelRowAt(float distance);
+	Math::Point getScreenCoords(float distanceX, float distanceY);
 
 private:
 	ObjectList processBalls(Dir dir);

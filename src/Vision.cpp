@@ -91,8 +91,8 @@ ObjectList Vision::processBalls(Dir dir) {
 			continue;
 		}
 
-		distance = getDistance(dir, (int)blob->centerX, (int)blob->y2);
-        angle = getAngle(dir, (int)blob->centerX, (int)blob->y2);
+		distance = getDistance((int)blob->centerX, (int)blob->y2);
+        angle = getAngle((int)blob->centerX, (int)blob->y2);
 
 		if (dir == Dir::REAR) {
 			if (angle > 0.0f) {
@@ -141,8 +141,8 @@ ObjectList Vision::processBalls(Dir dir) {
 				ball->height += extendHeightBelow;
 			}
 
-			ball->distance = getDistance(dir, ball->x, ball->y + ball->height / 2);
-			ball->angle = getAngle(dir, ball->x, ball->y + ball->height / 2);
+			ball->distance = getDistance(ball->x, ball->y + ball->height / 2);
+			ball->angle = getAngle(ball->x, ball->y + ball->height / 2);
 			filteredBalls.push_back(ball);
 		}
 	}
@@ -167,8 +167,8 @@ ObjectList Vision::processGoals(Dir dir) {
 				continue;
 			}
 
-			distance = getDistance(dir, (int)blob->centerX, (int)blob->y2);
-            angle = getAngle(dir, (int)blob->centerX, (int)blob->y2);
+			distance = getDistance((int)blob->centerX, (int)blob->y2);
+            angle = getAngle((int)blob->centerX, (int)blob->y2);
 
 			if (dir == Dir::REAR) {
 				if (angle > 0.0f) {
@@ -213,8 +213,8 @@ ObjectList Vision::processGoals(Dir dir) {
 		if (isValidGoal(goal, goal->type == 0 ? Side::YELLOW : Side::BLUE)) {
 			// TODO Extend the goal downwards using extended color / limited ammount horizontal too
 
-			goal->distance = getDistance(dir, goal->x, goal->y + goal->height / 2);
-			goal->angle = getAngle(dir, goal->x, goal->y + goal->height / 2);
+			goal->distance = getDistance(goal->x, goal->y + goal->height / 2);
+			goal->angle = getAngle(goal->x, goal->y + goal->height / 2);
 			filteredGoals.push_back(goal);
 		}
 	}
@@ -461,8 +461,8 @@ int Vision::getPixelsBelow(int startX, int startY, std::vector<std::string> vali
 	return validPixelCount;
 }
 
-float Vision::getDistance(Dir dir, int x, int y) {
-	int realX = x;
+float Vision::getDistance(int x, int y) {
+	/*int realX = x;
 	int realY = y;
 
 	Util::correctCameraPoint(realX, realY);
@@ -475,11 +475,15 @@ float Vision::getDistance(Dir dir, int x, int y) {
         distance = rearDistanceLookup.getValue((float)realY);
     }
 
-	return Math::max(distance + Config::distanceCorrection, 0.01f);
+	return Math::max(distance + Config::distanceCorrection, 0.01f);*/
+
+	CameraTranslator::WorldPosition pos = cameraTranslator->getWorldPosition(x, y);
+
+	return pos.distance;
 }
 
-int Vision::getPixelRowAt(Dir dir, float distance) {
-	int pixelRow;
+int Vision::getPixelRowAt(float distance) {
+	/*int pixelRow;
 
 	if (dir == FRONT) {
 		pixelRow = (int)frontDistanceLookup.getInverseValue(distance);
@@ -487,11 +491,15 @@ int Vision::getPixelRowAt(Dir dir, float distance) {
         pixelRow = (int)rearDistanceLookup.getInverseValue(distance);
     }
 
-	return (int)Math::min(Math::max((float)pixelRow, 0.0f), (float)(Config::cameraHeight - 1));
+	return (int)Math::min(Math::max((float)pixelRow, 0.0f), (float)(Config::cameraHeight - 1));*/
+
+	CameraTranslator::CameraPosition pos = cameraTranslator->getCameraPosition(distance, 0);
+
+	return pos.x;
 }
 
 // TODO Implement..
-Math::Point Vision::getScreenCoords(Dir dir, float distanceX, float distanceY) {
+Math::Point Vision::getScreenCoords(float distanceX, float distanceY) {
 	return Math::Point(0, 0);
 }
 /*float Vision::getHorizontalDistance(Dir dir, int x, int y) {
@@ -525,24 +533,11 @@ Math::Point Vision::getScreenCoords(Dir dir, float distanceX, float distanceY) {
 	return Math::tan(localAngle) * (realY + 0.062);
 }*/
 
-float Vision::getAngle(Dir dir, int x, int y) {
-	int realX = x;
+float Vision::getAngle(int x, int y) {
+	/*int realX = x;
 	int realY = y;
 
 	Util::correctCameraPoint(realX, realY);
-
-    /*float centerOffset = (float)(x - (Config::cameraWidth / 2));
-    float distance = getDistance(dir, x, y);
-    float pixelsPerCm = dir == FRONT ? frontAngleLookup.getValue(distance) : rearAngleLookup.getValue(distance);
-    float horizontalDistance = (double)centerOffset / pixelsPerCm;
-	//return Math::tan(horizontalDistance / distance) * 180.0 / Math::PI;
-	*/
-
-	/*float distance = getDistance(dir, x, y);
-	float horizontalDistance = getHorizontalDistance(dir, x, y);
-	return Math::tan(horizontalDistance / distance);*/
-
-	//float distance = getDistance(dir, x, y);
 
 	// last working
 	float centerOffset = (float)(realX - (Config::cameraWidth / 2.0f)),
@@ -556,12 +551,11 @@ float Vision::getAngle(Dir dir, int x, int y) {
 		}
 	}
 
-	return angle;
+	return angle;*/
 
-	/*float distance = getDistance(dir, x, y);
-	float horizontalDistance = getHorizontalDistance(dir, x, y);
+	CameraTranslator::WorldPosition pos = cameraTranslator->getWorldPosition(x, y);
 
-	return Math::atan(horizontalDistance / distance);*/
+	return pos.angle;
 }
 
 Blobber::Color* Vision::getColorAt(int x, int y) {
@@ -854,7 +848,7 @@ Vision::PathMetric Vision::getPathMetric(int x1, int y1, int x2, int y2, std::ve
 
 		if (y > Config::cameraHeight / 4) {
 			// sample less points near by and more in the distance
-			distance1 = getDistance(dir, x, y);
+			distance1 = getDistance(x, y);
 			distance2 = Math::round(distance1 / distanceStep, 0) * distanceStep;
 
 			if (Math::abs(distance1 - distance2) > distanceStep / 5.0f) {
@@ -1178,7 +1172,7 @@ float Vision::getColorDistance(std::string colorName, int x1, int y1, int x2, in
 					canvas.fillBox(x - 5, y - 5, 10, 10, 255, 0, 0);
 				}
 
-				return getDistance(Dir::FRONT, x, y);
+				return getDistance(x, y);
 			} else {
 				if (debug) {
 					//canvas.drawMarker(x, y, 200, 0, 0);
