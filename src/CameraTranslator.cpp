@@ -13,7 +13,7 @@ CameraTranslator::WorldPosition CameraTranslator::getWorldPosition(int cameraX, 
 	float worldDistance = sqrt(worldX + worldY);
 	float worldAngle = atan2(worldX, worldY);
 
-	return WorldPosition(worldX, worldY, worldDistance, worldAngle);
+	return WorldPosition(worldX / 1000.0f, worldY / 1000.0f, worldDistance / 1000.0f, worldAngle);
 }
 
 CameraTranslator::CameraPosition CameraTranslator::getCameraPosition(float worldX, float worldY) {
