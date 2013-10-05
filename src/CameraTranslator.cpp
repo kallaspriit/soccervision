@@ -24,7 +24,8 @@ CameraTranslator::CameraPosition CameraTranslator::getCameraPosition(float world
 	float cameraY = pixelVerticalCoord + this->horizon;
 	float cameraX = pixelRight + this->cameraWidth / 2;
 
-	return CameraTranslator::distort((int)Math::round(cameraX, 0), (int)Math::round(cameraY, 0));
+	//return CameraTranslator::distort((int)Math::round(cameraX, 0), (int)Math::round(cameraY, 0));
+	return CameraTranslator::CameraPosition((int)Math::round(cameraX, 0), (int)Math::round(cameraY, 0));
 }
 
 void CameraTranslator::setConstants(
