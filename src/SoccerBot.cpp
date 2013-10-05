@@ -385,7 +385,7 @@ void SoccerBot::setupVision() {
 
 	rearCameraTranslator->setConstants(
 		23.5f, 186800.0f, 140.1f,
-		-0.28313396671146590f, 0.49589037600405639, -0.70222022918250182f,
+		-0.28313396671146590f, 0.49589037600405639f, -0.70222022918250182f,
 		0.0f, Config::cameraWidth, Config::cameraHeight
 	);
 
