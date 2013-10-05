@@ -56,11 +56,11 @@ CameraTranslator::CameraPosition CameraTranslator::undistort(int x, int y) {
 		this->k2 * pow(r, 4) + 
 		this->k3 * pow(r, 6);
 
-	std::cout << "@ UNDISTORT " << x << "x" << y << " - dx: " << dx << ", dy: " << dy << ", r: " << r << ", multiplier: " << multipler << ", cameraWidth: " << cameraWidth << ", cameraHeight: " << cameraHeight << std::endl;
+	std::cout << "@ UNDISTORT " << x << "x" << y << " - dx: " << dx << ", dy: " << dy << ", r: " << r << ", multiplier: " << multipler << std::endl;
 
 	return CameraPosition(
-		(int)Math::round(dx * multipler, 0),
-		(int)Math::round(dy * multipler, 0)
+		(int)Math::round(x * multipler, 0),
+		(int)Math::round(y * multipler, 0)
 	);
 }
 
@@ -75,7 +75,7 @@ CameraTranslator::CameraPosition CameraTranslator::distort(int x, int y) {
 		this->k3 * pow(r, 6);
 
 	return CameraPosition(
-		(int)Math::round(dx / multipler, 0),
-		(int)Math::round(dy / multipler, 0)
+		(int)Math::round(x / multipler, 0),
+		(int)Math::round(y / multipler, 0)
 	);
 }
