@@ -378,15 +378,15 @@ void SoccerBot::setupVision() {
 	rearCameraTranslator = new CameraTranslator();
 
 	frontCameraTranslator->setConstants(
-		-66.1f, 245500.0f, 184.5f,
-		-0.20595885508962161f, 0.22994404138684341f, -0.26415340162084772f,
-		0.0f, Config::cameraWidth, Config::cameraHeight
+		-76.0f, 251000.0f, 185.6f,
+		-0.21940016544926860f, 0.28367303575278080f, -0.28619234423150669f,
+		4.3f, Config::cameraWidth, Config::cameraHeight
 	);
 
 	rearCameraTranslator->setConstants(
-		23.5f, 186800.0f, 140.1f,
-		-0.28313396671146590f, 0.49589037600405639f, -0.70222022918250182f,
-		0.0f, Config::cameraWidth, Config::cameraHeight
+		19.7f, 186000.0f, 141.1f,
+		-0.021270181223709137f, -0.61015608149019473f, 1.0218539545169596f,
+		10.4f, Config::cameraWidth, Config::cameraHeight
 	);
 
 	frontVision = new Vision(frontBlobber, frontCameraTranslator, Dir::FRONT, Config::cameraWidth, Config::cameraHeight);
