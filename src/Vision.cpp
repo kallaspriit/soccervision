@@ -494,7 +494,7 @@ float Vision::getDistance(int x, int y) {
 
 	CameraTranslator::WorldPosition pos = cameraTranslator->getWorldPosition(x, y);
 
-	return pos.distance;
+	return Math::max(pos.distance + Config::distanceCorrection, 0.01f);
 }
 
 float Vision::getAngle(int x, int y) {
