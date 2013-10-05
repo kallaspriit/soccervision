@@ -230,12 +230,12 @@ void DebugRenderer::renderGrid(unsigned char* image, Vision* vision, int width, 
 		px = Config::cameraWidth / 2 - 15;
 		py = pixelRow + 1;
 
-		Util::correctCameraPoint(px, py);
+		CameraTranslator::CameraPosition distorted = vision->getCameraTranslator()->distort(px, py);
 
-		if (lastTextY == -1 || lastTextY - py >= 10) {
-			canvas.drawText(px, py, Util::toString(distanceY), 128, 128, 128);
+		if (lastTextY == -1 || lastTextY - distorted.y >= 10) {
+			canvas.drawText(distorted.x, distorted.y, Util::toString(distanceY), 128, 128, 128);
 
-			lastTextY = py;
+			lastTextY = distorted.y;
 		}
 
 		/*for (distanceX = minDistanceX; distanceX < maxDistanceX; distanceX += stepX) {

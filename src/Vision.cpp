@@ -455,27 +455,6 @@ int Vision::getPixelsBelow(int startX, int startY, std::vector<std::string> vali
 	return validPixelCount;
 }
 
-float Vision::getDistance(int x, int y) {
-	/*int realX = x;
-	int realY = y;
-
-	Util::correctCameraPoint(realX, realY);
-
-	float distance;
-
-    if (dir == FRONT) {
-		distance = frontDistanceLookup.getValue((float)realY);
-    } else {
-        distance = rearDistanceLookup.getValue((float)realY);
-    }
-
-	return Math::max(distance + Config::distanceCorrection, 0.01f);*/
-
-	CameraTranslator::WorldPosition pos = cameraTranslator->getWorldPosition(x, y);
-
-	return pos.distance;
-}
-
 int Vision::getPixelRowAt(float distance) {
 	/*int pixelRow;
 
@@ -496,36 +475,27 @@ int Vision::getPixelRowAt(float distance) {
 Math::Point Vision::getScreenCoords(float distanceX, float distanceY) {
 	return Math::Point(0, 0);
 }
-/*float Vision::getHorizontalDistance(Dir dir, int x, int y) {
-	/float measurementPixels = 150;
-	float distance = getDistance(dir, x, y);
-	float distanceLookup = dir == FRONT ? frontAngleLookup.getValue(distance) : frontAngleLookup.getValue(distance);
-	float metersPerPixel = distanceLookup / measurementPixels;
-	float centerOffset = (float)(x - (Config::cameraWidth / 2));
-	float horizontalDistance = centerOffset * metersPerPixel;/
 
-	/std::cout << "! Solve horizontal distance for " << x << "x" << y << std::endl;
-	std::cout << " > Dir " << dir << std::endl;
-	std::cout << " > Distance " << distance << std::endl;
-	std::cout << " > Horizontal " << measurementPixels << " pixels meters: " << distanceLookup << std::endl;
-	std::cout << " > Test 2m lookup: " << frontAngleLookup.getValue(2.0f) << std::endl;
-	std::cout << " > Meters for pixel: " << metersPerPixel << std::endl;
-	std::cout << " > Center offset: " << centerOffset << std::endl;
-	std::cout << " > Horizontal distance: " << horizontalDistance << std::endl;/
-
-	//return horizontalDistance;
-
-	int realX = x;
+float Vision::getDistance(int x, int y) {
+	/*int realX = x;
 	int realY = y;
 
 	Util::correctCameraPoint(realX, realY);
 
-	float distance = getDistance(dir, realX, realY);
-	float centerOffset = (float)(realX - (Config::cameraWidth / 2));
-	float localAngle = distance / 686.0f;
+	float distance;
 
-	return Math::tan(localAngle) * (realY + 0.062);
-}*/
+    if (dir == FRONT) {
+		distance = frontDistanceLookup.getValue((float)realY);
+    } else {
+        distance = rearDistanceLookup.getValue((float)realY);
+    }
+
+	return Math::max(distance + Config::distanceCorrection, 0.01f);*/
+
+	CameraTranslator::WorldPosition pos = cameraTranslator->getWorldPosition(x, y);
+
+	return pos.distance;
+}
 
 float Vision::getAngle(int x, int y) {
 	/*int realX = x;
@@ -549,7 +519,17 @@ float Vision::getAngle(int x, int y) {
 
 	CameraTranslator::WorldPosition pos = cameraTranslator->getWorldPosition(x, y);
 
-	return pos.angle;
+	float angle = pos.angle;
+
+	if (dir == Dir::REAR) {
+		if (angle < 0.0f) {
+			angle += Math::PI;
+		} else {
+			angle -= Math::PI;
+		}
+	}
+
+	return angle;
 }
 
 Blobber::Color* Vision::getColorAt(int x, int y) {
