@@ -42,7 +42,10 @@ bool TestController::handleCommand(const Command& cmd) {
         handleTargetVectorCommand(cmd);
     } else if (cmd.name == "toggle-go") {
         handleToggleGoCommand();
-    } else if (cmd.name == "stop" ||cmd.name == "toggle-side") {
+    } else if (cmd.name == "stop") {
+        handleResetCommand();
+		setState("idle");
+    } else if (cmd.name == "toggle-side") {
         handleResetCommand();
     } else if (cmd.name == "drive-to" && cmd.parameters.size() == 3) {
         handleDriveToCommand(cmd);
