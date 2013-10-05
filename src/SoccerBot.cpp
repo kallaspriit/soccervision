@@ -390,12 +390,12 @@ void SoccerBot::setupVision() {
 		12.0f, Config::cameraWidth, Config::cameraHeight
 	);
 
-	for (int x = 1; x <= Config::cameraWidth; x += Config::cameraWidth / 3) {
-		for (int y = 1; y <= Config::cameraHeight; y+= Config::cameraHeight / 3) {
+	for (int x = 0; x <= Config::cameraWidth; x += Config::cameraWidth / 2) {
+		for (int y = 0; y <= Config::cameraHeight; y+= Config::cameraHeight / 2) {
 			CameraTranslator::CameraPosition distorted = rearCameraTranslator->distort(x, y);
 			CameraTranslator::CameraPosition undistorted = rearCameraTranslator->undistort(x, y);
 
-			std::cout << "@ " << x << "x" << y << " DISTORTED: " << distorted.x << "x" << distorted.y << " UNDISTORTED: " << undistorted.x << "x" << undistorted.y << std::endl;
+			//std::cout << "@ " << x << "x" << y << " DISTORTED: " << distorted.x << "x" << distorted.y << " UNDISTORTED: " << undistorted.x << "x" << undistorted.y << std::endl;
 		}
 	}
 
