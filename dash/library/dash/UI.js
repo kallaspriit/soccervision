@@ -378,8 +378,10 @@ Dash.UI.prototype.initKeyListeners = function() {
 };
 
 Dash.UI.prototype.initControls = function() {
-	var self = this;
-	
+	var self = this,
+		keyboardEnabled = $.cookie('keyboard-enabled'),
+		joystickEnabled = $.cookie('joystick-enabled');
+
 	$('#state-info-btn').click(function() {
 		self.showCurrentStateInfo();
 		
@@ -387,30 +389,40 @@ Dash.UI.prototype.initControls = function() {
 	}).bind('clickoutside', function() {
 		self.hideStateInfo();
 	});
-	
-	$('INPUT[name="keyboard-controller-enabled"]').iphoneStyle({
-		onChange: function(elem, enabled) {
-			self.keyboardController.enabled = enabled;
-		}
-	});
-	
-	$('INPUT[name="joystick-controller-enabled"]').iphoneStyle({
-		onChange: function(elem, enabled) {
-			self.joystickController.enabled = enabled;
-			
-			if (enabled) {
-				$('INPUT[name="keyboard-controller-enabled"]')
-					.removeAttr('checked')
-					.iphoneStyle('refresh')
-					.attr('disabled', 'disabled')
-					.iphoneStyle('refresh');
-			} else {
-				$('INPUT[name="keyboard-controller-enabled"]')
-					.removeAttr('disabled')
-					.iphoneStyle('refresh');
+
+	this.keyboardController.enabled = parseInt(keyboardEnabled) == 1 ? true : false;
+	this.joystickController.enabled = parseInt(joystickEnabled) == 1 ? true : false;
+
+	$('INPUT[name="keyboard-controller-enabled"]').prop('checked', this.keyboardController.enabled);
+	$('INPUT[name="joystick-controller-enabled"]').prop('checked',  this.joystickController.enabled);
+
+	window.setTimeout(function() {
+		$('INPUT[name="keyboard-controller-enabled"]').iphoneStyle({
+			onChange: function(elem, enabled) {
+				self.keyboardController.enabled = enabled;
+				$.cookie('keyboard-enabled', enabled ? 1 : 0);
 			}
-		}
-	});
+		});
+
+		$('INPUT[name="joystick-controller-enabled"]').iphoneStyle({
+			onChange: function(elem, enabled) {
+				self.joystickController.enabled = enabled;
+				$.cookie('joystick-enabled', enabled ? 1 : 0);
+
+				if (enabled) {
+					$('INPUT[name="keyboard-controller-enabled"]')
+						.removeAttr('checked')
+						.iphoneStyle('refresh')
+						.attr('disabled', 'disabled')
+						.iphoneStyle('refresh');
+				} else {
+					$('INPUT[name="keyboard-controller-enabled"]')
+						.removeAttr('disabled')
+						.iphoneStyle('refresh');
+				}
+			}
+		});
+	}, 200);
 
 	this.joystickController.onSelfEnable = function() {
 		$('INPUT[name="keyboard-controller-enabled"]')
@@ -1021,7 +1033,7 @@ Dash.UI.prototype.showTasksQueue = function(state) {
 	
 	wrap.empty();
 	
-	for (i = 0; i < state.tasks.length; i++) {
+	for (i = 0; i < state.robot.tasks.length; i++) {
 		wrap.append('<li><div class="percentage" style="width: ' + Math.ceil(state.tasks[i].percentage) + '%;"></div><div class="status">' + state.tasks[i].status + '<div></li>');
 	}
 };

@@ -32,6 +32,8 @@ bool ManualController::handleCommand(const Command& cmd) {
         handleSetDribblerCommand(cmd);
     } else if (cmd.name == "kick" && cmd.parameters.size() == 1) {
         handleKickCommand(cmd);
+    } else if (cmd.name == "reset-position") {
+		robot->setPosition(Config::fieldWidth / 2.0f, Config::fieldHeight / 2.0f, 0.0f);
     } else {
         return false;
     }
