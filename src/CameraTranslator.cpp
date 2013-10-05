@@ -68,7 +68,7 @@ CameraTranslator::CameraPosition CameraTranslator::undistort(int x, int y) {
 	float undistortedNormalizedY = y * multipler;
 
 	//std::cout << "@ UNDISTORT " << x << "x" << y << " - dx: " << dx << ", dy: " << dy << ", r: " << r << ", multiplier: " << multipler << std::endl;
-	std::cout << "@ UNDISTORT " << x << "x" << y << " - normalizedX: " << normalizedX << ", normalizedY: " << normalizedY << ", r: " << r << ", multiplier: " << multipler << std::endl;
+	//std::cout << "@ UNDISTORT " << x << "x" << y << " - normalizedX: " << normalizedX << ", normalizedY: " << normalizedY << ", r: " << r << ", multiplier: " << multipler << std::endl;
 
 	return CameraPosition(
 		(int)Math::round((undistortedNormalizedX + 1) * cameraWidth / 2.0f, 0),
