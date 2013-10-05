@@ -175,6 +175,7 @@
     <ClCompile Include="lib\libyuv\source\video_common.cc" />
     <ClCompile Include="src\BaseAI.cpp" />
     <ClCompile Include="src\Blobber.cpp" />
+    <ClCompile Include="src\CameraTranslator.cpp" />
     <ClCompile Include="src\Coilgun.cpp" />
     <ClCompile Include="src\Command.cpp" />
     <ClCompile Include="src\Communication.cpp" />
