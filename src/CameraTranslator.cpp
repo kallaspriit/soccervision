@@ -44,21 +44,27 @@ void CameraTranslator::setConstants(
 }
 
 CameraTranslator::CameraPosition CameraTranslator::undistort(int x, int y) {
-	double r = sqrt(pow(x - this->cameraWidth / 2.0, 2) + pow(y - this->cameraHeight / 2.0, 2));
+	double r = sqrt(pow((double)x - (double)this->cameraWidth / 2.0, 2) + pow((double)y - (double)this->cameraHeight / 2.0, 2));
 	float multipler = 1 + 
 		this->k1 * (float)pow(r, 2) +
 		this->k2 * (float)pow(r, 4) + 
 		this->k3 * (float)pow(r, 6);
 
-	return CameraPosition((int)Math::round(x * multipler, 0), (int)Math::round(y * multipler, 0));
+	return CameraPosition(
+		(int)Math::round(((float)x - (float)this->cameraWidth / 2.0f) * multipler, 0),
+		(int)Math::round(((float)y - (float)this->cameraHeight / 2.0f) * multipler, 0)
+	);
 }
 
 CameraTranslator::CameraPosition CameraTranslator::distort(int x, int y) {
-	double r = sqrt(pow(x - this->cameraWidth / 2.0, 2) + pow(y - this->cameraHeight / 2.0, 2));
+	double r = sqrt(pow((double)x - (double)this->cameraWidth / 2.0, 2) + pow((double)y - (double)this->cameraHeight / 2.0, 2));
 	float multipler = 1 + 
 		this->k1 * (float)pow(r, 2) +
 		this->k2 * (float)pow(r, 4) + 
 		this->k3 * (float)pow(r, 6);
 
-	return CameraPosition((int)Math::round(x / multipler, 0), (int)Math::round(y / multipler, 0));
+	return CameraPosition(
+		(int)Math::round(((float)x - (float)this->cameraWidth / 2.0f) / multipler, 0),
+		(int)Math::round(((float)y - (float)this->cameraHeight / 2.0f) / multipler, 0)
+	);
 }
