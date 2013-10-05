@@ -209,28 +209,27 @@ void DebugRenderer::renderGrid(unsigned char* image, Vision* vision, int width, 
 	float stepX = 0.1f;
 	float distanceY;
 	//float distanceX;
-	int pixelRow;
+	int x, y;
 	int counter = 0;
-	int px, py, lastTextY = -1;
+	int lastTextY = -1;
 	Math::Point screenCoords;
+	CameraTranslator::CameraPosition distorted;
+	CameraTranslator::CameraPosition undistorted;
 
 	for (distanceY = minDistanceY; distanceY < maxDistanceY; distanceY += stepY) {
-		pixelRow = vision->getPixelRowAt(distanceY);
+		y = vision->getPixelRowAt(distanceY);
 
-		for (int x = 0; x < Config::cameraWidth; x += 3) {
-			px = x;
-			py = pixelRow;
-
-			CameraTranslator::CameraPosition distorted = vision->getCameraTranslator()->distort(px, py);
+		for (x = 0; x < Config::cameraWidth; x += 3) {
+			distorted = vision->getCameraTranslator()->distort(x, y);
 
 			canvas.setPixelAt(distorted.x, distorted.y, 128, 128, 128);
+			canvas.setPixelAt(x, distorted.y, 0, 0, 0);
 		}
 
 		//px = 10 + (counter % 10) * 30;
-		px = Config::cameraWidth / 2 - 15;
-		py = pixelRow + 1;
+		x = Config::cameraWidth / 2 - 15;
 
-		CameraTranslator::CameraPosition distorted = vision->getCameraTranslator()->distort(px, py);
+		distorted = vision->getCameraTranslator()->distort(x, y + 1);
 
 		if (lastTextY == -1 || lastTextY - distorted.y >= 10) {
 			canvas.drawText(distorted.x, distorted.y, Util::toString(distanceY), 128, 128, 128);

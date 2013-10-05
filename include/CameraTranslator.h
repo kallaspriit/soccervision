@@ -7,6 +7,7 @@ class CameraTranslator {
 
 public:
 	struct WorldPosition {
+		WorldPosition() : dx(0.0f), dy(0.0f), distance(0.0f), angle(0.0f) {}
 		WorldPosition(float dx, float dy, float distance, float angle) : dx(dx), dy(dy), distance(distance), angle(angle) {}
 
 		float dx;
@@ -16,6 +17,7 @@ public:
 	};
 
 	struct CameraPosition {
+		CameraPosition() : x(0), y(0) {}
 		CameraPosition(int x, int y) : x(x), y(y) {}
 
 		int x;
