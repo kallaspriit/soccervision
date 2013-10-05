@@ -53,20 +53,26 @@ CameraTranslator::CameraPosition CameraTranslator::undistort(int x, int y) {
 		0.0f, 0.0f, 1.0f
 	);*/
 
-	float dx = (float)x - (float)this->cameraWidth / 2.0f;
-	float dy = (float)y - (float)this->cameraHeight / 2.0f;
+	//float dx = (float)x - (float)this->cameraWidth / 2.0f;
+	//float dy = (float)y - (float)this->cameraHeight / 2.0f;
+	float normalizedX = (2.0f * (float)x - (float)cameraWidth) / cameraWidth;
+	float normalizedY = (2.0f * (float)y - (float)cameraHeight) / cameraHeight;
 
-	float r = sqrt(pow(dx, 2) + pow(dy, 2));
+	float r = sqrt(pow(normalizedX, 2) + pow(normalizedY, 2));
 	float multipler = 1 + 
-		this->k1 * pow(r, 2) +
-		this->k2 * pow(r, 4) + 
-		this->k3 * pow(r, 6);
+		k1 * pow(r, 2) +
+		k2 * pow(r, 4) + 
+		k3 * pow(r, 6);
+
+	float undistortedNormalizedX = x * multipler;
+	float undistortedNormalizedY = y * multipler;
 
 	//std::cout << "@ UNDISTORT " << x << "x" << y << " - dx: " << dx << ", dy: " << dy << ", r: " << r << ", multiplier: " << multipler << std::endl;
+	std::cout << "@ UNDISTORT " << x << "x" << y << " - normalizedX: " << normalizedX << ", normalizedY: " << normalizedY << ", r: " << r << ", multiplier: " << multipler << std::endl;
 
 	return CameraPosition(
-		(int)Math::round(x * multipler, 0),
-		(int)Math::round(y * multipler, 0)
+		(int)Math::round((undistortedNormalizedX + 1) * cameraWidth / 2.0f, 0),
+		(int)Math::round((undistortedNormalizedY + 1) * cameraHeight / 2.0f, 0)
 	);
 }
 
