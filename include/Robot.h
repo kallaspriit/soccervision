@@ -17,8 +17,8 @@ class Dribbler;
 class Coilgun;
 class Task;
 class Communication;
+class OdometerLocalizer;
 
-// TODO Move localizer into controller
 class Robot : public Communication::Listener, public Command::Listener {
 
 public:
@@ -26,25 +26,18 @@ public:
     ~Robot();
 
     void setup();
-	void setupWheels();
-	void setupDribbler();
-	void setupCoilgun();
-	void setupOdometer();
-	void setupLocalizer();
 
 	void step(float dt, Vision::Results* visionResults);
 
-    inline const Math::Position getPosition() const { return Math::Position(x, y, orientation);  }
-    inline float getOrientation() const { return orientation; }
-	inline float getVelocity() { return velocity; }
-	inline float getLastVelocity() { return lastVelocity; }
-	inline bool isAccelerating() { return velocity > lastVelocity; }
-	inline bool isBraking() { return velocity < lastVelocity; }
-	inline bool usingAutostop() { return autostop; }
+    const Math::Position getPosition() const { return Math::Position(x, y, orientation);  }
+    float getOrientation() const { return orientation; }
+	float getVelocity() { return velocity; }
+	float getLastVelocity() { return lastVelocity; }
+	bool isAccelerating() { return velocity > lastVelocity; }
+	bool isBraking() { return velocity < lastVelocity; }
 	bool isStalled();
 	bool hasTasks() { return getCurrentTask() != NULL; }
 
-	inline void setAutostop(bool mode) { autostop = mode; }
     void setTargetDir(float x, float y, float omega = 0.0f);
     void setTargetDir(const Math::Angle& dir, float speed = 1.0f, float omega = 0.0f);
 	void setTargetOmega(float omega) { targetOmega = omega; }
@@ -72,6 +65,8 @@ public:
 	void handleCommunicationMessage(std::string message);
 	bool handleCommand(const Command& cmd);
 
+	std::string getJSON() { return json; }
+
 	Wheel* wheelFL;
     Wheel* wheelFR;
     Wheel* wheelRL;
@@ -79,8 +74,15 @@ public:
 	Dribbler* dribbler;
 	Coilgun* coilgun;
 	ParticleFilterLocalizer* robotLocalizer;
+	OdometerLocalizer* odometerLocalizer;
 	
 private:
+	void setupWheels();
+	void setupDribbler();
+	void setupCoilgun();
+	void setupOdometer();
+	void setupRobotLocalizer();
+	void setupOdometerLocalizer();
     void updateWheelSpeeds();
 	void updateMeasurements();
 
@@ -94,7 +96,6 @@ private:
     float lastDt;
     float totalTime;
 	bool coilgunCharged;
-	bool autostop;
 
     TaskQueue tasks;
 	Math::Vector targetDir;
@@ -106,6 +107,8 @@ private:
 	Odometer* odometer;
 	Odometer::Movement movement;
 	ParticleFilterLocalizer::Measurements measurements;
+
+	std::string json;
 };
 
 #endif // ROBOT_H

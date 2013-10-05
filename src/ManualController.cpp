@@ -15,8 +15,6 @@ void ManualController::reset() {
 }
 
 void ManualController::step(float dt, Vision::Results* visionResults) {
-	robot->setAutostop(false);
-
 	double time = Util::millitime();
 
 	// emergency stop

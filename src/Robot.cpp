@@ -3,6 +3,7 @@
 #include "Dribbler.h"
 #include "Coilgun.h"
 #include "Odometer.h"
+#include "OdometerLocalizer.h"
 #include "Util.h"
 #include "Tasks.h"
 #include "Config.h"
@@ -11,7 +12,7 @@
 #include <map>
 #include <sstream>
 
-Robot::Robot(Communication* com) : com(com), wheelFL(NULL), wheelFR(NULL), wheelRL(NULL), wheelRR(NULL), coilgun(NULL), robotLocalizer(NULL), odometer(NULL), visionResults(NULL) {
+Robot::Robot(Communication* com) : com(com), wheelFL(NULL), wheelFR(NULL), wheelRL(NULL), wheelRR(NULL), coilgun(NULL), robotLocalizer(NULL), odometerLocalizer(NULL), odometer(NULL), visionResults(NULL) {
     targetOmega = 0;
     targetDir = Math::Vector(0, 0);
    
@@ -22,7 +23,8 @@ Robot::Robot(Communication* com) : com(com), wheelFL(NULL), wheelFR(NULL), wheel
     lastCommandTime = -1;
 	frameTargetSpeedSet = false;
 	coilgunCharged = false;
-	autostop = true;
+
+	json = "null";
 }
 
 Robot::~Robot() {
@@ -34,6 +36,7 @@ Robot::~Robot() {
 	if (dribbler != NULL) delete dribbler; dribbler = NULL;
 	if (odometer != NULL) delete odometer; odometer = NULL;
 	if (robotLocalizer != NULL) delete robotLocalizer; robotLocalizer = NULL;
+	if (odometerLocalizer != NULL) delete odometerLocalizer; odometerLocalizer = NULL;
 
     while (tasks.size() > 0) {
         delete tasks.front();
@@ -43,7 +46,8 @@ Robot::~Robot() {
 }
 
 void Robot::setup() {
-	setupLocalizer();
+	setupRobotLocalizer();
+	setupOdometerLocalizer();
     setupWheels();
 	setupDribbler();
 	setupCoilgun();
@@ -52,7 +56,7 @@ void Robot::setup() {
 	setPosition(Config::fieldWidth / 2.0f, Config::fieldHeight / 2.0f, 0.0f);
 }
 
-void Robot::setupLocalizer() {
+void Robot::setupRobotLocalizer() {
 	robotLocalizer = new ParticleFilterLocalizer();
 
 	robotLocalizer->addLandmark(
@@ -66,6 +70,10 @@ void Robot::setupLocalizer() {
 		Config::fieldWidth,
 		Config::fieldHeight / 2.0f
 	);
+}
+
+void Robot::setupOdometerLocalizer() {
+	odometerLocalizer = new OdometerLocalizer();
 }
 
 void Robot::setupWheels() {
@@ -116,7 +124,6 @@ void Robot::step(float dt, Vision::Results* visionResults) {
 	coilgun->step(dt);
 	dribbler->step(dt);
 
-	// send target speeds
 	com->send("speeds:"
 		+ Util::toString((int)Math::round(wheelFL->getTargetSpeed())) + ":"
 		+ Util::toString((int)Math::round(wheelFR->getTargetSpeed())) + ":"
@@ -132,46 +139,29 @@ void Robot::step(float dt, Vision::Results* visionResults) {
 		wheelRR->getRealOmega()
 	);
 
-	// this is basically odometer localizer
-	/*orientation = Math::floatModulus(orientation + movement.omega * dt, Math::TWO_PI);
-
-    if (orientation < 0.0f) {
-        orientation += Math::TWO_PI;
-    }
-
-    float globalVelocityX = movement.velocityX * Math::cos(orientation) - movement.velocityY * Math::sin(orientation);
-    float globalVelocityY = movement.velocityX * Math::sin(orientation) + movement.velocityY * Math::cos(orientation);
-
-    x += globalVelocityX * dt;
-    y += globalVelocityY * dt;*/
-
-	// particle filter localizer
 	updateMeasurements();
 
 	robotLocalizer->update(measurements);
 	robotLocalizer->move(movement.velocityX, movement.velocityY, movement.omega, dt, measurements.size() == 0 ? true : false);
+	odometerLocalizer->move(movement.velocityX, movement.velocityY, movement.omega, dt);
 
-	Math::Position position = robotLocalizer->getPosition();
+	Math::Position localizerPosition = robotLocalizer->getPosition();
+	Math::Position odometerPosition = odometerLocalizer->getPosition();
 
-	x = position.x;
-	y = position.y;
-	orientation = position.orientation;
+	x = localizerPosition.x;
+	y = localizerPosition.y;
+	orientation = localizerPosition.orientation;
 
-    //std::cout << "Vx: " << movement.velocityX << "; Vy: " << movement.velocityY << "; omega: " << movement.omega << std::endl;
+	std::stringstream stream;
 
+	stream << "\"localizerX\":" << localizerPosition.x << ",";
+    stream << "\"localizerY\":" << localizerPosition.y << ",";
+    stream << "\"localizerOrientation\":" << localizerPosition.orientation << ",";
+	stream << "\"odometerX\":" << odometerPosition.x << ",";
+    stream << "\"odometerY\":" << odometerPosition.y << ",";
+    stream << "\"odometerOrientation\":" << odometerPosition.orientation;
 
-	// TODO Review this..
-	/*if (autostop) {
-		if (!frameTargetSpeedSet) {
-			stop();
-		}
-	} else if (lastCommandTime != -1 && Util::duration(lastCommandTime) > 0.5f) {
-        std::cout << "! No movement command for 500ms, stopping for safety" << std::endl;
-
-        stop();
-
-        lastCommandTime = -1.0f;
-    }*/
+	json = stream.str();
 
 	frameTargetSpeedSet = false;
 }
@@ -224,6 +214,7 @@ void Robot::setPosition(float x, float y, float orientation) {
 	this->orientation = Math::floatModulus(orientation, Math::TWO_PI);
 
 	robotLocalizer->setPosition(x, y, orientation);
+	odometerLocalizer->setPosition(x, y, orientation);
 }
 
 Task* Robot::getCurrentTask() {
