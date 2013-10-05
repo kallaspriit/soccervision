@@ -2,7 +2,8 @@
 #include "Maths.h"
 
 CameraTranslator::WorldPosition CameraTranslator::getWorldPosition(int cameraX, int cameraY) {
-	CameraTranslator::CameraPosition undistorted = CameraTranslator::undistort(cameraX, cameraY);
+	//CameraTranslator::CameraPosition undistorted = CameraTranslator::undistort(cameraX, cameraY);
+	CameraTranslator::CameraPosition undistorted = CameraTranslator::CameraPosition(cameraX, cameraY);
 
 	float pixelVerticalCoord = undistorted.y - this->horizon;
 	int pixelRight = undistorted.x - this->cameraWidth / 2;
