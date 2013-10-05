@@ -113,7 +113,7 @@ namespace Config {
 	const float robotWheelAngle4 = 135.0f;
 
 	// distance between two robot wheels diagonally
-	const float robotWheelOffset = 0.1170f;
+	const float robotWheelOffset = 0.1160f;
 
 	// radius of a wheel
 	const float robotWheelRadius = 0.034f;
