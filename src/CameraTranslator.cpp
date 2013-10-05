@@ -47,6 +47,12 @@ void CameraTranslator::setConstants(
 }
 
 CameraTranslator::CameraPosition CameraTranslator::undistort(int x, int y) {
+	/*Math::Matrix3x3 cameraMatrix(
+		1203.5723440938634f, 0.0f, 639.5f,
+		0.0f, 1203.5723440938634f, 511.5f,
+		0.0f, 0.0f, 1.0f
+	);*/
+
 	float dx = (float)x - (float)this->cameraWidth / 2.0f;
 	float dy = (float)y - (float)this->cameraHeight / 2.0f;
 
