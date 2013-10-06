@@ -19,10 +19,10 @@ public:
 
 	};
 
-	class IdleState : public State {
+	class ManualControlState : public State {
 
 	public:
-		IdleState(TestController* ai) : State(ai) {}
+		ManualControlState(TestController* ai) : State(ai) {}
 		void step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration);
 
 	};
@@ -69,7 +69,6 @@ public:
 
     bool handleCommand(const Command& cmd);
 	void handleTargetVectorCommand(const Command& cmd);
-	void handleToggleGoCommand();
 	void handleResetCommand();
 	void handleDriveToCommand(const Command& cmd);
     void step(float dt, Vision::Results* visionResults);
@@ -81,7 +80,7 @@ private:
 
 	DebouncedButton toggleGoBtn;
 	DebouncedButton resetBtn;
-	bool running;
+
 	float manualSpeedX;
 	float manualSpeedY;
 	float manualOmega;

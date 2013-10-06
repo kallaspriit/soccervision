@@ -25,7 +25,7 @@ namespace Config {
 	const int cameraHeight = 1024;
 
 	// default startup controller name
-	const std::string defaultController = "manual";
+	const std::string defaultController = "test";
 
 	// how big of a buffer to allocate for generating jpeg images
 	const int jpegBufferSize = 5000 * 1024;

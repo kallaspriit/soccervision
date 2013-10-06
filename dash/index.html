@@ -123,7 +123,7 @@
 				
 				<select name="controller-choice" id="controller-choice" class="live-only seperated" disabled="disabled">
 					<option value="">-- Select Controller --</option>
-					<option value="manual">Manual Controller</option>
+					<!--option value="manual">Manual Controller</option-->
 					<option value="test">Test Controller</option>
 					<option value="offensive-ai">Offensive AI</option>
 				</select>
@@ -134,6 +134,7 @@
 				<button id="kick-btn" class="live-only ctrl manual-ctrl" disabled="disabled">Kick</button>
 				
 				<!-- test controller -->
+				<button class="live-only ctrl test-ctrl send-cmd-btn" data-cmd="run-manual-control" disabled="disabled">Manual Control</button>
 				<button class="live-only ctrl test-ctrl send-cmd-btn" data-cmd="run-watch-ball" disabled="disabled">Watch Ball</button>
 				<button class="live-only ctrl test-ctrl send-cmd-btn" data-cmd="run-watch-goal" disabled="disabled">Watch Goal</button>
 				<button class="live-only ctrl test-ctrl send-cmd-btn" data-cmd="run-spin-around-dribbler" disabled="disabled">Spin around dribbler</button>
