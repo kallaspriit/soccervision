@@ -270,20 +270,32 @@ void Robot::updateBallLocalizer(Vision::Results* visionResults, float dt) {
 
 	visibleBalls.clear();
 
-	BallLocalizer::BallList frontBalls = ballLocalizer->extractBalls(
-		visionResults->front->balls,
-		x,
-		y,
-		orientation
-	);
-	BallLocalizer::BallList rearBalls = ballLocalizer->extractBalls(
-		visionResults->rear->balls,
-		x,
-		y,
-		orientation
-	);
-	BallLocalizer::BallList visibleBalls;
+	if (visionResults == NULL) {
+		return;
+	}
 
+	BallLocalizer::BallList frontBalls;
+	BallLocalizer::BallList rearBalls;
+	BallLocalizer::BallList visibleBalls;
+	
+	if (visionResults->front != NULL) {
+		frontBalls = ballLocalizer->extractBalls(
+			visionResults->front->balls,
+			x,
+			y,
+			orientation
+		);
+	}
+
+	if (visionResults->rear != NULL) {
+		rearBalls = ballLocalizer->extractBalls(
+			visionResults->rear->balls,
+			x,
+			y,
+			orientation
+		);
+	}
+	
 	visibleBalls.reserve(frontBalls.size() + rearBalls.size());
 	visibleBalls.insert(visibleBalls.end(), frontBalls.begin(), frontBalls.end());
 	visibleBalls.insert(visibleBalls.end(), rearBalls.begin(), rearBalls.end());
