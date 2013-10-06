@@ -422,7 +422,7 @@ Dash.UI.prototype.initControls = function() {
 				}
 			}
 		});
-	}, 200);
+	}, 500);
 
 	this.joystickController.onSelfEnable = function() {
 		$('INPUT[name="keyboard-controller-enabled"]')
@@ -837,6 +837,8 @@ Dash.UI.prototype.handleControllerMessage = function(controller) {
 
 Dash.UI.prototype.handleStateMessage = function(state) {
 	this.addState(state);
+
+	dash.socket.send('<get-state>'); // request for new state
 };
 
 Dash.UI.prototype.handleLogMessage = function(messages) {
@@ -943,9 +945,9 @@ Dash.UI.prototype.addState = function(state) {
 	}
 
 	this.states.push(state);
-	
+
+	// disable slider
 	this.stateSlider.slider('max', this.states.length);
-	
 	this.stateCountWrap.html(this.states.length);
 
 	if (state.playing) {
@@ -967,9 +969,9 @@ Dash.UI.prototype.showState = function(index) {
 	}
 	
 	var state = this.states[index];
-	
+
+	// disable slider
 	this.currentStateIndexWrap.val(index + 1);
-	
 	this.stateSlider.slider('val',index + 1);
 	
 	this.currentStateIndex = index;

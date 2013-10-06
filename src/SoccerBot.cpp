@@ -32,7 +32,7 @@ SoccerBot::SoccerBot() :
 	frontCameraTranslator(NULL), rearCameraTranslator(NULL),
 	gui(NULL), fpsCounter(NULL), visionResults(NULL), robot(NULL), activeController(NULL), server(NULL), com(NULL),
 	jpegBuffer(NULL), screenshotBufferFront(NULL), screenshotBufferRear(NULL),
-	running(false), debugVision(false), showGui(false), controllerRequested(false), frameRequested(false), useScreenshot(false),
+	running(false), debugVision(false), showGui(false), controllerRequested(false), stateRequested(false), frameRequested(false), useScreenshot(false),
 	dt(0.01666f), lastStepTime(0.0), totalTime(0.0f),
 	debugCameraDir(Dir::FRONT)
 {
@@ -262,9 +262,10 @@ void SoccerBot::run() {
 
 		robot->step(dt, visionResults);
 
-		if (server != NULL) {
-			// TODO Only broadcast if some client requested it
+		if (server != NULL && stateRequested) {
 			server->broadcast(Util::json("state", getStateJSON()));
+
+			stateRequested = false;
 		}
 
 		lastStepTime = time;
@@ -594,6 +595,8 @@ void SoccerBot::handleServerMessage(Server::Message* message) {
 				handleGetControllerCommand(message);
 			} else if (command.name == "set-controller" && command.parameters.size() == 1) {
 				handleSetControllerCommand(command.parameters, message);
+			} else if (command.name == "get-state") {
+				handleGetStateCommand();
 			} else if (command.name == "get-frame") {
 				handleGetFrameCommand();
 			} else if (command.name == "camera-choice" && command.parameters.size() == 1) {
@@ -635,6 +638,10 @@ void SoccerBot::handleSetControllerCommand(Command::Parameters parameters, Serve
 	}
 
 	message->respond(Util::json("controller", activeControllerName));
+}
+
+void SoccerBot::handleGetStateCommand() {
+	stateRequested = true;
 }
 
 void SoccerBot::handleGetFrameCommand() {

@@ -91,9 +91,9 @@ std::string TestController::getJSON() {
 	std::stringstream stream;
 
 	stream << "{";
-	stream << "\"Current state\": \"" << currentStateName << "\",";
-	stream << "\"State duration\": \"" << currentStateDuration << "\",";
-	stream << "\"Total duration\": \"" << totalDuration << "\",";
+	stream << "\"currentState\": \"" << currentStateName << "\",";
+	stream << "\"stateDuration\": \"" << currentStateDuration << "\",";
+	stream << "\"totalDuration\": \"" << totalDuration << "\",";
 	stream << "\"blueGoalDistance\": " << blueGoalDistance << ",";
 	stream << "\"yellowGoalDistance\": " << yellowGoalDistance;
 	stream << "}";

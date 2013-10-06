@@ -47,6 +47,7 @@ public:
 	void handleServerMessage(Server::Message* message);
 	void handleGetControllerCommand(Server::Message* message);
 	void handleSetControllerCommand(Command::Parameters parameters, Server::Message* message);
+	void handleGetStateCommand();
 	void handleGetFrameCommand();
 	void handleStreamChoiceCommand(Command::Parameters parameters);
 	void handleCameraChoiceCommand(Command::Parameters parameters);
@@ -97,6 +98,7 @@ private:
 
 	bool controllerRequested;
 	bool running;
+	bool stateRequested;
 	bool frameRequested;
 	bool useScreenshot;
 	float dt;
