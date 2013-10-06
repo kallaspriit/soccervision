@@ -2,16 +2,14 @@
 
 #include "Robot.h"
 #include "Command.h"
-#include "BallLocalizer.h"
 #include "Util.h"
 
-TestController::TestController(Robot* robot, Communication* com) : BaseAI(robot, com), manualSpeedX(0.0f), manualSpeedY(0.0f), manualOmega(0.0f), blueGoalDistance(0.0f), yellowGoalDistance(0.0f), ballLocalizer(NULL) {
+TestController::TestController(Robot* robot, Communication* com) : BaseAI(robot, com), manualSpeedX(0.0f), manualSpeedY(0.0f), manualOmega(0.0f), blueGoalDistance(0.0f), yellowGoalDistance(0.0f) {
 	setupStates();
-	setupBallLocalizer();
 };
 
 TestController::~TestController() {
-	if (ballLocalizer != NULL) delete ballLocalizer; ballLocalizer = NULL;
+	
 }
 
 void TestController::setupStates() {
@@ -22,13 +20,8 @@ void TestController::setupStates() {
 	states["drive-to"] = new DriveToState(this);
 }
 
-void TestController::setupBallLocalizer() {
-	ballLocalizer = new BallLocalizer();
-}
-
 void TestController::step(float dt, Vision::Results* visionResults) {
 	updateGoalDistances(visionResults);
-	updateBallLocalizer(visionResults);
 	
 	if (currentState == NULL) {
 		setState("manual-control");
@@ -96,10 +89,6 @@ void TestController::updateGoalDistances(Vision::Results* visionResults) {
 	
 	blueGoalDistance = blueGoal != NULL ? blueGoal->distance : 0.0f;
 	yellowGoalDistance = yellowGoal != NULL ? yellowGoal->distance : 0.0f;
-}
-
-void TestController::updateBallLocalizer(Vision::Results* visionResults) {
-
 }
 
 std::string TestController::getJSON() {

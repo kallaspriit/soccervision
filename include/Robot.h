@@ -18,6 +18,7 @@ class Coilgun;
 class Task;
 class Communication;
 class OdometerLocalizer;
+class BallLocalizer;
 
 class Robot : public Communication::Listener, public Command::Listener {
 
@@ -74,6 +75,7 @@ public:
 	Dribbler* dribbler;
 	Coilgun* coilgun;
 	ParticleFilterLocalizer* robotLocalizer;
+	BallLocalizer* ballLocalizer;
 	OdometerLocalizer* odometerLocalizer;
 	
 private:
@@ -83,8 +85,10 @@ private:
 	void setupOdometer();
 	void setupRobotLocalizer();
 	void setupOdometerLocalizer();
+	void setupBallLocalizer();
     void updateWheelSpeeds();
 	void updateMeasurements();
+	void updateBallLocalizer(Vision::Results* visionResults);
 
     float x;
     float y;

@@ -4,6 +4,7 @@
 #include "Coilgun.h"
 #include "Odometer.h"
 #include "OdometerLocalizer.h"
+#include "BallLocalizer.h"
 #include "Util.h"
 #include "Tasks.h"
 #include "Config.h"
@@ -12,7 +13,7 @@
 #include <map>
 #include <sstream>
 
-Robot::Robot(Communication* com) : com(com), wheelFL(NULL), wheelFR(NULL), wheelRL(NULL), wheelRR(NULL), coilgun(NULL), robotLocalizer(NULL), odometerLocalizer(NULL), odometer(NULL), visionResults(NULL) {
+Robot::Robot(Communication* com) : com(com), wheelFL(NULL), wheelFR(NULL), wheelRL(NULL), wheelRR(NULL), coilgun(NULL), robotLocalizer(NULL), odometerLocalizer(NULL), ballLocalizer(NULL), odometer(NULL), visionResults(NULL) {
     targetOmega = 0;
     targetDir = Math::Vector(0, 0);
    
@@ -35,6 +36,7 @@ Robot::~Robot() {
 	if (coilgun != NULL) delete coilgun; coilgun = NULL;
 	if (dribbler != NULL) delete dribbler; dribbler = NULL;
 	if (odometer != NULL) delete odometer; odometer = NULL;
+	if (ballLocalizer != NULL) delete ballLocalizer; ballLocalizer = NULL;
 	if (robotLocalizer != NULL) delete robotLocalizer; robotLocalizer = NULL;
 	if (odometerLocalizer != NULL) delete odometerLocalizer; odometerLocalizer = NULL;
 
@@ -47,6 +49,7 @@ Robot::~Robot() {
 
 void Robot::setup() {
 	setupRobotLocalizer();
+	setupBallLocalizer();
 	setupOdometerLocalizer();
     setupWheels();
 	setupDribbler();
@@ -70,6 +73,10 @@ void Robot::setupRobotLocalizer() {
 		Config::fieldWidth,
 		Config::fieldHeight / 2.0f
 	);
+}
+
+void Robot::setupBallLocalizer() {
+	ballLocalizer = new BallLocalizer();
 }
 
 void Robot::setupOdometerLocalizer() {
@@ -140,6 +147,7 @@ void Robot::step(float dt, Vision::Results* visionResults) {
 	);
 
 	updateMeasurements();
+	updateBallLocalizer(visionResults);
 
 	robotLocalizer->update(measurements);
 	robotLocalizer->move(movement.velocityX, movement.velocityY, movement.omega, dt, measurements.size() == 0 ? true : false);
@@ -357,6 +365,10 @@ void Robot::updateMeasurements() {
 	if (blueGoal != NULL) {
 		measurements["blue-center"] = ParticleFilterLocalizer::Measurement(blueGoal->distance, blueGoal->angle);
 	}
+}
+
+void Robot::updateBallLocalizer(Vision::Results* visionResults) {
+
 }
 
 void Robot::handleCommunicationMessage(std::string message) {
