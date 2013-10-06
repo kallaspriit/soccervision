@@ -6,6 +6,8 @@
 #include "DebouncedButton.h"
 #include "Config.h"
 
+class BallLocalizer;
+
 class TestController : public BaseAI {
 
 public:
@@ -66,6 +68,7 @@ public:
 
 	
 	TestController(Robot* robot, Communication* com);
+	~TestController();
 
     bool handleCommand(const Command& cmd);
 	void handleTargetVectorCommand(const Command& cmd);
@@ -76,7 +79,11 @@ public:
 
 private:
 	void setupStates();
+	void setupBallLocalizer();
 	void updateGoalDistances(Vision::Results* visionResults);
+	void updateBallLocalizer(Vision::Results* visionResults);
+
+	BallLocalizer* ballLocalizer;
 
 	DebouncedButton toggleGoBtn;
 	DebouncedButton resetBtn;
