@@ -165,6 +165,27 @@ namespace Config {
 	const float robotLocalizerDistanceNoise = 0.35f;
 	const float robotLocalizerAngleNoise = 0.2f; // ~~11deg
 
+	// maximum time object can be lost and still considered for updating its velocity
+	const double velocityUpdateMaxTime = 0.025;
+
+	// drag to apply to a rolling object
+	const float rollingDrag = 0.2f;
+
+	// object closer then this are considered to be the same object as observed before
+	const float objectIdentityDistanceThreshold = 0.25f;
+
+	// a localized ball will me marked for deletion after this amount of time of not being visible
+	const double objectMarkForRemovalThreshold = 0.3;
+
+	// object is purged from localization map if not seen for this amount of time
+	const double objectPurgeLifetime = 10.0f;
+
+	// maximum velocity of an object to be considered valid
+	const float objectMaxVelocity = 8.0f;
+
+	// how close to the field-of-view must the object be to be considered in view
+	const float objectFovCloseEnough = 0.5f;
+
 	// configuration filenames
 	const std::string blobberConfigFilename = "config/blobber.cfg";
 	const std::string frontDistanceLookupFilename = "config/distance-front.cfg";

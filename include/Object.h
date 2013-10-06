@@ -1,6 +1,8 @@
 #ifndef OBJECT_H
 #define OBJECT_H
 
+#include "Config.h"
+
 #include <vector>
 
 class Object {
@@ -10,10 +12,17 @@ public:
 	void copyFrom(const Object* other);
 	bool intersects(Object* other, int margin = 0) const;
 	bool contains(Object* other) const;
+	void updateVisible(float x, float y, float distance, float angle, float dt, float drag = Config::rollingDrag);
+    void updateInvisible(float dt, float drag = Config::rollingDrag);
+	void applyDrag(float drag, float dt);
+	void markForRemoval(float afterSeconds);
+    bool shouldBeRemoved();
 	Object* mergeWith(Object* other) const;
 
 	static std::vector<Object*> mergeOverlapping(const std::vector<Object*>& set, int margin = 0, bool requireSameType = false);
 
+	int id;
+	static int instances;
     int x;
     int y;
     int width;
@@ -21,8 +30,12 @@ public:
     int area;
     float distance;
     float angle;
+	float velocityX;
+	float velocityY;
     int type;
 	double lastSeenTime;
+	double removeTime;
+	bool visible;
 	bool behind;
 	bool processed;
 };

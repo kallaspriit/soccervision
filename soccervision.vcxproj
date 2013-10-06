@@ -88,6 +88,7 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="include\BallLocalizer.h" />
     <ClInclude Include="include\BaseAI.h" />
     <ClInclude Include="include\BaseCamera.h" />
     <ClInclude Include="include\Blobber.h" />
@@ -173,6 +174,7 @@
     <ClCompile Include="lib\libyuv\source\scale_argb.cc" />
     <ClCompile Include="lib\libyuv\source\scale_neon.cc" />
     <ClCompile Include="lib\libyuv\source\video_common.cc" />
+    <ClCompile Include="src\BallLocalizer.cpp" />
     <ClCompile Include="src\BaseAI.cpp" />
     <ClCompile Include="src\Blobber.cpp" />
     <ClCompile Include="src\CameraTranslator.cpp" />

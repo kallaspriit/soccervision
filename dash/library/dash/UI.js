@@ -833,6 +833,8 @@ Dash.UI.prototype.handleControllerMessage = function(controller) {
 			$(this).hide();
 		}
 	});
+
+	dash.socket.send('<get-state>');
 };
 
 Dash.UI.prototype.handleStateMessage = function(state) {
@@ -1041,7 +1043,7 @@ Dash.UI.prototype.showTasksQueue = function(state) {
 };
 
 Dash.UI.prototype.showStateStats = function(state) {
-	$('#time').html(Dash.Util.round(state.totalTime, 1) + 's / ' + Dash.Util.round(state.dt * 1000, 1) + 'ms / ' + state.fps + 'FPS');
+	$('#time').html(Dash.Util.round(state.totalTime, 1) + 's / ' + Dash.Util.round(state.dt * 1000, 1) + 'ms / ' + state.fps + 'FPS / ' + Math.round(this.rxCounter.getLastFPS()) + 'FPS');
 	//$('#load > SPAN').css('width', Math.ceil(state.load) + '%');
 	
 	if (state.gotBall) {
