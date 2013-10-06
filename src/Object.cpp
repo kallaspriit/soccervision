@@ -3,10 +3,7 @@
 #include "Maths.h"
 #include "Config.h"
 
-int Object::instances = 0;
-
-Object::Object(int x, int y, int width, int height, int area, float distance, float angle, int type, bool behind) : x(x), y(y), width(width), height(height), area(area), distance(distance), angle(angle), velocityX(0.0f), velocityY(0.0f), type(type), visible(true), behind(behind), processed(false), removeTime(-1.0) {
-	id = instances++;
+Object::Object(int x, int y, int width, int height, int area, float distance, float angle, int type, bool behind) : x(x), y(y), width(width), height(height), area(area), distance(distance), angle(angle), type(type), behind(behind), processed(false) {
 	lastSeenTime = Util::millitime();
 }
 
@@ -50,65 +47,6 @@ bool Object::contains(Object* other) const {
 	int by2 = other->y + other->height / 2;
 
 	return bx1 >= ax1 && bx2 <= ax2 && by1 >= ay1 && by2 <= ay2;
-}
-
-void Object::updateVisible(float newX, float newY, float newDistance, float newAngle, float dt, float drag) {
-    double currentTime = Util::millitime();
-    double timeSinceLastUpdate = currentTime - lastSeenTime;
-
-    if (timeSinceLastUpdate <= Config::velocityUpdateMaxTime) {
-        velocityX = (newX - x) / dt;
-        velocityY = (newY - y) / dt;
-    } else {
-        applyDrag(drag, dt);
-    }
-
-    x = newX;
-    y = newY;
-    distance = newDistance;
-    angle = newAngle;
-    lastSeenTime = currentTime;
-    removeTime = -1.0;
-    visible = true;
-}
-
-void Object::updateInvisible(float dt, float drag) {
-    x += velocityX * dt;
-    y += velocityY * dt;
-
-    applyDrag(drag, dt);
-
-    visible = false;
-}
-
-void Object::applyDrag(float drag, float dt) {
-    float xSign = velocityX > 0 ? 1.0f : -1.0f;
-    float ySign = velocityY > 0 ? 1.0f : -1.0f;
-    float stepDrag = drag * dt;
-
-    if (Math::abs(velocityX) > stepDrag) {
-        velocityX -= stepDrag * xSign;
-    } else {
-        velocityX = 0.0f;
-    }
-
-    if (Math::abs(velocityY) > stepDrag) {
-        velocityY -= stepDrag * ySign;
-    } else {
-        velocityY = 0.0f;
-    }
-}
-
-void Object::markForRemoval(float afterSeconds) {
-    /*if (removeTime == -1.0) {
-        return;
-    }*/
-
-    removeTime = Util::millitime() + afterSeconds;
-}
-
-bool Object::shouldBeRemoved() {
-    return removeTime != -1 && removeTime < Util::millitime();
 }
 
 Object* Object::mergeWith(Object* other) const {
