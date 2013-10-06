@@ -209,9 +209,33 @@ void Robot::step(float dt, Vision::Results* visionResults) {
     stream << "\"realOmega\":" << wheelRR->getRealOmega();
     stream << "},";
 
+	stream << "\"ballsRaw\": [";
+	
+	BallLocalizer::Ball* ball;
+	bool first = true;
+
+	for (BallLocalizer::BallListIt it = visibleBalls.begin(); it != visibleBalls.end(); it++) {
+		ball = *it;
+
+		if (!first) {
+            stream << ",";
+        } else {
+            first = false;
+        }
+
+		stream << "{";
+		stream << "\"x\": " << ball->x << ",";
+		stream << "\"y\": " << ball->y << ",";
+		stream << "\"velocityX\": " << ball->velocityX << ",";
+		stream << "\"velocityY\": " << ball->velocityY;
+		stream << "}";
+	}
+
+    stream << "],";
+
 	stream << "\"tasks\": [";
 
-    bool first = true;
+    first = true;
 
     for (TaskQueueIt it = tasks.begin(); it != tasks.end(); it++) {
         Task* task = *it;
