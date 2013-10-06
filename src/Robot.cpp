@@ -325,6 +325,8 @@ void Robot::updateBallLocalizer(Vision::Results* visionResults, float dt) {
 	visibleBalls.insert(visibleBalls.end(), rearBalls.begin(), rearBalls.end());
 
 	ballLocalizer->update(visibleBalls, cameraFOV, dt);
+
+	std::cout << "@ UP front: " << frontBalls.size() << ", rear: " << rearBalls.size() << ", merged: " << visibleBalls.size() << std::endl;
 }
 
 void Robot::setTargetDir(float x, float y, float omega) {
