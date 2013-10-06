@@ -159,7 +159,7 @@ void DebugRenderer::renderBrush(unsigned char* image, int x, int y, int radius, 
 	canvas.width = width;
 	canvas.height = height;
 
-	canvas.drawCircle(x, y, radius, 255, active ? 0 : 255, active ? 0 : 255);
+	canvas.drawCircle(x, y, radius, active ? 255 : 0, 0, active ? 0 : 255);
 }
 
 void DebugRenderer::renderObstructions(unsigned char* image, Obstruction obstruction, int width, int height) {

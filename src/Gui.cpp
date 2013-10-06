@@ -60,7 +60,9 @@ Gui::Gui(HINSTANCE instance, Blobber* blobberFront, Blobber* blobberRear, int wi
 		createButton(color->name, 20, 40 + i * 18, 160, 1);
 	}
 
-	createButton("Quit", Config::cameraWidth - 80, 20, 60, 2);
+	createButton("Clear all", 20 + 160 + 10, 20, 80, 2);
+
+	createButton("Quit", Config::cameraWidth - 80, 20, 60, 3);
 }
 
 Gui::~Gui() {
@@ -263,6 +265,9 @@ void Gui::onElementClick(Element* element) {
 				}
 			}
 		} else if (button->type == 2) {
+			blobberFront->clearColors();
+			blobberRear->clearColors();
+		} else if (button->type == 3) {
 			quitRequested = true;
 		}
 	}
@@ -341,8 +346,8 @@ void Gui::Button::draw(unsigned char* image, int imageWidth, int imageHeight) {
 		canvas.drawBox(x, y, getWidth(), getHeight(), 255, over ? 0 : 255, over ? 0 : 255);
 		canvas.drawText(x + 6, y + 4, text, 255, 255, 255);
 	} else {
-		canvas.drawBox(x, y, getWidth(), getHeight(), 255, over ? 0 : 255, over ? 0 : 255);
-		canvas.drawText(x + 6, y + 4, text, 255, over ? 0 : 255, over ? 0 : 255);
+		canvas.drawBox(x, y, getWidth(), getHeight(), over ? 255 : 0, over ? 0 : 0, over ? 0 : 255);
+		canvas.drawText(x + 6, y + 4, text, over ? 255 : 0, over ? 0 : 0, over ? 0 : 255);
 	}
 }
 
