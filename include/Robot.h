@@ -5,6 +5,7 @@
 #include "Config.h"
 #include "Odometer.h"
 #include "ParticleFilterLocalizer.h"
+#include "BallLocalizer.h"
 #include "Vision.h"
 #include "Tasks.h"
 #include "Communication.h"
@@ -18,7 +19,6 @@ class Coilgun;
 class Task;
 class Communication;
 class OdometerLocalizer;
-class BallLocalizer;
 
 class Robot : public Communication::Listener, public Command::Listener {
 
@@ -86,9 +86,10 @@ private:
 	void setupRobotLocalizer();
 	void setupOdometerLocalizer();
 	void setupBallLocalizer();
+	void setupCameraFOV();
     void updateWheelSpeeds();
 	void updateMeasurements();
-	void updateBallLocalizer(Vision::Results* visionResults);
+	void updateBallLocalizer(Vision::Results* visionResults, float dt);
 
     float x;
     float y;
@@ -105,12 +106,14 @@ private:
 	Math::Vector targetDir;
     float targetOmega;
 	bool frameTargetSpeedSet;
+	Math::Polygon cameraFOV;
 
 	Communication* com;
 	Vision::Results* visionResults;
 	Odometer* odometer;
 	Odometer::Movement movement;
 	ParticleFilterLocalizer::Measurements measurements;
+	BallLocalizer::BallList visibleBalls;
 
 	std::string json;
 };

@@ -23,6 +23,8 @@ namespace Config {
 	// camera resolution
 	const int cameraWidth = 1280;
 	const int cameraHeight = 1024;
+	const float cameraFovDistance = 5.0f;
+	const float cameraFovWidth = 8.0f;
 
 	// default startup controller name
 	const std::string defaultController = "test";

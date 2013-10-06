@@ -4,7 +4,6 @@
 #include "Coilgun.h"
 #include "Odometer.h"
 #include "OdometerLocalizer.h"
-#include "BallLocalizer.h"
 #include "Util.h"
 #include "Tasks.h"
 #include "Config.h"
@@ -48,6 +47,7 @@ Robot::~Robot() {
 }
 
 void Robot::setup() {
+	setupCameraFOV();
 	setupRobotLocalizer();
 	setupBallLocalizer();
 	setupOdometerLocalizer();
@@ -57,6 +57,20 @@ void Robot::setup() {
 	setupOdometer();
 
 	setPosition(Config::fieldWidth / 2.0f, Config::fieldHeight / 2.0f, 0.0f);
+}
+
+void Robot::setupCameraFOV() {
+	Math::PointList points;
+
+	points.push_back(Math::Point(0, 0));
+	points.push_back(Math::Point(Config::cameraFovDistance, -Config::cameraFovWidth / 2.0f));
+	points.push_back(Math::Point(Config::cameraFovDistance, Config::cameraFovWidth / 2.0f));
+	points.push_back(Math::Point(0, 0));
+	points.push_back(Math::Point(-Config::cameraFovDistance, -Config::cameraFovWidth / 2.0f));
+	points.push_back(Math::Point(-Config::cameraFovDistance, Config::cameraFovWidth / 2.0f));
+	points.push_back(Math::Point(0, 0));
+
+	cameraFOV = Math::Polygon(points);
 }
 
 void Robot::setupRobotLocalizer() {
@@ -123,6 +137,7 @@ void Robot::step(float dt, Vision::Results* visionResults) {
 
     handleTasks(dt);
     updateWheelSpeeds();
+    updateBallLocalizer(visionResults, dt);
 
     wheelFL->step(dt);
     wheelFR->step(dt);
@@ -147,7 +162,7 @@ void Robot::step(float dt, Vision::Results* visionResults) {
 	);
 
 	updateMeasurements();
-	updateBallLocalizer(visionResults);
+	updateBallLocalizer(visionResults, dt);
 
 	robotLocalizer->update(measurements);
 	robotLocalizer->move(movement.velocityX, movement.velocityY, movement.omega, dt, measurements.size() == 0 ? true : false);
@@ -219,6 +234,61 @@ void Robot::step(float dt, Vision::Results* visionResults) {
 	json = stream.str();
 
 	frameTargetSpeedSet = false;
+}
+
+void Robot::updateWheelSpeeds() {
+	Odometer::WheelSpeeds wheelSpeeds = odometer->calculateWheelSpeeds(targetDir.x, targetDir.y, targetOmega);
+
+	//std::cout << "! Updating wheel speeds: " << wheelSpeeds.FL << ", " << wheelSpeeds.FR << ", " << wheelSpeeds.RL << ", " << wheelSpeeds.RR << std::endl;
+
+	wheelFL->setTargetOmega(wheelSpeeds.FL);
+	wheelFR->setTargetOmega(wheelSpeeds.FR);
+    wheelRL->setTargetOmega(wheelSpeeds.RL);
+    wheelRR->setTargetOmega(wheelSpeeds.RR);
+}
+
+void Robot::updateMeasurements() {
+	measurements.clear();
+
+	Object* yellowGoal = visionResults->getLargestGoal(Side::YELLOW);
+	Object* blueGoal = visionResults->getLargestGoal(Side::BLUE);
+
+	if (yellowGoal != NULL) {
+		measurements["yellow-center"] = ParticleFilterLocalizer::Measurement(yellowGoal->distance, yellowGoal->angle);
+	}
+
+	if (blueGoal != NULL) {
+		measurements["blue-center"] = ParticleFilterLocalizer::Measurement(blueGoal->distance, blueGoal->angle);
+	}
+}
+
+void Robot::updateBallLocalizer(Vision::Results* visionResults, float dt) {
+	// delete balls from previous frame
+	for (BallLocalizer::BallListIt it = visibleBalls.begin(); it != visibleBalls.end(); it++) {
+		delete (*it);
+	}
+
+	visibleBalls.clear();
+
+	BallLocalizer::BallList frontBalls = ballLocalizer->extractBalls(
+		visionResults->front->balls,
+		x,
+		y,
+		orientation
+	);
+	BallLocalizer::BallList rearBalls = ballLocalizer->extractBalls(
+		visionResults->rear->balls,
+		x,
+		y,
+		orientation
+	);
+	BallLocalizer::BallList visibleBalls;
+
+	visibleBalls.reserve(frontBalls.size() + rearBalls.size());
+	visibleBalls.insert(visibleBalls.end(), frontBalls.begin(), frontBalls.end());
+	visibleBalls.insert(visibleBalls.end(), rearBalls.begin(), rearBalls.end());
+
+	ballLocalizer->update(visibleBalls, cameraFOV, dt);
 }
 
 void Robot::setTargetDir(float x, float y, float omega) {
@@ -339,36 +409,6 @@ void Robot::handleTasks(float dt) {
 
         handleTasks(dt);
     }
-}
-
-void Robot::updateWheelSpeeds() {
-	Odometer::WheelSpeeds wheelSpeeds = odometer->calculateWheelSpeeds(targetDir.x, targetDir.y, targetOmega);
-
-	//std::cout << "! Updating wheel speeds: " << wheelSpeeds.FL << ", " << wheelSpeeds.FR << ", " << wheelSpeeds.RL << ", " << wheelSpeeds.RR << std::endl;
-
-	wheelFL->setTargetOmega(wheelSpeeds.FL);
-	wheelFR->setTargetOmega(wheelSpeeds.FR);
-    wheelRL->setTargetOmega(wheelSpeeds.RL);
-    wheelRR->setTargetOmega(wheelSpeeds.RR);
-}
-
-void Robot::updateMeasurements() {
-	measurements.clear();
-
-	Object* yellowGoal = visionResults->getLargestGoal(Side::YELLOW);
-	Object* blueGoal = visionResults->getLargestGoal(Side::BLUE);
-
-	if (yellowGoal != NULL) {
-		measurements["yellow-center"] = ParticleFilterLocalizer::Measurement(yellowGoal->distance, yellowGoal->angle);
-	}
-
-	if (blueGoal != NULL) {
-		measurements["blue-center"] = ParticleFilterLocalizer::Measurement(blueGoal->distance, blueGoal->angle);
-	}
-}
-
-void Robot::updateBallLocalizer(Vision::Results* visionResults) {
-
 }
 
 void Robot::handleCommunicationMessage(std::string message) {

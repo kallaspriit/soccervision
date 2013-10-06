@@ -15,17 +15,17 @@ BallLocalizer::~BallLocalizer() {
 
 int BallLocalizer::Ball::instances = 0;
 
-BallLocalizer::Ball::Ball(float x, float y, float distance, float angle, float dt) {
+BallLocalizer::Ball::Ball(float px, float py) {
     id = instances++;
     createdTime = Util::millitime();
     updatedTime = createdTime;
-    removeTime = -1,
+    removeTime = -1.0,
     visible = true;
-
-    updateVisible(x, y, distance, angle, dt);
+	x = px;
+	y = py;
 }
 
-void BallLocalizer::Ball::updateVisible(float newX, float newY, float newDistance, float newAngle, float dt) {
+void BallLocalizer::Ball::updateVisible(float newX, float newY, float dt) {
     double currentTime = Util::millitime();
     double timeSinceLastUpdate = currentTime - updatedTime;
 
@@ -38,8 +38,6 @@ void BallLocalizer::Ball::updateVisible(float newX, float newY, float newDistanc
 
     x = newX;
     y = newY;
-    distance = newDistance;
-    angle = newAngle;
     updatedTime = currentTime;
     removeTime = -1;
     visible = true;
@@ -84,25 +82,45 @@ void BallLocalizer::Ball::applyDrag(float dt) {
     }
 }
 
-void BallLocalizer::update(Math::Position robotPosition, const BallList& visibleBalls, const Math::Polygon& cameraFOV, float dt) {
+BallLocalizer::BallList BallLocalizer::extractBalls(const ObjectList& sourceBalls, float robotX, float robotY, float robotOrientation) {
+	BallList balls;
+	Object* screenBall;
+	Ball* worldBall;
+
+	for (ObjectListItc it = sourceBalls.begin(); it != sourceBalls.end(); it++) {
+		screenBall = *it;
+
+		float globalAngle = Math::floatModulus(robotOrientation + screenBall->angle, Math::TWO_PI);
+        float ballX = robotX + Math::cos(globalAngle) * screenBall->distance;
+        float ballY = robotY + Math::sin(globalAngle) * screenBall->distance;
+
+		worldBall = new Ball(ballX, ballY);
+
+		balls.push_back(worldBall);
+	}
+
+	return balls;
+}
+
+void BallLocalizer::update(const BallList& visibleBalls, const Math::Polygon& cameraFOV, float dt) {
     Ball* closestBall;
     std::vector<int> handledBalls;
-    float globalAngle;
+    //float globalAngle;
 
     for (unsigned int i = 0; i < visibleBalls.size(); i++) {
-        globalAngle = Math::floatModulus(robotPosition.orientation + visibleBalls[i]->angle, Math::TWO_PI);
+        /*globalAngle = Math::floatModulus(robotPosition.orientation + visibleBalls[i]->angle, Math::TWO_PI);
 
         visibleBalls[i]->x = robotPosition.x + Math::cos(globalAngle) * visibleBalls[i]->distance;
-        visibleBalls[i]->y = robotPosition.y + Math::sin(globalAngle) * visibleBalls[i]->distance;
+        visibleBalls[i]->y = robotPosition.y + Math::sin(globalAngle) * visibleBalls[i]->distance;*/
 
         closestBall = getBallAround(visibleBalls[i]->x, visibleBalls[i]->y);
 
         if (closestBall != NULL) {
-            closestBall->updateVisible(visibleBalls[i]->x, visibleBalls[i]->y, visibleBalls[i]->distance, visibleBalls[i]->angle, dt);
+            closestBall->updateVisible(visibleBalls[i]->x, visibleBalls[i]->y, dt);
 
             handledBalls.push_back(closestBall->id);
         } else {
-            Ball* newBall = new Ball(visibleBalls[i]->x, visibleBalls[i]->y, visibleBalls[i]->distance, visibleBalls[i]->angle, dt);
+            Ball* newBall = new Ball(visibleBalls[i]->x, visibleBalls[i]->y);
 
             balls.push_back(newBall);
 
