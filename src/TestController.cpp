@@ -18,6 +18,7 @@ void TestController::setupStates() {
 	states["watch-goal"] = new WatchGoalState(this);
 	states["spin-around-dribbler"] = new SpinAroundDribblerState(this);
 	states["drive-to"] = new DriveToState(this);
+	states["fetch-ball-infront"] = new FetchBallInfrontState(this);
 }
 
 void TestController::step(float dt, Vision::Results* visionResults) {
@@ -155,4 +156,19 @@ void TestController::DriveToState::onEnter(Robot* robot) {
 
 void TestController::DriveToState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration) {
 	
+}
+
+void TestController::FetchBallInfrontState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration) {
+	Object* ball = visionResults->getClosestBall(true);
+	Object* goal = visionResults->getLargestGoal(Side::BLUE, true);
+
+	if (ball == NULL || goal == NULL) {
+		return;
+	}
+
+	float sideSpeed = ball->angle * 0.5f;
+	//float forwardSpeed = Math::max(Math::degToRad(30.0f) - Math::abs(ball->angle), 0.0f) * 1.0f;
+
+	robot->setTargetDir(0.0f, sideSpeed);
+	robot->lookAt(goal);
 }

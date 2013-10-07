@@ -54,11 +54,6 @@ Dash.Renderer.prototype.init = function() {
 		this.mouseY = e.offsetY;
 	}.bind(this));
 
-	$('#' + this.id).mousemove(function(e) {
-		this.mouseX = e.offsetX;
-		this.mouseY = e.offsetY;
-	}.bind(this));
-
 	$('#' + this.id).click(function(e) {
 		if (this.renderDriveTo) {
 			var mouseX = e.offsetX,
