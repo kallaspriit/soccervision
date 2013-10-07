@@ -73,8 +73,7 @@ ObjectList Vision::processBalls(Dir dir) {
 	ObjectList allBalls;
 	ObjectList filteredBalls;
 
-    float distance;
-    float angle;
+    Distance distance;
 
     Blobber::Blob* blob = blobber->getBlobs("ball");
 
@@ -86,13 +85,12 @@ ObjectList Vision::processBalls(Dir dir) {
 		}
 
 		distance = getDistance((int)blob->centerX, (int)blob->y2);
-        angle = getAngle((int)blob->centerX, (int)blob->y2);
 
 		if (dir == Dir::REAR) {
-			if (angle > 0.0f) {
-				angle -= Math::PI;
+			if (distance.angle > 0.0f) {
+				distance.angle -= Math::PI;
 			} else {
-				angle += Math::PI;
+				distance.angle += Math::PI;
 			}
 		}
 
@@ -110,8 +108,10 @@ ObjectList Vision::processBalls(Dir dir) {
             width,
             height,
             blob->area,
-            distance,
-            angle,
+			distance.straight,
+			distance.x,
+			distance.y,
+            distance.angle,
 			0,
 			dir == Dir::FRONT ? false : true
         );
@@ -135,8 +135,13 @@ ObjectList Vision::processBalls(Dir dir) {
 				ball->height += extendHeightBelow;
 			}
 
-			ball->distance = getDistance(ball->x, ball->y + ball->height / 2);
-			ball->angle = getAngle(ball->x, ball->y + ball->height / 2);
+			distance = getDistance(ball->x, ball->y + ball->height / 2);
+
+			ball->distance = distance.straight;
+			ball->distanceX = distance.x;
+			ball->distanceY = distance.y;
+			ball->angle = distance.angle;
+
 			filteredBalls.push_back(ball);
 		}
 	}
@@ -148,9 +153,8 @@ ObjectList Vision::processGoals(Dir dir) {
 	ObjectList allGoals;
 	ObjectList filteredGoals;
 
-    float distance;
-    float angle;
-
+    Distance distance;
+    
     for (int i = 0; i < 2; i++) {
         Blobber::Blob* blob = blobber->getBlobs(i == 0 ? "yellow-goal" : "blue-goal");
 
@@ -162,13 +166,12 @@ ObjectList Vision::processGoals(Dir dir) {
 			}
 
 			distance = getDistance((int)blob->centerX, (int)blob->y2);
-            angle = getAngle((int)blob->centerX, (int)blob->y2);
 
 			if (dir == Dir::REAR) {
-				if (angle > 0.0f) {
-					angle -= Math::PI;
+				if (distance.angle > 0.0f) {
+					distance.angle -= Math::PI;
 				} else {
-					angle += Math::PI;
+					distance.angle += Math::PI;
 				}
 			}
 
@@ -186,8 +189,10 @@ ObjectList Vision::processGoals(Dir dir) {
 				width,
 				height,
 				blob->area,
-				distance,
-				angle,
+				distance.straight,
+				distance.x,
+				distance.y,
+				distance.angle,
 				i == 0 ? Side::YELLOW : Side::BLUE,
 				dir == Dir::FRONT ? false : true
 			);
@@ -207,8 +212,13 @@ ObjectList Vision::processGoals(Dir dir) {
 		if (isValidGoal(goal, goal->type == 0 ? Side::YELLOW : Side::BLUE)) {
 			// TODO Extend the goal downwards using extended color / limited ammount horizontal too
 
-			goal->distance = getDistance(goal->x, goal->y + goal->height / 2);
-			goal->angle = getAngle(goal->x, goal->y + goal->height / 2);
+			distance = getDistance(goal->x, goal->y + goal->height / 2);
+
+			goal->distance = distance.straight;
+			goal->distanceX = distance.x;
+			goal->distanceY = distance.y;
+			goal->angle = distance.angle;
+
 			filteredGoals.push_back(goal);
 		}
 	}
@@ -476,7 +486,7 @@ Math::Point Vision::getScreenCoords(float distanceX, float distanceY) {
 	return Math::Point(0, 0);
 }
 
-float Vision::getDistance(int x, int y) {
+Vision::Distance Vision::getDistance(int x, int y) {
 	/*int realX = x;
 	int realY = y;
 
@@ -494,7 +504,7 @@ float Vision::getDistance(int x, int y) {
 
 	CameraTranslator::WorldPosition pos = cameraTranslator->getWorldPosition(x, y);
 
-	return Math::max(pos.distance + Config::distanceCorrection, 0.01f);
+	return Distance(pos.dx, pos.dy, pos.distance, pos.angle);
 }
 
 float Vision::getAngle(int x, int y) {
@@ -822,7 +832,7 @@ Vision::PathMetric Vision::getPathMetric(int x1, int y1, int x2, int y2, std::ve
 
 		if (y > Config::cameraHeight / 4) {
 			// sample less points near by and more in the distance
-			distance1 = getDistance(x, y);
+			distance1 = getDistance(x, y).straight;
 			distance2 = Math::round(distance1 / distanceStep, 0) * distanceStep;
 
 			if (Math::abs(distance1 - distance2) > distanceStep / 5.0f) {
@@ -1146,7 +1156,7 @@ float Vision::getColorDistance(std::string colorName, int x1, int y1, int x2, in
 					canvas.fillBox(x - 5, y - 5, 10, 10, 255, 0, 0);
 				}
 
-				return getDistance(x, y);
+				return getDistance(x, y).straight;
 			} else {
 				if (debug) {
 					//canvas.drawMarker(x, y, 200, 0, 0);

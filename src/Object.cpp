@@ -3,7 +3,7 @@
 #include "Maths.h"
 #include "Config.h"
 
-Object::Object(int x, int y, int width, int height, int area, float distance, float angle, int type, bool behind) : x(x), y(y), width(width), height(height), area(area), distance(distance), angle(angle), type(type), behind(behind), processed(false) {
+Object::Object(int x, int y, int width, int height, int area, float distance, float distanceX, float distanceY, float angle, int type, bool behind) : x(x), y(y), width(width), height(height), area(area), distance(distance), distanceX(distanceX), distanceY(distanceY), angle(angle), type(type), behind(behind), processed(false) {
 	lastSeenTime = Util::millitime();
 }
 

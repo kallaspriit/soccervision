@@ -43,6 +43,15 @@ public:
 			Vision::Result* rear;
 	};
 
+	struct Distance {
+		Distance(float x = 0.0f, float y = 0.0f, float straight = 0.0f, float angle = 0.0f) : x(x), y(y), straight(straight), angle(angle) {}
+
+		float x;
+		float y;
+		float straight;
+		float angle;
+	};
+
     Vision(Blobber* blobber, CameraTranslator* cameraTranslator, Dir dir, int width, int height);
     ~Vision();
 
@@ -55,7 +64,7 @@ public:
 	Dir getDir() { return dir; }
 	bool isBallInWay(ObjectList balls, int goalY);
 	float getBlackDistance() { return blackDistance; }
-    float getDistance(int x, int y);
+    Distance getDistance(int x, int y);
 	//float getHorizontalDistance(Dir dir, int x, int y);
     float getAngle(int x, int y);
 	int getPixelRowAt(float distance);
