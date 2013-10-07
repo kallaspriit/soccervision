@@ -38,6 +38,8 @@ void BallLocalizer::Ball::updateVisible(float newX, float newY, float dt) {
 		if (Math::abs(newVelocityX) <= Config::objectMaxVelocity && Math::abs(newVelocityY) <= Config::objectMaxVelocity) {
 			velocityX = newVelocityX;
 			velocityY = newVelocityY;
+		} else {
+			applyDrag(dt);
 		}
     } else {
         applyDrag(dt);
