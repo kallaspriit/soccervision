@@ -45,7 +45,7 @@ public:
     void update(const BallList& visibleBalls, const Math::Polygon& cameraFOV, float dt);
     Ball* getBallAround(float x, float y);
     void purge(const BallList& visibleBalls, const Math::Polygon& cameraFOV);
-    bool isValid(Ball* ball, const BallList& visibleBalls, const Math::Polygon& cameraFOV);
+    //bool isValid(Ball* ball, const BallList& visibleBalls, const Math::Polygon& cameraFOV);
 
 	BallList balls; 
 

@@ -186,7 +186,7 @@ namespace Config {
 	const float objectMaxVelocity = 8.0f;
 
 	// how close to the field-of-view must the object be to be considered in view
-	const float objectFovCloseEnough = 0.5f;
+	const float objectFovCloseEnough = 0.2f;
 
 	// configuration filenames
 	const std::string blobberConfigFilename = "config/blobber.cfg";

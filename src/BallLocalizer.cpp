@@ -54,7 +54,9 @@ void BallLocalizer::Ball::updateVisible(float newX, float newY, float dt) {
     
     visible = true;
 
-	if (resurrectable) {
+	if (removeTime != -1 && resurrectable) {
+		std::cout << "@ RESURRECT" << std::endl;
+
 		removeTime = -1;
 	}
 }
@@ -182,13 +184,61 @@ BallLocalizer::Ball* BallLocalizer::getBallAround(float x, float y) {
 }
 
 void BallLocalizer::purge(const BallList& visibleBalls, const Math::Polygon& cameraFOV) {
+	double currentTime = Util::millitime();
     BallList remainingBalls;
     Ball* ball;
+	bool keep;
 
     for (unsigned int i = 0; i < balls.size(); i++) {
         ball = balls[i];
+		keep = true;
 
-        if (!ball->shouldBeRemoved()) {
+		if (currentTime - ball->updatedTime > Config::objectPurgeLifetime) {
+			std::cout << "@ LIFETIME" << std::endl;
+
+			keep = false;
+		}
+
+		Math::Vector velocity(ball->velocityX, ball->velocityY);
+
+		if (velocity.getLength() > Config::objectMaxVelocity) {
+			std::cout << "@ VELOCITY" << std::endl;
+
+			keep = false;
+		}
+
+		if (cameraFOV.containsPoint(ball->x, ball->y)) {
+			ball->inFOV = true;
+
+			bool ballNear = false;
+
+			for (unsigned int i = 0; i < visibleBalls.size(); i++) {
+				float distance = Math::distanceBetween(ball->x, ball->y, visibleBalls[i]->x, visibleBalls[i]->y);
+
+				if (distance <= Config::objectFovCloseEnough) {
+					ballNear = true;
+
+					break;
+				}
+			}
+
+			if (!ballNear)  {
+				std::cout << "@ NO BALL NEAR" << std::endl;
+
+				keep = false;
+			}
+		} else {
+			ball->inFOV = false;	
+		}
+
+		if (keep) {
+			remainingBalls.push_back(ball);
+		} else {
+			delete ball;
+            ball = NULL;
+		}
+
+        /*if (!ball->shouldBeRemoved()) {
             remainingBalls.push_back(ball);
 
             if (!isValid(ball, visibleBalls, cameraFOV)) {
@@ -197,13 +247,13 @@ void BallLocalizer::purge(const BallList& visibleBalls, const Math::Polygon& cam
         } else {
             delete ball;
             ball = NULL;
-        }
+        }*/
     }
 
     balls = remainingBalls;
 }
 
-bool BallLocalizer::isValid(Ball* ball, const BallList& visibleBalls, const Math::Polygon& cameraFOV) {
+/*bool BallLocalizer::isValid(Ball* ball, const BallList& visibleBalls, const Math::Polygon& cameraFOV) {
     double currentTime = Util::millitime();
 
     if (currentTime - ball->updatedTime > Config::objectPurgeLifetime) {
@@ -252,4 +302,4 @@ bool BallLocalizer::isValid(Ball* ball, const BallList& visibleBalls, const Math
 	}
 
     return true;
-}
+}*/
