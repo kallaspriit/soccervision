@@ -88,6 +88,8 @@ private:
 	float blueGoalDistance;
 	float yellowGoalDistance;
 
+	double lastCommandTime;
+
 };
 
 #endif // TESTCONTROLLER_H

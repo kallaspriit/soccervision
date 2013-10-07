@@ -9,6 +9,9 @@ Dash.Config = {
 	robot: {
 		radius: 0.125
 	},
+	ball: {
+		radius: 0.021335
+	},
 	field: {
 		width: 4.5,
 		height: 3.0

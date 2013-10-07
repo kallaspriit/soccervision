@@ -112,6 +112,24 @@ Dash.Renderer.prototype.drawRobot = function(radius, color, x, y, orientation) {
 	this.c.restore();
 };
 
+Dash.Renderer.prototype.drawBalls = function(balls, color) {
+	for (var i = 0; i < balls.length; i++) {
+		this.drawBall(balls[i], color);
+	}
+};
+
+Dash.Renderer.prototype.drawBall = function(ball, color) {
+	this.c.save();
+
+	this.c.translate(ball.x, ball.y);
+	this.c.fillStyle = color;
+	this.c.beginPath();
+	this.c.arc(0, 0, dash.config.ball.radius, 0, Math.PI * 2, true);
+	this.c.closePath();
+	this.c.fill();
+
+	this.c.restore();
+};
 
 Dash.Renderer.prototype.drawIntersections = function(yellowDistance, blueDistance) {
 	this.c.save();
@@ -261,6 +279,11 @@ Dash.Renderer.prototype.renderState = function(state) {
 		state.robot.odometerX,
 		state.robot.odometerY,
 		state.robot.odometerOrientation
+	);
+
+	this.drawBalls(
+		state.robot.ballsRaw,
+		'#006'
 	);
 		
 	/*this.drawRobot(

@@ -4,7 +4,7 @@
 #include "Command.h"
 #include "Util.h"
 
-TestController::TestController(Robot* robot, Communication* com) : BaseAI(robot, com), manualSpeedX(0.0f), manualSpeedY(0.0f), manualOmega(0.0f), blueGoalDistance(0.0f), yellowGoalDistance(0.0f) {
+TestController::TestController(Robot* robot, Communication* com) : BaseAI(robot, com), manualSpeedX(0.0f), manualSpeedY(0.0f), manualOmega(0.0f), blueGoalDistance(0.0f), yellowGoalDistance(0.0f), lastCommandTime(0.0) {
 	setupStates();
 };
 
@@ -38,6 +38,8 @@ void TestController::step(float dt, Vision::Results* visionResults) {
 bool TestController::handleCommand(const Command& cmd) {
 	if (cmd.name == "target-vector" && cmd.parameters.size() == 3) {
         handleTargetVectorCommand(cmd);
+    } else if (cmd.name == "reset-position") {
+		robot->setPosition(Config::fieldWidth / 2.0f, Config::fieldHeight / 2.0f, 0.0f);
     } else if (cmd.name == "stop") {
         handleResetCommand();
 		setState("manual-control");
@@ -58,6 +60,8 @@ void TestController::handleTargetVectorCommand(const Command& cmd) {
     manualSpeedX = Util::toFloat(cmd.parameters[0]);
     manualSpeedY = Util::toFloat(cmd.parameters[1]);
     manualOmega = Util::toFloat(cmd.parameters[2]);
+
+	lastCommandTime = Util::millitime();
 }
 
 void TestController::handleResetCommand() {
@@ -106,7 +110,13 @@ std::string TestController::getJSON() {
 }
 
 void TestController::ManualControlState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration) {
-	robot->setTargetDir(ai->manualSpeedX, ai->manualSpeedY, ai->manualOmega);
+	double time = Util::millitime();
+
+	if (time - ai->lastCommandTime > 0.5) {
+		robot->setTargetDir(ai->manualSpeedX, ai->manualSpeedY, ai->manualOmega);
+	} else {
+		robot->stop();
+	}
 }
 
 void TestController::WatchBallState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration) {
