@@ -25,6 +25,7 @@ BallLocalizer::Ball::Ball(float px, float py) {
 	velocityX = 0.0f;
 	velocityY = 0.0f;
 	visible = true;
+	inFOV = true;
 }
 
 void BallLocalizer::Ball::updateVisible(float newX, float newY, float dt) {
@@ -212,6 +213,8 @@ bool BallLocalizer::isValid(Ball* ball, const BallList& visibleBalls, const Math
     // @TODO Remove if in either goal or out of bounds..
 
     if (cameraFOV.containsPoint(ball->x, ball->y)) {
+		ball->inFOV = true;
+
         bool ballNear = false;
         float distance;
 
@@ -228,7 +231,9 @@ bool BallLocalizer::isValid(Ball* ball, const BallList& visibleBalls, const Math
         if (!ballNear)  {
             return false;
         }
-    }
+    } else {
+		ball->inFOV = false;	
+	}
 
     return true;
 }

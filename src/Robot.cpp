@@ -474,7 +474,8 @@ void Robot::debugBallList(std::string name, std::stringstream& stream, BallLocal
 		stream << "\"createdTime\": " << ball->createdTime << ",";
 		stream << "\"updatedTime\": " << ball->updatedTime << ",";
 		stream << "\"shouldBeRemoved\": " << (ball->shouldBeRemoved() ? "true" : "false") << ",";
-		stream << "\"visible\": " << (ball->visible ? "true" : "false");
+		stream << "\"visible\": " << (ball->visible ? "true" : "false") << ",";
+		stream << "\"inFOV\": " << (ball->inFOV ? "true" : "false");
 		stream << "}";
 	}
 
