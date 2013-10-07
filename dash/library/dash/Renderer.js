@@ -129,6 +129,8 @@ Dash.Renderer.prototype.drawBall = function(ball, color, radius) {
 
 	if (ball.shouldBeRemoved) {
 		color = '#000';
+	} else if (ball.inFOV) {
+		color = '#F00';
 	}
 
 	this.c.save();

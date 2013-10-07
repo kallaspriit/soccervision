@@ -63,9 +63,9 @@ void BallLocalizer::Ball::updateInvisible(float dt) {
 }
 
 void BallLocalizer::Ball::markForRemoval(double afterSeconds) {
-    if (removeTime == -1) {
+    /*if (removeTime == -1) {
         return;
-    }
+    }*/
 
     removeTime = Util::millitime() + afterSeconds;
 }
