@@ -166,7 +166,7 @@ void TestController::FetchBallInfrontState::step(float dt, Vision::Results* visi
 		return;
 	}
 
-	float sideSpeed = ball->angle * 0.5f;
+	float sideSpeed = ball->angle * 2.0f;
 	//float forwardSpeed = Math::max(Math::degToRad(30.0f) - Math::abs(ball->angle), 0.0f) * 1.0f;
 
 	robot->setTargetDir(0.0f, sideSpeed);
