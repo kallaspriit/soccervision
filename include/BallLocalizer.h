@@ -46,8 +46,7 @@ public:
     void purge(const BallList& visibleBalls, const Math::Polygon& cameraFOV);
     bool isValid(Ball* ball, const BallList& visibleBalls, const Math::Polygon& cameraFOV);
 
-private:
-    BallList balls;
+	BallList balls; 
 
 };
 

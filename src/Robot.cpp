@@ -233,6 +233,29 @@ void Robot::step(float dt, Vision::Results* visionResults) {
 
     stream << "],";
 
+	stream << "\"ballsFiltered\": [";
+	
+	first = true;
+
+	for (BallLocalizer::BallListIt it = ballLocalizer->balls.begin(); it != ballLocalizer->balls.end(); it++) {
+		ball = *it;
+
+		if (!first) {
+            stream << ",";
+        } else {
+            first = false;
+        }
+
+		stream << "{";
+		stream << "\"x\": " << ball->x << ",";
+		stream << "\"y\": " << ball->y << ",";
+		stream << "\"velocityX\": " << ball->velocityX << ",";
+		stream << "\"velocityY\": " << ball->velocityY;
+		stream << "}";
+	}
+
+    stream << "],";
+
 	stream << "\"tasks\": [";
 
     first = true;

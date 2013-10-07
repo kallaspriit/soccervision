@@ -1038,7 +1038,7 @@ Dash.UI.prototype.showTasksQueue = function(state) {
 	wrap.empty();
 	
 	for (i = 0; i < state.robot.tasks.length; i++) {
-		wrap.append('<li><div class="percentage" style="width: ' + Math.ceil(state.tasks[i].percentage) + '%;"></div><div class="status">' + state.tasks[i].status + '<div></li>');
+		wrap.append('<li><div class="percentage" style="width: ' + Math.ceil(state.robot.tasks[i].percentage) + '%;"></div><div class="status">' + state.robot.tasks[i].status + '<div></li>');
 	}
 };
 
