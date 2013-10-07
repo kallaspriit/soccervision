@@ -32,8 +32,13 @@ void BallLocalizer::Ball::updateVisible(float newX, float newY, float dt) {
     double timeSinceLastUpdate = currentTime - updatedTime;
 
     if (timeSinceLastUpdate <= Config::velocityUpdateMaxTime) {
-        velocityX = (newX - x) / dt;
-        velocityY = (newY - y) / dt;
+		float newVelocityX = (newX - x) / dt;
+		float newVelocityY = (newY - y) / dt;
+
+		if (Math::abs(newVelocityX) <= Config::objectMaxVelocity && Math::abs(newVelocityY) <= Config::objectMaxVelocity) {
+			velocityX = newVelocityX;
+			velocityY = newVelocityY;
+		}
     } else {
         applyDrag(dt);
     }
