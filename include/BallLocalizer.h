@@ -26,6 +26,7 @@ public:
         float velocityY;
         bool visible;
 		bool inFOV;
+		bool resurrectable;
 
     private:
         static int instances;

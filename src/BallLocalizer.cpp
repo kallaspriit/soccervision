@@ -27,6 +27,7 @@ BallLocalizer::Ball::Ball(float px, float py) {
 	velocityY = 0.0f;
 	visible = true;
 	inFOV = true;
+	resurrectable = true;
 }
 
 void BallLocalizer::Ball::updateVisible(float newX, float newY, float dt) {
@@ -50,8 +51,12 @@ void BallLocalizer::Ball::updateVisible(float newX, float newY, float dt) {
     x = newX;
     y = newY;
     updatedTime = currentTime;
-    removeTime = -1;
+    
     visible = true;
+
+	if (resurrectable) {
+		removeTime = -1;
+	}
 }
 
 void BallLocalizer::Ball::updateInvisible(float dt) {
@@ -204,6 +209,8 @@ bool BallLocalizer::isValid(Ball* ball, const BallList& visibleBalls, const Math
     if (currentTime - ball->updatedTime > Config::objectPurgeLifetime) {
 		std::cout << "@ LIFETIME" << std::endl;
 
+		ball->resurrectable = false;
+
         return false;
     }
 
@@ -211,6 +218,8 @@ bool BallLocalizer::isValid(Ball* ball, const BallList& visibleBalls, const Math
 
     if (velocity.getLength() > Config::objectMaxVelocity) {
 		std::cout << "@ VELOCITY" << std::endl;
+
+		ball->resurrectable = false;
 
         return false;
     }
