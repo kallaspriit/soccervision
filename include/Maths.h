@@ -299,6 +299,7 @@ struct Point {
 };
 
 typedef std::vector<Point> PointList;
+typedef std::vector<Point>::iterator PointListIt;
 
 class Polygon {
     public:
@@ -311,6 +312,7 @@ class Polygon {
         Polygon getTranslated(float dx, float dy) const;
         Polygon getScaled(float sx, float sy) const;
         Polygon getRotated(float angle) const;
+		std::string toJSON();
 
     private:
         PointList points;

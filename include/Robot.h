@@ -115,6 +115,7 @@ private:
 	Odometer::Movement movement;
 	ParticleFilterLocalizer::Measurements measurements;
 	BallLocalizer::BallList visibleBalls;
+	Math::Polygon currentCameraFOV;
 
 	std::string json;
 };

@@ -119,22 +119,26 @@ Dash.Renderer.prototype.drawBalls = function(balls, color, radius) {
 };
 
 Dash.Renderer.prototype.drawBall = function(ball, color, radius) {
+	if (!radius) {
+		radius = dash.config.ball.radius;
+	}
+
+	if (ball.visible) {
+		radius *= 2;
+	}
+
+	if (ball.shouldBeRemoved) {
+		color = '#000';
+	}
+
 	this.c.save();
 
 	this.c.translate(ball.x, ball.y);
-	this.c.fillStyle = ball.shouldBeRemoved ? "#000" : color;
+	this.c.fillStyle = color;
 	this.c.beginPath();
 	this.c.arc(0, 0, radius || dash.config.ball.radius, 0, Math.PI * 2, true);
 	this.c.closePath();
 	this.c.fill();
-
-	if (ball.visible) {
-		this.c.beginPath();
-		this.c.strokeStyle
-		this.c.arc(0, 0, radius || dash.config.ball.radius * 3, 0, Math.PI * 2, true);
-		this.c.closePath();
-		this.c.stroke();
-	}
 
 	this.c.restore();
 };

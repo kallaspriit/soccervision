@@ -212,6 +212,8 @@ void Robot::step(float dt, Vision::Results* visionResults) {
 	debugBallList("ballsRaw", stream, visibleBalls);
 	debugBallList("ballsFiltered", stream, ballLocalizer->balls);
 
+	stream << "\"cameraFOV\":" << currentCameraFOV.toJSON() << ",";
+
 	stream << "\"tasks\": [";
 
     bool first = true;
@@ -302,7 +304,7 @@ void Robot::updateBallLocalizer(Vision::Results* visionResults, float dt) {
 	visibleBalls.insert(visibleBalls.end(), frontBalls.begin(), frontBalls.end());
 	visibleBalls.insert(visibleBalls.end(), rearBalls.begin(), rearBalls.end());
 
-	Math::Polygon currentCameraFOV = cameraFOV.getRotated(orientation).getTranslated(x, y);
+	currentCameraFOV = cameraFOV.getRotated(orientation).getTranslated(x, y);
 
 	ballLocalizer->update(visibleBalls, currentCameraFOV, dt);
 
