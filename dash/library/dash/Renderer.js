@@ -119,6 +119,11 @@ Dash.Renderer.prototype.drawBalls = function(balls, color, radius) {
 };
 
 Dash.Renderer.prototype.drawBall = function(ball, color, radius) {
+	this.c.save();
+
+	this.c.translate(ball.x, ball.y);
+	this.c.fillStyle = color;
+
 	if (!radius) {
 		radius = dash.config.ball.radius;
 	}
@@ -127,16 +132,10 @@ Dash.Renderer.prototype.drawBall = function(ball, color, radius) {
 		radius *= 2;
 	}
 
-	if (ball.shouldBeRemoved) {
-		color = '#000';
-	} else if (ball.inFOV) {
+	if (ball.inFOV) {
 		color = '#F00';
 	}
-
-	this.c.save();
-
-	this.c.translate(ball.x, ball.y);
-	this.c.fillStyle = color;
+	
 	this.c.beginPath();
 	this.c.arc(0, 0, radius || dash.config.ball.radius, 0, Math.PI * 2, true);
 	this.c.closePath();
@@ -324,11 +323,11 @@ Dash.Renderer.prototype.renderState = function(state) {
 		dash.config.ball.radius * 2
 	);
 
-	this.drawBalls(
+	/*this.drawBalls(
 		state.robot.ballsFiltered,
 		'#FFA500',
 		dash.config.ball.radius
-	);
+	);*/
 
 	/*this.drawRobot(
 		dash.config.robot.radius,
