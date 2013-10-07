@@ -112,7 +112,7 @@ std::string TestController::getJSON() {
 void TestController::ManualControlState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration) {
 	double time = Util::millitime();
 
-	if (time - ai->lastCommandTime > 0.5) {
+	if (time - ai->lastCommandTime < 0.5) {
 		robot->setTargetDir(ai->manualSpeedX, ai->manualSpeedY, ai->manualOmega);
 	} else {
 		robot->stop();
