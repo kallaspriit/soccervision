@@ -24,8 +24,6 @@ public:
         float y;
         float velocityX;
         float velocityY;
-        float elasticity;
-        float radius;
         bool visible;
     private:
         static int instances;

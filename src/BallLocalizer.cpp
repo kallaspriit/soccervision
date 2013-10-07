@@ -20,9 +20,11 @@ BallLocalizer::Ball::Ball(float px, float py) {
     createdTime = Util::millitime();
     updatedTime = createdTime;
     removeTime = -1.0,
-    visible = true;
 	x = px;
 	y = py;
+	velocityX = 0.0f;
+	velocityY = 0.0f;
+	visible = true;
 }
 
 void BallLocalizer::Ball::updateVisible(float newX, float newY, float dt) {
