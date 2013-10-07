@@ -90,6 +90,7 @@ private:
     void updateWheelSpeeds();
 	void updateMeasurements();
 	void updateBallLocalizer(Vision::Results* visionResults, float dt);
+	void debugBallList(std::string name, std::stringstream& stream, BallLocalizer::BallList balls);
 
     float x;
     float y;

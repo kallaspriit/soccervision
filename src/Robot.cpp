@@ -209,56 +209,12 @@ void Robot::step(float dt, Vision::Results* visionResults) {
     stream << "\"realOmega\":" << wheelRR->getRealOmega();
     stream << "},";
 
-	stream << "\"ballsRaw\": [";
-	
-	BallLocalizer::Ball* ball;
-	bool first = true;
-
-	for (BallLocalizer::BallListIt it = visibleBalls.begin(); it != visibleBalls.end(); it++) {
-		ball = *it;
-
-		if (!first) {
-            stream << ",";
-        } else {
-            first = false;
-        }
-
-		stream << "{";
-		stream << "\"x\": " << ball->x << ",";
-		stream << "\"y\": " << ball->y << ",";
-		stream << "\"velocityX\": " << ball->velocityX << ",";
-		stream << "\"velocityY\": " << ball->velocityY;
-		stream << "}";
-	}
-
-    stream << "],";
-
-	stream << "\"ballsFiltered\": [";
-	
-	first = true;
-
-	for (BallLocalizer::BallListIt it = ballLocalizer->balls.begin(); it != ballLocalizer->balls.end(); it++) {
-		ball = *it;
-
-		if (!first) {
-            stream << ",";
-        } else {
-            first = false;
-        }
-
-		stream << "{";
-		stream << "\"x\": " << ball->x << ",";
-		stream << "\"y\": " << ball->y << ",";
-		stream << "\"velocityX\": " << ball->velocityX << ",";
-		stream << "\"velocityY\": " << ball->velocityY;
-		stream << "}";
-	}
-
-    stream << "],";
+	debugBallList("ballsRaw", stream, visibleBalls);
+	debugBallList("ballsFiltered", stream, ballLocalizer->balls);
 
 	stream << "\"tasks\": [";
 
-    first = true;
+    bool first = true;
 
     for (TaskQueueIt it = tasks.begin(); it != tasks.end(); it++) {
         Task* task = *it;
@@ -346,7 +302,9 @@ void Robot::updateBallLocalizer(Vision::Results* visionResults, float dt) {
 	visibleBalls.insert(visibleBalls.end(), frontBalls.begin(), frontBalls.end());
 	visibleBalls.insert(visibleBalls.end(), rearBalls.begin(), rearBalls.end());
 
-	ballLocalizer->update(visibleBalls, cameraFOV, dt);
+	Math::Polygon currentCameraFOV = cameraFOV.getRotated(orientation).getTranslated(x, y);
+
+	ballLocalizer->update(visibleBalls, currentCameraFOV, dt);
 
 	//std::cout << "@ UP front: " << frontBalls.size() << ", rear: " << rearBalls.size() << ", merged: " << visibleBalls.size() << std::endl;
 }
@@ -489,4 +447,34 @@ bool Robot::handleCommand(const Command& cmd) {
 	if (dribbler->handleCommand(cmd)) handled = true;
 
 	return handled;
+}
+
+void Robot::debugBallList(std::string name, std::stringstream& stream, BallLocalizer::BallList balls) {
+	BallLocalizer::Ball* ball;
+	bool first = true;
+
+	stream << "\"" << name << "\": [";
+
+	for (BallLocalizer::BallListIt it = balls.begin(); it != balls.end(); it++) {
+		ball = *it;
+
+		if (!first) {
+            stream << ",";
+        } else {
+            first = false;
+        }
+
+		stream << "{";
+		stream << "\"x\": " << ball->x << ",";
+		stream << "\"y\": " << ball->y << ",";
+		stream << "\"velocityX\": " << ball->velocityX << ",";
+		stream << "\"velocityY\": " << ball->velocityY << ",";
+		stream << "\"createdTime\": " << ball->createdTime << ",";
+		stream << "\"updatedTime\": " << ball->updatedTime << ",";
+		stream << "\"shouldBeRemoved\": " << (ball->shouldBeRemoved() ? "true" : "false") << ",";
+		stream << "\"visible\": " << (ball->visible ? "true" : "false");
+		stream << "}";
+	}
+
+    stream << "],";
 }

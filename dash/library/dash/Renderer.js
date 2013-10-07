@@ -112,21 +112,29 @@ Dash.Renderer.prototype.drawRobot = function(radius, color, x, y, orientation) {
 	this.c.restore();
 };
 
-Dash.Renderer.prototype.drawBalls = function(balls, color) {
+Dash.Renderer.prototype.drawBalls = function(balls, color, radius) {
 	for (var i = 0; i < balls.length; i++) {
-		this.drawBall(balls[i], color);
+		this.drawBall(balls[i], color, radius);
 	}
 };
 
-Dash.Renderer.prototype.drawBall = function(ball, color) {
+Dash.Renderer.prototype.drawBall = function(ball, color, radius) {
 	this.c.save();
 
 	this.c.translate(ball.x, ball.y);
-	this.c.fillStyle = color;
+	this.c.fillStyle = ball.shouldBeRemoved ? "#000" : color;
 	this.c.beginPath();
-	this.c.arc(0, 0, dash.config.ball.radius, 0, Math.PI * 2, true);
+	this.c.arc(0, 0, radius || dash.config.ball.radius, 0, Math.PI * 2, true);
 	this.c.closePath();
 	this.c.fill();
+
+	if (ball.visible) {
+		this.c.beginPath();
+		this.c.strokeStyle
+		this.c.arc(0, 0, radius || dash.config.ball.radius * 3, 0, Math.PI * 2, true);
+		this.c.closePath();
+		this.c.stroke();
+	}
 
 	this.c.restore();
 };
@@ -283,7 +291,14 @@ Dash.Renderer.prototype.renderState = function(state) {
 
 	this.drawBalls(
 		state.robot.ballsRaw,
-		'#006'
+		'#006',
+		dash.config.ball.radius * 2
+	);
+
+	this.drawBalls(
+		state.robot.ballsFiltered,
+		'#FFA500',
+		dash.config.ball.radius
 	);
 		
 	/*this.drawRobot(
