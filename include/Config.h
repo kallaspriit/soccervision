@@ -177,7 +177,7 @@ namespace Config {
 	const float objectIdentityDistanceThreshold = 0.25f;
 
 	// a localized ball will me marked for deletion after this amount of time of not being visible
-	const double objectMarkForRemovalThreshold = 0.3;
+	const double objectMarkForRemovalThreshold = 5.0;
 
 	// object is purged from localization map if not seen for this amount of time
 	const double objectPurgeLifetime = 10.0f;

@@ -2,6 +2,7 @@
 #include "Config.h"
 #include "Util.h"
 
+#include <iostream>
 #include <vector>
 #include <algorithm>
 
@@ -201,12 +202,16 @@ bool BallLocalizer::isValid(Ball* ball, const BallList& visibleBalls, const Math
     double currentTime = Util::millitime();
 
     if (currentTime - ball->updatedTime > Config::objectPurgeLifetime) {
+		std::cout << "@ LIFETIME" << std::endl;
+
         return false;
     }
 
     Math::Vector velocity(ball->velocityX, ball->velocityY);
 
     if (velocity.getLength() > Config::objectMaxVelocity) {
+		std::cout << "@ VELOCITY" << std::endl;
+
         return false;
     }
 
@@ -229,6 +234,8 @@ bool BallLocalizer::isValid(Ball* ball, const BallList& visibleBalls, const Math
         }
 
         if (!ballNear)  {
+			std::cout << "@ NO BALL NEAR" << std::endl;
+
             return false;
         }
     } else {
