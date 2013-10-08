@@ -189,8 +189,8 @@ void TestController::FetchBallInfrontState::step(float dt, Vision::Results* visi
 	float sideP = 2.0f;
 	float forwardP = 3.0f;
 	float zeroSpeedAngle = 40.0f;
-	float slowdownDistance = 0.3f;
-	float stopDistance = 0.1f;
+	float slowdownDistance = 0.5f;
+	float stopDistance = 0.15f;
 
 	if (ai->parameters[0].length() > 0) sideP = Util::toFloat(ai->parameters[0]);
 	if (ai->parameters[1].length() > 0) forwardP = Util::toFloat(ai->parameters[1]);

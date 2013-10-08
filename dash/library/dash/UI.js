@@ -935,7 +935,12 @@ Dash.UI.prototype.addState = function(state) {
 		this.states = [];
 	}*/
 
-	var full = false;
+	var full = false,
+		live = this.states.length <= 1 || this.currentStateIndex == this.states.length - 1;
+
+	if (!live) {
+		return;
+	}
 	
 	state.index = this.states.length;
 	
@@ -964,7 +969,7 @@ Dash.UI.prototype.addState = function(state) {
 		$('#ai-toggle-side-btn').attr('disabled', false);
 	}
 	
-	if (this.states.length == 1 || this.currentStateIndex == this.states.length - 2 || (full && this.currentStateIndex == this.states.length - 1)) {
+	if (live) {
 		this.showState(this.states.length - 1);
 	}
 };
