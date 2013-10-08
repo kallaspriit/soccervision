@@ -193,7 +193,7 @@ void TestController::FetchBallInfrontState::step(float dt, Vision::Results* visi
 	float forwardP = 3.0f;
 	float zeroSpeedAngle = 40.0f;
 	float slowdownDistance = 0.5f;
-	float stopDistance = 0.15f;
+	float stopDistance = 0.05f;
 	int sideMovementMaxThreshold = 75; // side speed is maximal at this distance from side
 	int cancelSideMovementThreshold = 250; // side speed is canceled starting from this distance from side
 
@@ -202,7 +202,7 @@ void TestController::FetchBallInfrontState::step(float dt, Vision::Results* visi
 	if (ai->parameters[2].length() > 0) zeroSpeedAngle = Util::toFloat(ai->parameters[2]);
 	if (ai->parameters[3].length() > 0) slowdownDistance = Util::toFloat(ai->parameters[3]);
 	
-	float sideSpeedMultiplier = Math::map(ballSideDistance, sideMovementMaxThreshold, cancelSideMovementThreshold, 1.0f, 0.0f);
+	float sideSpeedMultiplier = Math::map((float)ballSideDistance, (float)sideMovementMaxThreshold, (float)cancelSideMovementThreshold, 1.0f, 0.0f);
 	float sideSpeed = ball->distanceX * sideP * sideSpeedMultiplier;
 	float forwardSpeed = Math::max(Math::degToRad(zeroSpeedAngle) - Math::abs(ball->angle), 0.0f) * forwardP;
 
