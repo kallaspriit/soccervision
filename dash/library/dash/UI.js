@@ -539,7 +539,7 @@ Dash.UI.prototype.initControls = function() {
 		dash.socket.send('<' + $(this).data('cmd') + '>');
 	});
 
-	$('.send-parameter-field').change(function() {
+	$('.send-parameter-field').keyup(function() {
 		dash.socket.send('<parameter:' + $(this).data('index') + ':' + $(this).val() + '>');
 	});
 	
