@@ -119,6 +119,9 @@ namespace Config {
 	// distance between two robot wheels diagonally
 	const float robotWheelOffset = 0.1167f;
 
+	// how much to substract from observed distance to calculate distance from dribbler
+	const float robotDribblerDistance = 0.17f;
+
 	// radius of a wheel
 	const float robotWheelRadius = 0.034f;
 
