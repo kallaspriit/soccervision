@@ -200,10 +200,10 @@ void TestController::FetchBallInfrontState::step(float dt, Vision::Results* visi
 	float sideSpeed = ball->distanceX * sideP;
 	float forwardSpeed = Math::max(Math::degToRad(zeroSpeedAngle) - Math::abs(ball->angle), 0.0f) * forwardP;
 
-	if (ballDistance < slowdownDistance) {
-		forwardSpeed = 0.5f;
-	} else if (ballDistance < stopDistance) {
+	if (ballDistance < stopDistance) {
 		forwardSpeed = 0.0f;
+	} else if (ballDistance < slowdownDistance) {
+		forwardSpeed = 0.5f;
 	}
 
 	ai->dbg("ballDistance", ballDistance);
