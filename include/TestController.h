@@ -4,6 +4,7 @@
 #include "BaseAI.h"
 #include "Vision.h"
 #include "DebouncedButton.h"
+#include "Util.h"
 #include "Config.h"
 
 #include <map>
@@ -75,6 +76,9 @@ public:
 
 	};
 
+	typedef std::map<std::string, std::string> Messages;
+	typedef Messages::iterator MessagesIt;
+	typedef std::map<int, std::string> Parameters;
 	
 	TestController(Robot* robot, Communication* com);
 	~TestController();
@@ -87,6 +91,8 @@ public:
 
     void step(float dt, Vision::Results* visionResults);
 	void dbg(std::string key, std::string value) { messages[key] = value; }
+	void dbg(std::string key, int value) { messages[key] = Util::toString(value); }
+	void dbg(std::string key, float value) { messages[key] = Util::toString(value); }
 	std::string getJSON();
 
 private:
@@ -104,8 +110,8 @@ private:
 
 	double lastCommandTime;
 
-	std::map<int, std::string> parameters;
-	std::map<std::string, std::string> messages;
+	Parameters parameters;
+	Messages messages;
 
 };
 

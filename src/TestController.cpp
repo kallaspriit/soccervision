@@ -2,7 +2,6 @@
 
 #include "Robot.h"
 #include "Command.h"
-#include "Util.h"
 
 TestController::TestController(Robot* robot, Communication* com) : BaseAI(robot, com), manualSpeedX(0.0f), manualSpeedY(0.0f), manualOmega(0.0f), blueGoalDistance(0.0f), yellowGoalDistance(0.0f), lastCommandTime(0.0) {
 	setupStates();
@@ -115,7 +114,14 @@ std::string TestController::getJSON() {
 	stream << "\"stateDuration\": \"" << currentStateDuration << "\",";
 	stream << "\"totalDuration\": \"" << totalDuration << "\",";
 	stream << "\"blueGoalDistance\": " << blueGoalDistance << ",";
-	stream << "\"yellowGoalDistance\": " << yellowGoalDistance;
+	stream << "\"yellowGoalDistance\": " << yellowGoalDistance << ",";
+
+	for (MessagesIt it = messages.begin(); it != messages.end(); it++) {
+		stream << "\"" << (it->first) << "\": \"" << (it->second) << "\",";
+	}
+
+	messages.clear();
+
 	stream << "}";
 
 	return stream.str();
@@ -198,6 +204,10 @@ void TestController::FetchBallInfrontState::step(float dt, Vision::Results* visi
 	} else if (ballDistance < stopDistance) {
 		forwardSpeed = 0.0f;
 	}
+
+	ai->dbg("ballDistance", ballDistance);
+	ai->dbg("sideSpeed", sideSpeed);
+	ai->dbg("forwardSpeed", forwardSpeed);
 
 	robot->setTargetDir(forwardSpeed, sideSpeed);
 	robot->lookAt(goal);
