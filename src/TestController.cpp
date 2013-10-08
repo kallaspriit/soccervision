@@ -185,7 +185,10 @@ void TestController::FetchBallInfrontState::step(float dt, Vision::Results* visi
 	}
 
 	float ballDistance = ball->getDribblerDistance();
+	bool onLeft = ball->x < goal->x;
+	int ballDistanceFromSide = onLeft ? ball->x - ball->width / 2 : Config::cameraWidth - ball->x + ball->width / 2;
 
+	// config
 	float sideP = 2.0f;
 	float forwardP = 3.0f;
 	float zeroSpeedAngle = 40.0f;
@@ -209,6 +212,8 @@ void TestController::FetchBallInfrontState::step(float dt, Vision::Results* visi
 	ai->dbg("ballDistance", ballDistance);
 	ai->dbg("sideSpeed", sideSpeed);
 	ai->dbg("forwardSpeed", forwardSpeed);
+	ai->dbg("onLeft", onLeft);
+	ai->dbg("ballDistanceFromSide", ballDistanceFromSide);
 
 	robot->setTargetDir(forwardSpeed, sideSpeed);
 	robot->lookAt(goal);
