@@ -50,7 +50,9 @@ bool TestController::handleCommand(const Command& cmd) {
         handleDriveToCommand(cmd);
     } else if (cmd.name.substr(0, 4) == "run-") {
         setState(cmd.name.substr(4));
-    } else {
+    } else if (cmd.name == "parameter" && cmd.parameters.size() == 2) {
+		handleParameterCommand(cmd);
+	} else {
 		return false;
 	}
 
@@ -76,6 +78,15 @@ void TestController::handleResetCommand() {
 	currentStateDuration = 0.0f;
 
 	setState(currentStateName);
+}
+
+void TestController::handleParameterCommand(const Command& cmd) {
+	int index = Util::toInt(cmd.parameters[0]);
+	std::string value = cmd.parameters[1];
+
+	parameters[index] = value;
+
+	std::cout << "! Received parameter #" << index << ": " << value << std::endl;
 }
 
 void TestController::handleDriveToCommand(const Command& cmd) {

@@ -6,6 +6,9 @@
 #include "DebouncedButton.h"
 #include "Config.h"
 
+#include <map>
+#include <string>
+
 class TestController : public BaseAI {
 
 public:
@@ -80,6 +83,7 @@ public:
 	void handleTargetVectorCommand(const Command& cmd);
 	void handleResetCommand();
 	void handleDriveToCommand(const Command& cmd);
+	void handleParameterCommand(const Command& cmd);
     void step(float dt, Vision::Results* visionResults);
 	std::string getJSON();
 
@@ -97,6 +101,8 @@ private:
 	float yellowGoalDistance;
 
 	double lastCommandTime;
+
+	std::map<int, std::string> parameters;
 
 };
 

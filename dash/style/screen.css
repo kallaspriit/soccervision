@@ -355,7 +355,8 @@ A:hover {
 
 /* Options and buttons */
 #options,
-#buttons {
+#buttons,
+#parameters {
 	position: absolute;
 	top: -10px;
 	/*background-color: rgba(0, 0, 0, 0.5);
@@ -394,6 +395,25 @@ A:hover {
 }
 #buttons .seperated {
 	margin-top: 20px;
+}
+#parameters {
+	width: 160px;
+	left: 0px;
+	top: -40px;
+	width: 600px;
+}
+#parameters INPUT {
+	position: relative;
+	float: left;
+	border: none;
+	background-color: rgba(255, 255, 255, 0.5);
+	padding: 3px 6px;
+	color: #000;
+	width: 80px;
+	margin: 0 4px 0 0;
+}
+#parameters INPUT::-webkit-input-placeholder {
+	color: #333;
 }
 
 /* Debugging */

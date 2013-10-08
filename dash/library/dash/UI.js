@@ -538,6 +538,10 @@ Dash.UI.prototype.initControls = function() {
 	$('.send-cmd-btn').click(function() {
 		dash.socket.send('<' + $(this).data('cmd') + '>');
 	});
+
+	$('.send-parameter-field').change(function() {
+		dash.socket.send('<parameter:' + $(this).data('index') + ':' + $(this).val() + '>');
+	});
 	
 	/*$('#test-turn-btn').click(function() {
 		self.robot.turnBy(Math.PI / 2.0, 2);
