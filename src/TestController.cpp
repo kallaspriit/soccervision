@@ -165,8 +165,7 @@ void TestController::FetchBallInfrontState::step(float dt, Vision::Results* visi
 	if (ball == NULL || goal == NULL) {
 		return;
 	}
-
-	//float sideDistance = 
+	
 	float sideSpeed = ball->distanceX * 2.0f;
 	float forwardSpeed = Math::max(Math::degToRad(30.0f) - Math::abs(ball->angle), 0.0f) * 2.0f;
 

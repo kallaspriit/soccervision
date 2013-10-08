@@ -55,8 +55,6 @@ void BallLocalizer::Ball::updateVisible(float newX, float newY, float dt) {
     visible = true;
 
 	if (removeTime != -1 && resurrectable) {
-		std::cout << "@ RESURRECT" << std::endl;
-
 		removeTime = -1;
 	}
 }
@@ -194,7 +192,7 @@ void BallLocalizer::purge(const BallList& visibleBalls, const Math::Polygon& cam
 		keep = true;
 
 		if (currentTime - ball->updatedTime > Config::objectPurgeLifetime) {
-			std::cout << "@ LIFETIME" << std::endl;
+			//std::cout << "@ LIFETIME" << std::endl;
 
 			keep = false;
 		}
@@ -202,7 +200,7 @@ void BallLocalizer::purge(const BallList& visibleBalls, const Math::Polygon& cam
 		Math::Vector velocity(ball->velocityX, ball->velocityY);
 
 		if (velocity.getLength() > Config::objectMaxVelocity) {
-			std::cout << "@ VELOCITY" << std::endl;
+			//std::cout << "@ VELOCITY" << std::endl;
 
 			keep = false;
 		}
@@ -223,7 +221,7 @@ void BallLocalizer::purge(const BallList& visibleBalls, const Math::Polygon& cam
 			}
 
 			if (!ballNear)  {
-				std::cout << "@ NO BALL NEAR" << std::endl;
+				//std::cout << "@ NO BALL NEAR" << std::endl;
 
 				keep = false;
 			}
