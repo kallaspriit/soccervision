@@ -84,7 +84,9 @@ public:
 	void handleResetCommand();
 	void handleDriveToCommand(const Command& cmd);
 	void handleParameterCommand(const Command& cmd);
+
     void step(float dt, Vision::Results* visionResults);
+	void dbg(std::string key, std::string value) { messages[key] = value; }
 	std::string getJSON();
 
 private:
@@ -103,6 +105,7 @@ private:
 	double lastCommandTime;
 
 	std::map<int, std::string> parameters;
+	std::map<std::string, std::string> messages;
 
 };
 
