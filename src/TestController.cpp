@@ -178,13 +178,15 @@ void TestController::FetchBallInfrontState::step(float dt, Vision::Results* visi
 	}
 
 	float sideP = 2.0f;
-	float forwardP = 2.0f;
+	float forwardP = 3.0f;
+	float zeroSpeedAngle = 40.0f;
 
 	if (ai->parameters[0].length() > 0) sideP = Util::toFloat(ai->parameters[0]);
 	if (ai->parameters[1].length() > 0) forwardP = Util::toFloat(ai->parameters[1]);
+	if (ai->parameters[2].length() > 0) zeroSpeedAngle = Util::toFloat(ai->parameters[2]);
 	
 	float sideSpeed = ball->distanceX * sideP;
-	float forwardSpeed = Math::max(Math::degToRad(30.0f) - Math::abs(ball->angle), 0.0f) * forwardP;
+	float forwardSpeed = Math::max(Math::degToRad(zeroSpeedAngle) - Math::abs(ball->angle), 0.0f) * forwardP;
 
 	robot->setTargetDir(forwardSpeed, sideSpeed);
 	robot->lookAt(goal);
