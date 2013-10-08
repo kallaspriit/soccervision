@@ -186,7 +186,7 @@ void TestController::FetchBallInfrontState::step(float dt, Vision::Results* visi
 
 	float ballDistance = ball->getDribblerDistance();
 	bool onLeft = ball->x < goal->x;
-	int ballDistanceFromSide = onLeft ? ball->x - ball->width / 2 : Config::cameraWidth - ball->x + ball->width / 2;
+	int ballSideDistance = onLeft ? ball->x - ball->width / 2 : Config::cameraWidth - ball->x + ball->width / 2;
 
 	// config
 	float sideP = 2.0f;
@@ -194,14 +194,15 @@ void TestController::FetchBallInfrontState::step(float dt, Vision::Results* visi
 	float zeroSpeedAngle = 40.0f;
 	float slowdownDistance = 0.5f;
 	float stopDistance = 0.15f;
-	int cancelSideMovementDistancePixels = 100;
+	int sideMovementMaxThreshold = 75; // side speed is maximal at this distance from side
+	int cancelSideMovementThreshold = 250; // side speed is canceled starting from this distance from side
 
 	if (ai->parameters[0].length() > 0) sideP = Util::toFloat(ai->parameters[0]);
 	if (ai->parameters[1].length() > 0) forwardP = Util::toFloat(ai->parameters[1]);
 	if (ai->parameters[2].length() > 0) zeroSpeedAngle = Util::toFloat(ai->parameters[2]);
 	if (ai->parameters[3].length() > 0) slowdownDistance = Util::toFloat(ai->parameters[3]);
 	
-	float sideSpeedMultiplier = Math::min((float)cancelSideMovementDistancePixels / (float)ballDistanceFromSide, 1.0f);
+	float sideSpeedMultiplier = Math::map(ballSideDistance, sideMovementMaxThreshold, cancelSideMovementThreshold, 1.0f, 0.0f);
 	float sideSpeed = ball->distanceX * sideP * sideSpeedMultiplier;
 	float forwardSpeed = Math::max(Math::degToRad(zeroSpeedAngle) - Math::abs(ball->angle), 0.0f) * forwardP;
 
@@ -219,7 +220,8 @@ void TestController::FetchBallInfrontState::step(float dt, Vision::Results* visi
 	ai->dbg("sideSpeed", sideSpeed);
 	ai->dbg("forwardSpeed", forwardSpeed);
 	ai->dbg("onLeft", onLeft);
-	ai->dbg("ballDistanceFromSide", ballDistanceFromSide);
+	ai->dbg("ballDistanceFromSide", ballSideDistance);
+	ai->dbg("sideSpeedMultiplier", sideSpeedMultiplier);
 
 	robot->setTargetDir(forwardSpeed, sideSpeed);
 	robot->lookAt(goal);
