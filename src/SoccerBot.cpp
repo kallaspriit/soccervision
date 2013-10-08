@@ -301,8 +301,6 @@ bool SoccerBot::fetchFrame(BaseCamera* camera, ProcessThread* processor) {
 }
 
 void SoccerBot::broadcastFrame(unsigned char* rgb, unsigned char* classification) {
-	std::cout << "@ BROADCAST FRAME" << std::endl;
-
 	int jpegBufferSize = Config::jpegBufferSize;
 
 	if (jpegBuffer == NULL) {
@@ -648,8 +646,6 @@ void SoccerBot::handleGetStateCommand() {
 
 void SoccerBot::handleGetFrameCommand() {
 	frameRequested = true;
-
-	std::cout << "@ FRAME REQUESTED" << std::endl;
 }
 
 void SoccerBot::handleCameraChoiceCommand(Command::Parameters parameters) {
