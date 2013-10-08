@@ -110,17 +110,18 @@ std::string TestController::getJSON() {
 	std::stringstream stream;
 
 	stream << "{";
-	stream << "\"currentState\": \"" << currentStateName << "\",";
-	stream << "\"stateDuration\": \"" << currentStateDuration << "\",";
-	stream << "\"totalDuration\": \"" << totalDuration << "\",";
-	stream << "\"blueGoalDistance\": " << blueGoalDistance << ",";
-	stream << "\"yellowGoalDistance\": " << yellowGoalDistance << ",";
-
+	
 	for (MessagesIt it = messages.begin(); it != messages.end(); it++) {
 		stream << "\"" << (it->first) << "\": \"" << (it->second) << "\",";
 	}
 
 	messages.clear();
+
+	stream << "\"currentState\": \"" << currentStateName << "\",";
+	stream << "\"stateDuration\": \"" << currentStateDuration << "\",";
+	stream << "\"totalDuration\": \"" << totalDuration << "\",";
+	stream << "\"blueGoalDistance\": " << blueGoalDistance << ",";
+	stream << "\"yellowGoalDistance\": " << yellowGoalDistance;
 
 	stream << "}";
 
