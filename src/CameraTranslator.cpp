@@ -4,8 +4,8 @@
 #include <iostream>
 
 CameraTranslator::WorldPosition CameraTranslator::getWorldPosition(int cameraX, int cameraY) {
-	//CameraTranslator::CameraPosition undistorted = CameraTranslator::undistort(cameraX, cameraY);
-	CameraTranslator::CameraPosition undistorted = CameraTranslator::CameraPosition(cameraX, cameraY);
+	CameraTranslator::CameraPosition undistorted = CameraTranslator::undistort(cameraX, cameraY);
+	//CameraTranslator::CameraPosition undistorted = CameraTranslator::CameraPosition(cameraX, cameraY);
 
 	float pixelVerticalCoord = undistorted.y - this->horizon;
 	int pixelRight = undistorted.x - this->cameraWidth / 2;
@@ -31,78 +31,42 @@ CameraTranslator::CameraPosition CameraTranslator::getCameraPosition(float world
 }
 
 void CameraTranslator::setConstants(
-	float A, float B, float C,
-	float k1, float k2, float k3,
-	float horizon, int cameraWidth, int cameraHeight
+	int cameraWidth, int cameraHeight,
+	float A, float B, float C, float horizon, 
+	float distortionFocus,
+	float k1, float k2, float k3
 ) {
+	this->cameraWidth = cameraWidth;
+	this->cameraHeight = cameraHeight;
 	this->A = A;
 	this->B = B;
 	this->C = C;
+	this->horizon = horizon;
+	this->distortionFocus = distortionFocus;
 	this->k1 = k1;
 	this->k2 = k2;
 	this->k3 = k3;
-	this->horizon = horizon;
-	this->cameraWidth = cameraWidth;
-	this->cameraHeight = cameraHeight;
 }
 
-CameraTranslator::CameraPosition CameraTranslator::undistort(int x, int y) {
-	/*Math::Matrix3x3 cameraMatrix(
-		1203.5723440938634f, 0.0f, 639.5f,
-		0.0f, 1203.5723440938634f, 511.5f,
-		0.0f, 0.0f, 1.0f
-	);*/
+CameraTranslator::CameraPosition CameraTranslator::undistort(int distortedX, int distortedY) {
 
-	//float dx = (float)x - (float)this->cameraWidth / 2.0f;
-	//float dy = (float)y - (float)this->cameraHeight / 2.0f;
-	float normalizedX = (2.0f * (float)x - (float)cameraWidth) / cameraWidth;
-	float normalizedY = (2.0f * (float)y - (float)cameraHeight) / cameraHeight;
-
-	float r = sqrt(pow(normalizedX, 2) + pow(normalizedY, 2));
+	//Conversion for undistorting  (normalization?)
+	float x = (float(distortedX) - cameraWidth / 2.0 ) / distortionFocus;
+	float y = (float(distortedY) - cameraHeight / 2.0) / distortionFocus;
+	//Undistort
+	float r2 = x*x + y*y; // distance squared
 	float multipler = 1 + 
-		k1 * pow(r, 2) +
-		k2 * pow(r, 4) + 
-		k3 * pow(r, 6);
-
-	float undistortedNormalizedX = x * multipler;
-	float undistortedNormalizedY = y * multipler;
-
-	//int resultX = (int)Math::round((undistortedNormalizedX + 1) * cameraWidth / 2.0f, 0);
-	//int resultY = (int)Math::round((undistortedNormalizedY + 1) * cameraHeight / 2.0f, 0);
-
-	int resultX = (int)undistortedNormalizedX;
-	int resultY = (int)undistortedNormalizedY;
-
-	//std::cout << "@ UNDISTORT " << x << "x" << y << " - dx: " << dx << ", dy: " << dy << ", r: " << r << ", multiplier: " << multipler << std::endl;
-	std::cout << "@ UNDISTORT "
-		<< x << "x" << y
-		<< " - normalizedX: " << normalizedX
-		<< ", normalizedY: " << normalizedY
-		<< ", r: " << r
-		<< ", multiplier: " << multipler
-		<< ", undistortedNormalizedX: " << undistortedNormalizedX
-		<< ", undistortedNormalizedY: " << undistortedNormalizedY
-		<< ", resultX: " << resultX
-		<< ", resultY: " << resultY << std::endl;
+		k1 * 1 * r2 +
+		k2 * 2 * r2 + 
+		k3 * 3 * r2;
+	x *= multipler;
+	y *= multipler;
+	//Convert back
+	float undistortedX = x * distortionFocus + cameraWidth / 2.0;
+	float undistortedY = y * distortionFocus + cameraHeight / 2.0;
 
 	return CameraPosition(
-		resultX,
-		resultY
-	);
-}
-
-CameraTranslator::CameraPosition CameraTranslator::distort(int x, int y) {
-	float dx = (float)x - (float)this->cameraWidth / 2.0f;
-	float dy = (float)y - (float)this->cameraHeight / 2.0f;
-
-	float r = sqrt(pow(dx, 2) + pow(dy, 2));
-	float multipler = 1 + 
-		this->k1 * pow(r, 2) +
-		this->k2 * pow(r, 4) + 
-		this->k3 * pow(r, 6);
-
-	return CameraPosition(
-		(int)Math::round(x / multipler, 0),
-		(int)Math::round(y / multipler, 0)
+		int(undistortedX),
+		int(undistortedY)
 	);
 }
