@@ -132,7 +132,7 @@ ObjectList Vision::processBalls(Dir dir) {
 
 			if (extendHeightBelow > 0) {
 				ball->y += extendHeightBelow / 2;
-				ball->height += extendHeightBelow;
+				ball->height = Math::min(ball->height + extendHeightBelow, ball->width);
 			}
 
 			distance = getDistance(ball->x, ball->y + ball->height / 2);
