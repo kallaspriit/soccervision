@@ -116,7 +116,7 @@ private:
 	float manualSpeedX;
 	float manualSpeedY;
 	float manualOmega;
-	float manualDribblerSpeed;
+	int manualDribblerSpeed;
 	int manualKickStrength;
 	float blueGoalDistance;
 	float yellowGoalDistance;

@@ -4,7 +4,7 @@
 #include "Dribbler.h"
 #include "Command.h"
 
-TestController::TestController(Robot* robot, Communication* com) : BaseAI(robot, com), manualSpeedX(0.0f), manualSpeedY(0.0f), manualOmega(0.0f), manualDribblerSpeed(0.0f), manualKickStrength(0), blueGoalDistance(0.0f), yellowGoalDistance(0.0f), lastCommandTime(0.0) {
+TestController::TestController(Robot* robot, Communication* com) : BaseAI(robot, com), manualSpeedX(0.0f), manualSpeedY(0.0f), manualOmega(0.0f), manualDribblerSpeed(0), manualKickStrength(0), blueGoalDistance(0.0f), yellowGoalDistance(0.0f), lastCommandTime(0.0) {
 	setupStates();
 };
 
@@ -72,7 +72,7 @@ void TestController::handleTargetVectorCommand(const Command& cmd) {
 }
 
 void TestController::handleDribblerCommand(const Command& cmd) {
-    manualDribblerSpeed = Util::toFloat(cmd.parameters[0]);
+    manualDribblerSpeed = Util::toInt(cmd.parameters[0]);
 
 	lastCommandTime = Util::millitime();
 }
@@ -155,7 +155,7 @@ void TestController::ManualControlState::step(float dt, Vision::Results* visionR
 		if (ai->manualKickStrength != 0.0f) {
 			robot->kick(ai->manualKickStrength);
 
-			ai->manualKickStrength = 0.0f;
+			ai->manualKickStrength = 0;
 		}
 	} else {
 		robot->stop();
@@ -226,7 +226,7 @@ void TestController::FetchBallInfrontState::step(float dt, Vision::Results* visi
 	float slowdownDistance = 0.5f;
 	float slowdownSpeed = 0.5f;
 	float dribblerStartDistance = 0.5f;
-	float dribblerSpeed = 100.0f;
+	int dribblerSpeed = 100;
 	int sideMovementMaxThreshold = 75; // side speed is maximal at this distance from side
 	int cancelSideMovementThreshold = 250; // side speed is canceled starting from this distance from side
 
