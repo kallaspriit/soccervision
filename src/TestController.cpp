@@ -102,6 +102,17 @@ void TestController::handleDriveToCommand(const Command& cmd) {
 void TestController::updateGoalDistances(Vision::Results* visionResults) {
 	Object* blueGoal = visionResults->getLargestGoal(Side::BLUE);
 	Object* yellowGoal = visionResults->getLargestGoal(Side::YELLOW);
+
+	if (yellowGoal != NULL) {
+		std::cout << "@ YELLOW: "
+			<< yellowGoal->x << "x" << yellowGoal->y
+			<< ", area: " << yellowGoal->area
+			<< ", width: " << yellowGoal->width
+			<< ", height: " << yellowGoal->height
+			<< ", distance: " << yellowGoal->distance;
+	} else {
+		std::cout << "@ NO YELLOW" << std::endl;
+	}
 	
 	blueGoalDistance = blueGoal != NULL ? blueGoal->distance : 0.0f;
 	yellowGoalDistance = yellowGoal != NULL ? yellowGoal->distance : 0.0f;
