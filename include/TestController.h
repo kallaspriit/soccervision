@@ -93,6 +93,8 @@ public:
 
     bool handleCommand(const Command& cmd);
 	void handleTargetVectorCommand(const Command& cmd);
+	void handleDribblerCommand(const Command& cmd);
+	void handleKickCommand(const Command& cmd);
 	void handleResetCommand();
 	void handleDriveToCommand(const Command& cmd);
 	void handleParameterCommand(const Command& cmd);
@@ -114,6 +116,8 @@ private:
 	float manualSpeedX;
 	float manualSpeedY;
 	float manualOmega;
+	float manualDribblerSpeed;
+	int manualKickStrength;
 	float blueGoalDistance;
 	float yellowGoalDistance;
 
