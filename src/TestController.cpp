@@ -202,8 +202,11 @@ void TestController::DriveToState::step(float dt, Vision::Results* visionResults
 }
 
 void TestController::FetchBallInfrontState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration) {
+	int dribblerSpeed = 100;
+	
 	if (robot->dribbler->gotBall()) {
-		robot->stop();
+		robot->setTargetDir(0.0f, 0.0f, 0.0f);
+		robot->dribbler->setTargetSpeed(-dribblerSpeed);
 
 		return;
 	}
@@ -222,22 +225,21 @@ void TestController::FetchBallInfrontState::step(float dt, Vision::Results* visi
 	int ballSideDistance = onLeft ? ball->x - ball->width / 2 : Config::cameraWidth - ball->x + ball->width / 2;
 
 	// config
-	float sideP = 1.0f;
+	//float sideP = 1.0f;
 	//float forwardP = 3.0f;
-	float forwardP = 1.0f;
-	float zeroSpeedAngle = 40.0f;
+	//float forwardP = 1.0f;
+	float approachSpeed = 1.5f;
+	float zeroSpeedAngle = 35.0f;
 	float nearDistance = 0.5f;
 	float nearSpeed = 0.5f;
 	float dribblerStartDistance = 0.5f;
-	int dribblerSpeed = 100;
 	int maxSideSpeedThreshold = 25; // side speed is maximal at this distance from side
 	int minSideSpeedThreshold = 300; // side speed is canceled starting from this distance from side
 	float sideSpeed, forwardSpeed;
 
-	if (ai->parameters[0].length() > 0) sideP = Util::toFloat(ai->parameters[0]);
-	if (ai->parameters[1].length() > 0) forwardP = Util::toFloat(ai->parameters[1]);
-	if (ai->parameters[2].length() > 0) zeroSpeedAngle = Util::toFloat(ai->parameters[2]);
-	if (ai->parameters[3].length() > 0) nearDistance = Util::toFloat(ai->parameters[3]);
+	if (ai->parameters[0].length() > 0) approachSpeed = Util::toFloat(ai->parameters[0]);
+	if (ai->parameters[2].length() > 0) zeroSpeedAngle = Util::toFloat(ai->parameters[1]);
+	if (ai->parameters[3].length() > 0) nearDistance = Util::toFloat(ai->parameters[2]);
 	
 	//float sideSpeedMultiplier = Math::map((float)ballSideDistance, (float)sideMovementMaxThreshold, (float)cancelSideMovementThreshold, 1.0f, 0.0f);
 	
@@ -251,10 +253,10 @@ void TestController::FetchBallInfrontState::step(float dt, Vision::Results* visi
 	//float forwardSpeed = forwardP * (1.0f - sideSpeedMultiplier);
 
 	if (ballDistance > nearDistance) {
-		sideSpeed = Math::sign(ball->distanceX) * Math::map((float)ballSideDistance, (float)maxSideSpeedThreshold, (float)minSideSpeedThreshold, sideP, 0.0f);
-		forwardSpeed = forwardP - Math::abs(sideSpeed);
+		sideSpeed = approachSpeed * Math::sign(ball->distanceX) * Math::map((float)ballSideDistance, (float)maxSideSpeedThreshold, (float)minSideSpeedThreshold, 1.0f, 0.0f);
+		forwardSpeed = approachSpeed - Math::abs(sideSpeed);
 	} else {
-		forwardSpeed = nearSpeed * Math::map(Math::abs(Math::radToDeg(ball->angle)), 0.0f, 30.0f, 1.0f, 0.0f);
+		forwardSpeed = nearSpeed * Math::map(Math::abs(Math::radToDeg(ball->angle)), 0.0f, zeroSpeedAngle, 1.0f, 0.0f);
 		sideSpeed = Math::sign(ball->distanceX) * (nearSpeed - forwardSpeed);
 	}
 
