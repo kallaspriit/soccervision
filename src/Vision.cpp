@@ -260,18 +260,18 @@ bool Vision::isValidGoal(Object* goal, Side side) {
 
 		if (
 			pathMetric.percentage < Config::minValidGoalPathThreshold
-			|| pathMetric.out
+			//|| pathMetric.out
 			//|| !pathMetric.validColorFound
 			//|| pathMetric.invalidSpree > getBallMaxInvalidSpree(ball->y + ball->height / 2)
 		) {
-			std::cout << "@ BALL PATH FAILS: " << pathMetric.percentage << " VS " << Config::minValidGoalPathThreshold << ", OUT: " << (pathMetric.out ? "YES" : "NO") << std::endl;
+			//std::cout << "@ BALL PATH FAILS: " << pathMetric.percentage << " VS " << Config::minValidGoalPathThreshold << ", OUT: " << (pathMetric.out ? "YES" : "NO") << std::endl;
 
 			return false;
 		}
 	}
 
 	if (goal->area < Config::goalMinArea) {
-		std::cout << "@ GOAL INVALID MIN AREA: " << goal->area << " VS " << Config::goalMinArea << std::endl;
+		//std::cout << "@ GOAL INVALID MIN AREA: " << goal->area << " VS " << Config::goalMinArea << std::endl;
 
 		return false;
 	} else if (goal->area > Config::goalCertainArea) {
@@ -279,7 +279,7 @@ bool Vision::isValidGoal(Object* goal, Side side) {
 	}
 
 	if (goal->y - goal->height / 2 > Config::goalTopMaxY) {
-		std::cout << "@ GOAL NOT TOP ENOUGH: " << (goal->y - goal->height / 2) << " VS " << Config::goalTopMaxY << std::endl;
+		//std::cout << "@ GOAL NOT TOP ENOUGH: " << (goal->y - goal->height / 2) << " VS " << Config::goalTopMaxY << std::endl;
 
 		// TODO Add back!
 		return false;
