@@ -109,7 +109,8 @@ void TestController::updateGoalDistances(Vision::Results* visionResults) {
 			<< ", area: " << yellowGoal->area
 			<< ", width: " << yellowGoal->width
 			<< ", height: " << yellowGoal->height
-			<< ", distance: " << yellowGoal->distance;
+			<< ", distance: " << yellowGoal->distance
+			<< std::endl;
 	} else {
 		std::cout << "@ NO YELLOW" << std::endl;
 	}
