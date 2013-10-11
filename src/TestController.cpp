@@ -245,7 +245,7 @@ void TestController::FetchBallInfrontState::step(float dt, Vision::Results* visi
 	}*/
 	
 	//float sideSpeed = ball->distanceX * sideP * sideSpeedMultiplier;
-	float sideSpeed = Math::sign(ball->distanceX) * Math::map((float)ballSideDistance, (float)minSideSpeedThreshold, (float)maxSideSpeedThreshold, 0.0f, sideP);
+	float sideSpeed = Math::sign(ball->distanceX) * Math::map((float)ballSideDistance, (float)maxSideSpeedThreshold, (float)minSideSpeedThreshold, sideP, 0.0f);
 	//float forwardSpeed = Math::max(Math::degToRad(zeroSpeedAngle) - Math::abs(ball->angle), 0.0f) * forwardP;
 	//float forwardSpeed = forwardP * (1.0f - sideSpeedMultiplier);
 	float forwardSpeed = forwardP - Math::abs(sideSpeed);
