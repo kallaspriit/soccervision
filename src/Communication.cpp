@@ -32,7 +32,9 @@ void Communication::send(std::string message) {
 		send(queuedMessage);
 	}
 
-	//std::cout << "> " << message << std::endl;
+	if (message.substr(0, 6) != "speeds") {
+		std::cout << "> " << message << std::endl;
+	}
 
 	message += "\n";
 
