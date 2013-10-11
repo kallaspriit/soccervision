@@ -205,6 +205,8 @@ void TestController::DriveToState::step(float dt, Vision::Results* visionResults
 
 void TestController::FetchBallInfrontState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration) {
 	if (robot->dribbler->gotBall()) {
+		ai->dbg("gotBall", true);
+
 		ai->setState("aim");
 
 		return;
@@ -212,6 +214,9 @@ void TestController::FetchBallInfrontState::step(float dt, Vision::Results* visi
 	
 	Object* ball = visionResults->getClosestBall(Dir::FRONT);
 	Object* goal = visionResults->getLargestGoal(Side::BLUE, Dir::FRONT);
+
+	ai->dbg("ballVisible", ball != NULL);
+	ai->dbg("goalVisible", goal != NULL);
 
 	if (ball == NULL || goal == NULL) {
 		robot->stop();
