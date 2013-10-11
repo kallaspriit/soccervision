@@ -1554,13 +1554,13 @@ void Vision::updateColorDistances() {
 	blackDistance = getColorDistance("black");
 }
 
-Object* Vision::Results::getClosestBall(bool frontOnly) {
+Object* Vision::Results::getClosestBall(Dir dir) {
 	float closestDistance = 100.0f;
 	float distance;
 	Object* ball;
 	Object* closestBall = NULL;
 
-	if (front != NULL) {
+	if (front != NULL && dir != Dir::REAR) {
 		for (ObjectListItc it = front->balls.begin(); it != front->balls.end(); it++) {
 			ball = *it;
 			distance = ball->behind ? ball->distance * 1.25f : ball->distance;
@@ -1572,7 +1572,7 @@ Object* Vision::Results::getClosestBall(bool frontOnly) {
 		}
 	}
 
-	if (rear != NULL && !frontOnly) {
+	if (rear != NULL && dir != Dir::FRONT) {
 		for (ObjectListItc it = rear->balls.begin(); it != rear->balls.end(); it++) {
 			ball = *it;
 			distance = ball->behind ? ball->distance * 1.25f : ball->distance;
@@ -1587,13 +1587,13 @@ Object* Vision::Results::getClosestBall(bool frontOnly) {
 	return closestBall;
 }
 
-Object* Vision::Results::getLargestGoal(Side side, bool frontOnly) {
+Object* Vision::Results::getLargestGoal(Side side, Dir dir) {
 	int area;
 	int largestArea = 0;
 	Object* goal;
 	Object* largestGoal = NULL;
 
-	if (front != NULL) {
+	if (front != NULL && dir != Dir::REAR) {
 		for (ObjectListItc it = front->goals.begin(); it != front->goals.end(); it++) {
 			goal = *it;
 		
@@ -1611,7 +1611,7 @@ Object* Vision::Results::getLargestGoal(Side side, bool frontOnly) {
 		}
 	}
 
-	if (rear != NULL && frontOnly != true) {
+	if (rear != NULL && dir != Dir::FRONT) {
 		for (ObjectListItc it = rear->goals.begin(); it != rear->goals.end(); it++) {
 			goal = *it;
 
@@ -1645,11 +1645,11 @@ Object* Vision::Results::getLargestGoal(Side side, bool frontOnly) {
 	}
 }
 
-Object* Vision::Results::getFurthestGoal(bool frontOnly) {
+Object* Vision::Results::getFurthestGoal(Dir dir) {
 	return NULL;
 
-	Object* largestYellow = getLargestGoal(Side::YELLOW, frontOnly);
-	Object* largestBlue = getLargestGoal(Side::BLUE, frontOnly);
+	Object* largestYellow = getLargestGoal(Side::YELLOW, dir);
+	Object* largestBlue = getLargestGoal(Side::BLUE, dir);
 
 	if (largestYellow != NULL) {
 		if (largestBlue != NULL) {

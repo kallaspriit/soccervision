@@ -211,7 +211,8 @@ enum Side {
 
 enum Dir {
     FRONT = 1,
-    REAR = 2
+    REAR = 2,
+	ANY = 3
 };
 
 enum Obstruction {

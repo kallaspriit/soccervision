@@ -76,6 +76,14 @@ public:
 
 	};
 
+	class FetchBallBehindState : public State {
+
+	public:
+		FetchBallBehindState(TestController* ai) : State(ai) {}
+		void step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration);
+
+	};
+
 	typedef std::map<std::string, std::string> Messages;
 	typedef Messages::iterator MessagesIt;
 	typedef std::map<int, std::string> Parameters;

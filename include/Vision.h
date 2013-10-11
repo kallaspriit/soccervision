@@ -35,9 +35,9 @@ public:
 	class Results {
 		public:
 			Results() : front(NULL), rear(NULL) {}
-			Object* getClosestBall(bool frontOnly = false);
-			Object* getLargestGoal(Side side, bool frontOnly = false);
-			Object* getFurthestGoal(bool frontOnly = false);
+			Object* getClosestBall(Dir dir = Dir::ANY);
+			Object* getLargestGoal(Side side, Dir dir = Dir::ANY);
+			Object* getFurthestGoal(Dir dir = Dir::ANY);
 
 			Vision::Result* front;
 			Vision::Result* rear;
