@@ -45,7 +45,7 @@ public:
 	void spinAroundDribbler(bool reverse = false, float period = Config::robotSpinAroundDribblerPeriod, float radius = Config::robotSpinAroundDribblerRadius, float forwardSpeed = Config::robotSpinAroundDribblerForwardSpeed);
     void setPosition(float x, float y, float orientation);
 	void stop();
-	void kick(int milliseconds);
+	void kick(int microseconds = Config::robotDefaultKickStrength);
 	void clearTasks() { tasks.clear(); }
     void handleTasks(float dt);
 

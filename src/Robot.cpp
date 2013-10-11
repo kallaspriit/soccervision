@@ -353,8 +353,8 @@ void Robot::stop() {
 	dribbler->stop();
 }
 
-void Robot::kick(int milliseconds) {
-	com->send("kick:" + Util::toString(milliseconds));
+void Robot::kick(int microseconds) {
+	com->send("kick:" + Util::toString(microseconds));
 }
 
 void Robot::setPosition(float x, float y, float orientation) {
