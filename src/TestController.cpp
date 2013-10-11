@@ -1,6 +1,7 @@
 #include "TestController.h"
 
 #include "Robot.h"
+#include "Dribbler.h"
 #include "Command.h"
 
 TestController::TestController(Robot* robot, Communication* com) : BaseAI(robot, com), manualSpeedX(0.0f), manualSpeedY(0.0f), manualOmega(0.0f), blueGoalDistance(0.0f), yellowGoalDistance(0.0f), lastCommandTime(0.0) {
@@ -139,7 +140,7 @@ void TestController::ManualControlState::step(float dt, Vision::Results* visionR
 }
 
 void TestController::WatchBallState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration) {
-	Object* ball = visionResults->getClosestBall(true);
+	Object* ball = visionResults->getClosestBall(Dir::FRONT);
 
 	if (ball == NULL) {
 		robot->setTargetDir(ai->manualSpeedX, ai->manualSpeedY, ai->manualOmega);
@@ -152,7 +153,7 @@ void TestController::WatchBallState::step(float dt, Vision::Results* visionResul
 }
 
 void TestController::WatchGoalState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration) {
-	Object* goal = visionResults->getLargestGoal(Side::BLUE, true);
+	Object* goal = visionResults->getLargestGoal(Side::BLUE, Dir::FRONT);
 
 	if (goal == NULL) {
 		robot->setTargetDir(ai->manualSpeedX, ai->manualSpeedY, ai->manualOmega);
@@ -177,13 +178,69 @@ void TestController::DriveToState::step(float dt, Vision::Results* visionResults
 }
 
 void TestController::FetchBallInfrontState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration) {
-	Object* ball = visionResults->getClosestBall(true);
-	Object* goal = visionResults->getLargestGoal(Side::BLUE, true);
+	if (robot->dribbler->gotBall()) {
+		return;
+	}
+	
+	Object* ball = visionResults->getClosestBall(Dir::FRONT);
+	Object* goal = visionResults->getLargestGoal(Side::BLUE, Dir::FRONT);
 
 	if (ball == NULL || goal == NULL) {
 		return;
 	}
 
+	float ballDistance = ball->getDribblerDistance();
+	bool onLeft = ball->x < goal->x;
+	int ballSideDistance = onLeft ? ball->x - ball->width / 2 : Config::cameraWidth - ball->x + ball->width / 2;
+
+	// config
+	float sideP = 2.0f;
+	float forwardP = 3.0f;
+	float zeroSpeedAngle = 40.0f;
+	float slowdownDistance = 0.5f;
+	float slowdownSpeed = 0.5f;
+	float dribblerStartDistance = 0.5f;
+	float dribblerRotationsPerSecond = 5.0f; 
+	int sideMovementMaxThreshold = 75; // side speed is maximal at this distance from side
+	int cancelSideMovementThreshold = 250; // side speed is canceled starting from this distance from side
+
+	if (ai->parameters[0].length() > 0) sideP = Util::toFloat(ai->parameters[0]);
+	if (ai->parameters[1].length() > 0) forwardP = Util::toFloat(ai->parameters[1]);
+	if (ai->parameters[2].length() > 0) zeroSpeedAngle = Util::toFloat(ai->parameters[2]);
+	if (ai->parameters[3].length() > 0) slowdownDistance = Util::toFloat(ai->parameters[3]);
+	
+	float sideSpeedMultiplier = Math::map((float)ballSideDistance, (float)sideMovementMaxThreshold, (float)cancelSideMovementThreshold, 1.0f, 0.0f);
+	float sideSpeed = ball->distanceX * sideP * sideSpeedMultiplier;
+	float forwardSpeed = Math::max(Math::degToRad(zeroSpeedAngle) - Math::abs(ball->angle), 0.0f) * forwardP;
+
+	if (ballDistance < slowdownDistance) {
+		forwardSpeed = slowdownSpeed;
+	}
+
+	if (ballDistance < dribblerStartDistance) {
+		robot->dribbler->setTargetOmega(-dribblerRotationsPerSecond * Math::PI);
+	}
+
+	ai->dbg("ballDistance", ballDistance);
+	ai->dbg("sideSpeed", sideSpeed);
+	ai->dbg("forwardSpeed", forwardSpeed);
+	ai->dbg("onLeft", onLeft);
+	ai->dbg("ballDistanceFromSide", ballSideDistance);
+	ai->dbg("sideSpeedMultiplier", sideSpeedMultiplier);
+
+	robot->setTargetDir(forwardSpeed, sideSpeed);
+	robot->lookAt(goal);
+}
+
+void TestController::FetchBallBehindState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration) {
+	Object* ball = visionResults->getClosestBall(Dir::REAR);
+	Object* goal = visionResults->getLargestGoal(Side::BLUE, Dir::REAR);
+
+	if (ball == NULL || goal == NULL) {
+		return;
+	}
+
+	// TODO Unify the same calculations for front
 	float ballDistance = ball->getDribblerDistance();
 	bool onLeft = ball->x < goal->x;
 	int ballSideDistance = onLeft ? ball->x - ball->width / 2 : Config::cameraWidth - ball->x + ball->width / 2;
@@ -223,6 +280,6 @@ void TestController::FetchBallInfrontState::step(float dt, Vision::Results* visi
 	ai->dbg("ballDistanceFromSide", ballSideDistance);
 	ai->dbg("sideSpeedMultiplier", sideSpeedMultiplier);
 
-	robot->setTargetDir(forwardSpeed, sideSpeed);
+	robot->setTargetDir(-forwardSpeed, sideSpeed);
 	robot->lookAt(goal);
 }
