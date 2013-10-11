@@ -293,7 +293,7 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 		return;
 	}
 
-	robot->lookAt(goal);
+	// TODO
 }
 
 void TestController::FetchBallStraightState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration) {
@@ -318,7 +318,42 @@ void TestController::FetchBallStraightState::step(float dt, Vision::Results* vis
 	}
 
 	float ballDistance = ball->getDribblerDistance();
+	float targetAngle = getTargetPos(goal->distanceX, goal->distanceY, ball->distanceX, ball->distanceY, 0.25f);
 
+	robot->setTargetDir(Math::Rad(targetAngle), 0.5f);
+	robot->lookAt(goal);
+}
+
+float TestController::FetchBallStraightState::getTargetPos(float goalX, float goalY, float ballX, float ballY, float D) {
+	//Line connecting ball and goal
+	float a = (ballY - goalY)/(ballX - goalX);
+	float b = goalY - a * goalX;
+
+	//Calculate X and Y positions for target (there are two possible targets)
+	float c = sqrt(pow(D, 2) - pow(ballY + goalY, 2));
+	float targetX1 = ballX + c;
+	float targetX2 = ballX - c;
+	float targetY1 = a * targetX1 + b;
+	float targetY2 = a * targetX2 + b;
+
+	//Target's distance from goal (squared)
+	float target1Dist = pow(goalX - targetX1, 2) + pow(goalY - targetY1, 2);
+	float target2Dist = pow(goalX - targetX2, 2) + pow(goalY - targetY2, 2);
+
+	//Choose target which is farther away from goal
+	float targetX;
+	float targetY;
+	if(target1Dist > target2Dist){
+		targetX = targetX1;
+		targetY = targetY1;
+	}
+	else{
+		targetX = targetX2;
+		targetY = targetY2;
+	}
+
+	float targetAngle = atan2(targetX, targetY);
+	return targetAngle;
 }
 
 void TestController::AimState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration) {
