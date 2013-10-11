@@ -271,7 +271,8 @@ void TestController::FetchBallInfrontState::step(float dt, Vision::Results* visi
 	ai->dbg("ballDistanceFromSide", ballSideDistance);
 	//ai->dbg("sideSpeedMultiplier", sideSpeedMultiplier);
 
-	robot->setTargetDir(forwardSpeed, sideSpeed);
+	//robot->setTargetDir(forwardSpeed, sideSpeed);
+	robot->setTargetDir(Math::Rad(ball->angle), 1.0f);
 	robot->lookAt(goal);
 }
 
