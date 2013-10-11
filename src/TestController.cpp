@@ -320,6 +320,13 @@ void TestController::FetchBallStraightState::step(float dt, Vision::Results* vis
 	float ballDistance = ball->getDribblerDistance();
 	float targetAngle = getTargetPos(goal->distanceX, goal->distanceY, ball->distanceX, ball->distanceY, 0.25f);
 
+	ai->dbg("goalX", goal->distanceX);
+	ai->dbg("goalY", goal->distanceY);
+	ai->dbg("ballX", ball->distanceX);
+	ai->dbg("ballY", ball->distanceY);
+	ai->dbg("ballDistance", ballDistance);
+	ai->dbg("targetAngle", targetAngle);
+
 	robot->setTargetDir(Math::Rad(targetAngle), 0.5f);
 	robot->lookAt(goal);
 }
