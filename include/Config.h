@@ -178,6 +178,9 @@ namespace Config {
 	// default kick strength in microseconds
 	const int robotDefaultKickStrength = 10000;
 
+	// minimum kick interval
+	const double minKickInterval = 1.0;
+
 	// maximum time object can be lost and still considered for updating its velocity
 	const double velocityUpdateMaxTime = 0.025;
 

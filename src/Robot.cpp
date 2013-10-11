@@ -109,7 +109,7 @@ void Robot::setupDribbler() {
 }
 
 void Robot::setupCoilgun() {
-	coilgun = new Coilgun();
+	coilgun = new Coilgun(com);
 }
 
 void Robot::setupOdometer() {
@@ -354,7 +354,7 @@ void Robot::stop() {
 }
 
 void Robot::kick(int microseconds) {
-	com->send("kick:" + Util::toString(microseconds));
+	coilgun->kick(microseconds);
 }
 
 void Robot::setPosition(float x, float y, float orientation) {
