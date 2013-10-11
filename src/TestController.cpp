@@ -230,8 +230,8 @@ void TestController::FetchBallInfrontState::step(float dt, Vision::Results* visi
 	float nearSpeed = 0.5f;
 	float dribblerStartDistance = 0.5f;
 	int dribblerSpeed = 100;
-	int maxSideSpeedThreshold = 75; // side speed is maximal at this distance from side
-	int minSideSpeedThreshold = 250; // side speed is canceled starting from this distance from side
+	int maxSideSpeedThreshold = 25; // side speed is maximal at this distance from side
+	int minSideSpeedThreshold = 300; // side speed is canceled starting from this distance from side
 	float sideSpeed, forwardSpeed;
 
 	if (ai->parameters[0].length() > 0) sideP = Util::toFloat(ai->parameters[0]);
