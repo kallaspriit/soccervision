@@ -9,7 +9,7 @@ class Dribbler : public Wheel {
 public:
 	Dribbler(int id);
 
-	void start() { setTargetOmega(Config::robotDribblerNormalOmega); }
+	void start() { setTargetSpeed(-Config::robotDribblerSpeed); }
 	void stop() { setTargetOmega(0); }
 	bool isActive() const { return targetOmega > 0; }
 	bool gotBall() const;

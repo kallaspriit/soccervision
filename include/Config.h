@@ -139,7 +139,7 @@ namespace Config {
 	const float robotfluidOmegaStep = 6.28f;
 
 	// how fast to spin the dribbler
-	const float robotDribblerNormalOmega = 3.14f;
+	const int robotDribblerSpeed = 100;
 	
 	// proportional multiplier for looking at object, multiplied by object angle
 	const float lookAtP = 5.0f;
@@ -165,12 +165,18 @@ namespace Config {
 	// multipler to jump robot by certain angle
 	const float jumpAngleStopMultiplier = 1.0f;
 
+	// how much should the centerline be inside the goal to kick ball
+	const float goalKickThreshold = 0.20f;
+
 	// particle filter robot localizer parameters
 	const int robotLocalizerParticleCount = 1000;
 	const float robotLocalizerForwardNoise = 0.25f;
 	const float robotLocalizerTurnNoise = 0.3f; // 45deg
 	const float robotLocalizerDistanceNoise = 0.35f;
 	const float robotLocalizerAngleNoise = 0.2f; // ~~11deg
+
+	// default kick strength in microseconds
+	const int robotDefaultKickStrength = 10000;
 
 	// maximum time object can be lost and still considered for updating its velocity
 	const double velocityUpdateMaxTime = 0.025;

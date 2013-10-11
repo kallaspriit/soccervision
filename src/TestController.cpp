@@ -19,6 +19,8 @@ void TestController::setupStates() {
 	states["spin-around-dribbler"] = new SpinAroundDribblerState(this);
 	states["drive-to"] = new DriveToState(this);
 	states["fetch-ball-infront"] = new FetchBallInfrontState(this);
+	states["fetch-ball-behind"] = new FetchBallBehindState(this);
+	states["aim"] = new AimState(this);
 }
 
 void TestController::step(float dt, Vision::Results* visionResults) {
@@ -202,11 +204,8 @@ void TestController::DriveToState::step(float dt, Vision::Results* visionResults
 }
 
 void TestController::FetchBallInfrontState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration) {
-	int dribblerSpeed = 100;
-	
 	if (robot->dribbler->gotBall()) {
-		robot->setTargetDir(0.0f, 0.0f, 0.0f);
-		robot->dribbler->setTargetSpeed(-dribblerSpeed);
+		ai->setState("aim");
 
 		return;
 	}
@@ -261,7 +260,9 @@ void TestController::FetchBallInfrontState::step(float dt, Vision::Results* visi
 	}
 
 	if (ballDistance < dribblerStartDistance) {
-		robot->dribbler->setTargetSpeed(-dribblerSpeed);
+		robot->dribbler->start();
+	} else {
+		robot->dribbler->stop();
 	}
 
 	ai->dbg("ballDistance", ballDistance);
@@ -284,46 +285,42 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 		return;
 	}
 
-	// TODO Unify the same calculations for front
-	float ballDistance = ball->getDribblerDistance();
-	bool onLeft = ball->x < goal->x;
-	int ballSideDistance = onLeft ? ball->x - ball->width / 2 : Config::cameraWidth - ball->x + ball->width / 2;
+}
 
-	// config
-	float sideP = 2.0f;
-	float forwardP = 3.0f;
-	float zeroSpeedAngle = 40.0f;
-	float slowdownDistance = 0.5f;
-	float stopDistance = 0.01f;
-	int sideMovementMaxThreshold = 75; // side speed is maximal at this distance from side
-	int cancelSideMovementThreshold = 250; // side speed is canceled starting from this distance from side
-
-	if (ai->parameters[0].length() > 0) sideP = Util::toFloat(ai->parameters[0]);
-	if (ai->parameters[1].length() > 0) forwardP = Util::toFloat(ai->parameters[1]);
-	if (ai->parameters[2].length() > 0) zeroSpeedAngle = Util::toFloat(ai->parameters[2]);
-	if (ai->parameters[3].length() > 0) slowdownDistance = Util::toFloat(ai->parameters[3]);
+void TestController::AimState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration) {
+	robot->stop();
 	
-	float sideSpeedMultiplier = Math::map((float)ballSideDistance, (float)sideMovementMaxThreshold, (float)cancelSideMovementThreshold, 1.0f, 0.0f);
-	float sideSpeed = ball->distanceX * sideP * sideSpeedMultiplier;
-	float forwardSpeed = Math::max(Math::degToRad(zeroSpeedAngle) - Math::abs(ball->angle), 0.0f) * forwardP;
+	if (!robot->dribbler->gotBall()) {
+		return;
+	}
+	
+	Object* goal = visionResults->getLargestGoal(Side::BLUE, Dir::FRONT);
 
-	/*if (ballDistanceFromSide > 100) {
-		sideSpeed = 0.0f;
-	}*/
-
-	if (ballDistance < stopDistance) {
-		forwardSpeed = 0.0f;
-	} else if (ballDistance < slowdownDistance) {
-		forwardSpeed = 0.5f;
+	if (goal == NULL) {
+		return;
 	}
 
-	ai->dbg("ballDistance", ballDistance);
-	ai->dbg("sideSpeed", sideSpeed);
-	ai->dbg("forwardSpeed", forwardSpeed);
-	ai->dbg("onLeft", onLeft);
-	ai->dbg("ballDistanceFromSide", ballSideDistance);
-	ai->dbg("sideSpeedMultiplier", sideSpeedMultiplier);
+	robot->setTargetDir(0.0f, 0.0f, 0.0f);
+	robot->dribbler->start();
 
-	robot->setTargetDir(-forwardSpeed, sideSpeed);
-	robot->lookAt(goal);
+	int halfWidth = Config::cameraWidth / 2;
+	int leftEdge = goal->x - goal->width / 2;
+	int rightEdge = goal->x + goal->width / 2;
+	int goalKickThresholdPixels = (int)((float)goal->width * Config::goalKickThreshold);
+	bool shouldKick = false;
+
+	if (!goal->behind) {
+		if (
+			leftEdge + goalKickThresholdPixels < halfWidth
+			&& rightEdge - goalKickThresholdPixels > halfWidth
+		) {
+			shouldKick = true;
+		}
+	}
+
+	if (shouldKick) {
+		robot->kick();
+	} else {
+		robot->lookAt(goal);
+	}
 }
