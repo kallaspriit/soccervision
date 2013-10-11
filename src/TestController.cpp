@@ -244,13 +244,14 @@ void TestController::FetchBallInfrontState::step(float dt, Vision::Results* visi
 	}*/
 	
 	float sideSpeed = ball->distanceX * sideP * sideSpeedMultiplier;
-	float forwardSpeed = Math::max(Math::degToRad(zeroSpeedAngle) - Math::abs(ball->angle), 0.0f) * forwardP;
+	//float forwardSpeed = Math::max(Math::degToRad(zeroSpeedAngle) - Math::abs(ball->angle), 0.0f) * forwardP;
+	float forwardSpeed = forwardP * (1.0f - sideSpeedMultiplier);
 
-	if (ballDistance < nearDistance) {
+	/*if (ballDistance < nearDistance) {
 		float nearSpeedMultiplier = 1.0f - Math::map(Math::abs(Math::degToRad(ball->angle)), 0.0f, 25.0f, 0.0f, 1.0f);
 
 		forwardSpeed = nearSpeed * nearSpeedMultiplier;
-	}
+	}*/
 
 	if (ballDistance < dribblerStartDistance) {
 		robot->dribbler->setTargetSpeed(-dribblerSpeed);
