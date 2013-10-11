@@ -854,11 +854,12 @@ Vision::PathMetric Vision::getPathMetric(int x1, int y1, int x2, int y2, std::ve
 			if (strcmp(color->name, "black") == 0) {
 				blacksInRow++;
 
-				if (blacksInRow > maxBlacksInRow) {
+				// TODO Review
+				/*if (blacksInRow > maxBlacksInRow) {
 					tooManyBlacksInRow = true;
 
 					break;
-				}
+				}*/
 			} else {
 				blacksInRow = 0;
 			}
