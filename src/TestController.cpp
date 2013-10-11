@@ -233,13 +233,13 @@ void TestController::FetchBallInfrontState::step(float dt, Vision::Results* visi
 	int maxSideSpeedThreshold; // side speed is maximal at this distance from side
 	int minSideSpeedThreshold; // side speed is canceled starting from this distance from side
 
+
 	if (ballDistance > nearDistance) {
 		maxSideSpeedThreshold = 75;
 		minSideSpeedThreshold = 250;
 	} else {
 		minSideSpeedThreshold = Config::cameraWidth / 2;
 		maxSideSpeedThreshold = 0;
-		forwardP /= 4.0f; // reduce forward speed nearby
 	}
 
 	if (ai->parameters[0].length() > 0) sideP = Util::toFloat(ai->parameters[0]);
@@ -260,6 +260,10 @@ void TestController::FetchBallInfrontState::step(float dt, Vision::Results* visi
 
 	float sideSpeed = Math::sign(ball->distanceX) * Math::map((float)ballSideDistance, (float)maxSideSpeedThreshold, (float)minSideSpeedThreshold, sideP, 0.0f);
 	float forwardSpeed = forwardP - Math::abs(sideSpeed);
+
+	if (ballDistance < nearDistance) {
+		forwardSpeed /= 4.0f;
+	}
 
 	if (ballDistance < dribblerStartDistance) {
 		robot->dribbler->setTargetSpeed(-dribblerSpeed);
