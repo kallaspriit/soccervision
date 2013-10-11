@@ -230,21 +230,22 @@ void TestController::FetchBallInfrontState::step(float dt, Vision::Results* visi
 	float nearSpeed = 0.5f;
 	float dribblerStartDistance = 0.5f;
 	int dribblerSpeed = 100;
-	int sideMovementMaxThreshold = 75; // side speed is maximal at this distance from side
-	int cancelSideMovementThreshold = 250; // side speed is canceled starting from this distance from side
+	int maxSideSpeedThreshold = 75; // side speed is maximal at this distance from side
+	int minSideSpeedThreshold = 250; // side speed is canceled starting from this distance from side
 
 	if (ai->parameters[0].length() > 0) sideP = Util::toFloat(ai->parameters[0]);
 	if (ai->parameters[1].length() > 0) forwardP = Util::toFloat(ai->parameters[1]);
 	if (ai->parameters[2].length() > 0) zeroSpeedAngle = Util::toFloat(ai->parameters[2]);
 	if (ai->parameters[3].length() > 0) nearDistance = Util::toFloat(ai->parameters[3]);
 	
-	float sideSpeedMultiplier = Math::map((float)ballSideDistance, (float)sideMovementMaxThreshold, (float)cancelSideMovementThreshold, 1.0f, 0.0f);
+	//float sideSpeedMultiplier = Math::map((float)ballSideDistance, (float)sideMovementMaxThreshold, (float)cancelSideMovementThreshold, 1.0f, 0.0f);
 	
 	/*if (ballDistance <= nearDistance) {
 		sideSpeedMultiplier = 1.0f;
 	}*/
 	
-	float sideSpeed = ball->distanceX * sideP * sideSpeedMultiplier;
+	//float sideSpeed = ball->distanceX * sideP * sideSpeedMultiplier;
+	float sideSpeed = Math::sign(ball->distanceX) * Math::map((float)ballSideDistance, (float)minSideSpeedThreshold, (float)maxSideSpeedThreshold, 0.0f, sideP);
 	//float forwardSpeed = Math::max(Math::degToRad(zeroSpeedAngle) - Math::abs(ball->angle), 0.0f) * forwardP;
 	//float forwardSpeed = forwardP * (1.0f - sideSpeedMultiplier);
 	float forwardSpeed = forwardP - Math::abs(sideSpeed);
@@ -264,7 +265,7 @@ void TestController::FetchBallInfrontState::step(float dt, Vision::Results* visi
 	ai->dbg("forwardSpeed", forwardSpeed);
 	ai->dbg("onLeft", onLeft);
 	ai->dbg("ballDistanceFromSide", ballSideDistance);
-	ai->dbg("sideSpeedMultiplier", sideSpeedMultiplier);
+	//ai->dbg("sideSpeedMultiplier", sideSpeedMultiplier);
 
 	robot->setTargetDir(forwardSpeed, sideSpeed);
 	robot->lookAt(goal);

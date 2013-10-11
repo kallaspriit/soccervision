@@ -41,6 +41,10 @@ static float abs(float num) {
     return num >= 0 ? num : -num;
 }
 
+static float sign(float num) {
+    return num >= 0 ? 1.0f : -1.0f;
+}
+
 static float round(float r, int places = 1) {
     float off = (float)::pow(10, places);
 
