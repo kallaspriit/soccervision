@@ -18,7 +18,8 @@ Dash.Robot.prototype.kick = function() {
 	if (this.socket.isOpen()) {
 		dash.dbg.log('! Kicking');
 		
-		this.socket.send('<kick:1500>');
+		//this.socket.send('<kick:5000>');
+		this.socket.send('<kick:10000>');
 	}
 };
 
