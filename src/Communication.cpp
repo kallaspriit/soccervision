@@ -122,7 +122,7 @@ void Communication::onReceive(const boost::system::error_code& error, size_t byt
 		std::string msg2 = std::string(message);
 
 		if (msg.substr(0, 7) != "<speeds") {
-			std::cout << "< " << msg << ", bytesReceived: " << bytesReceived << std::endl;
+			std::cout << "< " << msg << ", bytesReceived: " << bytesReceived << ", msg2: " << msg2 << std::endl;
 		}
 
 		boost::mutex::scoped_lock lock(messagesMutex);
