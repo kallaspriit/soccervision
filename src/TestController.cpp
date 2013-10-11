@@ -320,8 +320,10 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 		}
 	}
 
-	if (shouldKick) {
+	if (shouldKick && lastKickTime == 0.0 || Util::duration(lastKickTime) >= 1) {
 		robot->kick();
+
+		lastKickTime = Util::millitime();
 	} else {
 		robot->lookAt(goal);
 	}
