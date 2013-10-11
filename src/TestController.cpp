@@ -20,6 +20,7 @@ void TestController::setupStates() {
 	states["drive-to"] = new DriveToState(this);
 	states["fetch-ball-infront"] = new FetchBallInfrontState(this);
 	states["fetch-ball-behind"] = new FetchBallBehindState(this);
+	states["fetch-ball-straight"] = new FetchBallStraightState(this);
 	states["aim"] = new AimState(this);
 }
 
@@ -291,6 +292,32 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 	if (ball == NULL || goal == NULL) {
 		return;
 	}
+
+	robot->lookAt(goal);
+}
+
+void TestController::FetchBallStraightState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration) {
+	if (robot->dribbler->gotBall()) {
+		ai->dbg("gotBall", true);
+
+		ai->setState("aim");
+
+		return;
+	}
+	
+	Object* ball = visionResults->getClosestBall(Dir::FRONT);
+	Object* goal = visionResults->getLargestGoal(Side::BLUE, Dir::FRONT);
+
+	ai->dbg("ballVisible", ball != NULL);
+	ai->dbg("goalVisible", goal != NULL);
+
+	if (ball == NULL || goal == NULL) {
+		robot->stop();
+
+		return;
+	}
+
+	float ballDistance = ball->getDribblerDistance();
 
 }
 
