@@ -66,7 +66,7 @@ namespace Config {
 	const int goalCertainArea = 10000;
 
 	// if a goal starts lower than this value then it's not considered valid
-	const int goalTopMaxY = 15;
+	const int goalTopMaxY = 30;
 
 	// surround metric is taken into account if ball bottom is below this threshold
 	const int surroundSenseThresholdY = cameraHeight - 50;
