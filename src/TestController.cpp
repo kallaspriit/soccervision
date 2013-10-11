@@ -239,6 +239,7 @@ void TestController::FetchBallInfrontState::step(float dt, Vision::Results* visi
 	} else {
 		minSideSpeedThreshold = Config::cameraWidth / 2;
 		maxSideSpeedThreshold = 0;
+		forwardP /= 4.0f; // reduce forward speed nearby
 	}
 
 	if (ai->parameters[0].length() > 0) sideP = Util::toFloat(ai->parameters[0]);
