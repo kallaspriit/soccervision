@@ -4,7 +4,7 @@
 #include "Dribbler.h"
 #include "Command.h"
 
-TestController::TestController(Robot* robot, Communication* com) : BaseAI(robot, com), manualSpeedX(0.0f), manualSpeedY(0.0f), manualOmega(0.0f), blueGoalDistance(0.0f), yellowGoalDistance(0.0f), lastCommandTime(0.0) {
+TestController::TestController(Robot* robot, Communication* com) : BaseAI(robot, com), manualSpeedX(0.0f), manualSpeedY(0.0f), manualOmega(0.0f), manualDribblerSpeed(0.0f), manualKickStrength(0), blueGoalDistance(0.0f), yellowGoalDistance(0.0f), lastCommandTime(0.0) {
 	setupStates();
 };
 
@@ -39,6 +39,10 @@ void TestController::step(float dt, Vision::Results* visionResults) {
 bool TestController::handleCommand(const Command& cmd) {
 	if (cmd.name == "target-vector" && cmd.parameters.size() == 3) {
         handleTargetVectorCommand(cmd);
+    } else if (cmd.name == "set-dribbler" && cmd.parameters.size() == 1) {
+        handleDribblerCommand(cmd);
+    } else if (cmd.name == "kick" && cmd.parameters.size() == 1) {
+        handleKickCommand(cmd);
     } else if (cmd.name == "reset-position") {
 		robot->setPosition(Config::fieldWidth / 2.0f, Config::fieldHeight / 2.0f, 0.0f);
     } else if (cmd.name == "stop") {
@@ -63,6 +67,18 @@ void TestController::handleTargetVectorCommand(const Command& cmd) {
     manualSpeedX = Util::toFloat(cmd.parameters[0]);
     manualSpeedY = Util::toFloat(cmd.parameters[1]);
     manualOmega = Util::toFloat(cmd.parameters[2]);
+
+	lastCommandTime = Util::millitime();
+}
+
+void TestController::handleDribblerCommand(const Command& cmd) {
+    manualDribblerSpeed = Util::toFloat(cmd.parameters[0]);
+
+	lastCommandTime = Util::millitime();
+}
+
+void TestController::handleKickCommand(const Command& cmd) {
+    manualKickStrength = Util::toInt(cmd.parameters[0]);
 
 	lastCommandTime = Util::millitime();
 }
@@ -134,8 +150,16 @@ void TestController::ManualControlState::step(float dt, Vision::Results* visionR
 
 	if (time - ai->lastCommandTime < 0.5) {
 		robot->setTargetDir(ai->manualSpeedX, ai->manualSpeedY, ai->manualOmega);
+		robot->dribbler->setTargetSpeed(-ai->manualDribblerSpeed);
+
+		if (ai->manualKickStrength != 0.0f) {
+			robot->kick(ai->manualKickStrength);
+
+			ai->manualKickStrength = 0.0f;
+		}
 	} else {
 		robot->stop();
+		robot->dribbler->setTargetSpeed(0);
 	}
 }
 
@@ -179,6 +203,8 @@ void TestController::DriveToState::step(float dt, Vision::Results* visionResults
 
 void TestController::FetchBallInfrontState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration) {
 	if (robot->dribbler->gotBall()) {
+		robot->setTargetDir(0.0f, 0.0f, 0.0f);
+
 		return;
 	}
 	
@@ -200,7 +226,7 @@ void TestController::FetchBallInfrontState::step(float dt, Vision::Results* visi
 	float slowdownDistance = 0.5f;
 	float slowdownSpeed = 0.5f;
 	float dribblerStartDistance = 0.5f;
-	float dribblerRotationsPerSecond = 5.0f; 
+	float dribblerSpeed = 100.0f;
 	int sideMovementMaxThreshold = 75; // side speed is maximal at this distance from side
 	int cancelSideMovementThreshold = 250; // side speed is canceled starting from this distance from side
 
@@ -218,7 +244,7 @@ void TestController::FetchBallInfrontState::step(float dt, Vision::Results* visi
 	}
 
 	if (ballDistance < dribblerStartDistance) {
-		robot->dribbler->setTargetOmega(-dribblerRotationsPerSecond * Math::PI);
+		robot->dribbler->setTargetSpeed(-dribblerSpeed);
 	}
 
 	ai->dbg("ballDistance", ballDistance);
