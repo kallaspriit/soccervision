@@ -221,7 +221,7 @@ Dash.UI.prototype.initSocket = function() {
 	});
 	
 	dash.socket.bind(Dash.Socket.Event.CLOSE, function(e) {
-		dash.dbg.log('- Socket server closed');
+		//dash.dbg.log('- Socket server closed');
 		
 		$('#connecting').show();
 		$('.live-only').attr('disabled', 'disabled');
@@ -240,7 +240,7 @@ Dash.UI.prototype.initSocket = function() {
 	});
 	
 	dash.socket.bind(Dash.Socket.Event.ERROR, function(e) {
-		dash.dbg.log('- Socket error occured: ' + e.message);
+		//dash.dbg.log('- Socket error occured: ' + e.message);
 	});
 	
 	dash.socket.bind(Dash.Socket.Event.MESSAGE_SENT, function(e) {

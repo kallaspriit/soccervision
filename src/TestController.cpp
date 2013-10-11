@@ -203,7 +203,7 @@ void TestController::DriveToState::step(float dt, Vision::Results* visionResults
 
 void TestController::FetchBallInfrontState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration) {
 	if (robot->dribbler->gotBall()) {
-		robot->setTargetDir(0.0f, 0.0f, 0.0f);
+		robot->stop();
 
 		return;
 	}
@@ -212,6 +212,8 @@ void TestController::FetchBallInfrontState::step(float dt, Vision::Results* visi
 	Object* goal = visionResults->getLargestGoal(Side::BLUE, Dir::FRONT);
 
 	if (ball == NULL || goal == NULL) {
+		robot->stop();
+
 		return;
 	}
 
