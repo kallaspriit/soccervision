@@ -230,17 +230,9 @@ void TestController::FetchBallInfrontState::step(float dt, Vision::Results* visi
 	float nearSpeed = 0.5f;
 	float dribblerStartDistance = 0.5f;
 	int dribblerSpeed = 100;
-	int maxSideSpeedThreshold; // side speed is maximal at this distance from side
-	int minSideSpeedThreshold; // side speed is canceled starting from this distance from side
-
-
-	if (ballDistance > nearDistance) {
-		maxSideSpeedThreshold = 75;
-		minSideSpeedThreshold = 250;
-	} else {
-		minSideSpeedThreshold = Config::cameraWidth / 2;
-		maxSideSpeedThreshold = 0;
-	}
+	int maxSideSpeedThreshold = 75; // side speed is maximal at this distance from side
+	int minSideSpeedThreshold = 250; // side speed is canceled starting from this distance from side
+	float sideSpeed, forwardSpeed;
 
 	if (ai->parameters[0].length() > 0) sideP = Util::toFloat(ai->parameters[0]);
 	if (ai->parameters[1].length() > 0) forwardP = Util::toFloat(ai->parameters[1]);
@@ -258,11 +250,12 @@ void TestController::FetchBallInfrontState::step(float dt, Vision::Results* visi
 	//float forwardSpeed = Math::max(Math::degToRad(zeroSpeedAngle) - Math::abs(ball->angle), 0.0f) * forwardP;
 	//float forwardSpeed = forwardP * (1.0f - sideSpeedMultiplier);
 
-	float sideSpeed = Math::sign(ball->distanceX) * Math::map((float)ballSideDistance, (float)maxSideSpeedThreshold, (float)minSideSpeedThreshold, sideP, 0.0f);
-	float forwardSpeed = forwardP - Math::abs(sideSpeed);
-
-	if (ballDistance < nearDistance) {
-		forwardSpeed /= 4.0f;
+	if (ballDistance > nearDistance) {
+		sideSpeed = Math::sign(ball->distanceX) * Math::map((float)ballSideDistance, (float)maxSideSpeedThreshold, (float)minSideSpeedThreshold, sideP, 0.0f);
+		forwardSpeed = forwardP - Math::abs(sideSpeed);
+	} else {
+		forwardSpeed = nearSpeed * Math::map(Math::abs(Math::radToDeg(ball->angle)), 0.0f, 30.0f, 1.0f, 0.0f);
+		sideSpeed = Math::sign(ball->distanceX) * (nearSpeed - forwardSpeed);
 	}
 
 	if (ballDistance < dribblerStartDistance) {
