@@ -262,7 +262,7 @@ void TestController::FetchBallInfrontState::step(float dt, Vision::Results* visi
 	if (ballDistance > nearDistance) {
 		//sideSpeed = approachSpeed * Math::sign(ball->distanceX) * Math::map((float)ballSideDistance, (float)maxSideSpeedThreshold, (float)minSideSpeedThreshold, 1.0f, 0.0f);
 		sideSpeed = sideP * Math::sign(ball->distanceX) * Math::map((float)ballSideDistance, (float)maxSideSpeedThreshold, (float)minSideSpeedThreshold, 1.0f, 0.0f);
-		forwardSpeed = approachSpeed - Math::abs(sideSpeed);
+		forwardSpeed = approachSpeed - Math::abs(sideSpeed) * (approachSpeed / sideP);
 	} else {
 		forwardSpeed = nearSpeed * Math::map(Math::abs(Math::radToDeg(ball->angle)), 0.0f, zeroSpeedAngle, 1.0f, 0.0f);
 		sideSpeed = Math::sign(ball->distanceX) * (nearSpeed - forwardSpeed);
