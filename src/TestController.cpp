@@ -222,8 +222,9 @@ void TestController::FetchBallInfrontState::step(float dt, Vision::Results* visi
 	int ballSideDistance = onLeft ? ball->x - ball->width / 2 : Config::cameraWidth - ball->x + ball->width / 2;
 
 	// config
-	float sideP = 2.0f;
-	float forwardP = 3.0f;
+	float sideP = 1.0f;
+	//float forwardP = 3.0f;
+	float forwardP = 1.0f;
 	float zeroSpeedAngle = 40.0f;
 	float nearDistance = 0.5f;
 	float nearSpeed = 0.5f;
@@ -245,7 +246,8 @@ void TestController::FetchBallInfrontState::step(float dt, Vision::Results* visi
 	
 	float sideSpeed = ball->distanceX * sideP * sideSpeedMultiplier;
 	//float forwardSpeed = Math::max(Math::degToRad(zeroSpeedAngle) - Math::abs(ball->angle), 0.0f) * forwardP;
-	float forwardSpeed = forwardP * (1.0f - sideSpeedMultiplier);
+	//float forwardSpeed = forwardP * (1.0f - sideSpeedMultiplier);
+	float forwardSpeed = forwardP - Math::abs(sideSpeed);
 
 	/*if (ballDistance < nearDistance) {
 		float nearSpeedMultiplier = 1.0f - Math::map(Math::abs(Math::degToRad(ball->angle)), 0.0f, 25.0f, 0.0f, 1.0f);
