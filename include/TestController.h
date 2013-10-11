@@ -87,8 +87,11 @@ public:
 	class AimState : public State {
 
 	public:
-		AimState(TestController* ai) : State(ai) {}
+		AimState(TestController* ai) : State(ai), lastKickTime(0.0) {}
 		void step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration);
+
+	private:
+		double lastKickTime;
 
 	};
 
