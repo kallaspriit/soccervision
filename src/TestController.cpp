@@ -225,7 +225,7 @@ void TestController::FetchBallInfrontState::step(float dt, Vision::Results* visi
 		return;
 	}
 
-	if (stateDuration < 5.0f) {
+	if (stateDuration < 2.0f) {
 		robot->lookAt(goal);
 
 		return;
