@@ -365,7 +365,10 @@ void TestController::FetchBallStraightState::step(float dt, Vision::Results* vis
 		robot->setTargetDir(forwardSpeed, sideSpeed);
 	}
 
-	robot->lookAt(goal);
+	//robot->lookAt(goal);
+	float lookAngle = (goal->angle + ball->angle) / 2.0f;
+
+	robot->setTargetOmega(Math::limit(lookAngle * Config::lookAtP, Config::lookAtMaxOmega));
 }
 
 float TestController::FetchBallStraightState::getTargetPos(float goalX, float goalY, float ballX, float ballY, float D) {
