@@ -51,7 +51,11 @@ void Wheel::step(float dt) {
 
 bool Wheel::handleCommand(const Command& cmd) {
 	if (cmd.name == "speeds") {
-		realOmega = speedToOmega((float)Util::toInt(cmd.parameters[id]));
+		if ((int)cmd.parameters.size() > id) {
+			realOmega = speedToOmega((float)Util::toInt(cmd.parameters[id]));
+		} else {
+			std::cout << "- Invalid speeds info: " << cmd.name << " " << Util::toString(cmd.parameters) << std::endl;
+		}
 
 		return true;
 	}
