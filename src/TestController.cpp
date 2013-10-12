@@ -235,7 +235,7 @@ void TestController::FetchBallInfrontState::step(float dt, Vision::Results* visi
 	//float forwardP = 1.0f;
 	float approachSpeed = 2.0f;
 	float zeroSpeedAngle = 25.0f;
-	float maxSideSpeedDistance = 0.05f;
+	float maxSideSpeedDistance = 0.1f;
 	float nearDistance = 0.5f;
 	float nearSpeed = 1.0f;
 	float dribblerStartDistance = 0.5f;
@@ -248,6 +248,7 @@ void TestController::FetchBallInfrontState::step(float dt, Vision::Results* visi
 	if (ai->parameters[0].length() > 0) approachSpeed = Util::toFloat(ai->parameters[0]);
 	if (ai->parameters[1].length() > 0) nearDistance = Util::toFloat(ai->parameters[1]);
 	if (ai->parameters[2].length() > 0) nearSpeed = Util::toFloat(ai->parameters[2]);
+	if (ai->parameters[3].length() > 0) maxSideSpeedDistance = Util::toFloat(ai->parameters[3]);
 	
 	//float sideSpeedMultiplier = Math::map((float)ballSideDistance, (float)sideMovementMaxThreshold, (float)cancelSideMovementThreshold, 1.0f, 0.0f);
 	
