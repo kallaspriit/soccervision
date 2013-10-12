@@ -211,14 +211,15 @@ Dash.Renderer.prototype.drawRuler = function() {
 	this.c.restore();
 };
 
-Dash.Renderer.prototype.drawPath = function(state, localizer, color, items) {
+Dash.Renderer.prototype.drawPath = function(state/*, localizer*/, color, items) {
 	items = typeof(items) !== 'undefined' ? items : 1500;
 
-	if (state.controllerState === null) {
+	/*if (state.controllerState === null) {
 		return;
-	}
+	}*/
 
-	var data = state.controllerState[localizer],
+	//var data = state.controllerState[localizer],
+	var data = state,
 		previousState = state.previous,
 		skips = 10;
 
@@ -314,6 +315,8 @@ Dash.Renderer.prototype.renderState = function(state) {
 		state.robot.odometerOrientation
 	);
 
+	this.drawPath(state, '#060');
+
 	this.drawPolygon(state.robot.cameraFOV, 'rgba(255, 255, 255, 0.25)');
 
 	this.drawBalls(
@@ -396,7 +399,7 @@ Dash.Renderer.prototype.renderState = function(state) {
 				);
 			}
 
-			this.drawPath(state, 'particleLocalizer', '#060');
+			//this.drawPath(state, 'particleLocalizer', '#060');
 		}
 
 		if (state.controllerState.blueGoalDistance || state.controllerState.yellowGoalDistance) {
