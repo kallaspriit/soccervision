@@ -414,6 +414,11 @@ float TestController::FetchBallStraightState::getTargetPos(float goalX, float go
 		targetY = targetY2;
 	}
 
+	ai->dbg("targetX", targetX);
+	ai->dbg("targetY", targetY);
+	ai->dbg("target1Dist", target1Dist);
+	ai->dbg("target2Dist", target2Dist);
+
 	float targetAngle = atan2(targetX, targetY);
 	return targetAngle;
 }
