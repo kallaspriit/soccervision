@@ -121,7 +121,7 @@ void Communication::receiveNext() {
 }
 
 void Communication::onReceive(const boost::system::error_code& error, size_t bytesReceived) {
-	if (!error && bytesReceived > 0) {
+	if ((!error || error == boost::asio::error::message_size) && bytesReceived > 0) {
 		//std::string msg = std::string(message, bytesReceived);
 		std::string msg = std::string(receiveBuffer.data(), bytesReceived);
 
