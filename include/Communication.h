@@ -43,7 +43,7 @@ private:
 	int port;
 	//char message[1024];
 	boost::array<char, 1024> receiveBuffer;
-	char request[1024];
+	//char request[1024];
 	boost::asio::io_service ioService;
 	udp::socket* socket;
 	udp::endpoint endpoint;

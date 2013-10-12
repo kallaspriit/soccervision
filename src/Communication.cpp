@@ -38,8 +38,10 @@ void Communication::send(std::string message) {
 
 	message += "\n";
 
-	request[message.size()] = 0;
-	memcpy(request, message.c_str(), message.size());
+	//memcpy(request, message.c_str(), message.size());
+	//request[message.size()] = 0;
+
+	boost::shared_ptr<std::string> requestBuffer(new std::string(message));
 
 	try {
 		boost::asio::ip::udp::endpoint remoteEndpoint = boost::asio::ip::udp::endpoint(
@@ -48,7 +50,8 @@ void Communication::send(std::string message) {
 		);
 
 		socket->async_send_to(
-			boost::asio::buffer(request, message.length()), remoteEndpoint,
+			//boost::asio::buffer(request, message.length()), remoteEndpoint,
+			boost::asio::buffer(*requestBuffer), remoteEndpoint,
 			boost::bind(
 				&Communication::onSend,
 				this,
