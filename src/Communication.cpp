@@ -120,7 +120,7 @@ void Communication::receiveNext() {
 void Communication::onReceive(const boost::system::error_code& error, size_t bytesReceived) {
 	if (!error && bytesReceived > 0) {
 		//std::string msg = std::string(message, bytesReceived);
-		std::string msg = std::string(receiveBuffer.begin(), receiveBuffer.end());
+		std::string msg = std::string(receiveBuffer.data(), bytesReceived);
 
 		if (msg.substr(0, 7) != "<speeds") {
 			std::cout << "< " << msg << ", bytesReceived: " << bytesReceived << std::endl;
