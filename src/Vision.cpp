@@ -137,6 +137,14 @@ ObjectList Vision::processBalls(Dir dir) {
 
 			distance = getDistance(ball->x, ball->y + ball->height / 2);
 
+			if (dir == Dir::REAR) {
+				if (distance.angle > 0.0f) {
+					distance.angle -= Math::PI;
+				} else {
+					distance.angle += Math::PI;
+				}
+			}
+
 			ball->distance = distance.straight;
 			ball->distanceX = distance.x;
 			ball->distanceY = distance.y;
@@ -213,6 +221,14 @@ ObjectList Vision::processGoals(Dir dir) {
 			// TODO Extend the goal downwards using extended color / limited ammount horizontal too
 
 			distance = getDistance(goal->x, goal->y + goal->height / 2);
+
+			if (dir == Dir::REAR) {
+				if (distance.angle > 0.0f) {
+					distance.angle -= Math::PI;
+				} else {
+					distance.angle += Math::PI;
+				}
+			}
 
 			goal->distance = distance.straight;
 			goal->distanceX = distance.x;
