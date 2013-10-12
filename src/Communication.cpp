@@ -56,8 +56,7 @@ void Communication::send(std::string message) {
 		);*/
 
 		socket->async_send_to(
-			//boost::asio::buffer(requestBuffer, message.length()), remoteEndpoint,
-			boost::asio::buffer(requestBuffer, MAX_SIZE), remoteEndpoint,
+			boost::asio::buffer(requestBuffer, message.length()), remoteEndpoint,
 			//boost::asio::buffer(*requestBuffer), remoteEndpoint,
 			boost::bind(
 				&Communication::onSend,
@@ -114,7 +113,7 @@ void Communication::receiveNext() {
 	try {
 		socket->async_receive_from(
 			//boost::asio::buffer(message, MAX_SIZE), endpoint,
-			boost::asio::buffer(receiveBuffer), endpoint,
+			boost::asio::buffer(receiveBuffer, MAX_SIZE), endpoint,
 			boost::bind(
 				&Communication::onReceive,
 				this,
