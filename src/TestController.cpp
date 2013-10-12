@@ -245,7 +245,8 @@ void TestController::FetchBallInfrontState::step(float dt, Vision::Results* visi
 	float nearSideP = 1.0f;
 	float nearZeroSpeedAngle = 15.0f;
 	float nearMaxSideSpeedAngle = 40.0f;
-	float nearDistance = 0.5f;
+	//float nearDistance = 0.5f;
+	float nearDistance = Math::map(robot->getVelocity(), 0.0f, 2.0f, 0.25f, 1.0f);
 	
 	float dribblerStartDistance = 0.5f;
 	int maxSideSpeedThreshold = 0; // side speed is maximal at this distance from side
@@ -286,6 +287,7 @@ void TestController::FetchBallInfrontState::step(float dt, Vision::Results* visi
 
 	ai->dbg("ballDistance", ballDistance);
 	ai->dbg("ballDistanceX", ball->distanceX);
+	ai->dbg("nearDistance", nearDistance);
 	ai->dbg("ballAngle", Math::radToDeg(ball->angle));
 	ai->dbg("sideSpeed", sideSpeed);
 	ai->dbg("forwardSpeed", forwardSpeed);
