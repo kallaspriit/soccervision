@@ -5,6 +5,7 @@
 
 #include <boost/thread/mutex.hpp>
 #include <boost/asio.hpp>
+#include <boost/array.hpp>
 #include <string>
 #include <vector>
 #include <stack>
@@ -40,7 +41,8 @@ private:
 
 	std::string host;
 	int port;
-	char message[1024];
+	//char message[1024];
+	boost::array<char, 1024> receiveBuffer;
 	char request[1024];
 	boost::asio::io_service ioService;
 	udp::socket* socket;

@@ -337,7 +337,8 @@ float TestController::FetchBallStraightState::getTargetPos(float goalX, float go
 	float b = goalY - a * goalX;
 
 	//Calculate X and Y positions for target (there are two possible targets)
-	float c = sqrt(pow(D, 2) - pow(ballY + goalY, 2));
+	//float c = sqrt(pow(D, 2) - pow(ballY - goalY, 2));
+	float c = sqrt(Math::abs(pow(D, 2) - pow(ballY - goalY, 2)));
 	float targetX1 = ballX + c;
 	float targetX2 = ballX - c;
 	float targetY1 = a * targetX1 + b;

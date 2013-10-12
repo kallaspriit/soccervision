@@ -103,7 +103,8 @@ void* Communication::run() {
 void Communication::receiveNext() {
 	try {
 		socket->async_receive_from(
-			boost::asio::buffer(message, 1024), endpoint,
+			//boost::asio::buffer(message, 1024), endpoint,
+			boost::asio::buffer(receiveBuffer), endpoint,
 			boost::bind(
 				&Communication::onReceive,
 				this,
@@ -118,7 +119,8 @@ void Communication::receiveNext() {
 
 void Communication::onReceive(const boost::system::error_code& error, size_t bytesReceived) {
 	if (!error && bytesReceived > 0) {
-		std::string msg = std::string(message, bytesReceived);
+		//std::string msg = std::string(message, bytesReceived);
+		std::string msg = std::string(receiveBuffer.begin(), receiveBuffer.end());
 
 		if (msg.substr(0, 7) != "<speeds") {
 			std::cout << "< " << msg << ", bytesReceived: " << bytesReceived << std::endl;
