@@ -247,7 +247,6 @@ void TestController::FetchBallInfrontState::step(float dt, Vision::Results* visi
 	float nearMaxSideSpeedAngle = 40.0f;
 	//float nearDistance = 0.5f;
 	float nearDistance = Math::map(robot->getVelocity(), 0.0f, 2.0f, 0.25f, 1.0f);
-	
 	float dribblerStartDistance = 0.5f;
 	int maxSideSpeedThreshold = 0; // side speed is maximal at this distance from side
 	int minSideSpeedThreshold = Config::cameraWidth / 2; // side speed is canceled starting from this distance from side
@@ -339,6 +338,7 @@ void TestController::FetchBallStraightState::step(float dt, Vision::Results* vis
 	float nearSideP = 1.0f;
 	float nearZeroSpeedAngle = 15.0f;
 	float nearMaxSideSpeedAngle = 40.0f;
+	float dribblerStartDistance = 0.5f;
 
 	float ballDistance = ball->getDribblerDistance();
 	float targetAngle = getTargetPos(goal->distanceX, goal->distanceY, ball->distanceX, ball->distanceY, offsetDistance);
@@ -349,6 +349,12 @@ void TestController::FetchBallStraightState::step(float dt, Vision::Results* vis
 	ai->dbg("ballY", ball->distanceY);*/
 	ai->dbg("ballDistance", ballDistance);
 	ai->dbg("targetAngle", Math::radToDeg(targetAngle));
+
+	if (ballDistance < dribblerStartDistance) {
+		robot->dribbler->start();
+	} else {
+		robot->dribbler->stop();
+	}
 
 	if (ballDistance >= offsetDistance) {
 		robot->setTargetDir(Math::Rad(targetAngle), approachSpeed);
