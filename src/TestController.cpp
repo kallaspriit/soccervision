@@ -335,6 +335,10 @@ void TestController::FetchBallStraightState::step(float dt, Vision::Results* vis
 
 	float offsetDistance = 0.2f;
 	float approachSpeed = 0.5f;
+	float nearApproachP = 0.75f;
+	float nearSideP = 1.0f;
+	float nearZeroSpeedAngle = 15.0f;
+	float nearMaxSideSpeedAngle = 40.0f;
 
 	float ballDistance = ball->getDribblerDistance();
 	float targetAngle = getTargetPos(goal->distanceX, goal->distanceY, ball->distanceX, ball->distanceY, offsetDistance);
@@ -349,7 +353,10 @@ void TestController::FetchBallStraightState::step(float dt, Vision::Results* vis
 	if (ballDistance >= offsetDistance) {
 		robot->setTargetDir(Math::Rad(targetAngle), approachSpeed);
 	} else {
-		robot->setTargetDir(0.0f, 0.0f);
+		float forwardSpeed = nearApproachP * Math::map(Math::abs(Math::radToDeg(ball->angle)), 0.0f, nearZeroSpeedAngle, 1.0f, 0.0f);
+		float sideSpeed = Math::sign(ball->distanceX) * Math::map(Math::abs(Math::radToDeg(ball->angle)), 0.0f, nearMaxSideSpeedAngle, 0.0f, 1.0f) * nearSideP;
+
+		robot->setTargetDir(forwardSpeed, sideSpeed);
 	}
 
 	robot->lookAt(goal);
