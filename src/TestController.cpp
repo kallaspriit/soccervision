@@ -234,7 +234,7 @@ void TestController::FetchBallInfrontState::step(float dt, Vision::Results* visi
 	//float forwardP = 3.0f;
 	//float forwardP = 1.0f;
 	float approachSpeed = 2.0f;
-	float zeroSpeedAngle = 20.0f;
+	float zeroSpeedAngle = 10.0f;
 	float nearDistance = 0.5f;
 	float nearSpeed = 1.0f;
 	float dribblerStartDistance = 0.5f;
