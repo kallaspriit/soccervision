@@ -225,6 +225,12 @@ void TestController::FetchBallInfrontState::step(float dt, Vision::Results* visi
 		return;
 	}
 
+	if (stateDuration < 5.0f) {
+		robot->lookAt(goal);
+
+		return;
+	}
+
 	float ballDistance = ball->getDribblerDistance();
 	bool onLeft = ball->x < goal->x;
 	int ballSideDistance = onLeft ? ball->x - ball->width / 2 : Config::cameraWidth - ball->x + ball->width / 2;
