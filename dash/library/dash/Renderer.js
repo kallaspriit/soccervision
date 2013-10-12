@@ -212,7 +212,7 @@ Dash.Renderer.prototype.drawRuler = function() {
 };
 
 Dash.Renderer.prototype.drawPath = function(state/*, localizer*/, color, items) {
-	items = typeof(items) !== 'undefined' ? items : 1500;
+	items = typeof(items) !== 'undefined' ? items : 60 * 5;
 
 	/*if (state.controllerState === null) {
 		return;
@@ -226,18 +226,18 @@ Dash.Renderer.prototype.drawPath = function(state/*, localizer*/, color, items) 
 		return;
 	}
 
-	for (var i = 0; i < skips; i++) {
+	/*for (var i = 0; i < skips; i++) {
 		if (!previousState.previous) {
 			return;
 		}
 
 		previousState = previousState.previous;
-	}
+	}*/
 
 	if (arguments.length == 4) {
 		var last = arguments[3];
 
-		this.drawPathSegment(last.x, last.y, state.x, state.y, color);
+		this.drawPathSegment(last.robot.localizerX, last.robot.localizerY, state.robot.localizerX, state.robot.localizerY, color);
 	}
 
 	if (items > 0) {
