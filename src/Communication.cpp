@@ -141,7 +141,7 @@ void Communication::onReceive(const boost::system::error_code& error, size_t byt
 
 		boost::mutex::scoped_lock lock(messagesMutex);
 		messages.push(msg);
-	} else {
+	} else if (error.value() != 995) {
 		std::cout << "- Socket receive error: " << error << ", bytesReceived: " << bytesReceived << std::endl;
 	}
 
