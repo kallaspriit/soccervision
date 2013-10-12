@@ -369,6 +369,8 @@ float TestController::FetchBallStraightState::getTargetPos(float goalX, float go
 	float targetY2;
 	
 	if(Math::abs(ballX - goalX) < 0.001){
+		ai->dbg("case", 1);
+
 		//kui vahe on alla millimeetri, arvutame otse
 		targetX1 = ballX;
 		targetX2 = ballX;
@@ -376,6 +378,8 @@ float TestController::FetchBallStraightState::getTargetPos(float goalX, float go
 		targetY2 = ballY + D;
 	}
 	else{
+		ai->dbg("case", 2);
+
 		//Line connecting ball and goal
 		float a = (ballY - goalY)/(ballX - goalX);
 		float b = goalY - a * goalX;
@@ -392,10 +396,11 @@ float TestController::FetchBallStraightState::getTargetPos(float goalX, float go
 			);
 		float rest = - a * b + a * ballY + ballX;
 		float divisor = pow(a,2) + 1;
-		float targetX1 = ( + underSqrt + rest) / divisor;
-		float targetX2 = ( - underSqrt + rest) / divisor;
-		float targetY1 = a * targetX1 + b;
-		float targetY2 = a * targetX2 + b;
+
+		targetX1 = ( + underSqrt + rest) / divisor;
+		targetX2 = ( - underSqrt + rest) / divisor;
+		targetY1 = a * targetX1 + b;
+		targetY2 = a * targetX2 + b;
 	}
 
 	//Target's distance from goal (squared)
