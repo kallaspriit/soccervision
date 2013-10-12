@@ -326,6 +326,7 @@ void TestController::FetchBallStraightState::step(float dt, Vision::Results* vis
 	ai->dbg("ballVisible", ball != NULL);
 	ai->dbg("goalVisible", goal != NULL);
 
+	// TODO Drive to ball and search for goal when lost goal (new state)
 	if (ball == NULL || goal == NULL) {
 		robot->stop();
 
@@ -333,12 +334,14 @@ void TestController::FetchBallStraightState::step(float dt, Vision::Results* vis
 	}
 
 	float offsetDistance = 0.2f;
-	float approachSpeed = 0.5f;
+	float approachSpeed = 2.0f;
 	float nearApproachP = 0.75f;
 	float nearSideP = 1.0f;
 	float nearZeroSpeedAngle = 15.0f;
 	float nearMaxSideSpeedAngle = 40.0f;
 	float dribblerStartDistance = 0.5f;
+
+	if (ai->parameters[0].length() > 0) approachSpeed = Util::toFloat(ai->parameters[0]);
 
 	float ballDistance = ball->getDribblerDistance();
 	float targetAngle = getTargetPos(goal->distanceX, goal->distanceY, ball->distanceX, ball->distanceY, offsetDistance);
@@ -359,6 +362,7 @@ void TestController::FetchBallStraightState::step(float dt, Vision::Results* vis
 	if (ballDistance >= offsetDistance) {
 		robot->setTargetDir(Math::Rad(targetAngle), approachSpeed);
 	} else {
+		// TODO Separate state for near approach
 		float forwardSpeed = nearApproachP * Math::map(Math::abs(Math::radToDeg(ball->angle)), 0.0f, nearZeroSpeedAngle, 1.0f, 0.0f);
 		float sideSpeed = Math::sign(ball->distanceX) * Math::map(Math::abs(Math::radToDeg(ball->angle)), 0.0f, nearMaxSideSpeedAngle, 0.0f, 1.0f) * nearSideP;
 
@@ -439,6 +443,8 @@ float TestController::FetchBallStraightState::getTargetPos(float goalX, float go
 
 void TestController::AimState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration) {
 	robot->stop();
+
+	ai->dbg("gotBall", robot->dribbler->gotBall());
 	
 	if (!robot->dribbler->gotBall()) {
 		return;
@@ -473,6 +479,9 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 	}
 
 	ai->dbg("shouldKick", shouldKick);
+	ai->dbg("leftEdge", leftEdge);
+	ai->dbg("rightEdge", rightEdge);
+	ai->dbg("goalKickThresholdPixels", goalKickThresholdPixels);
 	ai->dbg("sinceLastKick", lastKickTime != 0.0 ? Util::duration(lastKickTime) : -1.0);
 
 	if (shouldKick && lastKickTime == 0.0 || Util::duration(lastKickTime) >= 1) {
