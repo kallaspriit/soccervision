@@ -19,6 +19,8 @@ Robot::Robot(Communication* com) : com(com), wheelFL(NULL), wheelFR(NULL), wheel
     x = 0.0f;
     y = 0.0f;
     orientation = 0.0f;
+	velocity = 0.0f;
+	lastVelocity = 0.0f;
 
     lastCommandTime = -1;
 	frameTargetSpeedSet = false;
@@ -160,6 +162,10 @@ void Robot::step(float dt, Vision::Results* visionResults) {
 		wheelRL->getRealOmega(),
 		wheelRR->getRealOmega()
 	);
+
+	Math::Vector velocityVec(movement.velocityX, movement.velocityY);
+	lastVelocity = velocity;
+	velocity = velocityVec.getLength();
 
 	updateMeasurements();
 	updateBallLocalizer(visionResults, dt);
