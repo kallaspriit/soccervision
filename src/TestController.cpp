@@ -277,6 +277,7 @@ void TestController::FetchBallInfrontState::step(float dt, Vision::Results* visi
 	}
 
 	ai->dbg("ballDistance", ballDistance);
+	ai->dbg("ballDistanceX", ball->distanceX);
 	ai->dbg("ballAngle", Math::radToDeg(ball->angle));
 	ai->dbg("sideSpeed", sideSpeed);
 	ai->dbg("forwardSpeed", forwardSpeed);
