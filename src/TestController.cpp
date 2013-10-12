@@ -348,17 +348,40 @@ void TestController::FetchBallStraightState::step(float dt, Vision::Results* vis
 }
 
 float TestController::FetchBallStraightState::getTargetPos(float goalX, float goalY, float ballX, float ballY, float D) {
-	//Line connecting ball and goal
-	float a = (ballY - goalY)/(ballX - goalX);
-	float b = goalY - a * goalX;
+	float targetX1;
+	float targetX2;
+	float targetY1;
+	float targetY2;
+	
+	if(ballX - goalX < 0.001){
+		//kui vahe on alla millimeetri, arvutame otse
+		targetX1 = ballX;
+		targetX2 = ballX;
+		targetY1 = ballY - D;
+		targetY2 = ballY + D;
+	}
+	else{
+		//Line connecting ball and goal
+		float a = (ballY - goalY)/(ballX - goalX);
+		float b = goalY - a * goalX;
 
-	//Calculate X and Y positions for target (there are two possible targets)
-	//float c = sqrt(pow(D, 2) - pow(ballY - goalY, 2));
-	float c = sqrt(Math::abs(pow(D, 2) - pow(ballY - goalY, 2)));
-	float targetX1 = ballX + c;
-	float targetX2 = ballX - c;
-	float targetY1 = a * targetX1 + b;
-	float targetY2 = a * targetX2 + b;
+		float underSqrt = sqrt(
+			- pow(a, 2) * pow(ballX, 2)
+			+ pow(a, 2) * pow(D, 2)
+			- 2 * a * b * ballX
+			+ 2 * a * ballX * ballY
+			- pow(b, 2)
+			+ 2 * b * ballY
+			+ pow(D, 2)
+			- pow(ballY, 2)
+			);
+		float rest = - a * b + a * ballY + ballX;
+		float divisor = pow(a,2) + 1;
+		float targetX1 = ( + underSqrt + rest) / divisor;
+		float targetX2 = ( - underSqrt + rest) / divisor;
+		float targetY1 = a * targetX1 + b;
+		float targetY2 = a * targetX2 + b;
+	}
 
 	//Target's distance from goal (squared)
 	float target1Dist = pow(goalX - targetX1, 2) + pow(goalY - targetY1, 2);
@@ -375,12 +398,6 @@ float TestController::FetchBallStraightState::getTargetPos(float goalX, float go
 		targetX = targetX2;
 		targetY = targetY2;
 	}
-
-	ai->dbg("a", a);
-	ai->dbg("b", b);
-	ai->dbg("c", c);
-	ai->dbg("targetX", targetX);
-	ai->dbg("targetY", targetY);
 
 	float targetAngle = atan2(targetX, targetY);
 	return targetAngle;
