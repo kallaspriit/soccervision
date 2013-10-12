@@ -233,11 +233,12 @@ void TestController::FetchBallInfrontState::step(float dt, Vision::Results* visi
 	//float sideP = 1.0f;
 	//float forwardP = 3.0f;
 	//float forwardP = 1.0f;
-	float farApproachP = 2.5f;
+	float farApproachP = 2.0f;
 	float nearApproachP = 0.75f;
 	float farSideP = 1.0f;
-	float nearSideP = 0.5f;
+	float nearSideP = 1.0f;
 	float zeroSpeedAngle = 15.0f;
+	float maxSideSpeedAngle = 40.0f;
 	float forwardSideRatio = 0.0f;
 	//float maxSideSpeedDistance = 0.1f;
 	float nearDistance = 0.5f;
@@ -270,10 +271,8 @@ void TestController::FetchBallInfrontState::step(float dt, Vision::Results* visi
 		forwardSpeed = farApproachP * forwardSideRatio;
 		sideSpeed = (1.0f - forwardSideRatio) * Math::sign(ball->distanceX) * farSideP;
 	} else {
-		forwardSideRatio = Math::map(Math::abs(Math::radToDeg(ball->angle)), 0.0f, zeroSpeedAngle, 1.0f, 0.0f);
-		forwardSpeed = nearApproachP * forwardSideRatio;
-		//forwardSpeed = nearSpeed * Math::map(Math::abs(ball->distanceX), 0.0f, maxSideSpeedDistance, 1.0f, 0.0f);
-		sideSpeed = (1.0f - forwardSideRatio) * Math::sign(ball->distanceX) * nearSideP;
+		forwardSpeed = nearApproachP * Math::map(Math::abs(Math::radToDeg(ball->angle)), 0.0f, zeroSpeedAngle, 1.0f, 0.0f);
+		sideSpeed = Math::map(Math::abs(Math::radToDeg(ball->angle)), 0.0f, maxSideSpeedAngle, 0.0f, 1.0f) * nearSideP;
 	}
 
 	if (ballDistance < dribblerStartDistance) {
