@@ -333,8 +333,11 @@ void TestController::FetchBallStraightState::step(float dt, Vision::Results* vis
 		return;
 	}
 
+	float offsetDistance = 0.2f;
+	float approachSpeed = 0.5f;
+
 	float ballDistance = ball->getDribblerDistance();
-	float targetAngle = getTargetPos(goal->distanceX, goal->distanceY, ball->distanceX, ball->distanceY, 0.25f);
+	float targetAngle = getTargetPos(goal->distanceX, goal->distanceY, ball->distanceX, ball->distanceY, offsetDistance);
 
 	ai->dbg("goalX", goal->distanceX);
 	ai->dbg("goalY", goal->distanceY);
@@ -343,7 +346,12 @@ void TestController::FetchBallStraightState::step(float dt, Vision::Results* vis
 	ai->dbg("ballDistance", ballDistance);
 	ai->dbg("targetAngle", targetAngle);
 
-	robot->setTargetDir(Math::Rad(targetAngle), 0.5f);
+	if (ballDistance >= offsetDistance) {
+		robot->setTargetDir(Math::Rad(targetAngle), approachSpeed);
+	} else {
+		robot->setTargetDir(0.0f, 0.0f);
+	}
+
 	robot->lookAt(goal);
 }
 
@@ -353,7 +361,7 @@ float TestController::FetchBallStraightState::getTargetPos(float goalX, float go
 	float targetY1;
 	float targetY2;
 	
-	if(ballX - goalX < 0.001){
+	if(Math::abs(ballX - goalX) < 0.001){
 		//kui vahe on alla millimeetri, arvutame otse
 		targetX1 = ballX;
 		targetX2 = ballX;
