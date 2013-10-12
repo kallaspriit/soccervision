@@ -38,10 +38,10 @@ void Communication::send(std::string message) {
 
 	message += "\n";
 
-	//memcpy(request, message.c_str(), message.size());
-	//request[message.size()] = 0;
+	memcpy(requestBuffer, message.c_str(), message.size());
+	requestBuffer[message.size()] = 0;
 
-	boost::shared_ptr<std::string> requestBuffer(new std::string(message));
+	//boost::shared_ptr<std::string> requestBuffer(new std::string(message));
 
 	try {
 		boost::asio::ip::udp::endpoint remoteEndpoint = boost::asio::ip::udp::endpoint(
@@ -50,8 +50,8 @@ void Communication::send(std::string message) {
 		);
 
 		socket->async_send_to(
-			//boost::asio::buffer(request, message.length()), remoteEndpoint,
-			boost::asio::buffer(*requestBuffer), remoteEndpoint,
+			boost::asio::buffer(requestBuffer, message.length()), remoteEndpoint,
+			//boost::asio::buffer(*requestBuffer), remoteEndpoint,
 			boost::bind(
 				&Communication::onSend,
 				this,
@@ -122,8 +122,8 @@ void Communication::receiveNext() {
 
 void Communication::onReceive(const boost::system::error_code& error, size_t bytesReceived) {
 	if ((!error || error == boost::asio::error::message_size) && bytesReceived > 0) {
-		//std::string msg = std::string(message, bytesReceived);
-		std::string msg = std::string(receiveBuffer.data(), bytesReceived);
+		std::string msg = std::string(receiveBuffer, bytesReceived);
+		//std::string msg = std::string(receiveBuffer.data(), bytesReceived);
 
 		if (msg.substr(0, 7) != "<speeds") {
 			std::cout << "< " << msg << ", bytesReceived: " << bytesReceived << std::endl;
