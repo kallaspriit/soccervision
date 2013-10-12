@@ -125,6 +125,7 @@ public:
 	void dbg(std::string key, std::string value) { messages[key] = value; }
 	void dbg(std::string key, int value) { messages[key] = Util::toString(value); }
 	void dbg(std::string key, float value) { messages[key] = Util::toString(value); }
+	void dbg(std::string key, double value) { messages[key] = Util::toString(value); }
 	void dbg(std::string key, bool value) { messages[key] = value ? "true" : "false"; }
 	std::string getJSON();
 

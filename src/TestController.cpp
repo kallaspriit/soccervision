@@ -381,8 +381,12 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 	Object* goal = visionResults->getLargestGoal(Side::BLUE, Dir::FRONT);
 
 	if (goal == NULL) {
+		ai->dbg("goalVisible", false);
+
 		return;
 	}
+
+	ai->dbg("goalVisible", true);
 
 	robot->setTargetDir(0.0f, 0.0f, 0.0f);
 	robot->dribbler->start();
@@ -401,6 +405,9 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 			shouldKick = true;
 		}
 	}
+
+	ai->dbg("shouldKick", shouldKick);
+	ai->dbg("sinceLastKick", lastKickTime != 0.0 ? Util::duration(lastKickTime) : -1.0);
 
 	if (shouldKick && lastKickTime == 0.0 || Util::duration(lastKickTime) >= 1) {
 		robot->kick();
