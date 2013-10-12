@@ -333,8 +333,8 @@ void TestController::FetchBallStraightState::step(float dt, Vision::Results* vis
 		return;
 	}
 
-	float offsetDistance = 0.2f;
-	float approachSpeed = 2.0f;
+	float offsetDistance = 0.5f;
+	float approachSpeed = 1.0f;
 	float nearApproachP = 0.75f;
 	float nearSideP = 1.0f;
 	float nearZeroSpeedAngle = 15.0f;
@@ -342,6 +342,7 @@ void TestController::FetchBallStraightState::step(float dt, Vision::Results* vis
 	float dribblerStartDistance = 0.5f;
 
 	if (ai->parameters[0].length() > 0) approachSpeed = Util::toFloat(ai->parameters[0]);
+	if (ai->parameters[1].length() > 0) offsetDistance = Util::toFloat(ai->parameters[1]);
 
 	float ballDistance = ball->getDribblerDistance();
 	float targetAngle = getTargetPos(goal->distanceX, goal->distanceY, ball->distanceX, ball->distanceY, offsetDistance);
