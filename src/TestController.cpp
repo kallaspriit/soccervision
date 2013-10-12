@@ -237,7 +237,7 @@ void TestController::FetchBallInfrontState::step(float dt, Vision::Results* visi
 	float nearApproachP = 1.5f;
 	float farSideP = 1.0f;
 	float nearSideP = 0.5f;
-	float zeroSpeedAngle = 25.0f;
+	float zeroSpeedAngle = 15.0f;
 	float forwardSideRatio = 0.0f;
 	//float maxSideSpeedDistance = 0.1f;
 	float nearDistance = 0.5f;
@@ -252,7 +252,7 @@ void TestController::FetchBallInfrontState::step(float dt, Vision::Results* visi
 	if (ai->parameters[0].length() > 0) farApproachP = Util::toFloat(ai->parameters[0]);
 	if (ai->parameters[1].length() > 0) nearDistance = Util::toFloat(ai->parameters[1]);
 	if (ai->parameters[2].length() > 0) nearApproachP = Util::toFloat(ai->parameters[2]);
-	//if (ai->parameters[3].length() > 0) maxSideSpeedDistance = Util::toFloat(ai->parameters[3]);
+	if (ai->parameters[3].length() > 0) zeroSpeedAngle = Util::toFloat(ai->parameters[3]);
 	
 	//float sideSpeedMultiplier = Math::map((float)ballSideDistance, (float)sideMovementMaxThreshold, (float)cancelSideMovementThreshold, 1.0f, 0.0f);
 	
@@ -270,7 +270,7 @@ void TestController::FetchBallInfrontState::step(float dt, Vision::Results* visi
 		forwardSpeed = farApproachP * forwardSideRatio;
 		sideSpeed = (1.0f - forwardSideRatio) * Math::sign(ball->distanceX) * nearApproachP;
 	} else {
-		forwardSideRatio =Math::map(Math::abs(Math::radToDeg(ball->angle)), 0.0f, zeroSpeedAngle, 1.0f, 0.0f);
+		forwardSideRatio = Math::map(Math::abs(Math::radToDeg(ball->angle)), 0.0f, zeroSpeedAngle, 1.0f, 0.0f);
 		forwardSpeed = nearApproachP * forwardSideRatio;
 		//forwardSpeed = nearSpeed * Math::map(Math::abs(ball->distanceX), 0.0f, maxSideSpeedDistance, 1.0f, 0.0f);
 		sideSpeed = (1.0f - forwardSideRatio) * Math::sign(ball->distanceX) * nearSideP;
