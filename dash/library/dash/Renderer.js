@@ -219,8 +219,7 @@ Dash.Renderer.prototype.drawPath = function(state/*, localizer*/, color, items) 
 	}*/
 
 	//var data = state.controllerState[localizer],
-	var data = state,
-		previousState = state.previous,
+	var previousState = state.previous,
 		skips = 10;
 
 	if (!previousState) {
@@ -235,14 +234,14 @@ Dash.Renderer.prototype.drawPath = function(state/*, localizer*/, color, items) 
 		previousState = previousState.previous;
 	}
 
-	if (arguments.length == 5) {
-		var last = arguments[4];
+	if (arguments.length == 4) {
+		var last = arguments[3];
 
-		this.drawPathSegment(last.x, last.y, data.x, data.y, color);
+		this.drawPathSegment(last.x, last.y, state.x, state.y, color);
 	}
 
 	if (items > 0) {
-		this.drawPath(previousState, localizer, color, items - 1, data);
+		this.drawPath(previousState, color, items - 1, state);
 	}
 };
 
