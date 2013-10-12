@@ -19,6 +19,12 @@ Communication::~Communication() {
 }
 
 void Communication::send(std::string message) {
+	if (message.size() >= MAX_SIZE) {
+		std::cout << "- Too big socket message" << std::endl;
+
+		return;
+	}
+
 	if (!running) {
 		queuedMessages.push(message);
 
@@ -44,13 +50,14 @@ void Communication::send(std::string message) {
 	//boost::shared_ptr<std::string> requestBuffer(new std::string(message));
 
 	try {
-		boost::asio::ip::udp::endpoint remoteEndpoint = boost::asio::ip::udp::endpoint(
+		/*boost::asio::ip::udp::endpoint remoteEndpoint = boost::asio::ip::udp::endpoint(
 			boost::asio::ip::address::from_string(host),
 			port
-		);
+		);*/
 
 		socket->async_send_to(
-			boost::asio::buffer(requestBuffer, message.length()), remoteEndpoint,
+			//boost::asio::buffer(requestBuffer, message.length()), remoteEndpoint,
+			boost::asio::buffer(requestBuffer, MAX_SIZE), remoteEndpoint,
 			//boost::asio::buffer(*requestBuffer), remoteEndpoint,
 			boost::bind(
 				&Communication::onSend,
@@ -91,10 +98,10 @@ void* Communication::run() {
 
 	socket = new udp::socket(ioService, udp::endpoint(udp::v4(), port));
 
-	/*remoteEndpoint = boost::asio::ip::udp::endpoint(
+	remoteEndpoint = boost::asio::ip::udp::endpoint(
 		boost::asio::ip::address::from_string(host),
 		port
-	);*/
+	);
 
 	receiveNext();
 
@@ -106,7 +113,7 @@ void* Communication::run() {
 void Communication::receiveNext() {
 	try {
 		socket->async_receive_from(
-			//boost::asio::buffer(message, 1024), endpoint,
+			//boost::asio::buffer(message, MAX_SIZE), endpoint,
 			boost::asio::buffer(receiveBuffer), endpoint,
 			boost::bind(
 				&Communication::onReceive,
@@ -121,6 +128,10 @@ void Communication::receiveNext() {
 }
 
 void Communication::onReceive(const boost::system::error_code& error, size_t bytesReceived) {
+	if (bytesReceived >= MAX_SIZE) {
+		std::cout << "- Too large socket message received: " << bytesReceived << std::endl;
+	}
+
 	if ((!error || error == boost::asio::error::message_size) && bytesReceived > 0) {
 		std::string msg = std::string(receiveBuffer, bytesReceived);
 		//std::string msg = std::string(receiveBuffer.data(), bytesReceived);
@@ -131,6 +142,8 @@ void Communication::onReceive(const boost::system::error_code& error, size_t byt
 
 		boost::mutex::scoped_lock lock(messagesMutex);
 		messages.push(msg);
+	} else {
+		std::cout << "- Socket receive error: " << error << ", bytesReceived: " << bytesReceived << std::endl;
 	}
 
 	if (running) {
@@ -139,6 +152,10 @@ void Communication::onReceive(const boost::system::error_code& error, size_t byt
 }
 
 void Communication::onSend(const boost::system::error_code& error, size_t bytesSent) {
+	if (error) {
+		std::cout << "- Socket send error: " << error << ", bytesSent: " << bytesSent << std::endl;
+	}
+
 	if (running) {
 		receiveNext();
 	}

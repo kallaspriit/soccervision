@@ -24,6 +24,7 @@ public:
 	};
 
 	typedef std::stack<std::string> Messages;
+	enum { MAX_SIZE = 1024 };
 
     Communication(std::string host = "127.0.0.1", int port = 8042);
 	~Communication();
@@ -41,13 +42,13 @@ private:
 
 	std::string host;
 	int port;
-	char receiveBuffer[1024];
+	char receiveBuffer[MAX_SIZE];
 	//boost::array<char, 1024> receiveBuffer;
-	char requestBuffer[1024];
+	char requestBuffer[MAX_SIZE];
 	boost::asio::io_service ioService;
 	udp::socket* socket;
 	udp::endpoint endpoint;
-	//boost::asio::ip::udp::endpoint remoteEndpoint;
+	boost::asio::ip::udp::endpoint remoteEndpoint;
 	Messages messages;
 	std::queue<std::string> queuedMessages;
 	bool running;
