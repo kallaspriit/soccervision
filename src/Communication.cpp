@@ -113,7 +113,8 @@ void Communication::receiveNext() {
 	try {
 		socket->async_receive_from(
 			//boost::asio::buffer(message, MAX_SIZE), endpoint,
-			boost::asio::buffer(receiveBuffer, MAX_SIZE), endpoint,
+			boost::asio::buffer(receiveBuffer, MAX_SIZE),
+			endpoint,
 			boost::bind(
 				&Communication::onReceive,
 				this,
