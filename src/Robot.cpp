@@ -385,10 +385,12 @@ void Robot::lookAt(Object* object) {
 		return;
 	}
 
-	// TODO Consider PID
-	setTargetOmega(Math::limit(object->angle * Config::lookAtP, Config::lookAtMaxOmega));
+	lookAt(Math::Rad(object->angle));
 }
 
+void Robot::lookAt(const Math::Angle& angle) {
+	setTargetOmega(Math::limit(angle.rad() * Config::lookAtP, Config::lookAtMaxOmega));
+}
 void Robot::turnBy(float angle, float speed) {
     addTask(new TurnByTask(angle, speed));
 }

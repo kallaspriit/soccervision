@@ -226,86 +226,55 @@ void TestController::FetchBallInfrontState::step(float dt, Vision::Results* visi
 		return;
 	}
 
+	// TODO Useful for testing, first focuses on goal
 	if (stateDuration < 2.0f) {
 		robot->lookAt(goal);
 
 		return;
 	}
 
+	// config
+	float approachP = 2.0f;
+	float sideP = 1.0f;
+	float nearDistance = Math::map(robot->getVelocity(), 0.0f, 2.0f, 0.25f, 1.0f);
+	int maxSideSpeedThreshold = 0; // side speed is maximal at this distance from side
+	int minSideSpeedThreshold = Config::cameraWidth / 2; // side speed is canceled starting from this distance from side
+
 	float ballDistance = ball->getDribblerDistance();
 	bool onLeft = ball->x < goal->x;
 	int ballSideDistance = onLeft ? ball->x - ball->width / 2 : Config::cameraWidth - ball->x + ball->width / 2;
 
-	// config
-	//float sideP = 1.0f;
-	//float forwardP = 3.0f;
-	//float forwardP = 1.0f;
-	float farApproachP = 2.0f;
-	float farSideP = 1.0f;
-	//float nearDistance = 0.5f;
-	float nearDistance = Math::map(robot->getVelocity(), 0.0f, 2.0f, 0.25f, 1.0f);
-	float dribblerStartDistance = 0.5f;
-	int maxSideSpeedThreshold = 0; // side speed is maximal at this distance from side
-	int minSideSpeedThreshold = Config::cameraWidth / 2; // side speed is canceled starting from this distance from side
-	float sideSpeed, forwardSpeed;
-
-	if (ai->parameters[0].length() > 0) farApproachP = Util::toFloat(ai->parameters[0]);
-	if (ai->parameters[1].length() > 0) nearDistance = Util::toFloat(ai->parameters[1]);
-	//if (ai->parameters[2].length() > 0) nearApproachP = Util::toFloat(ai->parameters[2]);
-	//if (ai->parameters[3].length() > 0) nearZeroSpeedAngle = Util::toFloat(ai->parameters[3]);
-	
-	//float sideSpeedMultiplier = Math::map((float)ballSideDistance, (float)sideMovementMaxThreshold, (float)cancelSideMovementThreshold, 1.0f, 0.0f);
-	
-	/*if (ballDistance <= nearDistance) {
-		sideSpeedMultiplier = 1.0f;
-	}*/
-	
-	//float sideSpeed = ball->distanceX * sideP * sideSpeedMultiplier;
-	
-	//float forwardSpeed = Math::max(Math::degToRad(zeroSpeedAngle) - Math::abs(ball->angle), 0.0f) * forwardP;
-	//float forwardSpeed = forwardP * (1.0f - sideSpeedMultiplier);
-
-	if (ballDistance > nearDistance) {
-		float forwardSideRatio = Math::map((float)ballSideDistance, (float)maxSideSpeedThreshold, (float)minSideSpeedThreshold, 0.0f, 1.0f);
-		
-		forwardSpeed = farApproachP * forwardSideRatio;
-		sideSpeed = (1.0f - forwardSideRatio) * Math::sign(ball->distanceX) * farSideP;
-	} else {
+	if (ballDistance < nearDistance) {
 		ai->setState("fetch-ball-near");
 
 		return;
 	}
 
-	if (ballDistance < dribblerStartDistance) {
-		robot->dribbler->start();
-	} else {
-		robot->dribbler->stop();
-	}
+	if (ai->parameters[0].length() > 0) approachP = Util::toFloat(ai->parameters[0]);
+	if (ai->parameters[1].length() > 0) approachP = Util::toFloat(ai->parameters[1]);
+	if (ai->parameters[2].length() > 0) nearDistance = Util::toFloat(ai->parameters[2]);
+
+	float forwardSideRatio = Math::map((float)ballSideDistance, (float)maxSideSpeedThreshold, (float)minSideSpeedThreshold, 0.0f, 1.0f);
+	float forwardSpeed = approachP * forwardSideRatio;
+	float sideSpeed = (1.0f - forwardSideRatio) * Math::sign(ball->distanceX) * sideP;
 
 	ai->dbg("ballDistance", ballDistance);
 	ai->dbg("ballDistanceX", ball->distanceX);
 	ai->dbg("nearDistance", nearDistance);
 	ai->dbg("robotVelocity", robot->getVelocity());
 	ai->dbg("ballAngle", Math::radToDeg(ball->angle));
+	ai->dbg("forwardSideRatio", forwardSideRatio);
 	ai->dbg("sideSpeed", sideSpeed);
 	ai->dbg("forwardSpeed", forwardSpeed);
 	ai->dbg("onLeft", onLeft);
 	ai->dbg("ballDistanceFromSide", ballSideDistance);
-	//ai->dbg("sideSpeedMultiplier", sideSpeedMultiplier);
 
 	robot->setTargetDir(forwardSpeed, sideSpeed);
-	//robot->setTargetDir(Math::Rad(ball->angle), 1.0f);
-	robot->lookAt(goal);
+	//robot->lookAt(goal); // TODO Try focusing between the two
+	robot->lookAt(Math::Rad((goal->angle + ball->angle) / 2.0f));
 }
 
 void TestController::FetchBallBehindState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration) {
-	Object* ball = visionResults->getClosestBall(Dir::REAR);
-	Object* goal = visionResults->getLargestGoal(Side::BLUE, Dir::REAR);
-
-	if (ball == NULL || goal == NULL) {
-		return;
-	}
-
 	// TODO
 }
 
@@ -333,45 +302,24 @@ void TestController::FetchBallStraightState::step(float dt, Vision::Results* vis
 
 	float offsetDistance = 0.5f;
 	float approachSpeed = 1.0f;
-	float nearApproachP = 0.75f;
-	float nearSideP = 1.0f;
-	float nearZeroSpeedAngle = 15.0f;
-	float nearMaxSideSpeedAngle = 40.0f;
-	float dribblerStartDistance = 0.5f;
+	float ballDistance = ball->getDribblerDistance();
 
 	if (ai->parameters[0].length() > 0) approachSpeed = Util::toFloat(ai->parameters[0]);
 	if (ai->parameters[1].length() > 0) offsetDistance = Util::toFloat(ai->parameters[1]);
 
-	float ballDistance = ball->getDribblerDistance();
+	if (ballDistance < offsetDistance) {
+		ai->setState("fetch-ball-near");
+		
+		return;
+	}
+	
 	float targetAngle = getTargetAngle(goal->distanceX, goal->distanceY, ball->distanceX, ball->distanceY, offsetDistance);
 
-	/*ai->dbg("goalX", goal->distanceX);
-	ai->dbg("goalY", goal->distanceY);
-	ai->dbg("ballX", ball->distanceX);
-	ai->dbg("ballY", ball->distanceY);*/
 	ai->dbg("ballDistance", ballDistance);
 	ai->dbg("targetAngle", Math::radToDeg(targetAngle));
 
-	if (ballDistance < dribblerStartDistance) {
-		robot->dribbler->start();
-	} else {
-		robot->dribbler->stop();
-	}
-
-	if (ballDistance >= offsetDistance) {
-		robot->setTargetDir(Math::Rad(targetAngle), approachSpeed);
-	} else {
-		// TODO Separate state for near approach
-		float forwardSpeed = nearApproachP * Math::map(Math::abs(Math::radToDeg(ball->angle)), 0.0f, nearZeroSpeedAngle, 1.0f, 0.0f);
-		float sideSpeed = Math::sign(ball->distanceX) * Math::map(Math::abs(Math::radToDeg(ball->angle)), 0.0f, nearMaxSideSpeedAngle, 0.0f, 1.0f) * nearSideP;
-
-		robot->setTargetDir(forwardSpeed, sideSpeed);
-	}
-
-	//robot->lookAt(goal);
-	float lookAngle = (goal->angle + ball->angle) / 2.0f;
-
-	robot->setTargetOmega(Math::limit(lookAngle * Config::lookAtP, Config::lookAtMaxOmega));
+	robot->setTargetDir(Math::Rad(targetAngle), approachSpeed);
+	robot->lookAt(Math::Rad((goal->angle + ball->angle) / 2.0f));
 }
 
 float TestController::FetchBallStraightState::getTargetAngle(float goalX, float goalY, float ballX, float ballY, float D) {
