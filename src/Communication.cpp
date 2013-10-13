@@ -3,7 +3,7 @@
 
 #include <boost/bind.hpp>
 
-Communication::Communication(std::string host, int port) : host(host), port(port), running(false), socket(NULL) {
+Communication::Communication(std::string host, int port) : host(host), port(port), running(false), socket(NULL), receiveBuffer2(boost::asio::buffer(receiveBuffer, MAX_SIZE)) {
 
 }
 
@@ -32,6 +32,8 @@ void Communication::send(std::string message) {
 	}
 
 	while (!queuedMessages.empty()) {
+		std::cout << "! Socket queue size: " << queuedMessages.size() << std::endl;
+
 		std::string queuedMessage = queuedMessages.front();
 		queuedMessages.pop();
 
@@ -108,6 +110,8 @@ void* Communication::run() {
 		port
 	);
 
+	//receiveBuffer2 = boost::asio::buffer(receiveBuffer, MAX_SIZE);
+
 	receiveNext();
 
 	ioService.run();
@@ -119,7 +123,8 @@ void Communication::receiveNext() {
 	try {
 		socket->async_receive_from(
 			//boost::asio::buffer(message, MAX_SIZE), endpoint,
-			boost::asio::buffer(receiveBuffer, MAX_SIZE),
+			//boost::asio::buffer(receiveBuffer, MAX_SIZE),
+			receiveBuffer2,
 			endpoint,
 			boost::bind(
 				&Communication::onReceive,
