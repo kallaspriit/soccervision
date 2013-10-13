@@ -520,9 +520,9 @@ Vision::Distance Vision::getDistance(int x, int y) {
 
 	CameraTranslator::WorldPosition pos = cameraTranslator->getWorldPosition(x, y);
 
-	if (pos.dx < -20.0f || pos.dx > 20.0f) std::cout << "- Invalid distance dx: " << pos.dx << std::endl;
-	if (pos.dy < 0.0f || pos.dy > 20.0f) std::cout << "- Invalid distance dy: " << pos.dy << std::endl;
-	if (pos.distance < 0.0f || pos.distance > 20.0f) std::cout << "- Invalid distance: " << pos.distance << std::endl;
+	if (pos.dx < -20.0f || pos.dx > 20.0f) std::cout << "- Invalid distance dx: " << pos.dx << " for " << x << "x" << y << std::endl;
+	if (pos.dy < 0.0f || pos.dy > 20.0f) std::cout << "- Invalid distance dy: " << pos.dy << " for " << x << "x" << y << std::endl;
+	if (pos.distance < 0.0f || pos.distance > 20.0f) std::cout << "- Invalid distance: " << pos.distance << " for " << x << "x" << y << std::endl;
 
 	return Distance(pos.dx, pos.dy, pos.distance, pos.angle);
 }
