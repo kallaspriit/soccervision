@@ -91,7 +91,15 @@ public:
 		void step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration);
 
 	private:
-		float getTargetPos(float goalX, float goalY, float ballX, float ballY, float D);
+		float getTargetAngle(float goalX, float goalY, float ballX, float ballY, float D);
+
+	};
+
+	class FetchBallNearState : public State {
+
+	public:
+		FetchBallNearState(TestController* ai) : State(ai) {}
+		void step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration);
 
 	};
 
