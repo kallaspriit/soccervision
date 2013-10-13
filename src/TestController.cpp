@@ -329,7 +329,7 @@ void TestController::FetchBallStraightState::step(float dt, Vision::Results* vis
 	float combinedBrakeFactor = distanceBraking * angleBreaking;
 
 	if (combinedBrakeFactor > 0.0f) {
-		acceleratedSpeed = Math::max(acceleratedSpeed / combinedBrakeFactor, minApproachSpeed);
+		acceleratedSpeed = Math::max(acceleratedSpeed * (1.0f - combinedBrakeFactor), minApproachSpeed);
 	}
 
 	ai->dbg("acceleratedSpeed", acceleratedSpeed);
