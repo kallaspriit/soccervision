@@ -19,7 +19,7 @@ Communication::~Communication() {
 }
 
 void Communication::send(std::string message) {
-	if (message.size() >= MAX_SIZE) {
+	/*if (message.size() >= MAX_SIZE) {
 		std::cout << "- Too big socket message" << std::endl;
 
 		return;
@@ -50,10 +50,10 @@ void Communication::send(std::string message) {
 	//boost::shared_ptr<std::string> requestBuffer(new std::string(message));
 
 	try {
-		/*boost::asio::ip::udp::endpoint remoteEndpoint = boost::asio::ip::udp::endpoint(
+		/boost::asio::ip::udp::endpoint remoteEndpoint = boost::asio::ip::udp::endpoint(
 			boost::asio::ip::address::from_string(host),
 			port
-		);*/
+		);/
 
 		socket->async_send_to(
 			boost::asio::buffer(requestBuffer, message.length()), remoteEndpoint,
@@ -67,7 +67,7 @@ void Communication::send(std::string message) {
 		);
 	} catch (std::exception& e) {
 		std::cout << "- Communication send error: " << e.what() << std::endl;
-	}
+	}*/
 }
 
 bool Communication::gotMessages() {
