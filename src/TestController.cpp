@@ -306,6 +306,7 @@ void TestController::FetchBallStraightState::step(float dt, Vision::Results* vis
 	float startBrakingDistance = 1.0f;
 	float maxAngleBrakingAngle = 60.0f; // degrees
 	float minApproachSpeed = 0.2f;
+	float brakeP = 4.0f;
 	float ballDistance = ball->getDribblerDistance();
 
 	if (ai->parameters[0].length() > 0) approachSpeed = Util::toFloat(ai->parameters[0]);
@@ -326,11 +327,9 @@ void TestController::FetchBallStraightState::step(float dt, Vision::Results* vis
 	// brake as getting close and large target angle
 	float distanceBraking = Math::map(ballDistance, 0.0f, startBrakingDistance, 1.0, 0.0f);
 	float angleBreaking = Math::map(targetAngle, 0.0f, Math::degToRad(maxAngleBrakingAngle), 0.0f, 1.0f);
-	float combinedBrakeFactor = distanceBraking * angleBreaking;
+	float combinedBrakeFactor = brakeP * distanceBraking * angleBreaking;
 
-	if (combinedBrakeFactor > 0.0f) {
-		acceleratedSpeed = Math::max(acceleratedSpeed * (1.0f - combinedBrakeFactor), minApproachSpeed);
-	}
+	acceleratedSpeed = Math::max(acceleratedSpeed * (1.0f - combinedBrakeFactor), minApproachSpeed);
 
 	ai->dbg("acceleratedSpeed", acceleratedSpeed);
 	ai->dbg("distanceBraking", distanceBraking);
