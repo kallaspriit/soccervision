@@ -151,7 +151,7 @@ ObjectList Vision::processBalls(Dir dir) {
 			ball->angle = distance.angle;
 
 			if (ball->distance < 0 || ball->distance > 5.0f) {
-				std::cout << "- Skipping ball with invalid distance: " << ball->distance << std::endl;
+				//std::cout << "- Skipping ball with invalid distance: " << ball->distance << std::endl;
 
 				continue;
 			}
@@ -242,7 +242,7 @@ ObjectList Vision::processGoals(Dir dir) {
 			goal->angle = distance.angle;
 
 			if (goal->distance < 0 || goal->distance > 5.0f) {
-				std::cout << "- Skipping goal with invalid distance: " << goal->distance << std::endl;
+				//std::cout << "- Skipping goal with invalid distance: " << goal->distance << std::endl;
 
 				continue;
 			}
@@ -532,9 +532,9 @@ Vision::Distance Vision::getDistance(int x, int y) {
 
 	CameraTranslator::WorldPosition pos = cameraTranslator->getWorldPosition(x, y);
 
-	if (pos.dx < -20.0f || pos.dx > 20.0f) std::cout << "- Invalid distance dx: " << pos.dx << " for " << x << "x" << y << ", dir: " << (dir == Dir::FRONT ? "front" : "rear") << std::endl;
-	if (pos.dy < 0.0f || pos.dy > 20.0f) std::cout << "- Invalid distance dy: " << pos.dy << " for " << x << "x" << y << ", dir: " << (dir == Dir::FRONT ? "front" : "rear") << std::endl;
-	if (pos.distance < 0.0f || pos.distance > 20.0f) std::cout << "- Invalid distance: " << pos.distance << " for " << x << "x" << y << ", dir: " << (dir == Dir::FRONT ? "front" : "rear") << std::endl;
+	//if (pos.dx < -20.0f || pos.dx > 20.0f) std::cout << "- Invalid distance dx: " << pos.dx << " for " << x << "x" << y << ", dir: " << (dir == Dir::FRONT ? "front" : "rear") << std::endl;
+	//if (pos.dy < 0.0f || pos.dy > 20.0f) std::cout << "- Invalid distance dy: " << pos.dy << " for " << x << "x" << y << ", dir: " << (dir == Dir::FRONT ? "front" : "rear") << std::endl;
+	//if (pos.distance < 0.0f || pos.distance > 20.0f) std::cout << "- Invalid distance: " << pos.distance << " for " << x << "x" << y << ", dir: " << (dir == Dir::FRONT ? "front" : "rear") << std::endl;
 
 	return Distance(pos.dx, pos.dy, pos.distance, pos.angle);
 }
