@@ -312,6 +312,7 @@ void TestController::FetchBallStraightState::step(float dt, Vision::Results* vis
 	if (ai->parameters[0].length() > 0) approachSpeed = Util::toFloat(ai->parameters[0]);
 	if (ai->parameters[1].length() > 0) offsetDistance = Util::toFloat(ai->parameters[1]);
 	if (ai->parameters[2].length() > 0) startAccelerationDuration = Util::toFloat(ai->parameters[2]);
+	if (ai->parameters[3].length() > 0) brakeP = Util::toFloat(ai->parameters[3]);
 
 	if (ballDistance < offsetDistance) {
 		ai->setState("fetch-ball-near");
