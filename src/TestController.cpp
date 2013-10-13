@@ -301,11 +301,15 @@ void TestController::FetchBallStraightState::step(float dt, Vision::Results* vis
 	}
 
 	float offsetDistance = 0.5f;
-	float approachSpeed = 1.0f;
+	float approachSpeed = 2.0f;
+	float startAccelerationDuration = 1.0f;
 	float ballDistance = ball->getDribblerDistance();
 
 	if (ai->parameters[0].length() > 0) approachSpeed = Util::toFloat(ai->parameters[0]);
 	if (ai->parameters[1].length() > 0) offsetDistance = Util::toFloat(ai->parameters[1]);
+
+	// accelerate in the beginning
+	float acceleratedSpeed = approachSpeed * Math::map(stateDuration, 0.0f, startAccelerationDuration, 0.0f, 1.0f);
 
 	if (ballDistance < offsetDistance) {
 		ai->setState("fetch-ball-near");
@@ -318,7 +322,7 @@ void TestController::FetchBallStraightState::step(float dt, Vision::Results* vis
 	ai->dbg("ballDistance", ballDistance);
 	ai->dbg("targetAngle", Math::radToDeg(targetAngle));
 
-	robot->setTargetDir(Math::Rad(targetAngle), approachSpeed);
+	robot->setTargetDir(Math::Rad(targetAngle), acceleratedSpeed);
 	robot->lookAt(Math::Rad((goal->angle + ball->angle) / 2.0f));
 }
 
