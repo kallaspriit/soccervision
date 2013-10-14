@@ -427,7 +427,9 @@ float TestController::FetchBallStraightState::getTargetAngle(float goalX, float 
 }
 
 void TestController::FetchBallNearState::onEnter(Robot* robot) {
-	enterVelocity = robot->getVelocity();
+	float minAllowedApproachSpeed = 0.25f;
+
+	enterVelocity = Math::max(robot->getVelocity(), minAllowedApproachSpeed);
 }
 
 void TestController::FetchBallNearState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration) {
