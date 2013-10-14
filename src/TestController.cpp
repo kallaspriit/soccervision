@@ -306,7 +306,7 @@ void TestController::FetchBallStraightState::step(float dt, Vision::Results* vis
 	float maxOffsetDistanceAngleDiff = 45.0f;
 	float maxAngleDiffDistance = 0.6f;
 	float minAngleDiffDistance = 0.2f;
-	float focusBetweenBallGoalDistance = 0.75f;
+	float focusBetweenBallGoalAngle = 15.0f;
 	float maxAngleBrakingAngle = 60.0f;
 	float minApproachSpeed = 0.2f;
 	float brakeP = 3.0f;
@@ -355,7 +355,7 @@ void TestController::FetchBallStraightState::step(float dt, Vision::Results* vis
 
 	robot->setTargetDir(Math::Rad(targetAngle), acceleratedSpeed);
 
-	if (ballDistance > focusBetweenBallGoalDistance) {
+	if (Math::radToDeg(angleDiff) > focusBetweenBallGoalAngle) {
 		robot->lookAt(Math::Rad((goal->angle + ball->angle) / 2.0f));
 	} else {
 		robot->lookAt(goal);
