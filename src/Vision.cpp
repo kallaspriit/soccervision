@@ -351,7 +351,7 @@ bool Vision::isValidBall(Object* ball, Dir dir) {
 		//std::cout << "Surround: " << surroundMetric << std::endl;
 
 		if (surroundMetric != -1.0f && surroundMetric < Config::minValidBallSurroundThreshold) {
-			std::cout << "@ BALL SURROUND FAIL: " << surroundMetric << " VS " << Config::minValidBallSurroundThreshold << std::endl;
+			//std::cout << "@ BALL SURROUND FAIL: " << surroundMetric << " VS " << Config::minValidBallSurroundThreshold << std::endl;
 
 			return false;
 		}
@@ -376,14 +376,14 @@ bool Vision::isValidBall(Object* ball, Dir dir) {
 			//|| !pathMetric.validColorFound
 			//|| pathMetric.invalidSpree > getBallMaxInvalidSpree(ball->y + ball->height / 2)
 		) {
-			std::cout << "@ BALL PATH FAIL: " << pathMetric.percentage << " VS " << Config::minValidBallPathThreshold << ", OUT: " << (pathMetric.out ? "YES" : "NO") << std::endl;
+			//std::cout << "@ BALL PATH FAIL: " << pathMetric.percentage << " VS " << Config::minValidBallPathThreshold << ", OUT: " << (pathMetric.out ? "YES" : "NO") << std::endl;
 
 			return false;
 		}
 	}
 
 	if (isBallInGoal(ball, dir)) {
-		std::cout << "@ BALL IN GOAL FAIL" << std::endl;
+		//std::cout << "@ BALL IN GOAL FAIL" << std::endl;
 
 		return false;
 	}
@@ -903,7 +903,7 @@ Vision::PathMetric Vision::getPathMetric(int x1, int y1, int x2, int y2, std::ve
 					if (debug) {
 						canvas.drawMarker(x, y, 0, 128, 0);
 					}
-				} else if ((sawWhite || firstColor == "white") && previousBlack >= 2) {
+				} else if ((sawWhite || firstColor == "white") && previousBlack >= 4) {
 					crossingGreenWhiteBlackGreen = true;
 
 					if (debug) {
