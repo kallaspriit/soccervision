@@ -106,7 +106,7 @@ static float map(float value, float inMin, float inMax, float outMin, float outM
     float rightSpan = outMax - outMin;
 
     // Convert the left range into a 0-1 range (float)
-    float valueScaled = float(value - inMin) / float(leftSpan);
+    float valueScaled = (value - inMin) / leftSpan;
 
     // Convert the 0-1 range into a value in the right range.
     return outMin + (valueScaled * rightSpan);

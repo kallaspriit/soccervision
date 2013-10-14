@@ -71,3 +71,22 @@ Dash.Util.getDistanceBetween = function(a, b, squared) {
 		return Math.sqrt(squaredValue);
 	}
 };
+
+Dash.Util.map = function(value, inMin, inMax, outMin, outMax) {
+	if (value < inMin) {
+		return outMin;
+	} else if (value > inMax) {
+		return outMax;
+	}
+
+	var leftSpan = inMax - inMin,
+		rightSpan = outMax - outMin;
+
+	// Convert the left range into a 0-1 range (float)
+	var valueScaled = value - inMin / leftSpan;
+
+	// Convert the 0-1 range into a value in the right range.
+	return outMin + (valueScaled * rightSpan);
+
+	//return (value - inMin) * (outMax - outMin) / (inMax - inMin) + outMin;
+}
