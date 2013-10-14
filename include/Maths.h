@@ -109,9 +109,15 @@ static float map(float value, float inMin, float inMax, float outMin, float outM
     float valueScaled = (value - inMin) / leftSpan;
 
     // Convert the 0-1 range into a value in the right range.
-    return outMin + (valueScaled * rightSpan);
+    float result = outMin + (valueScaled * rightSpan);
 
-	//return (value - inMin) * (outMax - outMin) / (inMax - inMin) + outMin;
+	if (result < outMin) {
+		result = outMin;
+	} else if (result > outMax) {
+		result = outMax;
+	}
+
+	return result;
 }
 
 static float floatModulus(float a, float b) {
