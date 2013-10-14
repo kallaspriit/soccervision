@@ -307,7 +307,7 @@ void TestController::FetchBallStraightState::step(float dt, Vision::Results* vis
 	float minAngleDiffDistance = 0.2f;
 	float maxAngleBrakingAngle = 60.0f;
 	float minApproachSpeed = 0.2f;
-	float brakeP = 4.0f;
+	float brakeP = 3.0f;
 	//float nearDistance = 0.25f;
 
 	float startBrakingDistance = Math::map(robot->getVelocity(), 0.0f, 2.0, 0.5f, 1.5f);
