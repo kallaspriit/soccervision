@@ -472,7 +472,7 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	}
 
 	float approachP = 1.5f;
-	float sideP = 0.5f;
+	float sideP = 0.75f;
 	float nearZeroSpeedAngle = 10.0f;
 	float nearMaxSideSpeedAngle = 45.0f;
 	float ballDistance = ball->getDribblerDistance();
