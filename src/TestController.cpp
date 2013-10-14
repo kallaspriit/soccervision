@@ -303,12 +303,12 @@ void TestController::FetchBallStraightState::step(float dt, Vision::Results* vis
 	float approachSpeed = 2.0f;
 	float startAccelerationDuration = 0.5f;
 	float maxOffsetDistanceAngleDiff = 45.0f;
-	float maxAngleDiffDistance = 0.5f;
+	float maxAngleDiffDistance = 0.6f;
 	float minAngleDiffDistance = 0.2f;
 	float maxAngleBrakingAngle = 60.0f;
 	float minApproachSpeed = 0.2f;
 	float brakeP = 3.0f;
-	//float nearDistance = 0.25f;
+	float nearDistance = 0.15f;
 
 	float startBrakingDistance = Math::map(robot->getVelocity(), 0.0f, 2.0, 0.5f, 1.5f);
 	float ballDistance = ball->getDribblerDistance();
@@ -322,7 +322,8 @@ void TestController::FetchBallStraightState::step(float dt, Vision::Results* vis
 	if (ai->parameters[2].length() > 0) startAccelerationDuration = Util::toFloat(ai->parameters[2]);
 	if (ai->parameters[3].length() > 0) brakeP = Util::toFloat(ai->parameters[3]);
 
-	if (ballDistance < offsetDistance) {
+	//if (ballDistance < offsetDistance) {
+	if (ballDistance < nearDistance) {
 		ai->setState("fetch-ball-near");
 		
 		return;
@@ -347,6 +348,8 @@ void TestController::FetchBallStraightState::step(float dt, Vision::Results* vis
 	ai->dbg("combinedBrakeFactor", combinedBrakeFactor);
 	ai->dbg("ballDistance", ballDistance);
 	ai->dbg("targetAngle", Math::radToDeg(targetAngle));
+	ai->dbg("angleDiff", Math::radToDeg(angleDiff));
+	ai->dbg("offsetDistance", Math::radToDeg(offsetDistance));
 
 	robot->setTargetDir(Math::Rad(targetAngle), acceleratedSpeed);
 	robot->lookAt(Math::Rad((goal->angle + ball->angle) / 2.0f));
@@ -359,7 +362,7 @@ float TestController::FetchBallStraightState::getTargetAngle(float goalX, float 
 	float targetY2;
 	
 	if(Math::abs(ballX - goalX) < 0.001){
-		ai->dbg("case", 1);
+		//ai->dbg("case", 1);
 
 		//kui vahe on alla millimeetri, arvutame otse
 		targetX1 = ballX;
@@ -368,7 +371,7 @@ float TestController::FetchBallStraightState::getTargetAngle(float goalX, float 
 		targetY2 = ballY + D;
 	}
 	else{
-		ai->dbg("case", 2);
+		//ai->dbg("case", 2);
 
 		//Line connecting ball and goal
 		float a = (ballY - goalY)/(ballX - goalX);
@@ -409,10 +412,10 @@ float TestController::FetchBallStraightState::getTargetAngle(float goalX, float 
 		targetY = targetY2;
 	}
 
-	ai->dbg("targetX", targetX);
+	/*ai->dbg("targetX", targetX);
 	ai->dbg("targetY", targetY);
 	ai->dbg("target1Dist", target1Dist);
-	ai->dbg("target2Dist", target2Dist);
+	ai->dbg("target2Dist", target2Dist);*/
 
 	float targetAngle = atan2(targetX, targetY);
 	return targetAngle;
