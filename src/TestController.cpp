@@ -303,7 +303,7 @@ void TestController::FetchBallStraightState::step(float dt, Vision::Results* vis
 	float offsetDistance = 0.5f;
 	float approachSpeed = 2.0f;
 	float startAccelerationDuration = 0.5f;
-	float startBrakingDistance = 1.0f;
+	float startBrakingDistance = Math::map(robot->getVelocity(), 0.0f, 2.0, 0.5f, 1.5f);
 	float maxAngleBrakingAngle = 60.0f; // degrees
 	float minApproachSpeed = 0.2f;
 	float brakeP = 4.0f;
@@ -333,6 +333,7 @@ void TestController::FetchBallStraightState::step(float dt, Vision::Results* vis
 	acceleratedSpeed = Math::max(acceleratedSpeed * (1.0f - combinedBrakeFactor), minApproachSpeed);
 
 	ai->dbg("acceleratedSpeed", acceleratedSpeed);
+	ai->dbg("startBrakingDistance", startBrakingDistance);
 	ai->dbg("distanceBraking", distanceBraking);
 	ai->dbg("angleBreaking", angleBreaking);
 	ai->dbg("combinedBrakeFactor", combinedBrakeFactor);
