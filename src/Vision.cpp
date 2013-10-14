@@ -967,9 +967,9 @@ Vision::PathMetric Vision::getPathMetric(int x1, int y1, int x2, int y2, std::ve
 
 	if (
 		(lastColor == "black" && sawWhite)
-		|| (sawWhiteBeforeBlack && lastColor == "green")
+		|| (firstColor == "white" && sawWhiteBeforeBlack && lastColor == "green")
 	) {
-		std::cout << "@ OUT LATE" << std::endl;
+		//std::cout << "@ OUT LATE" << std::endl;
 
 		crossingGreenWhiteBlackGreen = true;
 	}
@@ -981,10 +981,10 @@ Vision::PathMetric Vision::getPathMetric(int x1, int y1, int x2, int y2, std::ve
 	float percentage = (float)matches / (float)sampleCount;
 	bool validColorFound = requiredColor == "" || requiredColorFound;
 
-	std::cout << "@ blacksInRow: " << blacksInRow << std::endl;
+	/*std::cout << "@ blacksInRow: " << blacksInRow << std::endl;
 	std::cout << "@ previousBlack: " << previousBlack << std::endl;
 	std::cout << "@ crossingGreenWhiteBlackGreen: " << crossingGreenWhiteBlackGreen << std::endl;
-	std::cout << "@ tooManyBlacksInRow: " << tooManyBlacksInRow << std::endl << std::endl;
+	std::cout << "@ tooManyBlacksInRow: " << tooManyBlacksInRow << std::endl << std::endl;*/
 
 	return PathMetric(percentage, longestInvalidSpree, validColorFound, crossingGreenWhiteBlackGreen || tooManyBlacksInRow);
 }
