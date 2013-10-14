@@ -87,11 +87,13 @@ public:
 	class FetchBallStraightState : public State {
 
 	public:
-		FetchBallStraightState(TestController* ai) : State(ai) {}
+		FetchBallStraightState(TestController* ai) : State(ai), startBrakingDistance(-1.0f) {}
+		void onEnter(Robot* robot);
 		void step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration);
 
 	private:
 		float getTargetAngle(float goalX, float goalY, float ballX, float ballY, float D);
+		float startBrakingDistance;
 
 	};
 
