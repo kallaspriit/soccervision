@@ -300,8 +300,7 @@ void TestController::FetchBallStraightState::step(float dt, Vision::Results* vis
 		return;
 	}
 
-	//float approachSpeed = 2.0f;
-	float approachSpeed = 0.5f;
+	float approachSpeed = 2.0f;
 	float startAccelerationDuration = 0.5f;
 	float maxOffsetDistanceAngleDiff = 45.0f;
 	float maxAngleDiffDistance = 0.6f;
@@ -341,7 +340,7 @@ void TestController::FetchBallStraightState::step(float dt, Vision::Results* vis
 	float angleBreaking = Math::map(Math::abs(targetAngle), 0.0f, Math::degToRad(maxAngleBrakingAngle), 0.0f, 1.0f);
 	float combinedBrakeFactor = brakeP * distanceBraking * angleBreaking;
 
-	//acceleratedSpeed = Math::max(acceleratedSpeed * (1.0f - combinedBrakeFactor), minApproachSpeed);
+	acceleratedSpeed = Math::max(acceleratedSpeed * (1.0f - combinedBrakeFactor), minApproachSpeed);
 
 	robot->setTargetDir(Math::Rad(targetAngle), acceleratedSpeed);
 
