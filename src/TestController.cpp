@@ -300,13 +300,21 @@ void TestController::FetchBallStraightState::step(float dt, Vision::Results* vis
 		return;
 	}
 
-	float offsetDistance = 0.5f;
 	float approachSpeed = 2.0f;
 	float startAccelerationDuration = 0.5f;
-	float startBrakingDistance = Math::map(robot->getVelocity(), 0.0f, 2.0, 0.5f, 1.5f);
-	float maxAngleBrakingAngle = 60.0f; // degrees
+	float maxOffsetDistanceAngleDiff = 45.0f;
+	float maxAngleDiffDistance = 0.5f;
+	float minAngleDiffDistance = 0.2f;
+	float maxAngleBrakingAngle = 60.0f;
 	float minApproachSpeed = 0.2f;
 	float brakeP = 4.0f;
+	//float nearDistance = 0.25f;
+
+	float startBrakingDistance = Math::map(robot->getVelocity(), 0.0f, 2.0, 0.5f, 1.5f);
+	float ballAngle = ball->angle;
+	float goalAngle = goal->angle;
+	float angleDiff = Math::abs(goalAngle - ballAngle);
+	float offsetDistance = Math::map(Math::radToDeg(angleDiff), 0.0f, maxOffsetDistanceAngleDiff, minAngleDiffDistance, maxAngleDiffDistance);
 	float ballDistance = ball->getDribblerDistance();
 
 	if (ai->parameters[0].length() > 0) approachSpeed = Util::toFloat(ai->parameters[0]);
