@@ -79,14 +79,5 @@ Dash.Util.map = function(value, inMin, inMax, outMin, outMax) {
 		return outMax;
 	}
 
-	var leftSpan = inMax - inMin,
-		rightSpan = outMax - outMin;
-
-	// Convert the left range into a 0-1 range (float)
-	var valueScaled = value - inMin / leftSpan;
-
-	// Convert the 0-1 range into a value in the right range.
-	return outMin + (valueScaled * rightSpan);
-
-	//return (value - inMin) * (outMax - outMin) / (inMax - inMin) + outMin;
+	return (value - inMin) * (outMax - outMin) / (inMax - inMin) + outMin;
 }
