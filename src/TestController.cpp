@@ -426,6 +426,10 @@ float TestController::FetchBallStraightState::getTargetAngle(float goalX, float 
 	return targetAngle;
 }
 
+void TestController::FetchBallNearState::onEnter(Robot* robot) {
+	enterVelocity = robot->getVelocity();
+}
+
 void TestController::FetchBallNearState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration) {
 	if (robot->dribbler->gotBall()) {
 		ai->dbg("gotBall", true);
@@ -457,7 +461,7 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	if (ai->parameters[1].length() > 0) sideP = Util::toFloat(ai->parameters[1]);
 	if (ai->parameters[2].length() > 0) nearZeroSpeedAngle = Util::toFloat(ai->parameters[2]);
 
-	float forwardSpeed = approachP * Math::map(Math::abs(Math::radToDeg(ball->angle)), 0.0f, nearZeroSpeedAngle, 1.0f, 0.0f);
+	float forwardSpeed = Math::min(approachP * Math::map(Math::abs(Math::radToDeg(ball->angle)), 0.0f, nearZeroSpeedAngle, 1.0f, 0.0f), enterVelocity);
 	float sideSpeed = sideP * Math::sign(ball->distanceX) * Math::map(Math::abs(Math::radToDeg(ball->angle)), 0.0f, nearMaxSideSpeedAngle, 0.0f, 1.0f);
 
 	ai->dbg("ballDistance", ballDistance);
