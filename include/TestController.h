@@ -99,7 +99,11 @@ public:
 
 	public:
 		FetchBallNearState(TestController* ai) : State(ai) {}
+		void onEnter(Robot* robot);
 		void step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration);
+
+	private:
+		float enterVelocity;
 
 	};
 
