@@ -305,6 +305,7 @@ void TestController::FetchBallStraightState::step(float dt, Vision::Results* vis
 	}
 
 	float approachSpeed = 2.0f;
+	float maxNearSpeed = 0.5f;
 	float startAccelerationDuration = 0.5f;
 	float maxOffsetDistanceAngleDiff = 45.0f;
 	float minAngleDiffDistance = 0.2f;
@@ -338,7 +339,7 @@ void TestController::FetchBallStraightState::step(float dt, Vision::Results* vis
 
 	// accelerate in the beginning
 	float acceleratedSpeed = approachSpeed * Math::map(stateDuration, 0.0f, startAccelerationDuration, 0.0f, 1.0f);
-	
+
 	// only choose the braking distance once
 	if (startBrakingDistance == -1.0f && ballDistance < adaptiveBrakingDistance) {
 		startBrakingDistance = adaptiveBrakingDistance;
@@ -348,14 +349,18 @@ void TestController::FetchBallStraightState::step(float dt, Vision::Results* vis
 		// brake as getting close and large target angle
 		float distanceBraking = Math::map(ballDistance, 0.0f, startBrakingDistance, 1.0, 0.0f);
 		float angleBreaking = Math::map(Math::abs(targetAngle), 0.0f, Math::degToRad(maxAngleBrakingAngle), 0.0f, 1.0f);
-		//float combinedBrakeFactor = brakeP * distanceBraking * angleBreaking;
-		float combinedBrakeFactor = brakeP * (distanceBraking + angleBreaking);
+		float combinedBrakeFactor = brakeP * distanceBraking * angleBreaking;
+		
+		// limit max speed near the ball
+		float maxSpeed = Math::map(ballDistance, 0.0f, startBrakingDistance, maxNearSpeed, approachSpeed);
+		//float combinedBrakeFactor = brakeP * (distanceBraking + angleBreaking);
 
-		acceleratedSpeed = Math::max(acceleratedSpeed * (1.0f - combinedBrakeFactor), minApproachSpeed);
+		acceleratedSpeed = Math::min(Math::max(acceleratedSpeed * (1.0f - combinedBrakeFactor), minApproachSpeed), maxSpeed);
 
 		ai->dbg("distanceBraking", distanceBraking);
 		ai->dbg("angleBreaking", angleBreaking);
 		ai->dbg("combinedBrakeFactor", combinedBrakeFactor);
+		ai->dbg("maxSpeed", maxSpeed);
 	}
 
 	robot->setTargetDir(Math::Rad(targetAngle), acceleratedSpeed);
