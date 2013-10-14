@@ -102,7 +102,9 @@ static float map(float value, float inMin, float inMax, float outMin, float outM
 		return outMax;
 	}
 
-	float leftSpan = inMax - inMin;
+	return (value - inMin) * (outMax - outMin) / (inMax - inMin) + outMin;
+
+	/*float leftSpan = inMax - inMin;
     float rightSpan = outMax - outMin;
 
     // Convert the left range into a 0-1 range (float)
@@ -117,7 +119,7 @@ static float map(float value, float inMin, float inMax, float outMin, float outM
 		result = outMax;
 	}
 
-	return result;
+	return result;*/
 }
 
 static float floatModulus(float a, float b) {
