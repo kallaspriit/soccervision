@@ -670,6 +670,7 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	ai->dbg("ballDistance", ballDistance);
 	ai->dbg("forwardSpeed", forwardSpeed);
 	ai->dbg("sideSpeed", sideSpeed);
+	ai->dbg("enterVelocity", enterVelocity);
 	ai->dbg("ballAngle", (Math::radToDeg(ball->angle)));
 
 	robot->dribbler->start();
