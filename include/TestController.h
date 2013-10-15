@@ -126,6 +126,9 @@ public:
 		DriveCircleState(TestController* ai) : State(ai) {}
 		void step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration);
 
+	private:
+		static float getCircleTargetAngle(float start, float time, float period);
+
 	};
 
 	typedef std::map<std::string, std::string> Messages;

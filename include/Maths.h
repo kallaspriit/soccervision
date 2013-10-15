@@ -385,15 +385,6 @@ static float getAngleBetween(Math::Position pointA, Math::Position pointB, float
 	return angle;
 };
 
-static float circleAround(float start, float time, float period){
-	float omega = 2.0f * PI / period;
-	float targetX = sin(omega * time + start);
-	float targetY = cos(omega * time + start);
-	float targetAngle = atan2(targetY, targetX);
-
-	return targetAngle;
-}
-
 } // namespace Math
 
 #endif // MATHS_H
