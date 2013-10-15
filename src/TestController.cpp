@@ -368,6 +368,12 @@ void TestController::FetchBallInfrontState::step(float dt, Vision::Results* visi
 	robot->lookAt(Math::Rad((goal->angle + ball->angle) / 2.0f));
 }
 
+void TestController::FetchBallBehindState::onEnter(Robot* robot) {
+	hadBall = false;
+	lastTargetAngle = 0.0f;
+	lostBallTime = 0.0;
+}
+
 void TestController::FetchBallBehindState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration) {
 	if (robot->dribbler->gotBall()) {
 		ai->dbg("gotBall", true);
@@ -377,19 +383,46 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 		return;
 	}
 	
-	Object* ball = visionResults->getClosestBall(Dir::REAR);
+	Object* ball = visionResults->getClosestBall();
 	Object* goal = visionResults->getLargestGoal(Side::BLUE, Dir::FRONT);
 
 	ai->dbg("ballVisible", ball != NULL);
 	ai->dbg("goalVisible", goal != NULL);
 
-	if (ball == NULL || goal == NULL) {
-		robot->stop();
-
-		return;
+	if (goal == NULL) {
+		return; // TODO What now?
 	}
 
-	float offsetDistance = 0.5f;
+	if (ball != NULL) {
+		hadBall = true;
+
+		if (!ball->behind) {
+			ai->setState("fetch-ball-straight");
+
+			return;
+		}
+	} else {
+		if (!hadBall) {
+			return; // TODO Never had the ball, what now?
+		}
+
+		if (lostBallTime == 0.0) {
+			lostBallTime = Util::millitime();
+		}
+
+		float driveBehindSpeed = 0.5f;
+		double timeSinceLostBall = Util::duration(lostBallTime);
+
+		robot->setTargetDir(Math::Rad(lastTargetAngle), driveBehindSpeed);
+		robot->lookAt(goal);
+
+		ai->dbg("mode", "blind");
+		ai->dbg("timeSinceLostBall", timeSinceLostBall);
+	}
+
+	ai->dbg("mode", "visible");
+
+	float offsetDistance = 0.25f;
 	float approachP = 0.5f;
 	float startAccelerationDuration = 0.5f;
 	TargetMode targetMode = TargetMode::LEFT;
@@ -422,6 +455,8 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 
 	robot->setTargetDir(Math::Rad(targetAngle), approachSpeed);
 	robot->lookAt(goal);
+
+	lastTargetAngle = targetAngle;
 }
 
 void TestController::FetchBallStraightState::onEnter(Robot* robot) {

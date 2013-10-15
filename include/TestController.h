@@ -79,8 +79,14 @@ public:
 	class FetchBallBehindState : public State {
 
 	public:
-		FetchBallBehindState(TestController* ai) : State(ai) {}
+		FetchBallBehindState(TestController* ai) : State(ai), hadBall(false), lastTargetAngle(0.0f), lostBallTime(0.0) {}
+		void onEnter(Robot* robot);
 		void step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration);
+
+	private:
+		bool hadBall;
+		float lastTargetAngle;
+		double lostBallTime;
 
 	};
 
