@@ -310,9 +310,11 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 	ai->dbg("approachSpeed", approachSpeed);
 	ai->dbg("targetAngle", Math::radToDeg(targetAngle));
 	ai->dbg("goal->distanceX", goal->distanceX);
-	ai->dbg("goal->distanceY", goal->distanceY * (goal->behind ? -1.0f : 1.0f));
+	ai->dbg("goal->distanceY1", goal->distanceY);
+	ai->dbg("goal->distanceY2", goal->distanceY * (goal->behind ? -1.0f : 1.0f));
 	ai->dbg("ball->distanceX", ball->distanceX);
-	ai->dbg("ball->distanceY", ball->distanceY * (ball->behind ? -1.0f : 1.0f));
+	ai->dbg("ball->distanceY1", ball->distanceY);
+	ai->dbg("ball->distanceY2", ball->distanceY * (ball->behind ? -1.0f : 1.0f));
 
 	robot->setTargetDir(Math::Rad(targetAngle), approachSpeed);
 	robot->lookAt(goal);
