@@ -310,7 +310,7 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 	ai->dbg("approachSpeed", approachSpeed);
 	ai->dbg("targetAngle", Math::radToDeg(targetAngle));
 
-	robot->setTargetDir(targetAngle, approachSpeed);
+	robot->setTargetDir(Math::Rad(targetAngle), approachSpeed);
 	robot->lookAt(goal);
 }
 
