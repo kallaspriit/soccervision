@@ -392,12 +392,24 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 	float offsetDistance = 0.5f;
 	float approachP = 0.5f;
 	float startAccelerationDuration = 0.5f;
+	TargetMode targetMode = TargetMode::LEFT;
 
 	if (ai->parameters[0].length() > 0) offsetDistance = Util::toFloat(ai->parameters[0]);
 	if (ai->parameters[1].length() > 0) approachP = Util::toFloat(ai->parameters[1]);
+	if (ai->parameters[2].length() > 0) {
+		int targetModeVal = Util::toInt(ai->parameters[2]);
+
+		if (targetModeVal == -1) {
+			targetMode = TargetMode::LEFT;
+		} else if (targetModeVal == 1) {
+			targetMode = TargetMode::RIGHT;
+		} else {
+			targetMode = TargetMode::INLINE;
+		}
+	}
 
 	//float targetAngle = ai->getTargetAngle(goal->distanceX, goal->distanceY * (goal->behind ? -1.0f : 1.0f), ball->distanceX, ball->distanceY * (ball->behind ? -1.0f : 1.0f), offsetDistance, TargetMode::RIGHT);
-	float targetAngle = ai->getTargetAngle(goal->distanceX * (goal->behind ? -1.0f : 1.0f), goal->distanceY * (goal->behind ? -1.0f : 1.0f), ball->distanceX * (ball->behind ? -1.0f : 1.0f), ball->distanceY * (ball->behind ? -1.0f : 1.0f), offsetDistance, TargetMode::INLINE);
+	float targetAngle = ai->getTargetAngle(goal->distanceX * (goal->behind ? -1.0f : 1.0f), goal->distanceY * (goal->behind ? -1.0f : 1.0f), ball->distanceX * (ball->behind ? -1.0f : 1.0f), ball->distanceY * (ball->behind ? -1.0f : 1.0f), offsetDistance, targetMode);
 	float approachSpeed = approachP * Math::map(stateDuration, 0.0f, startAccelerationDuration, 0.0f, 1.0f);
 
 	ai->dbg("offsetDistance", offsetDistance);
