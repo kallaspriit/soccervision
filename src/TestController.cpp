@@ -150,6 +150,99 @@ std::string TestController::getJSON() {
 	return stream.str();
 }
 
+float TestController::getTargetAngle(float goalX, float goalY, float ballX, float ballY, float D, TestController::TargetMode targetMode) {
+	float targetX1;
+	float targetX2;
+	float targetY1;
+	float targetY2;
+
+	if (Math::abs(ballX - goalX) < 0.001f){
+		// special case of small x difference
+		if (targetMode == TargetMode::INLINE){
+			// let's not divide by zero
+			targetX1 = ballX;
+			targetX2 = ballX;
+			targetY1 = ballY + D;
+			targetY2 = ballY - D;
+		} else if (targetMode == TargetMode::LEFT || targetMode == TargetMode::RIGHT){
+			targetX1 = ballX + D;
+			targetX2 = ballX - D;
+			targetY1 = ballY;
+			targetY2 = ballY;
+		}
+	} else if(Math::abs(ballY - goalY) < 0.001f){
+		// special case of small y difference
+		if (targetMode == TargetMode::INLINE){
+			targetX1 = ballX + D;
+			targetX2 = ballX - D;
+			targetY1 = ballY;
+			targetY2 = ballY;
+		} else if (targetMode == TargetMode::LEFT || targetMode == TargetMode::RIGHT) {
+			targetX1 = ballX;
+			targetX2 = ballX;
+			targetY1 = ballY + D;
+			targetY2 = ballY - D;
+		}
+	} else {
+		// normal case
+		float a = (ballY - goalY) / (ballX - goalX);
+
+		if (targetMode == TargetMode::LEFT || targetMode == TargetMode::RIGHT){
+			// perpendicular to the line from goal to ball
+			a = -(1.0f / a);
+		}
+
+		float b = ballY - a * ballX;
+		float underSqrt = sqrt(
+			- pow(a, 2) * pow(ballX, 2)
+			+ pow(a, 2) * pow(D, 2)
+			- 2.0f * a * b * ballX
+			+ 2.0f * a * ballX * ballY
+			- pow(b, 2)
+			+ 2.0f * b * ballY
+			+ pow(D, 2)
+			- pow(ballY, 2)
+		);
+		float rest = - a * b + a * ballY + ballX;
+		float divisor = pow(a, 2) + 1.0f;
+
+		targetX1 = ( + underSqrt + rest) / divisor;
+		targetX2 = ( - underSqrt + rest) / divisor;
+		targetY1 = a * targetX1 + b;
+		targetY2 = a * targetX2 + b;
+	}
+
+	// target's distance from goal (squared)
+	float target1Dist = pow(goalX - targetX1, 2) + pow(goalY - targetY1, 2);
+	float target2Dist = pow(goalX - targetX2, 2) + pow(goalY - targetY2, 2);
+
+	float targetX;
+	float targetY;
+
+	if (targetMode == TargetMode::INLINE) {
+		// choose target which is farther away from goal
+		if (target1Dist > target2Dist){
+			targetX = targetX1;
+			targetY = targetY1;
+		} else{
+			targetX = targetX2;
+			targetY = targetY2;
+		}
+	} else if (targetMode == TargetMode::LEFT) {
+		// choose one on left
+		targetX = targetX2;
+		targetY = targetY2;
+	} else if (targetMode == TargetMode::RIGHT) {
+		// choose one on right
+		targetX = targetX1;
+		targetY = targetY1;
+	}
+
+	float targetAngle = atan2(targetX, targetY);
+
+	return targetAngle;
+}
+
 void TestController::ManualControlState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration) {
 	double time = Util::millitime();
 
@@ -303,7 +396,8 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 	if (ai->parameters[0].length() > 0) offsetDistance = Util::toFloat(ai->parameters[0]);
 	if (ai->parameters[1].length() > 0) approachP = Util::toFloat(ai->parameters[1]);
 
-	float targetAngle = ai->getTargetAngle(goal->distanceX, goal->distanceY * (goal->behind ? -1.0f : 1.0f), ball->distanceX, ball->distanceY * (ball->behind ? -1.0f : 1.0f), offsetDistance, TargetMode::RIGHT);
+	//float targetAngle = ai->getTargetAngle(goal->distanceX, goal->distanceY * (goal->behind ? -1.0f : 1.0f), ball->distanceX, ball->distanceY * (ball->behind ? -1.0f : 1.0f), offsetDistance, TargetMode::RIGHT);
+	float targetAngle = ai->getTargetAngle(goal->distanceX, goal->distanceY * (goal->behind ? -1.0f : 1.0f), ball->distanceX, ball->distanceY * (ball->behind ? -1.0f : 1.0f), offsetDistance, TargetMode::INLINE);
 	float approachSpeed = approachP * Math::map(stateDuration, 0.0f, startAccelerationDuration, 0.0f, 1.0f);
 
 	ai->dbg("offsetDistance", offsetDistance);
@@ -485,99 +579,6 @@ void TestController::FetchBallStraightState::step(float dt, Vision::Results* vis
 	float targetAngle = atan2(targetX, targetY);
 	return targetAngle;
 }*/
-
-float TestController::getTargetAngle(float goalX, float goalY, float ballX, float ballY, float D, TestController::TargetMode targetMode) {
-	float targetX1;
-	float targetX2;
-	float targetY1;
-	float targetY2;
-
-	if (Math::abs(ballX - goalX) < 0.001){
-		// special case of small x difference
-		if (targetMode == TargetMode::INLINE){
-			// let's not divide by zero
-			targetX1 = ballX;
-			targetX2 = ballX;
-			targetY1 = ballY + D;
-			targetY2 = ballY - D;
-		} else if (targetMode == TargetMode::LEFT || targetMode == TargetMode::RIGHT){
-			targetX1 = ballX + D;
-			targetX2 = ballX - D;
-			targetY1 = ballY;
-			targetY2 = ballY;
-		}
-	} else if(Math::abs(ballY - goalY) < 0.001){
-		// special case of small y difference
-		if (targetMode == TargetMode::INLINE){
-			targetX1 = ballX + D;
-			targetX2 = ballX - D;
-			targetY1 = ballY;
-			targetY2 = ballY;
-		} else if (targetMode == TargetMode::LEFT || targetMode == TargetMode::RIGHT) {
-			targetX1 = ballX;
-			targetX2 = ballX;
-			targetY1 = ballY + D;
-			targetY2 = ballY - D;
-		}
-	} else {
-		// normal case
-		float a = (ballY - goalY) / (ballX - goalX);
-
-		if (targetMode == TargetMode::LEFT || targetMode == TargetMode::RIGHT){
-			// perpendicular to the line from goal to ball
-			a = -(1 / a);
-		}
-
-		float b = ballY - a * ballX;
-		float underSqrt = sqrt(
-			- pow(a, 2) * pow(ballX, 2)
-			+ pow(a, 2) * pow(D, 2)
-			- 2 * a * b * ballX
-			+ 2 * a * ballX * ballY
-			- pow(b, 2)
-			+ 2 * b * ballY
-			+ pow(D, 2)
-			- pow(ballY, 2)
-		);
-		float rest = - a * b + a * ballY + ballX;
-		float divisor = pow(a, 2) + 1;
-
-		targetX1 = ( + underSqrt + rest) / divisor;
-		targetX2 = ( - underSqrt + rest) / divisor;
-		targetY1 = a * targetX1 + b;
-		targetY2 = a * targetX2 + b;
-	}
-
-	// target's distance from goal (squared)
-	float target1Dist = pow(goalX - targetX1, 2) + pow(goalY - targetY1, 2);
-	float target2Dist = pow(goalX - targetX2, 2) + pow(goalY - targetY2, 2);
-
-	float targetX;
-	float targetY;
-
-	if (targetMode == TargetMode::INLINE) {
-		// choose target which is farther away from goal
-		if (target1Dist > target2Dist){
-			targetX = targetX1;
-			targetY = targetY1;
-		} else{
-			targetX = targetX2;
-			targetY = targetY2;
-		}
-	} else if (targetMode == TargetMode::LEFT) {
-		// choose one on left
-		targetX = targetX2;
-		targetY = targetY2;
-	} else if (targetMode == TargetMode::RIGHT) {
-		// choose one on right
-		targetX = targetX1;
-		targetY = targetY1;
-	}
-
-	float targetAngle = atan2(targetX, targetY);
-
-	return targetAngle;
-}
 
 void TestController::FetchBallNearState::onEnter(Robot* robot) {
 	float minAllowedApproachSpeed = 0.25f;
