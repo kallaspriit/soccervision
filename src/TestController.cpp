@@ -23,6 +23,7 @@ void TestController::setupStates() {
 	states["fetch-ball-straight"] = new FetchBallStraightState(this);
 	states["fetch-ball-near"] = new FetchBallNearState(this);
 	states["aim"] = new AimState(this);
+	states["drive-circle"] = new DriveCircleState(this);
 }
 
 void TestController::step(float dt, Vision::Results* visionResults) {
@@ -505,9 +506,9 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 	
 	Object* goal = visionResults->getLargestGoal(Side::BLUE, Dir::FRONT);
 
-	if (goal == NULL) {
-		ai->dbg("goalVisible", false);
+	ai->dbg("goalVisible", goal != NULL);
 
+	if (goal == NULL) {
 		return;
 	}
 
@@ -544,4 +545,19 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 	} else {
 		robot->lookAt(goal);
 	}
+}
+
+void TestController::DriveCircleState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration) {
+	Object* goal = visionResults->getLargestGoal(Side::BLUE, Dir::FRONT);
+
+	ai->dbg("goalVisible", goal != NULL);
+
+	if (goal == NULL) {
+		return;
+	}
+
+	float targetAngle = Math::circleAround(0.0f, stateDuration, 5.0f);
+
+	robot->setTargetDir(Math::Rad(targetAngle), 0.2f);
+	robot->lookAt(goal);
 }
