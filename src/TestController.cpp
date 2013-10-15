@@ -556,8 +556,17 @@ void TestController::DriveCircleState::step(float dt, Vision::Results* visionRes
 		return;
 	}
 
-	float targetAngle = Math::circleAround(0.0f, stateDuration, 5.0f);
+	float targetAngle = getCircleTargetAngle(1.0f, stateDuration, 5.0f);
 
 	robot->setTargetDir(Math::Rad(targetAngle), 0.2f);
 	robot->lookAt(goal);
+}
+
+float TestController::DriveCircleState::getCircleTargetAngle(float start, float time, float period){
+	float omega = 2.0f * Math::PI / period;
+	float targetX = sin(omega * time + start);
+	float targetY = cos(omega * time + start);
+	float targetAngle = atan2(targetY, targetX);
+
+	return targetAngle;
 }
