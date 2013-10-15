@@ -290,7 +290,6 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 	ai->dbg("ballVisible", ball != NULL);
 	ai->dbg("goalVisible", goal != NULL);
 
-	// TODO Drive to ball and search for goal when lost goal (new state)
 	if (ball == NULL || goal == NULL) {
 		robot->stop();
 
@@ -304,12 +303,12 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 	if (ai->parameters[0].length() > 0) offsetDistance = Util::toFloat(ai->parameters[0]);
 	if (ai->parameters[1].length() > 0) approachP = Util::toFloat(ai->parameters[1]);
 
-	float targetAngle = ai->getTargetAngle(goal->distanceX, goal->distanceY, ball->distanceX, ball->distanceY, offsetDistance, TargetMode::RIGHT);
+	float targetAngle = ai->getTargetAngle(goal->distanceX, goal->distanceY * goal->behind ? -1.0f : 1.0f, ball->distanceX, ball->distanceY * ball->behind ? -1.0f : 1.0f, offsetDistance, TargetMode::RIGHT);
 	float approachSpeed = approachP * Math::map(stateDuration, 0.0f, startAccelerationDuration, 0.0f, 1.0f);
 
 	ai->dbg("offsetDistance", offsetDistance);
 	ai->dbg("approachSpeed", approachSpeed);
-	ai->dbg("targetAngle", targetAngle);
+	ai->dbg("targetAngle", Math::radToDeg(targetAngle));
 
 	robot->setTargetDir(targetAngle, approachSpeed);
 	robot->lookAt(goal);
