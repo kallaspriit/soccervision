@@ -284,7 +284,7 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 		return;
 	}
 	
-	Object* ball = visionResults->getClosestBall(Dir::FRONT);
+	Object* ball = visionResults->getClosestBall(Dir::REAR);
 	Object* goal = visionResults->getLargestGoal(Side::BLUE, Dir::FRONT);
 
 	ai->dbg("ballVisible", ball != NULL);
@@ -296,6 +296,23 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 
 		return;
 	}
+
+	float offsetDistance = 0.5f;
+	float approachP = 0.5f;
+	float startAccelerationDuration = 0.5f;
+
+	if (ai->parameters[0].length() > 0) offsetDistance = Util::toFloat(ai->parameters[0]);
+	if (ai->parameters[1].length() > 0) approachP = Util::toFloat(ai->parameters[1]);
+
+	float targetAngle = ai->getTargetAngle(goal->distanceX, goal->distanceY, ball->distanceX, ball->distanceY, offsetDistance, TargetMode::RIGHT);
+	float approachSpeed = approachP * Math::map(stateDuration, 0.0f, startAccelerationDuration, 0.0f, 1.0f);
+
+	ai->dbg("offsetDistance", offsetDistance);
+	ai->dbg("approachSpeed", approachSpeed);
+	ai->dbg("targetAngle", targetAngle);
+
+	robot->setTargetDir(targetAngle, approachSpeed);
+	robot->lookAt(goal);
 }
 
 void TestController::FetchBallStraightState::onEnter(Robot* robot) {
