@@ -92,7 +92,6 @@ public:
 		void step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration);
 
 	private:
-		float getTargetAngle(float goalX, float goalY, float ballX, float ballY, float D);
 		float startBrakingDistance;
 
 	};
@@ -145,6 +144,9 @@ public:
 	void handleResetCommand();
 	void handleDriveToCommand(const Command& cmd);
 	void handleParameterCommand(const Command& cmd);
+
+	enum TargetMode { LEFT = -1, INLINE = 0, RIGHT = 1 };
+	float getTargetAngle(float goalX, float goalY, float ballX, float ballY, float D, TargetMode targetMode = TargetMode::INLINE);
 
     void step(float dt, Vision::Results* visionResults);
 	void dbg(std::string key, std::string value) { messages[key] = value; }
