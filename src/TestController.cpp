@@ -418,6 +418,8 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 
 		ai->dbg("mode", "blind");
 		ai->dbg("timeSinceLostBall", timeSinceLostBall);
+
+		return;
 	}
 
 	ai->dbg("mode", "visible");
