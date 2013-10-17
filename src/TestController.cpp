@@ -480,6 +480,7 @@ void TestController::FetchBallBehindState::onEnter(Robot* robot) {
 	lostBallTime = 0.0;
 	timeSinceLostBall = 0.0;
 	lostBallVelocity = 0.0f;
+	lastBallDistance = -1.0f;
 	targetMode = TargetMode::UNDECIDED;
 }
 
@@ -506,7 +507,12 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 	}
 
 	// only revert to fetch front if not fetching behind blind
-	if (ball != NULL && !ball->behind && timeSinceLostBall == 0.0) {
+	if (
+		ball != NULL
+		&& !ball->behind
+		&& timeSinceLostBall == 0.0
+		&& ball->getDribblerDistance() <= lastBallDistance * 1.5f
+	) {
 		ai->setState("fetch-ball-front");
 
 		return;
@@ -599,6 +605,7 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 	robot->lookAt(goal);
 
 	lastTargetAngle = targetAngle;
+	lastBallDistance = ballDistance;
 }
 
 /*float TestController::getTargetAngle(float goalX, float goalY, float ballX, float ballY, float D) {
