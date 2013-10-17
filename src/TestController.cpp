@@ -401,8 +401,8 @@ void TestController::FetchBallFrontState::step(float dt, Vision::Results* vision
 	}
 
 	float approachSpeed = 2.0f;
-	float maxNearSpeed = 0.5f;
-	float startAccelerationDuration = 0.5f;
+	float maxNearSpeed = 0.25f;
+	float startAccelerationDuration = 0.75f;
 	float maxOffsetDistanceAngleDiff = 45.0f;
 	float minAngleDiffDistance = 0.2f;
 	float maxAngleDiffDistance = 0.6f;
@@ -446,11 +446,11 @@ void TestController::FetchBallFrontState::step(float dt, Vision::Results* vision
 		float distanceBraking = Math::map(ballDistance, 0.0f, startBrakingDistance, 1.0, 0.0f);
 		float angleBreaking = Math::map(Math::abs(targetAngle), 0.0f, Math::degToRad(maxAngleBrakingAngle), 0.0f, 1.0f);
 		float combinedBrakeFactor = brakeP * distanceBraking * angleBreaking;
+		//float combinedBrakeFactor = brakeP * (distanceBraking + angleBreaking);
 		
 		// limit max speed near the ball
-		float maxSpeed = Math::map(ballDistance, 0.0f, startBrakingDistance, maxNearSpeed, approachSpeed);
-		//float combinedBrakeFactor = brakeP * (distanceBraking + angleBreaking);
-
+		float maxSpeed = Math::map(ballDistance, nearDistance, startBrakingDistance, maxNearSpeed, approachSpeed);
+		
 		acceleratedSpeed = Math::min(Math::max(acceleratedSpeed * (1.0f - combinedBrakeFactor), minApproachSpeed), maxSpeed);
 
 		ai->dbg("distanceBraking", distanceBraking);
@@ -471,6 +471,7 @@ void TestController::FetchBallFrontState::step(float dt, Vision::Results* vision
 	ai->dbg("targetAngle", Math::radToDeg(targetAngle));
 	ai->dbg("angleDiff", Math::radToDeg(angleDiff));
 	ai->dbg("offsetDistance", offsetDistance);
+	ai->dbg("nearDistance", nearDistance);
 	ai->dbg("lookAngle", Math::radToDeg(lookAngle));
 }
 
