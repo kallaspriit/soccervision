@@ -97,7 +97,7 @@ public:
 	class FetchBallBehindState : public State {
 
 	public:
-		FetchBallBehindState(TestController* ai) : State(ai), hadBall(false), lastTargetAngle(0.0f), lostBallTime(0.0), timeSinceLostBall(0.0), lostBallVelocity(0.0f), startBallDistance(-1.0f), targetMode(TargetMode::UNDECIDED) {}
+		FetchBallBehindState(TestController* ai) : State(ai), hadBall(false), lastTargetAngle(0.0f), lostBallTime(-1.0), timeSinceLostBall(0.0), lostBallVelocity(0.0f), startBallDistance(-1.0f), targetMode(TargetMode::UNDECIDED) {}
 		void onEnter(Robot* robot);
 		void step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration);
 
