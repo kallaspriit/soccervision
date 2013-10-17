@@ -520,8 +520,8 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 		}
 
 		float fetchBlindSpeed = 0.5f;
-		float sideP = 0.5f;
-		float sideAccelerationDuration = 1.0f;
+		float sideP = 0.3f;
+		float sideAccelerationDuration = 2.0f;
 		double maxBlindReverseDuration = 2.0;
 		double timeSinceLostBall = Util::duration(lostBallTime);
 
