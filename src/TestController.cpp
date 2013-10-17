@@ -508,10 +508,10 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 
 	if (ball != NULL) {
 		ai->dbg("ballDistance", ball->getDribblerDistance());
+		ai->dbg("ball->behind", ball->behind);
 	}
 
 	ai->dbg("lastBallDistance", lastBallDistance);
-	ai->dbg("ball->behind", ball->behind);
 	ai->dbg("hadBall", hadBall);
 
 	// only revert to fetch front if not fetching behind blind
