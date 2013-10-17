@@ -506,6 +506,14 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 		return; // TODO What now?
 	}
 
+	if (ball != NULL) {
+		ai->dbg("ballDistance", ball->getDribblerDistance());
+	}
+
+	ai->dbg("lastBallDistance", lastBallDistance);
+	ai->dbg("ball->behind", ball->behind);
+	ai->dbg("hadBall", hadBall);
+
 	// only revert to fetch front if not fetching behind blind
 	if (
 		ball != NULL
@@ -540,6 +548,12 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 		timeSinceLostBall = Util::duration(lostBallTime);
 
 		if (timeSinceLostBall > maxBlindReverseDuration) {
+			robot->stop();
+
+			if (ball != NULL) {
+				ai->setState("fetch-ball-front");
+			}
+
 			return; // TODO Start searching for new ball
 		}
 
@@ -590,11 +604,9 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 	}
 
 	//float targetAngle = ai->getTargetAngle(goal->distanceX, goal->distanceY * (goal->behind ? -1.0f : 1.0f), ball->distanceX, ball->distanceY * (ball->behind ? -1.0f : 1.0f), offsetDistance, TargetMode::RIGHT);
-	float ballDistance = ball->getDribblerDistance();
 	float targetAngle = ai->getTargetAngle(goal->distanceX * (goal->behind ? -1.0f : 1.0f), goal->distanceY * (goal->behind ? -1.0f : 1.0f), ball->distanceX * (ball->behind ? -1.0f : 1.0f), ball->distanceY * (ball->behind ? -1.0f : 1.0f), offsetDistance, targetMode);
 	float approachSpeed = approachP * Math::map(stateDuration, 0.0f, startAccelerationDuration, 0.0f, 1.0f);
 
-	ai->dbg("ballDistance", ballDistance);
 	ai->dbg("offsetDistance", offsetDistance);
 	ai->dbg("approachSpeed", approachSpeed);
 	ai->dbg("targetAngle", Math::radToDeg(targetAngle));
@@ -607,7 +619,7 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 	robot->lookAt(goal);
 
 	lastTargetAngle = targetAngle;
-	lastBallDistance = ballDistance;
+	lastBallDistance = ball->getDribblerDistance();
 }
 
 /*float TestController::getTargetAngle(float goalX, float goalY, float ballX, float ballY, float D) {
