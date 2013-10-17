@@ -82,10 +82,10 @@ public:
 
 	};*/
 
-	class FetchBallStraightState : public State {
+	class FetchBallFrontState : public State {
 
 	public:
-		FetchBallStraightState(TestController* ai) : State(ai), startBrakingDistance(-1.0f) {}
+		FetchBallFrontState(TestController* ai) : State(ai), startBrakingDistance(-1.0f) {}
 		void onEnter(Robot* robot);
 		void step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration);
 
