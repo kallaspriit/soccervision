@@ -554,8 +554,8 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 		}
 
 		float fetchBlindSpeed = 0.5f;
-		float sideP = 0.3f;
-		float sideAccelerationDuration = 2.0f;
+		float sideP = 0.4f;
+		float sideAccelerationDuration = 1.0f;
 		
 		timeSinceLostBall = Util::duration(lostBallTime);
 
@@ -578,8 +578,9 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 		robot->setTargetDir(dirVector.x, dirVector.y);
 		robot->lookAt(goal);
 
-		ai->dbg("mode", "blind");
+		ai->dbgs("mode", "blind");
 		ai->dbg("timeSinceLostBall", timeSinceLostBall);
+		ai->dbg("sideSpeed", sideSpeed);
 
 		return;
 	}
@@ -587,7 +588,7 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 	hadBall = true;
 	timeSinceLostBall = 0.0;
 
-	ai->dbg("mode", "visible");
+	ai->dbgs("mode", "visible");
 
 	float offsetDistance = 0.25f;
 	float approachP = 2.0f;
