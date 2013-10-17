@@ -78,7 +78,7 @@ namespace Config {
 
 	// the ball/goal bottom needs to be below this line to consider path metric
 	const int ballPathSenseStartY = cameraHeight - 80;
-	const int goalPathSenseStartY = cameraHeight - 80;
+	const int goalPathSenseStartY = cameraHeight - 200;
 
 	// color sense start Y
 	const int colorDistanceStartY = cameraHeight - 160;
