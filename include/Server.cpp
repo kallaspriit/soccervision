@@ -31,7 +31,7 @@ Server::~Server() {
 	Message* message;
 
 	while (messages.size() > 0) {
-		message = messages.top();
+		message = messages.front();
 		messages.pop();
 
 		delete message;
@@ -64,14 +64,14 @@ bool Server::gotMessages() {
 	return messages.size() > 0;
 }
 
-Server::Message* Server::popLastMessage() {
+Server::Message* Server::dequeueMessage() {
 	boost::mutex::scoped_lock lock(messagesMutex);
 	
 	if (messages.size() == 0) {
 		return NULL;
 	}
 
-	Message* message = messages.top();
+	Message* message = messages.front();
 
 	messages.pop();
 
