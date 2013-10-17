@@ -18,7 +18,7 @@ void TestController::setupStates() {
 	states["watch-goal"] = new WatchGoalState(this);
 	states["spin-around-dribbler"] = new SpinAroundDribblerState(this);
 	states["drive-to"] = new DriveToState(this);
-	states["fetch-ball-infront"] = new FetchBallInfrontState(this);
+	//states["fetch-ball-infront"] = new FetchBallInfrontState(this);
 	states["fetch-ball-behind"] = new FetchBallBehindState(this);
 	states["fetch-ball-straight"] = new FetchBallStraightState(this);
 	states["fetch-ball-near"] = new FetchBallNearState(this);
@@ -299,7 +299,7 @@ void TestController::DriveToState::step(float dt, Vision::Results* visionResults
 	
 }
 
-void TestController::FetchBallInfrontState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration) {
+/*void TestController::FetchBallInfrontState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration) {
 	if (robot->dribbler->gotBall()) {
 		ai->dbg("gotBall", true);
 
@@ -366,100 +366,7 @@ void TestController::FetchBallInfrontState::step(float dt, Vision::Results* visi
 	robot->setTargetDir(forwardSpeed, sideSpeed);
 	//robot->lookAt(goal); // TODO Try focusing between the two
 	robot->lookAt(Math::Rad((goal->angle + ball->angle) / 2.0f));
-}
-
-void TestController::FetchBallBehindState::onEnter(Robot* robot) {
-	hadBall = false;
-	lastTargetAngle = 0.0f;
-	lostBallTime = 0.0;
-}
-
-void TestController::FetchBallBehindState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration) {
-	if (robot->dribbler->gotBall()) {
-		ai->dbg("gotBall", true);
-
-		ai->setState("aim");
-
-		return;
-	}
-	
-	Object* ball = visionResults->getClosestBall();
-	Object* goal = visionResults->getLargestGoal(Side::BLUE, Dir::FRONT);
-
-	ai->dbg("ballVisible", ball != NULL);
-	ai->dbg("goalVisible", goal != NULL);
-
-	if (goal == NULL) {
-		return; // TODO What now?
-	}
-
-	if (ball != NULL) {
-		hadBall = true;
-
-		if (!ball->behind) {
-			ai->setState("fetch-ball-straight");
-
-			return;
-		}
-	} else {
-		if (!hadBall) {
-			return; // TODO Never had the ball, what now?
-		}
-
-		if (lostBallTime == 0.0) {
-			lostBallTime = Util::millitime();
-		}
-
-		float driveBehindSpeed = 0.5f;
-		double timeSinceLostBall = Util::duration(lostBallTime);
-
-		robot->setTargetDir(Math::Rad(lastTargetAngle), driveBehindSpeed);
-		robot->lookAt(goal);
-
-		ai->dbg("mode", "blind");
-		ai->dbg("timeSinceLostBall", timeSinceLostBall);
-
-		return;
-	}
-
-	ai->dbg("mode", "visible");
-
-	float offsetDistance = 0.25f;
-	float approachP = 0.5f;
-	float startAccelerationDuration = 0.5f;
-	TargetMode targetMode = TargetMode::LEFT;
-
-	if (ai->parameters[0].length() > 0) offsetDistance = Util::toFloat(ai->parameters[0]);
-	if (ai->parameters[1].length() > 0) approachP = Util::toFloat(ai->parameters[1]);
-	if (ai->parameters[2].length() > 0) {
-		int targetModeVal = Util::toInt(ai->parameters[2]);
-
-		if (targetModeVal == -1) {
-			targetMode = TargetMode::LEFT;
-		} else if (targetModeVal == 1) {
-			targetMode = TargetMode::RIGHT;
-		} else {
-			targetMode = TargetMode::INLINE;
-		}
-	}
-
-	//float targetAngle = ai->getTargetAngle(goal->distanceX, goal->distanceY * (goal->behind ? -1.0f : 1.0f), ball->distanceX, ball->distanceY * (ball->behind ? -1.0f : 1.0f), offsetDistance, TargetMode::RIGHT);
-	float targetAngle = ai->getTargetAngle(goal->distanceX * (goal->behind ? -1.0f : 1.0f), goal->distanceY * (goal->behind ? -1.0f : 1.0f), ball->distanceX * (ball->behind ? -1.0f : 1.0f), ball->distanceY * (ball->behind ? -1.0f : 1.0f), offsetDistance, targetMode);
-	float approachSpeed = approachP * Math::map(stateDuration, 0.0f, startAccelerationDuration, 0.0f, 1.0f);
-
-	ai->dbg("offsetDistance", offsetDistance);
-	ai->dbg("approachSpeed", approachSpeed);
-	ai->dbg("targetAngle", Math::radToDeg(targetAngle));
-	ai->dbg("goal->distanceX", goal->distanceX * (goal->behind ? -1.0f : 1.0f));
-	ai->dbg("goal->distanceY", goal->distanceY * (goal->behind ? -1.0f : 1.0f));
-	ai->dbg("ball->distanceX", ball->distanceX * (ball->behind ? -1.0f : 1.0f));
-	ai->dbg("ball->distanceY", ball->distanceY * (ball->behind ? -1.0f : 1.0f));
-
-	robot->setTargetDir(Math::Rad(targetAngle), approachSpeed);
-	robot->lookAt(goal);
-
-	lastTargetAngle = targetAngle;
-}
+}*/
 
 void TestController::FetchBallStraightState::onEnter(Robot* robot) {
 	startBrakingDistance = -1.0f;
@@ -561,6 +468,103 @@ void TestController::FetchBallStraightState::step(float dt, Vision::Results* vis
 	ai->dbg("lookAngle", Math::radToDeg(lookAngle));
 }
 
+void TestController::FetchBallBehindState::onEnter(Robot* robot) {
+	hadBall = false;
+	lastTargetAngle = 0.0f;
+	lostBallTime = 0.0;
+	lostBallVelocity = 0.0f;
+}
+
+void TestController::FetchBallBehindState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration) {
+	if (robot->dribbler->gotBall()) {
+		ai->dbg("gotBall", true);
+
+		ai->setState("aim");
+
+		return;
+	}
+	
+	Object* ball = visionResults->getClosestBall();
+	Object* goal = visionResults->getLargestGoal(Side::BLUE, Dir::FRONT);
+
+	ai->dbg("ballVisible", ball != NULL);
+	ai->dbg("goalVisible", goal != NULL);
+
+	if (goal == NULL) {
+		return; // TODO What now?
+	}
+
+	if (ball != NULL) {
+		hadBall = true;
+
+		if (!ball->behind) {
+			ai->setState("fetch-ball-straight");
+
+			return;
+		}
+	} else {
+		if (!hadBall) {
+			return; // TODO Never had the ball, what now?
+		}
+
+		if (lostBallTime == 0.0) {
+			lostBallTime = Util::millitime();
+			lostBallVelocity = robot->getVelocity();
+		}
+
+		float fetchBlindSpeed = 0.5f;
+		double timeSinceLostBall = Util::duration(lostBallTime);
+
+		float deacceleratedSpeed = Math::map((float)timeSinceLostBall, 0.0f, 1.0f, lostBallVelocity, fetchBlindSpeed);
+
+		robot->setTargetDir(Math::Rad(lastTargetAngle), deacceleratedSpeed);
+		robot->lookAt(goal);
+
+		ai->dbg("mode", "blind");
+		ai->dbg("timeSinceLostBall", timeSinceLostBall);
+
+		return;
+	}
+
+	ai->dbg("mode", "visible");
+
+	float offsetDistance = 0.25f;
+	float approachP = 2.0f;
+	float startAccelerationDuration = 0.5f;
+	TargetMode targetMode = TargetMode::LEFT;
+
+	if (ai->parameters[0].length() > 0) offsetDistance = Util::toFloat(ai->parameters[0]);
+	if (ai->parameters[1].length() > 0) approachP = Util::toFloat(ai->parameters[1]);
+	if (ai->parameters[2].length() > 0) {
+		int targetModeVal = Util::toInt(ai->parameters[2]);
+
+		if (targetModeVal == -1) {
+			targetMode = TargetMode::LEFT;
+		} else if (targetModeVal == 1) {
+			targetMode = TargetMode::RIGHT;
+		} else {
+			targetMode = TargetMode::INLINE;
+		}
+	}
+
+	//float targetAngle = ai->getTargetAngle(goal->distanceX, goal->distanceY * (goal->behind ? -1.0f : 1.0f), ball->distanceX, ball->distanceY * (ball->behind ? -1.0f : 1.0f), offsetDistance, TargetMode::RIGHT);
+	float targetAngle = ai->getTargetAngle(goal->distanceX * (goal->behind ? -1.0f : 1.0f), goal->distanceY * (goal->behind ? -1.0f : 1.0f), ball->distanceX * (ball->behind ? -1.0f : 1.0f), ball->distanceY * (ball->behind ? -1.0f : 1.0f), offsetDistance, targetMode);
+	float approachSpeed = approachP * Math::map(stateDuration, 0.0f, startAccelerationDuration, 0.0f, 1.0f);
+
+	ai->dbg("offsetDistance", offsetDistance);
+	ai->dbg("approachSpeed", approachSpeed);
+	ai->dbg("targetAngle", Math::radToDeg(targetAngle));
+	ai->dbg("goal->distanceX", goal->distanceX * (goal->behind ? -1.0f : 1.0f));
+	ai->dbg("goal->distanceY", goal->distanceY * (goal->behind ? -1.0f : 1.0f));
+	ai->dbg("ball->distanceX", ball->distanceX * (ball->behind ? -1.0f : 1.0f));
+	ai->dbg("ball->distanceY", ball->distanceY * (ball->behind ? -1.0f : 1.0f));
+
+	robot->setTargetDir(Math::Rad(targetAngle), approachSpeed);
+	robot->lookAt(goal);
+
+	lastTargetAngle = targetAngle;
+}
+
 /*float TestController::getTargetAngle(float goalX, float goalY, float ballX, float ballY, float D) {
 	float targetX1;
 	float targetX2;
@@ -631,6 +635,7 @@ void TestController::FetchBallNearState::onEnter(Robot* robot) {
 	float minAllowedApproachSpeed = 0.25f;
 
 	enterVelocity = Math::max(robot->getVelocity(), minAllowedApproachSpeed);
+	enterBallDistance = -1.0f;
 }
 
 void TestController::FetchBallNearState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration) {
@@ -649,7 +654,7 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	ai->dbg("goalVisible", goal != NULL);
 
 	if (ball == NULL || goal == NULL) {
-		robot->stop();
+		robot->stop(); // TODO What now?
 
 		return;
 	}
@@ -659,6 +664,15 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	float nearZeroSpeedAngle = 10.0f;
 	float nearMaxSideSpeedAngle = 45.0f;
 	float ballDistance = ball->getDribblerDistance();
+
+	if (enterBallDistance == -1.0f) {
+		enterBallDistance = ballDistance;
+	} else if (ballDistance > enterBallDistance * 1.25f) {
+		// ball has gotten further than when started, probably messed it up, switch to faster fetch
+		ai->setState("fetch-ball-straight");
+
+		return;
+	}
 
 	if (ai->parameters[0].length() > 0) approachP = Util::toFloat(ai->parameters[0]);
 	if (ai->parameters[1].length() > 0) sideP = Util::toFloat(ai->parameters[1]);

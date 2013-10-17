@@ -68,27 +68,13 @@ public:
 
 	};
 
-	class FetchBallInfrontState : public State {
+	/*class FetchBallInfrontState : public State {
 
 	public:
 		FetchBallInfrontState(TestController* ai) : State(ai) {}
 		void step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration);
 
-	};
-
-	class FetchBallBehindState : public State {
-
-	public:
-		FetchBallBehindState(TestController* ai) : State(ai), hadBall(false), lastTargetAngle(0.0f), lostBallTime(0.0) {}
-		void onEnter(Robot* robot);
-		void step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration);
-
-	private:
-		bool hadBall;
-		float lastTargetAngle;
-		double lostBallTime;
-
-	};
+	};*/
 
 	class FetchBallStraightState : public State {
 
@@ -102,15 +88,31 @@ public:
 
 	};
 
+	class FetchBallBehindState : public State {
+
+	public:
+		FetchBallBehindState(TestController* ai) : State(ai), hadBall(false), lastTargetAngle(0.0f), lostBallTime(0.0), lostBallVelocity(0.0f) {}
+		void onEnter(Robot* robot);
+		void step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration);
+
+	private:
+		bool hadBall;
+		float lastTargetAngle;
+		double lostBallTime;
+		float lostBallVelocity;
+
+	};
+
 	class FetchBallNearState : public State {
 
 	public:
-		FetchBallNearState(TestController* ai) : State(ai) {}
+		FetchBallNearState(TestController* ai) : State(ai), enterVelocity(0.0f), enterBallDistance(-1.0f) {}
 		void onEnter(Robot* robot);
 		void step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration);
 
 	private:
 		float enterVelocity;
+		float enterBallDistance;
 
 	};
 
