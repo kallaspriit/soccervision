@@ -373,6 +373,8 @@ void TestController::FetchBallFrontState::onEnter(Robot* robot) {
 }
 
 void TestController::FetchBallFrontState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration) {
+	robot->stop();
+	
 	if (robot->dribbler->gotBall()) {
 		ai->dbg("gotBall", true);
 
@@ -395,8 +397,6 @@ void TestController::FetchBallFrontState::step(float dt, Vision::Results* vision
 
 	// TODO Drive to ball and search for goal when lost goal (new state)
 	if (ball == NULL || goal == NULL) {
-		robot->stop();
-
 		return;
 	}
 
@@ -485,6 +485,8 @@ void TestController::FetchBallBehindState::onEnter(Robot* robot) {
 }
 
 void TestController::FetchBallBehindState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration) {
+	robot->stop();
+
 	if (robot->dribbler->gotBall()) {
 		ai->dbg("gotBall", true);
 
@@ -501,8 +503,6 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 	ai->dbg("timeSinceLostBall", timeSinceLostBall);
 
 	if (goal == NULL) {
-		robot->stop();
-
 		return; // TODO What now?
 	}
 
@@ -530,8 +530,6 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 
 	if (ball == NULL || !ball->behind) {
 		if (!hadBall) {
-			robot->stop();
-
 			return; // TODO Never had the ball, what now?
 		}
 
@@ -548,8 +546,6 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 		timeSinceLostBall = Util::duration(lostBallTime);
 
 		if (timeSinceLostBall > maxBlindReverseDuration) {
-			robot->stop();
-
 			if (ball != NULL) {
 				ai->setState("fetch-ball-front");
 			}
@@ -580,8 +576,7 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 	ai->dbg("mode", "visible");
 
 	float offsetDistance = 0.25f;
-	//float approachP = 2.0f;
-	float approachP = 0.5f;
+	float approachP = 2.0f;
 	float startAccelerationDuration = 0.5f;
 
 	if (targetMode == TargetMode::UNDECIDED) {
@@ -622,72 +617,6 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 	lastBallDistance = ball->getDribblerDistance();
 }
 
-/*float TestController::getTargetAngle(float goalX, float goalY, float ballX, float ballY, float D) {
-	float targetX1;
-	float targetX2;
-	float targetY1;
-	float targetY2;
-	
-	if(Math::abs(ballX - goalX) < 0.001){
-		//ai->dbg("case", 1);
-
-		//kui vahe on alla millimeetri, arvutame otse
-		targetX1 = ballX;
-		targetX2 = ballX;
-		targetY1 = ballY - D;
-		targetY2 = ballY + D;
-	}
-	else{
-		//ai->dbg("case", 2);
-
-		//Line connecting ball and goal
-		float a = (ballY - goalY)/(ballX - goalX);
-		float b = goalY - a * goalX;
-
-		float underSqrt = sqrt(
-			- pow(a, 2) * pow(ballX, 2)
-			+ pow(a, 2) * pow(D, 2)
-			- 2 * a * b * ballX
-			+ 2 * a * ballX * ballY
-			- pow(b, 2)
-			+ 2 * b * ballY
-			+ pow(D, 2)
-			- pow(ballY, 2)
-			);
-		float rest = - a * b + a * ballY + ballX;
-		float divisor = pow(a,2) + 1;
-
-		targetX1 = ( + underSqrt + rest) / divisor;
-		targetX2 = ( - underSqrt + rest) / divisor;
-		targetY1 = a * targetX1 + b;
-		targetY2 = a * targetX2 + b;
-	}
-
-	//Target's distance from goal (squared)
-	float target1Dist = pow(goalX - targetX1, 2) + pow(goalY - targetY1, 2);
-	float target2Dist = pow(goalX - targetX2, 2) + pow(goalY - targetY2, 2);
-
-	//Choose target which is farther away from goal
-	float targetX;
-	float targetY;
-	if(target1Dist > target2Dist){
-		targetX = targetX1;
-		targetY = targetY1;
-	}
-	else{
-		targetX = targetX2;
-		targetY = targetY2;
-	}
-
-	/ai->dbg("targetX", targetX);
-	ai->dbg("targetY", targetY);
-	ai->dbg("target1Dist", target1Dist);
-	ai->dbg("target2Dist", target2Dist);/
-
-	float targetAngle = atan2(targetX, targetY);
-	return targetAngle;
-}*/
-
 void TestController::FetchBallNearState::onEnter(Robot* robot) {
 	float minAllowedApproachSpeed = 0.25f;
 
@@ -696,6 +625,8 @@ void TestController::FetchBallNearState::onEnter(Robot* robot) {
 }
 
 void TestController::FetchBallNearState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration) {
+	robot->stop();
+	
 	if (robot->dribbler->gotBall()) {
 		ai->dbg("gotBall", true);
 
@@ -711,8 +642,6 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	ai->dbg("goalVisible", goal != NULL);
 
 	if (goal == NULL) {
-		robot->stop();
-
 		return; // TODO Start searching
 	}
 
@@ -723,9 +652,7 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	}
 
 	if (ball == NULL) {
-		robot->stop(); // TODO Start searching
-
-		return;
+		return; // TODO Start searching
 	}
 
 	float approachP = 1.5f;
