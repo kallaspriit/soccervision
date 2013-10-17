@@ -767,6 +767,8 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 	ai->dbg("gotBall", robot->dribbler->gotBall());
 	
 	if (!robot->dribbler->gotBall()) {
+		ai->setState("fetch-ball-front");
+
 		return;
 	}
 	
