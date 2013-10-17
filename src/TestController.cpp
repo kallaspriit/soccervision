@@ -517,6 +517,8 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 		ball = visionResults->getClosestBall(Dir::ANY);
 	}
 
+	float ballDistance = ball->getDribblerDistance();
+
 	ai->dbg("ballVisible", ball != NULL);
 	ai->dbg("goalVisible", goal != NULL);
 	ai->dbg("timeSinceLostBall", timeSinceLostBall);
@@ -526,7 +528,7 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 	}
 
 	if (ball != NULL) {
-		ai->dbg("ballDistance", ball->getDribblerDistance());
+		ai->dbg("ballDistance", ballDistance);
 		ai->dbg("ball->behind", ball->behind);
 	}
 
@@ -538,7 +540,7 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 		ball != NULL
 		&& !ball->behind
 		&& (
-			ball->getDribblerDistance() <= startBallDistance
+			ballDistance <= startBallDistance
 			|| timeSinceLostBall >= maxBlindReverseDuration
 			|| !hadBall
 		)
@@ -592,8 +594,6 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 		return;
 	}
 
-	float ballDistance = ball->getDribblerDistance();
-
 	hadBall = true;
 	timeSinceLostBall = 0.0;
 	lostBallTime = -1.0;
@@ -630,7 +630,7 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 	//float targetAngle = ai->getTargetAngle(goal->distanceX, goal->distanceY * (goal->behind ? -1.0f : 1.0f), ball->distanceX, ball->distanceY * (ball->behind ? -1.0f : 1.0f), offsetDistance, TargetMode::RIGHT);
 	float targetAngle = ai->getTargetAngle(goal->distanceX * (goal->behind ? -1.0f : 1.0f), goal->distanceY * (goal->behind ? -1.0f : 1.0f), ball->distanceX * (ball->behind ? -1.0f : 1.0f), ball->distanceY * (ball->behind ? -1.0f : 1.0f), offsetDistance, targetMode);
 	float approachSpeed = approachP * Math::map(stateDuration, 0.0f, startAccelerationDuration, 0.0f, 1.0f);
-	float deacceleratedSpeed = Math::map(ball->distance, 0.25f, 1.0f, 1.0f, approachSpeed);
+	float deacceleratedSpeed = Math::map(ballDistance, 0.3f, 1.0f, 0.5f, approachSpeed);
 
 	ai->dbg("offsetDistance", offsetDistance);
 	ai->dbg("approachSpeed", approachSpeed);
