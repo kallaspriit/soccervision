@@ -572,7 +572,8 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 			return; // TODO Start searching for new ball
 		}
 
-		float deacceleratedSpeed = Math::map((float)timeSinceLostBall, 0.0f, 1.0f, lostBallVelocity, fetchBlindSpeed);
+		float deaccelerationDuration = 0.5f;
+		float deacceleratedSpeed = Math::map((float)timeSinceLostBall, 0.0f, deaccelerationDuration, lostBallVelocity, fetchBlindSpeed);
 		float targetModeSide = targetMode == TargetMode::LEFT ? 1.0f : -1.0f;
 		float sideSpeed = targetModeSide * Math::map((float)timeSinceLostBall, 0.0f, sideAccelerationDuration, 0.0f, sideP);
 
@@ -586,6 +587,7 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 		ai->dbgs("mode", "blind");
 		ai->dbg("timeSinceLostBall", timeSinceLostBall);
 		ai->dbg("sideSpeed", sideSpeed);
+		ai->dbg("deacceleratedSpeed", deacceleratedSpeed);
 
 		return;
 	}
