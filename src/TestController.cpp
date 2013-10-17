@@ -559,8 +559,8 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 		}
 
 		float fetchBlindSpeed = 0.5f;
-		float sideP = 0.4f;
-		float sideAccelerationDuration = 1.0f;
+		//float sideP = 0.4f;
+		float sideAccelerationDuration = 0.75f;
 		
 		timeSinceLostBall = Util::duration(lostBallTime);
 
@@ -575,7 +575,7 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 		float deaccelerationDuration = 0.5f;
 		float deacceleratedSpeed = Math::map((float)timeSinceLostBall, 0.0f, deaccelerationDuration, lostBallVelocity, fetchBlindSpeed);
 		float targetModeSide = targetMode == TargetMode::LEFT ? 1.0f : -1.0f;
-		float sideSpeed = targetModeSide * Math::map((float)timeSinceLostBall, 0.0f, sideAccelerationDuration, 0.0f, sideP);
+		float sideSpeed = targetModeSide * Math::map((float)timeSinceLostBall, 0.0f, sideAccelerationDuration, 0.0f, deacceleratedSpeed);
 
 		Math::Vector dirVector = Math::Vector::createForwardVec(lastTargetAngle, deacceleratedSpeed);
 
