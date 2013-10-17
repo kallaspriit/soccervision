@@ -507,7 +507,7 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 		return;
 	}
 
-	double maxBlindReverseDuration = 1.0;
+	double maxBlindReverseDuration = 1.5;
 	double minSearchBehindDuration = 1.0;
 
 	Object* ball = visionResults->getClosestBall(Dir::REAR);
@@ -557,10 +557,6 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 			lostBallTime = Util::millitime();
 			lostBallVelocity = robot->getVelocity();
 		}
-
-		float fetchBlindSpeed = 0.3f;
-		//float sideP = 0.4f;
-		float sideAccelerationDuration = 0.5f;
 		
 		timeSinceLostBall = Util::duration(lostBallTime);
 
@@ -572,8 +568,11 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 			return; // TODO Start searching for new ball
 		}
 
+		float fetchBlindSpeed = 0.3f;
+		//float sideP = 0.4f;
+		float sideAccelerationDuration = 0.5f;
 		float deaccelerationDuration = 0.5f;
-		double sideSpeedDelay = 0.25;
+		double sideSpeedDelay = 0.5;
 		float deacceleratedSpeed = Math::map((float)timeSinceLostBall, 0.0f, deaccelerationDuration, lostBallVelocity, fetchBlindSpeed);
 		float targetModeSide = targetMode == TargetMode::LEFT ? 1.0f : -1.0f;
 		float sideSpeed = targetModeSide * Math::map((float)(timeSinceLostBall - sideSpeedDelay), 0.0f, sideAccelerationDuration, 0.0f, deacceleratedSpeed);
@@ -694,7 +693,6 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	float sideP = 0.75f;
 	float nearZeroSpeedAngle = 10.0f;
 	float nearMaxSideSpeedAngle = 45.0f;
-	
 
 	if (enterBallDistance == -1.0f) {
 		enterBallDistance = ballDistance;
