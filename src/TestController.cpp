@@ -692,10 +692,12 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	ai->dbg("ballDistance", ballDistance);
 	
 	float approachP = 1.5f;
-	float sideP = 0.75f;
+	//float sideP = 0.75f;
+	float sideP = 0.5f;
 	//float nearZeroSpeedAngle = 10.0f;
 	float nearZeroSpeedAngle = Math::map(ballDistance, 0.0f, 0.75f, 5.0f, 25.0f);
-	float nearMaxSideSpeedAngle = 45.0f;
+	//float nearMaxSideSpeedAngle = 45.0f;
+	float nearMaxSideSpeedAngle = nearZeroSpeedAngle;
 
 	if (enterBallDistance == -1.0f) {
 		enterBallDistance = ballDistance;
