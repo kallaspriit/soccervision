@@ -640,6 +640,7 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 
 	ai->dbg("ballVisible", ball != NULL);
 	ai->dbg("goalVisible", goal != NULL);
+	ai->dbg("enterBallDistance", enterBallDistance);
 
 	if (goal == NULL) {
 		return; // TODO Start searching
@@ -655,11 +656,15 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 		return; // TODO Start searching
 	}
 
+	float ballDistance = ball->getDribblerDistance();
+
+	ai->dbg("ballDistance", ballDistance);
+	
 	float approachP = 1.5f;
 	float sideP = 0.75f;
 	float nearZeroSpeedAngle = 10.0f;
 	float nearMaxSideSpeedAngle = 45.0f;
-	float ballDistance = ball->getDribblerDistance();
+	
 
 	if (enterBallDistance == -1.0f) {
 		enterBallDistance = ballDistance;
@@ -676,8 +681,7 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 
 	float forwardSpeed = Math::min(approachP * Math::map(Math::abs(Math::radToDeg(ball->angle)), 0.0f, nearZeroSpeedAngle, 1.0f, 0.0f), enterVelocity);
 	float sideSpeed = sideP * Math::sign(ball->distanceX) * Math::map(Math::abs(Math::radToDeg(ball->angle)), 0.0f, nearMaxSideSpeedAngle, 0.0f, 1.0f);
-
-	ai->dbg("ballDistance", ballDistance);
+	
 	ai->dbg("forwardSpeed", forwardSpeed);
 	ai->dbg("sideSpeed", sideSpeed);
 	ai->dbg("enterVelocity", enterVelocity);
