@@ -511,6 +511,8 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 		ai->dbg("ball->behind", ball->behind);
 	}
 
+	double maxBlindReverseDuration = 1.0;
+
 	ai->dbg("lastBallDistance", lastBallDistance);
 	ai->dbg("hadBall", hadBall);
 
@@ -519,7 +521,8 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 		ball != NULL
 		&& !ball->behind
 		&& (
-			ball->getDribblerDistance() <= lastBallDistance * 1.5f
+			ball->getDribblerDistance() <= lastBallDistance * 2.0f
+			|| timeSinceLostBall >= maxBlindReverseDuration
 			|| !hadBall
 		)
 	) {
@@ -541,7 +544,6 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 		float fetchBlindSpeed = 0.5f;
 		float sideP = 0.3f;
 		float sideAccelerationDuration = 2.0f;
-		double maxBlindReverseDuration = 3.0;
 		
 		timeSinceLostBall = Util::duration(lostBallTime);
 
