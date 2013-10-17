@@ -13,6 +13,12 @@
 class TestController : public BaseAI {
 
 public:
+	enum TargetMode { LEFT = -1, INLINE = 0, RIGHT = 1, UNDECIDED = 2 };
+
+	typedef std::map<std::string, std::string> Messages;
+	typedef Messages::iterator MessagesIt;
+	typedef std::map<int, std::string> Parameters;
+
 	class State : public BaseAI::State {
 
 	public:
@@ -91,7 +97,7 @@ public:
 	class FetchBallBehindState : public State {
 
 	public:
-		FetchBallBehindState(TestController* ai) : State(ai), hadBall(false), lastTargetAngle(0.0f), lostBallTime(0.0), lostBallVelocity(0.0f) {}
+		FetchBallBehindState(TestController* ai) : State(ai), hadBall(false), lastTargetAngle(0.0f), lostBallTime(0.0), lostBallVelocity(0.0f), targetMode(TargetMode::UNDECIDED) {}
 		void onEnter(Robot* robot);
 		void step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration);
 
@@ -100,6 +106,7 @@ public:
 		float lastTargetAngle;
 		double lostBallTime;
 		float lostBallVelocity;
+		TargetMode targetMode;
 
 	};
 
@@ -137,10 +144,6 @@ public:
 		static float getCircleTargetAngle(float start, float time, float period);
 
 	};
-
-	typedef std::map<std::string, std::string> Messages;
-	typedef Messages::iterator MessagesIt;
-	typedef std::map<int, std::string> Parameters;
 	
 	TestController(Robot* robot, Communication* com);
 	~TestController();
@@ -153,7 +156,6 @@ public:
 	void handleDriveToCommand(const Command& cmd);
 	void handleParameterCommand(const Command& cmd);
 
-	enum TargetMode { LEFT = -1, INLINE = 0, RIGHT = 1 };
 	float getTargetAngle(float goalX, float goalY, float ballX, float ballY, float D, TargetMode targetMode = TargetMode::INLINE);
 
     void step(float dt, Vision::Results* visionResults);

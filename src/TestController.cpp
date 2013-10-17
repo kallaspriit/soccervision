@@ -473,6 +473,7 @@ void TestController::FetchBallBehindState::onEnter(Robot* robot) {
 	lastTargetAngle = 0.0f;
 	lostBallTime = 0.0;
 	lostBallVelocity = 0.0f;
+	targetMode = TargetMode::UNDECIDED;
 }
 
 void TestController::FetchBallBehindState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration) {
@@ -513,11 +514,24 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 		}
 
 		float fetchBlindSpeed = 0.5f;
+		float sideP = 0.5f;
+		float sideAccelerationDuration = 1.0f;
+		double maxBlindReverseDuration = 2.0;
 		double timeSinceLostBall = Util::duration(lostBallTime);
 
-		float deacceleratedSpeed = Math::map((float)timeSinceLostBall, 0.0f, 1.0f, lostBallVelocity, fetchBlindSpeed);
+		if (timeSinceLostBall > maxBlindReverseDuration) {
+			return; // TODO Start searching for new ball
+		}
 
-		robot->setTargetDir(Math::Rad(lastTargetAngle), deacceleratedSpeed);
+		float deacceleratedSpeed = Math::map((float)timeSinceLostBall, 0.0f, 1.0f, lostBallVelocity, fetchBlindSpeed);
+		float targetModeSide = targetMode == TargetMode::LEFT ? 1.0f : -1.0f;
+		float sideSpeed = targetModeSide * Math::map((float)timeSinceLostBall, 0.0f, sideAccelerationDuration, 0.0f, sideP);
+
+		Math::Vector dirVector = Math::Vector::createForwardVec(lastTargetAngle, deacceleratedSpeed);
+
+		dirVector.y += sideSpeed;
+
+		robot->setTargetDir(dirVector.x, dirVector.y);
 		robot->lookAt(goal);
 
 		ai->dbg("mode", "blind");
@@ -529,9 +543,14 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 	ai->dbg("mode", "visible");
 
 	float offsetDistance = 0.25f;
-	float approachP = 2.0f;
+	//float approachP = 2.0f;
+	float approachP = 0.5f;
 	float startAccelerationDuration = 0.5f;
-	TargetMode targetMode = TargetMode::LEFT;
+
+	if (targetMode == TargetMode::UNDECIDED) {
+		// TODO Select best target mode
+		TargetMode targetMode = TargetMode::LEFT;
+	}
 
 	if (ai->parameters[0].length() > 0) offsetDistance = Util::toFloat(ai->parameters[0]);
 	if (ai->parameters[1].length() > 0) approachP = Util::toFloat(ai->parameters[1]);
