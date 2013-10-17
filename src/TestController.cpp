@@ -492,7 +492,7 @@ void TestController::FetchBallBehindState::onEnter(Robot* robot) {
 	lostBallTime = 0.0;
 	timeSinceLostBall = 0.0;
 	lostBallVelocity = 0.0f;
-	lastBallDistance = -1.0f;
+	smallestBallDistance = -1.0f;
 	targetMode = TargetMode::UNDECIDED;
 }
 
@@ -530,7 +530,7 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 		ai->dbg("ball->behind", ball->behind);
 	}
 
-	ai->dbg("lastBallDistance", lastBallDistance);
+	ai->dbg("smallestBallDistance", smallestBallDistance);
 	ai->dbg("hadBall", hadBall);
 
 	// only revert to fetch front if not fetching behind blind
@@ -538,7 +538,7 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 		ball != NULL
 		&& !ball->behind
 		&& (
-			ball->getDribblerDistance() <= lastBallDistance * 2.0f
+			ball->getDribblerDistance() <= smallestBallDistance * 2.0f
 			|| timeSinceLostBall >= maxBlindReverseDuration
 			|| !hadBall
 		)
@@ -618,6 +618,7 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 		}
 	}
 
+	float ballDistance = ball->getDribblerDistance();
 	//float targetAngle = ai->getTargetAngle(goal->distanceX, goal->distanceY * (goal->behind ? -1.0f : 1.0f), ball->distanceX, ball->distanceY * (ball->behind ? -1.0f : 1.0f), offsetDistance, TargetMode::RIGHT);
 	float targetAngle = ai->getTargetAngle(goal->distanceX * (goal->behind ? -1.0f : 1.0f), goal->distanceY * (goal->behind ? -1.0f : 1.0f), ball->distanceX * (ball->behind ? -1.0f : 1.0f), ball->distanceY * (ball->behind ? -1.0f : 1.0f), offsetDistance, targetMode);
 	float approachSpeed = approachP * Math::map(stateDuration, 0.0f, startAccelerationDuration, 0.0f, 1.0f);
@@ -634,7 +635,10 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 	robot->lookAt(goal);
 
 	lastTargetAngle = targetAngle;
-	lastBallDistance = ball->getDribblerDistance();
+
+	if (smallestBallDistance == -1.0f || ballDistance < smallestBallDistance) {
+		smallestBallDistance = ball->getDribblerDistance();
+	}
 }
 
 void TestController::FetchBallNearState::onEnter(Robot* robot) {
