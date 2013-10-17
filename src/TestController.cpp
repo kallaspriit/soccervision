@@ -604,7 +604,7 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 
 	ai->dbgs("mode", "visible");
 
-	float offsetDistance = 0.25f;
+	float offsetDistance = 0.15f;
 	float approachP = 2.0f;
 	float startAccelerationDuration = 0.5f;
 
