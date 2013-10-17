@@ -517,6 +517,7 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 	}
 
 	double maxBlindReverseDuration = 1.0;
+	double minStateDuration = 2.0;
 
 	ai->dbg("lastBallDistance", lastBallDistance);
 	ai->dbg("hadBall", hadBall);
@@ -530,6 +531,7 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 			|| timeSinceLostBall >= maxBlindReverseDuration
 			|| !hadBall
 		)
+		&& stateDuration > minStateDuration
 	) {
 		ai->setState("fetch-ball-front");
 
