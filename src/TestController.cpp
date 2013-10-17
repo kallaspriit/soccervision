@@ -549,7 +549,7 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 
 	if (targetMode == TargetMode::UNDECIDED) {
 		// TODO Select best target mode
-		TargetMode targetMode = TargetMode::LEFT;
+		targetMode = TargetMode::LEFT;
 	}
 
 	if (ai->parameters[0].length() > 0) offsetDistance = Util::toFloat(ai->parameters[0]);
@@ -567,16 +567,18 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 	}
 
 	//float targetAngle = ai->getTargetAngle(goal->distanceX, goal->distanceY * (goal->behind ? -1.0f : 1.0f), ball->distanceX, ball->distanceY * (ball->behind ? -1.0f : 1.0f), offsetDistance, TargetMode::RIGHT);
+	float ballDistance = ball->getDribblerDistance();
 	float targetAngle = ai->getTargetAngle(goal->distanceX * (goal->behind ? -1.0f : 1.0f), goal->distanceY * (goal->behind ? -1.0f : 1.0f), ball->distanceX * (ball->behind ? -1.0f : 1.0f), ball->distanceY * (ball->behind ? -1.0f : 1.0f), offsetDistance, targetMode);
 	float approachSpeed = approachP * Math::map(stateDuration, 0.0f, startAccelerationDuration, 0.0f, 1.0f);
 
+	ai->dbg("ballDistance", ballDistance);
 	ai->dbg("offsetDistance", offsetDistance);
 	ai->dbg("approachSpeed", approachSpeed);
 	ai->dbg("targetAngle", Math::radToDeg(targetAngle));
-	ai->dbg("goal->distanceX", goal->distanceX * (goal->behind ? -1.0f : 1.0f));
+	/*ai->dbg("goal->distanceX", goal->distanceX * (goal->behind ? -1.0f : 1.0f));
 	ai->dbg("goal->distanceY", goal->distanceY * (goal->behind ? -1.0f : 1.0f));
 	ai->dbg("ball->distanceX", ball->distanceX * (ball->behind ? -1.0f : 1.0f));
-	ai->dbg("ball->distanceY", ball->distanceY * (ball->behind ? -1.0f : 1.0f));
+	ai->dbg("ball->distanceY", ball->distanceY * (ball->behind ? -1.0f : 1.0f));*/
 
 	robot->setTargetDir(Math::Rad(targetAngle), approachSpeed);
 	robot->lookAt(goal);
