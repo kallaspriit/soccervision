@@ -505,16 +505,14 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 		return; // TODO What now?
 	}
 
-	if (ball != NULL) {
-		hadBall = true;
+	// only revert to fetch front if not fetching behind blind
+	if (ball != NULL && !ball->behind && timeSinceLostBall == 0.0) {
+		ai->setState("fetch-ball-front");
 
-		// only revert to fetch front if not fetching behind blind
-		if (!ball->behind && timeSinceLostBall == 0.0) {
-			ai->setState("fetch-ball-front");
+		return;
+	}
 
-			return;
-		}
-	} else {
+	if (ball == NULL) {
 		if (!hadBall) {
 			robot->stop();
 
@@ -553,6 +551,9 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 
 		return;
 	}
+
+	hadBall = true;
+	timeSinceLostBall = 0.0;
 
 	ai->dbg("mode", "visible");
 
