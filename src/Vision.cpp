@@ -323,7 +323,10 @@ bool Vision::isValidGoal(Object* goal, Side side) {
 }
 
 bool Vision::isValidBall(Object* ball, Dir dir) {
-    if (ball->area < Config::ballMinArea) {
+	int ballMinArea = (int)Math::map(ball->distance, 0.0f, 5.0f, 32.0f, 4.0f);
+
+    //if (ball->area < Config::ballMinArea) {
+    if (ball->area < ballMinArea) {
 		//std::cout << "@ BALL AREA TOO SMALL: " << ball->area << " VS " << Config::ballMinArea << std::endl;
 
         return false;
