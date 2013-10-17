@@ -512,7 +512,7 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 		return;
 	}
 
-	if (ball == NULL) {
+	if (ball == NULL || !ball->behind) {
 		if (!hadBall) {
 			robot->stop();
 
