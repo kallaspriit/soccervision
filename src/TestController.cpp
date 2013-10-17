@@ -568,7 +568,7 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 			return; // TODO Start searching for new ball
 		}
 
-		float fetchBlindSpeed = 0.3f;
+		float fetchBlindSpeed = 0.5f;
 		//float sideP = 0.4f;
 		float sideAccelerationDuration = 0.5f;
 		float deaccelerationDuration = 0.5f;
@@ -603,7 +603,7 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 
 	ai->dbgs("mode", "visible");
 
-	float offsetDistance = 0.15f;
+	float offsetDistance = 0.2f;
 	float approachP = 2.0f;
 	float startAccelerationDuration = 0.5f;
 
