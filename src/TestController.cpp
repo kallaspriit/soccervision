@@ -478,6 +478,7 @@ void TestController::FetchBallBehindState::onEnter(Robot* robot) {
 	hadBall = false;
 	lastTargetAngle = 0.0f;
 	lostBallTime = 0.0;
+	timeSinceLostBall = 0.0;
 	lostBallVelocity = 0.0f;
 	targetMode = TargetMode::UNDECIDED;
 }
@@ -504,7 +505,8 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 	if (ball != NULL) {
 		hadBall = true;
 
-		if (!ball->behind) {
+		// only revert to fetch front if not fetching behind blind
+		if (!ball->behind && timeSinceLostBall == 0.0) {
 			ai->setState("fetch-ball-front");
 
 			return;
@@ -523,7 +525,8 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 		float sideP = 0.3f;
 		float sideAccelerationDuration = 2.0f;
 		double maxBlindReverseDuration = 2.0;
-		double timeSinceLostBall = Util::duration(lostBallTime);
+		
+		timeSinceLostBall = Util::duration(lostBallTime);
 
 		if (timeSinceLostBall > maxBlindReverseDuration) {
 			return; // TODO Start searching for new ball
