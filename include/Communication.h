@@ -23,7 +23,7 @@ public:
 
 	};
 
-	typedef std::stack<std::string> Messages;
+	typedef std::queue<std::string> Messages;
 	enum { MAX_SIZE = 10240 };
 
     Communication(std::string host = "127.0.0.1", int port = 8042);
@@ -31,7 +31,7 @@ public:
 
 	void send(std::string message);
 	bool gotMessages();
-	std::string popLastMessage();
+	std::string dequeueMessage();
 	void close();
 
 private:

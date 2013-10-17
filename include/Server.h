@@ -6,7 +6,7 @@
 
 #include <boost/thread/mutex.hpp>
 #include <string>
-#include <stack>
+#include <queue>
 #include <map>
 
 class Server : public Thread, WebSocketServer::Listener {
@@ -28,7 +28,7 @@ public:
 		std::string content;
 	};
 
-	typedef std::stack<Message*> Messages;
+	typedef std::queue<Message*> Messages;
 	typedef std::map<int, Client*> Clients;
 	typedef Clients::iterator ClientsIt;
 
@@ -40,7 +40,7 @@ public:
 	void send(websocketpp::connection_hdl connection, std::string message) { ws->send(connection, message); }
 	void close();
 	bool gotMessages();
-	Message* popLastMessage();
+	Message* dequeueMessage();
 	Client* getClientByConnection(websocketpp::connection_hdl connection);
 
 private:

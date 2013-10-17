@@ -572,7 +572,7 @@ std::string SoccerBot::getActiveControllerName() {
 void SoccerBot::handleServerMessages() {
 	Server::Message* message;
 
-	while ((message = server->popLastMessage()) != NULL) {
+	while ((message = server->dequeueMessage()) != NULL) {
 		handleServerMessage(message);
 
 		delete message;
@@ -756,7 +756,7 @@ void SoccerBot::handleListScreenshotsCommand(Server::Message* message) {
 void SoccerBot::handleCommunicationMessages() {
 	std::string message;
 
-	while ((message = com->popLastMessage()) != "") {
+	while ((message = com->dequeueMessage()) != "") {
 		handleCommunicationMessage(message);
 	}
 }

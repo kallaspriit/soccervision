@@ -84,14 +84,14 @@ bool Communication::gotMessages() {
 	return messages.size() > 0;
 }
 
-std::string Communication::popLastMessage() {
+std::string Communication::dequeueMessage() {
 	boost::mutex::scoped_lock lock(messagesMutex);
 	
 	if (messages.size() == 0) {
 		return "";
 	}
 
-	std::string message = messages.top();
+	std::string message = messages.front();
 
 	messages.pop();
 
