@@ -497,8 +497,11 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 
 	ai->dbg("ballVisible", ball != NULL);
 	ai->dbg("goalVisible", goal != NULL);
+	ai->dbg("timeSinceLostBall", timeSinceLostBall);
 
 	if (goal == NULL) {
+		robot->stop();
+
 		return; // TODO What now?
 	}
 
@@ -513,6 +516,8 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 		}
 	} else {
 		if (!hadBall) {
+			robot->stop();
+
 			return; // TODO Never had the ball, what now?
 		}
 
@@ -524,7 +529,7 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 		float fetchBlindSpeed = 0.5f;
 		float sideP = 0.3f;
 		float sideAccelerationDuration = 2.0f;
-		double maxBlindReverseDuration = 2.0;
+		double maxBlindReverseDuration = 3.0;
 		
 		timeSinceLostBall = Util::duration(lostBallTime);
 
