@@ -510,7 +510,10 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 	if (
 		ball != NULL
 		&& !ball->behind
-		&& ball->getDribblerDistance() <= lastBallDistance * 1.5f
+		&& (
+			ball->getDribblerDistance() <= lastBallDistance * 1.5f
+			|| !hadBall
+		)
 	) {
 		ai->setState("fetch-ball-front");
 
