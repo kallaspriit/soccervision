@@ -382,9 +382,16 @@ void TestController::FetchBallFrontState::step(float dt, Vision::Results* vision
 
 		return;
 	}
+
+	double minSearchFrontDuration = 1.0;
 	
-	Object* ball = visionResults->getClosestBall();
+	// prefer balls in the front camera
+	Object* ball = visionResults->getClosestBall(Dir::FRONT);
 	Object* goal = visionResults->getLargestGoal(Side::BLUE, Dir::FRONT);
+
+	if (ball == NULL && stateDuration > minSearchFrontDuration) {
+		ball = visionResults->getClosestBall(Dir::ANY);
+	}
 
 	ai->dbg("ballVisible", ball != NULL);
 	ai->dbg("goalVisible", goal != NULL);
@@ -502,15 +509,13 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 
 	double maxBlindReverseDuration = 1.0;
 	double minSearchBehindDuration = 1.0;
-	Dir ballSearchDir = Dir::ANY;
 
-	// try to avoid flickering between rear and front fetch states
-	if (stateDuration < minSearchBehindDuration) {
-		ballSearchDir = Dir::REAR;
-	}
-	
-	Object* ball = visionResults->getClosestBall(ballSearchDir);
+	Object* ball = visionResults->getClosestBall(Dir::REAR);
 	Object* goal = visionResults->getLargestGoal(Side::BLUE, Dir::FRONT);
+
+	if (ball == NULL && stateDuration > minSearchBehindDuration) {
+		ball = visionResults->getClosestBall(Dir::ANY);
+	}
 
 	ai->dbg("ballVisible", ball != NULL);
 	ai->dbg("goalVisible", goal != NULL);
