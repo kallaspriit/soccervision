@@ -408,7 +408,7 @@ void TestController::FetchBallFrontState::step(float dt, Vision::Results* vision
 	}
 
 	float approachSpeed = 2.0f;
-	float maxNearSpeed = 0.25f;
+	float maxNearSpeed = 0.5f;
 	float maxBrakingDistanceSpeed = 1.0f;
 	float startAccelerationDuration = 0.75f;
 	float maxOffsetDistanceAngleDiff = 45.0f;
@@ -462,7 +462,9 @@ void TestController::FetchBallFrontState::step(float dt, Vision::Results* vision
 		// limit max speed near the ball
 		float maxSpeed = Math::map(ballDistance, nearDistance, startBrakingDistance, maxNearSpeed, maxBrakingDistanceSpeed);
 		
-		acceleratedSpeed = Math::min(Math::max(acceleratedSpeed * (1.0f - combinedBrakeFactor), minApproachSpeed), maxSpeed);
+		acceleratedSpeed = acceleratedSpeed * (1.0f - combinedBrakeFactor);
+		acceleratedSpeed = Math::max(acceleratedSpeed, minApproachSpeed);
+		acceleratedSpeed = Math::min(acceleratedSpeed, maxSpeed);
 
 		ai->dbg("distanceBraking", distanceBraking);
 		ai->dbg("angleBreaking", angleBreaking);
@@ -715,6 +717,7 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	ai->dbg("sideSpeed", sideSpeed);
 	ai->dbg("enterVelocity", enterVelocity);
 	ai->dbg("ballAngle", (Math::radToDeg(ball->angle)));
+	ai->dbg("nearZeroSpeedAngle", nearZeroSpeedAngle);
 
 	robot->dribbler->start();
 	robot->setTargetDir(forwardSpeed, sideSpeed);
