@@ -489,7 +489,7 @@ void TestController::FetchBallFrontState::step(float dt, Vision::Results* vision
 void TestController::FetchBallBehindState::onEnter(Robot* robot) {
 	hadBall = false;
 	lastTargetAngle = 0.0f;
-	lostBallTime = 0.0;
+	lostBallTime = -1.0;
 	timeSinceLostBall = 0.0;
 	lostBallVelocity = 0.0f;
 	startBallDistance = -1.0f;
@@ -553,7 +553,7 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 			return; // TODO Never had the ball, what now?
 		}
 
-		if (lostBallTime == 0.0) {
+		if (lostBallTime == -1.0) {
 			lostBallTime = Util::millitime();
 			lostBallVelocity = robot->getVelocity();
 		}
@@ -585,7 +585,6 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 		robot->lookAt(goal);
 
 		ai->dbgs("mode", "blind");
-		ai->dbg("timeSinceLostBall", timeSinceLostBall);
 		ai->dbg("sideSpeed", sideSpeed);
 		ai->dbg("deacceleratedSpeed", deacceleratedSpeed);
 
@@ -596,6 +595,7 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 
 	hadBall = true;
 	timeSinceLostBall = 0.0;
+	lostBallTime = -1.0;
 
 	if (startBallDistance == -1.0f) {
 		startBallDistance = ballDistance;
@@ -629,16 +629,18 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 	//float targetAngle = ai->getTargetAngle(goal->distanceX, goal->distanceY * (goal->behind ? -1.0f : 1.0f), ball->distanceX, ball->distanceY * (ball->behind ? -1.0f : 1.0f), offsetDistance, TargetMode::RIGHT);
 	float targetAngle = ai->getTargetAngle(goal->distanceX * (goal->behind ? -1.0f : 1.0f), goal->distanceY * (goal->behind ? -1.0f : 1.0f), ball->distanceX * (ball->behind ? -1.0f : 1.0f), ball->distanceY * (ball->behind ? -1.0f : 1.0f), offsetDistance, targetMode);
 	float approachSpeed = approachP * Math::map(stateDuration, 0.0f, startAccelerationDuration, 0.0f, 1.0f);
+	float deacceleratedSpeed = Math::map(ball->distance, 0.25f, 1.0f, 1.0f, approachSpeed);
 
 	ai->dbg("offsetDistance", offsetDistance);
 	ai->dbg("approachSpeed", approachSpeed);
+	ai->dbg("deacceleratedSpeed", deacceleratedSpeed);
 	ai->dbg("targetAngle", Math::radToDeg(targetAngle));
 	/*ai->dbg("goal->distanceX", goal->distanceX * (goal->behind ? -1.0f : 1.0f));
 	ai->dbg("goal->distanceY", goal->distanceY * (goal->behind ? -1.0f : 1.0f));
 	ai->dbg("ball->distanceX", ball->distanceX * (ball->behind ? -1.0f : 1.0f));
 	ai->dbg("ball->distanceY", ball->distanceY * (ball->behind ? -1.0f : 1.0f));*/
 
-	robot->setTargetDir(Math::Rad(targetAngle), approachSpeed);
+	robot->setTargetDir(Math::Rad(targetAngle), deacceleratedSpeed);
 	robot->lookAt(goal);
 
 	lastTargetAngle = targetAngle;
