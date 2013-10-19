@@ -422,8 +422,8 @@ void TestController::FetchBallFrontState::step(float dt, Vision::Results* vision
 	float maxBrakingDistanceVelocity = 2.0f;
 	float minVelocityBrakeDistance = 0.5f;
 	float maxVelocityBrakingDistance = 1.5f;
-	float minApproachSpeed = 0.4f;
-	float nearDistance = 0.3f;
+	float minApproachSpeed = 0.5f;
+	float nearDistance = 0.25f;
 
 	float ballDistance = ball->getDribblerDistance();
 	float ballAngle = ball->angle;
@@ -487,8 +487,8 @@ void TestController::FetchBallFrontState::step(float dt, Vision::Results* vision
 	ai->dbg("startBrakingDistance", startBrakingDistance);
 	ai->dbg("startBrakingVelocity", startBrakingVelocity);
 	ai->dbg("ballDistance", ballDistance);
-	ai->dbg("ballAngle", ballAngle);
-	ai->dbg("goalAngle", goalAngle);
+	ai->dbg("ballAngle", Math::radToDeg(ballAngle));
+	ai->dbg("goalAngle", Math::radToDeg(goalAngle));
 	ai->dbg("targetAngle", Math::radToDeg(targetAngle));
 	ai->dbg("angleDiff", Math::radToDeg(angleDiff));
 	ai->dbg("offsetDistance", offsetDistance);
@@ -657,7 +657,7 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 }
 
 void TestController::FetchBallNearState::onEnter(Robot* robot) {
-	float minAllowedApproachSpeed = 0.25f;
+	float minAllowedApproachSpeed = 0.5f;
 
 	enterVelocity = Math::max(robot->getVelocity(), minAllowedApproachSpeed);
 	enterBallDistance = -1.0f;
