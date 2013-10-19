@@ -119,13 +119,14 @@ public:
 	class FetchBallNearState : public State {
 
 	public:
-		FetchBallNearState(TestController* ai) : State(ai), enterVelocity(0.0f), enterBallDistance(-1.0f) {}
+		FetchBallNearState(TestController* ai) : State(ai), enterVelocity(0.0f), enterBallDistance(-1.0f), smallestForwardSpeed(-1.0f) {}
 		void onEnter(Robot* robot);
 		void step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration);
 
 	private:
 		float enterVelocity;
 		float enterBallDistance;
+		float smallestForwardSpeed;
 
 	};
 
