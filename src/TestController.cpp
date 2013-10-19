@@ -12,7 +12,7 @@
  * - avoid kicking through another ball
  */
 
-TestController::TestController(Robot* robot, Communication* com) : BaseAI(robot, com), manualSpeedX(0.0f), manualSpeedY(0.0f), manualOmega(0.0f), manualDribblerSpeed(0), manualKickStrength(0), blueGoalDistance(0.0f), yellowGoalDistance(0.0f), lastCommandTime(0.0) {
+TestController::TestController(Robot* robot, Communication* com) : BaseAI(robot, com), targetSide(Side::BLUE), manualSpeedX(0.0f), manualSpeedY(0.0f), manualOmega(0.0f), manualDribblerSpeed(0), manualKickStrength(0), blueGoalDistance(0.0f), yellowGoalDistance(0.0f), lastCommandTime(0.0) {
 	setupStates();
 };
 
@@ -61,8 +61,10 @@ bool TestController::handleCommand(const Command& cmd) {
     } else if (cmd.name == "stop") {
         handleResetCommand();
 		setState("manual-control");
-    } else if (cmd.name == "reset" || cmd.name == "toggle-side") {
+    } else if (cmd.name == "reset") {
         handleResetCommand();
+    } else if (cmd.name == "toggle-side") {
+        handleToggleSideCommand();
     } else if (cmd.name == "drive-to" && cmd.parameters.size() == 3) {
         handleDriveToCommand(cmd);
     } else if (cmd.name.substr(0, 4) == "run-") {
@@ -107,6 +109,22 @@ void TestController::handleResetCommand() {
 	currentStateDuration = 0.0f;
 
 	setState(currentStateName);
+}
+
+void TestController::handleToggleSideCommand() {
+	if (!toggleSideBtn.toggle()) {
+		return;
+	}
+
+	if (targetSide == Side::BLUE) {
+		targetSide = Side::YELLOW;
+	} else {
+		targetSide = Side::BLUE;
+	}
+
+	std::cout << "! Now targeting " << (targetSide == Side::BLUE ? "blue" : "yellow") << " side" << std::endl;
+
+	com->send("target:" + Util::toString(targetSide));
 }
 
 void TestController::handleParameterCommand(const Command& cmd) {
@@ -283,7 +301,7 @@ void TestController::WatchBallState::step(float dt, Vision::Results* visionResul
 }
 
 void TestController::WatchGoalState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration) {
-	Object* goal = visionResults->getLargestGoal(Side::BLUE, Dir::FRONT);
+	Object* goal = visionResults->getLargestGoal(ai->targetSide, Dir::FRONT);
 
 	if (goal == NULL) {
 		robot->setTargetDir(ai->manualSpeedX, ai->manualSpeedY, ai->manualOmega);
@@ -317,7 +335,7 @@ void TestController::DriveToState::step(float dt, Vision::Results* visionResults
 	}
 	
 	Object* ball = visionResults->getClosestBall(Dir::FRONT);
-	Object* goal = visionResults->getLargestGoal(Side::BLUE, Dir::FRONT);
+	Object* goal = visionResults->getLargestGoal(targetSide, Dir::FRONT);
 
 	ai->dbg("ballVisible", ball != NULL);
 	ai->dbg("goalVisible", goal != NULL);
@@ -401,7 +419,7 @@ void TestController::FetchBallFrontState::step(float dt, Vision::Results* vision
 	
 	// prefer balls in the front camera
 	Object* ball = visionResults->getClosestBall(Dir::FRONT);
-	Object* goal = visionResults->getLargestGoal(Side::BLUE, Dir::FRONT);
+	Object* goal = visionResults->getLargestGoal(ai->targetSide, Dir::FRONT);
 
 	if (ball == NULL && stateDuration > minSearchFrontDuration) {
 		ball = visionResults->getClosestBall(Dir::ANY);
@@ -544,7 +562,7 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 	double minSearchBehindDuration = 1.0;
 
 	Object* ball = visionResults->getClosestBall(Dir::REAR);
-	Object* goal = visionResults->getLargestGoal(Side::BLUE, Dir::FRONT);
+	Object* goal = visionResults->getLargestGoal(ai->targetSide, Dir::FRONT);
 
 	if (ball == NULL && stateDuration > minSearchBehindDuration) {
 		ball = visionResults->getClosestBall(Dir::ANY);
@@ -702,7 +720,7 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	}
 	
 	Object* ball = visionResults->getClosestBall();
-	Object* goal = visionResults->getLargestGoal(Side::BLUE, Dir::FRONT);
+	Object* goal = visionResults->getLargestGoal(ai->targetSide, Dir::FRONT);
 
 	ai->dbg("ballVisible", ball != NULL);
 	ai->dbg("goalVisible", goal != NULL);
@@ -783,12 +801,16 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 
 		return;
 	}
+
+	robot->dribbler->start();
 	
-	Object* goal = visionResults->getLargestGoal(Side::BLUE, Dir::FRONT);
+	Object* goal = visionResults->getLargestGoal(ai->targetSide, Dir::FRONT);
 
 	ai->dbg("goalVisible", goal != NULL);
 
 	if (goal == NULL) {
+
+
 		return;
 	}
 
@@ -855,7 +877,7 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 }
 
 void TestController::DriveCircleState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration) {
-	Object* goal = visionResults->getLargestGoal(Side::BLUE, Dir::FRONT);
+	Object* goal = visionResults->getLargestGoal(ai->targetSide, Dir::FRONT);
 
 	ai->dbg("goalVisible", goal != NULL);
 
