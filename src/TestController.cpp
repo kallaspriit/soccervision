@@ -489,6 +489,12 @@ void TestController::FetchBallFrontState::step(float dt, Vision::Results* vision
 	ai->dbg("lookAngle", Math::radToDeg(lookAngle));
 }
 
+void TestController::FetchBallDirectState::onEnter(Robot* robot) {
+	float minAllowedApproachSpeed = 0.5f;
+
+	enterVelocity = Math::max(robot->getVelocity(), minAllowedApproachSpeed);
+}
+
 void TestController::FetchBallDirectState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration) {
 	robot->stop();
 	
@@ -537,7 +543,7 @@ void TestController::FetchBallDirectState::step(float dt, Vision::Results* visio
 	}
 
 	float ballDistance = ball->getDribblerDistance();
-	float forwardSpeed = Math::map(ballDistance, 0.0f, 1.0f, 0.3f, 2.0f);
+	float forwardSpeed = Math::map(ballDistance, 0.0f, 1.0f, 0.2f, enterVelocity);
 
 	ai->dbg("ballDistance", ballDistance);
 	ai->dbg("forwardSpeed", forwardSpeed);
