@@ -618,8 +618,11 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 	float startAccelerationDuration = 0.5f;
 
 	if (targetMode == TargetMode::UNDECIDED) {
-		// TODO Select best target mode
-		targetMode = TargetMode::LEFT;
+		if (ball->angle > 0.0f) {
+			targetMode = TargetMode::LEFT;
+		} else {
+			targetMode = TargetMode::RIGHT;
+		}
 	}
 
 	if (ai->parameters[0].length() > 0) offsetDistance = Util::toFloat(ai->parameters[0]);
