@@ -4,8 +4,8 @@
 #include <iostream>
 
 CameraTranslator::WorldPosition CameraTranslator::getWorldPosition(int cameraX, int cameraY) {
-	CameraTranslator::CameraPosition undistorted = CameraTranslator::undistort(cameraX, cameraY);
-	//CameraTranslator::CameraPosition undistorted = CameraTranslator::CameraPosition(cameraX, cameraY);
+	//CameraTranslator::CameraPosition undistorted = CameraTranslator::undistort(cameraX, cameraY);
+	CameraTranslator::CameraPosition undistorted = CameraTranslator::CameraPosition(cameraX, cameraY);
 
 	float pixelVerticalCoord = undistorted.y - this->horizon;
 	int pixelRight = undistorted.x - this->cameraWidth / 2;
@@ -49,7 +49,7 @@ void CameraTranslator::setConstants(
 }
 
 CameraTranslator::CameraPosition CameraTranslator::undistort(int distortedX, int distortedY) {
-
+	/*
 	//Conversion for undistorting  (normalization?)
 	float x = (float(distortedX) - cameraWidth / 2.0 ) / distortionFocus;
 	float y = (float(distortedY) - cameraHeight / 2.0) / distortionFocus;
@@ -69,4 +69,7 @@ CameraTranslator::CameraPosition CameraTranslator::undistort(int distortedX, int
 		int(undistortedX),
 		int(undistortedY)
 	);
+	*/
+	return CameraPosition(0,0);
 }
+
