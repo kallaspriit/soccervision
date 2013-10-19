@@ -840,6 +840,8 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 	ai->dbg("rightValid", rightEdge - goalKickThresholdPixels > halfWidth);
 	ai->dbg("goalKickThresholdPixels", goalKickThresholdPixels);
 	ai->dbg("sinceLastKick", timeSinceLastKick);
+	ai->dbg("forwardSpeed", forwardSpeed);
+	ai->dbg("sideSpeed", sideSpeed);
 
 	if (shouldKick && !isBallInWay && (lastKickTime == -1.0 || timeSinceLastKick >= 1.0)) {
 		robot->kick();
