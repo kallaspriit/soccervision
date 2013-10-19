@@ -85,13 +85,16 @@ public:
 	class FetchBallFrontState : public State {
 
 	public:
-		FetchBallFrontState(TestController* ai) : State(ai), startBrakingDistance(-1.0f), startBrakingVelocity(-1.0f) {}
+		FetchBallFrontState(TestController* ai) : State(ai), startBrakingDistance(-1.0f), startBrakingVelocity(-1.0f), lastBallDistance(-1.0f) {}
 		void onEnter(Robot* robot);
 		void step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration);
 
 	private:
+		void reset();
+
 		float startBrakingDistance;
 		float startBrakingVelocity;
+		float lastBallDistance;
 
 	};
 

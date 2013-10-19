@@ -376,10 +376,14 @@ void TestController::DriveToState::step(float dt, Vision::Results* visionResults
 }*/
 
 void TestController::FetchBallFrontState::onEnter(Robot* robot) {
-	startBrakingDistance = -1.0f;
-	startBrakingVelocity = -1.0f;
+	reset();
 }
 
+void TestController::FetchBallFrontState::reset() {
+	startBrakingDistance = -1.0f;
+	startBrakingVelocity = -1.0f;
+	lastBallDistance = -1.0f;
+}
 void TestController::FetchBallFrontState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration) {
 	robot->stop();
 	
@@ -442,6 +446,11 @@ void TestController::FetchBallFrontState::step(float dt, Vision::Results* vision
 	if (ai->parameters[1].length() > 0) offsetDistance = Util::toFloat(ai->parameters[1]);
 	if (ai->parameters[2].length() > 0) startAccelerationDuration = Util::toFloat(ai->parameters[2]);
 
+	// reset if we probably started to watch a ball we just kicked
+	if (lastBallDistance != -1.0f && lastBallDistance - ballDistance < -0.2f) {
+		reset();
+	}
+
 	//if (ballDistance < offsetDistance) {
 	if (ballDistance < nearDistance) {
 		ai->dbgs("action", "Switch to fetch ball near");
@@ -489,6 +498,8 @@ void TestController::FetchBallFrontState::step(float dt, Vision::Results* vision
 
 	robot->setTargetDir(Math::Rad(targetAngle), acceleratedSpeed);
 	robot->lookAt(Math::Rad(lookAngle));
+
+	lastBallDistance = ballDistance;
 
 	ai->dbg("acceleratedSpeed", acceleratedSpeed);
 	ai->dbg("startBrakingDistance", startBrakingDistance);
@@ -713,7 +724,7 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	float sideP = 1.0f;
 	//float sideP = 0.5f;
 	//float nearZeroSpeedAngle = 10.0f;
-	float nearZeroSpeedAngle = Math::map(ballDistance, 0.0f, 0.75f, 5.0f, 25.0f);
+	float nearZeroSpeedAngle = Math::map(ballDistance, 0.0f, 0.75f, 2.5f, 25.0f);
 	float nearMaxSideSpeedAngle = 45.0f;
 	//float nearMaxSideSpeedAngle = nearZeroSpeedAngle * 2.0f;
 
