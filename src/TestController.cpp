@@ -422,7 +422,7 @@ void TestController::FetchBallFrontState::step(float dt, Vision::Results* vision
 	float minVelocityBrakeDistance = 0.5f;
 	float maxVelocityBrakingDistance = 1.5f;
 	float minApproachSpeed = 0.4f;
-	float nearDistance = 0.2f;
+	float nearDistance = 0.3f;
 
 	float ballDistance = ball->getDribblerDistance();
 	float ballAngle = ball->angle;
@@ -474,7 +474,8 @@ void TestController::FetchBallFrontState::step(float dt, Vision::Results* vision
 		ai->dbg("maxSpeed", maxSpeed);
 	}
 	
-	float lookAngle = Math::map(angleDiff, 0.0f, Math::degToRad(focusBetweenBallGoalAngle), goal->angle, (goal->angle + ball->angle) / 2.0f);
+	//float lookAngle = Math::map(angleDiff, 0.0f, Math::degToRad(focusBetweenBallGoalAngle), goal->angle, (goal->angle + ball->angle) / 2.0f);
+	float lookAngle = Math::map(ballDistance, nearDistance, maxAngleDiffDistance, goal->angle, (goal->angle + ball->angle) / 2.0f);
 
 	robot->setTargetDir(Math::Rad(targetAngle), acceleratedSpeed);
 	robot->lookAt(Math::Rad(lookAngle));
