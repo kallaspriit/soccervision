@@ -418,6 +418,7 @@ void TestController::FetchBallFrontState::step(float dt, Vision::Results* vision
 	float maxAngleDiffDistance = 0.6f;
 	float focusBetweenBallGoalAngle = 15.0f;
 	float maxAngleBrakingAngle = 40.0f;
+	float maxBallBrakingAngle = 10.0f;
 	float maxBrakingDistanceVelocity = 2.0f;
 	float minVelocityBrakeDistance = 0.5f;
 	float maxVelocityBrakingDistance = 1.5f;
@@ -457,8 +458,9 @@ void TestController::FetchBallFrontState::step(float dt, Vision::Results* vision
 	if (startBrakingDistance != -1.0f) {
 		// brake as getting close and large target angle
 		float distanceBraking = Math::map(ballDistance, nearDistance, startBrakingDistance, 1.0, 0.0f);
-		float angleBreaking = Math::map(Math::abs(targetAngle), 0.0f, Math::degToRad(maxAngleBrakingAngle), 0.0f, 1.0f);
-		float combinedBrakeFactor = distanceBraking * angleBreaking;
+		float targetAngleBreaking = Math::map(Math::abs(targetAngle), 0.0f, Math::degToRad(maxAngleBrakingAngle), 0.0f, 1.0f);
+		float ballAngleBreaking = Math::map(Math::abs(ballAngle), 0.0f, Math::degToRad(maxBallBrakingAngle), 0.0f, 1.0f);
+		float combinedBrakeFactor = distanceBraking * (targetAngleBreaking + ballAngleBreaking);
 		//float combinedBrakeFactor = brakeP * (distanceBraking + angleBreaking);
 		
 		// limit max speed near the ball
@@ -469,7 +471,8 @@ void TestController::FetchBallFrontState::step(float dt, Vision::Results* vision
 		acceleratedSpeed = Math::min(acceleratedSpeed, maxSpeed);
 
 		ai->dbg("distanceBraking", distanceBraking);
-		ai->dbg("angleBreaking", angleBreaking);
+		ai->dbg("targetAngleBreaking", targetAngleBreaking);
+		ai->dbg("ballAngleBreaking", ballAngleBreaking);
 		ai->dbg("combinedBrakeFactor", combinedBrakeFactor);
 		ai->dbg("maxSpeed", maxSpeed);
 	}
@@ -484,6 +487,8 @@ void TestController::FetchBallFrontState::step(float dt, Vision::Results* vision
 	ai->dbg("startBrakingDistance", startBrakingDistance);
 	ai->dbg("startBrakingVelocity", startBrakingVelocity);
 	ai->dbg("ballDistance", ballDistance);
+	ai->dbg("ballAngle", ballAngle);
+	ai->dbg("goalAngle", goalAngle);
 	ai->dbg("targetAngle", Math::radToDeg(targetAngle));
 	ai->dbg("angleDiff", Math::radToDeg(angleDiff));
 	ai->dbg("offsetDistance", offsetDistance);
