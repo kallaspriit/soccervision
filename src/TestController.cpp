@@ -531,6 +531,11 @@ void TestController::FetchBallDirectState::step(float dt, Vision::Results* visio
 		return;
 	}
 
+	if (ball == NULL) {
+		// TODO Switch to searching ball
+		return;
+	}
+
 	float ballDistance = ball->getDribblerDistance();
 	float forwardSpeed = Math::map(ballDistance, 0.0f, 1.0f, 0.3f, 2.0f);
 
