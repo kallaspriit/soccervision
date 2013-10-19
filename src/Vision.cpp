@@ -1696,7 +1696,7 @@ bool Vision::Results::isBallInWay(ObjectList balls, int goalY) {
 
 	for (ObjectListItc it = balls.begin(); it != balls.end(); it++) {
 		ball = *it;
-		checkWidth = ball->width * 2.0f;
+		checkWidth = ball->width * 2.5f;
 		
 		if (
 			ball->x - checkWidth < halfWidth && ball->x + checkWidth > halfWidth
