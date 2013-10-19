@@ -170,6 +170,7 @@ public:
 	float getTargetAngle(float goalX, float goalY, float ballX, float ballY, float D, TargetMode targetMode = TargetMode::INLINE);
 
     void step(float dt, Vision::Results* visionResults);
+	Side getTargetSide() { return targetSide; }
 	void dbgs(std::string key, std::string value) { messages[key] = value; }
 	void dbg(std::string key, int value) { messages[key] = Util::toString(value); }
 	void dbg(std::string key, float value) { messages[key] = Util::toString(value); }
