@@ -618,7 +618,7 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 	float startAccelerationDuration = 0.5f;
 
 	if (targetMode == TargetMode::UNDECIDED) {
-		if (ball->angle > 0.0f) {
+		if (ball->angle + goal->angle > 0.0f) {
 			targetMode = TargetMode::LEFT;
 		} else {
 			targetMode = TargetMode::RIGHT;
