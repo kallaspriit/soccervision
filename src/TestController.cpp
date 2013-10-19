@@ -818,7 +818,7 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 		}
 
 		forwardSpeed = Math::map(goal->distance, 0.5f, 1.0f, 0.0f, avoidBallSpeed);
-		sideSpeed = avoidBallSide == (TargetMode::LEFT ? -1.0f : 1.0f) * avoidBallSpeed;
+		sideSpeed = (avoidBallSide == TargetMode::LEFT ? -1.0f : 1.0f) * avoidBallSpeed;
 	}
 
 	if (!goal->behind) {
