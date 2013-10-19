@@ -174,6 +174,7 @@ std::string TestController::getJSON() {
 	stream << "\"currentState\": \"" << currentStateName << "\",";
 	stream << "\"stateDuration\": \"" << currentStateDuration << "\",";
 	stream << "\"totalDuration\": \"" << totalDuration << "\",";
+	stream << "\"targetSide\": \"" << (targetSide == Side::BLUE ? "blue" : targetSide == Side::YELLOW ? "yellow" : "not chosen") << "\",";
 	stream << "\"blueGoalDistance\": " << blueGoalDistance << ",";
 	stream << "\"yellowGoalDistance\": " << yellowGoalDistance << ",";
 	stream << "\"lastTargetGoalAngle\": " << Math::radToDeg(lastTargetGoalAngle);
