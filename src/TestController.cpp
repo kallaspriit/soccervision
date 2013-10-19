@@ -769,6 +769,10 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	}
 }
 
+void TestController::AimState::onEnter(Robot* robot) {
+	avoidBallSide = TargetMode::UNDECIDED;
+}
+
 void TestController::AimState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration) {
 	robot->stop();
 
@@ -793,12 +797,25 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 	robot->setTargetDir(0.0f, 0.0f, 0.0f);
 	robot->dribbler->start();
 
+	float avoidBallSpeed = 0.25f;
 	int halfWidth = Config::cameraWidth / 2;
 	int leftEdge = goal->x - goal->width / 2;
 	int rightEdge = goal->x + goal->width / 2;
 	int goalKickThresholdPixels = (int)((float)goal->width * Config::goalKickThreshold);
 	bool isBallInWay = visionResults->isBallInWay(visionResults->front->balls, goal->y + goal->height / 2);
 	bool shouldKick = false;
+
+	if (isBallInWay) {
+		if (avoidBallSide == TargetMode::UNDECIDED) {
+			if (robot->getPosition().y < Config::fieldHeight / 2) {
+				avoidBallSide = TargetMode::RIGHT;
+			} else {
+				avoidBallSide = TargetMode::LEFT;
+			}
+		}
+
+		robot->setTargetDir(0.0f, avoidBallSide == (TargetMode::LEFT ? -1.0f : 1.0f) * avoidBallSpeed);
+	}
 
 	if (!goal->behind) {
 		if (
@@ -810,6 +827,8 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 	}
 
 	ai->dbg("shouldKick", shouldKick);
+	ai->dbg("isBallInWay", isBallInWay);
+	ai->dbg("avoidBallSide", avoidBallSide);
 	ai->dbg("leftEdge", leftEdge);
 	ai->dbg("rightEdge", rightEdge);
 	ai->dbg("halfWidth", halfWidth);
