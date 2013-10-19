@@ -4,6 +4,13 @@
 #include "Dribbler.h"
 #include "Command.h"
 
+/**
+ * TODO
+ * - fetch ball straight and search for goal if lost goal at large angle
+ * - search for goal state
+ * - search for ball state
+ */
+
 TestController::TestController(Robot* robot, Communication* com) : BaseAI(robot, com), manualSpeedX(0.0f), manualSpeedY(0.0f), manualOmega(0.0f), manualDribblerSpeed(0), manualKickStrength(0), blueGoalDistance(0.0f), yellowGoalDistance(0.0f), lastCommandTime(0.0) {
 	setupStates();
 };
@@ -703,7 +710,7 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	ai->dbg("ballDistance", ballDistance);
 	
 	float approachP = 1.5f;
-	float sideP = 0.75f;
+	float sideP = 1.0f;
 	//float sideP = 0.5f;
 	//float nearZeroSpeedAngle = 10.0f;
 	float nearZeroSpeedAngle = Math::map(ballDistance, 0.0f, 0.75f, 5.0f, 25.0f);
@@ -781,8 +788,8 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 	ai->dbg("leftEdge", leftEdge);
 	ai->dbg("rightEdge", rightEdge);
 	ai->dbg("halfWidth", halfWidth);
-	ai->dbg("leftEdge + goalKickThresholdPixels < halfWidth", leftEdge + goalKickThresholdPixels < halfWidth);
-	ai->dbg("rightEdge - goalKickThresholdPixels > halfWidth", rightEdge - goalKickThresholdPixels > halfWidth);
+	ai->dbg("leftValid", leftEdge + goalKickThresholdPixels < halfWidth);
+	ai->dbg("rightValid", rightEdge - goalKickThresholdPixels > halfWidth);
 	ai->dbg("goalKickThresholdPixels", goalKickThresholdPixels);
 	ai->dbg("sinceLastKick", lastKickTime != 0.0 ? Util::duration(lastKickTime) : -1.0);
 
