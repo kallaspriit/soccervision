@@ -12,7 +12,7 @@
  * - avoid kicking through another ball
  */
 
-TestController::TestController(Robot* robot, Communication* com) : BaseAI(robot, com), targetSide(Side::BLUE), manualSpeedX(0.0f), manualSpeedY(0.0f), manualOmega(0.0f), manualDribblerSpeed(0), manualKickStrength(0), blueGoalDistance(0.0f), yellowGoalDistance(0.0f), lastCommandTime(0.0) {
+TestController::TestController(Robot* robot, Communication* com) : BaseAI(robot, com), targetSide(Side::BLUE), manualSpeedX(0.0f), manualSpeedY(0.0f), manualOmega(0.0f), manualDribblerSpeed(0), manualKickStrength(0), blueGoalDistance(0.0f), yellowGoalDistance(0.0f), lastCommandTime(0.0), lastTargetGoalAngle(0.0f) {
 	setupStates();
 };
 
@@ -152,6 +152,12 @@ void TestController::updateGoalDistances(Vision::Results* visionResults) {
 
 	blueGoalDistance = blueGoal != NULL ? blueGoal->distance : 0.0f;
 	yellowGoalDistance = yellowGoal != NULL ? yellowGoal->distance : 0.0f;
+
+	if (targetSide == Side::BLUE && blueGoal != NULL) {
+		lastTargetGoalAngle = blueGoal->angle;
+	} else if (targetSide == Side::YELLOW && yellowGoal != NULL) {
+		lastTargetGoalAngle = yellowGoal->angle;
+	}
 }
 
 std::string TestController::getJSON() {
@@ -170,6 +176,7 @@ std::string TestController::getJSON() {
 	stream << "\"totalDuration\": \"" << totalDuration << "\",";
 	stream << "\"blueGoalDistance\": " << blueGoalDistance << ",";
 	stream << "\"yellowGoalDistance\": " << yellowGoalDistance;
+	stream << "\"lastTargetGoalAngle\": " << Math::radToDeg(lastTargetGoalAngle);
 
 	stream << "}";
 
@@ -789,6 +796,7 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 
 void TestController::AimState::onEnter(Robot* robot) {
 	avoidBallSide = TargetMode::UNDECIDED;
+	searchGoalDir = 0.0f;
 }
 
 void TestController::AimState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration) {
@@ -809,7 +817,15 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 	ai->dbg("goalVisible", goal != NULL);
 
 	if (goal == NULL) {
+		if (searchGoalDir == 0.0f) {
+			if (ai->lastTargetGoalAngle > 0.0f) {
+				searchGoalDir = 1.0f;
+			} else {
+				searchGoalDir = -1.0f;
+			}
+		}
 
+		robot->spinAroundDribbler(searchGoalDir == -1.0f);
 
 		return;
 	}

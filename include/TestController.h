@@ -134,12 +134,13 @@ public:
 
 	public:
 		void onEnter(Robot* robot);
-		AimState(TestController* ai) : State(ai), lastKickTime(-1.0), avoidBallSide(TargetMode::UNDECIDED) {}
+		AimState(TestController* ai) : State(ai), lastKickTime(-1.0), avoidBallSide(TargetMode::UNDECIDED), searchGoalDir(0.0f) {}
 		void step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration);
 
 	private:
 		double lastKickTime;
 		TargetMode avoidBallSide;
+		float searchGoalDir;
 
 	};
 
@@ -192,6 +193,7 @@ private:
 	int manualKickStrength;
 	float blueGoalDistance;
 	float yellowGoalDistance;
+	float lastTargetGoalAngle;
 
 	double lastCommandTime;
 
