@@ -162,6 +162,7 @@ public:
 	void handleDribblerCommand(const Command& cmd);
 	void handleKickCommand(const Command& cmd);
 	void handleResetCommand();
+	void handleToggleSideCommand();
 	void handleDriveToCommand(const Command& cmd);
 	void handleParameterCommand(const Command& cmd);
 
@@ -180,8 +181,10 @@ private:
 	void updateGoalDistances(Vision::Results* visionResults);
 
 	DebouncedButton toggleGoBtn;
+	DebouncedButton toggleSideBtn;
 	DebouncedButton resetBtn;
 
+	Side targetSide;
 	float manualSpeedX;
 	float manualSpeedY;
 	float manualOmega;
