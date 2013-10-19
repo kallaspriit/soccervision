@@ -797,7 +797,8 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 	robot->setTargetDir(0.0f, 0.0f, 0.0f);
 	robot->dribbler->start();
 
-	float avoidBallSpeed = 0.3f;
+	float avoidBallSpeed = 0.5f;
+	float minBallAvoidSideSpeed = 0.25f;
 	int halfWidth = Config::cameraWidth / 2;
 	int leftEdge = goal->x - goal->width / 2;
 	int rightEdge = goal->x + goal->width / 2;
@@ -818,7 +819,7 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 		}
 
 		forwardSpeed = Math::map(goal->distance, 0.5f, 1.0f, 0.0f, avoidBallSpeed);
-		sideSpeed = (avoidBallSide == TargetMode::LEFT ? -1.0f : 1.0f) * avoidBallSpeed;
+		sideSpeed = (avoidBallSide == TargetMode::LEFT ? -1.0f : 1.0f) * Math::max(forwardSpeed, minBallAvoidSideSpeed);
 	}
 
 	if (!goal->behind) {
