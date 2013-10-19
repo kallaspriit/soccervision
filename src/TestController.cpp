@@ -435,7 +435,7 @@ void TestController::FetchBallFrontState::step(float dt, Vision::Results* vision
 	float minVelocityBrakeDistance = 0.5f;
 	float maxVelocityBrakingDistance = 1.5f;
 	float minApproachSpeed = 0.5f;
-	float nearDistance = 0.25f;
+	float nearDistance = 0.3f;
 
 	float ballDistance = ball->getDribblerDistance();
 	float ballAngle = ball->angle;
