@@ -336,6 +336,8 @@ void TestController::DriveToState::step(float dt, Vision::Results* visionResults
 	if (robot->dribbler->gotBall()) {
 		ai->dbg("gotBall", true);
 
+		robot->dribbler->start();
+
 		ai->setState("aim");
 
 		return;
@@ -416,6 +418,8 @@ void TestController::FetchBallFrontState::step(float dt, Vision::Results* vision
 	if (robot->dribbler->gotBall()) {
 		ai->dbg("gotBall", true);
 		ai->dbgs("action", "Switch to aim");
+
+		robot->dribbler->start();
 
 		ai->setState("aim");
 
@@ -559,6 +563,8 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 
 	if (robot->dribbler->gotBall()) {
 		ai->dbg("gotBall", true);
+
+		robot->dribbler->start();
 
 		ai->setState("aim");
 
@@ -720,6 +726,8 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	
 	if (robot->dribbler->gotBall()) {
 		ai->dbg("gotBall", true);
+
+		robot->dribbler->start();
 
 		ai->setState("aim");
 
