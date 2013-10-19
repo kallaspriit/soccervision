@@ -780,10 +780,13 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 	ai->dbg("shouldKick", shouldKick);
 	ai->dbg("leftEdge", leftEdge);
 	ai->dbg("rightEdge", rightEdge);
+	ai->dbg("halfWidth", halfWidth);
+	ai->dbg("leftEdge + goalKickThresholdPixels < halfWidth", leftEdge + goalKickThresholdPixels < halfWidth);
+	ai->dbg("rightEdge - goalKickThresholdPixels > halfWidth", rightEdge - goalKickThresholdPixels > halfWidth);
 	ai->dbg("goalKickThresholdPixels", goalKickThresholdPixels);
 	ai->dbg("sinceLastKick", lastKickTime != 0.0 ? Util::duration(lastKickTime) : -1.0);
 
-	if (shouldKick && lastKickTime == 0.0 || Util::duration(lastKickTime) >= 1) {
+	if (shouldKick && (lastKickTime == 0.0 || Util::duration(lastKickTime) >= 1)) {
 		robot->kick();
 
 		lastKickTime = Util::millitime();
