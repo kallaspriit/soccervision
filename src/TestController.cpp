@@ -415,7 +415,6 @@ void TestController::FetchBallFrontState::step(float dt, Vision::Results* vision
 	float maxNearSpeed = 1.0f;
 	float startAccelerationDuration = 0.75f;
 	float maxOffsetDistanceAngleDiff = 45.0f;
-	float minAngleDiffDistance = 0.2f;
 	float maxAngleDiffDistance = 0.6f;
 	float focusBetweenBallGoalAngle = 15.0f;
 	float maxAngleBrakingAngle = 30.0f;
@@ -423,13 +422,13 @@ void TestController::FetchBallFrontState::step(float dt, Vision::Results* vision
 	float minVelocityBrakeDistance = 0.5f;
 	float maxVelocityBrakingDistance = 1.5f;
 	float minApproachSpeed = 0.4f;
-	float nearDistance = 0.15f;
+	float nearDistance = 0.2f;
 
 	float ballDistance = ball->getDribblerDistance();
 	float ballAngle = ball->angle;
 	float goalAngle = goal->angle;
 	float angleDiff = Math::abs(goalAngle - ballAngle);
-	float offsetDistance = Math::map(Math::radToDeg(angleDiff), 0.0f, maxOffsetDistanceAngleDiff, minAngleDiffDistance, maxAngleDiffDistance);
+	float offsetDistance = Math::map(Math::radToDeg(angleDiff), 0.0f, maxOffsetDistanceAngleDiff, nearDistance, maxAngleDiffDistance);
 
 	if (ai->parameters[0].length() > 0) approachSpeed = Util::toFloat(ai->parameters[0]);
 	if (ai->parameters[1].length() > 0) offsetDistance = Util::toFloat(ai->parameters[1]);
@@ -438,7 +437,7 @@ void TestController::FetchBallFrontState::step(float dt, Vision::Results* vision
 	//if (ballDistance < offsetDistance) {
 	if (ballDistance < nearDistance) {
 		ai->dbgs("action", "Switch to fetch ball near");
-		//ai->setState("fetch-ball-near"); // TODO Add back
+		ai->setState("fetch-ball-near"); // TODO Add back
 		
 		return;
 	}
