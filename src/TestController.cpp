@@ -378,6 +378,7 @@ void TestController::FetchBallFrontState::step(float dt, Vision::Results* vision
 	
 	if (robot->dribbler->gotBall()) {
 		ai->dbg("gotBall", true);
+		ai->dbgs("action", "Switch to aim");
 
 		ai->setState("aim");
 
@@ -398,6 +399,8 @@ void TestController::FetchBallFrontState::step(float dt, Vision::Results* vision
 	ai->dbg("goalVisible", goal != NULL);
 
 	if (ball != NULL && ball->behind) {
+		ai->dbgs("action", "Switch to fetch behind");
+
 		ai->setState("fetch-ball-behind");
 
 		return;
@@ -434,7 +437,8 @@ void TestController::FetchBallFrontState::step(float dt, Vision::Results* vision
 
 	//if (ballDistance < offsetDistance) {
 	if (ballDistance < nearDistance) {
-		//ai->setState("fetch-ball-near");
+		ai->dbgs("action", "Switch to fetch ball near");
+		//ai->setState("fetch-ball-near"); // TODO Add back
 		
 		return;
 	}
@@ -470,15 +474,15 @@ void TestController::FetchBallFrontState::step(float dt, Vision::Results* vision
 		ai->dbg("combinedBrakeFactor", combinedBrakeFactor);
 		ai->dbg("maxSpeed", maxSpeed);
 	}
-
-	robot->setTargetDir(Math::Rad(targetAngle), acceleratedSpeed);
-
+	
 	float lookAngle = Math::map(angleDiff, 0.0f, Math::degToRad(focusBetweenBallGoalAngle), goal->angle, (goal->angle + ball->angle) / 2.0f);
 
+	robot->setTargetDir(Math::Rad(targetAngle), acceleratedSpeed);
 	robot->lookAt(Math::Rad(lookAngle));
 
 	ai->dbg("acceleratedSpeed", acceleratedSpeed);
 	ai->dbg("startBrakingDistance", startBrakingDistance);
+	ai->dbg("startBrakingVelocity", startBrakingVelocity);
 	ai->dbg("ballDistance", ballDistance);
 	ai->dbg("targetAngle", Math::radToDeg(targetAngle));
 	ai->dbg("angleDiff", Math::radToDeg(angleDiff));
