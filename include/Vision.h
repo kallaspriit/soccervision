@@ -38,6 +38,7 @@ public:
 			Object* getClosestBall(Dir dir = Dir::ANY);
 			Object* getLargestGoal(Side side, Dir dir = Dir::ANY);
 			Object* getFurthestGoal(Dir dir = Dir::ANY);
+			bool isBallInWay(ObjectList balls, int goalY);
 
 			Vision::Result* front;
 			Vision::Result* rear;
@@ -62,7 +63,6 @@ public:
 	bool isViewObstructed() { return obstructionSide != Obstruction::NONE; }
 	Obstruction getObstruction() { return obstructionSide; }
 	Dir getDir() { return dir; }
-	bool isBallInWay(ObjectList balls, int goalY);
 	float getBlackDistance() { return blackDistance; }
     Distance getDistance(int x, int y);
 	//float getHorizontalDistance(Dir dir, int x, int y);

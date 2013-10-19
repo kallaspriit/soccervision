@@ -1237,27 +1237,6 @@ float Vision::getColorDistance(std::string colorName) {
 	return Math::min(Math::min(distanceA, distanceB), distanceC);
 }
 
-bool Vision::isBallInWay(ObjectList balls, int goalY) {
-	int startY = Config::cameraHeight - 100;
-	int halfWidth = Config::cameraWidth / 2;
-	Object* ball;
-	float checkWidth;
-
-	for (ObjectListItc it = balls.begin(); it != balls.end(); it++) {
-		ball = *it;
-		checkWidth = ball->width * 2.0f;
-		
-		if (
-			ball->x - checkWidth < halfWidth && ball->x + checkWidth > halfWidth
-			&& ball->y - ball->height < startY && ball->y  + ball->height > goalY
-		) {
-			return true;
-		}
-	}
-
-	return false;
-}
-
 float Vision::getBlockMetric(int x1, int y1, int blockWidth, int blockHeight, std::vector<std::string> validColors, int step) {
 	bool debug = canvas.data != NULL;
 	int matches = 0;
@@ -1707,4 +1686,25 @@ Object* Vision::Results::getFurthestGoal(Dir dir) {
 			return NULL;
 		}
 	}
+}
+
+bool Vision::Results::isBallInWay(ObjectList balls, int goalY) {
+	int startY = Config::goalPathSenseStartY;
+	int halfWidth = Config::cameraWidth / 2;
+	Object* ball;
+	float checkWidth;
+
+	for (ObjectListItc it = balls.begin(); it != balls.end(); it++) {
+		ball = *it;
+		checkWidth = ball->width * 2.0f;
+		
+		if (
+			ball->x - checkWidth < halfWidth && ball->x + checkWidth > halfWidth
+			&& ball->y - ball->height < startY && ball->y  + ball->height > goalY
+		) {
+			return true;
+		}
+	}
+
+	return false;
 }
