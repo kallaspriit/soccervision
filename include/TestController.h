@@ -134,7 +134,7 @@ public:
 
 	public:
 		void onEnter(Robot* robot);
-		AimState(TestController* ai) : State(ai), lastKickTime(0.0), avoidBallSide(TargetMode::UNDECIDED) {}
+		AimState(TestController* ai) : State(ai), lastKickTime(-1.0), avoidBallSide(TargetMode::UNDECIDED) {}
 		void step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration);
 
 	private:

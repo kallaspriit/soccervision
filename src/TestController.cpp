@@ -797,24 +797,28 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 	robot->setTargetDir(0.0f, 0.0f, 0.0f);
 	robot->dribbler->start();
 
-	float avoidBallSpeed = 0.25f;
+	float avoidBallSpeed = 0.3f;
 	int halfWidth = Config::cameraWidth / 2;
 	int leftEdge = goal->x - goal->width / 2;
 	int rightEdge = goal->x + goal->width / 2;
 	int goalKickThresholdPixels = (int)((float)goal->width * Config::goalKickThreshold);
+	double timeSinceLastKick = lastKickTime != 0.0 ? Util::duration(lastKickTime) : -1.0;
 	bool isBallInWay = visionResults->isBallInWay(visionResults->front->balls, goal->y + goal->height / 2);
 	bool shouldKick = false;
+	float forwardSpeed = 0.0f;
+	float sideSpeed = 0.0f;
 
 	if (isBallInWay) {
 		if (avoidBallSide == TargetMode::UNDECIDED) {
-			if (robot->getPosition().y < Config::fieldHeight / 2) {
+			if (robot->getPosition().y < Config::fieldHeight / 2.0f) {
 				avoidBallSide = TargetMode::RIGHT;
 			} else {
 				avoidBallSide = TargetMode::LEFT;
 			}
 		}
 
-		robot->setTargetDir(0.0f, avoidBallSide == (TargetMode::LEFT ? -1.0f : 1.0f) * avoidBallSpeed);
+		forwardSpeed = Math::map(goal->distance, 0.5f, 1.0f, 0.0f, avoidBallSpeed);
+		sideSpeed = avoidBallSide == (TargetMode::LEFT ? -1.0f : 1.0f) * avoidBallSpeed;
 	}
 
 	if (!goal->behind) {
@@ -835,13 +839,14 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 	ai->dbg("leftValid", leftEdge + goalKickThresholdPixels < halfWidth);
 	ai->dbg("rightValid", rightEdge - goalKickThresholdPixels > halfWidth);
 	ai->dbg("goalKickThresholdPixels", goalKickThresholdPixels);
-	ai->dbg("sinceLastKick", lastKickTime != 0.0 ? Util::duration(lastKickTime) : -1.0);
+	ai->dbg("sinceLastKick", timeSinceLastKick);
 
-	if (shouldKick && !isBallInWay && (lastKickTime == 0.0 || Util::duration(lastKickTime) >= 1)) {
+	if (shouldKick && !isBallInWay && (lastKickTime == -1.0 || timeSinceLastKick >= 1.0)) {
 		robot->kick();
 
 		lastKickTime = Util::millitime();
 	} else {
+		robot->setTargetDir(forwardSpeed, sideSpeed);
 		robot->lookAt(goal);
 	}
 }
