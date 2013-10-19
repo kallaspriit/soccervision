@@ -472,25 +472,29 @@ void TestController::FetchBallFrontState::step(float dt, Vision::Results* vision
 	}
 
 	if (startBrakingDistance != -1.0f) {
-		// brake as getting close and large target angle
-		float distanceBraking = Math::map(ballDistance, nearDistance, startBrakingDistance, 1.0, 0.0f);
-		float targetAngleBreaking = Math::map(Math::abs(targetAngle), 0.0f, Math::degToRad(maxAngleBrakingAngle), 0.0f, 1.0f);
-		float ballAngleBreaking = Math::map(Math::abs(ballAngle), 0.0f, Math::degToRad(maxBallBrakingAngle), 0.0f, 1.0f);
-		float combinedBrakeFactor = distanceBraking * (targetAngleBreaking + ballAngleBreaking);
-		//float combinedBrakeFactor = brakeP * (distanceBraking + angleBreaking);
+		if (ball->distance < startBrakingDistance) {
+			// brake as getting close and large target angle
+			float distanceBraking = Math::map(ballDistance, nearDistance, startBrakingDistance, 1.0, 0.0f);
+			float targetAngleBreaking = Math::map(Math::abs(targetAngle), 0.0f, Math::degToRad(maxAngleBrakingAngle), 0.0f, 1.0f);
+			float ballAngleBreaking = Math::map(Math::abs(ballAngle), 0.0f, Math::degToRad(maxBallBrakingAngle), 0.0f, 1.0f);
+			float combinedBrakeFactor = distanceBraking * (targetAngleBreaking + ballAngleBreaking);
+			//float combinedBrakeFactor = brakeP * (distanceBraking + angleBreaking);
 		
-		// limit max speed near the ball
-		float maxSpeed = Math::map(ballDistance, nearDistance, startBrakingDistance, maxNearSpeed, startBrakingVelocity);
+			// limit max speed near the ball
+			float maxSpeed = Math::map(ballDistance, nearDistance, startBrakingDistance, maxNearSpeed, startBrakingVelocity);
 		
-		acceleratedSpeed = acceleratedSpeed * (1.0f - combinedBrakeFactor);
-		acceleratedSpeed = Math::max(acceleratedSpeed, minApproachSpeed);
-		acceleratedSpeed = Math::min(acceleratedSpeed, maxSpeed);
+			acceleratedSpeed = acceleratedSpeed * (1.0f - combinedBrakeFactor);
+			acceleratedSpeed = Math::min(acceleratedSpeed, maxSpeed);
+			acceleratedSpeed = Math::max(acceleratedSpeed, minApproachSpeed);
 
-		ai->dbg("distanceBraking", distanceBraking);
-		ai->dbg("targetAngleBreaking", targetAngleBreaking);
-		ai->dbg("ballAngleBreaking", ballAngleBreaking);
-		ai->dbg("combinedBrakeFactor", combinedBrakeFactor);
-		ai->dbg("maxSpeed", maxSpeed);
+			ai->dbg("distanceBraking", distanceBraking);
+			ai->dbg("targetAngleBreaking", targetAngleBreaking);
+			ai->dbg("ballAngleBreaking", ballAngleBreaking);
+			ai->dbg("combinedBrakeFactor", combinedBrakeFactor);
+			ai->dbg("maxSpeed", maxSpeed);
+		} else if (ballDistance - startBrakingDistance > 0.2f) {
+			reset(); // the ball has gone further than when started to brake, may have seen kicked ball, reset
+		}
 	}
 	
 	//float lookAngle = Math::map(angleDiff, 0.0f, Math::degToRad(focusBetweenBallGoalAngle), goal->angle, (goal->angle + ball->angle) / 2.0f);
