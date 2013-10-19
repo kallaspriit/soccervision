@@ -731,12 +731,12 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	//float nearZeroSpeedAngle = 10.0f;
 	float nearZeroSpeedAngle = Math::map(ballDistance, 0.0f, 0.75f, 5.0f, 25.0f);
 	float nearMaxSideSpeedAngle = 35.0f;
-	float nearDistance = 0.2f;
+	float nearDistance = 0.35f;
 	//float nearMaxSideSpeedAngle = nearZeroSpeedAngle * 2.0f;
 
 	if (enterBallDistance == -1.0f) {
 		enterBallDistance = ballDistance;
-	} else if (ballDistance > enterBallDistance + 0.1f && ballDistance > nearDistance) {
+	} else if (ballDistance > enterBallDistance + 0.1f || ballDistance > nearDistance) {
 		// ball has gotten further than when started, probably messed it up, switch to faster fetch
 		ai->setState("fetch-ball-front");
 
