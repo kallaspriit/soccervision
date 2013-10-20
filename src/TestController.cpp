@@ -879,7 +879,9 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	}
 
 	if (ball == NULL) {
-		return; // TODO Start searching
+		ai->setState("find-ball");
+
+		return;
 	}
 
 	float ballDistance = ball->getDribblerDistance();

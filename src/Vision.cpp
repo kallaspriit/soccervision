@@ -859,7 +859,7 @@ Vision::PathMetric Vision::getPathMetric(int x1, int y1, int x2, int y2, std::ve
 	int step = originalX1 < originalX2 ? 1 : -1;
 	int sampleCount = 0;
 	float distanceStep = 0.05f;
-	float distance1, distance2;
+	//float distance1, distance2;
 
     for (int i = start; (originalX1 < originalX2 ? i < senseCounter : i >= 0); i += step) {
         x = senseX[i];
