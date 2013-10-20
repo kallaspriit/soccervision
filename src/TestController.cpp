@@ -379,14 +379,22 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 
 	ai->dbg("hasTasks", robot->hasTasks());
 
-	if (robot->hasTasks()) {
-		return;
-	}
-
 	robot->stop();
 	
-	Object* ball = visionResults->getClosestBall();
+	Object* ball = visionResults->getClosestBall(Dir::FRONT);
 	Object* goal = visionResults->getLargestGoal(ai->targetSide, Dir::FRONT);
+
+	if (ball == NULL) {
+		ball = visionResults->getClosestBall(Dir::ANY);
+	}
+
+	if (robot->hasTasks()) {
+		if (ball != NULL && !ball->behind) {
+			robot->clearTasks();
+		} else {
+			return;
+		}
+	}
 
 	ai->dbg("ballVisible", ball != NULL);
 	ai->dbg("goalVisible", goal != NULL);
