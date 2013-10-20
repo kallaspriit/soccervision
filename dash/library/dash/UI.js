@@ -529,6 +529,12 @@ Dash.UI.prototype.initControls = function() {
 		dash.renderer.showDriveTo();
 	});
 
+	$('#turn-by-btn').click(function() {
+		var angle = window.prompt('Enter angle', 90.0);
+
+		dash.socket.send('<turn-by:' + angle +'>');
+	});
+
 	$(window).keydown(function(e) {
 		if (e.keyCode == 27) {
 			dash.socket.send('<stop>');

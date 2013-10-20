@@ -153,7 +153,7 @@ void TestController::handleDriveToCommand(const Command& cmd) {
 void TestController::handleTurnByCommand(const Command& cmd) {
 	TurnByState* state = (TurnByState*)states["turn-by"];
 
-	state->angle = Util::toFloat(cmd.parameters[0]);
+	state->angle = Math::degToRad(Util::toFloat(cmd.parameters[0]));
 
 	setState("turn-by");
 }
@@ -342,7 +342,9 @@ void TestController::DriveToState::onEnter(Robot* robot) {
 }
 
 void TestController::DriveToState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration) {
-	
+	if (!robot->hasTasks()) {
+		ai->setState("manual-control");
+	}
 }
 
 void TestController::TurnByState::onEnter(Robot* robot) {
@@ -350,7 +352,9 @@ void TestController::TurnByState::onEnter(Robot* robot) {
 }
 
 void TestController::TurnByState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration) {
-	
+	if (!robot->hasTasks()) {
+		ai->setState("manual-control");
+	}
 }
 
 void TestController::FindBallState::onEnter(Robot* robot) {
