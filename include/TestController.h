@@ -77,8 +77,12 @@ public:
 	class FindBallState : public State {
 
 	public:
-		FindBallState(TestController* ai) : State(ai) {}
+		void onEnter(Robot* robot);
+		FindBallState(TestController* ai) : State(ai), searchDir(1.0f) {}
 		void step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration);
+
+	private:
+		float searchDir;
 
 	};
 

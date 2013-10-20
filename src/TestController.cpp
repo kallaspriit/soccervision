@@ -334,6 +334,14 @@ void TestController::DriveToState::step(float dt, Vision::Results* visionResults
 	
 }
 
+void TestController::FindBallState::onEnter(Robot* robot) {
+	if (ai->lastTargetGoalAngle > 0.0f) {
+		searchDir = 1.0f;
+	} else {
+		searchDir = -1.0f;
+	}
+}
+
 void TestController::FindBallState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration) {
 	if (robot->dribbler->gotBall()) {
 		ai->dbg("gotBall", true);
@@ -358,10 +366,11 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 	Object* goal = visionResults->getLargestGoal(ai->targetSide, Dir::FRONT);
 
 	ai->dbg("ballVisible", ball != NULL);
-	ai->dbg("ballBehind", ball->behind);
 	ai->dbg("goalVisible", goal != NULL);
 
 	if (ball != NULL) {
+		ai->dbg("ballBehind", ball->behind);
+
 		if (!ball->behind) {
 			if (goal != NULL) {
 				ai->setState("fetch-ball-front");
@@ -375,11 +384,13 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 
 			if (turnAngle < 0.0f) {
 				turnAngle += underturnAngle;
+				searchDir = -1.0f;
 			} else {
 				turnAngle -= underturnAngle;
+				searchDir = 1.0f;
 			}
 
-			robot->turnBy(turnAngle, turnSpeed);
+			robot->turnBy(turnAngle, turnSpeed * searchDir);
 		}
 	} else {
 		float searchOmega = Math::PI;
