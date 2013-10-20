@@ -74,6 +74,14 @@ public:
 
 	};
 
+	class FindBallState : public State {
+
+	public:
+		FindBallState(TestController* ai) : State(ai) {}
+		void step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration);
+
+	};
+
 	class FetchBallFrontState : public State {
 
 	public:

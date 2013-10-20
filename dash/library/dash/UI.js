@@ -1070,6 +1070,7 @@ Dash.UI.prototype.showStateStats = function(state) {
 	$('#status').removeClass('yellow blue go stop');
 	
 	if (state.targetSide == 1) {
+	if (state.targetSide == 1) {
 		$('#status').addClass('yellow');
 	} else if (state.targetSide == 0) {
 		$('#status').addClass('blue');

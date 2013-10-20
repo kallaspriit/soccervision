@@ -26,6 +26,7 @@ void TestController::setupStates() {
 	states["watch-goal"] = new WatchGoalState(this);
 	states["spin-around-dribbler"] = new SpinAroundDribblerState(this);
 	states["drive-to"] = new DriveToState(this);
+	states["find-ball"] = new FindBallState(this);
 	states["fetch-ball-front"] = new FetchBallFrontState(this);
 	states["fetch-ball-direct"] = new FetchBallDirectState(this);
 	states["fetch-ball-behind"] = new FetchBallBehindState(this);
@@ -333,6 +334,60 @@ void TestController::DriveToState::step(float dt, Vision::Results* visionResults
 	
 }
 
+void TestController::FindBallState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration) {
+	if (robot->dribbler->gotBall()) {
+		ai->dbg("gotBall", true);
+		ai->dbgs("action", "Switch to aim");
+
+		robot->dribbler->start();
+
+		ai->setState("aim");
+
+		return;
+	}
+
+	ai->dbg("hasTasks", robot->hasTasks());
+
+	if (robot->hasTasks()) {
+		return;
+	}
+
+	robot->stop();
+	
+	Object* ball = visionResults->getClosestBall();
+	Object* goal = visionResults->getLargestGoal(ai->targetSide, Dir::FRONT);
+
+	ai->dbg("ballVisible", ball != NULL);
+	ai->dbg("ballBehind", ball->behind);
+	ai->dbg("goalVisible", goal != NULL);
+
+	if (ball != NULL) {
+		if (!ball->behind) {
+			if (goal != NULL) {
+				ai->setState("fetch-ball-front");
+			} else {
+				ai->setState("fetch-ball-direct");
+			}
+		} else {
+			float turnAngle = ball->angle;
+			float underturnAngle = Math::degToRad(60.0f);
+			float turnSpeed = Math::TWO_PI;
+
+			if (turnAngle < 0.0f) {
+				turnAngle += underturnAngle;
+			} else {
+				turnAngle -= underturnAngle;
+			}
+
+			robot->turnBy(turnAngle, turnSpeed);
+		}
+	} else {
+		float searchOmega = Math::PI;
+
+		robot->setTargetOmega(searchOmega);
+	}
+}
+
 void TestController::FetchBallFrontState::onEnter(Robot* robot) {
 	reset();
 }
@@ -378,18 +433,15 @@ void TestController::FetchBallFrontState::step(float dt, Vision::Results* vision
 		return;
 	}
 
-	if (goal == NULL) {
-		if (ball != NULL) {
-			ai->setState("fetch-ball-direct");
-		} else {
-			// TODO No goal nor ball, start searching
-		}
+	if (goal == NULL && ball != NULL) {
+		ai->setState("fetch-ball-direct");
 
 		return;
 	}
 
-	// TODO Drive to ball and search for goal when lost goal (new state)
 	if (ball == NULL) {
+		ai->setState("find-ball");
+
 		return;
 	}
 
@@ -425,7 +477,7 @@ void TestController::FetchBallFrontState::step(float dt, Vision::Results* vision
 	//if (ballDistance < offsetDistance) {
 	if (ballDistance < nearDistance) {
 		ai->dbgs("action", "Switch to fetch ball near");
-		ai->setState("fetch-ball-near"); // TODO Add back
+		ai->setState("fetch-ball-near");
 		
 		return;
 	}
@@ -538,7 +590,8 @@ void TestController::FetchBallDirectState::step(float dt, Vision::Results* visio
 	}
 
 	if (ball == NULL) {
-		// TODO Switch to searching ball
+		ai->setState("find-ball");
+
 		return;
 	}
 
@@ -591,7 +644,13 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 	ai->dbg("timeSinceLostBall", timeSinceLostBall);
 
 	if (goal == NULL) {
-		return; // TODO What now?
+		if (ball != NULL && !ball->behind) {
+			ai->setState("fetch-ball-direct");
+		} else {
+			ai->setState("find-ball");
+		}
+
+		return;
 	}
 
 	if (ball != NULL) {
@@ -749,7 +808,7 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 		if (ball != NULL) {
 			ai->setState("fetch-ball-direct");
 		} else {
-			// TODO No goal nor ball, start searching
+			ai->setState("find-ball");
 		}
 
 		return;
