@@ -771,12 +771,13 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	ai->dbg("ballDistance", ballDistance);
 	
 	float approachP = 1.5f;
-	float sideP = 0.75f;
+	float sideP = 0.5f;
 	//float sideP = 0.5f;
 	//float nearZeroSpeedAngle = 10.0f;
 	float nearZeroSpeedAngle = Math::map(ballDistance, 0.0f, 0.75f, 5.0f, 20.0f);
 	float nearMaxSideSpeedAngle = 35.0f;
 	float nearDistance = 0.35f;
+	float maxSideSpeedDistance = 0.2f;
 	//float nearMaxSideSpeedAngle = nearZeroSpeedAngle * 2.0f;
 
 	if (enterBallDistance == -1.0f) {
@@ -792,25 +793,29 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	if (ai->parameters[1].length() > 0) sideP = Util::toFloat(ai->parameters[1]);
 	if (ai->parameters[2].length() > 0) nearZeroSpeedAngle = Util::toFloat(ai->parameters[2]);
 
-	float forwardSpeed = Math::min(approachP * Math::map(Math::abs(Math::radToDeg(ball->angle)), 0.0f, nearZeroSpeedAngle, 1.0f, 0.0f), enterVelocity);
-	float sideSpeed = sideP * Math::sign(ball->distanceX) * Math::map(Math::abs(Math::radToDeg(ball->angle)), 0.0f, nearMaxSideSpeedAngle, 0.0f, 1.0f);
-	float limitedForwardSpeed = Math::map(smallestForwardSpeed, 0.0f, enterVelocity, 0.5f, enterVelocity);
+	//float forwardSpeed = Math::min(approachP * Math::map(Math::abs(Math::radToDeg(ball->angle)), 0.0f, nearZeroSpeedAngle, 1.0f, 0.0f), enterVelocity);
+	float forwardSpeed = 0.0f;
+	//float sideSpeed = sideP * Math::sign(ball->distanceX) * Math::map(Math::abs(Math::radToDeg(ball->angle)), 0.0f, nearMaxSideSpeedAngle, 0.0f, 1.0f);
+	float sideSpeed = sideP * Math::sign(ball->distanceX) * Math::map(Math::abs(ball->distanceX), 0.0f, maxSideSpeedDistance, 0.0f, 1.0f);
+	
+	/*if (smallestForwardSpeed == -1.0f || forwardSpeed < smallestForwardSpeed) {
+		smallestForwardSpeed = forwardSpeed;
+	}
+
+	float limitedForwardSpeed = Math::map(smallestForwardSpeed, 0.0f, enterVelocity, 0.5f, enterVelocity);*/
 
 	ai->dbg("forwardSpeed", forwardSpeed);
-	ai->dbg("limitedForwardSpeed", limitedForwardSpeed);
+	//ai->dbg("limitedForwardSpeed", limitedForwardSpeed);
 	ai->dbg("sideSpeed", sideSpeed);
 	ai->dbg("enterVelocity", enterVelocity);
 	ai->dbg("ballAngle", (Math::radToDeg(ball->angle)));
+	ai->dbg("goalAngle", (Math::radToDeg(goal->angle)));
 	ai->dbg("nearZeroSpeedAngle", nearZeroSpeedAngle);
 	ai->dbg("ball->distanceX", ball->distanceX);
 
 	robot->dribbler->start();
-	robot->setTargetDir(limitedForwardSpeed, sideSpeed);
+	robot->setTargetDir(forwardSpeed, sideSpeed);
 	robot->lookAt(goal);
-
-	if (smallestForwardSpeed == -1.0f || forwardSpeed < smallestForwardSpeed) {
-		smallestForwardSpeed = forwardSpeed;
-	}
 }
 
 void TestController::AimState::onEnter(Robot* robot) {
