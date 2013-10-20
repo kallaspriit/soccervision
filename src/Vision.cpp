@@ -907,7 +907,7 @@ Vision::PathMetric Vision::getPathMetric(int x1, int y1, int x2, int y2, std::ve
 					if (debug) {
 						canvas.drawMarker(x, y, 0, 128, 0);
 					}
-				} else if ((sawWhite || firstColor == "white") && previousBlack >= 2) {
+				} else if ((sawWhite || firstColor == "white") && previousBlack >= 1) {
 					crossingGreenWhiteBlackGreen = true;
 
 					if (debug) {
