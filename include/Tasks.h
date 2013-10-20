@@ -26,7 +26,7 @@ class Task {
 
 class TurnByTask : public Task {
     public:
-        TurnByTask(float angle, float speed = 1) : Task(), threshold(Math::PI / 90.0f), speed(speed), turnAngle(angle), diff(angle) {}
+        TurnByTask(float angle, float speed = 1) : Task(), threshold(Math::PI / 90.0f), speed(speed), turnAngle(angle), lastDiff(angle) {}
 
         void onStart(Robot& robot, float dt);
         bool onStep(Robot& robot, float dt);
@@ -41,7 +41,7 @@ class TurnByTask : public Task {
         float startAngle;
         float turnAngle;
         float targetAngle;
-        float diff;
+        float lastDiff;
 		float dir;
 		double startTime;
 		float maxTurnTime;

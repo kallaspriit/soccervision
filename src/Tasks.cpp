@@ -11,7 +11,7 @@ void TurnByTask::onStart(Robot& robot, float dt) {
 	dir = turnAngle < 0.0f ? -1.0f : 1.0f;
 	startTime = -1;
 	maxTurnTime = Math::abs(turnAngle / speed) * 1.5f;
-	diff = -1;
+	lastDiff = turnAngle;
 }
 
 bool TurnByTask::onStep(Robot& robot, float dt) {
@@ -26,9 +26,9 @@ bool TurnByTask::onStep(Robot& robot, float dt) {
 	float newDiff;
 
 	if (dir == 1.0f) {
-		newDiff = targetAngle - currentAngle;
+		newDiff = Math::abs(targetAngle - currentAngle);
 	} else {
-		newDiff = currentAngle - targetAngle;
+		newDiff = Math::abs(currentAngle - targetAngle);
 	}
 
 	if (newDiff < 0.0f) {
@@ -37,13 +37,13 @@ bool TurnByTask::onStep(Robot& robot, float dt) {
 
 	if (
 		newDiff < threshold
-		|| (diff != -1 && newDiff - diff > threshold)
+		|| (lastDiff != -1 && newDiff - lastDiff > threshold)
 		|| Util::duration(startTime) > maxTurnTime
 	) {
 		return false;
 	}
 
-	diff = newDiff;
+	lastDiff = newDiff;
 
 	/*if (dir == 1.0f) {
 		if (targetAngle > startAngle) {
@@ -149,7 +149,7 @@ float TurnByTask::getPercentage() {
         return 0.0f;
     }
 
-    return 100.0f - (diff * 100.0f / Math::abs(turnAngle));
+    return 100.0f - (lastDiff * 100.0f / Math::abs(turnAngle));
 }
 
 std::string TurnByTask::toString() {
