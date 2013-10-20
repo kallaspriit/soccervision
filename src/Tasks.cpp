@@ -6,6 +6,7 @@
 
 // TurnBy angle task
 void TurnByTask::onStart(Robot& robot, float dt) {
+	speed = Math::abs(speed);
     startAngle = robot.getOrientation();
 	targetAngle = Math::floatModulus(startAngle + turnAngle, Math::TWO_PI);
 	dir = turnAngle < 0.0f ? -1.0f : 1.0f;

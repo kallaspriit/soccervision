@@ -420,7 +420,7 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 			ai->dbg("turnSpeed", Math::radToDeg(turnSpeed));
 			ai->dbg("searchDir", searchDir);
 
-			robot->turnBy(turnAngle, turnSpeed * searchDir);
+			robot->turnBy(turnAngle, turnSpeed);
 		}
 	} else {
 		float searchOmega = Math::PI;
