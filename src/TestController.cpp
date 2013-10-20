@@ -363,6 +363,8 @@ void TestController::FindBallState::onEnter(Robot* robot) {
 	} else {
 		searchDir = -1.0f;
 	}
+
+	lastTurnTime = -1.0;
 }
 
 void TestController::FindBallState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration) {
@@ -396,9 +398,13 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 		}
 	}
 
+	float searchOmega = Math::PI;
+	double minTurnBreak = (double)(Math::TWO_PI / searchOmega);
+
 	ai->dbg("ballVisible", ball != NULL);
 	ai->dbg("goalVisible", goal != NULL);
 	ai->dbg("searchDir", searchDir);
+	ai->dbg("timeSinceLastTurn", lastTurnTime == -1.0 ? -1.0 : Util::duration(lastTurnTime));
 
 	if (ball != NULL) {
 		ai->dbg("ballBehind", ball->behind);
@@ -411,7 +417,7 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 			} else {
 				ai->setState("fetch-ball-direct");
 			}
-		} else {
+		} else if (lastTurnTime == -1.0 || Util::duration(lastTurnTime) >= minTurnBreak) {
 			float turnAngle = ball->angle;
 			//float underturnAngle = Math::degToRad(60.0f);
 			float turnSpeed = Math::TWO_PI;
@@ -429,12 +435,14 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 			ai->dbg("searchDir", searchDir);
 
 			robot->turnBy(turnAngle, turnSpeed);
-		}
-	} else {
-		float searchOmega = Math::PI;
 
-		robot->setTargetOmega(searchOmega * searchDir);
+			lastTurnTime = Util::millitime();
+
+			return;
+		}
 	}
+
+	robot->setTargetOmega(searchOmega * searchDir);
 }
 
 void TestController::FetchBallFrontState::onEnter(Robot* robot) {
