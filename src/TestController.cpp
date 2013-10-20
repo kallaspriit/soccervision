@@ -348,7 +348,7 @@ void TestController::DriveToState::step(float dt, Vision::Results* visionResults
 }
 
 void TestController::TurnByState::onEnter(Robot* robot) {
-	robot->turnBy(angle);
+	robot->turnBy(angle, Math::PI);
 }
 
 void TestController::TurnByState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration) {
