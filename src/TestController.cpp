@@ -367,9 +367,12 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 
 	ai->dbg("ballVisible", ball != NULL);
 	ai->dbg("goalVisible", goal != NULL);
+	ai->dbg("searchDir", searchDir);
 
 	if (ball != NULL) {
 		ai->dbg("ballBehind", ball->behind);
+		ai->dbg("ballDistance", ball->getDribblerDistance());
+		ai->dbg("ballAngle", Math::radToDeg(ball->angle));
 
 		if (!ball->behind) {
 			if (goal != NULL) {
@@ -389,6 +392,10 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 				turnAngle -= underturnAngle;
 				searchDir = 1.0f;
 			}
+
+			ai->dbg("turnAngle", Math::radToDeg(turnAngle));
+			ai->dbg("turnSpeed", Math::radToDeg(turnSpeed));
+			ai->dbg("searchDir", searchDir);
 
 			robot->turnBy(turnAngle, turnSpeed * searchDir);
 		}
