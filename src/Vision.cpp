@@ -366,7 +366,7 @@ bool Vision::isValidBall(Object* ball, Dir dir) {
 			Config::ballPathSenseStartY,
 			ball->x,
 			//(int)((float)ball->y + (float)ballRadius * 0.75f + (float)senseRadius),
-			ball->y + ball->height,
+			ball->y + ball->height + 5,
 			//ball->y + ballRadius + senseRadius / 2 + 6,
 			validBallPathColors
 			//,"green"
@@ -907,7 +907,7 @@ Vision::PathMetric Vision::getPathMetric(int x1, int y1, int x2, int y2, std::ve
 					if (debug) {
 						canvas.drawMarker(x, y, 0, 128, 0);
 					}
-				} else if ((sawWhite || firstColor == "white") && previousBlack >= 4) {
+				} else if ((sawWhite || firstColor == "white") && previousBlack >= 2) {
 					crossingGreenWhiteBlackGreen = true;
 
 					if (debug) {
