@@ -11,7 +11,7 @@ void TurnByTask::onStart(Robot& robot, float dt) {
 	dir = turnAngle < 0.0f ? -1.0f : 1.0f;
 	startTime = -1;
 	maxTurnTime = Math::abs(turnAngle / speed) * 1.5f;
-	lastDiff = turnAngle;
+	lastDiff = -1.0f;
 }
 
 bool TurnByTask::onStep(Robot& robot, float dt) {
@@ -45,97 +45,9 @@ bool TurnByTask::onStep(Robot& robot, float dt) {
 
 	lastDiff = newDiff;
 
-	/*if (dir == 1.0f) {
-		if (targetAngle > startAngle) {
-			if (currentAngle >= targetAngle) {
-				return false;
-			}
-		} else {
-			if (currentAngle >= targetAngle && Math::abs(currentAngle - targetAngle) < Math::PI) {
-				return false;
-			}
-		}
-	} else {
-		if (targetAngle < startAngle) {
-			if (currentAngle <= targetAngle) {
-				return false;
-			}
-		} else {
-			if (currentAngle <= targetAngle && Math::abs(currentAngle - targetAngle) < Math::PI) {
-				return false;
-			}
-		}
-	}*/
-
-	/*float angleDiff;
-
-	if (dir == 1.0f) {
-		angleDiff = targetAngle - currentAngle;
-	} else {
-		angleDiff = currentAngle - targetAngle;
-	}
-
-	if (angleDiff < 0.0f) {
-		angleDiff += Math::TWO_PI;
-	}
-
-	if (
-		(dir == 1.0f && currentAngle >= targetAngle && angleDiff < turnAngle)
-		|| (dir == -1.0f && currentAngle <= targetAngle && angleDiff < turnAngle)
-		//|| Util::duration(startTime) > maxTurnTime
-	) {
-		return false;
-	}*/
-
-	/*if (targetDiff > 0) {
-		if (currentAngle > targetAngle) {
-			return false;
-		}
-	} else {
-		if (currentAngle > targetAngle) {
-			return false;
-		}
-	}*/
-
-	/*
-	std::cout << "  > CURRENT: " << Math::radToDeg(currentAngle) << "; TARGET: " << Math::radToDeg(targetAngle);
-
-	if (targetDiff > 0) {
-		diff = targetAngle - currentAngle;
-
-		std::cout << "; DIFF 1: " << Math::radToDeg(diff);
-	} else {
-		diff = targetAngle - currentAngle;
-
-		if (currentAngle < Math::TWO_PI) {
-			diff += Math::TWO_PI;
-
-			std::cout << "; ADD 360";
-		}
-
-		std::cout << "; DIFF 2: " << Math::radToDeg(diff);
-	}
-
-    if (
-		diff < threshold
-		//|| Util::duration(startTime) > maxTurnTime
-	) {
-		std::cout << "; GOOD ENOUGH";
-
-        return false;
-    }
-	*/
 	float useSpeed = speed * dir;
 
-	/*if (Math::abs(diff) < threshold * 4.0) {
-		useSpeed /= 2.0f;
-
-		std::cout << "; CUT SPEED: " << useSpeed;
-	}*/
-
-	//std::cout << std::endl;
-
-    robot.setTargetDir(Math::Rad(0), 0, useSpeed);
+    robot.setTargetDir(0.0f, 0.0f, useSpeed);
 
     return true;
 }
@@ -149,7 +61,7 @@ float TurnByTask::getPercentage() {
         return 0.0f;
     }
 
-    return 100.0f - (lastDiff * 100.0f / Math::abs(turnAngle));
+    return Math::max(100.0f - (lastDiff * 100.0f / Math::abs(turnAngle)), 0.0f);
 }
 
 std::string TurnByTask::toString() {
