@@ -366,8 +366,7 @@ bool Vision::isValidBall(Object* ball, Dir dir) {
 			Config::ballPathSenseStartY,
 			ball->x,
 			//(int)((float)ball->y + (float)ballRadius * 0.75f + (float)senseRadius),
-			ball->y + ball->height + 5,
-			//ball->y + ballRadius + senseRadius / 2 + 6,
+			ball->y + ballRadius + senseRadius / 2 + 10,
 			validBallPathColors
 			//,"green"
 		);
