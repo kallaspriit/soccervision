@@ -395,7 +395,7 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 	} else {
 		float searchOmega = Math::PI;
 
-		robot->setTargetOmega(searchOmega);
+		robot->setTargetOmega(searchOmega * searchDir);
 	}
 }
 
