@@ -74,6 +74,17 @@ public:
 
 	};
 
+	class TurnByState : public State {
+
+	public:
+		TurnByState(TestController* ai) : State(ai), angle(0.0f) {}
+		void onEnter(Robot* robot);
+		void step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration);
+
+		float angle;
+
+	};
+
 	class FindBallState : public State {
 
 	public:
@@ -182,6 +193,7 @@ public:
 	void handleResetCommand();
 	void handleToggleSideCommand();
 	void handleDriveToCommand(const Command& cmd);
+	void handleTurnByCommand(const Command& cmd);
 	void handleParameterCommand(const Command& cmd);
 
 	float getTargetAngle(float goalX, float goalY, float ballX, float ballY, float D, TargetMode targetMode = TargetMode::INLINE);

@@ -26,6 +26,7 @@ void TestController::setupStates() {
 	states["watch-goal"] = new WatchGoalState(this);
 	states["spin-around-dribbler"] = new SpinAroundDribblerState(this);
 	states["drive-to"] = new DriveToState(this);
+	states["turn-by"] = new TurnByState(this);
 	states["find-ball"] = new FindBallState(this);
 	states["fetch-ball-front"] = new FetchBallFrontState(this);
 	states["fetch-ball-direct"] = new FetchBallDirectState(this);
@@ -68,6 +69,8 @@ bool TestController::handleCommand(const Command& cmd) {
         handleToggleSideCommand();
     } else if (cmd.name == "drive-to" && cmd.parameters.size() == 3) {
         handleDriveToCommand(cmd);
+    } else if (cmd.name == "turn-by" && cmd.parameters.size() == 1) {
+        handleTurnByCommand(cmd);
     } else if (cmd.name.substr(0, 4) == "run-") {
         setState(cmd.name.substr(4));
     } else if (cmd.name == "parameter" && cmd.parameters.size() == 2) {
@@ -145,6 +148,14 @@ void TestController::handleDriveToCommand(const Command& cmd) {
 	state->orientation = Util::toFloat(cmd.parameters[2]);
 
 	setState("drive-to");
+}
+
+void TestController::handleTurnByCommand(const Command& cmd) {
+	TurnByState* state = (TurnByState*)states["turn-by"];
+
+	state->angle = Util::toFloat(cmd.parameters[0]);
+
+	setState("turn-by");
 }
 
 void TestController::updateGoalDistances(Vision::Results* visionResults) {
@@ -331,6 +342,14 @@ void TestController::DriveToState::onEnter(Robot* robot) {
 }
 
 void TestController::DriveToState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration) {
+	
+}
+
+void TestController::TurnByState::onEnter(Robot* robot) {
+	robot->turnBy(angle);
+}
+
+void TestController::TurnByState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration) {
 	
 }
 
