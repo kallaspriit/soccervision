@@ -207,7 +207,7 @@ void DebugRenderer::renderGrid(unsigned char* image, Vision* vision, int width, 
 	float stepY = 0.25f;
 	float minDistanceX = -4.0f;
 	float maxDistanceX = 4.0f;
-	float distanceX, distanceY;
+	float distanceX = 0.0f, distanceY = 0.0f;
 	int x, y;
 	int counter = 0;
 	int lastTextY = -1;
@@ -216,7 +216,7 @@ void DebugRenderer::renderGrid(unsigned char* image, Vision* vision, int width, 
 	CameraTranslator::CameraPosition distorted;
 	CameraTranslator::CameraPosition undistorted;
 
-	for (distanceX = minDistanceX; distanceX <= maxDistanceX; distanceX += stepX) {
+	//for (distanceX = minDistanceX; distanceX <= maxDistanceX; distanceX += stepX) {
 		for (distanceY = minDistanceY; distanceY <= maxDistanceY; distanceY += stepY) {
 			pos = vision->getPixelAt(distanceX, distanceY);
 
@@ -257,7 +257,7 @@ void DebugRenderer::renderGrid(unsigned char* image, Vision* vision, int width, 
 
 			counter++;
 		}
-	}
+	//}
 
 	
 
