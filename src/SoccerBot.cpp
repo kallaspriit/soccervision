@@ -400,7 +400,7 @@ void SoccerBot::setupVision() {
 	frontCameraTranslator->setConstants(
 		-72.0f, 257500.0f, 190.5f,
 		-1.7578689303905209e-001f, -2.5481256902241417e-001f, 7.6993101864245295e-001f,
-		-26.0f, 1.2309756548915236e+003,
+		-26.0f, 1.2309756548915236e+003f,
 		Config::cameraWidth, Config::cameraHeight
 	);
 
