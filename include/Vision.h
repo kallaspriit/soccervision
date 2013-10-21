@@ -7,11 +7,10 @@
 #include "LookupTable.h"
 #include "Config.h"
 #include "Maths.h"
+#include "CameraTranslator.h"
 
 #include <string>
 #include <vector>
-
-class CameraTranslator;
 
 class Vision {
 
@@ -67,7 +66,8 @@ public:
     Distance getDistance(int x, int y);
 	//float getHorizontalDistance(Dir dir, int x, int y);
     float getAngle(int x, int y);
-	int getPixelRowAt(float distance);
+	//int getPixelRowAt(float distance);
+	CameraTranslator::CameraPosition getPixelAt(float distanceX, float distanceY);
 	Math::Point getScreenCoords(float distanceX, float distanceY);
 
 private:

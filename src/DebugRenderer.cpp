@@ -203,49 +203,60 @@ void DebugRenderer::renderGrid(unsigned char* image, Vision* vision, int width, 
 
 	float minDistanceY = 0.0f;
 	float maxDistanceY = 6.0f;
+	float stepX = 0.25f;
 	float stepY = 0.25f;
 	float minDistanceX = -4.0f;
 	float maxDistanceX = 4.0f;
-	float stepX = 0.1f;
-	float distanceY;
-	//float distanceX;
+	float distanceX, distanceY;
 	int x, y;
 	int counter = 0;
 	int lastTextY = -1;
 	Math::Point screenCoords;
+	CameraTranslator::CameraPosition pos;
 	CameraTranslator::CameraPosition distorted;
 	CameraTranslator::CameraPosition undistorted;
 
-	for (distanceY = minDistanceY; distanceY <= maxDistanceY; distanceY += stepY) {
-		y = vision->getPixelRowAt(distanceY);
+	for (distanceX = minDistanceX; distanceX <= maxDistanceX; distanceX += stepX) {
+		for (distanceY = minDistanceY; distanceY <= maxDistanceY; distanceY += stepY) {
+			pos = vision->getPixelAt(distanceX, distanceY);
 
-		for (x = 0; x < Config::cameraWidth; x += 3) {
-			distorted = vision->getCameraTranslator()->distort(x, y);
-			//undistorted = vision->getCameraTranslator()->undistort(distorted.x, distorted.y);
+			for (x = 0; x < Config::cameraWidth; x += 3) {
+				distorted = vision->getCameraTranslator()->distort(x, pos.y);
+				//undistorted = vision->getCameraTranslator()->undistort(distorted.x, distorted.y);
 
-			//canvas.setPixelAt(x, y, 0, 0, 128);
-			canvas.setPixelAt(distorted.x, distorted.y, 0, 0, 128);
-			//canvas.setPixelAt(undistorted.x, undistorted.y, 128, 0, 0);
-		}
-
-		//px = 10 + (counter % 10) * 30;
-		x = Config::cameraWidth / 2 - 15;
-
-		distorted = vision->getCameraTranslator()->distort(x, y + 1);
-
-		if (lastTextY == -1 || lastTextY - distorted.y >= 10) {
-			canvas.drawText(distorted.x, distorted.y, Util::toString(distanceY), 128, 128, 128);
-
-			lastTextY = distorted.y;
-		}
-
-		/*for (distanceX = minDistanceX; distanceX < maxDistanceX; distanceX += stepX) {
-			for (int y = 0; y < Config::cameraHeight; y++) {
-				screenCoords = vision->getScreenCoords(vision->getDir(), distanceX, distanceY);
+				//canvas.setPixelAt(x, y, 0, 0, 128);
+				canvas.setPixelAt(distorted.x, distorted.y, 0, 0, 128);
+				//canvas.setPixelAt(undistorted.x, undistorted.y, 128, 0, 0);
 			}
-		}*/
 
-		counter++;
+			for (y = 0; y < Config::cameraHeight; y += 3) {
+				distorted = vision->getCameraTranslator()->distort(pos.x, y);
+				//undistorted = vision->getCameraTranslator()->undistort(distorted.x, distorted.y);
+
+				//canvas.setPixelAt(x, y, 0, 0, 128);
+				canvas.setPixelAt(distorted.x, distorted.y, 0, 0, 128);
+				//canvas.setPixelAt(undistorted.x, undistorted.y, 128, 0, 0);
+			}
+
+			//px = 10 + (counter % 10) * 30;
+			x = Config::cameraWidth / 2 - 15;
+
+			distorted = vision->getCameraTranslator()->distort(x, y + 1);
+
+			if (lastTextY == -1 || lastTextY - distorted.y >= 10) {
+				canvas.drawText(distorted.x, distorted.y, Util::toString(distanceY), 128, 128, 128);
+
+				lastTextY = distorted.y;
+			}
+
+			/*for (distanceX = minDistanceX; distanceX < maxDistanceX; distanceX += stepX) {
+				for (int y = 0; y < Config::cameraHeight; y++) {
+					screenCoords = vision->getScreenCoords(vision->getDir(), distanceX, distanceY);
+				}
+			}*/
+
+			counter++;
+		}
 	}
 
 	

@@ -1,6 +1,5 @@
 #include "Vision.h"
 #include "Config.h"
-#include "CameraTranslator.h"
 #include "Util.h"
 
 #include <iostream>
@@ -496,20 +495,14 @@ int Vision::getPixelsBelow(int startX, int startY, std::vector<std::string> vali
 	return validPixelCount;
 }
 
-int Vision::getPixelRowAt(float distance) {
-	/*int pixelRow;
-
-	if (dir == FRONT) {
-		pixelRow = (int)frontDistanceLookup.getInverseValue(distance);
-    } else {
-        pixelRow = (int)rearDistanceLookup.getInverseValue(distance);
-    }
-
-	return (int)Math::min(Math::max((float)pixelRow, 0.0f), (float)(Config::cameraHeight - 1));*/
-
+/*int Vision::getPixelRowAt(float distance) {
 	CameraTranslator::CameraPosition pos = cameraTranslator->getCameraPosition(0, distance);
 
 	return pos.y;
+}*/
+
+CameraTranslator::CameraPosition Vision::getPixelAt(float distanceX, float distanceY) {
+	return cameraTranslator->getCameraPosition(distanceX, distanceY);
 }
 
 // TODO Implement..
