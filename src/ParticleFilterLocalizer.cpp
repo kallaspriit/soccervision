@@ -81,7 +81,7 @@ void ParticleFilterLocalizer::update(const Measurements& measurements) {
     for (unsigned int i = 0; i < particles.size(); i++) {
         particle = particles[i];
 
-		Util::confineField(particle->x, particle->y);
+		//Util::confineField(particle->x, particle->y);
 
         particle->probability = getMeasurementProbability(particle, measurements);
 
@@ -192,7 +192,7 @@ Math::Position ParticleFilterLocalizer::getPosition() {
 	y = ySum / (float)particleCount;
 	orientation = Math::floatModulus(orientationSum / (float)particleCount, Math::TWO_PI);
 
-	Util::confineField(x, y);
+	//Util::confineField(x, y);
 
 	// generate the state JSON
 	std::stringstream stream;

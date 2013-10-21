@@ -17,7 +17,7 @@ void OdometerLocalizer::move(float velocityX, float velocityY, float omega, floa
     x += (velocityX * Math::cos(orientation) - velocityY * Math::sin(orientation)) * dt;
     y += (velocityX * Math::sin(orientation) + velocityY * Math::cos(orientation)) * dt;
 
-	Util::confineField(x, y);
+	//Util::confineField(x, y);
 
 	std::stringstream stream;
 
