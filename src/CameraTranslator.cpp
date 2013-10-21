@@ -4,8 +4,7 @@
 #include <iostream>
 
 CameraTranslator::WorldPosition CameraTranslator::getWorldPosition(int cameraX, int cameraY) {
-	//CameraTranslator::CameraPosition undistorted = CameraTranslator::undistort(cameraX, cameraY);
-	CameraTranslator::CameraPosition undistorted = CameraTranslator::CameraPosition(cameraX, cameraY);
+	CameraTranslator::CameraPosition undistorted = CameraTranslator::undistort(cameraX, cameraY);
 
 	float pixelVerticalCoord = undistorted.y - this->horizon;
 	int pixelRight = undistorted.x - this->cameraWidth / 2;
@@ -26,14 +25,14 @@ CameraTranslator::CameraPosition CameraTranslator::getCameraPosition(float world
 	float cameraY = pixelVerticalCoord + this->horizon;
 	float cameraX = pixelRight + this->cameraWidth / 2;
 
-	//return CameraTranslator::distort((int)Math::round(cameraX, 0), (int)Math::round(cameraY, 0));
-	return CameraTranslator::CameraPosition((int)Math::round(cameraX, 0), (int)Math::round(cameraY, 0));
+	return CameraTranslator::distort((int)Math::round(cameraX, 0), (int)Math::round(cameraY, 0));
 }
 
 void CameraTranslator::setConstants(
 	float A, float B, float C,
 	float k1, float k2, float k3,
-	float horizon, int cameraWidth, int cameraHeight
+	float horizon, float distortionFocus,
+	int cameraWidth, int cameraHeight
 ) {
 	this->A = A;
 	this->B = B;
@@ -42,67 +41,116 @@ void CameraTranslator::setConstants(
 	this->k2 = k2;
 	this->k3 = k3;
 	this->horizon = horizon;
+	this->distortionFocus = distortionFocus;
 	this->cameraWidth = cameraWidth;
 	this->cameraHeight = cameraHeight;
 }
 
-CameraTranslator::CameraPosition CameraTranslator::undistort(int x, int y) {
-	/*Math::Matrix3x3 cameraMatrix(
-		1203.5723440938634f, 0.0f, 639.5f,
-		0.0f, 1203.5723440938634f, 511.5f,
-		0.0f, 0.0f, 1.0f
-	);*/
+CameraTranslator::CameraPosition CameraTranslator::undistort(int distortedX, int distortedY) {
+	if (
+		distortedX < 0 || distortedX > cameraWidth - 1
+		|| distortedY < 0 || distortedY > cameraHeight - 1
+	) {
+		return CameraPosition(
+			distortedX,
+			distortedY
+		);
+	}
 
-	//float dx = (float)x - (float)this->cameraWidth / 2.0f;
-	//float dy = (float)y - (float)this->cameraHeight / 2.0f;
-	float normalizedX = (2.0f * (float)x - (float)cameraWidth) / cameraWidth;
-	float normalizedY = (2.0f * (float)y - (float)cameraHeight) / cameraHeight;
-
-	float r = sqrt(pow(normalizedX, 2) + pow(normalizedY, 2));
-	float multipler = 1 + 
-		k1 * pow(r, 2) +
-		k2 * pow(r, 4) + 
-		k3 * pow(r, 6);
-
-	float undistortedNormalizedX = x * multipler;
-	float undistortedNormalizedY = y * multipler;
-
-	//int resultX = (int)Math::round((undistortedNormalizedX + 1) * cameraWidth / 2.0f, 0);
-	//int resultY = (int)Math::round((undistortedNormalizedY + 1) * cameraHeight / 2.0f, 0);
-
-	int resultX = (int)undistortedNormalizedX;
-	int resultY = (int)undistortedNormalizedY;
-
-	//std::cout << "@ UNDISTORT " << x << "x" << y << " - dx: " << dx << ", dy: " << dy << ", r: " << r << ", multiplier: " << multipler << std::endl;
-	std::cout << "@ UNDISTORT "
-		<< x << "x" << y
-		<< " - normalizedX: " << normalizedX
-		<< ", normalizedY: " << normalizedY
-		<< ", r: " << r
-		<< ", multiplier: " << multipler
-		<< ", undistortedNormalizedX: " << undistortedNormalizedX
-		<< ", undistortedNormalizedY: " << undistortedNormalizedY
-		<< ", resultX: " << resultX
-		<< ", resultY: " << resultY << std::endl;
+	int undistortedX = xMap[distortedY][distortedX];
+	int undistortedY = yMap[distortedY][distortedX];
 
 	return CameraPosition(
-		resultX,
-		resultY
+		undistortedX,
+		undistortedY
+	);
+}
+CameraTranslator::CameraPosition CameraTranslator::distort(int undistortedX, int undistortedY) {
+	// conversion for distorting  (normalization?)
+	float x = (float(undistortedX) - cameraWidth / 2.0 ) / distortionFocus;
+	float y = (float(undistortedY) - cameraHeight / 2.0) / distortionFocus;
+
+	// distort
+	float r2 = x * x + y * y; // distance squared
+	float multipler = 1 + 
+		k1 *  r2 +
+		k2 *  r2 * r2 + 
+		k3 *  r2 * r2 * r2;
+
+	x *= multipler;
+	y *= multipler;
+
+	// convert back
+	int distortedX = (int)(x * distortionFocus + cameraWidth / 2.0f);
+	int distortedY = (int)(y * distortionFocus + cameraHeight / 2.0f);
+
+	return CameraPosition(
+		distortedX,
+		distortedY
 	);
 }
 
-CameraTranslator::CameraPosition CameraTranslator::distort(int x, int y) {
-	float dx = (float)x - (float)this->cameraWidth / 2.0f;
-	float dy = (float)y - (float)this->cameraHeight / 2.0f;
+bool CameraTranslator::loadUndistortionMapping(std::string xFilename, std::string yFilename){
+	std::ifstream fileStream;
 
-	float r = sqrt(pow(dx, 2) + pow(dy, 2));
-	float multipler = 1 + 
-		this->k1 * pow(r, 2) +
-		this->k2 * pow(r, 4) + 
-		this->k3 * pow(r, 6);
+	fileStream.open(xFilename);
 
-	return CameraPosition(
-		(int)Math::round(x / multipler, 0),
-		(int)Math::round(y / multipler, 0)
-	);
+	if (fileStream.is_open()) {
+		fileStream >> xMap;
+
+		if (!fileStream.eof()) {
+			std::cout << "- Failed to load xMap" << std::endl;
+
+			return false;
+		}
+	} else {
+		std::cout << "- Failed to open xMap file" << std::endl;
+	}
+
+	fileStream.close();
+	fileStream.open(yFilename);
+
+	if (fileStream.is_open()) {
+		fileStream >> yMap;
+
+		if (!fileStream.eof()) {
+			std::cout << "- Failed to load yMap" << std::endl;
+
+			return false;
+		}
+	} else {
+		std::cout << "- Failed to open yMap file" << std::endl;
+	}
+
+	fileStream.close();
+
+	return true;
 }
+
+std::istream& operator >> (std::istream& inputStream, CameraTranslator::CameraMap& map) {
+	map.clear();
+	CameraTranslator::CameraMapRow mapRow;
+
+	std::string lineString;
+	int field;
+
+	while (getline(inputStream, lineString)) {
+		mapRow.clear();
+
+		std::stringstream lineStream(lineString);
+		std::string fieldString;
+
+		while (getline(lineStream, fieldString, ',')) {
+			std::stringstream fieldStream(fieldString);
+
+			fieldStream >> field;
+
+			mapRow.push_back(field);
+		}
+
+		map.push_back(mapRow);
+	}
+
+	return inputStream;  
+}
+

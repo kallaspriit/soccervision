@@ -2,10 +2,18 @@
 #define CAMERATRANSLATOR_H
 
 #include <math.h>
+#include <string>
+#include <vector>
+#include <iostream>
+#include <fstream>
+#include <sstream>
 
 class CameraTranslator {
 
 public:
+	typedef std::vector <int> CameraMapRow;
+	typedef std::vector <CameraMapRow> CameraMap;
+
 	struct WorldPosition {
 		WorldPosition() : dx(0.0f), dy(0.0f), distance(0.0f), angle(0.0f) {}
 		WorldPosition(float dx, float dy, float distance, float angle) : dx(dx), dy(dy), distance(distance), angle(angle) {}
@@ -29,14 +37,18 @@ public:
 	void setConstants(
 		float A, float B, float C,
 		float k1, float k2, float k3,
-		float horizon, int cameraWidth, int cameraHeight);
+		float horizon, float distortionFocus,
+		int cameraWidth, int cameraHeight);
 
+	bool loadUndistortionMapping(std::string xFilename, std::string yFilename);
 	WorldPosition getWorldPosition(int cameraX, int cameraY);
 	CameraPosition getCameraPosition(float dx, float dy);
 	CameraTranslator::CameraPosition CameraTranslator::undistort(int x, int y);
 	CameraTranslator::CameraPosition CameraTranslator::distort(int x, int y);
 
 private:
+	friend std::istream& operator >> (std::istream& inputStream, CameraMap& map);
+
 	float A;
 	float B;
 	float C;
@@ -44,8 +56,11 @@ private:
 	float k2;
 	float k3;
 	float horizon;
+	float distortionFocus;
 	int cameraWidth;
 	int cameraHeight;
+	CameraMap xMap;
+	CameraMap yMap;
 
 };
 

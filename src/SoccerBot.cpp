@@ -381,14 +381,16 @@ void SoccerBot::setupVision() {
 	// TODO Add to config or load from file
 	frontCameraTranslator->setConstants(
 		-72.0f, 257500.0f, 190.5f,
-		0.0f, 0.0f, 0.0f,
-		-26.0f, Config::cameraWidth, Config::cameraHeight
+		-1.7578689303905209e-001f, -2.5481256902241417e-001f, 7.6993101864245295e-001f,
+		-26.0f, 1.2309756548915236e+003,
+		Config::cameraWidth, Config::cameraHeight
 	);
 
 	rearCameraTranslator->setConstants(
 		22.0f, 193500.0f, 145.5f,
-		0.0f, 0.0f, 0.0f,
-		-24.0f, Config::cameraWidth, Config::cameraHeight
+		-1.7578689303905209e-001f, -2.5481256902241417e-001f, 7.6993101864245295e-001f,
+		-24.0f, 1.2309756548915236e+003f,
+		Config::cameraWidth, Config::cameraHeight
 	);
 
 	// TODO Remove this test
