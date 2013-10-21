@@ -65,10 +65,11 @@ CameraTranslator::CameraPosition CameraTranslator::undistort(int distortedX, int
 		undistortedY
 	);
 }
+
 CameraTranslator::CameraPosition CameraTranslator::distort(int undistortedX, int undistortedY) {
 	// conversion for distorting  (normalization?)
-	float x = (float(undistortedX) - cameraWidth / 2.0 ) / distortionFocus;
-	float y = (float(undistortedY) - cameraHeight / 2.0) / distortionFocus;
+	float x = ((float)undistortedX - (float)cameraWidth / 2.0f) / distortionFocus;
+	float y = ((float)undistortedY - (float)cameraHeight / 2.0f) / distortionFocus;
 
 	// distort
 	float r2 = x * x + y * y; // distance squared
@@ -153,4 +154,3 @@ std::istream& operator >> (std::istream& inputStream, CameraTranslator::CameraMa
 
 	return inputStream;  
 }
-
