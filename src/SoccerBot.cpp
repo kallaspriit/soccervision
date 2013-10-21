@@ -364,7 +364,7 @@ void SoccerBot::broadcastScreenshots() {
 }
 
 void SoccerBot::setupVision() {
-	std::cout << "! Setting up vision.. ";
+	std::cout << "! Setting up vision.. " << std::endl;
 
 	frontBlobber = new Blobber();
 	rearBlobber = new Blobber();
@@ -377,6 +377,24 @@ void SoccerBot::setupVision() {
 
 	frontCameraTranslator = new CameraTranslator();
 	rearCameraTranslator = new CameraTranslator();
+
+	std::cout << "  > loading front camera undistorion mappings.. ";
+
+	frontCameraTranslator->loadUndistortionMapping(
+		Config::undistortMappingFilenameX,
+		Config::undistortMappingFilenameY
+	);
+
+	std::cout << "done!" << std::endl;
+
+	std::cout << "  > loading rear camera undistorion mappings.. ";
+
+	rearCameraTranslator->loadUndistortionMapping(
+		Config::undistortMappingFilenameX,
+		Config::undistortMappingFilenameY
+	);
+
+	std::cout << "done!" << std::endl;
 
 	// TODO Add to config or load from file
 	frontCameraTranslator->setConstants(
@@ -407,8 +425,6 @@ void SoccerBot::setupVision() {
 	rearVision = new Vision(rearBlobber, rearCameraTranslator, Dir::REAR, Config::cameraWidth, Config::cameraHeight);
 
 	visionResults = new Vision::Results();
-
-	std::cout << "done!" << std::endl;
 }
 
 void SoccerBot::setupProcessors() {
