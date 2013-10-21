@@ -202,8 +202,8 @@ void DebugRenderer::renderGrid(unsigned char* image, Vision* vision, int width, 
 	canvas.height = height;
 
 	float minDistanceY = 0.0f;
-	float maxDistanceY = 4.6f;
-	float stepY = 0.2f;
+	float maxDistanceY = 6.0f;
+	float stepY = 0.25f;
 	float minDistanceX = -4.0f;
 	float maxDistanceX = 4.0f;
 	float stepX = 0.1f;
@@ -221,7 +221,7 @@ void DebugRenderer::renderGrid(unsigned char* image, Vision* vision, int width, 
 
 		for (x = 0; x < Config::cameraWidth; x += 3) {
 			distorted = vision->getCameraTranslator()->distort(x, y);
-			undistorted = vision->getCameraTranslator()->undistort(distorted.x, distorted.y);
+			//undistorted = vision->getCameraTranslator()->undistort(distorted.x, distorted.y);
 
 			//canvas.setPixelAt(x, y, 0, 0, 128);
 			canvas.setPixelAt(distorted.x, distorted.y, 0, 0, 128);

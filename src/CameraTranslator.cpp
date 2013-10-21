@@ -4,7 +4,7 @@
 #include <iostream>
 
 CameraTranslator::WorldPosition CameraTranslator::getWorldPosition(int cameraX, int cameraY) {
-	CameraTranslator::CameraPosition undistorted = CameraTranslator::undistort(cameraX, cameraY);
+	CameraPosition undistorted = undistort(cameraX, cameraY);
 
 	float pixelVerticalCoord = undistorted.y - this->horizon;
 	int pixelRight = undistorted.x - this->cameraWidth / 2;
@@ -25,7 +25,7 @@ CameraTranslator::CameraPosition CameraTranslator::getCameraPosition(float world
 	float cameraY = pixelVerticalCoord + this->horizon;
 	float cameraX = pixelRight + this->cameraWidth / 2;
 
-	return CameraTranslator::distort((int)Math::round(cameraX, 0), (int)Math::round(cameraY, 0));
+	return distort((int)Math::round(cameraX, 0), (int)Math::round(cameraY, 0));
 }
 
 void CameraTranslator::setConstants(
@@ -47,15 +47,10 @@ void CameraTranslator::setConstants(
 }
 
 CameraTranslator::CameraPosition CameraTranslator::undistort(int distortedX, int distortedY) {
-	if (
-		distortedX < 0 || distortedX > cameraWidth - 1
-		|| distortedY < 0 || distortedY > cameraHeight - 1
-	) {
-		return CameraPosition(
-			distortedX,
-			distortedY
-		);
-	}
+	if (distortedX < 0) distortedX = 0;
+	if (distortedX > cameraWidth - 1) distortedX = cameraWidth - 1;
+	if (distortedY < 0) distortedY = 0;
+	if (distortedY > cameraWidth - 1) distortedY = cameraHeight - 1;
 
 	int undistortedX = xMap[distortedY][distortedX];
 	int undistortedY = yMap[distortedY][distortedX];
