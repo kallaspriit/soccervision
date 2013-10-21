@@ -208,8 +208,10 @@ namespace Config {
 	const std::string rearDistanceLookupFilename = "config/distance-rear.cfg";
 	const std::string frontAngleLookupFilename = "config/angle-front.cfg";
 	const std::string rearAngleLookupFilename = "config/angle-rear.cfg";
-	const std::string undistortMappingFilenameX = "config/undistort-mapping-x.csv";
-	const std::string undistortMappingFilenameY = "config/undistort-mapping-y.csv";
+	const std::string undistortMappingFilenameFrontX = "config/undistort-mapping-front-x.csv";
+	const std::string undistortMappingFilenameFrontY = "config/undistort-mapping-front-y.csv";
+	const std::string undistortMappingFilenameRearX = "config/undistort-mapping-rear-x.csv";
+	const std::string undistortMappingFilenameRearY = "config/undistort-mapping-rear-y.csv";
 	const std::string screenshotsDirectory = "screenshots";
 
 } // namespace Config

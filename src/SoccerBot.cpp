@@ -381,8 +381,8 @@ void SoccerBot::setupVision() {
 	std::cout << "  > loading front camera undistorion mappings.. ";
 
 	frontCameraTranslator->loadUndistortionMapping(
-		Config::undistortMappingFilenameX,
-		Config::undistortMappingFilenameY
+		Config::undistortMappingFilenameFrontX,
+		Config::undistortMappingFilenameFrontY
 	);
 
 	std::cout << "done!" << std::endl;
@@ -390,24 +390,24 @@ void SoccerBot::setupVision() {
 	std::cout << "  > loading rear camera undistorion mappings.. ";
 
 	rearCameraTranslator->loadUndistortionMapping(
-		Config::undistortMappingFilenameX,
-		Config::undistortMappingFilenameY
+		Config::undistortMappingFilenameRearX,
+		Config::undistortMappingFilenameRearY
 	);
 
 	std::cout << "done!" << std::endl;
 
 	// TODO Add to config or load from file
 	frontCameraTranslator->setConstants(
-		-72.0f, 257500.0f, 190.5f,
-		-1.7578689303905209e-001f, -2.5481256902241417e-001f, 7.6993101864245295e-001f,
-		-26.0f, 1.2309756548915236e+003f,
+		-67.5f, 256000.0f, 189.5f,
+		-1.9893851797458320e-001f, -1.6092582552528201e-001f, 1.0571490816680831e+000f,
+		-29.3f, 1.2637489191208601e+003f,
 		Config::cameraWidth, Config::cameraHeight
 	);
 
 	rearCameraTranslator->setConstants(
-		22.0f, 193500.0f, 145.5f,
-		-1.7578689303905209e-001f, -2.5481256902241417e-001f, 7.6993101864245295e-001f,
-		-24.0f, 1.2309756548915236e+003f,
+		27.0f, 191500.0f, 143.3f,
+		-2.0971206246161431e-001f, 1.3804267164342868e-001f, -1.2815466847742417e-002f,
+		-30.5f, 1.2402373257077263e+003f,
 		Config::cameraWidth, Config::cameraHeight
 	);
 
