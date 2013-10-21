@@ -221,11 +221,11 @@ void DebugRenderer::renderGrid(unsigned char* image, Vision* vision, int width, 
 
 		for (x = 0; x < Config::cameraWidth; x += 3) {
 			distorted = vision->getCameraTranslator()->distort(x, y);
-			//undistorted = vision->getCameraTranslator()->undistort(x, y);
+			undistorted = vision->getCameraTranslator()->undistort(distorted.x, distorted.y);
 
 			//canvas.setPixelAt(x, y, 0, 0, 128);
-			canvas.setPixelAt(distorted.x, distorted.y, 255, 0, 0);
-			//canvas.setPixelAt(undistorted.x, undistorted.y, 128, 0, 0);
+			canvas.setPixelAt(distorted.x, distorted.y, 128, 128, 128);
+			canvas.setPixelAt(undistorted.x, undistorted.y, 0, 0, 128);
 		}
 
 		//px = 10 + (counter % 10) * 30;
