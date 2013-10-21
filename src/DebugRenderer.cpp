@@ -208,7 +208,6 @@ void DebugRenderer::renderGrid(unsigned char* image, Vision* vision, int width, 
 	float minDistanceX = -4.0f;
 	float maxDistanceX = 4.0f;
 	float distanceX = 0.0f, distanceY = 0.0f;
-	int x, y;
 	int counter = 0;
 	int lastTextY = -1;
 	Math::Point screenCoords;
@@ -220,7 +219,7 @@ void DebugRenderer::renderGrid(unsigned char* image, Vision* vision, int width, 
 		for (distanceY = minDistanceY; distanceY <= maxDistanceY; distanceY += stepY) {
 			pos = vision->getPixelAt(distanceX, distanceY);
 
-			for (x = 0; x < Config::cameraWidth; x += 3) {
+			for (int x = 0; x < Config::cameraWidth; x += 3) {
 				distorted = vision->getCameraTranslator()->distort(x, pos.y);
 				//undistorted = vision->getCameraTranslator()->undistort(distorted.x, distorted.y);
 
@@ -229,7 +228,7 @@ void DebugRenderer::renderGrid(unsigned char* image, Vision* vision, int width, 
 				//canvas.setPixelAt(undistorted.x, undistorted.y, 128, 0, 0);
 			}
 
-			/*for (y = 0; y < Config::cameraHeight; y += 3) {
+			/*for (int y = 0; y < Config::cameraHeight; y += 3) {
 				distorted = vision->getCameraTranslator()->distort(pos.x, y);
 				//undistorted = vision->getCameraTranslator()->undistort(distorted.x, distorted.y);
 
@@ -239,7 +238,7 @@ void DebugRenderer::renderGrid(unsigned char* image, Vision* vision, int width, 
 			}*/
 
 			//px = 10 + (counter % 10) * 30;
-			x = Config::cameraWidth / 2 - 15;
+			int x = Config::cameraWidth / 2 - 15;
 
 			distorted = vision->getCameraTranslator()->distort(x, pos.y + 1);
 
