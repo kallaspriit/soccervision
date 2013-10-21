@@ -51,7 +51,7 @@ void DebugRenderer::renderBlobs(unsigned char* image, Blobber* blobber, int widt
 	}
 }
 
-void DebugRenderer::renderBalls(unsigned char* image, const ObjectList& balls, int width, int height) {
+void DebugRenderer::renderBalls(unsigned char* image, Vision* vision, const ObjectList& balls, int width, int height) {
 	Canvas canvas = Canvas();
 
 	canvas.data = image;
@@ -60,7 +60,7 @@ void DebugRenderer::renderBalls(unsigned char* image, const ObjectList& balls, i
 
 	Object* ball = NULL;
     char buf[256];
-	int correctedX, correctedY;
+	//int correctedX, correctedY;
 
     for (ObjectListItc it = balls.begin(); it != balls.end(); it++) {
         ball = *it;
@@ -72,12 +72,14 @@ void DebugRenderer::renderBalls(unsigned char* image, const ObjectList& balls, i
 		sprintf(buf, "%.2fm  %.1f deg", ball->distance, Math::radToDeg(ball->angle));
         canvas.drawText(ball->x - ball->width / 2 + 2, ball->y - ball->height / 2 - 22, buf);
 
-		correctedX = ball->x;
-		correctedY = ball->y + ball->height / 2;
+		//correctedX = ball->x;
+		//correctedY = ball->y + ball->height / 2;
+
+		CameraTranslator::CameraPosition undistortedPos = vision->getCameraTranslator()->undistort(ball->x, ball->y + ball->height / 2);
 
 		//Util::correctCameraPoint(correctedX, correctedY);
 
-		sprintf(buf, "%d x %d", correctedX, correctedY);
+		sprintf(buf, "%d x %d - %d x %d", ball->x, ball->y + ball->height / 2, undistortedPos.x, undistortedPos.y);
         canvas.drawText(ball->x - ball->width / 2 + 2, ball->y - ball->height / 2 - 12, buf);
 
         //int boxArea = ball->width * ball->height;
