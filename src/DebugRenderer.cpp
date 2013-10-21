@@ -203,7 +203,7 @@ void DebugRenderer::renderGrid(unsigned char* image, Vision* vision, int width, 
 
 	float minDistanceY = 0.0f;
 	float maxDistanceY = 4.6f;
-	float stepY = 0.1f;
+	float stepY = 0.2f;
 	float minDistanceX = -4.0f;
 	float maxDistanceX = 4.0f;
 	float stepX = 0.1f;
