@@ -229,19 +229,19 @@ void DebugRenderer::renderGrid(unsigned char* image, Vision* vision, int width, 
 				//canvas.setPixelAt(undistorted.x, undistorted.y, 128, 0, 0);
 			}
 
-			for (y = 0; y < Config::cameraHeight; y += 3) {
+			/*for (y = 0; y < Config::cameraHeight; y += 3) {
 				distorted = vision->getCameraTranslator()->distort(pos.x, y);
 				//undistorted = vision->getCameraTranslator()->undistort(distorted.x, distorted.y);
 
 				//canvas.setPixelAt(x, y, 0, 0, 128);
 				canvas.setPixelAt(distorted.x, distorted.y, 0, 0, 128);
 				//canvas.setPixelAt(undistorted.x, undistorted.y, 128, 0, 0);
-			}
+			}*/
 
 			//px = 10 + (counter % 10) * 30;
 			x = Config::cameraWidth / 2 - 15;
 
-			distorted = vision->getCameraTranslator()->distort(x, y + 1);
+			distorted = vision->getCameraTranslator()->distort(x, pos.y + 1);
 
 			if (lastTextY == -1 || lastTextY - distorted.y >= 10) {
 				canvas.drawText(distorted.x, distorted.y, Util::toString(distanceY), 128, 128, 128);
