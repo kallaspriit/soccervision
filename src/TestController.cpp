@@ -1002,21 +1002,29 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 		robot->spinAroundDribbler(searchGoalDir == -1.0f, searchPeriod);
 
 		if (stateDuration > searchPeriod) {
+			float approachOwnGoalBackwardsSpeed = 1.0f;
+			float approachOwnGoalSideSpeed = 0.5f;
+			float accelerationPeriod = 0.5f;
+			float reverseDuration = 1.5f;
+
+			if (stateDuration > searchPeriod + reverseDuration) {
+				ai->setState("aim");
+
+				return;
+			}
+
 			// didn't find our goal in time, search for opponent goal and drive towards it instead
 			Side ownSide = ai->targetSide == Side::YELLOW ? Side::BLUE : Side::YELLOW;
 
 			Object* ownGoal = visionResults->getLargestGoal(ownSide, Dir::REAR);
-
-			float approachOwnGoalBackwardsSpeed = 1.0f;
-			float approachOwnGoalSideSpeed = 0.5f;
-			float accelerationPeriod = 0.5f;
 
 			float accelerationMultiplier = Math::map(stateDuration, searchPeriod, searchPeriod + accelerationPeriod, 0.0f, 1.0f);
 
 			if (ownGoal != NULL) {
 				robot->setTargetDir(
 					-approachOwnGoalBackwardsSpeed * accelerationMultiplier,
-					approachOwnGoalSideSpeed * (ownGoal->angle > 0.0f ? 1.0f : -1.0f) * accelerationMultiplier,
+					//approachOwnGoalSideSpeed * (ownGoal->angle > 0.0f ? 1.0f : -1.0f) * accelerationMultiplier,
+					0.0f,
 					0.0f
 				);
 				robot->lookAtBehind(ownGoal);
