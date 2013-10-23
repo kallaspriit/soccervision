@@ -401,7 +401,15 @@ void Robot::lookAtBehind(Object* object) {
 }
 
 void Robot::lookAtBehind(const Math::Angle& angle) {
-	lookAt(Math::Rad(angle.rad() - Math::PI));
+	float targetAngle;
+
+	if (angle.rad() > 0.0f) {
+		targetAngle = Math::PI - angle.rad();
+	} else {
+		targetAngle = angle.rad() + Math::PI;
+	}
+
+	lookAt(Math::Rad(targetAngle));
 }
 
 void Robot::turnBy(float angle, float speed) {
