@@ -594,6 +594,10 @@ void TestController::FetchBallFrontState::step(float dt, Vision::Results* vision
 	//float lookAngle = Math::map(angleDiff, 0.0f, Math::degToRad(focusBetweenBallGoalAngle), goal->angle, (goal->angle + ball->angle) / 2.0f);
 	float lookAngle = Math::map(ballDistance, nearDistance, maxAngleDiffDistance, goal->angle, (goal->angle + ball->angle) / 2.0f);
 
+	if (ballDistance < nearDistance) {
+		robot->dribbler->start();
+	}
+
 	robot->setTargetDir(Math::Rad(targetAngle), acceleratedSpeed);
 	robot->lookAt(Math::Rad(lookAngle));
 
@@ -667,12 +671,24 @@ void TestController::FetchBallDirectState::step(float dt, Vision::Results* visio
 	}
 
 	float approachSpeed = 2.0f;
+	float nearDistance = 0.3f;
 	float ballDistance = ball->getDribblerDistance();
-	float forwardSpeed = Math::map(ballDistance, 0.0f, 1.0f, 0.3f, approachSpeed);
+	float forwardSpeed;
+
+	if (goal != NULL) {
+		forwardSpeed = Math::map(ballDistance, 0.0f, 1.0f, 0.3f, approachSpeed);
+	} else {
+		// be more careful when goal not visible
+		forwardSpeed = Math::map(ballDistance, 0.0f, 1.0f, 0.1f, approachSpeed);
+	}
 
 	ai->dbg("ballDistance", ballDistance);
 	ai->dbg("forwardSpeed", forwardSpeed);
 	ai->dbg("enterVelocity", enterVelocity);
+
+	if (ballDistance < nearDistance) {
+		robot->dribbler->start();
+	}
 
 	robot->setTargetDir(forwardSpeed, 0.0f);
 	robot->lookAt(ball);
@@ -904,8 +920,6 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 		enterDistance = ballDistance;
 	}
 
-	
-	
 	//float approachP = 1.5f;
 	//float sideP = 0.5f;
 	//float sideP = 0.5f;
@@ -1003,7 +1017,7 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 
 		if (stateDuration > searchPeriod) {
 			float approachOwnGoalBackwardsSpeed = 1.0f;
-			float approachOwnGoalSideSpeed = 0.5f;
+			//float approachOwnGoalSideSpeed = 0.5f;
 			float accelerationPeriod = 0.5f;
 			float reverseDuration = 1.5f;
 

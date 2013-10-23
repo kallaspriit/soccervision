@@ -1058,7 +1058,7 @@ Dash.UI.prototype.showTasksQueue = function(state) {
 };
 
 Dash.UI.prototype.showStateStats = function(state) {
-	$('#time').html(Dash.Util.round(state.totalTime, 1) + 's / ' + Dash.Util.round(state.dt * 1000, 1) + 'ms / ' + state.fps + 'FPS / ' + Math.round(this.rxCounter.getLastFPS()) + 'FPS');
+	$('#time').html(Dash.Util.round(state.totalTime, 1) + 's / ' + Dash.Util.round(state.dt * 1000, 1) + 'ms / ' + state.fps + 'FPS / ' + Math.round(this.rxCounter.getLastFPS()) + 'PPS');
 	//$('#load > SPAN').css('width', Math.ceil(state.load) + '%');
 	
 	if (state.gotBall) {
