@@ -977,10 +977,12 @@ void TestController::AimState::onEnter(Robot* robot) {
 	avoidBallSide = TargetMode::UNDECIDED;
 	searchGoalDir = 0.0f;
 	foundOwnGoalTime = -1.0;
+	reversed = false;
 }
 
 void TestController::AimState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration) {
 	robot->stop();
+	robot->dribbler->start();
 
 	ai->dbg("gotBall", robot->dribbler->gotBall());
 	
@@ -990,13 +992,23 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 		return;
 	}
 
-	robot->dribbler->start();
+	if (robot->hasTasks()) {
+		return;
+	}
 	
 	Object* goal = visionResults->getLargestGoal(ai->targetSide, Dir::FRONT);
 
 	ai->dbg("goalVisible", goal != NULL);
 
 	if (goal == NULL) {
+		if (!reversed) {
+			robot->setTargetDirFor(-0.25f, 0.0f, 0.0f, 2.0f);
+
+			reversed = true;
+
+			return;
+		}
+
 		float searchPeriod = Config::robotSpinAroundDribblerPeriod;
 
 		if (searchGoalDir == 0.0f) {
