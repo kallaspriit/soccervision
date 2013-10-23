@@ -673,7 +673,7 @@ void TestController::FetchBallDirectState::step(float dt, Vision::Results* visio
 	float approachSpeed = 2.0f;
 	float nearDistance = 0.3f;
 	float ballDistance = ball->getDribblerDistance();
-	float forwardSpeed = Math::map(ballDistance, 0.0f, 1.0f, 0.3f, approachSpeed);
+	float forwardSpeed = Math::map(ballDistance, 0.0f, 1.5f, 0.2f, approachSpeed);
 
 	ai->dbg("ballDistance", ballDistance);
 	ai->dbg("forwardSpeed", forwardSpeed);

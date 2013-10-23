@@ -87,7 +87,7 @@ Dash.Renderer.prototype.showDriveTo = function() {
 	this.driveToOrientation = 0.0;
 };
 
-Dash.Renderer.prototype.drawRobot = function(radius, color, x, y, orientation) {
+Dash.Renderer.prototype.drawRobot = function(radius, color, x, y, orientation, gotBall) {
 	this.c.save();
 	
 	this.c.translate(x, y);
@@ -97,12 +97,20 @@ Dash.Renderer.prototype.drawRobot = function(radius, color, x, y, orientation) {
 	this.c.arc(0, 0, radius, 0, Math.PI * 2, true); 
 	this.c.closePath();
 	this.c.fill();
-	
+
 	var dirHeight = radius / 5;
-	
-	
+
 	this.c.fillStyle = '#FFF';
 	this.c.fillRect(0, -dirHeight / 2.0, radius, dirHeight);
+
+	if (gotBall) {
+		//this.c.fillStyle = '#FFA500';
+		this.c.fillStyle = '#FF0000';
+		this.c.beginPath();
+		this.c.arc(radius, 0, dash.config.ball.radius * 2, 0, Math.PI * 2, true);
+		this.c.closePath();
+		this.c.fill();
+	}
 	
 	this.c.restore();
 };
@@ -303,16 +311,17 @@ Dash.Renderer.prototype.renderState = function(state) {
 		state.targetSide == 1 ? '#00F' : state.targetSide == 0 ? '#DD0' : '#CCC',
 		state.robot.localizerX,
 		state.robot.localizerY,
-		state.robot.localizerOrientation
+		state.robot.localizerOrientation,
+		state.robot.gotBall
 	);
 
-	this.drawRobot(
+	/*this.drawRobot(
 		dash.config.robot.radius / 2,
 		'#900',
 		state.robot.odometerX,
 		state.robot.odometerY,
 		state.robot.odometerOrientation
-	);
+	);*/
 
 	this.drawPath(state, '#060');
 
