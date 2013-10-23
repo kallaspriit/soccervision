@@ -942,7 +942,7 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	//float sideSpeed = sideP * Math::sign(ball->distanceX) * Math::map(Math::abs(Math::radToDeg(ball->angle)), 0.0f, nearMaxSideSpeedAngle, 0.0f, 1.0f);
 	float maxSideSpeedDistance = Math::map(ballDistance, 0.1f, 0.5f, 0.05f, 0.2f);
 	float sideP = Math::map(ballDistance, 0.1f, enterDistance, 0.2f, 0.5f);
-	float approachP = Math::map(ballDistance, 0.1f, enterDistance, 0.5f, enterVelocity);
+	float approachP = Math::map(ballDistance, 0.1f, enterDistance, 0.5f, Math::max(enterVelocity, minAllowedApproachSpeed));
 	float sidePower = Math::map(Math::abs(ball->distanceX), 0.0f, maxSideSpeedDistance, 0.0f, 1.0f);
 	float sideSpeed = sideP * Math::sign(ball->distanceX) * sidePower;
 	float forwardSpeed = approachP * (1.0f - sidePower);
