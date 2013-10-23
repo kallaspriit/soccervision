@@ -977,7 +977,7 @@ void TestController::AimState::onEnter(Robot* robot) {
 	avoidBallSide = TargetMode::UNDECIDED;
 	searchGoalDir = 0.0f;
 	foundOwnGoalTime = -1.0;
-	reversed = false;
+	reverseTime = 0.0f;
 }
 
 void TestController::AimState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration) {
@@ -999,12 +999,22 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 	Object* goal = visionResults->getLargestGoal(ai->targetSide, Dir::FRONT);
 
 	ai->dbg("goalVisible", goal != NULL);
+	ai->dbg("reverseTime", reverseTime);
+
+	float reversePeriod = 1.5f;
+	float accelerationPeriod = 1.5f;
+	float reverseSpeed = 1.0f;
 
 	if (goal == NULL) {
-		if (!reversed) {
-			robot->setTargetDirFor(-0.25f, 0.0f, 0.0f, 2.0f);
+		// TODO Perhaps only do this when in corner / white line is close
+		if (reverseTime < reversePeriod) {
+			float acceleratedReverseSpeed = Math::map(reverseTime, 0, accelerationPeriod, 0.0f, 1.0f);
 
-			reversed = true;
+			robot->setTargetDir(-acceleratedReverseSpeed, 0.0f, 0.0f);
+
+			reverseTime += dt;
+
+			ai->dbg("acceleratedReverseSpeed", acceleratedReverseSpeed);
 
 			return;
 		}
@@ -1021,12 +1031,11 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 
 		robot->spinAroundDribbler(searchGoalDir == -1.0f, searchPeriod);
 
-		// start searching for own goal after half a rotation
-		if (stateDuration > searchPeriod / 2.0f) {
-			float approachOwnGoalBackwardsSpeed = 1.0f;
+		// start searching for own goal after almost full rotation
+		if (stateDuration > searchPeriod / 1.5f) {
 			//float approachOwnGoalSideSpeed = 0.5f;
-			float accelerationPeriod = 1.5f;
 			float reverseDuration = 1.5f;
+			float approachOwnGoalMinDistance = 2.0f;
 
 			if (stateDuration > searchPeriod + reverseDuration) {
 				ai->setState("aim");
@@ -1039,14 +1048,14 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 
 			Object* ownGoal = visionResults->getLargestGoal(ownSide, Dir::REAR);
 
-			if (ownGoal != NULL) {
+			if (ownGoal != NULL && ownGoal->distance > approachOwnGoalMinDistance) {
 				if (foundOwnGoalTime == -1.0) {
 					foundOwnGoalTime = Util::millitime();
 				}
 
 				double timeSinceFoundOwnGoal = Util::duration(foundOwnGoalTime);
 				float accelerationMultiplier = Math::map((float)timeSinceFoundOwnGoal, 0, accelerationPeriod, 0.0f, 1.0f);
-				float acceleratedBackwardsSpeed = -approachOwnGoalBackwardsSpeed * accelerationMultiplier;
+				float acceleratedBackwardsSpeed = -reverseSpeed * accelerationMultiplier;
 
 				robot->setTargetDir(
 					acceleratedBackwardsSpeed,

@@ -171,7 +171,7 @@ public:
 
 	public:
 		void onEnter(Robot* robot);
-		AimState(TestController* ai) : State(ai), lastKickTime(-1.0), foundOwnGoalTime(-1.0), avoidBallSide(TargetMode::UNDECIDED), searchGoalDir(0.0f), reversed(false) {}
+		AimState(TestController* ai) : State(ai), lastKickTime(-1.0), foundOwnGoalTime(-1.0), avoidBallSide(TargetMode::UNDECIDED), searchGoalDir(0.0f), reverseTime(0.0f) {}
 		void step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration);
 
 	private:
@@ -179,7 +179,7 @@ public:
 		double foundOwnGoalTime;
 		TargetMode avoidBallSide;
 		float searchGoalDir;
-		bool reversed;
+		float reverseTime;
 
 	};
 
