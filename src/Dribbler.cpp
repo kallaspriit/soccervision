@@ -4,12 +4,24 @@
 
 #include <iostream>
 
-Dribbler::Dribbler(int id) : Wheel(id), ballDetected(false), ballInDribblerTime(0.0), ballLostTime(-1.0) {
+Dribbler::Dribbler(int id) : Wheel(id), ballDetected(false), ballInDribblerTime(0.0), ballLostTime(-1.0f), stopRequestedTime(-1.0) {
 
 };
 
+void Dribbler::stop() {
+	stopRequestedTime = Util::millitime();
+}
+
 void Dribbler::step(float dt) {
 	Wheel::step(dt);
+
+	double delayStopPeriod = 1.0;
+
+	if (stopRequestedTime != -1.0 && Util::duration(stopRequestedTime) >= delayStopPeriod) {
+		setTargetOmega(0);
+
+		stopRequestedTime = -1.0;
+	}
 
 	if (ballDetected) {
 		ballInDribblerTime += dt;

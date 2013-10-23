@@ -10,7 +10,7 @@ public:
 	Dribbler(int id);
 
 	void start() { setTargetSpeed(-Config::robotDribblerSpeed); }
-	void stop() { setTargetOmega(0); }
+	void stop();
 	bool isActive() const { return targetOmega > 0; }
 	bool gotBall() const;
 	bool handleCommand(const Command& cmd);
@@ -26,6 +26,7 @@ private:
 	bool ballDetected;
 	float ballInDribblerTime;
 	float ballLostTime;
+	double stopRequestedTime;
 
 };
 
