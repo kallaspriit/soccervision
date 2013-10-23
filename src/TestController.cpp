@@ -983,6 +983,7 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 void TestController::AimState::onEnter(Robot* robot) {
 	avoidBallSide = TargetMode::UNDECIDED;
 	searchGoalDir = 0.0f;
+	foundOwnGoalTime = -1.0;
 }
 
 void TestController::AimState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration) {
@@ -1018,7 +1019,7 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 		if (stateDuration > searchPeriod) {
 			float approachOwnGoalBackwardsSpeed = 1.0f;
 			//float approachOwnGoalSideSpeed = 0.5f;
-			float accelerationPeriod = 0.5f;
+			float accelerationPeriod = 1.0f;
 			float reverseDuration = 1.5f;
 
 			if (stateDuration > searchPeriod + reverseDuration) {
@@ -1032,16 +1033,26 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 
 			Object* ownGoal = visionResults->getLargestGoal(ownSide, Dir::REAR);
 
-			float accelerationMultiplier = Math::map(stateDuration, searchPeriod, searchPeriod + accelerationPeriod, 0.0f, 1.0f);
-
 			if (ownGoal != NULL) {
+				if (foundOwnGoalTime == -1.0) {
+					foundOwnGoalTime = Util::millitime();
+				}
+
+				double timeSinceFoundOwnGoal = Util::duration(foundOwnGoalTime);
+				float accelerationMultiplier = Math::map((float)timeSinceFoundOwnGoal, 0, accelerationPeriod, 0.0f, 1.0f);
+				float acceleratedBackwardsSpeed = -approachOwnGoalBackwardsSpeed * accelerationMultiplier;
+
 				robot->setTargetDir(
-					-approachOwnGoalBackwardsSpeed * accelerationMultiplier,
+					acceleratedBackwardsSpeed,
 					//approachOwnGoalSideSpeed * (ownGoal->angle > 0.0f ? 1.0f : -1.0f) * accelerationMultiplier,
 					0.0f,
 					0.0f
 				);
 				robot->lookAtBehind(ownGoal);
+
+				ai->dbg("timeSinceFoundOwnGoal", timeSinceFoundOwnGoal);
+				ai->dbg("accelerationMultiplier", accelerationMultiplier);
+				ai->dbg("acceleratedBackwardsSpeed", acceleratedBackwardsSpeed);
 			}
 		}
 
