@@ -248,7 +248,7 @@ void SoccerBot::run() {
 				running = false;
 			}
 		}
-
+		
 		/*if (fpsCounter->frameNumber % 60 == 0) {
 			std::cout << "! FPS: " << fpsCounter->getFps() << std::endl;
 		}*/
