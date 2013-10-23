@@ -1031,7 +1031,7 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 		robot->spinAroundDribbler(searchGoalDir == -1.0f, searchPeriod);
 
 		// start searching for own goal after almost full rotation
-		if (stateDuration > searchPeriod / 1.5f) {
+		if (stateDuration > searchPeriod / 1.5f + reversePeriod) {
 			//float approachOwnGoalSideSpeed = 0.5f;
 			float reverseDuration = 1.5f;
 			float approachOwnGoalMinDistance = 2.0f;
