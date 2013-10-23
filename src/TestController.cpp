@@ -433,14 +433,14 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 			}
 		} else if (lastTurnTime == -1.0 || Util::duration(lastTurnTime) >= minTurnBreak) {
 			float turnAngle = ball->angle;
-			//float underturnAngle = Math::degToRad(60.0f);
+			float underturnAngle = Math::degToRad(45.0f);
 			float turnSpeed = Math::TWO_PI;
 
 			if (turnAngle < 0.0f) {
-				//turnAngle += underturnAngle;
+				turnAngle += underturnAngle;
 				searchDir = -1.0f;
 			} else {
-				//turnAngle -= underturnAngle;
+				turnAngle -= underturnAngle;
 				searchDir = 1.0f;
 			}
 
