@@ -975,6 +975,9 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 	ai->dbg("goalVisible", goal != NULL);
 
 	if (goal == NULL) {
+		float searchPeriod = Config::robotSpinAroundDribblerPeriod;
+		float approachOwnGoalSpeed = 0.5f;
+
 		if (searchGoalDir == 0.0f) {
 			if (ai->lastTargetGoalAngle > 0.0f) {
 				searchGoalDir = 1.0f;
@@ -983,7 +986,19 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 			}
 		}
 
-		robot->spinAroundDribbler(searchGoalDir == -1.0f);
+		robot->spinAroundDribbler(searchGoalDir == -1.0f, searchPeriod);
+
+		if (stateDuration > searchPeriod) {
+			// didn't find our goal in time, search for opponent goal and drive towards it instead
+			Side ownSide = ai->targetSide == Side::YELLOW ? Side::BLUE : Side::YELLOW;
+
+			Object* ownGoal = visionResults->getLargestGoal(ownSide, Dir::REAR);
+
+			if (ownGoal != NULL) {
+				robot->setTargetDir(-approachOwnGoalSpeed, 0.0f, 0.0f);
+				robot->lookAt(ownGoal);
+			}
+		}
 
 		return;
 	}

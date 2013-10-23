@@ -249,9 +249,9 @@ void SoccerBot::run() {
 			}
 		}
 
-		if (fpsCounter->frameNumber % 60 == 0) {
+		/*if (fpsCounter->frameNumber % 60 == 0) {
 			std::cout << "! FPS: " << fpsCounter->getFps() << std::endl;
-		}
+		}*/
 
 		handleServerMessages();
 		handleCommunicationMessages();
