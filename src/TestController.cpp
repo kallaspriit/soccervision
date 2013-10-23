@@ -1001,14 +1001,13 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 	ai->dbg("goalVisible", goal != NULL);
 	ai->dbg("reverseTime", reverseTime);
 
-	float reversePeriod = 1.5f;
-	float accelerationPeriod = 1.5f;
-	float reverseSpeed = 1.0f;
+	float reversePeriod = 1.0f;
 
 	if (goal == NULL) {
 		// TODO Perhaps only do this when in corner / white line is close
 		if (reverseTime < reversePeriod) {
-			float acceleratedReverseSpeed = Math::map(reverseTime, 0, accelerationPeriod, 0.0f, 1.0f);
+			float reverseSpeed = 0.5f;
+			float acceleratedReverseSpeed = reverseSpeed * Math::map(reverseTime, 0, reversePeriod, 0.0f, 1.0f);
 
 			robot->setTargetDir(-acceleratedReverseSpeed, 0.0f, 0.0f);
 
@@ -1036,6 +1035,8 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 			//float approachOwnGoalSideSpeed = 0.5f;
 			float reverseDuration = 1.5f;
 			float approachOwnGoalMinDistance = 2.0f;
+			float accelerationPeriod = 1.5f;
+			float reverseSpeed = 1.0f;
 
 			if (stateDuration > searchPeriod + reverseDuration) {
 				ai->setState("aim");
@@ -1055,10 +1056,10 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 
 				double timeSinceFoundOwnGoal = Util::duration(foundOwnGoalTime);
 				float accelerationMultiplier = Math::map((float)timeSinceFoundOwnGoal, 0, accelerationPeriod, 0.0f, 1.0f);
-				float acceleratedBackwardsSpeed = -reverseSpeed * accelerationMultiplier;
+				float acceleratedReverseSpeed = -reverseSpeed * accelerationMultiplier;
 
 				robot->setTargetDir(
-					acceleratedBackwardsSpeed,
+					acceleratedReverseSpeed,
 					//approachOwnGoalSideSpeed * (ownGoal->angle > 0.0f ? 1.0f : -1.0f) * accelerationMultiplier,
 					0.0f,
 					0.0f
@@ -1067,7 +1068,7 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 
 				ai->dbg("timeSinceFoundOwnGoal", timeSinceFoundOwnGoal);
 				ai->dbg("accelerationMultiplier", accelerationMultiplier);
-				ai->dbg("acceleratedBackwardsSpeed", acceleratedBackwardsSpeed);
+				ai->dbg("acceleratedBackwardsSpeed", acceleratedReverseSpeed);
 			}
 		}
 
