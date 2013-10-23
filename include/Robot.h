@@ -50,6 +50,8 @@ public:
 
 	void lookAt(Object* object);
 	void lookAt(const Math::Angle& angle);
+	void lookAtBehind(Object* object);
+	void lookAtBehind(const Math::Angle& angle);
 	void turnBy(float angle, float speed = 1.0f);
     void driveTo(float x, float y, float orientation, float speed = 1.0f);
     void driveFacing(float targetX, float targetY, float faceX, float faceY, float speed = 1.0f);

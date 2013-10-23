@@ -24,6 +24,7 @@ void TestController::setupStates() {
 	states["manual-control"] = new ManualControlState(this);
 	states["watch-ball"] = new WatchBallState(this);
 	states["watch-goal"] = new WatchGoalState(this);
+	states["watch-goal-behind"] = new WatchGoalBehindState(this);
 	states["spin-around-dribbler"] = new SpinAroundDribblerState(this);
 	states["drive-to"] = new DriveToState(this);
 	states["turn-by"] = new TurnByState(this);
@@ -331,6 +332,19 @@ void TestController::WatchGoalState::step(float dt, Vision::Results* visionResul
 
 	robot->setTargetDir(ai->manualSpeedX, ai->manualSpeedY);
 	robot->lookAt(goal);
+}
+
+void TestController::WatchGoalBehindState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration) {
+	Object* goal = visionResults->getLargestGoal(ai->targetSide, Dir::REAR);
+
+	if (goal == NULL) {
+		robot->setTargetDir(ai->manualSpeedX, ai->manualSpeedY, ai->manualOmega);
+
+		return;
+	}
+
+	robot->setTargetDir(ai->manualSpeedX, ai->manualSpeedY);
+	robot->lookAtBehind(goal);
 }
 
 void TestController::SpinAroundDribblerState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration) {
@@ -996,7 +1010,7 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 
 			if (ownGoal != NULL) {
 				robot->setTargetDir(-approachOwnGoalSpeed, 0.0f, 0.0f);
-				robot->lookAt(ownGoal);
+				robot->lookAtBehind(ownGoal);
 			}
 		}
 

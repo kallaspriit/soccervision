@@ -391,6 +391,19 @@ void Robot::lookAt(Object* object) {
 void Robot::lookAt(const Math::Angle& angle) {
 	setTargetOmega(Math::limit(angle.rad() * Config::lookAtP, Config::lookAtMaxOmega));
 }
+
+void Robot::lookAtBehind(Object* object) {
+    if (object == NULL) {
+		return;
+	}
+
+	lookAtBehind(Math::Rad(object->angle));
+}
+
+void Robot::lookAtBehind(const Math::Angle& angle) {
+	lookAt(Math::Rad(angle.rad() + Math::PI));
+}
+
 void Robot::turnBy(float angle, float speed) {
     addTask(new TurnByTask(angle, speed));
 }
