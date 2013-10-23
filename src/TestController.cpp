@@ -990,7 +990,6 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 
 	if (goal == NULL) {
 		float searchPeriod = Config::robotSpinAroundDribblerPeriod;
-		float approachOwnGoalSpeed = 0.5f;
 
 		if (searchGoalDir == 0.0f) {
 			if (ai->lastTargetGoalAngle > 0.0f) {
@@ -1008,8 +1007,18 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 
 			Object* ownGoal = visionResults->getLargestGoal(ownSide, Dir::REAR);
 
+			float approachOwnGoalBackwardsSpeed = 1.0f;
+			float approachOwnGoalSideSpeed = 0.5f;
+			float accelerationPeriod = 0.5f;
+
+			float accelerationMultiplier = Math::map(stateDuration, searchPeriod, searchPeriod + accelerationPeriod, 0.0f, 1.0f);
+
 			if (ownGoal != NULL) {
-				robot->setTargetDir(-approachOwnGoalSpeed, 0.0f, 0.0f);
+				robot->setTargetDir(
+					-approachOwnGoalBackwardsSpeed * accelerationMultiplier,
+					approachOwnGoalSideSpeed * (ownGoal->angle > 0.0f ? 1.0f : -1.0f) * accelerationMultiplier,
+					0.0f
+				);
 				robot->lookAtBehind(ownGoal);
 			}
 		}
