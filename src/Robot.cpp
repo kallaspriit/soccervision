@@ -404,7 +404,7 @@ void Robot::lookAtBehind(const Math::Angle& angle) {
 	float targetAngle;
 
 	if (angle.rad() > 0.0f) {
-		targetAngle = Math::PI - angle.rad();
+		targetAngle = angle.rad() - Math::PI;
 	} else {
 		targetAngle = angle.rad() + Math::PI;
 	}
