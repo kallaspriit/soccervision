@@ -1191,7 +1191,8 @@ void TestController::AccelerateState::step(float dt, Vision::Results* visionResu
 
 	forwardSpeed = Math::getAcceleratedSpeed(currentSpeed, targetApproachSpeed);
 
-	robot->setTargetDir(forwardSpeed, 0.0f);
+	//robot->setTargetDir(forwardSpeed, 0.0f);
+	robot->setTargetDir(0.5f, 0.0f);
 	robot->lookAt(ball);
 
 	ai->dbg("currentSpeed", currentSpeed);
@@ -1199,4 +1200,5 @@ void TestController::AccelerateState::step(float dt, Vision::Results* visionResu
 	ai->dbg("brakeDistance", brakeDistance);
 	ai->dbg("targetApproachSpeed", targetApproachSpeed);
 	ai->dbg("forwardSpeed", forwardSpeed);
+	ai->dbg("dt", dt);
 }
