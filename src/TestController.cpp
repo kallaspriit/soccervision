@@ -1168,6 +1168,10 @@ float TestController::DriveCircleState::getCircleTargetAngle(float start, float 
 	return targetAngle;
 }
 
+void TestController::AccelerateState::onEnter(Robot* robot) {
+	currentSpeed = robot->getVelocity();
+}
+
 void TestController::AccelerateState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration) {
 	Object* ball = visionResults->getClosestBall(Dir::FRONT);
 
@@ -1177,7 +1181,7 @@ void TestController::AccelerateState::step(float dt, Vision::Results* visionResu
 
 	float targetApproachSpeed = 2.0f;
 	float acceleration = 2.0f;
-	float currentSpeed = robot->getVelocity();
+	float realSpeed = robot->getVelocity();
 	float ballDistance = ball->getDribblerDistance();
 	float brakeDistance = Math::getAccelerationDistance(currentSpeed, 0.0f, acceleration);
 	float forwardSpeed;
@@ -1191,10 +1195,12 @@ void TestController::AccelerateState::step(float dt, Vision::Results* visionResu
 	}
 
 	forwardSpeed = Math::getAcceleratedSpeed(currentSpeed, targetApproachSpeed, dt, acceleration);
+	currentSpeed = forwardSpeed;
 
 	robot->setTargetDir(forwardSpeed, 0.0f);
 	robot->lookAt(ball);
 
+	ai->dbg("realSpeed", realSpeed);
 	ai->dbg("currentSpeed", currentSpeed);
 	ai->dbg("ballDistance", ballDistance);
 	ai->dbg("brakeDistance", brakeDistance);
