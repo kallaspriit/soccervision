@@ -193,6 +193,14 @@ public:
 		static float getCircleTargetAngle(float start, float time, float period);
 
 	};
+
+	class AccelerateState : public State {
+
+	public:
+		AccelerateState(TestController* ai) : State(ai) {}
+		void step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration);
+
+	};
 	
 	TestController(Robot* robot, Communication* com);
 	~TestController();

@@ -178,6 +178,9 @@ namespace Config {
 	// maximum acceleration/deacceleration the robot should attempt
 	const float robotMaxAcceleration = 1.0f;
 
+	// maximum attempted approach speed
+	const float robotMaxApproachSpeed = 2.0f;
+
 	// default kick strength in microseconds
 	const int robotDefaultKickStrength = 10000;
 

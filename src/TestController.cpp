@@ -35,6 +35,7 @@ void TestController::setupStates() {
 	states["fetch-ball-near"] = new FetchBallNearState(this);
 	states["aim"] = new AimState(this);
 	states["drive-circle"] = new DriveCircleState(this);
+	states["accelerate"] = new AccelerateState(this);
 }
 
 void TestController::step(float dt, Vision::Results* visionResults) {
@@ -1165,4 +1166,29 @@ float TestController::DriveCircleState::getCircleTargetAngle(float start, float 
 	float targetAngle = atan2(targetY, targetX);
 
 	return targetAngle;
+}
+
+void TestController::AccelerateState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration) {
+	Object* ball = visionResults->getClosestBall(Dir::FRONT);
+
+	if (ball == NULL) {
+		return;
+	}
+
+	float targetApproachSpeed = 2.0f;
+	float currentSpeed = robot->getVelocity();
+	float ballDistance = ball->getDribblerDistance();
+	float brakeDistance = Math::getBrakeDistance(currentSpeed, 0.0f);
+	float forwardSpeed;
+
+	if (ballDistance < brakeDistance) {
+		float brakeAcceleration = Math::getAcceleration(currentSpeed, 0.0f, brakeDistance);
+
+		targetApproachSpeed = currentSpeed + brakeAcceleration * dt;
+	}
+
+	forwardSpeed = Math::getAcceleratedSpeed(currentSpeed, targetApproachSpeed);
+
+	robot->setTargetDir(forwardSpeed, 0.0f);
+	robot->lookAt(ball);
 }

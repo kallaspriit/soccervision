@@ -387,7 +387,7 @@ static float getAngleBetween(Math::Position pointA, Math::Position pointB, float
 	return angle;
 };
 
-static float getAcceleratedSpeed(float currentSpeed, float targetSpeed, float dt = 0.16666f, float acceleration = Config::robotMaxAcceleration) {
+static float getAcceleratedSpeed(float currentSpeed = 0.0f, float targetSpeed = Config::robotMaxApproachSpeed, float dt = 0.16666f, float acceleration = Config::robotMaxAcceleration) {
 	float speedDifference = targetSpeed - currentSpeed;
 	float maxChange = acceleration * dt;
 	float change;
@@ -402,7 +402,7 @@ static float getAcceleratedSpeed(float currentSpeed, float targetSpeed, float dt
 	return currentSpeed + change;
 }
 
-static float getBrakeDistance(float currentSpeed, float finalSpeed, float acceleration){
+static float getBrakeDistance(float currentSpeed, float finalSpeed, float acceleration = Config::robotMaxAcceleration){
 	return (Math::pow(finalSpeed, 2.0f) - Math::pow(currentSpeed, 2.0f)) / (2.0f * acceleration);
 }
 
