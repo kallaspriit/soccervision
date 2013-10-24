@@ -402,7 +402,11 @@ static float getAcceleratedSpeed(float currentSpeed = 0.0f, float targetSpeed = 
 	return currentSpeed + change;
 }
 
-static float getBrakeDistance(float currentSpeed, float finalSpeed, float acceleration = Config::robotMaxAcceleration){
+static float getAccelerationDistance(float currentSpeed, float finalSpeed, float acceleration = Config::robotMaxAcceleration) {
+	if (finalSpeed < currentSpeed) {
+		acceleration *= -1.0f;
+	}
+
 	return (Math::pow(finalSpeed, 2.0f) - Math::pow(currentSpeed, 2.0f)) / (2.0f * acceleration);
 }
 
