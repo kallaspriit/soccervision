@@ -1,6 +1,8 @@
 #ifndef MATHS_H
 #define MATHS_H
 
+#include "Config.h"
+
 #include <stdio.h>
 #include <math.h>
 #include <vector>
@@ -384,6 +386,30 @@ static float getAngleBetween(Math::Position pointA, Math::Position pointB, float
 
 	return angle;
 };
+
+static float getAcceleratedSpeed(float currentSpeed, float targetSpeed, float dt = 0.16666f, float acceleration = Config::robotMaxAcceleration) {
+	float speedDifference = targetSpeed - currentSpeed;
+	float maxChange = acceleration * dt;
+	float change;
+
+	if (speedDifference > 0){
+		change = Math::min(maxChange, speedDifference);
+	}
+	else{
+		change = Math::max(-maxChange, speedDifference);
+	}
+
+	return currentSpeed + change;
+}
+
+static float getBrakeDistance(float currentSpeed, float finalSpeed, float acceleration){
+	return (Math::pow(finalSpeed, 2.0f) - Math::pow(currentSpeed, 2.0f)) / (2.0f * acceleration);
+}
+
+//Get acceleration needed for change in speed (while travelling a certain distance)
+static float getAcceleration(float currentSpeed, float finalSpeed, float distance){
+	return (Math::pow(finalSpeed, 2.0f) - Math::pow(currentSpeed, 2.0f)) / (2.0f * distance);
+}
 
 } // namespace Math
 

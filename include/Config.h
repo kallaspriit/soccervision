@@ -175,6 +175,9 @@ namespace Config {
 	const float robotLocalizerDistanceNoise = 0.35f;
 	const float robotLocalizerAngleNoise = 0.2f; // ~~11deg
 
+	// maximum acceleration/deacceleration the robot should attempt
+	const float robotMaxAcceleration = 1.0f;
+
 	// default kick strength in microseconds
 	const int robotDefaultKickStrength = 10000;
 

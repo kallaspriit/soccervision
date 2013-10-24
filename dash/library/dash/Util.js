@@ -80,4 +80,20 @@ Dash.Util.map = function(value, inMin, inMax, outMin, outMax) {
 	}
 
 	return (value - inMin) * (outMax - outMin) / (inMax - inMin) + outMin;
+};
+
+Dash.Util.getSpeed = function(currentSpeed, targetSpeed, dt, acceleration){
+	var changeToTarget = targetSpeed - currentSpeed;
+	var maxChange = acceleration * dt;
+
+	var change;
+
+	if (changeToTarget > 0){
+		change = Math.min(maxChange, changeToTarget);
+	}
+	else{
+		change = Math.max(-maxChange, changeToTarget);
+	}
+
+	return currentSpeed + change;
 }

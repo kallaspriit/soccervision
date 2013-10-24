@@ -8,6 +8,10 @@ Dribbler::Dribbler(int id) : Wheel(id), ballDetected(false), ballInDribblerTime(
 
 };
 
+void Dribbler::start() {
+	setTargetSpeed(-Config::robotDribblerSpeed);
+}
+
 void Dribbler::stop() {
 	stopRequestedTime = Util::millitime();
 }
