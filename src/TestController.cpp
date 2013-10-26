@@ -467,7 +467,7 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 				}
 
 				ai->dbg("turnAngle", Math::radToDeg(turnAngle));
-				ai->dbg("turnSpeed", Math::radToDeg(turnSpeed));
+				ai->dbg("turnSpeed", turnSpeed);
 				ai->dbg("searchDir", searchDir);
 
 				robot->turnBy(turnAngle, turnSpeed);
@@ -902,6 +902,8 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 		
 		float goalBallDistance = goalPos.getDistanceTo(ballPos);
 
+		ai->dbg("goalBallDistance", goalBallDistance);
+
 		if (goalBallDistance < minFetchBehindGoalBallDistance) {
 			//if (lastTurnTime == -1.0 || Util::duration(lastTurnTime) >= minTurnBreak) {
 				float turnAngle = ball->angle;
@@ -917,7 +919,7 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 				}
 
 				ai->dbg("turnAngle", Math::radToDeg(turnAngle));
-				ai->dbg("turnSpeed", Math::radToDeg(turnSpeed));
+				ai->dbg("turnSpeed", turnSpeed);
 				//ai->dbg("searchDir", searchDir);
 
 				robot->turnBy(turnAngle, turnSpeed);
@@ -927,8 +929,6 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 				return;
 			//}
 		}
-
-		ai->dbg("goalBallDistance", goalBallDistance);
 	}
 
 	//float targetAngle = ai->getTargetAngle(goal->distanceX, goal->distanceY * (goal->behind ? -1.0f : 1.0f), ball->distanceX, ball->distanceY * (ball->behind ? -1.0f : 1.0f), offsetDistance, TargetMode::RIGHT);
