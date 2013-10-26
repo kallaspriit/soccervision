@@ -197,8 +197,8 @@ public:
 	class AccelerateState : public State {
 
 	public:
+		AccelerateState(TestController* ai) : State(ai), forwardSpeed(0.0f) {}
 		void onEnter(Robot* robot);
-		AccelerateState(TestController* ai) : State(ai) {}
 		void step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration);
 
 	private:
