@@ -73,7 +73,7 @@ public:
 
 	public:
 		DriveToState(TestController* ai) : State(ai), x(Config::fieldWidth / 2.0f), y(Config::fieldHeight / 2.0f), orientation(0.0f) {}
-		void onEnter(Robot* robot);
+		void onEnter(Robot* robot, Parameters parameters);
 		void step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration);
 
 		float x;
@@ -86,7 +86,7 @@ public:
 
 	public:
 		TurnByState(TestController* ai) : State(ai), angle(0.0f) {}
-		void onEnter(Robot* robot);
+		void onEnter(Robot* robot, Parameters parameters);
 		void step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration);
 
 		float angle;
@@ -96,7 +96,7 @@ public:
 	class FindBallState : public State {
 
 	public:
-		void onEnter(Robot* robot);
+		void onEnter(Robot* robot, Parameters parameters);
 		FindBallState(TestController* ai) : State(ai), searchDir(1.0f), lastTurnTime(-1.0) {}
 		void step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration);
 
@@ -110,7 +110,7 @@ public:
 
 	public:
 		FetchBallFrontState(TestController* ai) : State(ai), forwardSpeed(0.0f), startBrakingDistance(-1.0f), startBrakingVelocity(-1.0f), lastBallDistance(-1.0f) {}
-		void onEnter(Robot* robot);
+		void onEnter(Robot* robot, Parameters parameters);
 		void step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration);
 
 	private:
@@ -127,7 +127,7 @@ public:
 
 	public:
 		FetchBallDirectState(TestController* ai) : State(ai), forwardSpeed(0.0f), nearLine(false) {}
-		void onEnter(Robot* robot);
+		void onEnter(Robot* robot, Parameters parameters);
 		void step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration);
 
 	private:
@@ -140,7 +140,7 @@ public:
 
 	public:
 		FetchBallBehindState(TestController* ai) : State(ai), hadBall(false), lastTargetAngle(0.0f), lostBallTime(-1.0), timeSinceLostBall(0.0), lostBallVelocity(0.0f), startBallDistance(-1.0f), targetMode(TargetMode::UNDECIDED), avgBallGoalDistance(10) {}
-		void onEnter(Robot* robot);
+		void onEnter(Robot* robot, Parameters parameters);
 		void step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration);
 
 	private:
@@ -159,7 +159,7 @@ public:
 
 	public:
 		FetchBallNearState(TestController* ai) : State(ai), enterDistance(-1.0f), enterVelocity(0.0f), enterBallDistance(-1.0f), smallestForwardSpeed(-1.0f) {}
-		void onEnter(Robot* robot);
+		void onEnter(Robot* robot, Parameters parameters);
 		void step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration);
 
 	private:
@@ -173,7 +173,7 @@ public:
 	class AimState : public State {
 
 	public:
-		void onEnter(Robot* robot);
+		void onEnter(Robot* robot, Parameters parameters);
 		AimState(TestController* ai) : State(ai), lastKickTime(-1.0), foundOwnGoalTime(-1.0), avoidBallSide(TargetMode::UNDECIDED), searchGoalDir(0.0f), performReverse(Decision::UNDECIDED), reverseTime(0.0f) {}
 		void step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration);
 
@@ -202,7 +202,7 @@ public:
 
 	public:
 		AccelerateState(TestController* ai) : State(ai), forwardSpeed(0.0f) {}
-		void onEnter(Robot* robot);
+		void onEnter(Robot* robot, Parameters parameters);
 		void step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration);
 
 	private:

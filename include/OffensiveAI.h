@@ -34,7 +34,7 @@ public:
 
 	public:
 		FindBallState(OffensiveAI* ai) : State(ai) {}
-		void onEnter(Robot* robot);
+		void onEnter(Robot* robot, Parameters parameters);
 		void onExit(Robot* robot);
 		void step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration);
 

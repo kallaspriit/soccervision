@@ -13,6 +13,12 @@ BaseAI::~BaseAI() {
 }
 
 void BaseAI::setState(std::string state) {
+	Parameters parameters;
+
+	setState(state, parameters);
+}
+
+void BaseAI::setState(std::string state, Parameters parameters) {
 	if (states.find(state) == states.end()) {
 		std::cout << "- Invalid state '" << state << "' requested" << std::endl;
 
@@ -31,7 +37,7 @@ void BaseAI::setState(std::string state) {
 
 	currentStateDuration = 0.0f;
 
-	newState->onEnter(robot);
+	newState->onEnter(robot, parameters);
 
 	currentState = newState;
 	currentStateName = state;

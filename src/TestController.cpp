@@ -372,7 +372,7 @@ void TestController::SpinAroundDribblerState::step(float dt, Vision::Results* vi
 	robot->spinAroundDribbler();
 }
 
-void TestController::DriveToState::onEnter(Robot* robot) {
+void TestController::DriveToState::onEnter(Robot* robot, Parameters parameters) {
 	robot->driveTo(x, y, orientation);
 }
 
@@ -382,7 +382,7 @@ void TestController::DriveToState::step(float dt, Vision::Results* visionResults
 	}
 }
 
-void TestController::TurnByState::onEnter(Robot* robot) {
+void TestController::TurnByState::onEnter(Robot* robot, Parameters parameters) {
 	robot->turnBy(angle, Math::PI);
 }
 
@@ -392,7 +392,7 @@ void TestController::TurnByState::step(float dt, Vision::Results* visionResults,
 	}
 }
 
-void TestController::FindBallState::onEnter(Robot* robot) {
+void TestController::FindBallState::onEnter(Robot* robot, Parameters parameters) {
 	if (ai->lastTargetGoalAngle > 0.0f) {
 		searchDir = 1.0f;
 	} else {
@@ -484,7 +484,7 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 	robot->setTargetOmega(searchOmega * searchDir);
 }
 
-void TestController::FetchBallFrontState::onEnter(Robot* robot) {
+void TestController::FetchBallFrontState::onEnter(Robot* robot, Parameters parameters) {
 	reset(robot);
 }
 
@@ -644,7 +644,7 @@ void TestController::FetchBallFrontState::step(float dt, Vision::Results* vision
 	ai->dbg("lookAngle", Math::radToDeg(lookAngle));
 }
 
-void TestController::FetchBallDirectState::onEnter(Robot* robot) {
+void TestController::FetchBallDirectState::onEnter(Robot* robot, Parameters parameters) {
 	forwardSpeed = robot->getVelocity();
 	nearLine = false;
 }
@@ -657,6 +657,12 @@ void TestController::FetchBallDirectState::step(float dt, Vision::Results* visio
 		ai->dbgs("action", "Switch to aim");
 
 		robot->dribbler->start();
+
+		Parameters parameters;
+
+		if (nearLine) {
+			parameters["near-line"] = "1";
+		}
 
 		ai->setState("aim");
 
@@ -746,7 +752,7 @@ void TestController::FetchBallDirectState::step(float dt, Vision::Results* visio
 	ai->dbg("dt", dt);
 }
 
-void TestController::FetchBallBehindState::onEnter(Robot* robot) {
+void TestController::FetchBallBehindState::onEnter(Robot* robot, Parameters parameters) {
 	hadBall = false;
 	lastTargetAngle = 0.0f;
 	lostBallTime = -1.0;
@@ -975,7 +981,7 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 	lastTargetAngle = targetAngle;
 }
 
-void TestController::FetchBallNearState::onEnter(Robot* robot) {
+void TestController::FetchBallNearState::onEnter(Robot* robot, Parameters parameters) {
 	enterVelocity = robot->getVelocity();
 	enterDistance = -1.0f;
 	enterBallDistance = -1.0f;
@@ -1090,7 +1096,7 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	robot->lookAt(goal);
 }
 
-void TestController::AimState::onEnter(Robot* robot) {
+void TestController::AimState::onEnter(Robot* robot, Parameters parameters) {
 	avoidBallSide = TargetMode::UNDECIDED;
 	performReverse = Decision::UNDECIDED;
 	searchGoalDir = 0.0f;
@@ -1317,7 +1323,7 @@ float TestController::DriveCircleState::getCircleTargetAngle(float start, float 
 	return targetAngle;
 }
 
-void TestController::AccelerateState::onEnter(Robot* robot) {
+void TestController::AccelerateState::onEnter(Robot* robot, Parameters parameters) {
 	forwardSpeed = robot->getVelocity();
 }
 
