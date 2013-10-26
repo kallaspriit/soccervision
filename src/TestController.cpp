@@ -700,6 +700,7 @@ void TestController::FetchBallDirectState::step(float dt, Vision::Results* visio
 	float minApproachSpeed = 0.3f;
 	float accelerateAcceleration = 3.0f;
 	float brakeAcceleration = 2.0f;
+	float nearLineDistance = 0.35f;
 	float realSpeed = robot->getVelocity();
 	float ballDistance = ball->getDribblerDistance();
 	float brakeDistance = Math::getAccelerationDistance(forwardSpeed, 0.0f, brakeAcceleration);
@@ -715,6 +716,16 @@ void TestController::FetchBallDirectState::step(float dt, Vision::Results* visio
 	}
 
 	forwardSpeed = Math::max(Math::getAcceleratedSpeed(forwardSpeed, targetApproachSpeed, dt, accelerateAcceleration), minApproachSpeed);
+
+	// limit the speed low near the white-black line to avoid driving the ball out
+	if (
+		visionResults->front->whiteDistance != -1.0f && visionResults->front->whiteDistance < nearLineDistance
+		&& visionResults->front->blackDistance != -1.0f && visionResults->front->blackDistance < nearLineDistance
+	) {
+		forwardSpeed = 0.2f;
+
+		ai->dbg("lineLimited", true);
+	}
 
 	robot->setTargetDir(forwardSpeed, 0.0f);
 	robot->lookAt(ball);
@@ -897,7 +908,7 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 
 	// make sure we don't reverse into our own goal
 	if (ownGoal != NULL) {
-		float minFetchBehindGoalBallDistance = 0.8f;
+		float minFetchBehindGoalBallDistance = 0.6f;
 
 		Math::Point goalPos = Math::Point(ownGoal->distanceX, ownGoal->distanceY);
 		Math::Point ballPos = Math::Point(ball->distanceX, ball->distanceY);
