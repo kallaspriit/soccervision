@@ -1138,15 +1138,18 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 
 	float avoidBallSpeed = 0.5f;
 	float minBallAvoidSideSpeed = 0.25f;
+	float maxRobotKickOmega = Math::PI / 4.0f;
+	double minKickInterval = 1.0;
 	int halfWidth = Config::cameraWidth / 2;
 	int leftEdge = goal->x - goal->width / 2;
 	int rightEdge = goal->x + goal->width / 2;
 	int goalKickThresholdPixels = (int)((float)goal->width * Config::goalKickThreshold);
 	double timeSinceLastKick = lastKickTime != 0.0 ? Util::duration(lastKickTime) : -1.0;
 	bool isBallInWay = visionResults->isBallInWay(visionResults->front->balls, goal->y + goal->height / 2);
-	bool shouldKick = false;
 	float forwardSpeed = 0.0f;
 	float sideSpeed = 0.0f;
+	bool validWindow = false;
+	bool isKickTooSoon = lastKickTime != -1.0 && timeSinceLastKick < minKickInterval;
 
 	if (isBallInWay) {
 		if (avoidBallSide == TargetMode::UNDECIDED) {
@@ -1166,12 +1169,27 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 			leftEdge + goalKickThresholdPixels < halfWidth
 			&& rightEdge - goalKickThresholdPixels > halfWidth
 		) {
-			shouldKick = true;
+			validWindow = true;
 		}
 	}
 
-	ai->dbg("shouldKick", shouldKick);
+	bool isRobotOmegaLowEnough = Math::abs(robot->getOmega()) <= maxRobotKickOmega;
+	bool performKick = validWindow && !isKickTooSoon && isBallInWay && isRobotOmegaLowEnough;
+
+	if (performKick) {
+		robot->kick();
+
+		lastKickTime = Util::millitime();
+	} else {
+		robot->setTargetDir(forwardSpeed, sideSpeed);
+		robot->lookAt(goal);
+	}
+
+	ai->dbg("performKick", performKick);
+	ai->dbg("validWindow", validWindow);
+	ai->dbg("isKickTooSoon", isKickTooSoon);
 	ai->dbg("isBallInWay", isBallInWay);
+	ai->dbg("isRobotOmegaLowEnough", isRobotOmegaLowEnough);
 	ai->dbg("avoidBallSide", avoidBallSide);
 	ai->dbg("leftEdge", leftEdge);
 	ai->dbg("rightEdge", rightEdge);
@@ -1186,14 +1204,6 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 	ai->dbg("robotOmega", robot->getOmega());
 	ai->dbgs("performReverse", (performReverse == Decision::YES ? "yes" : performReverse == Decision::NO ? "no" : "undecided"));
 
-	if (shouldKick && !isBallInWay && (lastKickTime == -1.0 || timeSinceLastKick >= 1.0)) {
-		robot->kick();
-
-		lastKickTime = Util::millitime();
-	} else {
-		robot->setTargetDir(forwardSpeed, sideSpeed);
-		robot->lookAt(goal);
-	}
 }
 
 void TestController::DriveCircleState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration) {
