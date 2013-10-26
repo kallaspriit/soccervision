@@ -451,25 +451,29 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 				ai->setState("fetch-ball-direct");
 			}
 		} else if (lastTurnTime == -1.0 || Util::duration(lastTurnTime) >= minTurnBreak) {
-			float turnAngle = ball->angle;
-			float underturnAngle = Math::degToRad(45.0f);
-			float turnSpeed = Math::TWO_PI;
-
-			if (turnAngle < 0.0f) {
-				turnAngle += underturnAngle;
-				searchDir = -1.0f;
+			if (goal != NULL) {
+				ai->setState("fetch-ball-behind");
 			} else {
-				turnAngle -= underturnAngle;
-				searchDir = 1.0f;
+				float turnAngle = ball->angle;
+				float underturnAngle = Math::degToRad(45.0f);
+				float turnSpeed = Math::TWO_PI;
+
+				if (turnAngle < 0.0f) {
+					turnAngle += underturnAngle;
+					searchDir = -1.0f;
+				} else {
+					turnAngle -= underturnAngle;
+					searchDir = 1.0f;
+				}
+
+				ai->dbg("turnAngle", Math::radToDeg(turnAngle));
+				ai->dbg("turnSpeed", Math::radToDeg(turnSpeed));
+				ai->dbg("searchDir", searchDir);
+
+				robot->turnBy(turnAngle, turnSpeed);
+
+				lastTurnTime = Util::millitime();
 			}
-
-			ai->dbg("turnAngle", Math::radToDeg(turnAngle));
-			ai->dbg("turnSpeed", Math::radToDeg(turnSpeed));
-			ai->dbg("searchDir", searchDir);
-
-			robot->turnBy(turnAngle, turnSpeed);
-
-			lastTurnTime = Util::millitime();
 
 			return;
 		}
