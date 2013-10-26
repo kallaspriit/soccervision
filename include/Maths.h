@@ -336,41 +336,60 @@ typedef std::vector<Point> PointList;
 typedef std::vector<Point>::iterator PointListIt;
 
 class Polygon {
-    public:
-        Polygon();
-        Polygon(const PointList& points);
 
-        void addPoint(float x, float y);
-        void addPoint(Point point);
-        bool containsPoint(float x, float y) const;
-        Polygon getTranslated(float dx, float dy) const;
-        Polygon getScaled(float sx, float sy) const;
-        Polygon getRotated(float angle) const;
-		std::string toJSON();
+public:
+    Polygon();
+    Polygon(const PointList& points);
 
-    private:
-        PointList points;
+    void addPoint(float x, float y);
+    void addPoint(Point point);
+    bool containsPoint(float x, float y) const;
+    Polygon getTranslated(float dx, float dy) const;
+    Polygon getScaled(float sx, float sy) const;
+    Polygon getRotated(float angle) const;
+	std::string toJSON();
+
+private:
+    PointList points;
+
 };
 
 class Circle {
-	public:
-		struct Intersections {
-			Intersections() : exist(false), x1(-1), y1(-1), x2(-1), y2(-1) {}
 
-			bool exist;
-			float x1;
-			float y1;
-			float x2;
-			float y2;
-		};
+public:
+	struct Intersections {
+		Intersections() : exist(false), x1(-1), y1(-1), x2(-1), y2(-1) {}
 
-		Circle(float x, float y, float radius) : x(x), y(y), radius(radius) {}
+		bool exist;
+		float x1;
+		float y1;
+		float x2;
+		float y2;
+	};
 
-		Intersections getIntersections(const Circle& other);
+	Circle(float x, float y, float radius) : x(x), y(y), radius(radius) {}
 
-		float x;
-		float y;
-		float radius;
+	Intersections getIntersections(const Circle& other);
+
+	float x;
+	float y;
+	float radius;
+
+};
+
+class Avg {
+
+public:
+	Avg(int sampleCount = 10) : sampleCount(sampleCount) {}
+	void add(float sample);
+	float value();
+	int size() { return samples.size(); }
+	bool full() { return size() == sampleCount; }
+
+private:
+	int sampleCount;
+	std::vector<float> samples;
+
 };
 
 static float getAngleBetween(Math::Position pointA, Math::Position pointB, float orientationB) {

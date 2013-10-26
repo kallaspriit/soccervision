@@ -327,4 +327,22 @@ Circle::Intersections Circle::getIntersections(const Circle& other) {
 	return intersections;
 };
 
+void Avg::add(float sample) {
+	samples.push_back(sample);
+
+	if ((int)samples.size() > sampleCount) {
+		samples.erase(samples.begin(), samples.begin() + 1);
+	}
+}
+
+float Avg::value() {
+	float total = 0;
+
+	for  (std::vector<float>::const_iterator it = samples.begin(); it != samples.end(); it++) {
+		total += *it;
+	}
+
+	return total / samples.size();
+}
+
 } // namespace Math

@@ -10,10 +10,11 @@
  * + search for goal state
  * + search for ball state
  * + avoid kicking through another ball
- * - improve aiming while spinning around dribbler
+ * + improve aiming while spinning around dribbler
  * - make it brake less/smarter for fetch front
  * - improve fetch behind not to reconsider so much (complete maneuver?)
  * - decrease fetch direct speed if white-black close (nearby line)
+ * - move while aiming if other robot in the way
  */
 
 TestController::TestController(Robot* robot, Communication* com) : BaseAI(robot, com), targetSide(Side::BLUE), manualSpeedX(0.0f), manualSpeedY(0.0f), manualOmega(0.0f), manualDribblerSpeed(0), manualKickStrength(0), blueGoalDistance(0.0f), yellowGoalDistance(0.0f), lastCommandTime(0.0), lastTargetGoalAngle(0.0f), whiteDistance(-1.0f), blackDistance(-1.0f) {
@@ -903,9 +904,14 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 		
 		float goalBallDistance = goalPos.getDistanceTo(ballPos);
 
-		ai->dbg("goalBallDistance", goalBallDistance);
+		avgBallGoalDistance.add(goalBallDistance);
 
-		if (goalBallDistance < minFetchBehindGoalBallDistance) {
+		ai->dbg("goalBallDistance", goalBallDistance);
+		ai->dbg("avgBallGoalDistance", avgBallGoalDistance.value());
+		ai->dbg("avgBallGoalDistanceSize", avgBallGoalDistance.size());
+		ai->dbg("avgBallGoalDistanceFull", avgBallGoalDistance.full());
+
+		if (avgBallGoalDistance.full() && avgBallGoalDistance.value() < minFetchBehindGoalBallDistance) {
 			//if (lastTurnTime == -1.0 || Util::duration(lastTurnTime) >= minTurnBreak) {
 				float turnAngle = ball->angle;
 				float underturnAngle = Math::degToRad(45.0f);
