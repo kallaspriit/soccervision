@@ -176,7 +176,7 @@ namespace Config {
 	const float robotLocalizerAngleNoise = 0.2f; // ~~11deg
 
 	// maximum acceleration/deacceleration the robot should attempt
-	const float robotMaxAcceleration = 1.0f;
+	const float robotMaxAcceleration = 2.0f;
 
 	// maximum attempted approach speed
 	const float robotMaxApproachSpeed = 2.0f;
