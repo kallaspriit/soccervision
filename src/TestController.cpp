@@ -618,9 +618,7 @@ void TestController::FetchBallFrontState::step(float dt, Vision::Results* vision
 }
 
 void TestController::FetchBallDirectState::onEnter(Robot* robot) {
-	float minAllowedApproachSpeed = 0.5f;
-
-	enterVelocity = Math::max(robot->getVelocity(), minAllowedApproachSpeed);
+	forwardSpeed = robot->getVelocity();
 }
 
 void TestController::FetchBallDirectState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration) {
@@ -671,21 +669,37 @@ void TestController::FetchBallDirectState::step(float dt, Vision::Results* visio
 		return;
 	}
 
-	float approachSpeed = 2.0f;
-	float nearDistance = 0.3f;
+	float targetApproachSpeed = 3.0f;
+	float minApproachSpeed = 0.3f;
+	float accelerateAcceleration = 2.0f;
+	float brakeAcceleration = 2.0f;
+	float realSpeed = robot->getVelocity();
 	float ballDistance = ball->getDribblerDistance();
-	float forwardSpeed = Math::map(ballDistance, 0.0f, 1.5f, 0.2f, approachSpeed);
+	float brakeDistance = Math::getAccelerationDistance(forwardSpeed, 0.0f, brakeAcceleration);
 
-	ai->dbg("ballDistance", ballDistance);
-	ai->dbg("forwardSpeed", forwardSpeed);
-	ai->dbg("enterVelocity", enterVelocity);
+	if (ballDistance < brakeDistance) {
+		float brakingAcceleration = Math::getAcceleration(forwardSpeed, 0.0f, brakeDistance);
 
-	if (ballDistance < nearDistance) {
+		targetApproachSpeed = forwardSpeed + brakingAcceleration * dt;
+
+		ai->dbg("brakingAcceleration", brakingAcceleration);
+
 		robot->dribbler->start();
 	}
 
+	forwardSpeed = Math::max(Math::getAcceleratedSpeed(forwardSpeed, targetApproachSpeed, dt, accelerateAcceleration), minApproachSpeed);
+
 	robot->setTargetDir(forwardSpeed, 0.0f);
 	robot->lookAt(ball);
+
+	ai->dbg("realSpeed", realSpeed);
+	ai->dbg("ballDistance", ballDistance);
+	ai->dbg("brakeDistance", brakeDistance);
+	ai->dbg("targetApproachSpeed", targetApproachSpeed);
+	ai->dbg("forwardSpeed", forwardSpeed);
+	ai->dbg("brakeAcceleration", brakeAcceleration);
+	ai->dbg("accelerateAcceleration", accelerateAcceleration);
+	ai->dbg("dt", dt);
 }
 
 void TestController::FetchBallBehindState::onEnter(Robot* robot) {
