@@ -664,7 +664,7 @@ void TestController::FetchBallDirectState::step(float dt, Vision::Results* visio
 			parameters["near-line"] = "1";
 		}
 
-		ai->setState("aim");
+		ai->setState("aim", parameters);
 
 		return;
 	}

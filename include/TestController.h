@@ -17,7 +17,7 @@ public:
 
 	typedef std::map<std::string, std::string> Messages;
 	typedef Messages::iterator MessagesIt;
-	typedef std::map<int, std::string> Parameters;
+	typedef std::map<int, std::string> Params;
 
 	class State : public BaseAI::State {
 
@@ -257,7 +257,7 @@ private:
 
 	double lastCommandTime;
 
-	Parameters parameters;
+	Params parameters;
 	Messages messages;
 
 };
