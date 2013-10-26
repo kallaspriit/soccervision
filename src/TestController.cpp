@@ -646,6 +646,7 @@ void TestController::FetchBallFrontState::step(float dt, Vision::Results* vision
 
 void TestController::FetchBallDirectState::onEnter(Robot* robot) {
 	forwardSpeed = robot->getVelocity();
+	nearLine = false;
 }
 
 void TestController::FetchBallDirectState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration) {
@@ -720,10 +721,14 @@ void TestController::FetchBallDirectState::step(float dt, Vision::Results* visio
 
 	// limit the speed low near the white-black line to avoid driving the ball out
 	if (
-		visionResults->front->whiteDistance != -1.0f && visionResults->front->whiteDistance < nearLineDistance
-		&& visionResults->front->blackDistance != -1.0f && visionResults->front->blackDistance < nearLineDistance
+		nearLine
+		|| (
+			visionResults->front->whiteDistance != -1.0f && visionResults->front->whiteDistance < nearLineDistance
+			&& visionResults->front->blackDistance != -1.0f && visionResults->front->blackDistance < nearLineDistance
+		)
 	) {
 		forwardSpeed = nearLineSpeed;
+		nearLine = true;
 
 		ai->dbg("lineLimited", true);
 	}

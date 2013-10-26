@@ -126,12 +126,13 @@ public:
 	class FetchBallDirectState : public State {
 
 	public:
-		FetchBallDirectState(TestController* ai) : State(ai), forwardSpeed(0.0f) {}
+		FetchBallDirectState(TestController* ai) : State(ai), forwardSpeed(0.0f), nearLine(false) {}
 		void onEnter(Robot* robot);
 		void step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration);
 
 	private:
 		float forwardSpeed;
+		bool nearLine;
 
 	};
 
