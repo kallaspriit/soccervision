@@ -67,7 +67,7 @@ public:
 
 private:
 	void setupXimeaCamera(std::string name, XimeaCamera* camera);
-	bool fetchFrame(BaseCamera* camera, ProcessThread* processor);
+	//bool fetchFrame(BaseCamera* camera, ProcessThread* processor);
 	void broadcastFrame(unsigned char* rgb, unsigned char* classification);
 	void broadcastScreenshots();
 

@@ -142,37 +142,37 @@ void SoccerBot::run() {
 
 		totalTime += dt;
 
-		gotFrontFrame = gotRearFrame = false;
+		//gotFrontFrame = gotRearFrame = false;
 		debugging = frontProcessor->debug = rearProcessor->debug = debugVision || showGui || frameRequested;
 
-		gotFrontFrame = fetchFrame(frontCamera, frontProcessor);
+		/*gotFrontFrame = fetchFrame(frontCamera, frontProcessor);
 		gotRearFrame = fetchFrame(rearCamera, rearProcessor);
 
 		if (!gotFrontFrame && !gotRearFrame && fpsCounter->frameNumber > 0) {
 			//std::cout << "- Didn't get any frames from either of the cameras" << std::endl;
 
 			continue;
-		}
+		}*/
 
 		fpsCounter->step();
 
-		if (gotFrontFrame) {
+		//if (gotFrontFrame) {
 			frontProcessor->start();
-		}
+		//}
 
-		if (gotRearFrame) {
+		//if (gotRearFrame) {
 			rearProcessor->start();
-		}
+		//}
 
-		if (gotFrontFrame) {
+		//if (gotFrontFrame) {
 			frontProcessor->join();
 			visionResults->front = frontProcessor->visionResult;
-		}
+		//}
 
-		if (gotRearFrame) {
+		//if (gotRearFrame) {
 			rearProcessor->join();
 			visionResults->rear = rearProcessor->visionResult;
-		}
+		//}
 
 		if (debugging) {
 			Object* closestBall = visionResults->getClosestBall();
@@ -282,7 +282,7 @@ void SoccerBot::run() {
 	std::cout << "! Main loop ended" << std::endl;
 }
 
-bool SoccerBot::fetchFrame(BaseCamera* camera, ProcessThread* processor) {
+/*bool SoccerBot::fetchFrame(BaseCamera* camera, ProcessThread* processor) {
 	if (camera->isAcquisitioning()) {
 		double startTime = Util::millitime();
 		
@@ -290,7 +290,7 @@ bool SoccerBot::fetchFrame(BaseCamera* camera, ProcessThread* processor) {
 		
 		double timeTaken = Util::duration(startTime);
 
-		if (timeTaken > 0.016) {
+		if (timeTaken > 0.02) {
 			std::cout << "- Fetching " << (camera == frontCamera ? "front" : "rear") << " camera frame took: " << timeTaken << std::endl;
 		}
 
@@ -304,7 +304,7 @@ bool SoccerBot::fetchFrame(BaseCamera* camera, ProcessThread* processor) {
 	}
 
 	return false;
-}
+}*/
 
 void SoccerBot::broadcastFrame(unsigned char* rgb, unsigned char* classification) {
 	int jpegBufferSize = Config::jpegBufferSize;
@@ -436,8 +436,8 @@ void SoccerBot::setupVision() {
 void SoccerBot::setupProcessors() {
 	std::cout << "! Setting up processor threads.. ";
 
-	frontProcessor = new ProcessThread(frontBlobber, frontVision);
-	rearProcessor = new ProcessThread(rearBlobber, rearVision);
+	frontProcessor = new ProcessThread(frontCamera, frontBlobber, frontVision);
+	rearProcessor = new ProcessThread(frontCamera, rearBlobber, rearVision);
 
 	std::cout << "done!" << std::endl;
 }

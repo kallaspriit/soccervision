@@ -5,15 +5,16 @@
 #include "Config.h"
 #include "Vision.h"
 
+class BaseCamera;
 class Blobber;
 
 class ProcessThread : public Thread {
 
 public:
-	ProcessThread(Blobber* blobber, Vision* vision);
+	ProcessThread(BaseCamera* camera, Blobber* blobber, Vision* vision);
 	~ProcessThread();
 
-	void setFrame(unsigned char* data) { frame = data; };
+	//void setFrame(unsigned char* data) { frame = data; };
 	bool isDone() { return done; };
 
 	int width;
@@ -22,6 +23,7 @@ public:
 
 	bool debug;
 
+	BaseCamera* camera;
 	Blobber* blobber;
 	Vision* vision;
 	Vision::Result* visionResult;
@@ -37,6 +39,7 @@ public:
 
 private:
 	void* run();
+	bool fetchFrame();
 
 	bool done;
 };

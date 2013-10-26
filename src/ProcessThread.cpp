@@ -3,11 +3,13 @@
 #include "ImageProcessor.h"
 #include "DebugRenderer.h"
 #include "Canvas.h"
+#include "BaseCamera.h"
+#include "Util.h"
 #include "Config.h"
 
 #include <iostream>
 
-ProcessThread::ProcessThread(Blobber* blobber, Vision* vision) : Thread(), dir(dir), blobber(blobber), vision(vision), visionResult(NULL), debug(false), done(true) {
+ProcessThread::ProcessThread(BaseCamera* camera, Blobber* blobber, Vision* vision) : Thread(), dir(dir), camera(camera), blobber(blobber), vision(vision), visionResult(NULL), debug(false), done(true) {
 	frame = NULL;
 	width = blobber->getWidth();
 	height = blobber->getHeight();
@@ -36,6 +38,10 @@ ProcessThread::~ProcessThread() {
 }
 
 void* ProcessThread::run() {
+	if (!fetchFrame()) {
+		return NULL;
+	}
+
 	if (frame == NULL) {
 		return NULL;
 	}
@@ -104,4 +110,28 @@ void* ProcessThread::run() {
 	done = true;
 
 	return NULL;
+}
+
+bool ProcessThread::fetchFrame() {
+	if (camera->isAcquisitioning()) {
+		double startTime = Util::millitime();
+		
+		const BaseCamera::Frame* cameraFrame = camera->getFrame();
+		
+		double timeTaken = Util::duration(startTime);
+
+		if (timeTaken > 0.02) {
+			std::cout << "- Fetching camera frame took: " << timeTaken << std::endl;
+		}
+
+		if (cameraFrame != NULL) {
+			if (cameraFrame->fresh) {
+				frame = cameraFrame->data;
+
+				return true;
+			}
+		}
+	}
+
+	return false;
 }
