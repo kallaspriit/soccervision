@@ -123,7 +123,7 @@ void TestController::handleResetCommand() {
 }
 
 void TestController::handleToggleGoCommand() {
-	if (!toggleGoBtn.toggle() || currentStateName != "manual-controller") {
+	if (!toggleGoBtn.toggle() || currentStateName != "manual-control") {
 		return;
 	}
 
@@ -131,7 +131,7 @@ void TestController::handleToggleGoCommand() {
 }
 
 void TestController::handleToggleSideCommand() {
-	if (!toggleSideBtn.toggle() || currentStateName != "manual-controller") {
+	if (!toggleSideBtn.toggle() || currentStateName != "manual-control") {
 		return;
 	}
 
