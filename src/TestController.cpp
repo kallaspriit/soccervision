@@ -6,7 +6,7 @@
 
 /**
  * TODO
- * +fetch ball straight and search for goal if lost goal at large angle
+ * + fetch ball straight and search for goal if lost goal at large angle
  * + search for goal state
  * + search for ball state
  * + avoid kicking through another ball
@@ -1163,6 +1163,8 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 	ai->dbg("sinceLastKick", timeSinceLastKick);
 	ai->dbg("forwardSpeed", forwardSpeed);
 	ai->dbg("sideSpeed", sideSpeed);
+	ai->dbg("whiteDistance", visionResults->front->whiteDistance);
+	ai->dbgs("performReverse", (performReverse == Decision::YES ? "yes" : performReverse == Decision::NO ? "no" : "undecided"));
 
 	if (shouldKick && !isBallInWay && (lastKickTime == -1.0 || timeSinceLastKick >= 1.0)) {
 		robot->kick();

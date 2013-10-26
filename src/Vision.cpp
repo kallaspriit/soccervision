@@ -152,7 +152,7 @@ ObjectList Vision::processBalls(Dir dir) {
 
 			// TODO Review this
 			if (ball->distance < 0 || ball->distance > 6.5f) {
-				std::cout << "- Skipping ball with invalid distance: " << ball->distance << std::endl;
+				//std::cout << "- Skipping ball with invalid distance: " << ball->distance << std::endl;
 
 				continue;
 			}
