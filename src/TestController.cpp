@@ -1197,7 +1197,7 @@ void TestController::AccelerateState::step(float dt, Vision::Results* visionResu
 	float forwardSpeed;
 
 	if (ballDistance < brakeDistance) {
-		float brakeAcceleration = Math::getAcceleration(currentSpeed, 0.0f, brakeDistance);
+		float brakeAcceleration = Math::getAcceleration(currentSpeed, 0.0f, brakeDistance) * 2.0f; // test 2.0
 
 		targetApproachSpeed = currentSpeed + brakeAcceleration * dt;
 
