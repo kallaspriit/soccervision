@@ -284,9 +284,15 @@ void SoccerBot::run() {
 
 bool SoccerBot::fetchFrame(BaseCamera* camera, ProcessThread* processor) {
 	if (camera->isAcquisitioning()) {
+		double startTime = Util::millitime();
+		
 		const BaseCamera::Frame* frame = camera->getFrame();
+		
+		double timeTaken = Util::duration(startTime);
 
-		//ImageProcessor::loadBitmap("screenshot.bin", frame->data, frame->width * frame->height * 4);
+		if (timeTaken > 0.016) {
+			std::cout << "- Fetching " << (camera == frontCamera ? "front" : "rear") << " camera frame took: " << timeTaken << std::endl;
+		}
 
 		if (frame != NULL) {
 			if (frame->fresh) {
