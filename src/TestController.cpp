@@ -1190,7 +1190,7 @@ void TestController::AccelerateState::step(float dt, Vision::Results* visionResu
 	//float targetApproachSpeed = 2.0f;
 	//float acceleration = 2.0f;
 	float targetApproachSpeed = 3.0f;
-	float acceleration = 3.0f;
+	float acceleration = 2.0f;
 	float realSpeed = robot->getVelocity();
 	float ballDistance = ball->getDribblerDistance();
 	float brakeDistance = Math::getAccelerationDistance(currentSpeed, 0.0f, acceleration);
