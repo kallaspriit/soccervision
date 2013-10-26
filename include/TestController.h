@@ -216,6 +216,7 @@ public:
 	void handleDribblerCommand(const Command& cmd);
 	void handleKickCommand(const Command& cmd);
 	void handleResetCommand();
+	void handleToggleGoCommand();
 	void handleToggleSideCommand();
 	void handleDriveToCommand(const Command& cmd);
 	void handleTurnByCommand(const Command& cmd);

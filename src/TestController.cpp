@@ -70,6 +70,8 @@ bool TestController::handleCommand(const Command& cmd) {
 		setState("manual-control");
     } else if (cmd.name == "reset") {
         handleResetCommand();
+    } else if (cmd.name == "toggle-go") {
+        handleToggleGoCommand();
     } else if (cmd.name == "toggle-side") {
         handleToggleSideCommand();
     } else if (cmd.name == "drive-to" && cmd.parameters.size() == 3) {
@@ -120,8 +122,16 @@ void TestController::handleResetCommand() {
 	setState(currentStateName);
 }
 
+void TestController::handleToggleGoCommand() {
+	if (!toggleGoBtn.toggle() || currentStateName != "manual-controller") {
+		return;
+	}
+
+	setState("find-ball");
+}
+
 void TestController::handleToggleSideCommand() {
-	if (!toggleSideBtn.toggle()) {
+	if (!toggleSideBtn.toggle() || currentStateName != "manual-controller") {
 		return;
 	}
 
