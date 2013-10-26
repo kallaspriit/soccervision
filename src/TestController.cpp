@@ -668,7 +668,7 @@ void TestController::FetchBallDirectState::step(float dt, Vision::Results* visio
 	ai->dbg("ballVisible", ball != NULL);
 	ai->dbg("goalVisible", goal != NULL);
 
-	if (ball != NULL && goal != NULL && !ball->behind) {
+	if (ball != NULL && goal != NULL && !ball->behind && !goal->behind) {
 		ai->dbgs("action", "Switch to fetch front");
 
 		ai->setState("fetch-ball-front");
