@@ -518,7 +518,7 @@ void TestController::FetchBallFrontState::step(float dt, Vision::Results* vision
 		return;
 	}
 
-	float approachSpeed = 2.0f;
+	float targetApproachSpeed = 3.0f;
 	float maxNearSpeed = 1.0f;
 	float startAccelerationDuration = 0.75f;
 	float maxOffsetDistanceAngleDiff = 45.0f;
@@ -531,6 +531,7 @@ void TestController::FetchBallFrontState::step(float dt, Vision::Results* vision
 	float maxVelocityBrakingDistance = 1.5f;
 	float minApproachSpeed = 0.5f;
 	float nearDistance = 0.3f;
+	float accelerateAcceleration = 3.0f;
 
 	float ballDistance = ball->getDribblerDistance();
 	float ballAngle = ball->angle;
@@ -538,7 +539,7 @@ void TestController::FetchBallFrontState::step(float dt, Vision::Results* vision
 	float angleDiff = Math::abs(goalAngle - ballAngle);
 	float offsetDistance = Math::map(Math::radToDeg(angleDiff), 0.0f, maxOffsetDistanceAngleDiff, nearDistance, maxAngleDiffDistance);
 
-	if (ai->parameters[0].length() > 0) approachSpeed = Util::toFloat(ai->parameters[0]);
+	if (ai->parameters[0].length() > 0) targetApproachSpeed = Util::toFloat(ai->parameters[0]);
 	if (ai->parameters[1].length() > 0) offsetDistance = Util::toFloat(ai->parameters[1]);
 	if (ai->parameters[2].length() > 0) startAccelerationDuration = Util::toFloat(ai->parameters[2]);
 
@@ -559,8 +560,8 @@ void TestController::FetchBallFrontState::step(float dt, Vision::Results* vision
 	float targetAngle = ai->getTargetAngle(goal->distanceX, goal->distanceY, ball->distanceX, ball->distanceY, offsetDistance);
 
 	// accelerate in the beginning
-	forwardSpeed = approachSpeed * Math::map(stateDuration, 0.0f, startAccelerationDuration, 0.0f, 1.0f);
-	//forwardSpeed = Math::max(Math::getAcceleratedSpeed(forwardSpeed, targetApproachSpeed, dt, accelerateAcceleration), minApproachSpeed);
+	//forwardSpeed = targetApproachSpeed * Math::map(stateDuration, 0.0f, startAccelerationDuration, 0.0f, 1.0f);
+	forwardSpeed = Math::getAcceleratedSpeed(forwardSpeed, targetApproachSpeed, dt, accelerateAcceleration);
 
 	// only choose the braking distance once
 	if (startBrakingDistance == -1.0f && ballDistance < adaptiveBrakingDistance) {
