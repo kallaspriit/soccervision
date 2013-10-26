@@ -125,7 +125,7 @@ void SoccerBot::run() {
 		return;
 	}
 
-	bool gotFrontFrame, gotRearFrame;
+	//bool gotFrontFrame, gotRearFrame;
 	double time;
 	double debugging;
 
@@ -224,7 +224,7 @@ void SoccerBot::run() {
 
 			gui->setFps(fpsCounter->getFps());
 
-			if (gotFrontFrame) {
+			if (frontProcessor->gotFrame) {
 				gui->setFrontImages(
 					frontProcessor->rgb,
 					frontProcessor->dataYUYV,
@@ -233,7 +233,7 @@ void SoccerBot::run() {
 				);
 			}
 
-			if (gotRearFrame) {
+			if (rearProcessor->gotFrame) {
 				gui->setRearImages(
 					rearProcessor->rgb,
 					rearProcessor->dataYUYV,
