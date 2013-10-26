@@ -1138,7 +1138,7 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 
 	float avoidBallSpeed = 0.5f;
 	float minBallAvoidSideSpeed = 0.25f;
-	float maxRobotKickOmega = Math::PI / 2.0f;
+	float maxRobotKickOmega = Math::PI / 4.0f;
 	double minKickInterval = 1.0;
 	int halfWidth = Config::cameraWidth / 2;
 	int leftEdge = goal->x - goal->width / 2;
