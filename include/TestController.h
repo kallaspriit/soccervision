@@ -202,7 +202,7 @@ public:
 		void step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration);
 
 	private:
-		float currentSpeed;
+		float forwardSpeed;
 
 	};
 	

@@ -1169,7 +1169,7 @@ float TestController::DriveCircleState::getCircleTargetAngle(float start, float 
 }
 
 void TestController::AccelerateState::onEnter(Robot* robot) {
-	currentSpeed = robot->getVelocity();
+	forwardSpeed = robot->getVelocity();
 }
 
 void TestController::AccelerateState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration) {
@@ -1191,30 +1191,28 @@ void TestController::AccelerateState::step(float dt, Vision::Results* visionResu
 	//float acceleration = 2.0f;
 	float targetApproachSpeed = 3.0f;
 	float minApproachSpeed = 0.3f;
-	float acceleration = 2.0f;
+	float acceleration = 2.5f;
 	float realSpeed = robot->getVelocity();
 	float ballDistance = ball->getDribblerDistance();
-	float brakeDistance = Math::getAccelerationDistance(currentSpeed, 0.0f, acceleration);
+	float brakeDistance = Math::getAccelerationDistance(forwardSpeed, 0.0f, acceleration);
 	float forwardSpeed;
 
 	if (ballDistance < brakeDistance) {
-		float brakeAcceleration = Math::getAcceleration(currentSpeed, 0.0f, brakeDistance);
+		float brakeAcceleration = Math::getAcceleration(forwardSpeed, 0.0f, brakeDistance);
 
-		targetApproachSpeed = currentSpeed + brakeAcceleration * dt;
+		targetApproachSpeed = forwardSpeed + brakeAcceleration * dt;
 
 		ai->dbg("brakeAcceleration", brakeAcceleration);
 
 		robot->dribbler->start();
 	}
 
-	forwardSpeed = Math::max(Math::getAcceleratedSpeed(currentSpeed, targetApproachSpeed, dt, acceleration), minApproachSpeed);
-	currentSpeed = forwardSpeed;
+	forwardSpeed = Math::max(Math::getAcceleratedSpeed(forwardSpeed, targetApproachSpeed, dt, acceleration), minApproachSpeed);
 
 	robot->setTargetDir(forwardSpeed, 0.0f);
 	robot->lookAt(ball);
 
 	ai->dbg("realSpeed", realSpeed);
-	ai->dbg("currentSpeed", currentSpeed);
 	ai->dbg("ballDistance", ballDistance);
 	ai->dbg("brakeDistance", brakeDistance);
 	ai->dbg("targetApproachSpeed", targetApproachSpeed);
