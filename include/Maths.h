@@ -408,8 +408,8 @@ static float getAccelerationDistance(float currentSpeed, float finalSpeed, float
 		acceleration *= -1.0f;
 	}
 
-	//return (Math::pow(finalSpeed, 2.0f) - Math::pow(currentSpeed, 2.0f)) / (2.0f * acceleration);
-	return (Math::pow(finalSpeed, 2.0f) - Math::pow(currentSpeed, 2.0f)) / acceleration;
+	return (Math::pow(finalSpeed, 2.0f) - Math::pow(currentSpeed, 2.0f)) / (2.0f * acceleration);
+	//return (Math::pow(finalSpeed, 2.0f) - Math::pow(currentSpeed, 2.0f)) / acceleration;
 }
 
 //Get acceleration needed for change in speed (while travelling a certain distance)

@@ -13,6 +13,7 @@
  * - improve aiming while spinning around dribbler
  * - make it brake less/smarter for fetch front
  * - improve fetch behind not to reconsider so much (complete maneuver?)
+ * - decrease fetch direct speed if white-black close (nearby line)
  */
 
 TestController::TestController(Robot* robot, Communication* com) : BaseAI(robot, com), targetSide(Side::BLUE), manualSpeedX(0.0f), manualSpeedY(0.0f), manualOmega(0.0f), manualDribblerSpeed(0), manualKickStrength(0), blueGoalDistance(0.0f), yellowGoalDistance(0.0f), lastCommandTime(0.0), lastTargetGoalAngle(0.0f), whiteDistance(-1.0f), blackDistance(-1.0f) {
