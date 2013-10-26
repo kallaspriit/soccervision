@@ -1174,7 +1174,7 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 	}
 
 	bool isRobotOmegaLowEnough = Math::abs(robot->getOmega()) <= maxRobotKickOmega;
-	bool performKick = validWindow && !isKickTooSoon && isBallInWay && isRobotOmegaLowEnough;
+	bool performKick = validWindow && !isKickTooSoon && !isBallInWay && isRobotOmegaLowEnough;
 
 	if (performKick) {
 		robot->kick();
