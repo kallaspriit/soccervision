@@ -78,9 +78,9 @@ SoccerBot::~SoccerBot() {
 void SoccerBot::setup() {
 	setupCommunication();
 	setupVision();
-	setupProcessors();
 	setupFpsCounter();
 	setupCameras();
+	setupProcessors();
 	setupRobot();
 	setupControllers();
 	setupSignalHandler();
