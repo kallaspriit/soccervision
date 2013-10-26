@@ -1183,6 +1183,7 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 	ai->dbg("forwardSpeed", forwardSpeed);
 	ai->dbg("sideSpeed", sideSpeed);
 	ai->dbg("whiteDistance", visionResults->front->whiteDistance);
+	ai->dbg("robotOmega", robot->getOmega());
 	ai->dbgs("performReverse", (performReverse == Decision::YES ? "yes" : performReverse == Decision::NO ? "no" : "undecided"));
 
 	if (shouldKick && !isBallInWay && (lastKickTime == -1.0 || timeSinceLastKick >= 1.0)) {
