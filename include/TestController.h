@@ -235,7 +235,7 @@ public:
 
 private:
 	void setupStates();
-	void updateGoalDistances(Vision::Results* visionResults);
+	void updateVisionDebugInfo(Vision::Results* visionResults);
 
 	DebouncedButton toggleGoBtn;
 	DebouncedButton toggleSideBtn;
@@ -250,6 +250,7 @@ private:
 	float blueGoalDistance;
 	float yellowGoalDistance;
 	float lastTargetGoalAngle;
+	float whiteDistance;
 
 	double lastCommandTime;
 

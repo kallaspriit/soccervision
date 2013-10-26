@@ -15,7 +15,7 @@
  * - improve fetch behind not to reconsider so much (complete maneuver?)
  */
 
-TestController::TestController(Robot* robot, Communication* com) : BaseAI(robot, com), targetSide(Side::BLUE), manualSpeedX(0.0f), manualSpeedY(0.0f), manualOmega(0.0f), manualDribblerSpeed(0), manualKickStrength(0), blueGoalDistance(0.0f), yellowGoalDistance(0.0f), lastCommandTime(0.0), lastTargetGoalAngle(0.0f) {
+TestController::TestController(Robot* robot, Communication* com) : BaseAI(robot, com), targetSide(Side::BLUE), manualSpeedX(0.0f), manualSpeedY(0.0f), manualOmega(0.0f), manualDribblerSpeed(0), manualKickStrength(0), blueGoalDistance(0.0f), yellowGoalDistance(0.0f), lastCommandTime(0.0), lastTargetGoalAngle(0.0f), whiteDistance(-1.0f) {
 	setupStates();
 };
 
@@ -42,7 +42,7 @@ void TestController::setupStates() {
 }
 
 void TestController::step(float dt, Vision::Results* visionResults) {
-	updateGoalDistances(visionResults);
+	updateVisionDebugInfo(visionResults);
 	
 	if (currentState == NULL) {
 		setState("manual-control");
@@ -173,7 +173,7 @@ void TestController::handleTurnByCommand(const Command& cmd) {
 	setState("turn-by");
 }
 
-void TestController::updateGoalDistances(Vision::Results* visionResults) {
+void TestController::updateVisionDebugInfo(Vision::Results* visionResults) {
 	Object* blueGoal = visionResults->getLargestGoal(Side::BLUE);
 	Object* yellowGoal = visionResults->getLargestGoal(Side::YELLOW);
 
@@ -185,6 +185,8 @@ void TestController::updateGoalDistances(Vision::Results* visionResults) {
 	} else if (targetSide == Side::YELLOW && yellowGoal != NULL) {
 		lastTargetGoalAngle = yellowGoal->angle;
 	}
+
+	whiteDistance = visionResults->front->whiteDistance;
 }
 
 std::string TestController::getJSON() {
@@ -202,6 +204,7 @@ std::string TestController::getJSON() {
 	stream << "\"stateDuration\": \"" << currentStateDuration << "\",";
 	stream << "\"totalDuration\": \"" << totalDuration << "\",";
 	stream << "\"targetSide\": \"" << (targetSide == Side::BLUE ? "blue" : targetSide == Side::YELLOW ? "yellow" : "not chosen") << "\",";
+	stream << "\"whiteDistance\": " << whiteDistance << ",";
 	stream << "\"blueGoalDistance\": " << blueGoalDistance << ",";
 	stream << "\"yellowGoalDistance\": " << yellowGoalDistance << ",";
 	stream << "\"lastTargetGoalAngle\": " << Math::radToDeg(lastTargetGoalAngle);
