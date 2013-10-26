@@ -993,6 +993,7 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 
 void TestController::AimState::onEnter(Robot* robot) {
 	avoidBallSide = TargetMode::UNDECIDED;
+	performReverse = Decision::UNDECIDED;
 	searchGoalDir = 0.0f;
 	foundOwnGoalTime = -1.0;
 	reverseTime = 0.0f;
@@ -1020,11 +1021,20 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 	ai->dbg("reverseTime", reverseTime);
 
 	float reversePeriod = 1.0f;
+	float performReverseMaxWhiteDistance = 0.3f;
 
 	if (goal == NULL) {
+		if (performReverse == Decision::UNDECIDED) {
+			if (visionResults->front->whiteDistance != -1.0f && visionResults->front->whiteDistance <= performReverseMaxWhiteDistance) {
+				performReverse = Decision::YES;
+			} else {
+				performReverse = Decision::NO;
+			}
+		}
+
 		// TODO Perhaps only do this when in corner / white line is close
-		if (reverseTime < reversePeriod) {
-			float reverseSpeed = 0.5f;
+		if (performReverse == Decision::YES && reverseTime < reversePeriod) {
+			float reverseSpeed = 0.75f;
 			float acceleratedReverseSpeed = reverseSpeed * Math::map(reverseTime, 0, reversePeriod, 0.0f, 1.0f);
 
 			robot->setTargetDir(-acceleratedReverseSpeed, 0.0f, 0.0f);
@@ -1048,8 +1058,14 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 
 		robot->spinAroundDribbler(searchGoalDir == -1.0f, searchPeriod);
 
+		float waitUntilSearchOwnGoalTime = searchPeriod / 1.5f;
+
+		if (performReverse == Decision::YES) {
+			waitUntilSearchOwnGoalTime += reversePeriod;
+		}
+
 		// start searching for own goal after almost full rotation
-		if (stateDuration > searchPeriod / 1.5f + reversePeriod) {
+		if (stateDuration > waitUntilSearchOwnGoalTime) {
 			//float approachOwnGoalSideSpeed = 0.5f;
 			float reverseDuration = 1.5f;
 			float approachOwnGoalMinDistance = 2.0f;

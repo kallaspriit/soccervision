@@ -28,6 +28,7 @@ public:
 		ObjectList balls;
 		ObjectList goals;
 		Obstruction obstructionSide;
+		float whiteDistance;
 		float blackDistance;
 	};
 
@@ -62,7 +63,6 @@ public:
 	bool isViewObstructed() { return obstructionSide != Obstruction::NONE; }
 	Obstruction getObstruction() { return obstructionSide; }
 	Dir getDir() { return dir; }
-	float getBlackDistance() { return blackDistance; }
     Distance getDistance(int x, int y);
 	//float getHorizontalDistance(Dir dir, int x, int y);
     float getAngle(int x, int y);
@@ -105,6 +105,7 @@ private:
     int width;
     int height;
 	Obstruction obstructionSide;
+	float whiteDistance;
 	float blackDistance;
 
 };

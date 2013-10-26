@@ -241,4 +241,10 @@ enum Obstruction {
 	BOTH = 3,
 };
 
+enum Decision {
+	UNDECIDED = 0,
+	YES = 1,
+	NO = -1
+};
+
 #endif // CONFIG_H

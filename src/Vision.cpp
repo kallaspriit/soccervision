@@ -5,7 +5,7 @@
 #include <iostream>
 #include <algorithm>
 
-Vision::Vision(Blobber* blobber, CameraTranslator* cameraTranslator, Dir dir, int width, int height) : blobber(blobber), cameraTranslator(cameraTranslator), dir(dir), width(width), height(height), obstructionSide(Obstruction::NONE), blackDistance(-1.0f) {
+Vision::Vision(Blobber* blobber, CameraTranslator* cameraTranslator, Dir dir, int width, int height) : blobber(blobber), cameraTranslator(cameraTranslator), dir(dir), width(width), height(height), obstructionSide(Obstruction::NONE), blackDistance(-1.0f), whiteDistance(-1.0f) {
     validBallBgColors.push_back("green");
     validBallBgColors.push_back("white");
     validBallBgColors.push_back("black");
@@ -63,6 +63,7 @@ Vision::Result* Vision::process() {
 	}
 
 	result->obstructionSide = obstructionSide;
+	result->whiteDistance = whiteDistance;
 	result->blackDistance = blackDistance;
 
 	return result;
@@ -1562,6 +1563,7 @@ void Vision::updateObstructions() {
 }
 
 void Vision::updateColorDistances() {
+	whiteDistance = getColorDistance("white");
 	blackDistance = getColorDistance("black");
 }
 
