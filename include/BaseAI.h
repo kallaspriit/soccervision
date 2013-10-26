@@ -12,6 +12,8 @@
 class BaseAI : public Controller {
 
 public:
+	typedef std::vector<std::string> Parameters;
+
 	class State {
 
 	public:
