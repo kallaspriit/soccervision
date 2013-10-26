@@ -326,6 +326,7 @@ struct Point {
     Point(float x, float y) : x(x), y(y) {}
     Point() : x(0), y(0) {}
     Point getRotated(float angle) const;
+    float getDistanceTo(Point other) const;
 
     float x;
     float y;

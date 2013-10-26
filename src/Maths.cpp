@@ -195,6 +195,10 @@ Point Point::getRotated(float angle) const {
     );
 }
 
+float Point::getDistanceTo(Point other) const {
+    return Math::sqrt(Math::pow(x - other.x, 2.0f) + Math::pow(y - other.y, 2.0f));
+}
+
 // 2D Polygon
 Polygon::Polygon() {}
 

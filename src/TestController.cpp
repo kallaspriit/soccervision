@@ -808,6 +808,8 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 		if (timeSinceLostBall > maxBlindReverseDuration) {
 			if (ball != NULL) {
 				ai->setState("fetch-ball-front");
+			} else {
+				ai->setState("find-ball");
 			}
 
 			return; // TODO Start searching for new ball
@@ -860,7 +862,7 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 		}
 	}
 
-	if (ai->parameters[0].length() > 0) offsetDistance = Util::toFloat(ai->parameters[0]);
+	/*if (ai->parameters[0].length() > 0) offsetDistance = Util::toFloat(ai->parameters[0]);
 	if (ai->parameters[1].length() > 0) approachP = Util::toFloat(ai->parameters[1]);
 	if (ai->parameters[2].length() > 0) {
 		int targetModeVal = Util::toInt(ai->parameters[2]);
@@ -872,6 +874,19 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 		} else {
 			targetMode = TargetMode::INLINE;
 		}
+	}*/
+
+	Side ownSide = ai->targetSide == Side::YELLOW ? Side::BLUE : Side::YELLOW;
+	Object* ownGoal = visionResults->getLargestGoal(ownSide, Dir::REAR);
+
+	// make sure we don't reverse into our own goal
+	if (ownGoal != NULL) {
+		Math::Point goalPos = Math::Point(ownGoal->distanceX, ownGoal->distanceY);
+		Math::Point ballPos = Math::Point(ball->distanceX, ball->distanceY);
+		
+		float goalBallDistance = goalPos.getDistanceTo(ballPos);
+
+		ai->dbg("goalBallDistance", goalBallDistance);
 	}
 
 	//float targetAngle = ai->getTargetAngle(goal->distanceX, goal->distanceY * (goal->behind ? -1.0f : 1.0f), ball->distanceX, ball->distanceY * (ball->behind ? -1.0f : 1.0f), offsetDistance, TargetMode::RIGHT);
