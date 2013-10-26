@@ -778,6 +778,16 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 	ai->dbg("startBallDistance", startBallDistance);
 	ai->dbg("hadBall", hadBall);
 
+	if (robot->hasTasks()) {
+		if (ball != NULL && !ball->behind) {
+			robot->clearTasks();
+
+			ai->setState("fetch-ball-direct");
+		}
+		
+		return;
+	}
+
 	// only revert to fetch front if not fetching behind blind
 	if (
 		ball != NULL
@@ -881,10 +891,38 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 
 	// make sure we don't reverse into our own goal
 	if (ownGoal != NULL) {
+		float minFetchBehindGoalBallDistance = 0.8f;
+
 		Math::Point goalPos = Math::Point(ownGoal->distanceX, ownGoal->distanceY);
 		Math::Point ballPos = Math::Point(ball->distanceX, ball->distanceY);
 		
 		float goalBallDistance = goalPos.getDistanceTo(ballPos);
+
+		if (goalBallDistance < minFetchBehindGoalBallDistance) {
+			//if (lastTurnTime == -1.0 || Util::duration(lastTurnTime) >= minTurnBreak) {
+				float turnAngle = ball->angle;
+				float underturnAngle = Math::degToRad(45.0f);
+				float turnSpeed = Math::TWO_PI;
+
+				if (turnAngle < 0.0f) {
+					turnAngle += underturnAngle;
+					//searchDir = -1.0f;
+				} else {
+					turnAngle -= underturnAngle;
+					//searchDir = 1.0f;
+				}
+
+				ai->dbg("turnAngle", Math::radToDeg(turnAngle));
+				ai->dbg("turnSpeed", Math::radToDeg(turnSpeed));
+				//ai->dbg("searchDir", searchDir);
+
+				robot->turnBy(turnAngle, turnSpeed);
+
+				//lastTurnTime = Util::millitime();
+
+				return;
+			//}
+		}
 
 		ai->dbg("goalBallDistance", goalBallDistance);
 	}
