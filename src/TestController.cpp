@@ -15,7 +15,7 @@
  * - improve fetch behind not to reconsider so much (complete maneuver?)
  */
 
-TestController::TestController(Robot* robot, Communication* com) : BaseAI(robot, com), targetSide(Side::BLUE), manualSpeedX(0.0f), manualSpeedY(0.0f), manualOmega(0.0f), manualDribblerSpeed(0), manualKickStrength(0), blueGoalDistance(0.0f), yellowGoalDistance(0.0f), lastCommandTime(0.0), lastTargetGoalAngle(0.0f), whiteDistance(-1.0f) {
+TestController::TestController(Robot* robot, Communication* com) : BaseAI(robot, com), targetSide(Side::BLUE), manualSpeedX(0.0f), manualSpeedY(0.0f), manualOmega(0.0f), manualDribblerSpeed(0), manualKickStrength(0), blueGoalDistance(0.0f), yellowGoalDistance(0.0f), lastCommandTime(0.0), lastTargetGoalAngle(0.0f), whiteDistance(-1.0f), blackDistance(-1.0f) {
 	setupStates();
 };
 
@@ -187,6 +187,7 @@ void TestController::updateVisionDebugInfo(Vision::Results* visionResults) {
 	}
 
 	whiteDistance = visionResults->front->whiteDistance;
+	blackDistance = visionResults->front->blackDistance;
 }
 
 std::string TestController::getJSON() {
@@ -205,6 +206,7 @@ std::string TestController::getJSON() {
 	stream << "\"totalDuration\": \"" << totalDuration << "\",";
 	stream << "\"targetSide\": \"" << (targetSide == Side::BLUE ? "blue" : targetSide == Side::YELLOW ? "yellow" : "not chosen") << "\",";
 	stream << "\"whiteDistance\": " << whiteDistance << ",";
+	stream << "\"blackDistance\": " << blackDistance << ",";
 	stream << "\"blueGoalDistance\": " << blueGoalDistance << ",";
 	stream << "\"yellowGoalDistance\": " << yellowGoalDistance << ",";
 	stream << "\"lastTargetGoalAngle\": " << Math::radToDeg(lastTargetGoalAngle);
@@ -1037,11 +1039,15 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 	ai->dbg("reverseTime", reverseTime);
 
 	float reversePeriod = 1.0f;
-	float performReverseMaxWhiteDistance = 0.3f;
+	float performReverseMaxWhiteDistance = 0.35f;
+	float performReverseMaxBlackDistance = 0.4f;
 
 	if (goal == NULL) {
 		if (performReverse == Decision::UNDECIDED) {
-			if (visionResults->front->whiteDistance != -1.0f && visionResults->front->whiteDistance <= performReverseMaxWhiteDistance) {
+			if (
+				visionResults->front->whiteDistance != -1.0f && visionResults->front->whiteDistance <= performReverseMaxWhiteDistance
+				&& visionResults->front->blackDistance != -1.0f && visionResults->front->blackDistance <= performReverseMaxBlackDistance
+			) {
 				performReverse = Decision::YES;
 			} else {
 				performReverse = Decision::NO;

@@ -251,6 +251,7 @@ private:
 	float yellowGoalDistance;
 	float lastTargetGoalAngle;
 	float whiteDistance;
+	float blackDistance;
 
 	double lastCommandTime;
 
