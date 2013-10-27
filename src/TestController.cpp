@@ -465,6 +465,10 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 	float searchOmega = Math::PI;
 	double minTurnBreak = (double)(Math::TWO_PI / searchOmega);
 
+	if (stateDuration > Math::TWO_PI / searchOmega) {
+		searchOmega /= 2.0f;
+	}
+
 	ai->dbg("ballVisible", ball != NULL);
 	ai->dbg("goalVisible", goal != NULL);
 	ai->dbg("searchDir", searchDir);
