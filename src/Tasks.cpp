@@ -437,12 +437,12 @@ bool DriveBehindBallTask::onStep(Robot& robot, float dt) {
 	float sideAccelerationDuration = 0.5f / speed;
 	float deaccelerationDuration = 0.5f;
 	double sideSpeedDelay = ballDistance / speed;
-	float deacceleratedSpeed = Math::map((float)elapsed, 0.0f, deaccelerationDuration, startSpeed, speed);
-	float sideSpeed = side * Math::map((float)(elapsed - sideSpeedDelay), 0.0f, sideAccelerationDuration, 0.0f, speed);
+	float sideSpeed = Math::map((float)(elapsed - sideSpeedDelay), 0.0f, sideAccelerationDuration, 0.0f, speed);
+	float forwardSpeed = Math::map((float)elapsed, 0.0f, deaccelerationDuration, startSpeed, speed) - sideSpeed;
+	
+	Math::Vector dirVector = Math::Vector::createForwardVec(targetAngle, forwardSpeed);
 
-	Math::Vector dirVector = Math::Vector::createForwardVec(targetAngle, deacceleratedSpeed);
-
-	dirVector.y += sideSpeed;
+	dirVector.y += side * sideSpeed;
 
 	robot.setTargetDir(dirVector.x, dirVector.y);
 	//robot.lookAt(goal);
