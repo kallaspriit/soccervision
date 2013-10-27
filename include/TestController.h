@@ -217,6 +217,10 @@ public:
 	TestController(Robot* robot, Communication* com);
 	~TestController();
 
+	void onEnter();
+	void onExit();
+	void reset();
+
     bool handleCommand(const Command& cmd);
 	void handleTargetVectorCommand(const Command& cmd);
 	void handleDribblerCommand(const Command& cmd);

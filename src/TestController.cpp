@@ -19,10 +19,34 @@
 
 TestController::TestController(Robot* robot, Communication* com) : BaseAI(robot, com), targetSide(Side::BLUE), manualSpeedX(0.0f), manualSpeedY(0.0f), manualOmega(0.0f), manualDribblerSpeed(0), manualKickStrength(0), blueGoalDistance(0.0f), yellowGoalDistance(0.0f), lastCommandTime(0.0), lastTargetGoalAngle(0.0f), whiteDistance(-1.0f), blackDistance(-1.0f) {
 	setupStates();
+	reset();
 };
 
 TestController::~TestController() {
 	
+}
+
+void TestController::reset() {
+	std::cout << "! Reset test-controller" << std::endl;
+
+	com->send("reset");
+	targetSide = Side::YELLOW;
+	totalDuration = 0.0f;
+	currentStateDuration = 0.0f;
+	currentState = NULL;
+	currentStateName = "";
+
+	handleToggleSideCommand();
+}
+
+void TestController::onEnter() {
+	std::cout << "! Now using offensive AI algorithm" << std::endl;
+
+	reset();
+}
+
+void TestController::onExit() {
+	reset();
 }
 
 void TestController::setupStates() {
@@ -139,8 +163,12 @@ void TestController::handleToggleSideCommand() {
 
 	if (targetSide == Side::BLUE) {
 		targetSide = Side::YELLOW;
+
+		robot->setPosition(Config::fieldWidth - Config::robotRadius, Config::robotRadius, Math::PI - Math::PI / 4);
 	} else {
 		targetSide = Side::BLUE;
+
+		robot->setPosition(Config::robotRadius, Config::fieldHeight - Config::robotRadius, -Math::PI / 4);
 	}
 
 	std::cout << "! Now targeting " << (targetSide == Side::BLUE ? "blue" : "yellow") << " side" << std::endl;

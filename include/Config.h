@@ -122,6 +122,9 @@ namespace Config {
 	// how much to substract from observed distance to calculate distance from dribbler
 	const float robotDribblerDistance = 0.17f;
 
+	// robot radius
+	const float robotRadius = 0.125f;
+
 	// radius of a wheel
 	const float robotWheelRadius = 0.034f;
 
