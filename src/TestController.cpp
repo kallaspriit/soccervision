@@ -613,7 +613,7 @@ void TestController::FetchBallFrontState::step(float dt, Vision::Results* vision
 	// accelerate in the beginning
 	forwardSpeed = Math::getAcceleratedSpeed(forwardSpeed, targetApproachSpeed, dt, accelerateAcceleration);
 
-	ai->dbg("forwardSpeedFull", forwardSpeed);
+	float limitedSpeed = forwardSpeed;
 
 	// only choose the braking distance once
 	if (startBrakingDistance == -1.0f && ballDistance < adaptiveBrakingDistance) {
@@ -633,9 +633,9 @@ void TestController::FetchBallFrontState::step(float dt, Vision::Results* vision
 			// limit max speed near the ball
 			//float maxSpeed = Math::map(ballDistance, nearDistance, startBrakingDistance, maxNearSpeed, startBrakingVelocity);
 		
-			forwardSpeed = forwardSpeed * (1.0f - combinedBrakeFactor);
+			limitedSpeed = limitedSpeed * (1.0f - combinedBrakeFactor);
 			//forwardSpeed = Math::min(forwardSpeed, maxSpeed);
-			forwardSpeed = Math::max(forwardSpeed, minApproachSpeed);
+			limitedSpeed = Math::max(limitedSpeed, minApproachSpeed);
 
 			ai->dbg("distanceBraking", distanceBraking);
 			ai->dbg("targetAngleBreaking", targetAngleBreaking);
@@ -654,12 +654,13 @@ void TestController::FetchBallFrontState::step(float dt, Vision::Results* vision
 		robot->dribbler->start();
 	}
 
-	robot->setTargetDir(Math::Rad(targetAngle), forwardSpeed);
+	robot->setTargetDir(Math::Rad(targetAngle), limitedSpeed);
 	robot->lookAt(Math::Rad(lookAngle));
 
 	lastBallDistance = ballDistance;
 
 	ai->dbg("forwardSpeed", forwardSpeed);
+	ai->dbg("limitedSpeed", limitedSpeed);
 	ai->dbg("realSpeed", robot->getVelocity());
 	ai->dbg("startBrakingDistance", startBrakingDistance);
 	ai->dbg("startBrakingVelocity", startBrakingVelocity);
