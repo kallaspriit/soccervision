@@ -629,17 +629,17 @@ void TestController::FetchBallFrontState::step(float dt, Vision::Results* vision
 			//float combinedBrakeFactor = brakeP * (distanceBraking + angleBreaking);
 		
 			// limit max speed near the ball
-			float maxSpeed = Math::map(ballDistance, nearDistance, startBrakingDistance, maxNearSpeed, startBrakingVelocity);
+			//float maxSpeed = Math::map(ballDistance, nearDistance, startBrakingDistance, maxNearSpeed, startBrakingVelocity);
 		
 			forwardSpeed = forwardSpeed * (1.0f - combinedBrakeFactor);
-			forwardSpeed = Math::min(forwardSpeed, maxSpeed);
+			//forwardSpeed = Math::min(forwardSpeed, maxSpeed);
 			forwardSpeed = Math::max(forwardSpeed, minApproachSpeed);
 
 			ai->dbg("distanceBraking", distanceBraking);
 			ai->dbg("targetAngleBreaking", targetAngleBreaking);
 			ai->dbg("ballAngleBreaking", ballAngleBreaking);
 			ai->dbg("combinedBrakeFactor", combinedBrakeFactor);
-			ai->dbg("maxSpeed", maxSpeed);
+			//ai->dbg("maxSpeed", maxSpeed);
 		} else if (ballDistance - startBrakingDistance > 0.2f) {
 			reset(robot); // the ball has gone further than when started to brake, may have seen kicked ball, reset
 		}
