@@ -735,14 +735,13 @@ void TestController::FetchBallDirectState::step(float dt, Vision::Results* visio
 	) {
 		forwardSpeed = nearLineSpeed;
 		nearLine = true;
-
-		ai->dbg("lineLimited", true);
 	}
 
 	robot->setTargetDir(forwardSpeed, 0.0f);
 	robot->lookAt(ball);
 
 	ai->dbg("realSpeed", realSpeed);
+	ai->dbg("nearLine", nearLine);
 	ai->dbg("ballDistance", ballDistance);
 	ai->dbg("brakeDistance", brakeDistance);
 	ai->dbg("targetApproachSpeed", targetApproachSpeed);
