@@ -473,11 +473,13 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 	ai->dbg("searchStartDir", searchStartDir);
 
 	if (robot->hasTasks()) {
-		if (ball != NULL && !ball->behind) {
+		/*if (ball != NULL && !ball->behind) {
 			robot->clearTasks();
 		} else {
 			return;
-		}
+		}*/
+
+		return;
 	}
 
 	float searchOmega = Math::PI;
