@@ -339,7 +339,7 @@ bool Vision::isValidBall(Object* ball, Dir dir) {
 	}
 
 	// check that a ball is not seen on the dribbler
-	if (ball->y - ball->height / 2 < Config::cameraHeight - 70) {
+	if (ball->y - ball->height / 2 > Config::cameraHeight - 70) {
 		return false;
 	}
 
