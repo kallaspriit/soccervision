@@ -1102,6 +1102,11 @@ void TestController::AimState::onEnter(Robot* robot, Parameters parameters) {
 	searchGoalDir = 0.0f;
 	foundOwnGoalTime = -1.0;
 	reverseTime = 0.0f;
+	nearLine = false;
+
+	if (parameters.find("near-line") != parameters.end()) {
+		nearLine = true;
+	}
 }
 
 void TestController::AimState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration) {
@@ -1124,6 +1129,7 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 
 	ai->dbg("goalVisible", goal != NULL);
 	ai->dbg("reverseTime", reverseTime);
+	ai->dbg("nearLine", nearLine);
 
 	float reversePeriod = 1.0f;
 	float performReverseMaxWhiteDistance = 0.35f;
@@ -1132,8 +1138,11 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 	if (goal == NULL) {
 		if (performReverse == Decision::UNDECIDED) {
 			if (
-				visionResults->front->whiteDistance != -1.0f && visionResults->front->whiteDistance <= performReverseMaxWhiteDistance
-				&& visionResults->front->blackDistance != -1.0f && visionResults->front->blackDistance <= performReverseMaxBlackDistance
+				nearLine
+				|| (
+					visionResults->front->whiteDistance != -1.0f && visionResults->front->whiteDistance <= performReverseMaxWhiteDistance
+					&& visionResults->front->blackDistance != -1.0f && visionResults->front->blackDistance <= performReverseMaxBlackDistance
+				)
 			) {
 				performReverse = Decision::YES;
 			} else {

@@ -174,17 +174,17 @@ public:
 
 	public:
 		void onEnter(Robot* robot, Parameters parameters);
-		AimState(TestController* ai) : State(ai), lastKickTime(-1.0), foundOwnGoalTime(-1.0), avoidBallSide(TargetMode::UNDECIDED), searchGoalDir(0.0f), performReverse(Decision::UNDECIDED), reverseTime(0.0f) {}
+		AimState(TestController* ai) : State(ai), lastKickTime(-1.0), foundOwnGoalTime(-1.0), avoidBallSide(TargetMode::UNDECIDED), searchGoalDir(0.0f), performReverse(Decision::UNDECIDED), reverseTime(0.0f), nearLine(false) {}
 		void step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration);
 
 	private:
 		double lastKickTime;
 		double foundOwnGoalTime;
-		TargetMode avoidBallSide;
 		float searchGoalDir;
+		TargetMode avoidBallSide;
 		Decision performReverse;
 		float reverseTime;
-
+		bool nearLine;
 	};
 
 	class DriveCircleState : public State {
