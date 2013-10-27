@@ -146,6 +146,7 @@ public:
 	private:
 		bool hadBall;
 		float lastTargetAngle;
+		float searchDir;
 		double lostBallTime;
 		double timeSinceLostBall;
 		float lostBallVelocity;

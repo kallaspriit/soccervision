@@ -393,10 +393,14 @@ void TestController::TurnByState::step(float dt, Vision::Results* visionResults,
 }
 
 void TestController::FindBallState::onEnter(Robot* robot, Parameters parameters) {
-	if (ai->lastTargetGoalAngle > 0.0f) {
-		searchDir = 1.0f;
+	if (parameters.find("search-dir") != parameters.end()) {
+		searchDir = Util::toFloat(parameters["search-dir"]);
 	} else {
-		searchDir = -1.0f;
+		if (ai->lastTargetGoalAngle > 0.0f) {
+			searchDir = 1.0f;
+		} else {
+			searchDir = -1.0f;
+		}
 	}
 
 	lastTurnTime = -1.0;
@@ -735,6 +739,8 @@ void TestController::FetchBallDirectState::step(float dt, Vision::Results* visio
 	) {
 		forwardSpeed = nearLineSpeed;
 		nearLine = true;
+
+		ai->dbg("lineLimited", true);
 	}
 
 	robot->setTargetDir(forwardSpeed, 0.0f);
@@ -758,6 +764,7 @@ void TestController::FetchBallBehindState::onEnter(Robot* robot, Parameters para
 	timeSinceLostBall = 0.0;
 	lostBallVelocity = 0.0f;
 	startBallDistance = -1.0f;
+	searchDir = 0.0f;
 	targetMode = TargetMode::UNDECIDED;
 }
 
@@ -792,7 +799,13 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 		if (ball != NULL && !ball->behind) {
 			ai->setState("fetch-ball-direct");
 		} else {
-			ai->setState("find-ball");
+			Parameters parameters;
+
+			if (searchDir != 0.0f) {
+				parameters["search-dir"] = Util::toString(searchDir);
+			}
+
+			ai->setState("find-ball", parameters);
 		}
 
 		return;
@@ -847,7 +860,13 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 			if (ball != NULL) {
 				ai->setState("fetch-ball-front");
 			} else {
-				ai->setState("find-ball");
+				Parameters parameters;
+
+				if (searchDir != 0.0f) {
+					parameters["search-dir"] = Util::toString(searchDir);
+				}
+
+				ai->setState("find-ball", parameters);
 			}
 
 			return; // TODO Start searching for new ball
@@ -941,10 +960,10 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 
 				if (turnAngle < 0.0f) {
 					turnAngle += underturnAngle;
-					//searchDir = -1.0f;
+					searchDir = -1.0f;
 				} else {
 					turnAngle -= underturnAngle;
-					//searchDir = 1.0f;
+					searchDir = 1.0f;
 				}
 
 				ai->dbg("turnAngle", Math::radToDeg(turnAngle));
