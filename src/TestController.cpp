@@ -697,7 +697,8 @@ void TestController::FetchBallDirectState::step(float dt, Vision::Results* visio
 		return;
 	}
 
-	double minSearchFrontDuration = 1.0;
+	float minSearchFrontDuration = 1.0f;
+	float minFetchDirectDuration = 0.5f;
 	
 	Object* ball = visionResults->getClosestBall(Dir::FRONT);
 	Object* goal = visionResults->getLargestGoal(ai->targetSide, Dir::FRONT);
@@ -709,7 +710,7 @@ void TestController::FetchBallDirectState::step(float dt, Vision::Results* visio
 	ai->dbg("ballVisible", ball != NULL);
 	ai->dbg("goalVisible", goal != NULL);
 
-	if (ball != NULL && goal != NULL && !ball->behind && !goal->behind) {
+	if (ball != NULL && goal != NULL && !ball->behind && !goal->behind && stateDuration > minFetchDirectDuration) {
 		ai->dbgs("action", "Switch to fetch front");
 
 		ai->setState("fetch-ball-front");
