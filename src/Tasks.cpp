@@ -418,14 +418,15 @@ std::string DriveForTask::toString() {
 // drive behind ball
 void DriveBehindBallTask::onStart(Robot& robot, float dt) {
 	startTime = Util::millitime();
-	endTime = startTime + ballDistance / speed + 1.0;
+	duration =  (double)ballDistance / (double)speed + 1.0;
+	endTime = startTime + duration;
 	startSpeed = robot.getVelocity();
 }
 
 bool DriveBehindBallTask::onStep(Robot& robot, float dt) {
 	currentTime = Util::millitime();
 
-	duration += dt;
+	elapsed += dt;
 
 	if (currentTime > endTime) {
 		robot.stop();
@@ -436,8 +437,8 @@ bool DriveBehindBallTask::onStep(Robot& robot, float dt) {
 	float sideAccelerationDuration = 0.5f;
 	float deaccelerationDuration = 0.5f;
 	double sideSpeedDelay = ballDistance / speed;
-	float deacceleratedSpeed = Math::map((float)duration, 0.0f, deaccelerationDuration, startSpeed, speed);
-	float sideSpeed = side * Math::map((float)(duration - sideSpeedDelay), 0.0f, sideAccelerationDuration, 0.0f, deacceleratedSpeed);
+	float deacceleratedSpeed = Math::map((float)elapsed, 0.0f, deaccelerationDuration, startSpeed, speed);
+	float sideSpeed = side * Math::map((float)(elapsed - sideSpeedDelay), 0.0f, sideAccelerationDuration, 0.0f, deacceleratedSpeed);
 
 	Math::Vector dirVector = Math::Vector::createForwardVec(targetAngle, deacceleratedSpeed);
 

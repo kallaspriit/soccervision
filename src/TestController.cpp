@@ -802,6 +802,10 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 	ai->dbg("startBallDistance", startBallDistance);
 	ai->dbg("hadBall", hadBall);
 
+	if (robot->hasTasks()) {
+		return;
+	}
+
 	// don't continue if target goal not visible
 	if (goal == NULL) {
 		if (ball != NULL && !ball->behind) {
@@ -832,10 +836,6 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 
 			return;
 		}
-	}
-
-	if (robot->hasTasks()) {
-		return;
 	}
 
 	if (ball == NULL) {
