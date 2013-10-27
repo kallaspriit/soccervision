@@ -432,9 +432,15 @@ void TestController::FindBallState::onEnter(Robot* robot, Parameters parameters)
 	}
 
 	lastTurnTime = -1.0;
+
+	if (lastSearchTime != -1.0) {
+		timeSinceLastSearch = Util::duration(lastSearchTime);
+	}
 }
 
 void TestController::FindBallState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration) {
+	lastSearchTime = Util::millitime();
+	
 	if (robot->dribbler->gotBall()) {
 		ai->dbg("gotBall", true);
 		ai->dbgs("action", "Switch to aim");
@@ -446,16 +452,25 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 		return;
 	}
 
-	ai->dbg("hasTasks", robot->hasTasks());
-
 	robot->stop();
+
+	Dir searchStartDir = Dir::FRONT;
+
+	// switch to starting from rear camera first if last search was little time ago to avoid flickering
+	if (timeSinceLastSearch < 0.2) {
+		searchStartDir = Dir::REAR;
+	}
 	
-	Object* ball = visionResults->getClosestBall(Dir::FRONT);
+	Object* ball = visionResults->getClosestBall(searchStartDir);
 	Object* goal = visionResults->getLargestGoal(ai->targetSide, Dir::FRONT);
 
 	if (ball == NULL) {
 		ball = visionResults->getClosestBall(Dir::ANY);
 	}
+
+	ai->dbg("hasTasks", robot->hasTasks());
+	ai->dbg("timeSinceLastSearch", timeSinceLastSearch);
+	ai->dbg("searchStartDir", searchStartDir);
 
 	if (robot->hasTasks()) {
 		if (ball != NULL && !ball->behind) {

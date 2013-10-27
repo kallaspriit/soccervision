@@ -97,12 +97,14 @@ public:
 
 	public:
 		void onEnter(Robot* robot, Parameters parameters);
-		FindBallState(TestController* ai) : State(ai), searchDir(1.0f), lastTurnTime(-1.0) {}
+		FindBallState(TestController* ai) : State(ai), searchDir(1.0f), lastTurnTime(-1.0), lastSearchTime(-1.0), timeSinceLastSearch(-1.0) {}
 		void step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration);
 
 	private:
 		float searchDir;
 		double lastTurnTime;
+		double lastSearchTime;
+		double timeSinceLastSearch;
 
 	};
 
