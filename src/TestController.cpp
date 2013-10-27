@@ -839,7 +839,7 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 	}
 
 	if (ball == NULL) {
-		if (!hadBall) {
+		if (!hadBall || reversePerformed) {
 			ai->setState("find-ball");
 
 			return;
