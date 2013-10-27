@@ -431,6 +431,10 @@ void Robot::drivePath(const Math::PositionQueue positions, float speed) {
     addTask(new DrivePathTask(positions, speed));
 }
 
+void Robot::driveBehindBall(float ballDistance, float targetAngle, float speed, float side) {
+	addTask(new DriveBehindBallTask(ballDistance, targetAngle, speed, side));
+}
+
 void Robot::stopRotation() {
     addTask(new StopRotationTask());
 }

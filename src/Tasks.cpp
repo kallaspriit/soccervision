@@ -413,3 +413,58 @@ float DriveForTask::getPercentage() {
 std::string DriveForTask::toString() {
     return "Drive " + Util::toString(x) + "x" + Util::toString(y) + " @ " + Util::toString(omega) + " for " + Util::toString(duration) + "seconds";
 }
+
+
+// drive behind ball
+void DriveBehindBallTask::onStart(Robot& robot, float dt) {
+	startTime = Util::millitime();
+	endTime = startTime + ballDistance / speed + 1.0;
+	startSpeed = robot.getVelocity();
+}
+
+bool DriveBehindBallTask::onStep(Robot& robot, float dt) {
+	currentTime = Util::millitime();
+
+	duration += dt;
+
+	if (currentTime > endTime) {
+		robot.stop();
+
+		return false;
+	}
+
+	float fetchBlindSpeed = 0.5f;
+	//float sideP = 0.4f;
+	float sideAccelerationDuration = 0.5f;
+	float deaccelerationDuration = 0.5f;
+	double sideSpeedDelay = 0.5;
+	float deacceleratedSpeed = Math::map((float)duration, 0.0f, deaccelerationDuration, startSpeed, fetchBlindSpeed);
+	float sideSpeed = side * Math::map((float)(duration - sideSpeedDelay), 0.0f, sideAccelerationDuration, 0.0f, deacceleratedSpeed);
+
+	Math::Vector dirVector = Math::Vector::createForwardVec(targetAngle, deacceleratedSpeed);
+
+	dirVector.y += sideSpeed;
+
+	robot.setTargetDir(dirVector.x, dirVector.y);
+	//robot.lookAt(goal);
+
+	return true;
+}
+
+void DriveBehindBallTask::onEnd(Robot& robot, float dt) {
+	robot.stop();
+}
+
+float DriveBehindBallTask::getPercentage() {
+    if (!started) {
+        return 0.0f;
+    }
+
+	double timeRemaining = endTime - currentTime;
+
+	return (float)(100.0 - (timeRemaining * 100.0 / duration));
+}
+
+std::string DriveBehindBallTask::toString() {
+    return "Drive behind ball";
+}

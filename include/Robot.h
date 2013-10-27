@@ -57,6 +57,7 @@ public:
     void driveTo(float x, float y, float orientation, float speed = 1.0f);
     void driveFacing(float targetX, float targetY, float faceX, float faceY, float speed = 1.0f);
     void drivePath(const Math::PositionQueue positions, float speed = 1.0f);
+	void driveBehindBall(float ballDistance, float targetAngle, float speed, float side);
 	void stopRotation();
 	void jumpAngle(float angle = 0.35f, float speed = 13.0f);
 	void setTargetDirFor(float x, float y, float omega, float duration);

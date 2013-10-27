@@ -182,6 +182,29 @@ class DriveForTask : public Task {
 		double currentTime;
 };
 
+class DriveBehindBallTask : public Task {
+    public:
+		DriveBehindBallTask(float ballDistance, float targetAngle, float speed, float side) : Task(), currentTime(0.0), startTime(0.0), duration(0.0), ballDistance(ballDistance), targetAngle(targetAngle), speed(speed), startSpeed(0.0f), side(side) {}
+
+        void onStart(Robot& robot, float dt);
+        bool onStep(Robot& robot, float dt);
+        void onEnd(Robot& robot, float dt);
+        float getPercentage();
+        std::string getType() { return "drive-behind-ball"; };
+        std::string toString();
+
+	private:
+		double currentTime;
+		double startTime;
+		double endTime;
+		double duration;
+		float ballDistance;
+		float targetAngle;
+		float speed;
+		float startSpeed;
+		float side;
+};
+
 typedef std::deque<Task*> TaskQueue;
 typedef std::deque<Task*>::const_iterator TaskQueueIt;
 
