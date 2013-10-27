@@ -610,10 +610,6 @@ void TestController::FetchBallFrontState::step(float dt, Vision::Results* vision
 	
 	//float adaptiveBrakingDistance = Math::map(robot->getVelocity(), 0.0f, maxBrakingDistanceVelocity, minVelocityBrakeDistance, maxVelocityBrakingDistance);
 	float adaptiveBrakingDistance = Math::getAccelerationDistance(forwardSpeed, 0.0f, brakeAcceleration);
-	float targetAngle = ai->getTargetAngle(goal->distanceX, goal->distanceY, ball->distanceX, ball->distanceY, offsetDistance);
-
-	// accelerate in the beginning
-	float limitedSpeed = forwardSpeed = Math::getAcceleratedSpeed(forwardSpeed, targetApproachSpeed, dt, accelerateAcceleration);
 
 	// only choose the braking distance once
 	if (startBrakingDistance == -1.0f && ballDistance < adaptiveBrakingDistance) {
@@ -621,9 +617,13 @@ void TestController::FetchBallFrontState::step(float dt, Vision::Results* vision
 		startBrakingVelocity = robot->getVelocity();
 	}
 
-	if (startBrakingDistance != -1.0f && ballDistance < startBrakingDistance) {
-		limitedSpeed = forwardSpeed = Math::getAcceleratedSpeed(forwardSpeed, brakingApproachSpeed, dt, accelerateAcceleration);
+	float targetAngle = ai->getTargetAngle(goal->distanceX, goal->distanceY, ball->distanceX, ball->distanceY, offsetDistance);
+	bool braking = startBrakingDistance != -1.0f && ballDistance < startBrakingDistance;
 
+	// accelerate in the beginning
+	float limitedSpeed = forwardSpeed = Math::getAcceleratedSpeed(forwardSpeed, braking ? brakingApproachSpeed : targetApproachSpeed, dt, accelerateAcceleration);
+
+	if (braking) {
 		// brake as getting close and large target angle
 		float distanceBraking = Math::map(ballDistance, nearDistance, startBrakingDistance, 1.0, 0.0f);
 		float targetAngleBreaking = Math::map(Math::abs(targetAngle), 0.0f, Math::degToRad(maxAngleBrakingAngle), 0.0f, 1.0f);
