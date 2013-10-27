@@ -842,6 +842,16 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 	ai->dbg("hadBall", hadBall);
 
 	if (robot->hasTasks()) {
+		Side ownSide = ai->targetSide == Side::YELLOW ? Side::BLUE : Side::YELLOW;
+		Object* ownGoal = visionResults->getLargestGoal(ownSide, Dir::REAR);
+
+		// make sure we don't blindly reverse into our goal
+		if (ownGoal != NULL && ownGoal->distance < 0.6f) {
+			robot->clearTasks();
+
+			ai->setState("find-ball");
+		}
+
 		return;
 	}
 
@@ -976,7 +986,7 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 		ai->dbg("avgBallGoalDistanceSize", avgBallGoalDistance.size());
 		ai->dbg("avgBallGoalDistanceFull", avgBallGoalDistance.full());
 
-		if (avgBallGoalDistance.full() && avgBallGoalDistance.value() < minFetchBehindGoalBallDistance) {
+		if (avgBallGoalDistance.full() && avgBallGoalDistance.value() < minFetchBehindGoalBallDistance && goalBallDistance < minFetchBehindGoalBallDistance) {
 			float turnAngle = ball->angle;
 			float underturnAngle = Math::degToRad(45.0f);
 			float turnSpeed = Math::TWO_PI;
