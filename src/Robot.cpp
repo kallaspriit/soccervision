@@ -398,7 +398,7 @@ void Robot::lookAt(Object* object) {
 }
 
 void Robot::lookAt(const Math::Angle& angle) {
-	setTargetOmega(Math::limit(angle.rad() * Config::lookAtP, Config::lookAtMaxOmega));
+	setTargetOmega(Math::limit(angle.rad() * Config::lookAtP, Math::degToRad(Config::lookAtMaxSpeedAngle) * Config::lookAtP));
 }
 
 void Robot::lookAtBehind(Object* object) {
