@@ -713,6 +713,7 @@ void TestController::FetchBallDirectState::step(float dt, Vision::Results* visio
 	float brakeAcceleration = 2.0f;
 	float nearLineDistance = 0.45f;
 	float nearLineSpeed = 0.2f;
+	float nearBallDistance = 0.3f;
 	float realSpeed = robot->getVelocity();
 	float ballDistance = ball->getDribblerDistance();
 	float brakeDistance = Math::getAccelerationDistance(forwardSpeed, 0.0f, brakeAcceleration);
@@ -735,12 +736,16 @@ void TestController::FetchBallDirectState::step(float dt, Vision::Results* visio
 		|| (
 			visionResults->front->whiteDistance != -1.0f && visionResults->front->whiteDistance < nearLineDistance
 			&& visionResults->front->blackDistance != -1.0f && visionResults->front->blackDistance < nearLineDistance
+			&& visionResults->front->whiteDistance < visionResults->front->blackDistance
 		)
 	) {
-		forwardSpeed = nearLineSpeed;
 		nearLine = true;
 
-		ai->dbg("lineLimited", true);
+		if (ballDistance < nearBallDistance) {
+			forwardSpeed = nearLineSpeed;
+
+			ai->dbg("lineLimited", true);
+		}
 	}
 
 	robot->setTargetDir(forwardSpeed, 0.0f);
@@ -1140,6 +1145,7 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 				|| (
 					visionResults->front->whiteDistance != -1.0f && visionResults->front->whiteDistance <= performReverseMaxWhiteDistance
 					&& visionResults->front->blackDistance != -1.0f && visionResults->front->blackDistance <= performReverseMaxBlackDistance
+					&& visionResults->front->whiteDistance < visionResults->front->blackDistance
 				)
 			) {
 				performReverse = Decision::YES;
