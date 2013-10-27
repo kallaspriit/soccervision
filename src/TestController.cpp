@@ -17,6 +17,7 @@
  * - move while aiming if other robot in the way
  * - do something if aiming for a while
  * - do something if searching for a ball for a while
+ * - deal with not seeing a ball at distance when starting to fetch it quickly
  */
 
 TestController::TestController(Robot* robot, Communication* com) : BaseAI(robot, com), targetSide(Side::BLUE), manualSpeedX(0.0f), manualSpeedY(0.0f), manualOmega(0.0f), manualDribblerSpeed(0), manualKickStrength(0), blueGoalDistance(0.0f), yellowGoalDistance(0.0f), lastCommandTime(0.0), lastTargetGoalAngle(0.0f), whiteDistance(-1.0f), blackDistance(-1.0f) {
