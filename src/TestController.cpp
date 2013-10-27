@@ -156,7 +156,11 @@ void TestController::handleToggleGoCommand() {
 }
 
 void TestController::handleToggleSideCommand() {
-	if (!toggleSideBtn.toggle() || currentStateName != "manual-control") {
+	bool x = toggleSideBtn.toggle();
+
+	if (!x || currentStateName != "manual-control") {
+		std::cout << "! Ignoring toggle side: " << x << ", " << currentStateName << std::endl;
+
 		return;
 	}
 
