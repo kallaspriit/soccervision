@@ -418,7 +418,7 @@ std::string DriveForTask::toString() {
 // drive behind ball
 void DriveBehindBallTask::onStart(Robot& robot, float dt) {
 	startTime = Util::millitime();
-	duration =  (double)ballDistance / (double)speed + 1.0;
+	duration =  (double)ballDistance / (double)speed + 0.5;
 	endTime = startTime + duration;
 	startSpeed = robot.getVelocity();
 }
