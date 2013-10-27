@@ -35,6 +35,7 @@ void TestController::reset() {
 	currentState = NULL;
 	currentStateName = "";
 
+	setState("manual-control");
 	handleToggleSideCommand();
 }
 
