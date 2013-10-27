@@ -784,8 +784,9 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 		return;
 	}
 
-	double maxBlindReverseDuration = 1.5;
+	//double maxBlindReverseDuration = 1.5;
 	double minSearchBehindDuration = 1.0;
+	float reverseBlindSpeed = 1.0f;
 
 	Object* ball = visionResults->getClosestBall(Dir::REAR);
 	Object* goal = visionResults->getLargestGoal(ai->targetSide, Dir::FRONT);
@@ -845,7 +846,6 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 			return;
 		}
 
-		float reverseBlindSpeed = 1.0f;
 		reversePerformed = true;
 
 		robot->driveBehindBall(lastBallDistance, lastTargetAngle, reverseBlindSpeed, targetMode == TargetMode::LEFT ? 1.0f : -1.0f);
@@ -963,9 +963,10 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 	}
 
 	//float targetAngle = ai->getTargetAngle(goal->distanceX, goal->distanceY * (goal->behind ? -1.0f : 1.0f), ball->distanceX, ball->distanceY * (ball->behind ? -1.0f : 1.0f), offsetDistance, TargetMode::RIGHT);
+	float probableBallLostDistance = 0.75f;
 	float targetAngle = ai->getTargetAngle(goal->distanceX * (goal->behind ? -1.0f : 1.0f), goal->distanceY * (goal->behind ? -1.0f : 1.0f), ball->distanceX * (ball->behind ? -1.0f : 1.0f), ball->distanceY * (ball->behind ? -1.0f : 1.0f), offsetDistance, targetMode);
 	float approachSpeed = approachP * Math::map(stateDuration, 0.0f, startAccelerationDuration, 0.0f, 1.0f);
-	float deacceleratedSpeed = Math::map(ballDistance, 0.3f, 1.0f, 0.5f, approachSpeed);
+	float deacceleratedSpeed = Math::map(ballDistance, probableBallLostDistance, probableBallLostDistance * 2.0f, reverseBlindSpeed, approachSpeed);
 
 	ai->dbg("offsetDistance", offsetDistance);
 	ai->dbg("approachSpeed", approachSpeed);
