@@ -432,13 +432,11 @@ bool DriveBehindBallTask::onStep(Robot& robot, float dt) {
 
 		return false;
 	}
-
-	float fetchBlindSpeed = 0.5f;
 	//float sideP = 0.4f;
 	float sideAccelerationDuration = 0.5f;
 	float deaccelerationDuration = 0.5f;
-	double sideSpeedDelay = 0.5;
-	float deacceleratedSpeed = Math::map((float)duration, 0.0f, deaccelerationDuration, startSpeed, fetchBlindSpeed);
+	double sideSpeedDelay = ballDistance / speed;
+	float deacceleratedSpeed = Math::map((float)duration, 0.0f, deaccelerationDuration, startSpeed, speed);
 	float sideSpeed = side * Math::map((float)(duration - sideSpeedDelay), 0.0f, sideAccelerationDuration, 0.0f, deacceleratedSpeed);
 
 	Math::Vector dirVector = Math::Vector::createForwardVec(targetAngle, deacceleratedSpeed);
@@ -452,7 +450,7 @@ bool DriveBehindBallTask::onStep(Robot& robot, float dt) {
 }
 
 void DriveBehindBallTask::onEnd(Robot& robot, float dt) {
-	robot.stop();
+	
 }
 
 float DriveBehindBallTask::getPercentage() {

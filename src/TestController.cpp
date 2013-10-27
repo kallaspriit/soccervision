@@ -845,6 +845,8 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 			return;
 		}
 
+		reversePerformed = true;
+
 		robot->driveBehindBall(lastBallDistance, lastTargetAngle, 0.5f, targetMode == TargetMode::LEFT ? 1.0f : -1.0f);
 
 		/*if (lostBallTime == -1.0) {
