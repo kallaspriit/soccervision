@@ -904,12 +904,6 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 		startBallDistance = ballDistance;
 	}
 
-	ai->dbgs("mode", "visible");
-
-	float offsetDistance = 0.2f;
-	float approachP = 2.0f;
-	float startAccelerationDuration = 0.5f;
-
 	if (targetMode == TargetMode::UNDECIDED) {
 		if (ball->angle + goal->angle > 0.0f) {
 			targetMode = TargetMode::LEFT;
@@ -918,19 +912,9 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 		}
 	}
 
-	/*if (ai->parameters[0].length() > 0) offsetDistance = Util::toFloat(ai->parameters[0]);
-	if (ai->parameters[1].length() > 0) approachP = Util::toFloat(ai->parameters[1]);
-	if (ai->parameters[2].length() > 0) {
-		int targetModeVal = Util::toInt(ai->parameters[2]);
-
-		if (targetModeVal == -1) {
-			targetMode = TargetMode::LEFT;
-		} else if (targetModeVal == 1) {
-			targetMode = TargetMode::RIGHT;
-		} else {
-			targetMode = TargetMode::INLINE;
-		}
-	}*/
+	float offsetDistance = 0.2f;
+	float approachP = 2.0f;
+	float startAccelerationDuration = 0.5f;
 
 	Side ownSide = ai->targetSide == Side::YELLOW ? Side::BLUE : Side::YELLOW;
 	Object* ownGoal = visionResults->getLargestGoal(ownSide, Dir::REAR);
@@ -952,31 +936,26 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 		ai->dbg("avgBallGoalDistanceFull", avgBallGoalDistance.full());
 
 		if (avgBallGoalDistance.full() && avgBallGoalDistance.value() < minFetchBehindGoalBallDistance) {
-			//if (lastTurnTime == -1.0 || Util::duration(lastTurnTime) >= minTurnBreak) {
-				float turnAngle = ball->angle;
-				float underturnAngle = Math::degToRad(45.0f);
-				float turnSpeed = Math::TWO_PI;
+			float turnAngle = ball->angle;
+			float underturnAngle = Math::degToRad(45.0f);
+			float turnSpeed = Math::TWO_PI;
 
-				if (turnAngle < 0.0f) {
-					turnAngle += underturnAngle;
-					searchDir = -1.0f;
-				} else {
-					turnAngle -= underturnAngle;
-					searchDir = 1.0f;
-				}
+			if (turnAngle < 0.0f) {
+				turnAngle += underturnAngle;
+				searchDir = -1.0f;
+			} else {
+				turnAngle -= underturnAngle;
+				searchDir = 1.0f;
+			}
 
-				ai->dbg("turnAngle", Math::radToDeg(turnAngle));
-				ai->dbg("turnSpeed", turnSpeed);
-				//ai->dbg("searchDir", searchDir);
+			ai->dbg("turnAngle", Math::radToDeg(turnAngle));
+			ai->dbg("turnSpeed", turnSpeed);
 
-				turnAroundPerformed = true;
+			turnAroundPerformed = true;
 
-				robot->turnBy(turnAngle, turnSpeed);
+			robot->turnBy(turnAngle, turnSpeed);
 
-				//lastTurnTime = Util::millitime();
-
-				return;
-			//}
+			return;
 		}
 	}
 
@@ -989,10 +968,6 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 	ai->dbg("approachSpeed", approachSpeed);
 	ai->dbg("deacceleratedSpeed", deacceleratedSpeed);
 	ai->dbg("targetAngle", Math::radToDeg(targetAngle));
-	/*ai->dbg("goal->distanceX", goal->distanceX * (goal->behind ? -1.0f : 1.0f));
-	ai->dbg("goal->distanceY", goal->distanceY * (goal->behind ? -1.0f : 1.0f));
-	ai->dbg("ball->distanceX", ball->distanceX * (ball->behind ? -1.0f : 1.0f));
-	ai->dbg("ball->distanceY", ball->distanceY * (ball->behind ? -1.0f : 1.0f));*/
 
 	robot->setTargetDir(Math::Rad(targetAngle), deacceleratedSpeed);
 	robot->lookAt(goal);
