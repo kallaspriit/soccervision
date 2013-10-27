@@ -139,13 +139,16 @@ public:
 	class FetchBallBehindState : public State {
 
 	public:
-		FetchBallBehindState(TestController* ai) : State(ai), hadBall(false), lastTargetAngle(0.0f), lostBallTime(-1.0), timeSinceLostBall(0.0), lostBallVelocity(0.0f), startBallDistance(-1.0f), targetMode(TargetMode::UNDECIDED), avgBallGoalDistance(10) {}
+		FetchBallBehindState(TestController* ai) : State(ai), hadBall(false), lastTargetAngle(0.0f), lastBallDistance(-1.0f), lostBallTime(-1.0), timeSinceLostBall(0.0), lostBallVelocity(0.0f), startBallDistance(-1.0f), targetMode(TargetMode::UNDECIDED), avgBallGoalDistance(10) {}
 		void onEnter(Robot* robot, Parameters parameters);
 		void step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration);
 
 	private:
 		bool hadBall;
+		bool reversePerformed;
+		bool turnAroundPerformed;
 		float lastTargetAngle;
+		float lastBallDistance;
 		float searchDir;
 		double lostBallTime;
 		double timeSinceLostBall;

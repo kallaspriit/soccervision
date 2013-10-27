@@ -1,4 +1,5 @@
 #include "BaseAI.h"
+#include "Robot.h"
 
 BaseAI::BaseAI(Robot* robot, Communication* com) : Controller(robot, com), currentState(NULL), currentStateName(""), totalDuration(0.0f), currentStateDuration(0.0f) {
 
@@ -41,6 +42,8 @@ void BaseAI::setState(std::string state, Parameters parameters) {
 
 	currentState = newState;
 	currentStateName = state;
+
+	robot->clearTasks();
 }
 
 void BaseAI::handleCommunicationMessage(std::string message) {
