@@ -65,8 +65,6 @@ void TestController::setupStates() {
 	states["aim"] = new AimState(this);
 	states["drive-circle"] = new DriveCircleState(this);
 	states["accelerate"] = new AccelerateState(this);
-
-	setState("manual-control");
 }
 
 void TestController::step(float dt, Vision::Results* visionResults) {
