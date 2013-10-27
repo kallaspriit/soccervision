@@ -64,15 +64,13 @@ void TestController::setupStates() {
 	states["aim"] = new AimState(this);
 	states["drive-circle"] = new DriveCircleState(this);
 	states["accelerate"] = new AccelerateState(this);
+
+	setState("manual-control");
 }
 
 void TestController::step(float dt, Vision::Results* visionResults) {
 	updateVisionDebugInfo(visionResults);
 	
-	if (currentState == NULL) {
-		setState("manual-control");
-	}
-
 	currentStateDuration += dt;
 	totalDuration += dt;
 
@@ -156,11 +154,7 @@ void TestController::handleToggleGoCommand() {
 }
 
 void TestController::handleToggleSideCommand() {
-	bool x = toggleSideBtn.toggle();
-
-	if (!x || currentStateName != "manual-control") {
-		std::cout << "! Ignoring toggle side: " << x << ", " << currentStateName << std::endl;
-
+	if (!toggleSideBtn.toggle() || currentStateName != "manual-control") {
 		return;
 	}
 
