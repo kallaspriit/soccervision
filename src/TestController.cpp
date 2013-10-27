@@ -585,10 +585,11 @@ void TestController::FetchBallFrontState::step(float dt, Vision::Results* vision
 	float minApproachSpeed = 0.5f;
 	float nearDistance = 0.25f;
 	float accelerateAcceleration = 3.0f;
-	float brakeAcceleration = 2.0f;
+	float brakeAcceleration = 3.0f;
 	float retratingBallDistanceDiff = 0.2f;
 
 	float ballDistance = ball->getDribblerDistance();
+	float realSpeed = robot->getVelocity();
 	float ballAngle = ball->angle;
 	float goalAngle = goal->angle;
 	float angleDiff = Math::abs(goalAngle - ballAngle);
@@ -609,7 +610,7 @@ void TestController::FetchBallFrontState::step(float dt, Vision::Results* vision
 	}
 	
 	//float adaptiveBrakingDistance = Math::map(robot->getVelocity(), 0.0f, maxBrakingDistanceVelocity, minVelocityBrakeDistance, maxVelocityBrakingDistance);
-	float adaptiveBrakingDistance = Math::getAccelerationDistance(forwardSpeed, 0.0f, brakeAcceleration);
+	float adaptiveBrakingDistance = Math::getAccelerationDistance(realSpeed, 0.0f, brakeAcceleration);
 
 	// only choose the braking distance once
 	if (startBrakingDistance == -1.0f && ballDistance < adaptiveBrakingDistance) {
