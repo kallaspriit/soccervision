@@ -613,6 +613,8 @@ void TestController::FetchBallFrontState::step(float dt, Vision::Results* vision
 	// accelerate in the beginning
 	forwardSpeed = Math::getAcceleratedSpeed(forwardSpeed, targetApproachSpeed, dt, accelerateAcceleration);
 
+	ai->dbg("forwardSpeedFull", forwardSpeed);
+
 	// only choose the braking distance once
 	if (startBrakingDistance == -1.0f && ballDistance < adaptiveBrakingDistance) {
 		startBrakingDistance = adaptiveBrakingDistance;
@@ -658,6 +660,7 @@ void TestController::FetchBallFrontState::step(float dt, Vision::Results* vision
 	lastBallDistance = ballDistance;
 
 	ai->dbg("forwardSpeed", forwardSpeed);
+	ai->dbg("realSpeed", robot->getVelocity());
 	ai->dbg("startBrakingDistance", startBrakingDistance);
 	ai->dbg("startBrakingVelocity", startBrakingVelocity);
 	ai->dbg("ballDistance", ballDistance);
