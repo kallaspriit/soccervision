@@ -21,6 +21,7 @@
  * - check if sees ball is out driving in reverse
  * - check whether adaptive fetch front distance is good
  * - can drive out of the field when avoiding to kick through balls
+ * - detect that the robot has gone out of the wheel (both cameras)
  */
 
 TestController::TestController(Robot* robot, Communication* com) : BaseAI(robot, com), targetSide(Side::BLUE), manualSpeedX(0.0f), manualSpeedY(0.0f), manualOmega(0.0f), manualDribblerSpeed(0), manualKickStrength(0), blueGoalDistance(0.0f), yellowGoalDistance(0.0f), lastCommandTime(-1.0), lastBallTime(-1.0), lastTargetGoalAngle(0.0f), whiteDistance(-1.0f), blackDistance(-1.0f), lastBall(NULL) {
@@ -234,17 +235,22 @@ void TestController::resetLastBall() {
 void TestController::setLastBall(Object* ball) {
 	resetLastBall();
 
-	lastBall = new Object(*ball);
+	lastBall = new Object();
+	lastBall->copyFrom(ball);
 }
 
 Object* TestController::getLastBall(Dir dir) {
 	// only return last seen ball if its fresh enough
 	if (lastBall == NULL || lastBallTime == -1.0 || Util::duration(lastBallTime) > 0.016 * 3) {
+		std::cout << "@ getLastBall 1 " << (lastBall == NULL) << ", " << Util::duration(lastBallTime) << std::endl;
+
 		return NULL;
 	}
 
 	// make sure the ball is on the right side
 	if (dir != Dir::ANY && (lastBall->behind && dir == Dir::FRONT) || (!lastBall->behind && dir == Dir::REAR)) {
+		std::cout << "@ getLastBall 2 " << dir << ", " << lastBall->behind << std::endl;
+
 		return NULL;
 	}
 
