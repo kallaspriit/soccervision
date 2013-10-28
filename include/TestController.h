@@ -250,7 +250,7 @@ private:
 	void updateVisionDebugInfo(Vision::Results* visionResults);
 	void resetLastBall();
 	void setLastBall(Object* ball);
-	Object* getLastBall();
+	Object* getLastBall(Dir dir = Dir::ANY);
 
 	DebouncedButton toggleGoBtn;
 	DebouncedButton toggleSideBtn;
