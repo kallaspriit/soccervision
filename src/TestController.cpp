@@ -14,6 +14,7 @@
  * + make it brake less/smarter for fetch front
  * + improve fetch behind not to reconsider so much (complete maneuver?)
  * + decrease fetch direct speed if white-black close (nearby line)
+ * + provide cached ball info for some frames if can't see one any more
  * - move while aiming if other robot in the way
  * - do something if aiming for a while
  * - do something if searching for a ball for a while
@@ -675,7 +676,7 @@ void TestController::FetchBallFrontState::step(float dt, Vision::Results* vision
 	float goalAngle = goal->angle;
 	float angleDiff = Math::abs(goalAngle - ballAngle);
 	//float offsetDistance = Math::map(Math::radToDeg(angleDiff), 0.0f, maxOffsetDistanceAngleDiff, nearDistance, maxAngleDiffDistance);
-	float offsetDistance = 0.2f;
+	float offsetDistance = 0.3f;
 
 	// reset if we probably started to watch a ball we just kicked
 	if (lastBallDistance != -1.0f && ballDistance - lastBallDistance > retratingBallDistanceDiff) {
