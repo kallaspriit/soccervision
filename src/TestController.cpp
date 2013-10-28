@@ -248,15 +248,11 @@ void TestController::setLastBall(Object* ball) {
 Object* TestController::getLastBall(Dir dir) {
 	// only return last seen ball if its fresh enough
 	if (lastBall == NULL || lastBallTime == -1.0 || Util::duration(lastBallTime) > 0.25) {
-		std::cout << "@ getLastBall 1 " << (lastBall == NULL) << ", " << Util::duration(lastBallTime) << std::endl;
-
 		return NULL;
 	}
 
 	// make sure the ball is on the right side
 	if (dir != Dir::ANY && (lastBall->behind && dir == Dir::FRONT) || (!lastBall->behind && dir == Dir::REAR)) {
-		std::cout << "@ getLastBall 2 " << dir << ", " << lastBall->behind << std::endl;
-
 		return NULL;
 	}
 
@@ -264,8 +260,6 @@ Object* TestController::getLastBall(Dir dir) {
 	if (lastBall->distance < 3.0f) {
 		return NULL;
 	}
-
-	std::cout << "! Providing cached ball" << std::endl;
 
 	return lastBall;
 }
