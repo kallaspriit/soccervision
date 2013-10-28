@@ -279,6 +279,7 @@ std::string TestController::getJSON() {
 	stream << "\"stateDuration\": \"" << currentStateDuration << "\",";
 	stream << "\"totalDuration\": \"" << totalDuration << "\",";
 	stream << "\"realSpeed\": \"" << robot->getVelocity() << "\",";
+	stream << "\"travelledDistance\": \"" << robot->getTravelledDistance() << "\",";
 	stream << "\"targetSide\": \"" << (targetSide == Side::BLUE ? "blue" : targetSide == Side::YELLOW ? "yellow" : "not chosen") << "\",";
 	stream << "\"whiteDistance\": " << whiteDistance << ",";
 	stream << "\"blackDistance\": " << blackDistance << ",";

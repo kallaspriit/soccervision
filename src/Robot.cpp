@@ -22,6 +22,7 @@ Robot::Robot(Communication* com) : com(com), wheelFL(NULL), wheelFR(NULL), wheel
 	velocity = 0.0f;
 	lastVelocity = 0.0f;
 	omega = 0.0f;
+	travelledDistance = 0.0f;
 
     lastCommandTime = -1;
 	frameTargetSpeedSet = false;
@@ -169,6 +170,8 @@ void Robot::step(float dt, Vision::Results* visionResults) {
 	velocity = velocityVec.getLength();
 
 	omega = movement.omega;
+
+	travelledDistance += velocity * dt;
 
 	updateMeasurements();
 	updateBallLocalizer(visionResults, dt);
