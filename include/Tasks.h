@@ -184,7 +184,7 @@ class DriveForTask : public Task {
 
 class DriveBehindBallTask : public Task {
     public:
-		DriveBehindBallTask(float ballDistance, float targetAngle, float speed, float side) : Task(), ballDistance(ballDistance), targetAngle(targetAngle), speed(speed), startSpeed(0.0f), side(side) {}
+		DriveBehindBallTask(float ballDistance, float targetAngle, float speed, float offsetDistance, float side) : Task(), ballDistance(ballDistance), targetAngle(targetAngle), speed(speed), offsetDistance(offsetDistance), startSpeed(0.0f), side(side) {}
 
         void onStart(Robot& robot, float dt);
         bool onStep(Robot& robot, float dt);
@@ -197,6 +197,7 @@ class DriveBehindBallTask : public Task {
 		float ballDistance;
 		float targetAngle;
 		float speed;
+		float offsetDistance;
 		float startSpeed;
 		float duration;
 		float side;

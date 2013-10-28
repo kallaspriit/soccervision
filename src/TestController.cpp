@@ -909,7 +909,8 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 
 	//double maxBlindReverseDuration = 1.5;
 	double minSearchBehindDuration = 1.0;
-	float reverseBlindSpeed = 1.0f;
+	float reverseBlindSpeed = 1.5f;
+	float offsetDistance = 0.2f;
 	Dir ballSearchDir = Dir::REAR;
 
 	Object* ball = visionResults->getClosestBall(ballSearchDir);
@@ -990,7 +991,7 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 
 		reversePerformed = true;
 
-		robot->driveBehindBall(lastBallDistance, lastTargetAngle, reverseBlindSpeed, targetMode == TargetMode::LEFT ? 1.0f : -1.0f);
+		robot->driveBehindBall(lastBallDistance, lastTargetAngle, reverseBlindSpeed, offsetDistance, targetMode == TargetMode::LEFT ? 1.0f : -1.0f);
 
 		return;
 	}
@@ -1014,7 +1015,6 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 		}
 	}
 
-	float offsetDistance = 0.2f;
 	float approachP = 2.0f;
 	float startAccelerationDuration = 0.5f;
 

@@ -417,8 +417,6 @@ std::string DriveForTask::toString() {
 
 // drive behind ball
 void DriveBehindBallTask::onStart(Robot& robot, float dt) {
-	float offsetDistance = 0.2f; // TODO Make as param
-
 	startSpeed = robot.getVelocity();
 	duration = 0.0f;
 	arcDistance = offsetDistance * Math::TWO_PI / 4.0f; // quarter of a circle
@@ -439,7 +437,6 @@ bool DriveBehindBallTask::onStep(Robot& robot, float dt) {
 	}
 
 	float deaccelerationDuration = 0.5f;
-	double sideSpeedDelay = ballDistance / speed;
 	float sideSpeed = Math::map(travelledDistance, ballDistance, ballDistance + arcDistance, 0.0f, speed);
 	float forwardSpeed = Math::map(duration, 0.0f, deaccelerationDuration, startSpeed, speed) - sideSpeed;
 	
@@ -448,7 +445,6 @@ bool DriveBehindBallTask::onStep(Robot& robot, float dt) {
 	dirVector.y += side * sideSpeed;
 
 	robot.setTargetDir(dirVector.x, dirVector.y);
-	//robot.lookAt(goal);
 
 	return true;
 }
@@ -466,5 +462,5 @@ float DriveBehindBallTask::getPercentage() {
 }
 
 std::string DriveBehindBallTask::toString() {
-    return "Drive behind ball";
+    return "Drive behind ball " + Util::toString(Math::round(travelledDistance)) + "/" + Util::toString(Math::round(totalDistance));
 }
