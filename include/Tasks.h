@@ -184,7 +184,7 @@ class DriveForTask : public Task {
 
 class DriveBehindBallTask : public Task {
     public:
-		DriveBehindBallTask(float ballDistance, float targetAngle, float speed, float side) : Task(), currentTime(0.0), startTime(0.0), duration(0.0), elapsed(0.0), ballDistance(ballDistance), targetAngle(targetAngle), speed(speed), startSpeed(0.0f), side(side) {}
+		DriveBehindBallTask(float ballDistance, float targetAngle, float speed, float side) : Task(), ballDistance(ballDistance), targetAngle(targetAngle), speed(speed), startSpeed(0.0f), side(side) {}
 
         void onStart(Robot& robot, float dt);
         bool onStep(Robot& robot, float dt);
@@ -194,16 +194,16 @@ class DriveBehindBallTask : public Task {
         std::string toString();
 
 	private:
-		double currentTime;
-		double startTime;
-		double endTime;
-		double duration;
-		double elapsed;
 		float ballDistance;
 		float targetAngle;
 		float speed;
 		float startSpeed;
+		float duration;
 		float side;
+		float startTravelledDistance;
+		float travelledDistance;
+		float arcDistance;
+		float totalDistance;
 };
 
 typedef std::deque<Task*> TaskQueue;

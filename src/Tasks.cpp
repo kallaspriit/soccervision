@@ -417,28 +417,31 @@ std::string DriveForTask::toString() {
 
 // drive behind ball
 void DriveBehindBallTask::onStart(Robot& robot, float dt) {
-	startTime = Util::millitime();
-	duration =  (double)ballDistance / (double)speed + 0.5f / speed;
-	endTime = startTime + duration;
+	float offsetDistance = 0.2f; // TODO Make as param
+
 	startSpeed = robot.getVelocity();
+	duration = 0.0f;
+	arcDistance = offsetDistance * Math::TWO_PI / 4.0f; // quarter of a circle
+	startTravelledDistance = robot.getTravelledDistance();
+	travelledDistance = 0.0f;
+	totalDistance = ballDistance + arcDistance;
 }
 
 bool DriveBehindBallTask::onStep(Robot& robot, float dt) {
-	currentTime = Util::millitime();
+	duration += dt;
 
-	elapsed += dt;
+	travelledDistance = robot.getTravelledDistance() - startTravelledDistance; 
 
-	if (currentTime > endTime) {
+	if (travelledDistance > totalDistance) {
 		robot.stop();
 
 		return false;
 	}
-	//float sideP = 0.4f;
-	float sideAccelerationDuration = 0.5f / speed;
+
 	float deaccelerationDuration = 0.5f;
 	double sideSpeedDelay = ballDistance / speed;
-	float sideSpeed = Math::map((float)(elapsed - sideSpeedDelay), 0.0f, sideAccelerationDuration, 0.0f, speed);
-	float forwardSpeed = Math::map((float)elapsed, 0.0f, deaccelerationDuration, startSpeed, speed) - sideSpeed;
+	float sideSpeed = Math::map(travelledDistance, ballDistance, ballDistance + arcDistance, 0.0f, speed);
+	float forwardSpeed = Math::map(duration, 0.0f, deaccelerationDuration, startSpeed, speed) - sideSpeed;
 	
 	Math::Vector dirVector = Math::Vector::createForwardVec(targetAngle, forwardSpeed);
 
@@ -459,9 +462,7 @@ float DriveBehindBallTask::getPercentage() {
         return 0.0f;
     }
 
-	double timeRemaining = endTime - currentTime;
-
-	return (float)(100.0 - (timeRemaining * 100.0 / duration));
+	return (float)(100.0 - (travelledDistance * 100.0 / totalDistance));
 }
 
 std::string DriveBehindBallTask::toString() {
