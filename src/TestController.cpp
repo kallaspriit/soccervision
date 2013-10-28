@@ -981,7 +981,7 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 	}
 
 	if (ball == NULL) {
-		if (!hadBall || reversePerformed) {
+		if (!hadBall || reversePerformed || lastBallDistance > 0.6f) {
 			ai->setState("find-ball");
 
 			return;
@@ -990,49 +990,6 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 		reversePerformed = true;
 
 		robot->driveBehindBall(lastBallDistance, lastTargetAngle, reverseBlindSpeed, targetMode == TargetMode::LEFT ? 1.0f : -1.0f);
-
-		/*if (lostBallTime == -1.0) {
-			lostBallTime = Util::millitime();
-			lostBallVelocity = robot->getVelocity();
-		}
-		
-		timeSinceLostBall = Util::duration(lostBallTime);
-
-		if (timeSinceLostBall > maxBlindReverseDuration) {
-			if (ball != NULL) {
-				ai->setState("fetch-ball-front");
-			} else {
-				Parameters parameters;
-
-				if (searchDir != 0.0f) {
-					parameters["search-dir"] = Util::toString(searchDir);
-				}
-
-				ai->setState("find-ball", parameters);
-			}
-
-			return;
-		}
-
-		float fetchBlindSpeed = 0.5f;
-		//float sideP = 0.4f;
-		float sideAccelerationDuration = 0.5f;
-		float deaccelerationDuration = 0.5f;
-		double sideSpeedDelay = 0.5;
-		float deacceleratedSpeed = Math::map((float)timeSinceLostBall, 0.0f, deaccelerationDuration, lostBallVelocity, fetchBlindSpeed);
-		float targetModeSide = targetMode == TargetMode::LEFT ? 1.0f : -1.0f;
-		float sideSpeed = targetModeSide * Math::map((float)(timeSinceLostBall - sideSpeedDelay), 0.0f, sideAccelerationDuration, 0.0f, deacceleratedSpeed);
-
-		Math::Vector dirVector = Math::Vector::createForwardVec(lastTargetAngle, deacceleratedSpeed);
-
-		dirVector.y += sideSpeed;
-
-		robot->setTargetDir(dirVector.x, dirVector.y);
-		robot->lookAt(goal);
-
-		ai->dbgs("mode", "blind");
-		ai->dbg("sideSpeed", sideSpeed);
-		ai->dbg("deacceleratedSpeed", deacceleratedSpeed);*/
 
 		return;
 	}
