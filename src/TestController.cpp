@@ -20,9 +20,10 @@
  * - deal with not seeing a ball at distance when starting to fetch it quickly
  * - check if sees ball is out driving in reverse
  * - check whether adaptive fetch front distance is good
+ * - can drive out of the field when avoiding to kick through balls
  */
 
-TestController::TestController(Robot* robot, Communication* com) : BaseAI(robot, com), targetSide(Side::BLUE), manualSpeedX(0.0f), manualSpeedY(0.0f), manualOmega(0.0f), manualDribblerSpeed(0), manualKickStrength(0), blueGoalDistance(0.0f), yellowGoalDistance(0.0f), lastCommandTime(0.0), lastTargetGoalAngle(0.0f), whiteDistance(-1.0f), blackDistance(-1.0f) {
+TestController::TestController(Robot* robot, Communication* com) : BaseAI(robot, com), targetSide(Side::BLUE), manualSpeedX(0.0f), manualSpeedY(0.0f), manualOmega(0.0f), manualDribblerSpeed(0), manualKickStrength(0), blueGoalDistance(0.0f), yellowGoalDistance(0.0f), lastCommandTime(-1.0), lastBallTime(-1.0), lastTargetGoalAngle(0.0f), whiteDistance(-1.0f), blackDistance(-1.0f), lastBall(NULL) {
 	setupStates();
 };
 
@@ -221,6 +222,30 @@ void TestController::updateVisionDebugInfo(Vision::Results* visionResults) {
 	blackDistance = visionResults->front->blackDistance;
 }
 
+void TestController::resetLastBall() {
+	if (lastBall != NULL) {
+		delete lastBall;
+
+		lastBall = NULL;
+		lastBallTime = -1.0;
+	}
+}
+
+void TestController::setLastBall(Object* ball) {
+	resetLastBall();
+
+	lastBall = new Object(*ball);
+}
+
+Object* TestController::getLastBall() {
+	// only return last seen ball if its fresh enough
+	if (lastBall == NULL || lastBallTime == -1.0 || Util::duration(lastBallTime) > 0.016 * 3) {
+		return NULL;
+	}
+
+	return lastBall;
+}
+
 std::string TestController::getJSON() {
 	std::stringstream stream;
 
@@ -344,7 +369,7 @@ float TestController::getTargetAngle(float goalX, float goalY, float ballX, floa
 void TestController::ManualControlState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration) {
 	double time = Util::millitime();
 
-	if (time - ai->lastCommandTime < 0.5) {
+	if (ai->lastCommandTime == -1.0 || time - ai->lastCommandTime < 0.5) {
 		robot->setTargetDir(ai->manualSpeedX, ai->manualSpeedY, ai->manualOmega);
 		robot->dribbler->setTargetSpeed(-ai->manualDribblerSpeed);
 
@@ -470,6 +495,10 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 		ball = visionResults->getClosestBall(Dir::ANY);
 	}
 
+	if (ball != NULL) {
+		ai->setLastBall(ball);
+	}
+
 	ai->dbg("hasTasks", robot->hasTasks());
 	ai->dbg("timeSinceLastSearch", timeSinceLastSearch);
 	ai->dbg("searchStartDir", searchStartDir);
@@ -576,6 +605,10 @@ void TestController::FetchBallFrontState::step(float dt, Vision::Results* vision
 
 	ai->dbg("ballVisible", ball != NULL);
 	ai->dbg("goalVisible", goal != NULL);
+
+	if (ball != NULL) {
+		ai->setLastBall(ball);
+	}
 
 	if (ball != NULL && ball->behind) {
 		ai->dbgs("action", "Switch to fetch behind");
@@ -735,6 +768,10 @@ void TestController::FetchBallDirectState::step(float dt, Vision::Results* visio
 		ball = visionResults->getClosestBall(Dir::ANY);
 	}
 
+	if (ball != NULL) {
+		ai->setLastBall(ball);
+	}
+
 	ai->dbg("ballVisible", ball != NULL);
 	ai->dbg("goalVisible", goal != NULL);
 
@@ -852,6 +889,10 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 	// only look for front balls after reverse maneuver completed
 	if (stateDuration > minSearchBehindDuration && (reversePerformed || turnAroundPerformed)) {
 		ball = visionResults->getClosestBall(Dir::ANY);
+	}
+
+	if (ball != NULL) {
+		ai->setLastBall(ball);
 	}
 
 	ai->dbg("ballVisible", ball != NULL);
@@ -1067,12 +1108,16 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 		return;
 	}
 	
-	Object* ball = visionResults->getClosestBall();
+	Object* ball = visionResults->getClosestBall(Dir::FRONT);
 	Object* goal = visionResults->getLargestGoal(ai->targetSide, Dir::FRONT);
 
 	ai->dbg("ballVisible", ball != NULL);
 	ai->dbg("goalVisible", goal != NULL);
 	ai->dbg("enterBallDistance", enterBallDistance);
+
+	if (ball != NULL) {
+		ai->setLastBall(ball);
+	}
 
 	if (goal == NULL) {
 		if (ball != NULL) {
@@ -1341,6 +1386,8 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 
 	if (performKick) {
 		robot->kick();
+
+		ai->resetLastBall();
 
 		lastKickTime = Util::millitime();
 	} else {

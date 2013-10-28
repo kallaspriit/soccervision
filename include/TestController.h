@@ -248,6 +248,9 @@ public:
 private:
 	void setupStates();
 	void updateVisionDebugInfo(Vision::Results* visionResults);
+	void resetLastBall();
+	void setLastBall(Object* ball);
+	Object* getLastBall();
 
 	DebouncedButton toggleGoBtn;
 	DebouncedButton toggleSideBtn;
@@ -266,6 +269,9 @@ private:
 	float blackDistance;
 
 	double lastCommandTime;
+	double lastBallTime;
+
+	Object* lastBall;
 
 	Params parameters;
 	Messages messages;
