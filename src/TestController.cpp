@@ -18,6 +18,8 @@
  * - do something if aiming for a while
  * - do something if searching for a ball for a while
  * - deal with not seeing a ball at distance when starting to fetch it quickly
+ * - check if sees ball is out driving in reverse
+ * - check whether adaptive fetch front distance is good
  */
 
 TestController::TestController(Robot* robot, Communication* com) : BaseAI(robot, com), targetSide(Side::BLUE), manualSpeedX(0.0f), manualSpeedY(0.0f), manualOmega(0.0f), manualDribblerSpeed(0), manualKickStrength(0), blueGoalDistance(0.0f), yellowGoalDistance(0.0f), lastCommandTime(0.0), lastTargetGoalAngle(0.0f), whiteDistance(-1.0f), blackDistance(-1.0f) {
@@ -617,7 +619,8 @@ void TestController::FetchBallFrontState::step(float dt, Vision::Results* vision
 	float ballAngle = ball->angle;
 	float goalAngle = goal->angle;
 	float angleDiff = Math::abs(goalAngle - ballAngle);
-	float offsetDistance = Math::map(Math::radToDeg(angleDiff), 0.0f, maxOffsetDistanceAngleDiff, nearDistance, maxAngleDiffDistance);
+	//float offsetDistance = Math::map(Math::radToDeg(angleDiff), 0.0f, maxOffsetDistanceAngleDiff, nearDistance, maxAngleDiffDistance);
+	float offsetDistance = 0.3f;
 
 	// reset if we probably started to watch a ball we just kicked
 	if (lastBallDistance != -1.0f && ballDistance - lastBallDistance > retratingBallDistanceDiff) {
