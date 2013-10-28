@@ -620,7 +620,7 @@ void TestController::FetchBallFrontState::step(float dt, Vision::Results* vision
 	float goalAngle = goal->angle;
 	float angleDiff = Math::abs(goalAngle - ballAngle);
 	//float offsetDistance = Math::map(Math::radToDeg(angleDiff), 0.0f, maxOffsetDistanceAngleDiff, nearDistance, maxAngleDiffDistance);
-	float offsetDistance = 0.15f;
+	float offsetDistance = 0.2f;
 
 	// reset if we probably started to watch a ball we just kicked
 	if (lastBallDistance != -1.0f && ballDistance - lastBallDistance > retratingBallDistanceDiff) {
