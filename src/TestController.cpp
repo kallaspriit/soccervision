@@ -237,6 +237,8 @@ void TestController::setLastBall(Object* ball) {
 
 	lastBall = new Object();
 	lastBall->copyFrom(ball);
+
+	lastBallTime = Util::millitime();
 }
 
 Object* TestController::getLastBall(Dir dir) {
