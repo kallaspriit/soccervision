@@ -599,8 +599,6 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 					std::cout << "! Driving to the center of the field" << std::endl;
 
 					robot->driveTo(Config::fieldWidth / 2.0f, Config::fieldHeight / 2.0f, robot->getPosition().orientation + Math::PI, 1.0f);
-				
-					ai->setState("find-ball");
 
 					return;
 				}
