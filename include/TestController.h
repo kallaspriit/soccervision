@@ -33,7 +33,7 @@ public:
 
 	public:
 		ManualControlState(TestController* ai) : State(ai) {}
-		void step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration);
+		void step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration, float combinedDuration);
 
 	};
 
@@ -41,7 +41,7 @@ public:
 
 	public:
 		WatchBallState(TestController* ai) : State(ai) {}
-		void step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration);
+		void step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration, float combinedDuration);
 
 	};
 
@@ -49,7 +49,7 @@ public:
 
 	public:
 		WatchGoalState(TestController* ai) : State(ai) {}
-		void step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration);
+		void step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration, float combinedDuration);
 
 	};
 
@@ -57,7 +57,7 @@ public:
 
 	public:
 		WatchGoalBehindState(TestController* ai) : State(ai) {}
-		void step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration);
+		void step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration, float combinedDuration);
 
 	};
 
@@ -65,7 +65,7 @@ public:
 
 	public:
 		SpinAroundDribblerState(TestController* ai) : State(ai) {}
-		void step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration);
+		void step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration, float combinedDuration);
 
 	};
 
@@ -74,7 +74,7 @@ public:
 	public:
 		DriveToState(TestController* ai) : State(ai), x(Config::fieldWidth / 2.0f), y(Config::fieldHeight / 2.0f), orientation(0.0f) {}
 		void onEnter(Robot* robot, Parameters parameters);
-		void step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration);
+		void step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration, float combinedDuration);
 
 		float x;
 		float y;
@@ -87,7 +87,7 @@ public:
 	public:
 		TurnByState(TestController* ai) : State(ai), angle(0.0f) {}
 		void onEnter(Robot* robot, Parameters parameters);
-		void step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration);
+		void step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration, float combinedDuration);
 
 		float angle;
 
@@ -98,7 +98,7 @@ public:
 	public:
 		void onEnter(Robot* robot, Parameters parameters);
 		FindBallState(TestController* ai) : State(ai), searchDir(1.0f), lastTurnTime(-1.0), lastSearchTime(-1.0), timeSinceLastSearch(-1.0) {}
-		void step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration);
+		void step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration, float combinedDuration);
 
 	private:
 		float searchDir;
@@ -113,7 +113,7 @@ public:
 	public:
 		FetchBallFrontState(TestController* ai) : State(ai), forwardSpeed(0.0f), startBrakingDistance(-1.0f), startBrakingVelocity(-1.0f), lastBallDistance(-1.0f) {}
 		void onEnter(Robot* robot, Parameters parameters);
-		void step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration);
+		void step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration, float combinedDuration);
 
 	private:
 		void reset(Robot* robot);
@@ -130,7 +130,7 @@ public:
 	public:
 		FetchBallDirectState(TestController* ai) : State(ai), forwardSpeed(0.0f), nearLine(false) {}
 		void onEnter(Robot* robot, Parameters parameters);
-		void step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration);
+		void step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration, float combinedDuration);
 
 	private:
 		float forwardSpeed;
@@ -143,7 +143,7 @@ public:
 	public:
 		FetchBallBehindState(TestController* ai) : State(ai), hadBall(false), lastTargetAngle(0.0f), lostBallTime(-1.0), timeSinceLostBall(0.0), lostBallVelocity(0.0f), startBallDistance(-1.0f), lastBallDistance(-1.0f), targetMode(TargetMode::UNDECIDED), avgBallGoalDistance(10) {}
 		void onEnter(Robot* robot, Parameters parameters);
-		void step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration);
+		void step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration, float combinedDuration);
 
 	private:
 		bool hadBall;
@@ -166,7 +166,7 @@ public:
 	public:
 		FetchBallNearState(TestController* ai) : State(ai), enterDistance(-1.0f), enterVelocity(0.0f), enterBallDistance(-1.0f), smallestForwardSpeed(-1.0f) {}
 		void onEnter(Robot* robot, Parameters parameters);
-		void step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration);
+		void step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration, float combinedDuration);
 
 	private:
 		float enterDistance;
@@ -181,7 +181,7 @@ public:
 	public:
 		void onEnter(Robot* robot, Parameters parameters);
 		AimState(TestController* ai) : State(ai), lastKickTime(-1.0), foundOwnGoalTime(-1.0), avoidBallSide(TargetMode::UNDECIDED), searchGoalDir(0.0f), performReverse(Decision::UNDECIDED), reverseTime(0.0f), nearLine(false) {}
-		void step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration);
+		void step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration, float combinedDuration);
 
 	private:
 		double lastKickTime;
@@ -197,7 +197,7 @@ public:
 
 	public:
 		DriveCircleState(TestController* ai) : State(ai) {}
-		void step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration);
+		void step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration, float combinedDuration);
 
 	private:
 		static float getCircleTargetAngle(float start, float time, float period);
@@ -209,7 +209,7 @@ public:
 	public:
 		AccelerateState(TestController* ai) : State(ai), forwardSpeed(0.0f) {}
 		void onEnter(Robot* robot, Parameters parameters);
-		void step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration);
+		void step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration, float combinedDuration);
 
 	private:
 		float forwardSpeed;

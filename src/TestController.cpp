@@ -82,10 +82,11 @@ void TestController::step(float dt, Vision::Results* visionResults) {
 	updateVisionDebugInfo(visionResults);
 	
 	currentStateDuration += dt;
+	combinedStateDuration += dt;
 	totalDuration += dt;
 
 	if (currentState != NULL) {
-		currentState->step(dt, visionResults, robot, totalDuration, currentStateDuration);
+		currentState->step(dt, visionResults, robot, totalDuration, currentStateDuration, combinedStateDuration);
 	}
 }
 
@@ -277,6 +278,7 @@ std::string TestController::getJSON() {
 
 	stream << "\"currentState\": \"" << currentStateName << "\",";
 	stream << "\"stateDuration\": \"" << currentStateDuration << "\",";
+	stream << "\"combinedDuration\": \"" << combinedStateDuration << "\",";
 	stream << "\"totalDuration\": \"" << totalDuration << "\",";
 	stream << "\"realSpeed\": \"" << robot->getVelocity() << "\",";
 	stream << "\"travelledDistance\": \"" << robot->getTravelledDistance() << "\",";
@@ -385,7 +387,7 @@ float TestController::getTargetAngle(float goalX, float goalY, float ballX, floa
 	return targetAngle;
 }
 
-void TestController::ManualControlState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration) {
+void TestController::ManualControlState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration, float combinedDuration) {
 	double time = Util::millitime();
 
 	if (ai->lastCommandTime == -1.0 || time - ai->lastCommandTime < 0.5) {
@@ -403,7 +405,7 @@ void TestController::ManualControlState::step(float dt, Vision::Results* visionR
 	}
 }
 
-void TestController::WatchBallState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration) {
+void TestController::WatchBallState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration, float combinedDuration) {
 	Object* ball = visionResults->getClosestBall(Dir::FRONT);
 
 	if (ball == NULL) {
@@ -416,7 +418,7 @@ void TestController::WatchBallState::step(float dt, Vision::Results* visionResul
 	robot->lookAt(ball);
 }
 
-void TestController::WatchGoalState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration) {
+void TestController::WatchGoalState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration, float combinedDuration) {
 	Object* goal = visionResults->getLargestGoal(ai->targetSide, Dir::FRONT);
 
 	if (goal == NULL) {
@@ -429,7 +431,7 @@ void TestController::WatchGoalState::step(float dt, Vision::Results* visionResul
 	robot->lookAt(goal);
 }
 
-void TestController::WatchGoalBehindState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration) {
+void TestController::WatchGoalBehindState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration, float combinedDuration) {
 	Object* goal = visionResults->getLargestGoal(ai->targetSide, Dir::REAR);
 
 	if (goal == NULL) {
@@ -442,7 +444,7 @@ void TestController::WatchGoalBehindState::step(float dt, Vision::Results* visio
 	robot->lookAtBehind(goal);
 }
 
-void TestController::SpinAroundDribblerState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration) {
+void TestController::SpinAroundDribblerState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration, float combinedDuration) {
 	robot->spinAroundDribbler();
 }
 
@@ -450,7 +452,7 @@ void TestController::DriveToState::onEnter(Robot* robot, Parameters parameters) 
 	robot->driveTo(x, y, orientation);
 }
 
-void TestController::DriveToState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration) {
+void TestController::DriveToState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration, float combinedDuration) {
 	if (!robot->hasTasks()) {
 		ai->setState("manual-control");
 	}
@@ -460,7 +462,7 @@ void TestController::TurnByState::onEnter(Robot* robot, Parameters parameters) {
 	robot->turnBy(angle, Math::PI);
 }
 
-void TestController::TurnByState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration) {
+void TestController::TurnByState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration, float combinedDuration) {
 	if (!robot->hasTasks()) {
 		ai->setState("manual-control");
 	}
@@ -484,7 +486,7 @@ void TestController::FindBallState::onEnter(Robot* robot, Parameters parameters)
 	}
 }
 
-void TestController::FindBallState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration) {
+void TestController::FindBallState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration, float combinedDuration) {
 	lastSearchTime = Util::millitime();
 	
 	if (robot->dribbler->gotBall()) {
@@ -598,7 +600,7 @@ void TestController::FetchBallFrontState::reset(Robot* robot) {
 	lastBallDistance = -1.0f;
 }
 
-void TestController::FetchBallFrontState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration) {
+void TestController::FetchBallFrontState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration, float combinedDuration) {
 	robot->stop();
 	
 	if (robot->dribbler->gotBall()) {
@@ -762,7 +764,7 @@ void TestController::FetchBallDirectState::onEnter(Robot* robot, Parameters para
 	nearLine = false;
 }
 
-void TestController::FetchBallDirectState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration) {
+void TestController::FetchBallDirectState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration, float combinedDuration) {
 	robot->stop();
 	
 	if (robot->dribbler->gotBall()) {
@@ -894,7 +896,7 @@ void TestController::FetchBallBehindState::onEnter(Robot* robot, Parameters para
 	targetMode = TargetMode::UNDECIDED;
 }
 
-void TestController::FetchBallBehindState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration) {
+void TestController::FetchBallBehindState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration, float combinedDuration) {
 	robot->stop();
 
 	if (robot->dribbler->gotBall()) {
@@ -1087,7 +1089,7 @@ void TestController::FetchBallNearState::onEnter(Robot* robot, Parameters parame
 	smallestForwardSpeed = -1.0f;
 }
 
-void TestController::FetchBallNearState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration) {
+void TestController::FetchBallNearState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration, float combinedDuration) {
 	robot->stop();
 	
 	if (robot->dribbler->gotBall()) {
@@ -1214,7 +1216,7 @@ void TestController::AimState::onEnter(Robot* robot, Parameters parameters) {
 	}
 }
 
-void TestController::AimState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration) {
+void TestController::AimState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration, float combinedDuration) {
 	robot->stop();
 	robot->dribbler->start();
 
@@ -1408,7 +1410,7 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 
 }
 
-void TestController::DriveCircleState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration) {
+void TestController::DriveCircleState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration, float combinedDuration) {
 	Object* goal = visionResults->getLargestGoal(ai->targetSide, Dir::FRONT);
 
 	ai->dbg("goalVisible", goal != NULL);
@@ -1442,7 +1444,7 @@ void TestController::AccelerateState::onEnter(Robot* robot, Parameters parameter
 	forwardSpeed = robot->getVelocity();
 }
 
-void TestController::AccelerateState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration) {
+void TestController::AccelerateState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration, float combinedDuration) {
 	robot->stop();
 	
 	if (robot->dribbler->gotBall()) {

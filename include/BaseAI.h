@@ -20,7 +20,7 @@ public:
 		State(BaseAI* ai) : ai(ai) {}
 		virtual void onEnter(Robot* robot, Parameters parameters) {}
 		virtual void onExit(Robot* robot) {}
-		virtual void step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration) = 0;
+		virtual void step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration, float combinedDuration) = 0;
 
 	protected:
 		BaseAI* ai;
@@ -42,6 +42,7 @@ protected:
 	std::string currentStateName;
 	float totalDuration;
 	float currentStateDuration;
+	float combinedStateDuration;
 
 };
 
