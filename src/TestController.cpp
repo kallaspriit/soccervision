@@ -589,14 +589,21 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 			return;
 		}
 	} else {
-		// drive to the center of the field after some time
-		// TODO Use odometer
 		if (!robot->hasTasks()) {
-			if (stateDuration < 5.0f) {
-				robot->setTargetOmega(searchOmega * searchDir);
-			} else {
-				robot->driveTo(Config::fieldWidth / 2.0f, Config::fieldHeight / 2.0f, 0.0f, 1.0f);
+			if (stateDuration > 5.0f) {
+				Math::Point robotPos(robot->getPosition().x, robot->getPosition().y);
+				Math::Point centerPos(Config::fieldWidth / 2.0f, Config::fieldHeight / 2.0f);
+
+				if (robotPos.getDistanceTo(centerPos) > 0.5f) {
+					std::cout << "! Driving to the center of the field" << std::endl;
+
+					robot->driveTo(Config::fieldWidth / 2.0f, Config::fieldHeight / 2.0f, robot->getPosition().orientation + Math::PI, 1.0f);
+				}
+
+				return;
 			}
+
+			robot->setTargetOmega(searchOmega * searchDir);
 		}
 	}
 
