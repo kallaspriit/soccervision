@@ -23,9 +23,10 @@
  * + can drive out of the field when avoiding to kick through balls
  * + don't drive forward while avoiding balls if next ball is close by
  * - detect that the robot has gone out of the wheel (both cameras)
- * - create a way to read the actual distance the robot has travelled at any time
- * - use robot distance to calculate how long to drive blind behind the ball
- * - account for ball and dribbler stall
+ * + create a way to read the actual distance the robot has travelled at any time
+ * + use robot distance to calculate how long to drive blind behind the ball
+ * - account for wheels and dribbler stall
+ * - do something about other robots, avoid driving into them
  */
 
 TestController::TestController(Robot* robot, Communication* com) : BaseAI(robot, com), targetSide(Side::BLUE), manualSpeedX(0.0f), manualSpeedY(0.0f), manualOmega(0.0f), manualDribblerSpeed(0), manualKickStrength(0), blueGoalDistance(0.0f), yellowGoalDistance(0.0f), lastCommandTime(-1.0), lastBallTime(-1.0), lastTargetGoalAngle(0.0f), whiteDistance(-1.0f), blackDistance(-1.0f), lastBall(NULL) {
@@ -540,7 +541,7 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 		searchOmega /= 2.0f;
 	}
 
-	double minTurnBreak = (double)(Math::TWO_PI / searchOmega);
+	double minTurnBreak = 1.5;
 
 	ai->dbg("ballVisible", ball != NULL);
 	ai->dbg("goalVisible", goal != NULL);
@@ -588,6 +589,8 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 			}
 
 			return;
+		} else {
+			robot->setTargetOmega(searchOmega * searchDir);
 		}
 	} else {
 		if (!robot->hasTasks()) {
