@@ -1244,7 +1244,7 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 	float performReverseMaxWhiteDistance = 0.35f;
 	float performReverseMaxBlackDistance = 0.4f;
 	float maxAimDuration = 6.0f;
-	int weakKickStrength = 6000;
+	int weakKickStrength = 3000;
 
 	if (goal == NULL) {
 		if (combinedDuration > maxAimDuration) {
