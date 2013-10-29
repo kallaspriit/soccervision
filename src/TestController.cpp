@@ -1243,8 +1243,18 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 	float reverseSpeed = 1.0f;
 	float performReverseMaxWhiteDistance = 0.35f;
 	float performReverseMaxBlackDistance = 0.4f;
+	float maxAimDuration = 10.0f;
+	int weakKickStrength = 1000;
 
 	if (goal == NULL) {
+		if (combinedDuration > maxAimDuration) {
+			robot->kick(weakKickStrength);
+
+			ai->setState("fetch-ball-behind");
+
+			return;
+		}
+
 		if (performReverse == Decision::UNDECIDED) {
 			if (
 				nearLine
