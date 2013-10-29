@@ -535,11 +535,12 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 	}
 
 	float searchOmega = Math::PI;
-	double minTurnBreak = (double)(Math::TWO_PI / searchOmega);
 
 	if (stateDuration > Math::TWO_PI / searchOmega) {
 		searchOmega /= 2.0f;
 	}
+
+	double minTurnBreak = (double)(Math::TWO_PI / searchOmega);
 
 	ai->dbg("ballVisible", ball != NULL);
 	ai->dbg("goalVisible", goal != NULL);
@@ -590,7 +591,7 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 		}
 	} else {
 		if (!robot->hasTasks()) {
-			if (stateDuration > 5.0f) {
+			if (stateDuration > Math::TWO_PI / searchOmega * 2.0f) {
 				Math::Point robotPos(robot->getPosition().x, robot->getPosition().y);
 				Math::Point centerPos(Config::fieldWidth / 2.0f, Config::fieldHeight / 2.0f);
 
@@ -608,8 +609,6 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 			robot->setTargetOmega(searchOmega * searchDir);
 		}
 	}
-
-	robot->setTargetOmega(searchOmega * searchDir);
 }
 
 void TestController::FetchBallFrontState::onEnter(Robot* robot, Parameters parameters) {
