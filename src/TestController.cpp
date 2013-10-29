@@ -591,7 +591,7 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 		}
 	} else {
 		if (!robot->hasTasks()) {
-			if (stateDuration > Math::TWO_PI / searchOmega * 2.0f) {
+			if (stateDuration > 4.0f) {
 				Math::Point robotPos(robot->getPosition().x, robot->getPosition().y);
 				Math::Point centerPos(Config::fieldWidth / 2.0f, Config::fieldHeight / 2.0f);
 
