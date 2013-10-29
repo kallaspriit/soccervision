@@ -16,6 +16,7 @@ public:
     ~XimeaCamera();
 
     bool open(int serial = 0);
+	int getSerial() { return getSerialNumber(); }
 	bool isOpened() { return opened; };
 	bool isAcquisitioning() { return acquisitioning; };
 	void startAcquisition();

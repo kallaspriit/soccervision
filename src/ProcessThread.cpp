@@ -123,7 +123,20 @@ bool ProcessThread::fetchFrame() {
 		double timeTaken = Util::duration(startTime);
 
 		if (timeTaken > 0.02) {
-			std::cout << "- Fetching camera frame took: " << timeTaken << std::endl;
+			std::cout << "- Fetching camera #" << camera->getSerial() << " frame took: " << timeTaken << std::endl;
+
+			// camera has failed
+			if (timeTaken > 0.031) {
+				int serial = camera->getSerial();
+
+				std::cout << "! Attempting to revive camera #" << serial << std::endl;
+
+				camera->close();
+				camera->open(serial);
+				camera->startAcquisition();
+
+				return false;
+			}
 		}
 
 		if (cameraFrame != NULL) {
