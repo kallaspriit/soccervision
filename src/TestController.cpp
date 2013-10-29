@@ -1234,7 +1234,9 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 	ai->dbg("reverseTime", reverseTime);
 	ai->dbg("nearLine", nearLine);
 
+	float searchPeriod = Config::robotSpinAroundDribblerPeriod;
 	float reversePeriod = 1.0f;
+	float reverseSpeed = 1.0f;
 	float performReverseMaxWhiteDistance = 0.35f;
 	float performReverseMaxBlackDistance = 0.4f;
 
@@ -1254,9 +1256,7 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 			}
 		}
 
-		// TODO Perhaps only do this when in corner / white line is close
 		if (performReverse == Decision::YES && reverseTime < reversePeriod) {
-			float reverseSpeed = 1.0f;
 			float acceleratedReverseSpeed = reverseSpeed * Math::map(reverseTime, 0, reversePeriod, 0.0f, 1.0f);
 
 			robot->setTargetDir(-acceleratedReverseSpeed, 0.0f, 0.0f);
@@ -1267,8 +1267,6 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 
 			return;
 		}
-
-		float searchPeriod = Config::robotSpinAroundDribblerPeriod;
 
 		if (searchGoalDir == 0.0f) {
 			if (ai->lastTargetGoalAngle > 0.0f) {
@@ -1294,11 +1292,11 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 			float accelerationPeriod = 1.5f;
 			float reverseSpeed = 1.0f;
 
-			/*if (stateDuration > searchPeriod + reverseDuration) {
+			if (stateDuration > searchPeriod + reverseDuration) {
 				ai->setState("aim");
 
 				return;
-			}*/
+			}
 
 			// didn't find our goal in time, search for opponent goal and drive towards it instead
 			Side ownSide = ai->targetSide == Side::YELLOW ? Side::BLUE : Side::YELLOW;
