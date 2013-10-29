@@ -15,13 +15,13 @@
  * + improve fetch behind not to reconsider so much (complete maneuver?)
  * + decrease fetch direct speed if white-black close (nearby line)
  * + provide cached ball info for some frames if can't see one any more
- * - move while aiming if other robot in the way
- * - do something if aiming for a while
- * - do something if searching for a ball for a while
- * - deal with not seeing a ball at distance when starting to fetch it quickly
- * - check if sees ball is out driving in reverse
- * - check whether adaptive fetch front distance is good
+ * + move while aiming if other robot in the way (can be improved)
+ * + do something if searching for a ball for a while (drive the center)
+ * + deal with not seeing a ball at distance when starting to fetch it quickly (remembers it for a while)
+ * + check if sees ball is out driving in reverse
+ * + check whether adaptive fetch front distance is good
  * - can drive out of the field when avoiding to kick through balls
+ * - don't drive forward while avoiding balls if next ball is close by
  * - detect that the robot has gone out of the wheel (both cameras)
  * - create a way to read the actual distance the robot has travelled at any time
  * - use robot distance to calculate how long to drive blind behind the ball
@@ -1386,9 +1386,9 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 	if (isBallInWay) {
 		if (avoidBallSide == TargetMode::UNDECIDED) {
 			if (robot->getPosition().y < Config::fieldHeight / 2.0f) {
-				avoidBallSide = TargetMode::RIGHT;
+				avoidBallSide = ai->targetSide == Side::BLUE ? TargetMode::RIGHT : TargetMode::LEFT;
 			} else {
-				avoidBallSide = TargetMode::LEFT;
+				avoidBallSide = ai->targetSide == Side::BLUE ? TargetMode::LEFT : TargetMode::RIGHT;
 			}
 		}
 
