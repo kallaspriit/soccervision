@@ -20,8 +20,8 @@
  * + deal with not seeing a ball at distance when starting to fetch it quickly (remembers it for a while)
  * + check if sees ball is out driving in reverse
  * + check whether adaptive fetch front distance is good
- * - can drive out of the field when avoiding to kick through balls
- * - don't drive forward while avoiding balls if next ball is close by
+ * + can drive out of the field when avoiding to kick through balls
+ * + don't drive forward while avoiding balls if next ball is close by
  * - detect that the robot has gone out of the wheel (both cameras)
  * - create a way to read the actual distance the robot has travelled at any time
  * - use robot distance to calculate how long to drive blind behind the ball
@@ -591,7 +591,8 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 		}
 	} else {
 		if (!robot->hasTasks()) {
-			if (stateDuration > 4.0f) {
+			// drive to the center of the field after a round of searching
+			if (stateDuration > 2.0f) {
 				Math::Point robotPos(robot->getPosition().x, robot->getPosition().y);
 				Math::Point centerPos(Config::fieldWidth / 2.0f, Config::fieldHeight / 2.0f);
 
