@@ -1256,7 +1256,7 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 
 		// TODO Perhaps only do this when in corner / white line is close
 		if (performReverse == Decision::YES && reverseTime < reversePeriod) {
-			float reverseSpeed = 0.75f;
+			float reverseSpeed = 1.0f;
 			float acceleratedReverseSpeed = reverseSpeed * Math::map(reverseTime, 0, reversePeriod, 0.0f, 1.0f);
 
 			robot->setTargetDir(-acceleratedReverseSpeed, 0.0f, 0.0f);
@@ -1290,15 +1290,15 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 		if (stateDuration > waitUntilSearchOwnGoalTime) {
 			//float approachOwnGoalSideSpeed = 0.5f;
 			float reverseDuration = 1.5f;
-			float approachOwnGoalMinDistance = 2.0f;
+			float approachOwnGoalMinDistance = 1.5f;
 			float accelerationPeriod = 1.5f;
 			float reverseSpeed = 1.0f;
 
-			if (stateDuration > searchPeriod + reverseDuration) {
+			/*if (stateDuration > searchPeriod + reverseDuration) {
 				ai->setState("aim");
 
 				return;
-			}
+			}*/
 
 			// didn't find our goal in time, search for opponent goal and drive towards it instead
 			Side ownSide = ai->targetSide == Side::YELLOW ? Side::BLUE : Side::YELLOW;
