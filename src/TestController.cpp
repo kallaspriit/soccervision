@@ -946,7 +946,7 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 
 			ai->setState("find-ball");
 		} else if (goal != NULL) {
-			//robot->lookAt(goal);
+			robot->lookAt(goal);
 		}
 
 		return;

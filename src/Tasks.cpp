@@ -440,10 +440,12 @@ bool DriveBehindBallTask::onStep(Robot& robot, float dt) {
 	float sideSpeed = Math::map(travelledDistance, ballDistance, ballDistance + arcDistance, 0.0f, speed);
 	float forwardSpeed = Math::map(duration, 0.0f, deaccelerationDuration, startSpeed, speed) - sideSpeed;
 	float brakeMultiplier = Math::map(travelledDistance, totalDistance - arcDistance, totalDistance, 1.0f, 0.0f);
-	
-	Math::Vector dirVector = Math::Vector::createForwardVec(targetAngle, forwardSpeed * brakeMultiplier);
 
-	dirVector.y += side * sideSpeed * brakeMultiplier;
+	std::cout << "@ BRAKE MULTIPLIER: " << brakeMultiplier << std::endl;
+	
+	Math::Vector dirVector = Math::Vector::createForwardVec(targetAngle, forwardSpeed/* * brakeMultiplier*/);
+
+	dirVector.y += side * sideSpeed/* * brakeMultiplier*/;
 
 	robot.setTargetDir(dirVector.x, dirVector.y);
 
