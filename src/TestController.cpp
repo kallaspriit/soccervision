@@ -1384,7 +1384,12 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 	bool isKickTooSoon = lastKickTime != -1.0 && timeSinceLastKick < minKickInterval;
 
 	if (isBallInWay) {
+		float anotherBallCloseDistance = 0.3f;
+		Object* nextClosestBall = visionResults->getNextClosestBall(Dir::FRONT);
+		bool nearbyAnotherBall = nextClosestBall != NULL && nextClosestBall->getDribblerDistance() < anotherBallCloseDistance;
+
 		if (avoidBallSide == TargetMode::UNDECIDED) {
+			// make sure to drive near the centerline of the field not out further
 			if (robot->getPosition().y < Config::fieldHeight / 2.0f) {
 				avoidBallSide = ai->targetSide == Side::BLUE ? TargetMode::RIGHT : TargetMode::LEFT;
 			} else {
@@ -1393,7 +1398,14 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 		}
 
 		forwardSpeed = Math::map(goal->distance, 0.5f, 1.0f, 0.0f, avoidBallSpeed);
-		sideSpeed = (avoidBallSide == TargetMode::LEFT ? -1.0f : 1.0f) * Math::max(forwardSpeed, minBallAvoidSideSpeed);
+
+		if (nearbyAnotherBall) {
+			forwardSpeed = 0.0f;
+		}
+
+		sideSpeed = (avoidBallSide == TargetMode::LEFT ? -1.0f : 1.0f) * avoidBallSpeed;
+	
+		ai->dbg("nearbyAnotherBall", nearbyAnotherBall);
 	}
 
 	if (!goal->behind) {

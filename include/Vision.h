@@ -35,7 +35,8 @@ public:
 	class Results {
 		public:
 			Results() : front(NULL), rear(NULL) {}
-			Object* getClosestBall(Dir dir = Dir::ANY);
+			Object* getClosestBall(Dir dir = Dir::ANY, bool nextClosest = false);
+			Object* getNextClosestBall(Dir dir = Dir::ANY);
 			Object* getLargestGoal(Side side, Dir dir = Dir::ANY);
 			Object* getFurthestGoal(Dir dir = Dir::ANY);
 			bool isBallInWay(ObjectList balls, int goalY);
