@@ -936,7 +936,7 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 
 	//double maxBlindReverseDuration = 1.5;
 	double minSearchBehindDuration = 1.0;
-	float reverseBlindSpeed = 1.5f;
+	float reverseBlindSpeed = 1.0f;
 	float offsetDistance = 0.2f;
 	Dir ballSearchDir = Dir::REAR;
 
