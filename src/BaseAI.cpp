@@ -43,11 +43,11 @@ void BaseAI::setState(std::string state, Parameters parameters) {
 		currentStateName = state;
 	}
 
+	robot->clearTasks();
+
 	newState->onEnter(robot, parameters);
 
 	currentState = newState;
-
-	robot->clearTasks();
 }
 
 void BaseAI::handleCommunicationMessage(std::string message) {
