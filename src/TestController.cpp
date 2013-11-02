@@ -184,6 +184,8 @@ void TestController::handleToggleSideCommand() {
 	std::cout << "! Now targeting " << (targetSide == Side::BLUE ? "blue" : "yellow") << " side" << std::endl;
 
 	com->send("target:" + Util::toString(targetSide));
+
+	lastTurnAroundTime = -1.0;
 }
 
 void TestController::handleParameterCommand(const Command& cmd) {
@@ -520,6 +522,9 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 		ai->setLastBall(ball);
 	}
 
+	ai->dbg("ballSearchDir", ballSearchDir);
+	ai->dbg("lastTurnAroundTime", ai->lastTurnAroundTime);
+	ai->dbg("timeSinceLastTurnAround", ai->lastTurnAroundTime != -1.0 ? Util::duration(ai->lastTurnAroundTime) : -1.0);
 	ai->dbg("hasTasks", robot->hasTasks());
 	ai->dbg("timeSinceLastSearch", timeSinceLastSearch);
 
