@@ -461,7 +461,7 @@ float DriveBehindBallTask::getPercentage() {
         return 0.0f;
     }
 
-	return (float)(100.0 - (travelledDistance * 100.0 / totalDistance));
+	return travelledDistance * 100.0f / totalDistance;
 }
 
 std::string DriveBehindBallTask::toString() {
