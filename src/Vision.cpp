@@ -155,6 +155,10 @@ ObjectList Vision::processBalls(Dir dir) {
 				std::cout << "- Skipping ball with invalid distance: " << ball->distance << std::endl;
 
 				continue;
+			} else if (ball->distance > 6.0f) {
+				// sometimes the distances returned are too large, cap them
+				ball->distance = 6.0f;
+				ball->distanceY = 6.0f;
 			}
 
 			filteredBalls.push_back(ball);
@@ -246,6 +250,10 @@ ObjectList Vision::processGoals(Dir dir) {
 				std::cout << "- Skipping goal with invalid distance: " << goal->distance << std::endl;
 
 				continue;
+			} else if (goal->distance > 6.0f) {
+				// sometimes the distances returned are too large, cap them
+				goal->distance = 6.0f;
+				goal->distanceY = 6.0f;
 			}
 
 			filteredGoals.push_back(goal);
