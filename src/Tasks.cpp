@@ -20,6 +20,8 @@ bool TurnByTask::onStep(Robot& robot, float dt) {
 		(dir > 0.0f && currentTravelledRotation > endTravelledRotation)
 		|| (dir < 0.0f && currentTravelledRotation < endTravelledRotation)
 	) {
+		std::cout << "! END currentTravelledRotation: " << currentTravelledRotation << ", endTravelledRotation: " << endTravelledRotation << ", angle: " << turnAngle << std::endl;
+
 		return false;
 	}
 
@@ -27,6 +29,8 @@ bool TurnByTask::onStep(Robot& robot, float dt) {
 
 	// slow down at the end of the turn
 	float applySpeed = Math::map(diff, 0.0f, Math::degToRad(30.0f), Math::degToRad(45.0f), speed) * dir;
+
+	std::cout << "! DIFF: " << diff << ", speed: " << applySpeed << std::endl;
 
     robot.setTargetDir(0.0f, 0.0f, applySpeed);
 
