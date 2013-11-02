@@ -1574,7 +1574,6 @@ void Vision::updateColorDistances() {
 
 Object* Vision::Results::getClosestBall(Dir dir, bool nextClosest) {
 	float closestDistance = 100.0f;
-	float distance;
 	Object* ball;
 	Object* closestBall = NULL;
 	Object* nextClosestBall = NULL;
@@ -1582,15 +1581,14 @@ Object* Vision::Results::getClosestBall(Dir dir, bool nextClosest) {
 	if (front != NULL && dir != Dir::REAR) {
 		for (ObjectListItc it = front->balls.begin(); it != front->balls.end(); it++) {
 			ball = *it;
-			distance = ball->behind ? ball->distance * 1.25f : ball->distance;
-		
-			if (closestBall == NULL || distance < closestDistance) {
+
+			if (closestBall == NULL || ball->distance < closestDistance) {
 				if (closestBall != NULL) {
 					nextClosestBall = closestBall;
 				}
 
 				closestBall = ball;
-				closestDistance = distance;
+				closestDistance = ball->distance;
 			}
 		}
 	}
@@ -1598,15 +1596,14 @@ Object* Vision::Results::getClosestBall(Dir dir, bool nextClosest) {
 	if (rear != NULL && dir != Dir::FRONT) {
 		for (ObjectListItc it = rear->balls.begin(); it != rear->balls.end(); it++) {
 			ball = *it;
-			distance = ball->behind ? ball->distance * 1.25f : ball->distance;
-		
-			if (closestBall == NULL || distance < closestDistance) {
+
+			if (closestBall == NULL || ball->distance < closestDistance) {
 				if (closestBall != NULL) {
 					nextClosestBall = closestBall;
 				}
 
 				closestBall = ball;
-				closestDistance = distance;
+				closestDistance = ball->distance;
 			}
 		}
 	}
@@ -1616,18 +1613,16 @@ Object* Vision::Results::getClosestBall(Dir dir, bool nextClosest) {
 
 Object* Vision::Results::getFurthestBall(Dir dir) {
 	float furthestDistance = -1.0f;
-	float distance;
 	Object* ball;
 	Object* furthestBall = NULL;
 
 	if (front != NULL && dir != Dir::REAR) {
 		for (ObjectListItc it = front->balls.begin(); it != front->balls.end(); it++) {
 			ball = *it;
-			distance = ball->behind ? ball->distance * 1.25f : ball->distance;
-		
-			if (furthestBall == NULL || distance > furthestDistance) {
+
+			if (furthestBall == NULL || ball->distance > furthestDistance) {
 				furthestBall = ball;
-				furthestDistance = distance;
+				furthestDistance = ball->distance;
 			}
 		}
 	}
@@ -1635,11 +1630,10 @@ Object* Vision::Results::getFurthestBall(Dir dir) {
 	if (rear != NULL && dir != Dir::FRONT) {
 		for (ObjectListItc it = rear->balls.begin(); it != rear->balls.end(); it++) {
 			ball = *it;
-			distance = ball->behind ? ball->distance * 1.25f : ball->distance;
-		
-			if (furthestBall == NULL || distance > furthestDistance) {
+
+			if (furthestBall == NULL || ball->distance > furthestDistance) {
 				furthestBall = ball;
-				furthestDistance = distance;
+				furthestDistance = ball->distance;
 			}
 		}
 	}
