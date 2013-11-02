@@ -691,6 +691,9 @@ void SoccerBot::handleStreamChoiceCommand(Command::Parameters parameters) {
 	if (requestedStream == "") {
 		std::cout << "! Switching to live stream" << std::endl;
 
+		frontProcessor->camera = ximeaFrontCamera;
+		rearProcessor->camera = ximeaRearCamera;
+
 		frontCamera = ximeaFrontCamera;
 		rearCamera = ximeaRearCamera;
 
@@ -707,6 +710,9 @@ void SoccerBot::handleStreamChoiceCommand(Command::Parameters parameters) {
 			}
 
 			std::cout << "! Switching to screenshot stream: " << requestedStream << std::endl;
+
+			frontProcessor->camera = virtualFrontCamera;
+			rearProcessor->camera = virtualRearCamera;
 
 			frontCamera = virtualFrontCamera;
 			rearCamera = virtualRearCamera;
