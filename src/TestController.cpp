@@ -527,6 +527,7 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 	ai->dbg("timeSinceLastTurnAround", ai->lastTurnAroundTime != -1.0 ? Util::duration(ai->lastTurnAroundTime) : -1.0);
 	ai->dbg("hasTasks", robot->hasTasks());
 	ai->dbg("timeSinceLastSearch", timeSinceLastSearch);
+	ai->dbg("hasTasks", robot->hasTasks());
 
 	if (robot->hasTasks()) {
 		/*if (ball != NULL && !ball->behind) {
