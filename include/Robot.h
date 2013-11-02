@@ -37,6 +37,7 @@ public:
 	bool isBraking() { return velocity < lastVelocity; }
 	float getOmega() { return omega; }
 	float getTravelledDistance() { return travelledDistance; }
+	float getTravelledRotation() { return travelledRotation; }
 	bool isStalled();
 	bool hasTasks() { return getCurrentTask() != NULL; }
 
@@ -105,6 +106,7 @@ private:
 	float lastVelocity;
 	float omega;
 	float travelledDistance;
+	float travelledRotation;
 
 	double lastCommandTime;
     float lastDt;
