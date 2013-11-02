@@ -1573,6 +1573,9 @@ void Vision::updateColorDistances() {
 }
 
 Object* Vision::Results::getClosestBall(Dir dir, bool nextClosest) {
+	Object* blueGoal = getLargestGoal(Side::BLUE, Dir::ANY);
+	Object* yellowGoal = getLargestGoal(Side::BLUE, Dir::ANY);
+
 	float closestDistance = 100.0f;
 	Object* ball;
 	Object* closestBall = NULL;
@@ -1581,6 +1584,13 @@ Object* Vision::Results::getClosestBall(Dir dir, bool nextClosest) {
 	if (front != NULL && dir != Dir::REAR) {
 		for (ObjectListItc it = front->balls.begin(); it != front->balls.end(); it++) {
 			ball = *it;
+
+			if (
+				(blueGoal != NULL && blueGoal->contains(ball))
+				|| (yellowGoal != NULL && yellowGoal->contains(ball))
+			) {
+				continue;
+			}
 
 			if (closestBall == NULL || ball->distance < closestDistance) {
 				if (closestBall != NULL) {
@@ -1596,6 +1606,13 @@ Object* Vision::Results::getClosestBall(Dir dir, bool nextClosest) {
 	if (rear != NULL && dir != Dir::FRONT) {
 		for (ObjectListItc it = rear->balls.begin(); it != rear->balls.end(); it++) {
 			ball = *it;
+
+			if (
+				(blueGoal != NULL && blueGoal->contains(ball))
+				|| (yellowGoal != NULL && yellowGoal->contains(ball))
+			) {
+				continue;
+			}
 
 			if (closestBall == NULL || ball->distance < closestDistance) {
 				if (closestBall != NULL) {

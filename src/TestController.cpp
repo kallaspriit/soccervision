@@ -27,6 +27,7 @@
  * + use robot distance to calculate how long to drive blind behind the ball
  * - account for wheels and dribbler stall
  * - do something about other robots, avoid driving into them
+ * - more reliable "ball in goal", check distances?
  */
 
 TestController::TestController(Robot* robot, Communication* com) : BaseAI(robot, com), targetSide(Side::BLUE), manualSpeedX(0.0f), manualSpeedY(0.0f), manualOmega(0.0f), manualDribblerSpeed(0), manualKickStrength(0), blueGoalDistance(0.0f), yellowGoalDistance(0.0f), lastCommandTime(-1.0), lastBallTime(-1.0), lastTargetGoalAngle(0.0f), whiteDistance(-1.0f), blackDistance(-1.0f), lastBall(NULL), lastTurnAroundTime(-1.0) {
