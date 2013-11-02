@@ -923,7 +923,9 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 	ai->dbg("hasTasks", robot->hasTasks());
 	ai->dbg("timeSinceLostBall", timeSinceLostBall);
 	ai->dbg("startBallDistance", startBallDistance);
+	ai->dbg("lastBallDistance", lastBallDistance);
 	ai->dbg("hadBall", hadBall);
+	ai->dbg("reversePerformed", reversePerformed);
 
 	if (reversePerformed) {
 		ai->setState("find-ball");
@@ -948,9 +950,7 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 		return;
 	}
 
-	if (ball != NULL) {
-		ai->dbg("ballDistance", ball->getDribblerDistance());
-	} else {
+	if (ball == NULL) {
 		if (!hadBall || lastBallDistance > 0.6f) {
 			ai->setState("find-ball");
 		} else {
@@ -980,6 +980,8 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 			targetMode = TargetMode::RIGHT;
 		}
 	}
+
+	ai->dbg("ballDistance", ballDistance);
 
 	Side ownSide = ai->targetSide == Side::YELLOW ? Side::BLUE : Side::YELLOW;
 	Object* ownGoal = visionResults->getLargestGoal(ownSide, Dir::REAR);
