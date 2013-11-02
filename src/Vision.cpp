@@ -152,7 +152,7 @@ ObjectList Vision::processBalls(Dir dir) {
 
 			// TODO Review this
 			if (ball->distance < 0 || ball->distance > 6.5f) {
-				//std::cout << "- Skipping ball with invalid distance: " << ball->distance << std::endl;
+				std::cout << "- Skipping ball with invalid distance: " << ball->distance << std::endl;
 
 				continue;
 			}
@@ -242,8 +242,8 @@ ObjectList Vision::processGoals(Dir dir) {
 			goal->distanceY = distance.y;
 			goal->angle = distance.angle;
 
-			if (goal->distance < 0 || goal->distance > 5.0f) {
-				//std::cout << "- Skipping goal with invalid distance: " << goal->distance << std::endl;
+			if (goal->distance < 0 || goal->distance > 6.5f) {
+				std::cout << "- Skipping goal with invalid distance: " << goal->distance << std::endl;
 
 				continue;
 			}
