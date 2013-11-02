@@ -369,10 +369,10 @@ void Robot::kick(int microseconds) {
 	coilgun->kick(microseconds);
 
 	// TODO Remove this hack once hardware issue is resolved
-	/*Command::Parameters lostBallParams;
+	Command::Parameters lostBallParams;
 	lostBallParams.push_back("0");
 	Command lostBallCmd("ball", lostBallParams);
-	dribbler->handleCommand(lostBallCmd);*/
+	dribbler->handleCommand(lostBallCmd);
 }
 
 void Robot::setPosition(float x, float y, float orientation) {
