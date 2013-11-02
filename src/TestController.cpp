@@ -919,7 +919,8 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 	float reverseBlindSpeed = 1.0f;
 	float offsetDistance = 0.2f;
 
-	Object* ball = visionResults->getFurthestBall(Dir::REAR);
+	//Object* ball = visionResults->getFurthestBall(Dir::REAR);
+	Object* ball = visionResults->getClosestBall(Dir::REAR);
 	Object* goal = visionResults->getLargestGoal(ai->targetSide, Dir::FRONT);
 
 	if (ball != NULL) {
@@ -1019,6 +1020,7 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 			avgBallGoalDistance.full()
 			&& avgBallGoalDistance.value() < minFetchBehindGoalBallDistance
 			&& goalBallDistance < minFetchBehindGoalBallDistance
+			&& ownGoal->distance <= minFetchBehindGoalBallDistance * 2.0f
 			&& (ai->lastTurnAroundTime == -1.0 || Util::duration(ai->lastTurnAroundTime) > minTurnBreak)
 		) {
 			float turnAngle = ball->angle;
