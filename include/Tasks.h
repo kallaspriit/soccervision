@@ -26,7 +26,7 @@ class Task {
 
 class TurnByTask : public Task {
     public:
-        TurnByTask(float angle, float speed = 1) : Task(), threshold(Math::PI / 90.0f), speed(speed), turnAngle(angle), lastDiff(angle) {}
+        TurnByTask(float angle, float speed = 1) : Task(), speed(speed), turnAngle(angle) {}
 
         void onStart(Robot& robot, float dt);
         bool onStep(Robot& robot, float dt);
@@ -36,15 +36,13 @@ class TurnByTask : public Task {
         std::string toString();
 
     private:
-        const float threshold;
         float speed;
-        float startAngle;
-        float turnAngle;
-        float targetAngle;
-        float lastDiff;
+		float turnAngle;
+        float startTravelledRotation;
+		float currentTravelledRotation;
+        float endTravelledRotation;
 		float dir;
-		double startTime;
-		float maxTurnTime;
+		float diff;
 };
 
 class DriveToTask : public Task {

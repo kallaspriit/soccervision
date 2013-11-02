@@ -7,48 +7,28 @@
 // TurnBy angle task
 void TurnByTask::onStart(Robot& robot, float dt) {
 	speed = Math::abs(speed);
-    startAngle = robot.getOrientation();
-	targetAngle = Math::floatModulus(startAngle + turnAngle, Math::TWO_PI);
-	dir = turnAngle < 0.0f ? -1.0f : 1.0f;
-	startTime = -1;
-	maxTurnTime = Math::abs(turnAngle / speed) * 1.5f;
-	lastDiff = -1.0f;
+    startTravelledRotation = robot.getTravelledRotation();
+	currentTravelledRotation = startTravelledRotation;
+	endTravelledRotation = startTravelledRotation + turnAngle;
+	dir = (turnAngle > 0.0f ? 1.0f : -1.0f);
 }
 
 bool TurnByTask::onStep(Robot& robot, float dt) {
-	if (startTime == -1) {
-		startTime = Util::millitime();
-	}
-
-    float currentAngle = robot.getOrientation();
-
-	//float newDiff = Math::abs(currentAngle - targetAngle);
-
-	float newDiff;
-
-	if (dir == 1.0f) {
-		newDiff = targetAngle - currentAngle;
-	} else {
-		newDiff = currentAngle - targetAngle;
-	}
-
-	if (newDiff < 0.0f) {
-		newDiff += Math::TWO_PI;
-	}
+	currentTravelledRotation = robot.getTravelledRotation();
 
 	if (
-		newDiff < threshold
-		//|| (lastDiff != -1 && newDiff - lastDiff > threshold)
-		|| Util::duration(startTime) > maxTurnTime
+		(dir > 0.0f && currentTravelledRotation > endTravelledRotation)
+		|| (dir < 0.0f && currentTravelledRotation < endTravelledRotation)
 	) {
 		return false;
 	}
 
-	lastDiff = newDiff;
+	diff = Math::abs(currentTravelledRotation - endTravelledRotation);
 
-	float useSpeed = speed * dir;
+	// slow down at the end of the turn
+	float applySpeed = Math::map(diff, 0.0f, Math::degToRad(30.0f), Math::degToRad(45.0f), speed) * dir;
 
-    robot.setTargetDir(0.0f, 0.0f, useSpeed);
+    robot.setTargetDir(0.0f, 0.0f, applySpeed);
 
     return true;
 }
@@ -62,7 +42,7 @@ float TurnByTask::getPercentage() {
         return 0.0f;
     }
 
-    return Math::max(100.0f - (lastDiff * 100.0f / Math::abs(turnAngle)), 0.0f);
+    return diff * 100.0f / turnAngle;
 }
 
 std::string TurnByTask::toString() {
