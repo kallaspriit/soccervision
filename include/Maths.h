@@ -385,6 +385,7 @@ public:
 	float value();
 	int size() { return samples.size(); }
 	bool full() { return size() == sampleCount; }
+	void clear() { samples.clear(); }
 
 private:
 	int sampleCount;

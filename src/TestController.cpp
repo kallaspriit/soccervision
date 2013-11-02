@@ -881,6 +881,7 @@ void TestController::FetchBallBehindState::onEnter(Robot* robot, Parameters para
 	searchDir = 0.0f;
 	targetMode = TargetMode::UNDECIDED;
 	forwardSpeed = robot->getVelocity();
+	avgBallGoalDistance.clear();
 }
 
 void TestController::FetchBallBehindState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration, float combinedDuration) {
