@@ -69,7 +69,7 @@ namespace Config {
 	const int goalTopMaxY = 30;
 
 	// surround metric is taken into account if ball bottom is below this threshold
-	const int surroundSenseThresholdY = cameraHeight - 70;
+	const int surroundSenseThresholdY = cameraHeight - 100;
 
 	// minimum object metric thresholds to be considered valid
 	const float minValidBallSurroundThreshold = 0.5f;
@@ -77,7 +77,7 @@ namespace Config {
 	const float minValidGoalPathThreshold = 0.65f;
 
 	// the ball/goal bottom needs to be below this line to consider path metric
-	const int ballPathSenseStartY = cameraHeight - 80;
+	const int ballPathSenseStartY = cameraHeight - 100;
 	const int goalPathSenseStartY = cameraHeight - 200;
 
 	// color sense start Y
