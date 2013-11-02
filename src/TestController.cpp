@@ -1313,6 +1313,7 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 	robot->dribbler->start();
 
 	float avoidBallSpeed = 0.5f;
+	float minForwardSpeed = 0.2f;
 	float minBallAvoidSideSpeed = 0.25f;
 	float maxRobotKickOmega = Math::PI / 4.0f;
 	double minKickInterval = 1.0;
@@ -1360,6 +1361,9 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 			validWindow = true;
 		}
 	}
+
+	// always apply some forward speed (can think that has ball when really doesn't)
+	forwardSpeed = Math::max(forwardSpeed, minForwardSpeed);
 
 	bool isRobotOmegaLowEnough = Math::abs(robot->getOmega()) <= maxRobotKickOmega;
 	bool performKick = validWindow && !isKickTooSoon && !isBallInWay && isRobotOmegaLowEnough;
