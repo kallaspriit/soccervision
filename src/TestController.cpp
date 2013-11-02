@@ -220,9 +220,13 @@ void TestController::updateVisionDebugInfo(Vision::Results* visionResults) {
 	yellowGoalDistance = yellowGoal != NULL ? yellowGoal->distance : 0.0f;
 
 	if (targetSide == Side::BLUE && blueGoal != NULL) {
-		lastTargetGoalAngle = blueGoal->angle;
+		if (blueGoal->distance <= 6.0f) {
+			lastTargetGoalAngle = blueGoal->angle;
+		}
 	} else if (targetSide == Side::YELLOW && yellowGoal != NULL) {
-		lastTargetGoalAngle = yellowGoal->angle;
+		if (yellowGoal->distance <= 6.0f) {
+			lastTargetGoalAngle = yellowGoal->angle;
+		}
 	}
 
 	whiteDistance = visionResults->front->whiteDistance;
