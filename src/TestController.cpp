@@ -627,33 +627,18 @@ void TestController::FetchBallFrontState::step(float dt, Vision::Results* vision
 	}
 
 	double minSearchFrontDuration = 1.0;
-	Dir ballSearchDir = Dir::FRONT;
-	
-	// prefer balls in the front camera
-	Object* ball = visionResults->getClosestBall(ballSearchDir);
-	Object* goal = visionResults->getLargestGoal(ai->targetSide, Dir::FRONT);
 
-	if (ball == NULL && stateDuration > minSearchFrontDuration) {
-		ballSearchDir = Dir::ANY;
-		ball = visionResults->getClosestBall(ballSearchDir);
-	}
+	// prefer balls in the front camera
+	Object* ball = visionResults->getClosestBall(Dir::FRONT);
+	Object* goal = visionResults->getLargestGoal(ai->targetSide, Dir::FRONT);
 
 	ai->dbg("ballVisible", ball != NULL);
 	ai->dbg("goalVisible", goal != NULL);
-	ai->dbg("ballSearchDir", ballSearchDir);
 
 	if (ball != NULL) {
 		ai->setLastBall(ball);
 	} else {
-		ball = ai->getLastBall(ballSearchDir);
-	}
-
-	if (ball != NULL && ball->behind) {
-		ai->dbgs("action", "Switch to fetch behind");
-
-		ai->setState("fetch-ball-behind");
-
-		return;
+		ball = ai->getLastBall(Dir::FRONT);
 	}
 
 	if (goal == NULL && ball != NULL) {
@@ -796,22 +781,15 @@ void TestController::FetchBallDirectState::step(float dt, Vision::Results* visio
 		return;
 	}
 
-	float minSearchFrontDuration = 1.0f;
 	float minFetchDirectDuration = 0.5f;
-	Dir ballSearchDir = Dir::FRONT;
 	
-	Object* ball = visionResults->getClosestBall(ballSearchDir);
+	Object* ball = visionResults->getClosestBall(Dir::FRONT);
 	Object* goal = visionResults->getLargestGoal(ai->targetSide, Dir::FRONT);
-
-	if (ball == NULL && stateDuration > minSearchFrontDuration) {
-		ballSearchDir = Dir::ANY;
-		ball = visionResults->getClosestBall(ballSearchDir);
-	}
 
 	if (ball != NULL) {
 		ai->setLastBall(ball);
 	} else {
-		ball = ai->getLastBall(ballSearchDir);
+		ball = ai->getLastBall(Dir::FRONT);
 	}
 
 	ai->dbg("ballVisible", ball != NULL);
@@ -821,14 +799,6 @@ void TestController::FetchBallDirectState::step(float dt, Vision::Results* visio
 		ai->dbgs("action", "Switch to fetch front");
 
 		ai->setState("fetch-ball-front");
-
-		return;
-	}
-
-	if (ball != NULL && ball->behind) {
-		ai->dbgs("action", "Switch to fetch behind");
-
-		ai->setState("fetch-ball-behind");
 
 		return;
 	}
@@ -922,35 +892,6 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 		return;
 	}
 
-	//double maxBlindReverseDuration = 1.5;
-	double minSearchBehindDuration = 1.0;
-	float reverseBlindSpeed = 1.0f;
-	float offsetDistance = 0.2f;
-	Dir ballSearchDir = Dir::REAR;
-
-	Object* ball = visionResults->getClosestBall(ballSearchDir);
-	Object* goal = visionResults->getLargestGoal(ai->targetSide, Dir::FRONT);
-
-	// only look for front balls after reverse maneuver completed
-	if (stateDuration > minSearchBehindDuration && (reversePerformed || turnAroundPerformed)) {
-		ballSearchDir = Dir::ANY;
-
-		ball = visionResults->getClosestBall(ballSearchDir);
-	}
-
-	if (ball != NULL) {
-		ai->setLastBall(ball);
-	} else {
-		ball = ai->getLastBall(ballSearchDir);
-	}
-
-	ai->dbg("ballVisible", ball != NULL);
-	ai->dbg("goalVisible", goal != NULL);
-	ai->dbg("hasTasks", robot->hasTasks());
-	ai->dbg("timeSinceLostBall", timeSinceLostBall);
-	ai->dbg("startBallDistance", startBallDistance);
-	ai->dbg("hadBall", hadBall);
-
 	if (robot->hasTasks()) {
 		Side ownSide = ai->targetSide == Side::YELLOW ? Side::BLUE : Side::YELLOW;
 		Object* ownGoal = visionResults->getLargestGoal(ownSide, Dir::REAR);
@@ -961,6 +902,31 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 
 			ai->setState("find-ball");
 		}
+
+		return;
+	}
+
+	float reverseBlindSpeed = 1.0f;
+	float offsetDistance = 0.2f;
+
+	Object* ball = visionResults->getClosestBall(Dir::REAR);
+	Object* goal = visionResults->getLargestGoal(ai->targetSide, Dir::FRONT);
+
+	if (ball != NULL) {
+		ai->setLastBall(ball);
+	} else {
+		ball = ai->getLastBall(Dir::REAR);
+	}
+
+	ai->dbg("ballVisible", ball != NULL);
+	ai->dbg("goalVisible", goal != NULL);
+	ai->dbg("hasTasks", robot->hasTasks());
+	ai->dbg("timeSinceLostBall", timeSinceLostBall);
+	ai->dbg("startBallDistance", startBallDistance);
+	ai->dbg("hadBall", hadBall);
+
+	if (reversePerformed) {
+		ai->setState("find-ball");
 
 		return;
 	}
@@ -984,27 +950,14 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 
 	if (ball != NULL) {
 		ai->dbg("ballDistance", ball->getDribblerDistance());
-		ai->dbg("ball->behind", ball->behind);
-
-		if (!ball->behind) {
-			if (goal != NULL) {
-				ai->setState("fetch-ball-front");
-			} else {
-				ai->setState("fetch-ball-direct");
-			}
-
-			return;
-		}
 	} else {
-		if (!hadBall || reversePerformed || lastBallDistance > 0.6f) {
+		if (!hadBall || lastBallDistance > 0.6f) {
 			ai->setState("find-ball");
+		} else {
+			reversePerformed = true;
 
-			return;
+			robot->driveBehindBall(lastBallDistance, lastTargetAngle, reverseBlindSpeed, offsetDistance, targetMode == TargetMode::LEFT ? 1.0f : -1.0f);
 		}
-
-		reversePerformed = true;
-
-		robot->driveBehindBall(lastBallDistance, lastTargetAngle, reverseBlindSpeed, offsetDistance, targetMode == TargetMode::LEFT ? 1.0f : -1.0f);
 
 		return;
 	}
