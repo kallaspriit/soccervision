@@ -36,6 +36,7 @@ public:
 		public:
 			Results() : front(NULL), rear(NULL) {}
 			Object* getClosestBall(Dir dir = Dir::ANY, bool nextClosest = false);
+			Object* getFurthestBall(Dir dir = Dir::ANY);
 			Object* getNextClosestBall(Dir dir = Dir::ANY);
 			Object* getLargestGoal(Side side, Dir dir = Dir::ANY);
 			Object* getFurthestGoal(Dir dir = Dir::ANY);

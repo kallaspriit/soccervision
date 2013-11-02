@@ -1614,6 +1614,39 @@ Object* Vision::Results::getClosestBall(Dir dir, bool nextClosest) {
 	return nextClosest ? nextClosestBall : closestBall;
 }
 
+Object* Vision::Results::getFurthestBall(Dir dir) {
+	float furthestDistance = -1.0f;
+	float distance;
+	Object* ball;
+	Object* furthestBall = NULL;
+
+	if (front != NULL && dir != Dir::REAR) {
+		for (ObjectListItc it = front->balls.begin(); it != front->balls.end(); it++) {
+			ball = *it;
+			distance = ball->behind ? ball->distance * 1.25f : ball->distance;
+		
+			if (furthestBall == NULL || distance > furthestDistance) {
+				furthestBall = ball;
+				furthestDistance = distance;
+			}
+		}
+	}
+
+	if (rear != NULL && dir != Dir::FRONT) {
+		for (ObjectListItc it = rear->balls.begin(); it != rear->balls.end(); it++) {
+			ball = *it;
+			distance = ball->behind ? ball->distance * 1.25f : ball->distance;
+		
+			if (furthestBall == NULL || distance > furthestDistance) {
+				furthestBall = ball;
+				furthestDistance = distance;
+			}
+		}
+	}
+
+	return furthestBall;
+}
+
 Object* Vision::Results::getNextClosestBall(Dir dir) {
 	return getClosestBall(dir, true);
 }

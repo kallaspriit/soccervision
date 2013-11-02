@@ -909,7 +909,7 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 	float reverseBlindSpeed = 1.0f;
 	float offsetDistance = 0.2f;
 
-	Object* ball = visionResults->getClosestBall(Dir::REAR);
+	Object* ball = visionResults->getFurthestBall(Dir::REAR);
 	Object* goal = visionResults->getLargestGoal(ai->targetSide, Dir::FRONT);
 
 	if (ball != NULL) {
@@ -956,7 +956,7 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 		} else {
 			reversePerformed = true;
 
-			robot->driveBehindBall(lastBallDistance, lastTargetAngle, reverseBlindSpeed, offsetDistance * 1.5f, targetMode == TargetMode::LEFT ? 1.0f : -1.0f);
+			robot->driveBehindBall(lastBallDistance, lastTargetAngle, reverseBlindSpeed, offsetDistance * 1.25f, targetMode == TargetMode::LEFT ? 1.0f : -1.0f);
 		}
 
 		return;
