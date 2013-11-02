@@ -560,7 +560,7 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 				ai->setState("fetch-ball-behind");
 			} else {
 				float turnAngle = ball->angle;
-				float underturnAngle = Math::degToRad(45.0f);
+				float underturnAngle = Math::degToRad(25.0f);
 				float turnSpeed = Math::TWO_PI;
 
 				if (turnAngle < 0.0f) {
@@ -1010,7 +1010,7 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 
 		if (avgBallGoalDistance.full() && avgBallGoalDistance.value() < minFetchBehindGoalBallDistance && goalBallDistance < minFetchBehindGoalBallDistance) {
 			float turnAngle = ball->angle;
-			float underturnAngle = Math::degToRad(45.0f);
+			float underturnAngle = Math::degToRad(25.0f);
 			float turnSpeed = Math::TWO_PI;
 
 			if (turnAngle < 0.0f) {
