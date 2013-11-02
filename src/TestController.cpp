@@ -29,7 +29,7 @@
  * - do something about other robots, avoid driving into them
  */
 
-TestController::TestController(Robot* robot, Communication* com) : BaseAI(robot, com), targetSide(Side::BLUE), manualSpeedX(0.0f), manualSpeedY(0.0f), manualOmega(0.0f), manualDribblerSpeed(0), manualKickStrength(0), blueGoalDistance(0.0f), yellowGoalDistance(0.0f), lastCommandTime(-1.0), lastBallTime(-1.0), lastTargetGoalAngle(0.0f), whiteDistance(-1.0f), blackDistance(-1.0f), lastBall(NULL) {
+TestController::TestController(Robot* robot, Communication* com) : BaseAI(robot, com), targetSide(Side::BLUE), manualSpeedX(0.0f), manualSpeedY(0.0f), manualOmega(0.0f), manualDribblerSpeed(0), manualKickStrength(0), blueGoalDistance(0.0f), yellowGoalDistance(0.0f), lastCommandTime(-1.0), lastBallTime(-1.0), lastTargetGoalAngle(0.0f), whiteDistance(-1.0f), blackDistance(-1.0f), lastBall(NULL), lastTurnAroundTime(-1.0) {
 	setupStates();
 };
 
@@ -485,8 +485,6 @@ void TestController::FindBallState::onEnter(Robot* robot, Parameters parameters)
 		}
 	}
 
-	lastTurnTime = -1.0;
-
 	if (lastSearchTime != -1.0) {
 		timeSinceLastSearch = Util::duration(lastSearchTime);
 	}
@@ -508,7 +506,13 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 
 	robot->stop();
 
-	Object* ball = visionResults->getClosestBall(Dir::ANY);
+	Dir ballSearchDir = Dir::ANY;
+
+	if (ai->lastTurnAroundTime != -1.0 && Util::duration(ai->lastTurnAroundTime) < 2.0) {
+		ballSearchDir = Dir::FRONT;
+	}
+
+	Object* ball = visionResults->getClosestBall(ballSearchDir);
 	Object* goal = visionResults->getLargestGoal(ai->targetSide, Dir::FRONT);
 
 	if (ball != NULL) {
@@ -534,12 +538,11 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 		searchOmega /= 2.0f;
 	}
 
-	double minTurnBreak = 1.5;
+	double minTurnBreak = 2.0;
 
 	ai->dbg("ballVisible", ball != NULL);
 	ai->dbg("goalVisible", goal != NULL);
 	ai->dbg("searchDir", searchDir);
-	ai->dbg("timeSinceLastTurn", lastTurnTime == -1.0 ? -1.0 : Util::duration(lastTurnTime));
 
 	if (ball != NULL) {
 		if (robot->hasTasks()) {
@@ -556,7 +559,7 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 			} else {
 				ai->setState("fetch-ball-direct");
 			}
-		} else if (lastTurnTime == -1.0 || Util::duration(lastTurnTime) >= minTurnBreak) {
+		} else if (ai->lastTurnAroundTime == -1.0 || Util::duration(ai->lastTurnAroundTime) > minTurnBreak) {
 			if (goal != NULL) {
 				ai->setState("fetch-ball-behind");
 			} else {
@@ -578,7 +581,7 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 
 				robot->turnBy(turnAngle, turnSpeed);
 
-				lastTurnTime = Util::millitime();
+				ai->lastTurnAroundTime = Util::millitime();
 			}
 
 			return;
@@ -1009,7 +1012,14 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 		ai->dbg("avgBallGoalDistanceSize", avgBallGoalDistance.size());
 		ai->dbg("avgBallGoalDistanceFull", avgBallGoalDistance.full());
 
-		if (avgBallGoalDistance.full() && avgBallGoalDistance.value() < minFetchBehindGoalBallDistance && goalBallDistance < minFetchBehindGoalBallDistance) {
+		double minTurnBreak = 2.0;
+
+		if (
+			avgBallGoalDistance.full()
+			&& avgBallGoalDistance.value() < minFetchBehindGoalBallDistance
+			&& goalBallDistance < minFetchBehindGoalBallDistance
+			&& (ai->lastTurnAroundTime == -1.0 || Util::duration(ai->lastTurnAroundTime) > minTurnBreak)
+		) {
 			float turnAngle = ball->angle;
 			float underturnAngle = Math::degToRad(25.0f);
 			float turnSpeed = Math::TWO_PI;
@@ -1028,6 +1038,8 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 			turnAroundPerformed = true;
 
 			robot->turnBy(turnAngle, turnSpeed);
+
+			ai->lastTurnAroundTime = Util::millitime();
 
 			return;
 		}
