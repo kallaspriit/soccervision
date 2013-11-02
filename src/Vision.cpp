@@ -1573,8 +1573,8 @@ void Vision::updateColorDistances() {
 }
 
 Object* Vision::Results::getClosestBall(Dir dir, bool nextClosest) {
-	Object* blueGoal = getLargestGoal(Side::BLUE, Dir::ANY);
-	Object* yellowGoal = getLargestGoal(Side::BLUE, Dir::ANY);
+	Object* blueGoal = getLargestGoal(Side::BLUE, dir);
+	Object* yellowGoal = getLargestGoal(Side::YELLOW, dir);
 
 	float closestDistance = 100.0f;
 	Object* ball;
