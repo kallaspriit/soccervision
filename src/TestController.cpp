@@ -1201,6 +1201,7 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 	ai->dbg("goalVisible", goal != NULL);
 	ai->dbg("reverseTime", reverseTime);
 	ai->dbg("nearLine", nearLine);
+	ai->dbg("ai->lastTargetGoalAngle", ai->lastTargetGoalAngle);
 
 	float searchPeriod = Config::robotSpinAroundDribblerPeriod;
 	float reversePeriod = 1.0f;

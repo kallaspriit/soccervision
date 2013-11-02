@@ -1688,6 +1688,17 @@ Object* Vision::Results::getLargestGoal(Side side, Dir dir) {
 	}
 
 	if (largestGoal != NULL) {
+		if (dir == Dir::ANY) {
+			Side otherSide = side == Side::BLUE ? Side::YELLOW : Side::BLUE;
+			Dir sameDir = largestGoal->behind ? Dir::REAR : Dir::FRONT;
+			Object* otherGaol = getLargestGoal(otherSide, sameDir);
+
+			// don't use the found goal if other goal is also visible on the same side and is larger
+			if (otherGaol != NULL && otherGaol->area > largestGoal->area) {
+				return NULL;
+			}
+		}
+
 		//lastLargestGoal.copyFrom(largestGoal);
 
 		return largestGoal;
