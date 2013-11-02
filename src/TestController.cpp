@@ -951,7 +951,8 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 	}
 
 	if (ball == NULL) {
-		if (!hadBall || lastBallDistance > 0.6f) {
+		// don't perform the blind reverse if the ball was lost at too great of a distance
+		if (!hadBall || lastBallDistance > 1.0f) {
 			ai->setState("find-ball");
 		} else {
 			reversePerformed = true;
