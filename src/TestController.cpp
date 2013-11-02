@@ -503,19 +503,8 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 
 	robot->stop();
 
-	Dir searchStartDir = Dir::FRONT;
-
-	// switch to starting from rear camera first if last search was little time ago to avoid flickering
-	if (timeSinceLastSearch < 0.2) {
-		searchStartDir = Dir::REAR;
-	}
-	
-	Object* ball = visionResults->getClosestBall(searchStartDir);
+	Object* ball = visionResults->getClosestBall(Dir::ANY);
 	Object* goal = visionResults->getLargestGoal(ai->targetSide, Dir::FRONT);
-
-	if (ball == NULL) {
-		ball = visionResults->getClosestBall(Dir::ANY);
-	}
 
 	if (ball != NULL) {
 		ai->setLastBall(ball);
@@ -523,7 +512,6 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 
 	ai->dbg("hasTasks", robot->hasTasks());
 	ai->dbg("timeSinceLastSearch", timeSinceLastSearch);
-	ai->dbg("searchStartDir", searchStartDir);
 
 	if (robot->hasTasks()) {
 		/*if (ball != NULL && !ball->behind) {
