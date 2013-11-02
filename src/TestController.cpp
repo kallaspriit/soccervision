@@ -918,6 +918,7 @@ void TestController::FetchBallBehindState::onEnter(Robot* robot, Parameters para
 	startBallDistance = -1.0f;
 	searchDir = 0.0f;
 	targetMode = TargetMode::UNDECIDED;
+	forwardSpeed = robot->getVelocity();
 }
 
 void TestController::FetchBallBehindState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration, float combinedDuration) {
@@ -966,13 +967,11 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 		Side ownSide = ai->targetSide == Side::YELLOW ? Side::BLUE : Side::YELLOW;
 		Object* ownGoal = visionResults->getLargestGoal(ownSide, Dir::REAR);
 
-		// make sure we don't blindly reverse into our goal
-		if (ownGoal != NULL && ownGoal->distance < 0.6f) {
+		// make sure we don't blindly reverse into our goal, this should not happen
+		if (ownGoal != NULL && ownGoal->distance < 0.3f) {
 			robot->clearTasks();
 
 			ai->setState("find-ball");
-		} else if (goal != NULL) {
-			robot->lookAt(goal);
 		}
 
 		return;
@@ -1008,9 +1007,7 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 
 			return;
 		}
-	}
-
-	if (ball == NULL) {
+	} else {
 		if (!hadBall || reversePerformed || lastBallDistance > 0.6f) {
 			ai->setState("find-ball");
 
@@ -1042,9 +1039,6 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 			targetMode = TargetMode::RIGHT;
 		}
 	}
-
-	float approachP = 2.0f;
-	float startAccelerationDuration = 0.5f;
 
 	Side ownSide = ai->targetSide == Side::YELLOW ? Side::BLUE : Side::YELLOW;
 	Object* ownGoal = visionResults->getLargestGoal(ownSide, Dir::REAR);
@@ -1089,14 +1083,16 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 		}
 	}
 
-	//float targetAngle = ai->getTargetAngle(goal->distanceX, goal->distanceY * (goal->behind ? -1.0f : 1.0f), ball->distanceX, ball->distanceY * (ball->behind ? -1.0f : 1.0f), offsetDistance, TargetMode::RIGHT);
+	float targetApproachSpeed = 3.0f;
+	float accelerateAcceleration = 3.0f;
 	float probableBallLostDistance = 0.75f;
 	float targetAngle = ai->getTargetAngle(goal->distanceX * (goal->behind ? -1.0f : 1.0f), goal->distanceY * (goal->behind ? -1.0f : 1.0f), ball->distanceX * (ball->behind ? -1.0f : 1.0f), ball->distanceY * (ball->behind ? -1.0f : 1.0f), offsetDistance, targetMode);
-	float approachSpeed = approachP * Math::map(stateDuration, 0.0f, startAccelerationDuration, 0.0f, 1.0f);
-	float deacceleratedSpeed = Math::map(ballDistance, probableBallLostDistance, probableBallLostDistance * 2.0f, reverseBlindSpeed, approachSpeed);
+	//float forwardSpeed = approachP * Math::map(stateDuration, 0.0f, startAccelerationDuration, 0.0f, 1.0f);
+	forwardSpeed = Math::getAcceleratedSpeed(forwardSpeed, targetApproachSpeed, dt, accelerateAcceleration);
+	float deacceleratedSpeed = Math::map(ballDistance, probableBallLostDistance, probableBallLostDistance * 2.0f, reverseBlindSpeed, forwardSpeed);
 
 	ai->dbg("offsetDistance", offsetDistance);
-	ai->dbg("approachSpeed", approachSpeed);
+	ai->dbg("forwardSpeed", forwardSpeed);
 	ai->dbg("deacceleratedSpeed", deacceleratedSpeed);
 	ai->dbg("targetAngle", Math::radToDeg(targetAngle));
 
