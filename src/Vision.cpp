@@ -65,6 +65,7 @@ Vision::Result* Vision::process() {
 	updateColorOrder();
 
 	result->obstructionSide = obstructionSide;
+	result->colorOrder = colorOrder;
 	result->whiteDistance = whiteDistance;
 	result->blackDistance = blackDistance;
 
@@ -1246,14 +1247,10 @@ Vision::ColorList Vision::getViewColorOrder() {
 	bool debug = canvas.data != NULL;
 	std::string lastColor = "";
 
-	for (int y = Config::ballPathSenseStartY; y >= Config::cameraHeight / 2; y -= 3) {
+	for (y = Config::ballPathSenseStartY; y >= 0; y -= 3) {
 		color = getColorAt(x, y);
 
 		if (color == NULL) {
-			if (debug) {
-				canvas.drawMarker(x, y, 128, 128, 128);
-			}
-
 			continue;
 		}
 
@@ -1263,11 +1260,7 @@ Vision::ColorList Vision::getViewColorOrder() {
 			lastColor = color->name;
 
 			if (debug) {
-				canvas.drawMarker(x, y, 128, 0, 0);
-			}
-		} else {
-			if (debug) {
-				canvas.drawMarker(x, y, 0, 0, 0);
+				canvas.drawMarker(x, y, 255, 0, 0);
 			}
 		}
 	}
@@ -1614,13 +1607,13 @@ void Vision::updateColorDistances() {
 void Vision::updateColorOrder() {
 	colorOrder = getViewColorOrder();
 
-	std::cout << "Color order " << dir << std::endl;
+	/*std::cout << "Color order " << dir << std::endl;
 
 	for (int i = 0; i < colorOrder.size(); i++) {
 		std::cout << "  " << i << ": " << colorOrder[i] << std::endl;
 	}
 
-	std::cout << std::endl;
+	std::cout << std::endl;*/
 }
 
 Object* Vision::Results::getClosestBall(Dir dir, bool nextClosest) {
@@ -1821,6 +1814,32 @@ bool Vision::Results::isBallInWay(ObjectList balls, int goalY) {
 			ball->x - checkWidth < halfWidth && ball->x + checkWidth > halfWidth
 			&& ball->y - ball->height < startY && ball->y  + ball->height > goalY
 		) {
+			return true;
+		}
+	}
+
+	return false;
+}
+
+bool Vision::Results::isRobotOut(Dir dir) {
+	if (dir == Dir::ANY) {
+		return isRobotOut(Dir::FRONT) || isRobotOut(Dir::REAR);
+	}
+
+	ColorList colorOrder = dir == Dir::FRONT ? front->colorOrder : rear->colorOrder;
+
+	for (int i = 0; i < colorOrder.size(); i++) {
+		if (colorOrder[i] != "black") {
+			continue;
+		}
+
+		// found black, search for black > white > green
+
+		if (colorOrder.size() < i + 3) {
+			return false;
+		}
+
+		if (colorOrder[i + 1] == "white" && colorOrder[i + 2] == "green") {
 			return true;
 		}
 	}

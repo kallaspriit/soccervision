@@ -15,6 +15,8 @@
 class Vision {
 
 public:
+	typedef std::vector<std::string> ColorList;
+
 	struct PathMetric {
 		PathMetric(float percentage, int invalidSpree, bool validColorFound, bool out) : percentage(percentage), invalidSpree(invalidSpree), validColorFound(validColorFound), out(out) {}
 
@@ -28,6 +30,7 @@ public:
 		ObjectList balls;
 		ObjectList goals;
 		Obstruction obstructionSide;
+		ColorList colorOrder;
 		float whiteDistance;
 		float blackDistance;
 	};
@@ -41,6 +44,7 @@ public:
 			Object* getLargestGoal(Side side, Dir dir = Dir::ANY);
 			Object* getFurthestGoal(Dir dir = Dir::ANY);
 			bool isBallInWay(ObjectList balls, int goalY);
+			bool isRobotOut(Dir dir = Dir::ANY);
 
 			Vision::Result* front;
 			Vision::Result* rear;
@@ -54,8 +58,6 @@ public:
 		float straight;
 		float angle;
 	};
-
-	typedef std::vector<std::string> ColorList;
 
     Vision(Blobber* blobber, CameraTranslator* cameraTranslator, Dir dir, int width, int height);
     ~Vision();

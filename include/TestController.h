@@ -268,6 +268,8 @@ private:
 	float whiteDistance;
 	float blackDistance;
 	double lastTurnAroundTime;
+	bool isRobotOutFront;
+	bool isRobotOutRear;
 
 	double lastCommandTime;
 	double lastBallTime;
