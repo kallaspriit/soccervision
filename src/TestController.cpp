@@ -1370,7 +1370,9 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 			}
 		}
 
-		forwardSpeed = Math::map(goal->distance, 0.5f, 1.0f, 0.0f, avoidBallSpeed);
+		// not sure if this is good after all
+		//forwardSpeed = Math::map(goal->distance, 0.5f, 1.0f, 0.0f, avoidBallSpeed);
+		forwardSpeed = 0.0f;
 
 		if (nearbyAnotherBall) {
 			forwardSpeed = 0.0f;
