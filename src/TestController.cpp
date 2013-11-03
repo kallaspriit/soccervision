@@ -499,6 +499,14 @@ void TestController::FindBallState::onEnter(Robot* robot, Parameters parameters)
 
 	if (lastSearchTime != -1.0) {
 		timeSinceLastSearch = Util::duration(lastSearchTime);
+
+		if (timeSinceLastSearch < 0.2 && Util::duration(lastTurnTime) >= 2.0) {
+			std::cout << "! Time since last search: " << timeSinceLastSearch << ", turning 90deg" << std::endl;
+
+			robot->turnBy(Math::degToRad(90.0f), Math::TWO_PI);
+
+			lastTurnTime = Util::millitime();
+		}
 	}
 }
 
@@ -517,14 +525,6 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 	}
 
 	if (robot->hasTasks()) {
-		return;
-	}
-
-	if (timeSinceLastSearch != -1.0 && timeSinceLastSearch < 0.2) {
-		std::cout << "! Time since last search: " << timeSinceLastSearch << ", turning 90deg" << std::endl;
-
-		robot->turnBy(Math::degToRad(90.0f), Math::TWO_PI);
-
 		return;
 	}
 
