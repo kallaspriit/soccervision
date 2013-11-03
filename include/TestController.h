@@ -179,8 +179,8 @@ public:
 	class AimState : public State {
 
 	public:
+		AimState(TestController* ai) : State(ai), lastKickTime(-1.0), foundOwnGoalTime(-1.0), avoidBallSide(TargetMode::UNDECIDED), searchGoalDir(0.0f), performReverse(Decision::UNDECIDED), reverseTime(0.0f), avoidBallDuration(0.0f), nearLine(false) {}
 		void onEnter(Robot* robot, Parameters parameters);
-		AimState(TestController* ai) : State(ai), lastKickTime(-1.0), foundOwnGoalTime(-1.0), avoidBallSide(TargetMode::UNDECIDED), searchGoalDir(0.0f), performReverse(Decision::UNDECIDED), reverseTime(0.0f), nearLine(false) {}
 		void step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration, float combinedDuration);
 
 	private:
@@ -190,6 +190,7 @@ public:
 		TargetMode avoidBallSide;
 		Decision performReverse;
 		float reverseTime;
+		float avoidBallDuration;
 		bool nearLine;
 	};
 

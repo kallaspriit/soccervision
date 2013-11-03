@@ -1209,6 +1209,7 @@ void TestController::AimState::onEnter(Robot* robot, Parameters parameters) {
 	searchGoalDir = 0.0f;
 	foundOwnGoalTime = -1.0;
 	reverseTime = 0.0f;
+	avoidBallDuration = 0.0f;
 	nearLine = false;
 
 	if (parameters.find("near-line") != parameters.end()) {
@@ -1379,15 +1380,17 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 			}
 		}
 
-		// not sure if this is good after all
-		forwardSpeed = Math::map(goal->distance, 0.5f, 1.0f, 0.0f, avoidBallSpeed / 2.0f);
-
 		if (nearbyAnotherBall) {
 			forwardSpeed = 0.0f;
 		}
 
-		sideSpeed = (avoidBallSide == TargetMode::LEFT ? -1.0f : 1.0f) * avoidBallSpeed;
+		avoidBallDuration += dt;
+
+		sideSpeed = (avoidBallSide == TargetMode::LEFT ? -1.0f : 1.0f) * Math::map(avoidBallDuration, 0.0f, 0.5f, 0.0f, avoidBallSpeed);
 	
+		// not sure if this is good after all
+		forwardSpeed = Math::map(goal->distance, 0.5f, 1.0f, 0.0f, Math::abs(sideSpeed) / 2.0f);
+
 		ai->dbg("nearbyAnotherBall", nearbyAnotherBall);
 	}
 
