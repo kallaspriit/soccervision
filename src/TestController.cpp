@@ -503,7 +503,7 @@ void TestController::FindBallState::onEnter(Robot* robot, Parameters parameters)
 		if (timeSinceLastSearch < 0.2 && Util::duration(lastTurnTime) >= 2.0) {
 			std::cout << "! Time since last search: " << timeSinceLastSearch << ", turning 90deg" << std::endl;
 
-			robot->turnBy(Math::degToRad(90.0f), Math::TWO_PI);
+			robot->turnBy(Math::degToRad(90.0f) * searchDir, Math::TWO_PI);
 
 			lastTurnTime = Util::millitime();
 		}
@@ -1172,8 +1172,8 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	//float forwardSpeed = Math::min(approachP * Math::map(Math::abs(Math::radToDeg(ball->angle)), 0.0f, nearZeroSpeedAngle, 1.0f, 0.0f), enterVelocity);
 	//float forwardSpeed = 0.0f;
 	//float sideSpeed = sideP * Math::sign(ball->distanceX) * Math::map(Math::abs(Math::radToDeg(ball->angle)), 0.0f, nearMaxSideSpeedAngle, 0.0f, 1.0f);
-	float maxSideSpeedDistance = Math::map(ballDistance, 0.0f, nearDistance, 0.025f, 0.1f);
-	float sideP = Math::map(ballDistance, 0.0f, nearDistance, 0.2f, 0.5f);
+	float maxSideSpeedDistance = Math::map(ballDistance, 0.0f, nearDistance, 0.025f, 0.05f);
+	float sideP = Math::map(ballDistance, 0.0f, nearDistance, 0.2f, 0.4f);
 	float approachP = Math::map(ballDistance, 0.0f, enterDistance, 0.5f, Math::max(enterVelocity, minAllowedApproachSpeed));
 	float sidePower = Math::map(Math::abs(ball->distanceX), 0.0f, maxSideSpeedDistance, 0.0f, 1.0f);
 	float sideSpeed = sideP * Math::sign(ball->distanceX) * sidePower;
