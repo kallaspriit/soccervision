@@ -5,7 +5,7 @@
 
 #include <iostream>
 
-Coilgun::Coilgun(Communication* com) : com(com), lastKickTime(0) {
+Coilgun::Coilgun(Communication* com) : com(com), lastKickTime(0.0), lastChargeRequestTime(0.0) {
 
 };
 
@@ -15,6 +15,8 @@ Coilgun::~Coilgun() {
 
 void Coilgun::charge() {
 	com->send("charge");
+
+	lastChargeRequestTime = Util::millitime();
 }
 
 void Coilgun::discharge() {
@@ -32,5 +34,7 @@ void Coilgun::kick(int microseconds) {
 }
 
 void Coilgun::step(float dt) {
-	
+	if (Util::duration(lastChargeRequestTime) >= 1.0) {
+		charge();
+	}
 }
