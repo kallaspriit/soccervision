@@ -689,7 +689,7 @@ void TestController::FetchBallFrontState::step(float dt, Vision::Results* vision
 	//float minVelocityBrakeDistance = 0.5f;
 	//float maxVelocityBrakingDistance = 1.5f;
 	float minApproachSpeed = 0.75f;
-	float nearDistance = 0.25f;
+	float nearDistance = 0.35f;
 	float accelerateAcceleration = 3.0f;
 	float brakeAcceleration = 3.0f;
 	float retratingBallDistanceDiff = 0.2f;
@@ -740,10 +740,10 @@ void TestController::FetchBallFrontState::step(float dt, Vision::Results* vision
 		//float combinedBrakeFactor = brakeP * (distanceBraking + angleBreaking);
 		
 		// limit max speed near the ball
-		//float maxSpeed = Math::map(ballDistance, nearDistance, startBrakingDistance, maxNearSpeed, startBrakingVelocity);
+		float maxSpeed = Math::map(ballDistance, nearDistance, startBrakingDistance, maxNearSpeed, startBrakingVelocity);
 		
 		limitedSpeed = limitedSpeed * (1.0f - combinedBrakeFactor);
-		//forwardSpeed = Math::min(forwardSpeed, maxSpeed);
+		forwardSpeed = Math::min(forwardSpeed, maxSpeed);
 		limitedSpeed = Math::max(limitedSpeed, minApproachSpeed);
 
 		ai->dbg("distanceBraking", distanceBraking);
