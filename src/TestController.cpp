@@ -516,6 +516,18 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 		return;
 	}
 
+	if (robot->hasTasks()) {
+		return;
+	}
+
+	if (timeSinceLastSearch != -1.0 && timeSinceLastSearch < 0.2) {
+		std::cout << "! Time since last search: " << timeSinceLastSearch << ", turning 90deg" << std::endl;
+
+		robot->turnBy(Math::degToRad(90.0f), Math::TWO_PI);
+
+		return;
+	}
+
 	robot->stop();
 
 	Dir ballSearchDir = Dir::ANY;
@@ -537,16 +549,6 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 	ai->dbg("hasTasks", robot->hasTasks());
 	ai->dbg("timeSinceLastSearch", timeSinceLastSearch);
 	ai->dbg("hasTasks", robot->hasTasks());
-
-	if (robot->hasTasks()) {
-		/*if (ball != NULL && !ball->behind) {
-			robot->clearTasks();
-		} else {
-			return;
-		}*/
-
-		return;
-	}
 
 	float searchOmega = Math::PI;
 
