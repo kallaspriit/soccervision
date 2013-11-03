@@ -1340,7 +1340,7 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 	robot->setTargetDir(0.0f, 0.0f, 0.0f);
 	robot->dribbler->start();
 
-	float avoidBallSpeed = 0.5f;
+	float avoidBallSpeed = 0.75f;
 	float minForwardSpeed = 0.2f;
 	float minBallAvoidSideSpeed = 0.25f;
 	float maxRobotKickOmega = Math::PI / 4.0f;
@@ -1371,8 +1371,7 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 		}
 
 		// not sure if this is good after all
-		//forwardSpeed = Math::map(goal->distance, 0.5f, 1.0f, 0.0f, avoidBallSpeed);
-		forwardSpeed = 0.0f;
+		forwardSpeed = Math::map(goal->distance, 0.5f, 1.0f, 0.0f, avoidBallSpeed / 2.0f);
 
 		if (nearbyAnotherBall) {
 			forwardSpeed = 0.0f;
