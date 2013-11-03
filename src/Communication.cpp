@@ -40,7 +40,7 @@ void Communication::send(std::string message) {
 		send(queuedMessage);
 	}
 
-	if (message.substr(0, 6) != "speeds") {
+	if (message.substr(0, 6) != "speeds" && message.substr(0, 6) != "charge") {
 		std::cout << "> " << message << std::endl;
 	}
 
