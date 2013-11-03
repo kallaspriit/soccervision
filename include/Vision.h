@@ -55,6 +55,8 @@ public:
 		float angle;
 	};
 
+	typedef std::vector<std::string> ColorList;
+
     Vision(Blobber* blobber, CameraTranslator* cameraTranslator, Dir dir, int width, int height);
     ~Vision();
 
@@ -82,6 +84,7 @@ private:
 	float getUndersideMetric(int x, int y, float distance, int width, int height, std::string targetColor, std::string targetColor2, std::vector<std::string> validColors, int& minValidX, int& minValidY, int& maxValidX, int& maxValidY, bool expand = true);
 	float getColorDistance(std::string colorName, int x1, int y1, int x2, int y2);
 	float getColorDistance(std::string colorName);
+	ColorList getViewColorOrder();
 	Object* Vision::mergeGoals(Object* goal1, Object* goal2);
     bool isValidBall(Object* ball, Dir dir);
     bool isValidGoal(Object* goal, Side side);
@@ -93,6 +96,7 @@ private:
 	int getGoalMaxInvalidSpree(int y);*/
 	void updateObstructions();
 	void updateColorDistances();
+	void updateColorOrder();
 
 	Dir dir;
 	Canvas canvas;
@@ -107,6 +111,7 @@ private:
     int width;
     int height;
 	Obstruction obstructionSide;
+	ColorList colorOrder;
 	float whiteDistance;
 	float blackDistance;
 

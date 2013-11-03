@@ -62,6 +62,8 @@ Vision::Result* Vision::process() {
 		updateColorDistances();
 	}
 
+	updateColorOrder();
+
 	result->obstructionSide = obstructionSide;
 	result->whiteDistance = whiteDistance;
 	result->blackDistance = blackDistance;
@@ -1236,6 +1238,43 @@ float Vision::getColorDistance(std::string colorName) {
 	return Math::min(Math::min(distanceA, distanceB), distanceC);
 }
 
+Vision::ColorList Vision::getViewColorOrder() {
+	ColorList colors;
+	int x = Config::cameraWidth / 2;
+	int y;
+	Blobber::Color* color;
+	bool debug = canvas.data != NULL;
+	std::string lastColor = "";
+
+	for (int y = Config::ballPathSenseStartY; y >= Config::cameraHeight / 2; y -= 3) {
+		color = getColorAt(x, y);
+
+		if (color == NULL) {
+			if (debug) {
+				canvas.drawMarker(x, y, 128, 128, 128);
+			}
+
+			continue;
+		}
+
+		if (color->name != lastColor) {
+			colors.push_back(color->name);
+
+			lastColor = color->name;
+
+			if (debug) {
+				canvas.drawMarker(x, y, 128, 0, 0);
+			}
+		} else {
+			if (debug) {
+				canvas.drawMarker(x, y, 0, 0, 0);
+			}
+		}
+	}
+
+	return colors;
+}
+
 float Vision::getBlockMetric(int x1, int y1, int blockWidth, int blockHeight, std::vector<std::string> validColors, int step) {
 	bool debug = canvas.data != NULL;
 	int matches = 0;
@@ -1570,6 +1609,18 @@ void Vision::updateObstructions() {
 void Vision::updateColorDistances() {
 	whiteDistance = getColorDistance("white");
 	blackDistance = getColorDistance("black");
+}
+
+void Vision::updateColorOrder() {
+	colorOrder = getViewColorOrder();
+
+	std::cout << "Color order " << dir << std::endl;
+
+	for (int i = 0; i < colorOrder.size(); i++) {
+		std::cout << "  " << i << ": " << colorOrder[i] << std::endl;
+	}
+
+	std::cout << std::endl;
 }
 
 Object* Vision::Results::getClosestBall(Dir dir, bool nextClosest) {
