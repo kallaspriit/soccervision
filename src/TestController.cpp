@@ -78,10 +78,15 @@ void TestController::setupStates() {
 	states["aim"] = new AimState(this);
 	states["drive-circle"] = new DriveCircleState(this);
 	states["accelerate"] = new AccelerateState(this);
+	states["return-field"] = new ReturnFieldState(this);
 }
 
 void TestController::step(float dt, Vision::Results* visionResults) {
 	updateVisionDebugInfo(visionResults);
+
+	/*if (visionResults->isRobotOut()) {
+		setState("return-field");
+	}*/
 	
 	currentStateDuration += dt;
 	combinedStateDuration += dt;
@@ -1513,4 +1518,23 @@ void TestController::AccelerateState::step(float dt, Vision::Results* visionResu
 	ai->dbg("targetApproachSpeed", targetApproachSpeed);
 	ai->dbg("forwardSpeed", forwardSpeed);
 	ai->dbg("dt", dt);
+}
+
+void TestController::ReturnFieldState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration, float combinedDuration) {
+	robot->stop();
+
+	Object* blueGoal = visionResults->getLargestGoal(Side::BLUE);
+	Object* yellowGoal = visionResults->getLargestGoal(Side::YELLOW);
+	Object* goal = blueGoal != NULL ? blueGoal : yellowGoal != NULL ? yellowGoal : NULL;
+
+	if (goal != NULL) {
+		robot->setTargetDir(1.5f, 0.0f);
+		robot->lookAt(goal);
+	} else {
+		robot->setTargetOmega(Math::PI);
+	}
+
+	if (stateDuration > 3.0f) {
+		ai->setState("find-ball");
+	}
 }

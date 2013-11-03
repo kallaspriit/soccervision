@@ -1828,14 +1828,14 @@ bool Vision::Results::isRobotOut(Dir dir) {
 
 	ColorList colorOrder = dir == Dir::FRONT ? front->colorOrder : rear->colorOrder;
 
-	for (int i = 0; i < colorOrder.size(); i++) {
+	for (int i = 0; i < (int)colorOrder.size(); i++) {
 		if (colorOrder[i] != "black") {
 			continue;
 		}
 
 		// found black, search for black > white > green
 
-		if (colorOrder.size() < i + 3) {
+		if ((int)colorOrder.size() < i + 3) {
 			return false;
 		}
 
