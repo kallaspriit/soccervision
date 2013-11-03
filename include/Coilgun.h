@@ -20,6 +20,7 @@ public:
 private:
 	Communication* com;
 	double lastKickTime;
+	double lastChargeRequestTime;
 
 };
 
