@@ -497,7 +497,7 @@ void TestController::FindBallState::onEnter(Robot* robot, Parameters parameters)
 		}
 	}
 
-	if (lastSearchTime != -1.0) {
+	/*if (lastSearchTime != -1.0) {
 		timeSinceLastSearch = Util::duration(lastSearchTime);
 
 		if (timeSinceLastSearch < 0.2 && Util::duration(lastTurnTime) >= 2.0) {
@@ -507,7 +507,7 @@ void TestController::FindBallState::onEnter(Robot* robot, Parameters parameters)
 
 			lastTurnTime = Util::millitime();
 		}
-	}
+	}*/
 }
 
 void TestController::FindBallState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration, float combinedDuration) {
@@ -582,7 +582,7 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 				ai->setState("fetch-ball-behind");
 			} else {
 				float turnAngle = ball->angle;
-				float underturnAngle = Math::degToRad(25.0f);
+				float underturnAngle = Math::degToRad(15.0f);
 				float turnSpeed = Math::TWO_PI;
 
 				if (turnAngle < 0.0f) {
@@ -1041,7 +1041,7 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 			&& (ai->lastTurnAroundTime == -1.0 || Util::duration(ai->lastTurnAroundTime) > minTurnBreak)
 		) {
 			float turnAngle = ball->angle;
-			float underturnAngle = Math::degToRad(25.0f);
+			float underturnAngle = Math::degToRad(15.0f);
 			float turnSpeed = Math::TWO_PI;
 
 			if (turnAngle < 0.0f) {
