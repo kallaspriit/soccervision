@@ -54,8 +54,8 @@ void Vision::setDebugImage(unsigned char* image, int width, int height) {
 Vision::Result* Vision::process() {
 	Result* result = new Result();
 
-    result->balls = processBalls(dir);
 	result->goals = processGoals(dir);
+    result->balls = processBalls(dir);
 
 	if (dir == Dir::FRONT) {
 		updateObstructions();
@@ -1629,10 +1629,7 @@ Object* Vision::Results::getClosestBall(Dir dir, bool nextClosest) {
 		for (ObjectListItc it = front->balls.begin(); it != front->balls.end(); it++) {
 			ball = *it;
 
-			if (
-				(blueGoal != NULL && blueGoal->behind == ball->behind && blueGoal->contains(ball))
-				|| (yellowGoal != NULL && yellowGoal->behind == ball->behind && yellowGoal->contains(ball))
-			) {
+			if (isBallInGoal(ball, blueGoal, yellowGoal)) {
 				continue;
 			}
 
@@ -1651,10 +1648,7 @@ Object* Vision::Results::getClosestBall(Dir dir, bool nextClosest) {
 		for (ObjectListItc it = rear->balls.begin(); it != rear->balls.end(); it++) {
 			ball = *it;
 
-			if (
-				(blueGoal != NULL && blueGoal->behind == ball->behind && blueGoal->contains(ball))
-				|| (yellowGoal != NULL && yellowGoal->behind == ball->behind && yellowGoal->contains(ball))
-			) {
+			if (isBallInGoal(ball, blueGoal, yellowGoal)) {
 				continue;
 			}
 
@@ -1673,6 +1667,9 @@ Object* Vision::Results::getClosestBall(Dir dir, bool nextClosest) {
 }
 
 Object* Vision::Results::getFurthestBall(Dir dir) {
+	Object* blueGoal = getLargestGoal(Side::BLUE);
+	Object* yellowGoal = getLargestGoal(Side::YELLOW);
+
 	float furthestDistance = -1.0f;
 	Object* ball;
 	Object* furthestBall = NULL;
@@ -1680,6 +1677,10 @@ Object* Vision::Results::getFurthestBall(Dir dir) {
 	if (front != NULL && dir != Dir::REAR) {
 		for (ObjectListItc it = front->balls.begin(); it != front->balls.end(); it++) {
 			ball = *it;
+
+			if (isBallInGoal(ball, blueGoal, yellowGoal)) {
+				continue;
+			}
 
 			if (furthestBall == NULL || ball->distance > furthestDistance) {
 				furthestBall = ball;
@@ -1691,6 +1692,10 @@ Object* Vision::Results::getFurthestBall(Dir dir) {
 	if (rear != NULL && dir != Dir::FRONT) {
 		for (ObjectListItc it = rear->balls.begin(); it != rear->balls.end(); it++) {
 			ball = *it;
+
+			if (isBallInGoal(ball, blueGoal, yellowGoal)) {
+				continue;
+			}
 
 			if (furthestBall == NULL || ball->distance > furthestDistance) {
 				furthestBall = ball;
@@ -1800,7 +1805,24 @@ Object* Vision::Results::getFurthestGoal(Dir dir) {
 	}
 }
 
+bool Vision::Results::isBallInGoal(Object* ball) {
+	return isBallInGoal(ball, getLargestGoal(Side::BLUE), getLargestGoal(Side::YELLOW));
+}
+
+bool Vision::Results::isBallInGoal(Object* ball, Object* blueGoal, Object* yellowGoal) {
+	if (
+		(blueGoal != NULL && blueGoal->behind == ball->behind && blueGoal->contains(ball))
+		|| (yellowGoal != NULL && yellowGoal->behind == ball->behind && yellowGoal->contains(ball))
+	) {
+		return true;
+	}
+
+	return false;
+}
+
 bool Vision::Results::isBallInWay(ObjectList balls, int goalY) {
+	Object* blueGoal = getLargestGoal(Side::BLUE);
+	Object* yellowGoal = getLargestGoal(Side::YELLOW);
 	int startY = Config::goalPathSenseStartY;
 	int halfWidth = Config::cameraWidth / 2;
 	Object* ball;
@@ -1809,6 +1831,10 @@ bool Vision::Results::isBallInWay(ObjectList balls, int goalY) {
 	for (ObjectListItc it = balls.begin(); it != balls.end(); it++) {
 		ball = *it;
 		checkWidth = ball->width * 2.5f;
+
+		if (isBallInGoal(ball, blueGoal, yellowGoal)) {
+			continue;
+		}
 		
 		if (
 			ball->x - checkWidth < halfWidth && ball->x + checkWidth > halfWidth

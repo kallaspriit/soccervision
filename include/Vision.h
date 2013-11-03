@@ -43,6 +43,8 @@ public:
 			Object* getNextClosestBall(Dir dir = Dir::ANY);
 			Object* getLargestGoal(Side side, Dir dir = Dir::ANY);
 			Object* getFurthestGoal(Dir dir = Dir::ANY);
+			bool isBallInGoal(Object* ball);
+			bool isBallInGoal(Object* ball, Object* blueGoal, Object* yellowGoal);
 			bool isBallInWay(ObjectList balls, int goalY);
 			bool isRobotOut(Dir dir = Dir::ANY);
 
