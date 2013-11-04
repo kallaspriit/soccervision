@@ -1852,7 +1852,15 @@ bool Vision::Results::isRobotOut(Dir dir) {
 		return isRobotOut(Dir::FRONT) || isRobotOut(Dir::REAR);
 	}
 
-	ColorList colorOrder = dir == Dir::FRONT ? front->colorOrder : rear->colorOrder;
+	ColorList colorOrder;
+
+	if (dir == Dir::FRONT && front != NULL) {
+		colorOrder = front->colorOrder;
+	} else if (dir == Dir::REAR && rear != NULL) {
+		colorOrder = rear->colorOrder;
+	} else {
+		return false;
+	}
 
 	for (int i = 0; i < (int)colorOrder.size(); i++) {
 		if (colorOrder[i] != "black") {
