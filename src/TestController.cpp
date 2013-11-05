@@ -1495,7 +1495,7 @@ void TestController::AccelerateState::step(float dt, Vision::Results* visionResu
 
 	//float targetApproachSpeed = 2.0f;
 	//float acceleration = 2.0f;
-	float targetApproachSpeed = 4.0f;
+	float targetApproachSpeed = 10.0f;
 	float minApproachSpeed = 0.3f;
 	float accelerateAcceleration = 3.0f;
 	float brakeAcceleration = 3.0f;
