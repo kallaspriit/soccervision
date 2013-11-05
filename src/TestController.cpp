@@ -262,18 +262,30 @@ void TestController::setLastBall(Object* ball) {
 }
 
 Object* TestController::getLastBall(Dir dir) {
+	if (lastBall == NULL) {
+		std::cout << "! No ghost ball exists" << std::endl;
+
+		return NULL;
+	}
+
 	// only return last seen ball if its fresh enough
-	if (lastBall == NULL || lastBallTime == -1.0 || Util::duration(lastBallTime) > 0.25) {
+	if (lastBall == NULL || Util::duration(lastBallTime) > 0.25) {
+		std::cout << "! Invalid ghost ball, too old: " << Util::duration(lastBallTime) << std::endl;
+
 		return NULL;
 	}
 
 	// make sure the ball is on the right side
 	if (dir != Dir::ANY && (lastBall->behind && dir == Dir::FRONT) || (!lastBall->behind && dir == Dir::REAR)) {
+		std::cout << "! Invalid ghost ball, wrong dir: " << lastBall->behind << std::endl;
+
 		return NULL;
 	}
 
 	// use this only for balls far away as they're likely to be badly visible
 	if (lastBall->distance < 3.0f) {
+		std::cout << "! Invalid ghost ball, too near: " << lastBall->distance << std::endl;
+
 		return NULL;
 	}
 
