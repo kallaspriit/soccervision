@@ -289,7 +289,7 @@ Object* TestController::getLastBall(Dir dir) {
 		return NULL;
 	}
 
-	std::cout << "@ Using ghost ball, age: " << Util::duration(lastBallTime) << std::endl;
+	std::cout << "@ Using ghost ball, age: " << Util::duration(lastBallTime) << ", distance: " << lastBall->distance << std::endl;
 
 	return lastBall;
 }
