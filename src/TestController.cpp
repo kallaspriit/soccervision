@@ -679,7 +679,7 @@ void TestController::FetchBallFrontState::step(float dt, Vision::Results* vision
 		return;
 	}
 
-	float targetApproachSpeed = 3.0f;
+	float targetApproachSpeed = 3.5f;
 	float brakingApproachSpeed = 1.5f;
 	float maxNearSpeed = 1.0f;
 	float maxOffsetDistanceAngleDiff = 45.0f;
@@ -692,7 +692,7 @@ void TestController::FetchBallFrontState::step(float dt, Vision::Results* vision
 	//float maxVelocityBrakingDistance = 1.5f;
 	float minApproachSpeed = 0.75f;
 	float nearDistance = 0.35f;
-	float accelerateAcceleration = 3.0f;
+	float accelerateAcceleration = 3.5f;
 	float brakeAcceleration = 3.0f;
 	float retratingBallDistanceDiff = 0.2f;
 
@@ -1504,7 +1504,7 @@ void TestController::AccelerateState::step(float dt, Vision::Results* visionResu
 	float targetApproachSpeed = 3.5f;
 	float minApproachSpeed = 0.3f;
 	float accelerateAcceleration = 2.8f;
-	float brakeAcceleration = 3.0f;
+	float brakeAcceleration = 2.5f;
 	float realSpeed = robot->getVelocity();
 	float ballDistance = ball->getDribblerDistance();
 	float brakeDistance = Math::getAccelerationDistance(forwardSpeed, 0.0f, brakeAcceleration);
