@@ -1489,6 +1489,12 @@ void TestController::AccelerateState::step(float dt, Vision::Results* visionResu
 
 	Object* ball = visionResults->getClosestBall(Dir::FRONT);
 
+	if (ball != NULL) {
+		ai->setLastBall(ball);
+	} else {
+		ball = ai->getLastBall(Dir::FRONT);
+	}
+
 	if (ball == NULL) {
 		return;
 	}
@@ -1497,7 +1503,7 @@ void TestController::AccelerateState::step(float dt, Vision::Results* visionResu
 	//float acceleration = 2.0f;
 	float targetApproachSpeed = 3.5f;
 	float minApproachSpeed = 0.3f;
-	float accelerateAcceleration = 3.0f;
+	float accelerateAcceleration = 2.8f;
 	float brakeAcceleration = 2.5f;
 	float realSpeed = robot->getVelocity();
 	float ballDistance = ball->getDribblerDistance();
