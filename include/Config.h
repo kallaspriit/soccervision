@@ -142,7 +142,7 @@ namespace Config {
 	const float robotfluidOmegaStep = 6.28f;
 
 	// how fast to spin the dribbler
-	const int robotDribblerSpeed = 100;
+	const int robotDribblerSpeed = 200;
 	
 	// proportional multiplier for looking at object, multiplied by object angle
 	const float lookAtP = 7.0f;

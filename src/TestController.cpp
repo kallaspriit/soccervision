@@ -835,10 +835,10 @@ void TestController::FetchBallDirectState::step(float dt, Vision::Results* visio
 		return;
 	}
 
-	float targetApproachSpeed = 3.0f;
+	float targetApproachSpeed = 3.5f;
 	float minApproachSpeed = 0.3f;
 	float accelerateAcceleration = 3.0f;
-	float brakeAcceleration = 2.0f;
+	float brakeAcceleration = 3.0f;
 	float nearLineDistance = 0.45f;
 	float nearLineSpeed = 0.3f;
 	float nearBallDistance = 0.3f;
