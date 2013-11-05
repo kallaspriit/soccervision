@@ -283,7 +283,7 @@ Object* TestController::getLastBall(Dir dir) {
 	}
 
 	// use this only for balls far away as they're likely to be badly visible
-	if (lastBall->distance < 1.5f) {
+	if (lastBall->distance < 1.0f) {
 		std::cout << "@ Invalid ghost ball, too near: " << lastBall->distance << std::endl;
 
 		return NULL;
