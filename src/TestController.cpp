@@ -915,6 +915,7 @@ void TestController::FetchBallBehindState::onEnter(Robot* robot, Parameters para
 	hadBall = false;
 	reversePerformed = false;
 	turnAroundPerformed = false;
+	lastBallWasGhost = false;
 	lastTargetAngle = 0.0f;
 	lastBallDistance = -1.0f;
 	lostBallTime = -1.0;
@@ -956,6 +957,7 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 
 	float reverseBlindSpeed = 1.0f;
 	float offsetDistance = 0.2f;
+	bool isBallGhost = false;
 
 	//Object* ball = visionResults->getFurthestBall(Dir::REAR);
 	Object* ball = visionResults->getClosestBall(Dir::REAR);
@@ -965,6 +967,10 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 		ai->setLastBall(ball);
 	} else {
 		ball = ai->getLastBall(Dir::REAR);
+
+		if (ball != NULL) {
+			isBallGhost = true;
+		}
 	}
 
 	ai->dbg("ballVisible", ball != NULL);
@@ -974,6 +980,8 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 	ai->dbg("startBallDistance", startBallDistance);
 	ai->dbg("lastBallDistance", lastBallDistance);
 	ai->dbg("hadBall", hadBall);
+	ai->dbg("isBallGhost", isBallGhost);
+	ai->dbg("lastBallWasGhost", lastBallWasGhost);
 	ai->dbg("reversePerformed", reversePerformed);
 
 	if (reversePerformed) {
@@ -1000,8 +1008,8 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 	}
 
 	if (ball == NULL) {
-		// don't perform the blind reverse if the ball was lost at too great of a distance
-		if (!hadBall || lastBallDistance > 1.2f) {
+		// don't perform the blind reverse if the ball was lost at too great of a distance, also if last seen ball was ghost
+		if (!hadBall || lastBallDistance > 1.2f || lastBallWasGhost) {
 			ai->setState("find-ball");
 		} else {
 			reversePerformed = true;
@@ -1011,6 +1019,8 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 
 		return;
 	}
+
+	lastBallWasGhost = isBallGhost;
 
 	float ballDistance = ball->getDribblerDistance();
 
