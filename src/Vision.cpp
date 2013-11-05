@@ -1811,8 +1811,8 @@ bool Vision::Results::isBallInGoal(Object* ball) {
 
 bool Vision::Results::isBallInGoal(Object* ball, Object* blueGoal, Object* yellowGoal) {
 	if (
-		(blueGoal != NULL && blueGoal->distance <= 1.5f && blueGoal->behind == ball->behind && blueGoal->contains(ball))
-		|| (yellowGoal != NULL && yellowGoal->distance <= 1.5f && yellowGoal->behind == ball->behind && yellowGoal->contains(ball))
+		(blueGoal != NULL/* && blueGoal->distance <= 1.5f*/ && blueGoal->behind == ball->behind && blueGoal->contains(ball))
+		|| (yellowGoal != NULL/* && yellowGoal->distance <= 1.5f*/ && yellowGoal->behind == ball->behind && yellowGoal->contains(ball))
 	) {
 		std::cout << "@ Ball would be considered in goal, distance: " << ball->distance << ", blue goal: " << (blueGoal != NULL ? Util::toString(blueGoal->distance) : "n/a") << ", yellow goal: " << (yellowGoal != NULL ? Util::toString(yellowGoal->distance) : "n/a") << std::endl;
 		//return true;
