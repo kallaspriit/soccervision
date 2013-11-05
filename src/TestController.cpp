@@ -1497,13 +1497,14 @@ void TestController::AccelerateState::step(float dt, Vision::Results* visionResu
 	//float acceleration = 2.0f;
 	float targetApproachSpeed = 4.0f;
 	float minApproachSpeed = 0.3f;
-	float accelerateAcceleration = 4.0f;
-	float brakeAcceleration = 4.0f;
+	float accelerateAcceleration = 3.0f;
+	float brakeAcceleration = 3.0f;
 	float realSpeed = robot->getVelocity();
 	float ballDistance = ball->getDribblerDistance();
 	float brakeDistance = Math::getAccelerationDistance(forwardSpeed, 0.0f, brakeAcceleration);
+	bool braking = ballDistance < brakeDistance;
 
-	if (ballDistance < brakeDistance) {
+	if (braking) {
 		//float brakeAcceleration = Math::getAcceleration(forwardSpeed, 0.0f, brakeDistance);
 		float brakeAcceleration = Math::getAcceleration(realSpeed, 0.0f, brakeDistance);
 
@@ -1514,7 +1515,7 @@ void TestController::AccelerateState::step(float dt, Vision::Results* visionResu
 		robot->dribbler->start();
 	}
 
-	forwardSpeed = Math::max(Math::getAcceleratedSpeed(forwardSpeed, targetApproachSpeed, dt, accelerateAcceleration), minApproachSpeed);
+	forwardSpeed = Math::max(Math::getAcceleratedSpeed(forwardSpeed, targetApproachSpeed, dt, braking ? brakeAcceleration : accelerateAcceleration), minApproachSpeed);
 
 	robot->setTargetDir(forwardSpeed, 0.0f);
 	robot->lookAt(ball);
