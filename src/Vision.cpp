@@ -1810,14 +1810,16 @@ bool Vision::Results::isBallInGoal(Object* ball) {
 }
 
 bool Vision::Results::isBallInGoal(Object* ball, Object* blueGoal, Object* yellowGoal) {
-	if (
-		(blueGoal != NULL && blueGoal->behind == ball->behind && blueGoal->contains(ball))
-		|| (yellowGoal != NULL && yellowGoal->behind == ball->behind && yellowGoal->contains(ball))
+	return false;
+
+	/*if (
+		(blueGoal != NULL && blueGoal->distance <= 1.5f && blueGoal->behind == ball->behind && blueGoal->contains(ball))
+		|| (yellowGoal != NULL && yellowGoal->distance <= 1.5f && yellowGoal->behind == ball->behind && yellowGoal->contains(ball))
 	) {
 		return true;
 	}
 
-	return false;
+	return false;*/
 }
 
 bool Vision::Results::isBallInWay(ObjectList balls, int goalY) {
