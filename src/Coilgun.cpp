@@ -34,7 +34,7 @@ void Coilgun::kick(int microseconds) {
 }
 
 void Coilgun::step(float dt) {
-	if (Util::duration(lastChargeRequestTime) >= 1.0) {
+	/*if (Util::duration(lastChargeRequestTime) >= 1.0) {
 		charge();
-	}
+	}*/
 }
