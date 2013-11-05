@@ -14,6 +14,8 @@ void Object::copyFrom(const Object* other) {
 	height = other->height;
 	area = other->area;
 	distance = other->distance;
+	distanceX = other->distanceX;
+	distanceY = other->distanceY;
 	angle = other->angle;
 	type = other->type;
 	lastSeenTime = other->lastSeenTime;
