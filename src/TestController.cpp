@@ -667,6 +667,7 @@ void TestController::FetchBallFrontState::step(float dt, Vision::Results* vision
 	}
 
 	double minSearchFrontDuration = 1.0;
+	bool usingGhost = false;
 
 	// prefer balls in the front camera
 	Object* ball = visionResults->getClosestBall(Dir::FRONT);
@@ -679,7 +680,13 @@ void TestController::FetchBallFrontState::step(float dt, Vision::Results* vision
 		ai->setLastBall(ball);
 	} else {
 		ball = ai->getLastBall(Dir::FRONT);
+
+		if (ball != NULL) {
+			usingGhost = true;
+		}
 	}
+
+	ai->dbg("usingGhost", usingGhost);
 
 	if (goal == NULL && ball != NULL) {
 		ai->setState("fetch-ball-direct");
@@ -994,7 +1001,7 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 
 	if (ball == NULL) {
 		// don't perform the blind reverse if the ball was lost at too great of a distance
-		if (!hadBall || lastBallDistance > 1.0f) {
+		if (!hadBall || lastBallDistance > 1.2f) {
 			ai->setState("find-ball");
 		} else {
 			reversePerformed = true;
