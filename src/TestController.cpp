@@ -1275,6 +1275,7 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 	ai->dbg("goalVisible", goal != NULL);
 	ai->dbg("inCorner", inCorner);
 	ai->dbg("ai->lastTargetGoalAngle", ai->lastTargetGoalAngle);
+	ai->dbg("timeSinceEscapeCorner", lastEscapeCornerTime == -1.0 ? -1.0 : Util::duration(lastEscapeCornerTime));
 
 	float searchPeriod = Config::robotSpinAroundDribblerPeriod;
 	float reversePeriod = 1.0f;
@@ -1300,9 +1301,11 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 
 		if (
 			(inCorner || ai->isRobotInCorner(visionResults))
-			&& (lastEscapeCornerTime == -1.0 || Util::duration(lastEscapeCornerTime) > 2.0)
+			&& (lastEscapeCornerTime == -1.0 || Util::duration(lastEscapeCornerTime) > 1.0)
 		) {
 			ai->setState("escape-corner");
+
+			lastEscapeCornerTime = Util::millitime();
 
 			return;
 		}
