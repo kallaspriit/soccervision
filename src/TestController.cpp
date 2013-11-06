@@ -30,7 +30,7 @@
  * + more reliable "ball in goal", check distances?
  */
 
-TestController::TestController(Robot* robot, Communication* com) : BaseAI(robot, com), targetSide(Side::BLUE), manualSpeedX(0.0f), manualSpeedY(0.0f), manualOmega(0.0f), manualDribblerSpeed(0), manualKickStrength(0), blueGoalDistance(0.0f), yellowGoalDistance(0.0f), lastCommandTime(-1.0), lastBallTime(-1.0), lastTargetGoalAngle(0.0f), lastBall(NULL), lastTurnAroundTime(-1.0), isRobotOutFront(false), isRobotOutRear(false) {
+TestController::TestController(Robot* robot, Communication* com) : BaseAI(robot, com), targetSide(Side::BLUE), manualSpeedX(0.0f), manualSpeedY(0.0f), manualOmega(0.0f), manualDribblerSpeed(0), manualKickStrength(0), blueGoalDistance(0.0f), yellowGoalDistance(0.0f), lastCommandTime(-1.0), lastBallTime(-1.0), lastTargetGoalAngle(0.0f), lastBall(NULL), lastTurnAroundTime(-1.0), framesRobotOutFront(0), framesRobotOutRear(0), isRobotOutFront(false), isRobotOutRear(false) {
 	setupStates();
 };
 
@@ -240,8 +240,21 @@ void TestController::updateVisionDebugInfo(Vision::Results* visionResults) {
 
 	whiteDistance = visionResults->front->whiteDistance;
 	blackDistance = visionResults->front->blackDistance;
-	isRobotOutFront = visionResults->isRobotOut(Dir::FRONT);
-	isRobotOutRear = visionResults->isRobotOut(Dir::REAR);
+
+	if (visionResults->isRobotOut(Dir::FRONT)) {
+		framesRobotOutFront++;
+	} else {
+		framesRobotOutFront = 0;
+	}
+
+	if (visionResults->isRobotOut(Dir::REAR)) {
+		framesRobotOutRear++;
+	} else {
+		framesRobotOutRear = 0;
+	}
+
+	isRobotOutFront = framesRobotOutFront >= 10;
+	isRobotOutRear = framesRobotOutRear >= 10;
 }
 
 bool TestController::isRobotInCorner(Vision::Results* visionResults) {
@@ -1266,7 +1279,7 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 		return;
 	}
 
-	if (visionResults->isRobotOut()) {
+	if (ai->isRobotOutFront || ai->isRobotOutRear) {
 		// no point to aim if robot is out
 		std::cout << "! Robot is out, kicking" << std::endl;
 
@@ -1597,7 +1610,7 @@ void TestController::EscapeCornerState::step(float dt, Vision::Results* visionRe
 		return;
 	}
 
-	if (visionResults->isRobotOut()) {
+	if (ai->isRobotOutFront || ai->isRobotOutRear) {
 		// no point to aim if robot is out
 		std::cout << "! Robot is out, kicking" << std::endl;
 

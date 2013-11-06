@@ -294,6 +294,8 @@ private:
 	Vision::ColorDistance whiteDistance;
 	Vision::ColorDistance blackDistance;
 	double lastTurnAroundTime;
+	int framesRobotOutFront;
+	int framesRobotOutRear;
 	bool isRobotOutFront;
 	bool isRobotOutRear;
 
