@@ -229,6 +229,17 @@ public:
 		float driveTowardsGoalTime;
 
 	};
+
+	class EscapeCornerState : public State {
+
+	public:
+		EscapeCornerState(TestController* ai) : State(ai) {}
+		void step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration, float combinedDuration);
+
+	private:
+		float driveTowardsGoalTime;
+
+	};
 	
 	TestController(Robot* robot, Communication* com);
 	~TestController();

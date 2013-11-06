@@ -29,8 +29,16 @@ public:
 	struct ColorDistance {
 		ColorDistance() : left(0.0f), center(0.0f), right(0.0f), min(0.0f), max(0.0f) {}
 		ColorDistance(float left, float center, float right) : left(left), center(center), right(right) {
-			min = Math::min(Math::min(left, center), right);
-			max = Math::max(Math::max(left, center), right);
+			min = -1.0f;
+			max = -1.0f;
+
+			if (left != -1.0f && (min == -1.0f || left < min)) min = left;
+			if (center != -1.0f && (min == -1.0f || center < min)) min = center;
+			if (right != -1.0f && (min == -1.0f || right < min)) min = right;
+
+			if (left != -1.0f && (max == -1.0f || left > max)) max = left;
+			if (center != -1.0f && (max == -1.0f || center > max)) max = center;
+			if (right != -1.0f && (max == -1.0f || right > max)) max = right;
 		}
 
 		float left;

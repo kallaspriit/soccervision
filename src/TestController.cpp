@@ -79,6 +79,7 @@ void TestController::setupStates() {
 	states["drive-circle"] = new DriveCircleState(this);
 	states["accelerate"] = new AccelerateState(this);
 	states["return-field"] = new ReturnFieldState(this);
+	states["escape-corner"] = new EscapeCornerState(this);
 }
 
 void TestController::step(float dt, Vision::Results* visionResults) {
@@ -1593,4 +1594,21 @@ void TestController::ReturnFieldState::step(float dt, Vision::Results* visionRes
 	if (stateDuration > 3.0f) {
 		ai->setState("find-ball");
 	}
+}
+
+void TestController::EscapeCornerState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration, float combinedDuration) {
+	robot->stop();
+
+	float reverseSpeed = 0.5f;
+	float sideP = 0.5f;
+	float sideSpeed = 0.0f;
+
+	if (ai->whiteDistance.left != -1.0f && ai->whiteDistance.right != -1.0f) {
+		float diff = Math::abs(ai->whiteDistance.left - ai->whiteDistance.right);
+		float side = ai->whiteDistance.left < ai->whiteDistance.right ? 1.0f : -1.0f;
+
+		sideSpeed = sideP * side * Math::map(diff, 0.0f, 0.1f, 0.0, 1.0f);
+	}
+
+	robot->setTargetDir(-reverseSpeed, sideSpeed);
 }
