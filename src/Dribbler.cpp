@@ -35,13 +35,17 @@ void Dribbler::step(float dt) {
 		ballInDribblerTime += dt;
 
 		if (ballInDribblerTime >= Config::ballInDribblerThreshold) {
-			ballLostTime = 0.0;
+			ballLostTime = -1.0f;
 		}
 	} else {
-		ballLostTime += dt;
+		if (ballLostTime == -1.0f) {
+			ballLostTime = dt;
+		} else {
+			ballLostTime += dt;
+		}
 
 		if (ballLostTime >= Config::dribblerBallLostThreshold) {
-			ballInDribblerTime = 0.0;
+			ballInDribblerTime = 0.0f;
 		}
 	}
 
@@ -49,7 +53,7 @@ void Dribbler::step(float dt) {
 }
 
 bool Dribbler::gotBall() const {
-	if (!ballDetected && ballLostTime <= Config::dribblerBallLostThreshold) {
+	if (!ballDetected && ballLostTime != -1.0f && ballLostTime <= Config::dribblerBallLostThreshold) {
 		std::cout << "! Faking got ball, actually lost for: " << ballLostTime << std::endl;
 
 		return true;
