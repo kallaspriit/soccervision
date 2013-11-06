@@ -1316,12 +1316,13 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 			}
 		}
 
-		spinDuration += dt;
-		float spinSpeed = Math::map(spinDuration, 0.0f, 1.0f, searchPeriod * 4.0f, searchPeriod);
+		/*spinDuration += dt;
 
-		robot->spinAroundDribbler(searchGoalDir == -1.0f, spinSpeed);
+		float spinPeriod = Math::map(spinDuration, 0.0f, 1.0f, searchPeriod * 2.0f, searchPeriod);*/
 
-		ai->dbg("spinSpeed", spinSpeed);
+		robot->spinAroundDribbler(searchGoalDir == -1.0f, searchPeriod);
+
+		//ai->dbg("spinPeriod", spinPeriod);
 
 		float waitUntilSearchOwnGoalTime = searchPeriod / 1.5f;
 
