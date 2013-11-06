@@ -26,13 +26,27 @@ public:
 		bool out;
 	};
 
+	struct ColorDistance {
+		ColorDistance() : left(0.0f), center(0.0f), right(0.0f), min(0.0f), max(0.0f) {}
+		ColorDistance(float left, float center, float right) : left(left), center(center), right(right) {
+			min = Math::min(Math::min(left, center), right);
+			max = Math::max(Math::max(left, center), right);
+		}
+
+		float left;
+		float center;
+		float right;
+		float min;
+		float max;
+	};
+
 	struct Result {
 		ObjectList balls;
 		ObjectList goals;
 		Obstruction obstructionSide;
 		ColorList colorOrder;
-		float whiteDistance;
-		float blackDistance;
+		ColorDistance whiteDistance;
+		ColorDistance blackDistance;
 	};
 
 	class Results {
@@ -87,7 +101,7 @@ private:
 	float getUndersideMetric(int x, int y, float distance, int width, int height, std::string targetColor, std::string targetColor2, std::vector<std::string> validColors, bool expand = true);
 	float getUndersideMetric(int x, int y, float distance, int width, int height, std::string targetColor, std::string targetColor2, std::vector<std::string> validColors, int& minValidX, int& minValidY, int& maxValidX, int& maxValidY, bool expand = true);
 	float getColorDistance(std::string colorName, int x1, int y1, int x2, int y2);
-	float getColorDistance(std::string colorName);
+	ColorDistance getColorDistance(std::string colorName);
 	ColorList getViewColorOrder();
 	Object* Vision::mergeGoals(Object* goal1, Object* goal2);
     bool isValidBall(Object* ball, Dir dir);
@@ -116,8 +130,8 @@ private:
     int height;
 	Obstruction obstructionSide;
 	ColorList colorOrder;
-	float whiteDistance;
-	float blackDistance;
+	ColorDistance whiteDistance;
+	ColorDistance blackDistance;
 
 };
 

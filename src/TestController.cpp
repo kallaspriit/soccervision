@@ -30,7 +30,7 @@
  * + more reliable "ball in goal", check distances?
  */
 
-TestController::TestController(Robot* robot, Communication* com) : BaseAI(robot, com), targetSide(Side::BLUE), manualSpeedX(0.0f), manualSpeedY(0.0f), manualOmega(0.0f), manualDribblerSpeed(0), manualKickStrength(0), blueGoalDistance(0.0f), yellowGoalDistance(0.0f), lastCommandTime(-1.0), lastBallTime(-1.0), lastTargetGoalAngle(0.0f), whiteDistance(-1.0f), blackDistance(-1.0f), lastBall(NULL), lastTurnAroundTime(-1.0), isRobotOutFront(false), isRobotOutRear(false) {
+TestController::TestController(Robot* robot, Communication* com) : BaseAI(robot, com), targetSide(Side::BLUE), manualSpeedX(0.0f), manualSpeedY(0.0f), manualOmega(0.0f), manualDribblerSpeed(0), manualKickStrength(0), blueGoalDistance(0.0f), yellowGoalDistance(0.0f), lastCommandTime(-1.0), lastBallTime(-1.0), lastTargetGoalAngle(0.0f), lastBall(NULL), lastTurnAroundTime(-1.0), isRobotOutFront(false), isRobotOutRear(false) {
 	setupStates();
 };
 
@@ -313,8 +313,8 @@ std::string TestController::getJSON() {
 	stream << "\"travelledDistance\": \"" << robot->getTravelledDistance() << "\",";
 	stream << "\"travelledTurns\": \"" << (robot->getTravelledRotation() / Math::TWO_PI) << "\",";
 	stream << "\"targetSide\": \"" << (targetSide == Side::BLUE ? "blue" : targetSide == Side::YELLOW ? "yellow" : "not chosen") << "\",";
-	stream << "\"whiteDistance\": " << whiteDistance << ",";
-	stream << "\"blackDistance\": " << blackDistance << ",";
+	stream << "\"whiteDistance\": " << whiteDistance.min << ",";
+	stream << "\"blackDistance\": " << blackDistance.min << ",";
 	stream << "\"blueGoalDistance\": " << blueGoalDistance << ",";
 	stream << "\"yellowGoalDistance\": " << yellowGoalDistance << ",";
 	stream << "\"isRobotOutFront\": " << (isRobotOutFront ? "true" : "false") << ",";
@@ -883,9 +883,10 @@ void TestController::FetchBallDirectState::step(float dt, Vision::Results* visio
 	if (
 		nearLine
 		|| (
-			visionResults->front->whiteDistance != -1.0f && visionResults->front->whiteDistance < nearLineDistance
-			&& visionResults->front->blackDistance != -1.0f && visionResults->front->blackDistance < nearLineDistance
-			&& visionResults->front->whiteDistance < visionResults->front->blackDistance
+			visionResults->front->whiteDistance.min != -1.0f && visionResults->front->whiteDistance.min < nearLineDistance
+			&& visionResults->front->blackDistance.min != -1.0f && visionResults->front->blackDistance.min < nearLineDistance
+			&& visionResults->front->whiteDistance.min < visionResults->front->blackDistance.min
+			&& visionResults->front->blackDistance.min - visionResults->front->whiteDistance.min <= 0.1f
 		)
 	) {
 		nearLine = true;
@@ -1278,7 +1279,7 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 
 	float searchPeriod = Config::robotSpinAroundDribblerPeriod;
 	float reversePeriod = 1.0f;
-	float reverseSpeed = 1.0f;
+	float reverseSpeed = 1.5f;
 	float performReverseMaxWhiteDistance = 0.35f;
 	float performReverseMaxBlackDistance = 0.4f;
 	float maxAimDuration = 6.0f;
@@ -1286,20 +1287,28 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 
 	if (goal == NULL) {
 		if (combinedDuration > maxAimDuration) {
-			robot->kick(weakKickStrength);
+			Side ownSide = ai->targetSide == Side::YELLOW ? Side::BLUE : Side::YELLOW;
 
-			ai->setState("fetch-ball-behind");
+			Object* ownGoalFront = visionResults->getLargestGoal(ownSide, Dir::FRONT);
 
-			return;
+			// only perform the give-up weak kick if not looking towards own goal
+			if (ownGoalFront == NULL) {
+				robot->kick(weakKickStrength);
+
+				ai->setState("fetch-ball-behind");
+
+				return;
+			}
 		}
 
 		if (performReverse == Decision::UNDECIDED) {
 			if (
 				nearLine
 				|| (
-					visionResults->front->whiteDistance != -1.0f && visionResults->front->whiteDistance <= performReverseMaxWhiteDistance
-					&& visionResults->front->blackDistance != -1.0f && visionResults->front->blackDistance <= performReverseMaxBlackDistance
-					&& visionResults->front->whiteDistance < visionResults->front->blackDistance
+					visionResults->front->whiteDistance.min != -1.0f && visionResults->front->whiteDistance.min <= performReverseMaxWhiteDistance
+					&& visionResults->front->blackDistance.min != -1.0f && visionResults->front->blackDistance.min <= performReverseMaxBlackDistance
+					&& visionResults->front->whiteDistance.min < visionResults->front->blackDistance.min
+					&& visionResults->front->blackDistance.min - visionResults->front->whiteDistance.min <= 0.1f
 				)
 			) {
 				performReverse = Decision::YES;
@@ -1471,7 +1480,7 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 	ai->dbg("sinceLastKick", timeSinceLastKick);
 	ai->dbg("forwardSpeed", forwardSpeed);
 	ai->dbg("sideSpeed", sideSpeed);
-	ai->dbg("whiteDistance", visionResults->front->whiteDistance);
+	ai->dbg("whiteDistance", visionResults->front->whiteDistance.min);
 	ai->dbg("robotOmega", robot->getOmega());
 	ai->dbgs("performReverse", (performReverse == Decision::YES ? "yes" : performReverse == Decision::NO ? "no" : "undecided"));
 

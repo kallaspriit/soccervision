@@ -279,8 +279,8 @@ private:
 	float blueGoalDistance;
 	float yellowGoalDistance;
 	float lastTargetGoalAngle;
-	float whiteDistance;
-	float blackDistance;
+	Vision::ColorDistance whiteDistance;
+	Vision::ColorDistance blackDistance;
 	double lastTurnAroundTime;
 	bool isRobotOutFront;
 	bool isRobotOutRear;

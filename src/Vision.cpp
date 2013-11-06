@@ -5,7 +5,7 @@
 #include <iostream>
 #include <algorithm>
 
-Vision::Vision(Blobber* blobber, CameraTranslator* cameraTranslator, Dir dir, int width, int height) : blobber(blobber), cameraTranslator(cameraTranslator), dir(dir), width(width), height(height), obstructionSide(Obstruction::NONE), blackDistance(-1.0f), whiteDistance(-1.0f) {
+Vision::Vision(Blobber* blobber, CameraTranslator* cameraTranslator, Dir dir, int width, int height) : blobber(blobber), cameraTranslator(cameraTranslator), dir(dir), width(width), height(height), obstructionSide(Obstruction::NONE) {
     validBallBgColors.push_back("green");
     validBallBgColors.push_back("white");
     validBallBgColors.push_back("black");
@@ -1213,18 +1213,18 @@ float Vision::getColorDistance(std::string colorName, int x1, int y1, int x2, in
 	return -1.0f;
 }
 
-float Vision::getColorDistance(std::string colorName) {
-	float distanceA = getColorDistance(
+Vision::ColorDistance Vision::getColorDistance(std::string colorName) {
+	float left = getColorDistance(
 		colorName,
 		Config::cameraWidth / 2, Config::colorDistanceStartY,
 		0, 0
 	);
-	float distanceB = getColorDistance(
+	float center = getColorDistance(
 		colorName,
 		Config::cameraWidth / 2, Config::colorDistanceStartY,
 		Config::cameraWidth / 2, 0
 	);
-	float distanceC = getColorDistance(
+	float right = getColorDistance(
 		colorName,
 		Config::cameraWidth / 2, Config::colorDistanceStartY,
 		Config::cameraWidth, 0
@@ -1236,7 +1236,7 @@ float Vision::getColorDistance(std::string colorName) {
 		Config::cameraWidth / 2 - 10, Config::colorDistanceStartY
 	);
 
-	return Math::min(Math::min(distanceA, distanceB), distanceC);
+	return ColorDistance(left, center, right);
 }
 
 Vision::ColorList Vision::getViewColorOrder() {
