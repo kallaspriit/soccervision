@@ -244,6 +244,15 @@ void TestController::updateVisionDebugInfo(Vision::Results* visionResults) {
 	isRobotOutRear = visionResults->isRobotOut(Dir::REAR);
 }
 
+bool TestController::isRobotInCorner(Vision::Results* visionResults) {
+	float nearLineDistance = 0.45f;
+
+	return visionResults->front->whiteDistance.min != -1.0f && visionResults->front->whiteDistance.min < nearLineDistance
+		&& visionResults->front->blackDistance.min != -1.0f && visionResults->front->blackDistance.min < nearLineDistance
+		&& visionResults->front->whiteDistance.min < visionResults->front->blackDistance.min
+		&& visionResults->front->blackDistance.min - visionResults->front->whiteDistance.min <= 0.1f;
+};
+
 void TestController::resetLastBall() {
 	if (lastBall != NULL) {
 		delete lastBall;
@@ -861,7 +870,6 @@ void TestController::FetchBallDirectState::step(float dt, Vision::Results* visio
 	float minApproachSpeed = 0.3f;
 	float accelerateAcceleration = 3.0f;
 	float brakeAcceleration = 3.0f;
-	float nearLineDistance = 0.45f;
 	float nearLineSpeed = 0.3f;
 	float nearBallDistance = 0.3f;
 	float realSpeed = robot->getVelocity();
@@ -881,15 +889,7 @@ void TestController::FetchBallDirectState::step(float dt, Vision::Results* visio
 	forwardSpeed = Math::max(Math::getAcceleratedSpeed(forwardSpeed, targetApproachSpeed, dt, accelerateAcceleration), minApproachSpeed);
 
 	// limit the speed low near the white-black line to avoid driving the ball out
-	if (
-		nearLine
-		|| (
-			visionResults->front->whiteDistance.min != -1.0f && visionResults->front->whiteDistance.min < nearLineDistance
-			&& visionResults->front->blackDistance.min != -1.0f && visionResults->front->blackDistance.min < nearLineDistance
-			&& visionResults->front->whiteDistance.min < visionResults->front->blackDistance.min
-			&& visionResults->front->blackDistance.min - visionResults->front->whiteDistance.min <= 0.1f
-		)
-	) {
+	if (nearLine|| ai->isRobotInCorner(visionResults)) {
 		nearLine = true;
 
 		if (ballDistance < nearBallDistance) {
@@ -1243,10 +1243,8 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 
 void TestController::AimState::onEnter(Robot* robot, Parameters parameters) {
 	avoidBallSide = TargetMode::UNDECIDED;
-	performReverse = Decision::UNDECIDED;
 	searchGoalDir = 0.0f;
 	foundOwnGoalTime = -1.0;
-	reverseTime = 0.0f;
 	avoidBallDuration = 0.0f;
 	nearLine = false;
 
@@ -1262,7 +1260,7 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 	ai->dbg("gotBall", robot->dribbler->gotBall());
 	
 	if (!robot->dribbler->gotBall()) {
-		ai->setState("fetch-ball-front");
+		ai->setState("find-ball");
 
 		return;
 	}
@@ -1274,15 +1272,12 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 	Object* goal = visionResults->getLargestGoal(ai->targetSide, Dir::FRONT);
 
 	ai->dbg("goalVisible", goal != NULL);
-	ai->dbg("reverseTime", reverseTime);
 	ai->dbg("nearLine", nearLine);
 	ai->dbg("ai->lastTargetGoalAngle", ai->lastTargetGoalAngle);
 
 	float searchPeriod = Config::robotSpinAroundDribblerPeriod;
 	float reversePeriod = 1.0f;
 	float reverseSpeed = 1.5f;
-	float performReverseMaxWhiteDistance = 0.35f;
-	float performReverseMaxBlackDistance = 0.4f;
 	float maxAimDuration = 6.0f;
 	int weakKickStrength = 3000;
 
@@ -1302,32 +1297,8 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 			}
 		}
 
-		if (performReverse == Decision::UNDECIDED) {
-			if (
-				nearLine
-				|| (
-					visionResults->front->whiteDistance.min != -1.0f && visionResults->front->whiteDistance.min <= performReverseMaxWhiteDistance
-					&& visionResults->front->blackDistance.min != -1.0f && visionResults->front->blackDistance.min <= performReverseMaxBlackDistance
-					&& visionResults->front->whiteDistance.min < visionResults->front->blackDistance.min
-					&& visionResults->front->blackDistance.min - visionResults->front->whiteDistance.min <= 0.1f
-				)
-			) {
-				performReverse = Decision::YES;
-			} else {
-				performReverse = Decision::NO;
-			}
-		}
-
-		if (performReverse == Decision::YES && reverseTime < reversePeriod) {
-			float acceleratedReverseSpeed = reverseSpeed * Math::map(reverseTime, 0, reversePeriod, 0.0f, 1.0f);
-
-			robot->setTargetDir(-acceleratedReverseSpeed, 0.0f, 0.0f);
-
-			reverseTime += dt;
-
-			ai->dbg("acceleratedReverseSpeed", acceleratedReverseSpeed);
-
-			return;
+		if (nearLine || ai->isRobotInCorner(visionResults)) {
+			ai->setState("escape-corner");
 		}
 
 		if (searchGoalDir == 0.0f) {
@@ -1341,10 +1312,6 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 		robot->spinAroundDribbler(searchGoalDir == -1.0f, searchPeriod);
 
 		float waitUntilSearchOwnGoalTime = searchPeriod / 1.5f;
-
-		if (performReverse == Decision::YES) {
-			waitUntilSearchOwnGoalTime += reversePeriod;
-		}
 
 		// start searching for own goal after almost full rotation
 		if (stateDuration > waitUntilSearchOwnGoalTime) {
@@ -1483,8 +1450,6 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 	ai->dbg("sideSpeed", sideSpeed);
 	ai->dbg("whiteDistance", visionResults->front->whiteDistance.min);
 	ai->dbg("robotOmega", robot->getOmega());
-	ai->dbgs("performReverse", (performReverse == Decision::YES ? "yes" : performReverse == Decision::NO ? "no" : "undecided"));
-
 }
 
 void TestController::DriveCircleState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration, float combinedDuration) {
@@ -1598,15 +1563,26 @@ void TestController::ReturnFieldState::step(float dt, Vision::Results* visionRes
 
 void TestController::EscapeCornerState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration, float combinedDuration) {
 	robot->stop();
+	robot->dribbler->start();
+
+	if (!robot->dribbler->gotBall()) {
+		ai->setState("find-ball");
+
+		return;
+	}
 
 	float reverseP = 1.0f;
-	float sideP = 1.0f;
+	float sideP = 0.5f;
+	float accelerationDuration = 1.5f;
+	float outOfCornerLineDistance = 0.5f;
 	float sideSpeed = 0.0f;
-	float reverseSpeed = reverseP * Math::map(stateDuration, 0.0f, 1.0f, 0.0f, 1.0f);
+	float reverseSpeed = reverseP * Math::map(stateDuration, 0.0f, accelerationDuration, 0.0f, 1.0f);
 
 	if (ai->whiteDistance.left != -1.0f && ai->whiteDistance.right != -1.0f) {
-		if (ai->whiteDistance.min > 0.5f) {
-			return; // TODO exit state
+		if (ai->whiteDistance.min > outOfCornerLineDistance) {
+			ai->setState("aim");
+
+			return;
 		}
 
 		float diff = Math::abs(ai->whiteDistance.left - ai->whiteDistance.right);

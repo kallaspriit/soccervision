@@ -181,7 +181,7 @@ public:
 	class AimState : public State {
 
 	public:
-		AimState(TestController* ai) : State(ai), lastKickTime(-1.0), foundOwnGoalTime(-1.0), avoidBallSide(TargetMode::UNDECIDED), searchGoalDir(0.0f), performReverse(Decision::UNDECIDED), reverseTime(0.0f), avoidBallDuration(0.0f), nearLine(false) {}
+		AimState(TestController* ai) : State(ai), lastKickTime(-1.0), foundOwnGoalTime(-1.0), avoidBallSide(TargetMode::UNDECIDED), searchGoalDir(0.0f), avoidBallDuration(0.0f), nearLine(false) {}
 		void onEnter(Robot* robot, Parameters parameters);
 		void step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration, float combinedDuration);
 
@@ -190,8 +190,6 @@ public:
 		double foundOwnGoalTime;
 		float searchGoalDir;
 		TargetMode avoidBallSide;
-		Decision performReverse;
-		float reverseTime;
 		float avoidBallDuration;
 		bool nearLine;
 	};
@@ -273,6 +271,7 @@ public:
 private:
 	void setupStates();
 	void updateVisionDebugInfo(Vision::Results* visionResults);
+	bool isRobotInCorner(Vision::Results* visionResults);
 	void resetLastBall();
 	void setLastBall(Object* ball);
 	Object* getLastBall(Dir dir = Dir::ANY);
