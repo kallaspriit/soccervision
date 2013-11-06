@@ -1266,6 +1266,17 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 		return;
 	}
 
+	if (visionResults->isRobotOut()) {
+		// no point to aim if robot is out
+		std::cout << "! Robot is out, kicking" << std::endl;
+
+		robot->kick();
+
+		ai->setState("find-ball");
+
+		return;
+	}
+
 	if (robot->hasTasks()) {
 		return;
 	}
@@ -1581,6 +1592,17 @@ void TestController::EscapeCornerState::step(float dt, Vision::Results* visionRe
 	robot->dribbler->start();
 
 	if (!robot->dribbler->gotBall()) {
+		ai->setState("find-ball");
+
+		return;
+	}
+
+	if (visionResults->isRobotOut()) {
+		// no point to aim if robot is out
+		std::cout << "! Robot is out, kicking" << std::endl;
+
+		robot->kick();
+
 		ai->setState("find-ball");
 
 		return;
