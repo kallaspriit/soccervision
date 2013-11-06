@@ -1246,7 +1246,6 @@ void TestController::AimState::onEnter(Robot* robot, Parameters parameters) {
 	searchGoalDir = 0.0f;
 	spinDuration = 0.0f;
 	foundOwnGoalTime = -1.0;
-	lastEscapeCornerTime = -1.0;
 	avoidBallDuration = 0.0f;
 	inCorner = false;
 
@@ -1588,6 +1587,7 @@ void TestController::EscapeCornerState::step(float dt, Vision::Results* visionRe
 	float sideP = 0.5f;
 	float accelerationDuration = 1.5f;
 	float outOfCornerLineDistance = 0.5f;
+	float maxSideSpeedDiff = 0.2f;
 	float sideSpeed = 0.0f;
 	float reverseSpeed = reverseP * Math::map(stateDuration, 0.0f, accelerationDuration, 0.0f, 1.0f);
 
@@ -1601,9 +1601,15 @@ void TestController::EscapeCornerState::step(float dt, Vision::Results* visionRe
 		float diff = Math::abs(ai->whiteDistance.left - ai->whiteDistance.right);
 		float side = ai->whiteDistance.left < ai->whiteDistance.right ? 1.0f : -1.0f;
 
-		sideSpeed = sideP * side * Math::map(diff, 0.0f, 0.2f, 0.0, 1.0f);
+		ai->dbg("diff", diff);
+		ai->dbg("side", side);
+
+		sideSpeed = sideP * side * Math::map(diff, 0.0f, maxSideSpeedDiff, 0.0, 1.0f);
 	}
 
 	robot->setTargetDir(-reverseSpeed, sideSpeed);
 	robot->dribbler->start();
+
+	ai->dbg("reverseSpeed", reverseSpeed);
+	ai->dbg("sideSpeed", sideSpeed);
 }
