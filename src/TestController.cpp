@@ -1317,7 +1317,7 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 		}
 
 		spinDuration += dt;
-		float spinSpeed = Math::map(spinDuration, 0.0f, 1.0f, 0.0f, searchPeriod);
+		float spinSpeed = Math::map(spinDuration, 0.0f, 1.0f, searchPeriod * 4.0f, searchPeriod);
 
 		robot->spinAroundDribbler(searchGoalDir == -1.0f, spinSpeed);
 
