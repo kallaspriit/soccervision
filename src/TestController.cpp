@@ -1599,16 +1599,22 @@ void TestController::ReturnFieldState::step(float dt, Vision::Results* visionRes
 void TestController::EscapeCornerState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration, float combinedDuration) {
 	robot->stop();
 
-	float reverseSpeed = 0.5f;
-	float sideP = 0.5f;
+	float reverseP = 1.0f;
+	float sideP = 1.0f;
 	float sideSpeed = 0.0f;
+	float reverseSpeed = reverseP * Math::map(stateDuration, 0.0f, 1.0f, 0.0f, 1.0f);
 
 	if (ai->whiteDistance.left != -1.0f && ai->whiteDistance.right != -1.0f) {
+		if (ai->whiteDistance.min > 0.5f) {
+			return; // TODO exit state
+		}
+
 		float diff = Math::abs(ai->whiteDistance.left - ai->whiteDistance.right);
 		float side = ai->whiteDistance.left < ai->whiteDistance.right ? 1.0f : -1.0f;
 
-		sideSpeed = sideP * side * Math::map(diff, 0.0f, 0.1f, 0.0, 1.0f);
+		sideSpeed = sideP * side * Math::map(diff, 0.0f, 0.2f, 0.0, 1.0f);
 	}
 
 	robot->setTargetDir(-reverseSpeed, sideSpeed);
+	robot->dribbler->start();
 }
