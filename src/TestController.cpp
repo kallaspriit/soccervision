@@ -815,7 +815,7 @@ void TestController::FetchBallFrontState::step(float dt, Vision::Results* vision
 
 void TestController::FetchBallDirectState::onEnter(Robot* robot, Parameters parameters) {
 	forwardSpeed = robot->getVelocity();
-	nearLine = false;
+	inCorner = false;
 }
 
 void TestController::FetchBallDirectState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration, float combinedDuration) {
@@ -829,8 +829,8 @@ void TestController::FetchBallDirectState::step(float dt, Vision::Results* visio
 
 		Parameters parameters;
 
-		if (nearLine) {
-			parameters["near-line"] = "1";
+		if (inCorner) {
+			parameters["in-corner"] = "1";
 		}
 
 		ai->setState("aim", parameters);
@@ -889,8 +889,8 @@ void TestController::FetchBallDirectState::step(float dt, Vision::Results* visio
 	forwardSpeed = Math::max(Math::getAcceleratedSpeed(forwardSpeed, targetApproachSpeed, dt, accelerateAcceleration), minApproachSpeed);
 
 	// limit the speed low near the white-black line to avoid driving the ball out
-	if (nearLine|| ai->isRobotInCorner(visionResults)) {
-		nearLine = true;
+	if (inCorner|| ai->isRobotInCorner(visionResults)) {
+		inCorner = true;
 
 		if (ballDistance < nearBallDistance) {
 			forwardSpeed = nearLineSpeed;
@@ -903,7 +903,7 @@ void TestController::FetchBallDirectState::step(float dt, Vision::Results* visio
 	robot->lookAt(ball);
 
 	ai->dbg("realSpeed", realSpeed);
-	ai->dbg("nearLine", nearLine);
+	ai->dbg("inCorner", inCorner);
 	ai->dbg("ballDistance", ballDistance);
 	ai->dbg("brakeDistance", brakeDistance);
 	ai->dbg("targetApproachSpeed", targetApproachSpeed);
@@ -1244,12 +1244,14 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 void TestController::AimState::onEnter(Robot* robot, Parameters parameters) {
 	avoidBallSide = TargetMode::UNDECIDED;
 	searchGoalDir = 0.0f;
+	spinDuration = 0.0f;
 	foundOwnGoalTime = -1.0;
+	lastEscapeCornerTime = -1.0;
 	avoidBallDuration = 0.0f;
-	nearLine = false;
+	inCorner = false;
 
-	if (parameters.find("near-line") != parameters.end()) {
-		nearLine = true;
+	if (parameters.find("in-corner") != parameters.end()) {
+		inCorner = true;
 	}
 }
 
@@ -1272,7 +1274,7 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 	Object* goal = visionResults->getLargestGoal(ai->targetSide, Dir::FRONT);
 
 	ai->dbg("goalVisible", goal != NULL);
-	ai->dbg("nearLine", nearLine);
+	ai->dbg("inCorner", inCorner);
 	ai->dbg("ai->lastTargetGoalAngle", ai->lastTargetGoalAngle);
 
 	float searchPeriod = Config::robotSpinAroundDribblerPeriod;
@@ -1297,8 +1299,13 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 			}
 		}
 
-		if (nearLine || ai->isRobotInCorner(visionResults)) {
+		if (
+			(inCorner || ai->isRobotInCorner(visionResults))
+			&& (lastEscapeCornerTime == -1.0 || Util::duration(lastEscapeCornerTime) > 2.0)
+		) {
 			ai->setState("escape-corner");
+
+			return;
 		}
 
 		if (searchGoalDir == 0.0f) {
@@ -1309,7 +1316,12 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 			}
 		}
 
-		robot->spinAroundDribbler(searchGoalDir == -1.0f, searchPeriod);
+		spinDuration += dt;
+		float spinSpeed = Math::map(spinDuration, 0.0f, 1.0f, 0.0f, searchPeriod);
+
+		robot->spinAroundDribbler(searchGoalDir == -1.0f, spinSpeed);
+
+		ai->dbg("spinSpeed", spinSpeed);
 
 		float waitUntilSearchOwnGoalTime = searchPeriod / 1.5f;
 
