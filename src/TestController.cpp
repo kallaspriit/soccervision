@@ -34,7 +34,7 @@
  * - don't fake ball in dribbler after kicking
  */
 
-TestController::TestController(Robot* robot, Communication* com) : BaseAI(robot, com), targetSide(Side::BLUE), manualSpeedX(0.0f), manualSpeedY(0.0f), manualOmega(0.0f), manualDribblerSpeed(0), manualKickStrength(0), blueGoalDistance(0.0f), yellowGoalDistance(0.0f), lastCommandTime(-1.0), lastBallTime(-1.0), lastTargetGoalAngle(0.0f), lastBall(NULL), lastTurnAroundTime(-1.0), framesRobotOutFront(0), framesRobotOutRear(0), isRobotOutFront(false), isRobotOutRear(false) {
+TestController::TestController(Robot* robot, Communication* com) : BaseAI(robot, com), targetSide(Side::BLUE), manualSpeedX(0.0f), manualSpeedY(0.0f), manualOmega(0.0f), manualDribblerSpeed(0), manualKickStrength(0), blueGoalDistance(0.0f), yellowGoalDistance(0.0f), lastCommandTime(-1.0), lastBallTime(-1.0), lastTargetGoalAngle(0.0f), lastBall(NULL), lastTurnAroundTime(-1.0), framesRobotOutFront(0), framesRobotOutRear(0), isRobotOutFront(false), isRobotOutRear(false), isNearLine(false), isInCorner(false) {
 	setupStates();
 };
 
@@ -259,7 +259,18 @@ void TestController::updateVisionDebugInfo(Vision::Results* visionResults) {
 
 	isRobotOutFront = framesRobotOutFront >= 10;
 	isRobotOutRear = framesRobotOutRear >= 10;
+	isNearLine = isRobotNearLine(visionResults);
+	isInCorner = isRobotInCorner(visionResults);
 }
+
+bool TestController::isRobotNearLine(Vision::Results* visionResults) {
+	float nearLineDistance = 0.45f;
+
+	return visionResults->front->whiteDistance.min != -1.0f && visionResults->front->whiteDistance.min < nearLineDistance
+		&& visionResults->front->blackDistance.min != -1.0f && visionResults->front->blackDistance.min < nearLineDistance
+		&& visionResults->front->whiteDistance.min < visionResults->front->blackDistance.min
+		&& visionResults->front->blackDistance.min - visionResults->front->whiteDistance.min <= 0.1f;
+};
 
 bool TestController::isRobotInCorner(Vision::Results* visionResults) {
 	float nearLineDistance = 0.45f;
@@ -346,6 +357,8 @@ std::string TestController::getJSON() {
 	stream << "\"yellowGoalDistance\": " << yellowGoalDistance << ",";
 	stream << "\"isRobotOutFront\": " << (isRobotOutFront ? "true" : "false") << ",";
 	stream << "\"isRobotOutRear\": " << (isRobotOutRear ? "true" : "false") << ",";
+	stream << "\"isInCorner\": " << (isInCorner ? "true" : "false") << ",";
+	stream << "\"isNearLine\": " << (isNearLine ? "true" : "false") << ",";
 	stream << "\"lastTargetGoalAngle\": " << Math::radToDeg(lastTargetGoalAngle);
 
 	stream << "}";

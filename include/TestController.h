@@ -273,6 +273,7 @@ public:
 private:
 	void setupStates();
 	void updateVisionDebugInfo(Vision::Results* visionResults);
+	bool isRobotNearLine(Vision::Results* visionResults);
 	bool isRobotInCorner(Vision::Results* visionResults);
 	void resetLastBall();
 	void setLastBall(Object* ball);
@@ -298,6 +299,8 @@ private:
 	int framesRobotOutRear;
 	bool isRobotOutFront;
 	bool isRobotOutRear;
+	bool isNearLine;
+	bool isInCorner;
 
 	double lastCommandTime;
 	double lastBallTime;

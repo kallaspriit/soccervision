@@ -1219,10 +1219,20 @@ Vision::ColorDistance Vision::getColorDistance(std::string colorName) {
 		Config::cameraWidth / 2, Config::colorDistanceStartY,
 		0, 0
 	);
+	float leftMiddle = getColorDistance(
+		colorName,
+		Config::cameraWidth / 2, Config::colorDistanceStartY,
+		Config::cameraWidth / 4, 0
+	);
 	float center = getColorDistance(
 		colorName,
 		Config::cameraWidth / 2, Config::colorDistanceStartY,
 		Config::cameraWidth / 2, 0
+	);
+	float rightMiddle = getColorDistance(
+		colorName,
+		Config::cameraWidth / 2, Config::colorDistanceStartY,
+		Config::cameraWidth / 2 + Config::cameraWidth / 4, 0
 	);
 	float right = getColorDistance(
 		colorName,
@@ -1230,13 +1240,13 @@ Vision::ColorDistance Vision::getColorDistance(std::string colorName) {
 		Config::cameraWidth, 0
 	);
 
-	getColorDistance(
+	/*getColorDistance(
 		colorName,
 		Config::cameraWidth - 10, 0,
 		Config::cameraWidth / 2 - 10, Config::colorDistanceStartY
-	);
+	);*/
 
-	return ColorDistance(left, center, right);
+	return ColorDistance(left, leftMiddle, center, rightMiddle, right);
 }
 
 Vision::ColorList Vision::getViewColorOrder() {
