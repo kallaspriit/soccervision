@@ -282,7 +282,19 @@ bool TestController::isRobotNearLine(Vision::Results* visionResults) {
 };
 
 bool TestController::isRobotInCorner(Vision::Results* visionResults) {
+	float tooCloseDistance = 0.3f;
+	
 	if (!isRobotNearLine(visionResults)) {
+		return false;
+	}
+
+	// too close to the line, it's impossible to make the difference
+	if (visionResults->front->whiteDistance.min < tooCloseDistance) {
+		return false;
+	}
+
+	// probably a straight line if the difference is very small
+	if (visionResults->front->whiteDistance.max - visionResults->front->whiteDistance.min < 0.05f) {
 		return false;
 	}
 
