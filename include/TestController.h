@@ -274,6 +274,8 @@ private:
 	void updateVisionDebugInfo(Vision::Results* visionResults);
 	bool isRobotNearLine(Vision::Results* visionResults);
 	bool isRobotInCorner(Vision::Results* visionResults);
+	bool wasNearLineLately(double threshold = 1.0);
+	bool wasInCornerLately(double threshold = 1.0);
 	void resetLastBall();
 	void setLastBall(Object* ball);
 	Object* getLastBall(Dir dir = Dir::ANY);
@@ -303,6 +305,8 @@ private:
 
 	double lastCommandTime;
 	double lastBallTime;
+	double lastNearLineTime;
+	double lastInCornerTime;
 
 	Object* lastBall;
 

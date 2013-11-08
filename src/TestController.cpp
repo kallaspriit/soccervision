@@ -34,7 +34,7 @@
  * - don't fake ball in dribbler after kicking
  */
 
-TestController::TestController(Robot* robot, Communication* com) : BaseAI(robot, com), targetSide(Side::BLUE), manualSpeedX(0.0f), manualSpeedY(0.0f), manualOmega(0.0f), manualDribblerSpeed(0), manualKickStrength(0), blueGoalDistance(0.0f), yellowGoalDistance(0.0f), lastCommandTime(-1.0), lastBallTime(-1.0), lastTargetGoalAngle(0.0f), lastBall(NULL), lastTurnAroundTime(-1.0), framesRobotOutFront(0), framesRobotOutRear(0), isRobotOutFront(false), isRobotOutRear(false), isNearLine(false), isInCorner(false) {
+TestController::TestController(Robot* robot, Communication* com) : BaseAI(robot, com), targetSide(Side::BLUE), manualSpeedX(0.0f), manualSpeedY(0.0f), manualOmega(0.0f), manualDribblerSpeed(0), manualKickStrength(0), blueGoalDistance(0.0f), yellowGoalDistance(0.0f), lastCommandTime(-1.0), lastBallTime(-1.0), lastNearLineTime(-1.0), lastInCornerTime(-1.0), lastTargetGoalAngle(0.0f), lastBall(NULL), lastTurnAroundTime(-1.0), framesRobotOutFront(0), framesRobotOutRear(0), isRobotOutFront(false), isRobotOutRear(false), isNearLine(false), isInCorner(false) {
 	setupStates();
 };
 
@@ -261,6 +261,14 @@ void TestController::updateVisionDebugInfo(Vision::Results* visionResults) {
 	isRobotOutRear = framesRobotOutRear >= 10;
 	isNearLine = isRobotNearLine(visionResults);
 	isInCorner = isRobotInCorner(visionResults);
+
+	if (isNearLine) {
+		lastNearLineTime = Util::millitime();
+	}
+
+	if (isInCorner) {
+		lastInCornerTime = Util::millitime();
+	}
 }
 
 bool TestController::isRobotNearLine(Vision::Results* visionResults) {
@@ -295,6 +303,14 @@ bool TestController::isRobotInCorner(Vision::Results* visionResults) {
 
 	return false;
 };
+
+bool TestController::wasNearLineLately(double threshold) {
+	return lastNearLineTime != -1.0 && Util::duration(lastNearLineTime) < threshold;
+}
+
+bool TestController::wasInCornerLately(double threshold) {
+	return lastInCornerTime != -1.0 && Util::duration(lastInCornerTime) < threshold;
+}
 
 void TestController::resetLastBall() {
 	if (lastBall != NULL) {
@@ -1328,6 +1344,7 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 	Object* goal = visionResults->getLargestGoal(ai->targetSide, Dir::FRONT);
 
 	ai->dbg("goalVisible", goal != NULL);
+	ai->dbg("ai->wasInCornerLately()", ai->wasInCornerLately());
 	ai->dbg("ai->lastTargetGoalAngle", ai->lastTargetGoalAngle);
 	ai->dbg("timeSinceEscapeCorner", lastEscapeCornerTime == -1.0 ? -1.0 : Util::duration(lastEscapeCornerTime));
 
@@ -1354,7 +1371,8 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 		}
 
 		if (
-			ai->isRobotInCorner(visionResults)
+			//ai->isRobotInCorner(visionResults)
+			ai->wasInCornerLately()
 			&& (lastEscapeCornerTime == -1.0 || Util::duration(lastEscapeCornerTime) > 1.0)
 		) {
 			ai->setState("escape-corner");
