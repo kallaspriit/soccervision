@@ -273,12 +273,26 @@ bool TestController::isRobotNearLine(Vision::Results* visionResults) {
 };
 
 bool TestController::isRobotInCorner(Vision::Results* visionResults) {
-	float nearLineDistance = 0.45f;
+	if (!isRobotNearLine(visionResults)) {
+		return false;
+	}
 
-	return visionResults->front->whiteDistance.min != -1.0f && visionResults->front->whiteDistance.min < nearLineDistance
-		&& visionResults->front->blackDistance.min != -1.0f && visionResults->front->blackDistance.min < nearLineDistance
-		&& visionResults->front->whiteDistance.min < visionResults->front->blackDistance.min
-		&& visionResults->front->blackDistance.min - visionResults->front->whiteDistance.min <= 0.1f;
+	if (visionResults->front->whiteDistance.left == -1.0f || visionResults->front->whiteDistance.right == -1.0f) {
+		return true; // can't be sure but better be safe
+	}
+
+	float maxCornerDistance = Math::max(visionResults->front->whiteDistance.left, visionResults->front->whiteDistance.right);
+
+	// robot is in corner if any of the center 3 samples are further than the furthest side samples
+	if (
+		(visionResults->front->whiteDistance.leftMiddle != -1.0f && visionResults->front->whiteDistance.leftMiddle > maxCornerDistance)
+		|| (visionResults->front->whiteDistance.center != -1.0f && visionResults->front->whiteDistance.center > maxCornerDistance)
+		|| (visionResults->front->whiteDistance.rightMiddle != -1.0f && visionResults->front->whiteDistance.rightMiddle > maxCornerDistance)
+	) {
+		return true;
+	}
+
+	return false;
 };
 
 void TestController::resetLastBall() {
