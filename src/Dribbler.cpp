@@ -4,7 +4,7 @@
 
 #include <iostream>
 
-Dribbler::Dribbler(int id) : Wheel(id), ballDetected(false), ballInDribblerTime(0.0), ballLostTime(-1.0f), stopRequestedTime(-1.0) {
+Dribbler::Dribbler(int id) : Wheel(id), ballDetected(false), everDetectedBall(false), ballInDribblerTime(0.0), ballLostTime(-1.0f), stopRequestedTime(-1.0) {
 
 };
 
@@ -18,6 +18,10 @@ void Dribbler::stop() {
 	if (stopRequestedTime == -1.0) {
 		stopRequestedTime = Util::millitime();
 	}
+}
+
+void Dribbler::onKick() {
+	
 }
 
 void Dribbler::step(float dt) {
@@ -38,10 +42,12 @@ void Dribbler::step(float dt) {
 			ballLostTime = -1.0f;
 		}
 	} else {
-		if (ballLostTime == -1.0f) {
-			ballLostTime = dt;
-		} else {
-			ballLostTime += dt;
+		if (everDetectedBall) {
+			if (ballLostTime == -1.0f) {
+				ballLostTime = dt;
+			} else {
+				ballLostTime += dt;
+			}
 		}
 
 		if (ballLostTime >= Config::dribblerBallLostThreshold) {
@@ -78,6 +84,7 @@ bool Dribbler::handleCommand(const Command& cmd) {
 	if (cmd.name == "ball") {
 		if (cmd.parameters[0] == "1") {
 			ballDetected = true;
+			everDetectedBall = true;
 		} else {
 			ballDetected = false;
 		}

@@ -369,6 +369,7 @@ void Robot::stop() {
 
 void Robot::kick(int microseconds) {
 	coilgun->kick(microseconds);
+	dribbler->onKick();
 
 	// TODO Remove this hack once hardware issue is resolved
 	/*Command::Parameters lostBallParams;

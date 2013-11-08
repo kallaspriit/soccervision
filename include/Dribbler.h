@@ -11,6 +11,7 @@ public:
 
 	void start();
 	void stop();
+	void onKick();
 	bool isActive() const { return targetOmega > 0; }
 	bool gotBall() const;
 	bool handleCommand(const Command& cmd);
@@ -24,6 +25,7 @@ private:
     float realOmega;
 	int stallCounter;
 	bool ballDetected;
+	bool everDetectedBall;
 	float ballInDribblerTime;
 	float ballLostTime;
 	double stopRequestedTime;
