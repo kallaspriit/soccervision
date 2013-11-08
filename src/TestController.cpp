@@ -266,10 +266,11 @@ void TestController::updateVisionDebugInfo(Vision::Results* visionResults) {
 bool TestController::isRobotNearLine(Vision::Results* visionResults) {
 	float nearLineDistance = 0.45f;
 
+	// the last two conditions may not be true if there's a ball in the way
 	return visionResults->front->whiteDistance.min != -1.0f && visionResults->front->whiteDistance.min < nearLineDistance
-		&& visionResults->front->blackDistance.min != -1.0f && visionResults->front->blackDistance.min < nearLineDistance
-		&& visionResults->front->whiteDistance.min < visionResults->front->blackDistance.min
-		&& visionResults->front->blackDistance.min - visionResults->front->whiteDistance.min <= 0.1f;
+		&& visionResults->front->blackDistance.min != -1.0f && visionResults->front->blackDistance.min < nearLineDistance;
+		//&& visionResults->front->whiteDistance.min < visionResults->front->blackDistance.min
+		//&& visionResults->front->blackDistance.min - visionResults->front->whiteDistance.min <= 0.1f;
 };
 
 bool TestController::isRobotInCorner(Vision::Results* visionResults) {
