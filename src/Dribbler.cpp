@@ -21,7 +21,8 @@ void Dribbler::stop() {
 }
 
 void Dribbler::onKick() {
-	
+	ballLostTime = Config::dribblerBallLostThreshold; // make it large so the ball is not faked after kick
+	ballDetected = false;
 }
 
 void Dribbler::step(float dt) {
@@ -59,7 +60,7 @@ void Dribbler::step(float dt) {
 }
 
 bool Dribbler::gotBall() const {
-	if (!ballDetected && ballLostTime != -1.0f && ballLostTime <= Config::dribblerBallLostThreshold) {
+	if (!ballDetected && ballLostTime != -1.0f && ballLostTime < Config::dribblerBallLostThreshold) {
 		std::cout << "! Faking got ball, actually lost for: " << ballLostTime << std::endl;
 
 		return true;
