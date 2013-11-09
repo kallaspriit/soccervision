@@ -1436,8 +1436,8 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 		// spin around dribbler with acceleration and initial reverse
 		spinDuration += dt;
 
-		float spinAccelerationTime = 1.0f;
-		float spinReverseDuration = 0.5f;
+		float spinAccelerationTime = 2.0f;
+		float spinReverseDuration = 1.0f;
 		float spinSlowdownMultiplier = 4.0f;
 		float spinReverseSpeed = 0.2f;
 		float spinRadius = Config::robotSpinAroundDribblerRadius;
@@ -1448,11 +1448,7 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 		float spinForwardSpeed = 0.0f;
 
 		if (spinDuration < spinReverseDuration) {
-			if (spinDuration < spinReverseDuration / 2.0f) {
-				spinForwardSpeed = Math::map(spinDuration, 0.0f, spinReverseDuration / 2.0f, 0.0f, -spinReverseSpeed);
-			} else {
-				spinForwardSpeed = Math::map(spinDuration, spinReverseDuration / 2.0f, spinReverseDuration, -spinReverseSpeed, 0.0f);
-			}
+			spinForwardSpeed = Math::map(spinDuration, 0.0f, spinReverseDuration, 0.0f, -spinReverseSpeed);
 		} else {
 			spinForwardSpeed = Math::map(spinDuration, 0.0f, spinAccelerationTime, 0.0f, Config::robotSpinAroundDribblerForwardSpeed);
 		}
