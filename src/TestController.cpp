@@ -30,6 +30,24 @@
  * + differentiate between near line and in corner
  * - reverse only a little near a line, more in corner, approach with care in both cases
  * + don't fake ball in dribbler after kicking
+ * - can fetch behind be made faster?
+ *
+ * DEMO
+ * - fetch string of balls in front
+ * - fetch string of balls behind
+ * - fetch diagonal set of balls
+ * - fetch ball behind near own goal (turn around)
+ * - fetch ball from own/opponent goal corner (near both lines)
+ * - fetch ball on the line
+ * - fetch ball at large angle from own goal, facing own goal
+ * - fetch balls from 4 corners (probably includes search)
+ * - empty entire field with timer
+ * - kick ball avoiding a set of other balls
+ * - find ball move to center
+ * - kick into very small goal
+ * - show robot and ball localization in the web UI
+ * - show "back in time" in the web UI
+ * - show configuring colors in the web UI
  */
 
 TestController::TestController(Robot* robot, Communication* com) : BaseAI(robot, com), targetSide(Side::BLUE), manualSpeedX(0.0f), manualSpeedY(0.0f), manualOmega(0.0f), manualDribblerSpeed(0), manualKickStrength(0), blueGoalDistance(0.0f), yellowGoalDistance(0.0f), lastCommandTime(-1.0), lastBallTime(-1.0), lastNearLineTime(-1.0), lastInCornerTime(-1.0), lastTargetGoalAngle(0.0f), lastBall(NULL), lastTurnAroundTime(-1.0), framesRobotOutFront(0), framesRobotOutRear(0), isRobotOutFront(false), isRobotOutRear(false), isNearLine(false), isInCorner(false) {
@@ -399,6 +417,7 @@ std::string TestController::getJSON() {
 	stream << "\"isRobotOutFront\": " << (isRobotOutFront ? "true" : "false") << ",";
 	stream << "\"isRobotOutRear\": " << (isRobotOutRear ? "true" : "false") << ",";
 	stream << "\"isInCorner\": " << (isInCorner ? "true" : "false") << ",";
+	stream << "\"wasInCornerLately\": " << (wasInCornerLately() ? "true: " + Util::toString(Util::duration(lastInCornerTime)) : "false") << ",";
 	stream << "\"isNearLine\": " << (isNearLine ? "true" : "false") << ",";
 	stream << "\"lastTargetGoalAngle\": " << Math::radToDeg(lastTargetGoalAngle);
 
