@@ -1441,7 +1441,7 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 		float spinRadius = Config::robotSpinAroundDribblerRadius;
 		float spinPeriod = Config::robotSpinAroundDribblerPeriod;
 		float spinForwardSpeed = Config::robotSpinAroundDribblerForwardSpeed;
-		float spinSpeed = (2.0f * Math::PI * spinPeriod) / spinPeriod;
+		float spinSpeed = (2.0f * Math::PI * spinRadius) / spinPeriod;
 		float spinOmega = (2.0f * Math::PI) / spinPeriod;
 
 		if (searchGoalDir == -1.0f) {
