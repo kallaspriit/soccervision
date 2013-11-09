@@ -1080,7 +1080,11 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 		return;
 	}
 
-	if (ball == NULL) {
+	// perform reverse if ball is not visible or suddenly seeing another ball further away
+	if (
+		ball == NULL
+		|| (lastBallDistance != -1.0f && ball->getDribblerDistance() > lastBallDistance * 1.2f)
+	) {
 		// don't perform the blind reverse if the ball was lost at too great of a distance, also if last seen ball was ghost
 		if (!hadBall || lastBallDistance > 1.2f || lastBallWasGhost) {
 			ai->setState("find-ball");
@@ -1115,6 +1119,7 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 	}
 
 	ai->dbg("ballDistance", ballDistance);
+	ai->dbg("targetMode", targetMode);
 
 	Side ownSide = ai->targetSide == Side::YELLOW ? Side::BLUE : Side::YELLOW;
 	Object* ownGoal = visionResults->getLargestGoal(ownSide, Dir::REAR);
