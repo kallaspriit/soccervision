@@ -417,7 +417,7 @@ std::string TestController::getJSON() {
 	stream << "\"isRobotOutFront\": " << (isRobotOutFront ? "true" : "false") << ",";
 	stream << "\"isRobotOutRear\": " << (isRobotOutRear ? "true" : "false") << ",";
 	stream << "\"isInCorner\": " << (isInCorner ? "true" : "false") << ",";
-	stream << "\"wasInCornerLately\": " << (wasInCornerLately() ? "true: " + Util::toString(Util::duration(lastInCornerTime)) : "false") << ",";
+	stream << "\"wasInCornerLately\": " << (wasInCornerLately() ? "\"true: " + Util::toString(Util::duration(lastInCornerTime)) + "\"" : "false") << ",";
 	stream << "\"isNearLine\": " << (isNearLine ? "true" : "false") << ",";
 	stream << "\"lastTargetGoalAngle\": " << Math::radToDeg(lastTargetGoalAngle);
 
