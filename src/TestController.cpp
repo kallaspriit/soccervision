@@ -929,7 +929,7 @@ void TestController::FetchBallDirectState::step(float dt, Vision::Results* visio
 		Parameters parameters;
 
 		if (nearLine) {
-			parameters["naer-line"] = "1";
+			parameters["near-line"] = "1";
 		}
 
 		ai->setState("aim", parameters);
@@ -1351,10 +1351,11 @@ void TestController::AimState::onEnter(Robot* robot, Parameters parameters) {
 	spinDuration = 0.0f;
 	foundOwnGoalTime = -1.0;
 	avoidBallDuration = 0.0f;
+	nearLine = false;
 
-	/*if (parameters.find("in-corner") != parameters.end()) {
-		inCorner = true;
-	}*/
+	if (parameters.find("near-line") != parameters.end()) {
+		nearLine = true;
+	}
 }
 
 void TestController::AimState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration, float combinedDuration) {
@@ -1387,6 +1388,7 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 	Object* goal = visionResults->getLargestGoal(ai->targetSide, Dir::FRONT);
 
 	ai->dbg("goalVisible", goal != NULL);
+	ai->dbg("nearLine", nearLine);
 	ai->dbg("ai->wasInCornerLately()", ai->wasInCornerLately());
 	ai->dbg("ai->lastTargetGoalAngle", ai->lastTargetGoalAngle);
 	ai->dbg("timeSinceEscapeCorner", lastEscapeCornerTime == -1.0 ? -1.0 : Util::duration(lastEscapeCornerTime));
@@ -1432,35 +1434,37 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 				searchGoalDir = -1.0f;
 			}
 		}
-
-		//robot->spinAroundDribbler(searchGoalDir == -1.0f, searchPeriod);
-
-		// spin around dribbler with acceleration and initial reverse
+		
 		spinDuration += dt;
 
-		float spinAccelerationTime = 1.5f;
-		float spinReverseDuration = 0.75f;
-		float spinSlowdownMultiplier = 4.0f;
-		float spinReverseSpeed = 0.4f;
-		float spinRadius = Config::robotSpinAroundDribblerRadius;
-		float spinPeriod = Math::map(spinDuration, 0.0f, spinAccelerationTime, Config::robotSpinAroundDribblerPeriod * spinSlowdownMultiplier, Config::robotSpinAroundDribblerPeriod);
+		if (nearLine) {
+			// spin around dribbler with acceleration and initial reverse
+			float spinAccelerationTime = 1.5f;
+			float spinReverseDuration = 0.75f;
+			float spinSlowdownMultiplier = 4.0f;
+			float spinReverseSpeed = 0.4f;
+			float spinRadius = Config::robotSpinAroundDribblerRadius;
+			float spinPeriod = Math::map(spinDuration, 0.0f, spinAccelerationTime, Config::robotSpinAroundDribblerPeriod * spinSlowdownMultiplier, Config::robotSpinAroundDribblerPeriod);
 		
-		float spinSpeed = (2.0f * Math::PI * spinRadius) / spinPeriod;
-		float spinOmega = (2.0f * Math::PI) / spinPeriod;
-		float spinForwardSpeed = 0.0f;
+			float spinSpeed = (2.0f * Math::PI * spinRadius) / spinPeriod;
+			float spinOmega = (2.0f * Math::PI) / spinPeriod;
+			float spinForwardSpeed = 0.0f;
 
-		if (spinDuration < spinReverseDuration) {
-			spinForwardSpeed = Math::map(spinDuration, 0.0f, spinReverseDuration, 0.0f, -spinReverseSpeed);
+			if (spinDuration < spinReverseDuration) {
+				spinForwardSpeed = Math::map(spinDuration, 0.0f, spinReverseDuration, 0.0f, -spinReverseSpeed);
+			} else {
+				spinForwardSpeed = Math::map(spinDuration, 0.0f, spinAccelerationTime, 0.0f, Config::robotSpinAroundDribblerForwardSpeed);
+			}
+
+			if (searchGoalDir == -1.0f) {
+				spinSpeed *= -1.0f;
+				spinOmega *= -1.0f;
+			}
+
+			robot->setTargetDir(spinForwardSpeed, -spinSpeed, spinOmega);
 		} else {
-			spinForwardSpeed = Math::map(spinDuration, 0.0f, spinAccelerationTime, 0.0f, Config::robotSpinAroundDribblerForwardSpeed);
+			robot->spinAroundDribbler(searchGoalDir == -1.0f, searchPeriod);
 		}
-
-		if (searchGoalDir == -1.0f) {
-			spinSpeed *= -1.0f;
-			spinOmega *= -1.0f;
-		}
-
-		robot->setTargetDir(spinForwardSpeed, -spinSpeed, spinOmega);
 
 		//ai->dbg("spinPeriod", spinPeriod);
 
