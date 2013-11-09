@@ -32,6 +32,8 @@
  * + don't fake ball in dribbler after kicking
  * - can fetch behind be made faster?
  * - when aiming, turn around dribbler with acceleration and don't move forward or event slightly reverse at the beginning
+ * - reverse towards own goal while aiming based on travelledRotation not time
+ *
  *
  * DEMO
  * - fetch string of balls in front
@@ -1462,7 +1464,8 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 
 		//ai->dbg("spinPeriod", spinPeriod);
 
-		float waitUntilSearchOwnGoalTime = searchPeriod / 1.5f;
+		// TODO Replace this with travelledOmega
+		float waitUntilSearchOwnGoalTime = 3.0f;
 
 		// start searching for own goal after almost full rotation
 		if (stateDuration > waitUntilSearchOwnGoalTime) {
@@ -1502,7 +1505,7 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 
 				ai->dbg("timeSinceFoundOwnGoal", timeSinceFoundOwnGoal);
 				ai->dbg("accelerationMultiplier", accelerationMultiplier);
-				ai->dbg("acceleratedBackwardsSpeed", acceleratedReverseSpeed);
+				ai->dbg("acceleratedReverseSpeed", acceleratedReverseSpeed);
 			}
 		}
 
