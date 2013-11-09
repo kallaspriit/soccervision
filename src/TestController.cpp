@@ -1437,7 +1437,7 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 		spinDuration += dt;
 
 		float spinAccelerationTime = 1.0f;
-		float spinReverseDuration = 0.25f;
+		float spinReverseDuration = 0.5f;
 		float spinSlowdownMultiplier = 4.0f;
 		float spinReverseSpeed = 0.2f;
 		float spinRadius = Config::robotSpinAroundDribblerRadius;
