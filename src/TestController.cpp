@@ -31,6 +31,7 @@
  * - reverse only a little near a line, more in corner, approach with care in both cases
  * + don't fake ball in dribbler after kicking
  * - can fetch behind be made faster?
+ * - when aiming, turn around dribbler with acceleration and don't move forward or event slightly reverse at the beginning
  *
  * DEMO
  * - fetch string of balls in front
@@ -1434,7 +1435,21 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 
 		float spinPeriod = Math::map(spinDuration, 0.0f, 1.0f, searchPeriod * 2.0f, searchPeriod);*/
 
-		robot->spinAroundDribbler(searchGoalDir == -1.0f, searchPeriod);
+		//robot->spinAroundDribbler(searchGoalDir == -1.0f, searchPeriod);
+
+		// spin around dribbler with acceleration
+		float spinRadius = Config::robotSpinAroundDribblerRadius;
+		float spinPeriod = Config::robotSpinAroundDribblerPeriod;
+		float spinForwardSpeed = Config::robotSpinAroundDribblerForwardSpeed;
+		float spinSpeed = (2.0f * Math::PI * spinPeriod) / spinPeriod;
+		float spinOmega = (2.0f * Math::PI) / spinPeriod;
+
+		if (searchGoalDir == -1.0f) {
+			spinSpeed *= -1.0f;
+			spinOmega *= -1.0f;
+		}
+
+		robot->setTargetDir(spinForwardSpeed, -spinSpeed, spinOmega);
 
 		//ai->dbg("spinPeriod", spinPeriod);
 

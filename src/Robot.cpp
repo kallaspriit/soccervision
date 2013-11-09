@@ -342,8 +342,8 @@ void Robot::setTargetDir(const Math::Angle& dir, float speed, float omega) {
 }
 
 void Robot::spinAroundDribbler(bool reverse, float period, float radius, float forwardSpeed) {
-	float speed = (2 * Math::PI * radius) / period;
-	float omega = (2 * Math::PI) / period;
+	float speed = (2.0f * Math::PI * radius) / period;
+	float omega = (2.0f * Math::PI) / period;
 
 	if (reverse) {
 		speed *= -1.0f;
