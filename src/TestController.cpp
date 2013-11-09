@@ -42,6 +42,7 @@
  * - fetch ball at large angle from own goal, facing own goal
  * - fetch balls from 4 corners (probably includes search)
  * - empty entire field with timer
+ * - maximum speed fetching forward/behind
  * - kick ball avoiding a set of other balls
  * - find ball move to center
  * - kick into very small goal
@@ -311,6 +312,11 @@ bool TestController::isRobotInCorner(Vision::Results* visionResults) {
 
 	// probably a straight line if the difference is very small
 	if (visionResults->front->whiteDistance.max - visionResults->front->whiteDistance.min < 0.05f) {
+		return false;
+	}
+
+	// if the maximum is far, we can be looking at the corner near the line and large distance, dont consider this valid
+	if (visionResults->front->whiteDistance.max > tooCloseDistance * 3.0f) {
 		return false;
 	}
 
