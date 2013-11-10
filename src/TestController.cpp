@@ -1820,5 +1820,24 @@ void TestController::DriveHomeState::step(float dt, Vision::Results* visionResul
 		return;
 	}
 
-	// drive by lines
+	Object* opponentGoal = visionResults->getLargestGoal(ai->targetSide, Dir::FRONT);
+
+	float sideP = 0.5f;
+	float reverseP = 0.5f;
+	float maxSideSpeedDiff = 0.2f;
+
+	float diff = Math::abs(visionResults->rear->whiteDistance.left - visionResults->rear->whiteDistance.right);
+	float side = visionResults->rear->whiteDistance.left < visionResults->rear->whiteDistance.right ? 1.0f : -1.0f;
+
+	ai->dbg("diff", diff);
+	ai->dbg("side", side);
+
+	float sideSpeed = sideP * side * Math::map(diff, 0.0f, maxSideSpeedDiff, 0.0, 1.0f);
+	float reverseSpeed = Math::map(visionResults->rear->whiteDistance.max, 0.3f, 1.0f, 0.0f, reverseP);
+
+	robot->setTargetDir(-reverseSpeed, sideSpeed);
+
+	if (opponentGoal != NULL) {
+		robot->lookAt(opponentGoal);
+	}
 }
