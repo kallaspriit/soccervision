@@ -22,16 +22,16 @@
  * + check whether adaptive fetch front distance is good
  * + can drive out of the field when avoiding to kick through balls
  * + don't drive forward while avoiding balls if next ball is close by
- * - detect that the robot has gone out of the wheel (both cameras)
+ * + detect that the robot has gone out of the field (both cameras)
  * + create a way to read the actual distance the robot has travelled at any time
  * + use robot distance to calculate how long to drive blind behind the ball
  * + more reliable "ball in goal", check distances?
  * + better reversing out of the corner
  * + differentiate between near line and in corner
- * - reverse only a little near a line, more in corner, approach with care in both cases
+ * + reverse only a little near a line, more in corner, approach with care in both cases
  * + don't fake ball in dribbler after kicking
  * - can fetch behind be made faster?
- * - when aiming, turn around dribbler with acceleration and don't move forward or event slightly reverse at the beginning
+ * + when aiming, turn around dribbler with acceleration and don't move forward or event slightly reverse at the beginning
  * - reverse towards own goal while aiming based on travelledRotation not time
  * - come home state, drives to corner based on localization, white lines (eq side distance approach)
  * - make sure robot doesn't drive into own goal if balls close to it
@@ -1065,7 +1065,7 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 		return;
 	}
 
-	float reverseBlindSpeed = 1.0f;
+	float reverseBlindSpeed = 1.5f;
 	float offsetDistance = 0.2f;
 	bool isBallGhost = false;
 
