@@ -1163,7 +1163,7 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 
 	// make sure we don't reverse into our own goal
 	if (ownGoal != NULL) {
-		float minFetchBehindGoalBallDistance = 0.8f;
+		float minFetchBehindGoalBallDistance = 0.6f;
 
 		Math::Point goalPos = Math::Point(ownGoal->distanceX, ownGoal->distanceY);
 		Math::Point ballPos = Math::Point(ball->distanceX, ball->distanceY);
