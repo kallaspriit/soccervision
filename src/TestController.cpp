@@ -34,6 +34,7 @@
  * - when aiming, turn around dribbler with acceleration and don't move forward or event slightly reverse at the beginning
  * - reverse towards own goal while aiming based on travelledRotation not time
  * - come home state, drives to corner based on localization, white lines (eq side distance approach)
+ * - make sure robot doesn't drive into own goal if balls close to it
  *
  *
  * DEMO
@@ -328,18 +329,19 @@ bool TestController::isRobotInCorner(Vision::Results* visionResults) {
 		return true; // can't be sure but better be safe
 	}
 
-	float maxCornerDistance = Math::max(visionResults->front->whiteDistance.left, visionResults->front->whiteDistance.right);
+	float maxCornerDistanceWhite = Math::max(visionResults->front->whiteDistance.left, visionResults->front->whiteDistance.right);
+	float maxCornerDistanceBlack = Math::max(visionResults->front->blackDistance.left, visionResults->front->blackDistance.right);
 
 	// robot is in corner if any of the center 3 samples are further than the furthest side samples (both white and black)
 	if (
 		(
-			(visionResults->front->whiteDistance.leftMiddle != -1.0f && visionResults->front->whiteDistance.leftMiddle > maxCornerDistance)
-			|| (visionResults->front->whiteDistance.center != -1.0f && visionResults->front->whiteDistance.center > maxCornerDistance)
-			|| (visionResults->front->whiteDistance.rightMiddle != -1.0f && visionResults->front->whiteDistance.rightMiddle > maxCornerDistance)
+			(visionResults->front->whiteDistance.leftMiddle != -1.0f && visionResults->front->whiteDistance.leftMiddle > maxCornerDistanceWhite)
+			|| (visionResults->front->whiteDistance.center != -1.0f && visionResults->front->whiteDistance.center > maxCornerDistanceWhite)
+			|| (visionResults->front->whiteDistance.rightMiddle != -1.0f && visionResults->front->whiteDistance.rightMiddle > maxCornerDistanceWhite)
 		) && (
-			(visionResults->front->blackDistance.leftMiddle != -1.0f && visionResults->front->blackDistance.leftMiddle > maxCornerDistance)
-			|| (visionResults->front->blackDistance.center != -1.0f && visionResults->front->blackDistance.center > maxCornerDistance)
-			|| (visionResults->front->blackDistance.rightMiddle != -1.0f && visionResults->front->blackDistance.rightMiddle > maxCornerDistance)
+			(visionResults->front->blackDistance.leftMiddle != -1.0f && visionResults->front->blackDistance.leftMiddle > maxCornerDistanceBlack)
+			|| (visionResults->front->blackDistance.center != -1.0f && visionResults->front->blackDistance.center > maxCornerDistanceBlack)
+			|| (visionResults->front->blackDistance.rightMiddle != -1.0f && visionResults->front->blackDistance.rightMiddle > maxCornerDistanceBlack)
 		)
 	) {
 		return true;
