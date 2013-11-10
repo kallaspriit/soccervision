@@ -106,6 +106,7 @@ void TestController::setupStates() {
 	states["accelerate"] = new AccelerateState(this);
 	states["return-field"] = new ReturnFieldState(this);
 	states["escape-corner"] = new EscapeCornerState(this);
+	states["drive-home"] = new DriveHomeState(this);
 }
 
 void TestController::step(float dt, Vision::Results* visionResults) {
@@ -206,11 +207,11 @@ void TestController::handleToggleSideCommand() {
 	if (targetSide == Side::BLUE) {
 		targetSide = Side::YELLOW;
 
-		robot->setPosition(Config::fieldWidth - Config::robotRadius, Config::robotRadius, Math::PI - Math::PI / 8);
+		robot->setPosition(Config::fieldWidth - Config::robotRadius, Config::robotRadius, Math::PI - Math::PI / 8.0f);
 	} else {
 		targetSide = Side::BLUE;
 
-		robot->setPosition(Config::robotRadius, Config::fieldHeight - Config::robotRadius, -Math::PI / 8);
+		robot->setPosition(Config::robotRadius, Config::fieldHeight - Config::robotRadius, -Math::PI / 8.0f);
 	}
 
 	std::cout << "! Now targeting " << (targetSide == Side::BLUE ? "blue" : "yellow") << " side" << std::endl;
@@ -1778,4 +1779,36 @@ void TestController::EscapeCornerState::step(float dt, Vision::Results* visionRe
 
 	ai->dbg("reverseSpeed", reverseSpeed);
 	ai->dbg("sideSpeed", sideSpeed);
+}
+
+void TestController::DriveHomeState::onEnter(Robot* robot, Parameters parameters) {
+	drivePerformed = false;
+}
+
+void TestController::DriveHomeState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration, float combinedDuration) {
+	robot->stop();
+
+	float homeX, homeY, homeOrientation;
+
+	if (ai->targetSide == Side::BLUE) {
+		homeX = Config::fieldWidth - Config::robotRadius;
+		homeY = Config::robotRadius;
+		homeOrientation = Math::PI - Math::PI / 8.0f;
+	} else {
+		homeX = Config::robotRadius;
+		homeY = Config::fieldHeight - Config::robotRadius;
+		homeOrientation = -Math::PI / 8;
+	}
+
+	if (robot->hasTasks()) {
+		return;
+	}
+
+	if (!drivePerformed) {
+		robot->driveTo(homeX, homeY, homeOrientation);
+
+		drivePerformed = true;
+
+		return;
+	}
 }

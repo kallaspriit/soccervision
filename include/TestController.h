@@ -240,6 +240,18 @@ public:
 		float driveTowardsGoalTime;
 
 	};
+
+	class DriveHomeState : public State {
+
+	public:
+		DriveHomeState(TestController* ai) : State(ai), drivePerformed(false) {}
+		void onEnter(Robot* robot, Parameters parameters);
+		void step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration, float combinedDuration);
+
+	private:
+		bool drivePerformed;
+
+	};
 	
 	TestController(Robot* robot, Communication* com);
 	~TestController();
