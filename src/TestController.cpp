@@ -1823,7 +1823,7 @@ void TestController::DriveHomeState::step(float dt, Vision::Results* visionResul
 		return;
 	}
 
-	if (visionResults->rear->whiteDistance.min == -1.0f) {
+	if (visionResults->rear->blackDistance.max < 0.25f) {
 		ai->setState("manual-control");
 
 		return;
