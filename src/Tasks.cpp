@@ -416,7 +416,7 @@ bool DriveBehindBallTask::onStep(Robot& robot, float dt) {
 		return false;
 	}
 
-	float useSpeed = Math::map(travelledDistance, 0.0f, offsetDistance, speed, speed / 2.0f);
+	float useSpeed = Math::map(travelledDistance, 0.0f, offsetDistance, speed, speed / 3.0f);
 
 	float deaccelerationDuration = 0.5f;
 	float sideSpeed = Math::map(travelledDistance, ballDistance, ballDistance + arcDistance, 0.0f, useSpeed);
