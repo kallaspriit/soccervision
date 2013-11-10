@@ -1790,7 +1790,7 @@ void TestController::DriveHomeState::step(float dt, Vision::Results* visionResul
 
 	float homeX, homeY, homeOrientation;
 
-	if (ai->targetSide == Side::BLUE) {
+	if (ai->targetSide == Side::YELLOW) {
 		homeX = Config::fieldWidth - Config::robotRadius;
 		homeY = Config::robotRadius;
 		homeOrientation = Math::PI - Math::PI / 8.0f;
@@ -1800,7 +1800,15 @@ void TestController::DriveHomeState::step(float dt, Vision::Results* visionResul
 		homeOrientation = -Math::PI / 8;
 	}
 
+	Math::Position homePos(homeX, homeY, homeOrientation);
+	Math::Position robotPos = robot->getPosition();
+
 	if (robot->hasTasks()) {
+		// continue based on lines if close enough
+		if (homePos.distanceTo(robotPos) < 1.0f && visionResults->rear->whiteDistance.min < 1.0f) {
+			robot->clearTasks();
+		}
+
 		return;
 	}
 
@@ -1811,4 +1819,6 @@ void TestController::DriveHomeState::step(float dt, Vision::Results* visionResul
 
 		return;
 	}
+
+	// drive by lines
 }
