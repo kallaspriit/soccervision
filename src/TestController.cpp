@@ -1823,11 +1823,11 @@ void TestController::DriveHomeState::step(float dt, Vision::Results* visionResul
 		return;
 	}
 
-	if (visionResults->rear->blackDistance.max < 0.25f) {
+	/*if (visionResults->rear->blackDistance.max < 0.25f) {
 		ai->setState("manual-control");
 
 		return;
-	}
+	}*/
 
 	Object* opponentGoal = visionResults->getLargestGoal(ai->targetSide, Dir::FRONT);
 
@@ -1839,7 +1839,7 @@ void TestController::DriveHomeState::step(float dt, Vision::Results* visionResul
 	float side = visionResults->rear->whiteDistance.left < visionResults->rear->whiteDistance.right ? -1.0f : 1.0f;
 
 	float sideSpeed = sideP * side * Math::map(diff, 0.0f, maxSideSpeedDiff, 0.0, 1.0f);
-	float reverseSpeed = Math::map(visionResults->rear->whiteDistance.max, 0.0f, 1.0f, 0.0f, reverseP);
+	float reverseSpeed = Math::map(visionResults->rear->blackDistance.max, 0.25f, 1.0f, 0.0f, reverseP);
 
 	robot->setTargetDir(-reverseSpeed, sideSpeed);
 
