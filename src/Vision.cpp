@@ -59,9 +59,9 @@ Vision::Result* Vision::process() {
 
 	if (dir == Dir::FRONT) {
 		updateObstructions();
-		updateColorDistances();
 	}
 
+	updateColorDistances();
 	updateColorOrder();
 
 	result->obstructionSide = obstructionSide;

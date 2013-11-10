@@ -1804,8 +1804,11 @@ void TestController::DriveHomeState::step(float dt, Vision::Results* visionResul
 	Math::Position robotPos = robot->getPosition();
 
 	if (robot->hasTasks()) {
+		ai->dbg("distanceDiff", homePos.distanceTo(robotPos));
+		ai->dbg("minWhiteDistance", visionResults->rear->whiteDistance.min);
+
 		// continue based on lines if close enough
-		if (homePos.distanceTo(robotPos) < 1.0f && visionResults->rear->whiteDistance.min < 1.0f) {
+		if (homePos.distanceTo(robotPos) < 1.0f && (visionResults->rear->whiteDistance.min != -1.0f && visionResults->rear->whiteDistance.min < 1.0f)) {
 			robot->clearTasks();
 		}
 
@@ -1829,9 +1832,6 @@ void TestController::DriveHomeState::step(float dt, Vision::Results* visionResul
 	float diff = Math::abs(visionResults->rear->whiteDistance.left - visionResults->rear->whiteDistance.right);
 	float side = visionResults->rear->whiteDistance.left < visionResults->rear->whiteDistance.right ? 1.0f : -1.0f;
 
-	ai->dbg("diff", diff);
-	ai->dbg("side", side);
-
 	float sideSpeed = sideP * side * Math::map(diff, 0.0f, maxSideSpeedDiff, 0.0, 1.0f);
 	float reverseSpeed = Math::map(visionResults->rear->whiteDistance.max, 0.3f, 1.0f, 0.0f, reverseP);
 
@@ -1840,4 +1840,10 @@ void TestController::DriveHomeState::step(float dt, Vision::Results* visionResul
 	if (opponentGoal != NULL) {
 		robot->lookAt(opponentGoal);
 	}
+
+	ai->dbg("diff", diff);
+	ai->dbg("side", side);
+	ai->dbg("sideSpeed", sideSpeed);
+	ai->dbg("reverseSpeed", reverseSpeed);
+	ai->dbg("maxWhiteDistance", visionResults->rear->whiteDistance.max);
 }
