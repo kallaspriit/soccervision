@@ -33,6 +33,7 @@
  * - can fetch behind be made faster?
  * - when aiming, turn around dribbler with acceleration and don't move forward or event slightly reverse at the beginning
  * - reverse towards own goal while aiming based on travelledRotation not time
+ * - come home state, drives to corner based on localization, white lines (eq side distance approach)
  *
  *
  * DEMO
@@ -329,11 +330,17 @@ bool TestController::isRobotInCorner(Vision::Results* visionResults) {
 
 	float maxCornerDistance = Math::max(visionResults->front->whiteDistance.left, visionResults->front->whiteDistance.right);
 
-	// robot is in corner if any of the center 3 samples are further than the furthest side samples
+	// robot is in corner if any of the center 3 samples are further than the furthest side samples (both white and black)
 	if (
-		(visionResults->front->whiteDistance.leftMiddle != -1.0f && visionResults->front->whiteDistance.leftMiddle > maxCornerDistance)
-		|| (visionResults->front->whiteDistance.center != -1.0f && visionResults->front->whiteDistance.center > maxCornerDistance)
-		|| (visionResults->front->whiteDistance.rightMiddle != -1.0f && visionResults->front->whiteDistance.rightMiddle > maxCornerDistance)
+		(
+			(visionResults->front->whiteDistance.leftMiddle != -1.0f && visionResults->front->whiteDistance.leftMiddle > maxCornerDistance)
+			|| (visionResults->front->whiteDistance.center != -1.0f && visionResults->front->whiteDistance.center > maxCornerDistance)
+			|| (visionResults->front->whiteDistance.rightMiddle != -1.0f && visionResults->front->whiteDistance.rightMiddle > maxCornerDistance)
+		) && (
+			(visionResults->front->blackDistance.leftMiddle != -1.0f && visionResults->front->blackDistance.leftMiddle > maxCornerDistance)
+			|| (visionResults->front->blackDistance.center != -1.0f && visionResults->front->blackDistance.center > maxCornerDistance)
+			|| (visionResults->front->blackDistance.rightMiddle != -1.0f && visionResults->front->blackDistance.rightMiddle > maxCornerDistance)
+		)
 	) {
 		return true;
 	}
