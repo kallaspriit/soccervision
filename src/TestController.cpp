@@ -294,7 +294,7 @@ void TestController::updateVisionDebugInfo(Vision::Results* visionResults) {
 }
 
 bool TestController::isRobotNearLine(Vision::Results* visionResults) {
-	float nearLineDistance = 0.55f;
+	float nearLineDistance = 0.5f;
 
 	// the last two conditions may not be true if there's a ball in the way
 	return visionResults->front->whiteDistance.min != -1.0f && visionResults->front->whiteDistance.min < nearLineDistance
