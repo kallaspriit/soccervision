@@ -1424,6 +1424,14 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 	int weakKickStrength = 3000;
 
 	if (goal == NULL) {
+		if (searchGoalDir == 0.0f) {
+			if (ai->lastTargetGoalAngle > 0.0f) {
+				searchGoalDir = 1.0f;
+			} else {
+				searchGoalDir = -1.0f;
+			}
+		}
+
 		if (combinedDuration > maxAimDuration) {
 			Side ownSide = ai->targetSide == Side::YELLOW ? Side::BLUE : Side::YELLOW;
 
@@ -1452,14 +1460,6 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 			return;
 		}
 
-		if (searchGoalDir == 0.0f) {
-			if (ai->lastTargetGoalAngle > 0.0f) {
-				searchGoalDir = 1.0f;
-			} else {
-				searchGoalDir = -1.0f;
-			}
-		}
-		
 		spinDuration += dt;
 
 		if (nearLine) {
