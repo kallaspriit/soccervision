@@ -1785,17 +1785,18 @@ void TestController::EscapeCornerState::step(float dt, Vision::Results* visionRe
 	float reverseSpeed = reverseP * Math::map(stateDuration, 0.0f, accelerationDuration, 0.0f, 1.0f);
 
 	if (ai->whiteDistance.left != -1.0f && ai->whiteDistance.right != -1.0f) {
-		if (ai->whiteDistance.min > outOfCornerLineDistance) {
+		/*if (ai->whiteDistance.min > outOfCornerLineDistance) {
 			ai->setState("aim");
 
 			return;
-		}
+		}*/
 
 		float diff = Math::abs(ai->whiteDistance.left - ai->whiteDistance.right);
 		float side = ai->whiteDistance.left < ai->whiteDistance.right ? 1.0f : -1.0f;
 
 		ai->dbg("diff", diff);
 		ai->dbg("side", side);
+		ai->dbg("whiteDistance.min", ai->whiteDistance.min);
 
 		sideSpeed = sideP * side * Math::map(diff, 0.0f, maxSideSpeedDiff, 0.0, 1.0f);
 	}
