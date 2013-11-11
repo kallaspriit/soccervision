@@ -1510,7 +1510,7 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 			float accelerationPeriod = 1.5f;
 			float reverseSpeed = 1.0f;
 
-			if (stateDuration > searchPeriod + reverseDuration) {
+			if (stateDuration > waitUntilSearchOwnGoalTime + reverseDuration) {
 				ai->setState("aim");
 
 				return;
