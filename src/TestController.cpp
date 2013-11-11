@@ -302,12 +302,30 @@ void TestController::updateVisionDebugInfo(Vision::Results* visionResults) {
 	}
 }
 
-bool TestController::isRobotNearLine(Vision::Results* visionResults) {
+bool TestController::isRobotNearLine(Vision::Results* visionResults, bool ignoreCenterSample) {
 	float nearLineDistance = 0.5f;
+	float whiteMin = visionResults->front->whiteDistance.min;
+	float blackMin = visionResults->front->blackDistance.min;
+
+	if (ignoreCenterSample) {
+		// recalculate minimum distances without the center sample
+		whiteMin = -1.0f;
+		blackMin = -1.0f;
+
+		if (visionResults->front->whiteDistance.left != -1.0f && (whiteMin == -1.0f || visionResults->front->whiteDistance.left < whiteMin)) whiteMin = visionResults->front->whiteDistance.left;
+		if (visionResults->front->whiteDistance.leftMiddle != -1.0f && (whiteMin == -1.0f || visionResults->front->whiteDistance.leftMiddle < whiteMin)) whiteMin = visionResults->front->whiteDistance.leftMiddle;
+		if (visionResults->front->whiteDistance.rightMiddle != -1.0f && (whiteMin == -1.0f || visionResults->front->whiteDistance.rightMiddle < whiteMin)) whiteMin = visionResults->front->whiteDistance.rightMiddle;
+		if (visionResults->front->whiteDistance.right != -1.0f && (whiteMin == -1.0f || visionResults->front->whiteDistance.right < whiteMin)) whiteMin = visionResults->front->whiteDistance.right;
+
+		if (visionResults->front->blackDistance.left != -1.0f && (blackMin == -1.0f || visionResults->front->blackDistance.left < blackMin)) blackMin = visionResults->front->blackDistance.left;
+		if (visionResults->front->blackDistance.leftMiddle != -1.0f && (blackMin == -1.0f || visionResults->front->blackDistance.leftMiddle < blackMin)) blackMin = visionResults->front->blackDistance.leftMiddle;
+		if (visionResults->front->blackDistance.rightMiddle != -1.0f && (blackMin == -1.0f || visionResults->front->blackDistance.rightMiddle < blackMin)) blackMin = visionResults->front->blackDistance.rightMiddle;
+		if (visionResults->front->blackDistance.right != -1.0f && (blackMin == -1.0f || visionResults->front->blackDistance.right < blackMin)) blackMin = visionResults->front->blackDistance.right;
+	}
 
 	// the last two conditions may not be true if there's a ball in the way
-	return visionResults->front->whiteDistance.min != -1.0f && visionResults->front->whiteDistance.min < nearLineDistance
-		&& visionResults->front->blackDistance.min != -1.0f && visionResults->front->blackDistance.min < nearLineDistance;
+	return whiteMin != -1.0f && whiteMin < nearLineDistance
+		&& blackMin != -1.0f && blackMin < nearLineDistance;
 		//&& visionResults->front->whiteDistance.min < visionResults->front->blackDistance.min
 		//&& visionResults->front->blackDistance.min - visionResults->front->whiteDistance.min <= 0.1f;
 };
@@ -1009,7 +1027,7 @@ void TestController::FetchBallDirectState::step(float dt, Vision::Results* visio
 	forwardSpeed = Math::max(Math::getAcceleratedSpeed(forwardSpeed, targetApproachSpeed, dt, accelerateAcceleration), minApproachSpeed);
 
 	// limit the speed low near the white-black line to avoid driving the ball out
-	if (nearLine || ai->isRobotNearLine(visionResults)) {
+	if (nearLine || ai->isRobotNearLine(visionResults, true)) {
 		nearLineFrames++;
 
 		if (nearLineFrames >= 10) {

@@ -288,7 +288,7 @@ public:
 private:
 	void setupStates();
 	void updateVisionDebugInfo(Vision::Results* visionResults);
-	bool isRobotNearLine(Vision::Results* visionResults);
+	bool isRobotNearLine(Vision::Results* visionResults, bool ignoreCenterSample = false);
 	bool isRobotInCorner(Vision::Results* visionResults);
 	bool wasNearLineLately(double threshold = 1.0);
 	bool wasInCornerLately(double threshold = 1.0);
