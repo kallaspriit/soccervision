@@ -30,11 +30,18 @@
  * + differentiate between near line and in corner
  * + reverse only a little near a line, more in corner, approach with care in both cases
  * + don't fake ball in dribbler after kicking
- * - can fetch behind be made faster?
+ * + can fetch behind be made faster?
  * + when aiming, turn around dribbler with acceleration and don't move forward or event slightly reverse at the beginning
  * - reverse towards own goal while aiming based on travelledRotation not time
- * - come home state, drives to corner based on localization, white lines (eq side distance approach)
+ * + come home state, drives to corner based on localization, white lines (eq side distance approach)
  * - make sure robot doesn't drive into own goal if balls close to it
+ * - thinks it's near the line too often when actually not
+ * - apply max distance on escape from corner
+ * - search: drive straigh until near line white-black, turn 45 degrees, repeat
+ * - check turnBy -150.4 degrees
+ * - check driving on ball
+ * - kicks through other balls if other balls very close
+ * - make localizer use angle to goal
  *
  *
  * DEMO
@@ -1077,11 +1084,12 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 	if (ball != NULL) {
 		ai->setLastBall(ball);
 	} else {
-		ball = ai->getLastBall(Dir::REAR);
+		// ghost ball is not very useful while reversing
+		/*ball = ai->getLastBall(Dir::REAR);
 
 		if (ball != NULL) {
 			isBallGhost = true;
-		}
+		}*/
 	}
 
 	ai->dbg("ballVisible", ball != NULL);
