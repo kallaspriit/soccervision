@@ -933,6 +933,7 @@ void TestController::FetchBallFrontState::step(float dt, Vision::Results* vision
 
 void TestController::FetchBallDirectState::onEnter(Robot* robot, Parameters parameters) {
 	forwardSpeed = robot->getVelocity();
+	nearLineFrames = 0;
 	nearLine = false;
 }
 
@@ -1008,10 +1009,14 @@ void TestController::FetchBallDirectState::step(float dt, Vision::Results* visio
 	forwardSpeed = Math::max(Math::getAcceleratedSpeed(forwardSpeed, targetApproachSpeed, dt, accelerateAcceleration), minApproachSpeed);
 
 	// limit the speed low near the white-black line to avoid driving the ball out
-	if (nearLine|| ai->isRobotNearLine(visionResults)) {
-		nearLine = true;
+	if (nearLine || ai->isRobotNearLine(visionResults)) {
+		nearLineFrames++;
 
-		if (ballDistance < nearBallDistance) {
+		if (nearLineFrames >= 10) {
+			nearLine = true;
+		}
+
+		if (nearLine && ballDistance < nearBallDistance) {
 			forwardSpeed = nearLineSpeed;
 
 			ai->dbg("lineLimited", true);
@@ -1022,6 +1027,7 @@ void TestController::FetchBallDirectState::step(float dt, Vision::Results* visio
 	robot->lookAt(ball);
 
 	ai->dbg("realSpeed", realSpeed);
+	ai->dbg("nearLineFrames", nearLineFrames);
 	ai->dbg("nearLine", nearLine);
 	ai->dbg("ballDistance", ballDistance);
 	ai->dbg("brakeDistance", brakeDistance);
