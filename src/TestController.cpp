@@ -1374,13 +1374,24 @@ void TestController::AimState::onEnter(Robot* robot, Parameters parameters) {
 	foundOwnGoalTime = -1.0;
 	avoidBallDuration = 0.0f;
 	nearLine = false;
+	escapeCornerPerformed = false;
+
+	std::cout << "@ Aim parameters: " << std::endl;
+
+	for (ParametersIt it = parameters.begin(); it != parameters.end(); it++) {
+		std::cout << "  > " << it->first << ": " << it->second;
+	}
 
 	if (parameters.find("near-line") != parameters.end()) {
 		nearLine = true;
+
+		std::cout << "! Aim enter near line" << std::endl;
 	}
 
 	if (parameters.find("escape-corner-performed") != parameters.end()) {
 		escapeCornerPerformed = true;
+
+		std::cout << "! Aim enter escape corner performed" << std::endl;
 	}
 }
 

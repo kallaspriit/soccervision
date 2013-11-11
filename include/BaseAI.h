@@ -13,6 +13,7 @@ class BaseAI : public Controller {
 
 public:
 	typedef std::map<std::string, std::string> Parameters;
+	typedef std::map<std::string, std::string>::iterator ParametersIt;
 
 	class State {
 
