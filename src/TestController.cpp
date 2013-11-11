@@ -1378,6 +1378,10 @@ void TestController::AimState::onEnter(Robot* robot, Parameters parameters) {
 	if (parameters.find("near-line") != parameters.end()) {
 		nearLine = true;
 	}
+
+	if (parameters.find("escape-corner-performed") != parameters.end()) {
+		escapeCornerPerformed = true;
+	}
 }
 
 void TestController::AimState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration, float combinedDuration) {
@@ -1385,6 +1389,7 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 	robot->dribbler->start();
 
 	ai->dbg("gotBall", robot->dribbler->gotBall());
+	ai->dbg("escapeCornerPerformed", escapeCornerPerformed);
 	
 	if (!robot->dribbler->gotBall()) {
 		ai->setState("find-ball");
@@ -1441,6 +1446,7 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 			//ai->isRobotInCorner(visionResults)
 			ai->wasInCornerLately()
 			&& (lastEscapeCornerTime == -1.0 || Util::duration(lastEscapeCornerTime) > 1.0)
+			&& !escapeCornerPerformed
 		) {
 			ai->setState("escape-corner");
 
@@ -1777,7 +1783,11 @@ void TestController::EscapeCornerState::step(float dt, Vision::Results* visionRe
 	ai->dbg("stateTravelledDistance", stateTravelledDistance);
 
 	if (stateTravelledDistance > reverseDistance) {
-		ai->setState("aim");
+		Parameters parameters;
+
+		parameters["escape-corner-performed"] = "1";
+
+		ai->setState("aim", parameters);
 
 		return;
 	}
