@@ -906,7 +906,8 @@ void TestController::FetchBallFrontState::step(float dt, Vision::Results* vision
 	float lookAngle = Math::map(ballDistance, nearDistance, maxAngleDiffDistance, goal->angle, (goal->angle + ball->angle) / 2.0f);
 
 	if (ballDistance < nearDistance) {
-		robot->dribbler->start();
+		// disable dribbler without ball
+		//robot->dribbler->start();
 	}
 
 	robot->setTargetDir(Math::Rad(targetAngle), limitedSpeed);
@@ -999,7 +1000,8 @@ void TestController::FetchBallDirectState::step(float dt, Vision::Results* visio
 
 		ai->dbg("brakingAcceleration", brakingAcceleration);
 
-		robot->dribbler->start();
+		// disable dribbler without ball
+		//robot->dribbler->start();
 	}
 
 	forwardSpeed = Math::max(Math::getAcceleratedSpeed(forwardSpeed, targetApproachSpeed, dt, accelerateAcceleration), minApproachSpeed);
@@ -1358,7 +1360,9 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	//ai->dbg("nearZeroSpeedAngle", nearZeroSpeedAngle);
 	ai->dbg("ball->distanceX", ball->distanceX);
 
-	robot->dribbler->start();
+	// disable dribbler without ball
+	//robot->dribbler->start();
+
 	robot->setTargetDir(limitedForwardSpeed, sideSpeed);
 	robot->lookAt(goal);
 }
@@ -1537,7 +1541,6 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 	ai->dbg("goalVisible", true);
 
 	robot->setTargetDir(0.0f, 0.0f, 0.0f);
-	robot->dribbler->start();
 
 	float avoidBallSpeed = 0.75f;
 	float minForwardSpeed = 0.2f;
@@ -1800,7 +1803,6 @@ void TestController::EscapeCornerState::step(float dt, Vision::Results* visionRe
 	}
 
 	robot->setTargetDir(-reverseSpeed, sideSpeed);
-	robot->dribbler->start();
 
 	ai->dbg("reverseSpeed", reverseSpeed);
 	ai->dbg("sideSpeed", sideSpeed);
