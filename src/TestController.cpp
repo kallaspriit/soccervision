@@ -39,7 +39,7 @@
  * - apply max distance on escape from corner
  * - search: drive straigh until near line white-black, turn 45 degrees, repeat
  * - check turnBy -150.4 degrees
- * - check driving on ball
+ * - need better fetch ball near
  * - kicks through other balls if other balls very close
  * - make localizer use angle to goal
  *
@@ -1737,6 +1737,10 @@ void TestController::ReturnFieldState::step(float dt, Vision::Results* visionRes
 	}
 }
 
+void TestController::EscapeCornerState::onEnter(Robot* robot, Parameters parameters) {
+	startTravelledDistance = robot->getTravelledDistance();
+}
+
 void TestController::EscapeCornerState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration, float combinedDuration) {
 	robot->stop();
 	robot->dribbler->start();
@@ -1754,6 +1758,20 @@ void TestController::EscapeCornerState::step(float dt, Vision::Results* visionRe
 		robot->kick();
 
 		ai->setState("find-ball");
+
+		return;
+	}
+
+	float stateTravelledDistance = robot->getTravelledDistance() - startTravelledDistance;
+
+	ai->dbg("stateTravelledDistance", stateTravelledDistance);
+
+	if (stateTravelledDistance > 0.5f) {
+		if (robot->dribbler->gotBall()) {
+			ai->setState("aim");
+		} else {
+			ai->setState("find-ball");
+		}
 
 		return;
 	}

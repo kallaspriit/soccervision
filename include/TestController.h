@@ -233,11 +233,12 @@ public:
 	class EscapeCornerState : public State {
 
 	public:
-		EscapeCornerState(TestController* ai) : State(ai) {}
+		EscapeCornerState(TestController* ai) : State(ai), startTravelledDistance(0.0f) {}
+		void onEnter(Robot* robot, Parameters parameters);
 		void step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration, float combinedDuration);
 
 	private:
-		float driveTowardsGoalTime;
+		float startTravelledDistance;
 
 	};
 
