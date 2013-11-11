@@ -1762,25 +1762,23 @@ void TestController::EscapeCornerState::step(float dt, Vision::Results* visionRe
 		return;
 	}
 
-	float stateTravelledDistance = robot->getTravelledDistance() - startTravelledDistance;
-
-	ai->dbg("stateTravelledDistance", stateTravelledDistance);
-
-	if (stateTravelledDistance > 0.5f) {
-		if (robot->dribbler->gotBall()) {
-			ai->setState("aim");
-		} else {
-			ai->setState("find-ball");
-		}
-
-		return;
-	}
-
 	float reverseP = 1.0f;
 	float sideP = 0.5f;
 	float accelerationDuration = 1.5f;
 	float outOfCornerLineDistance = 0.5f;
 	float maxSideSpeedDiff = 0.2f;
+	float reverseDistance = 0.5f;
+
+	float stateTravelledDistance = robot->getTravelledDistance() - startTravelledDistance;
+
+	ai->dbg("stateTravelledDistance", stateTravelledDistance);
+
+	if (stateTravelledDistance > reverseDistance) {
+		ai->setState("aim");
+
+		return;
+	}
+
 	float sideSpeed = 0.0f;
 	float reverseSpeed = reverseP * Math::map(stateDuration, 0.0f, accelerationDuration, 0.0f, 1.0f);
 
