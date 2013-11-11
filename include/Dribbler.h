@@ -20,10 +20,6 @@ public:
 	void step(float dt);
 
 private:
-	int id;
-	float targetOmega;
-    float realOmega;
-	int stallCounter;
 	bool ballDetected;
 	bool everDetectedBall;
 	float ballInDribblerTime;

@@ -34,14 +34,15 @@
  * + when aiming, turn around dribbler with acceleration and don't move forward or event slightly reverse at the beginning
  * - reverse towards own goal while aiming based on travelledRotation not time
  * + come home state, drives to corner based on localization, white lines (eq side distance approach)
- * - make sure robot doesn't drive into own goal if balls close to it
+ * - make sure robot doesn't drive into own goal if balls close to it, over line
  * - thinks it's near the line too often when actually not
- * - apply max distance on escape from corner
+ * + apply max distance on escape from corner
  * - search: drive straigh until near line white-black, turn 45 degrees, repeat
  * - check turnBy -150.4 degrees
  * - need better fetch ball near
  * - kicks through other balls if other balls very close
  * - make localizer use angle to goal
+ * - try accelerating dribbler
  *
  *
  * DEMO

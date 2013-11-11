@@ -28,7 +28,7 @@ void Dribbler::onKick() {
 void Dribbler::step(float dt) {
 	Wheel::step(dt);
 
-	double delayStopPeriod = 1.0;
+	double delayStopPeriod = 0.1;
 
 	if (stopRequestedTime != -1.0 && Util::duration(stopRequestedTime) >= delayStopPeriod) {
 		setTargetOmega(0);
