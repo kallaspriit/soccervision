@@ -713,7 +713,7 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 	ai->dbg("timeSinceLastSearch", timeSinceLastSearch);
 
 	double minTurnBreak = 2.0;
-	float searchPeriod = 1.5f;
+	float searchPeriod = 2.0f;
 	float searchOmega = Math::TWO_PI / searchPeriod;
 
 	/*if (stateDuration > Math::TWO_PI / searchOmega) {
@@ -795,7 +795,7 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 			return;
 		}
 
-		if (stateDuration < searchPeriod) {
+		if (stateDuration < searchPeriod / 2.0f) {
 			robot->setTargetOmega(searchOmega * searchDir);
 
 			return;
