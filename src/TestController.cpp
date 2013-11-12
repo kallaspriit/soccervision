@@ -1689,6 +1689,7 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 	float minForwardSpeed = 0.2f;
 	float minBallAvoidSideSpeed = 0.25f;
 	float maxRobotKickOmega = Math::PI / 4.0f;
+	float maxBallAvoidTime = 2.0f;
 	double minKickInterval = 1.0;
 	int halfWidth = Config::cameraWidth / 2;
 	int leftEdge = goal->x - goal->width / 2;
@@ -1702,7 +1703,11 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 	bool isKickTooSoon = lastKickTime != -1.0 && timeSinceLastKick < minKickInterval;
 
 	// limit ball avoidance time
-	if (isBallInWay && avoidBallDuration < 2.0f) {
+	if (isBallInWay && avoidBallDuration > maxBallAvoidTime) {
+		isBallInWay = false;
+	}
+
+	if (isBallInWay) {
 		float anotherBallCloseDistance = 0.3f;
 		Object* nextClosestBall = visionResults->getNextClosestBall(Dir::FRONT);
 		bool nearbyAnotherBall = nextClosestBall != NULL && nextClosestBall->getDribblerDistance() < anotherBallCloseDistance;
