@@ -399,7 +399,7 @@ std::string DriveForTask::toString() {
 void DriveBehindBallTask::onStart(Robot& robot, float dt) {
 	startSpeed = robot.getVelocity();
 	duration = 0.0f;
-	arcRadius = offsetDistance / Math::sin(Math::degToRad(90.0f) - targetAngle);
+	arcRadius = offsetDistance / Math::cos(targetAngle);
 	arcDistance = arcRadius * Math::TWO_PI / 4.0f; // quarter of a circle
 	startTravelledDistance = robot.getTravelledDistance();
 	travelledDistance = 0.0f;
