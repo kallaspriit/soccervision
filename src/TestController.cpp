@@ -798,7 +798,7 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 		}
 
 		float nearLineDistance = 1.0f;
-		float omegaP = 1.0f;
+		float omegaP = Math::PI;
 		float forwardSpeed = 1.0f;
 		float omega = 0.0f;
 
@@ -844,9 +844,9 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 					float omegaPower;
 
 					if (leftLine != -1.0f && (rightLine == -1.0f || leftLine < rightLine)) {
-						omegaPower = Math::map(leftLine, 0.0f, nearLineDistance, 1.0f, 0.0f);
+						omegaPower = Math::map(leftLine, nearLineDistance, nearLineDistance * 2.0f, 1.0f, 0.0f);
 					} else {
-						omegaPower = -1.0f * Math::map(rightLine, 0.0f, nearLineDistance, 1.0f, 0.0f);
+						omegaPower = -1.0f * Math::map(rightLine, nearLineDistance, nearLineDistance * 2.0f, 1.0f, 0.0f);
 					}
 
 					omega = omegaPower * omegaP;
