@@ -1845,7 +1845,7 @@ bool Vision::Results::isBallInWay(ObjectList balls, int goalY) {
 		ball = *it;
 		checkWidth = ball->width * 2.5f;
 
-		if (isBallInGoal(ball, blueGoal, yellowGoal)) {
+		if (isBallInGoal(ball, blueGoal, yellowGoal) || ball->getDribblerDistance() < 0.02f) {
 			continue;
 		}
 
