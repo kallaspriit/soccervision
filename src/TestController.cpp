@@ -371,8 +371,17 @@ bool TestController::isRobotInCorner(Vision::Results* visionResults) {
 		return false;
 	}
 
+	// not in corner if black is closer than black
+	if (
+		visionResults->front->whiteDistance.min != -1.0f
+		&& visionResults->front->blackDistance.min != -1.0f
+		&& visionResults->front->blackDistance.min < visionResults->front->whiteDistance.min
+	) {
+		return false;
+	}
+
 	if (visionResults->front->whiteDistance.left == -1.0f || visionResults->front->whiteDistance.right == -1.0f) {
-		return true; // can't be sure but better be safe
+		return false;
 	}
 
 	float maxCornerDistanceWhite = Math::max(visionResults->front->whiteDistance.left, visionResults->front->whiteDistance.right);
