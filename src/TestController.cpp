@@ -37,12 +37,17 @@
  * - make sure robot doesn't drive into own goal if balls close to it, over line
  * - thinks it's near the line too often when actually not
  * + apply max distance on escape from corner
- * - search: drive straigh until near line white-black, turn 45 degrees, repeat
+ * - search: drive straigh until near line white-black, turn 45 degrees, repeat, turn rotating
  * - check turnBy -150.4 degrees
  * - need better fetch ball near
  * - kicks through other balls if other balls very close
  * - make localizer use angle to goal
  * - try accelerating dribbler
+ * - better drive-into-goal avoidance
+ * - avoid goal collision, sample top quarter area pixels for unsegmented/goal colors, drive left from them
+ * - check why fetch behind sometimes messes it up
+ * - cancel fetch ball behind and escape corner if robot out is detected
+ * - fake ball in dribbler for more time if escaping corner / always complete it (if not out)
  *
  *
  * DEMO
@@ -766,7 +771,8 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 			robot->setTargetOmega(searchOmega * searchDir);
 		}
 	} else {
-		if (!robot->hasTasks()) {
+		// drives to the center of the field
+		/*if (!robot->hasTasks()) {
 			// drive to the center of the field after a round of searching
 			if (stateDuration > 2.0f) {
 				Math::Point robotPos(robot->getPosition().x, robot->getPosition().y);
@@ -782,7 +788,65 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 			}
 
 			robot->setTargetOmega(searchOmega * searchDir);
+		}*/
+
+		// drive until near a line, turn, repeat
+
+		if (robot->hasTasks()) {
+			// wait until tasks complete
+			return;
 		}
+
+		float nearLineDistance = 0.5f;
+		float omegaP = 1.0f;
+		float forwardSpeed = 1.0f;
+		float omega = 0.0f;
+
+		if (
+			visionResults->front->whiteDistance.left != -1.0f
+			&& visionResults->front->whiteDistance.right != -1.0f
+			&& visionResults->front->blackDistance.left != -1.0f
+			&& visionResults->front->blackDistance.right != -1.0f
+		) {
+			TargetMode lineSide = TargetMode::UNDECIDED;
+
+			float leftLine = -1.0f;
+			float rightLine = -1.0f;
+
+			if (
+				visionResults->front->whiteDistance.left < nearLineDistance
+				&& visionResults->front->blackDistance.left < nearLineDistance
+			) {
+				leftLine = (visionResults->front->whiteDistance.left + visionResults->front->blackDistance.left) / 2.0f;
+			}
+
+			if (
+				visionResults->front->whiteDistance.right < nearLineDistance
+				&& visionResults->front->blackDistance.right < nearLineDistance
+			) {
+				rightLine = (visionResults->front->whiteDistance.right + visionResults->front->blackDistance.right) / 2.0f;
+			}
+
+			if (leftLine != -1.0f && rightLine != -1.0f) {
+				// we're probably in a corner
+
+				robot->turnBy(Math::degToRad(180.0f));
+
+				return;
+			} else if (leftLine != -1.0f || rightLine != -1.0f) {
+				float omegaPower;
+
+				if (leftLine != -1.0f && (rightLine == -1.0f || leftLine < rightLine)) {
+					omegaPower = Math::map(leftLine, 0.0f, nearLineDistance, 1.0f, 0.0f);
+				} else {
+					omegaPower = -1.0f * Math::map(rightLine, 0.0f, nearLineDistance, 1.0f, 0.0f);
+				}
+
+				omega = omegaPower * omegaP;
+			}
+		}
+
+		robot->setTargetDir(forwardSpeed, 0.0f, omega);
 	}
 }
 
