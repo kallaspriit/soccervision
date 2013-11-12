@@ -1858,7 +1858,11 @@ bool Vision::Results::isBallInWay(ObjectList balls, int goalY) {
 
 		std::cout << "@ ball angle: " << ball->angle << ", left: " << ballLeftAngle << ", right: " << ballRightAngle << std::endl;
 
-		if (Math::abs(ballLeftAngle) < ballInWayAngleThreshold || Math::abs(ballRightAngle) < ballInWayAngleThreshold) {
+		if (
+			Math::abs(ballLeftAngle) < ballInWayAngleThreshold
+			|| Math::abs(ball->angle) < ballInWayAngleThreshold
+			|| Math::abs(ballRightAngle) < ballInWayAngleThreshold
+		) {
 			return true;
 		}
 		
