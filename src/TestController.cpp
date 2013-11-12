@@ -1351,8 +1351,8 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 		if (
 			avgBallGoalDistance.full()
 			&& avgBallGoalDistance.value() < minFetchBehindGoalBallDistance
-			&& goalBallDistance < minFetchBehindGoalBallDistance
-			&& ownGoal->distance <= minFetchBehindGoalBallDistance * 2.0f
+			//&& goalBallDistance < minFetchBehindGoalBallDistance
+			&& ownGoal->distance <= 1.5f
 			&& (ai->lastTurnAroundTime == -1.0 || Util::duration(ai->lastTurnAroundTime) > minTurnBreak)
 		) {
 			float turnAngle = ball->angle;
