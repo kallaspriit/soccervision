@@ -54,6 +54,8 @@ void Vision::setDebugImage(unsigned char* image, int width, int height) {
 Vision::Result* Vision::process() {
 	Result* result = new Result();
 
+	result->vision = this;
+
 	result->goals = processGoals(dir);
     result->balls = processBalls(dir);
 

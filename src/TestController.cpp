@@ -1305,13 +1305,24 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 	if (ownGoal != NULL) {
 		float minFetchBehindGoalBallDistance = 0.6f;
 
-		Math::Point goalPos = Math::Point(ownGoal->distanceX, ownGoal->distanceY);
-		Math::Point ballPos = Math::Point(ball->distanceX, ball->distanceY);
+		Vision::Distance goalLeftDistance = visionResults->front->vision->getDistance(ownGoal->y + ownGoal->height / 2, ownGoal->x - ownGoal->width / 2);
+		Vision::Distance goalRightDistance = visionResults->front->vision->getDistance(ownGoal->y + ownGoal->height / 2, ownGoal->x + ownGoal->width / 2);
 		
-		float goalBallDistance = goalPos.getDistanceTo(ballPos);
+		Math::Point goalCenterPos = Math::Point(ownGoal->distanceX, ownGoal->distanceY);
+		Math::Point goalLeftPos = Math::Point(goalLeftDistance.x, goalLeftDistance.y);
+		Math::Point goalRightPos = Math::Point(goalRightDistance.x, goalRightDistance.y);
+		Math::Point ballPos = Math::Point(ball->distanceX, ball->distanceY);
+
+		float goalBallDistanceCenter = goalCenterPos.getDistanceTo(ballPos);
+		float goalBallDistanceLeft = goalLeftPos.getDistanceTo(ballPos);
+		float goalBallDistanceRight = goalRightPos.getDistanceTo(ballPos);
+		float goalBallDistance = Math::min(Math::min(goalBallDistanceCenter, goalBallDistanceLeft), goalBallDistanceRight);
 
 		avgBallGoalDistance.add(goalBallDistance);
 
+		ai->dbg("goalBallDistanceCenter", goalBallDistanceCenter);
+		ai->dbg("goalBallDistanceLeft", goalBallDistanceLeft);
+		ai->dbg("goalBallDistanceRight", goalBallDistanceRight);
 		ai->dbg("goalBallDistance", goalBallDistance);
 		ai->dbg("avgBallGoalDistance", avgBallGoalDistance.value());
 		ai->dbg("avgBallGoalDistanceSize", avgBallGoalDistance.size());

@@ -61,6 +61,7 @@ public:
 		ColorList colorOrder;
 		ColorDistance whiteDistance;
 		ColorDistance blackDistance;
+		Vision* vision;
 	};
 
 	class Results {
