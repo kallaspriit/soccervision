@@ -861,15 +861,15 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 			}
 		}
 
-		float swirveP = 1.5f;
+		/*float swirveP = 1.5f;
 		float swirveFrequency = 1.0f;
 		float swirveOmega = Math::sin(robot->getTravelledDistance() * swirveFrequency) * swirveP;
 
-		omega += swirveOmega;
+		omega += swirveOmega;*/
 
 		ai->dbg("nearBothFrames", nearBothFrames);
 		ai->dbg("forwardSpeed", forwardSpeed);
-		ai->dbg("swirveOmega", swirveOmega);
+		//ai->dbg("swirveOmega", swirveOmega);
 		ai->dbg("omega", omega);
 
 		robot->setTargetDir(forwardSpeed, 0.0f, omega);
