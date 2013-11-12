@@ -1190,6 +1190,8 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 		if (ownGoal != NULL && ownGoal->distance < 0.3f) {
 			robot->clearTasks();
 
+			std::cout << "@ Behind to find ball, own goal close: " << ownGoal->distance << std::endl;
+
 			ai->setState("find-ball");
 		}
 
@@ -1243,6 +1245,8 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 				parameters["search-dir"] = Util::toString(searchDir);
 			}
 
+			std::cout << "@ Behind to find ball, no goal" << std::endl;
+
 			ai->setState("find-ball", parameters);
 		}
 
@@ -1256,6 +1260,8 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 	) {
 		// don't perform the blind reverse if the ball was lost at too great of a distance, also if last seen ball was ghost
 		if (!hadBall || lastBallDistance > 1.2f) {
+			std::cout << "@ Behind to find ball, had ball: " << hadBall << ", lastBallDistance: " << lastBallDistance << std::endl;
+
 			ai->setState("find-ball");
 		} else {
 			reversePerformed = true;
