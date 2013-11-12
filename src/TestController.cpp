@@ -807,7 +807,8 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 
 		float nearLineDistance = 0.5f;
 		float omegaP = Math::PI;
-		float forwardSpeed = 1.0f;
+		float forwardP = 2.0f;
+		float omegaPower = 0.0f;
 		float omega = 0.0f;
 
 		float leftLine = -1.0f;
@@ -848,9 +849,6 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 
 				return;
 			} else {
-				float omegaPower;
-
-				// TODO Decide dir once?
 				if (leftLine != -1.0f && (rightLine == -1.0f || leftLine < rightLine)) {
 					omegaPower = Math::map(leftLine, nearLineDistance, nearLineDistance * 2.0f, 1.0f, 0.0f);
 					//searchDir = 1.0f;
@@ -870,6 +868,8 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 		float swirveOmega = Math::sin(robot->getTravelledDistance() * swirveFrequency) * swirveP;
 
 		omega += swirveOmega;*/
+
+		float forwardSpeed = forwardP * (1.0f - omegaPower);
 
 		ai->dbg("nearBothFrames", nearBothFrames);
 		ai->dbg("forwardSpeed", forwardSpeed);
