@@ -315,13 +315,13 @@ Dash.Renderer.prototype.renderState = function(state) {
 		state.robot.gotBall
 	);
 
-	/*this.drawRobot(
+	this.drawRobot(
 		dash.config.robot.radius / 2,
 		'#900',
 		state.robot.odometerX,
 		state.robot.odometerY,
 		state.robot.odometerOrientation
-	);*/
+	);
 
 	this.drawPath(state, '#060');
 

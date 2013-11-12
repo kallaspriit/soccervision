@@ -420,6 +420,13 @@ bool DriveBehindBallTask::onStep(Robot& robot, float dt) {
 		return false;
 	}
 
+	// test stopping at ball side distance
+	if (travelledDistance >= ballSideDistance) {
+		robot.stop();
+
+		return true;
+	}
+
 	float useSpeed = Math::map(travelledDistance, 0.0f, ballSideDistance, speed, speed / 2.0f);
 	float sideSpeed = Math::map(travelledDistance, ballSideDistance, totalDistance, 0.0f, useSpeed);
 	float forwardSpeed = useSpeed - sideSpeed;

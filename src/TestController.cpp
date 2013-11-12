@@ -1283,6 +1283,7 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 		startBallDistance = ballDistance;
 	}
 
+	// TODO Maybe not go outside near line?
 	if (targetMode == TargetMode::UNDECIDED) {
 		if (ball->angle + goal->angle > 0.0f) {
 			targetMode = TargetMode::LEFT;
