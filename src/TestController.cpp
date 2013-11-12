@@ -1287,8 +1287,10 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 	if (targetMode == TargetMode::UNDECIDED) {
 		if (ball->angle + goal->angle > 0.0f) {
 			targetMode = TargetMode::LEFT;
+			searchDir = 1.0f;
 		} else {
 			targetMode = TargetMode::RIGHT;
+			searchDir = -1.0f;
 		}
 	}
 
