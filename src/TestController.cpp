@@ -803,12 +803,15 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 		float omega = 0.0f;
 
 		if (
-			visionResults->front->whiteDistance.left != -1.0f
-			&& visionResults->front->whiteDistance.right != -1.0f
-			&& visionResults->front->blackDistance.left != -1.0f
-			&& visionResults->front->blackDistance.right != -1.0f
+			(
+				visionResults->front->whiteDistance.left != -1.0f
+				&& visionResults->front->whiteDistance.right != -1.0f
+			) || (
+				visionResults->front->blackDistance.left != -1.0f
+				&& visionResults->front->blackDistance.right != -1.0f
+			)
 		) {
-			TargetMode lineSide = TargetMode::UNDECIDED;
+			//TargetMode lineSide = TargetMode::UNDECIDED;
 
 			float leftLine = -1.0f;
 			float rightLine = -1.0f;
