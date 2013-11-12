@@ -202,6 +202,7 @@ class DriveBehindBallTask : public Task {
 		float side;
 		float startTravelledDistance;
 		float travelledDistance;
+		float arcRadius;
 		float arcDistance;
 		float totalDistance;
 };
