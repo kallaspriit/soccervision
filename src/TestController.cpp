@@ -869,7 +869,8 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 
 		omega += swirveOmega;*/
 
-		float forwardSpeed = forwardP * (1.0f - omegaPower);
+		// slow down a bit when turning
+		float forwardSpeed = forwardP * (1.0f - omegaPower / 2.0f);
 
 		ai->dbg("nearBothFrames", nearBothFrames);
 		ai->dbg("forwardSpeed", forwardSpeed);
