@@ -802,60 +802,48 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 		float forwardSpeed = 1.0f;
 		float omega = 0.0f;
 
+		float leftLine = -1.0f;
+		float rightLine = -1.0f;
+
 		if (
-			(
-				visionResults->front->whiteDistance.left != -1.0f
-				&& visionResults->front->whiteDistance.right != -1.0f
-			) || (
-				visionResults->front->blackDistance.left != -1.0f
-				&& visionResults->front->blackDistance.right != -1.0f
-			)
+			visionResults->front->whiteDistance.left != -1.0f && visionResults->front->whiteDistance.left < nearLineDistance
+			&& visionResults->front->blackDistance.left != 1-.0f&& visionResults->front->blackDistance.left < nearLineDistance
 		) {
-			//TargetMode lineSide = TargetMode::UNDECIDED;
+			leftLine = (visionResults->front->whiteDistance.left + visionResults->front->blackDistance.left) / 2.0f;
+		}
 
-			float leftLine = -1.0f;
-			float rightLine = -1.0f;
+		if (
+			visionResults->front->whiteDistance.right != -1.0f && visionResults->front->whiteDistance.right < nearLineDistance
+			&& visionResults->front->blackDistance.right != 1-.0f&& visionResults->front->blackDistance.right < nearLineDistance
+		) {
+			rightLine = (visionResults->front->whiteDistance.right + visionResults->front->blackDistance.right) / 2.0f;
+		}
 
+		ai->dbg("leftLine", leftLine);
+		ai->dbg("rightLine", rightLine);
+
+		if (leftLine != -1.0f || rightLine != -1.0f) {
 			if (
-				visionResults->front->whiteDistance.left < nearLineDistance
-				&& visionResults->front->blackDistance.left < nearLineDistance
+				(leftLine != -1.0f && leftLine < nearLineDistance)
+				&& (rightLine != -1.0f && rightLine < nearLineDistance)
 			) {
-				leftLine = (visionResults->front->whiteDistance.left + visionResults->front->blackDistance.left) / 2.0f;
-			}
+				// we're probably in a corner
 
-			if (
-				visionResults->front->whiteDistance.right < nearLineDistance
-				&& visionResults->front->blackDistance.right < nearLineDistance
-			) {
-				rightLine = (visionResults->front->whiteDistance.right + visionResults->front->blackDistance.right) / 2.0f;
-			}
+				robot->turnBy(Math::degToRad(135.0f), Math::TWO_PI);
 
-			ai->dbg("leftLine", leftLine);
-			ai->dbg("rightLine", rightLine);
+				return;
+			} else {
+				float omegaPower;
 
-			if (leftLine != -1.0f || rightLine != -1.0f) {
-				if (
-					(leftLine != -1.0f && leftLine < nearLineDistance)
-					&& (rightLine != -1.0f && rightLine < nearLineDistance)
-				) {
-					// we're probably in a corner
-
-					robot->turnBy(Math::degToRad(135.0f), Math::TWO_PI);
-
-					return;
+				if (leftLine != -1.0f && (rightLine == -1.0f || leftLine < rightLine)) {
+					omegaPower = Math::map(leftLine, 0.0f, nearLineDistance * 2.0f, 1.0f, 0.0f);
 				} else {
-					float omegaPower;
-
-					if (leftLine != -1.0f && (rightLine == -1.0f || leftLine < rightLine)) {
-						omegaPower = Math::map(leftLine, nearLineDistance, nearLineDistance * 2.0f, 1.0f, 0.0f);
-					} else {
-						omegaPower = /*-1.0f * */Math::map(rightLine, nearLineDistance, nearLineDistance * 2.0f, 1.0f, 0.0f);
-					}
-
-					omega = omegaPower * omegaP;
-
-					ai->dbg("omegaPower", omegaPower);
+					omegaPower = /*-1.0f * */Math::map(rightLine, 0.0f, nearLineDistance * 2.0f, 1.0f, 0.0f);
 				}
+
+				omega = omegaPower * omegaP;
+
+				ai->dbg("omegaPower", omegaPower);
 			}
 		}
 
