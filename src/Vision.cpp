@@ -1836,6 +1836,8 @@ bool Vision::Results::isBallInWay(ObjectList balls, int goalY) {
 	Object* yellowGoal = getLargestGoal(Side::YELLOW);
 	int startY = Config::goalPathSenseStartY;
 	int halfWidth = Config::cameraWidth / 2;
+	float ballDiameter = 0.043f;
+	float ballInWayAngleThreshold = Math::degToRad(5.0f);
 	Object* ball;
 	float checkWidth;
 
@@ -1847,7 +1849,16 @@ bool Vision::Results::isBallInWay(ObjectList balls, int goalY) {
 			continue;
 		}
 
-		if (Math::abs(ball->angle) < Math::degToRad(5.0f)) {
+		
+		float ballLeftX = ball->distanceX - ballDiameter / 2.0f;
+		float ballRightX = ball->distanceX + ballDiameter / 2.0f;
+
+		float ballLeftAngle = atan2(ballLeftX, ball->distanceY);
+		float ballRightAngle = atan2(ballRightX, ball->distanceY);
+
+		std::cout << "@ ball angle: " << ball->angle << ", left: " << ballLeftAngle << ", right: " << ballRightAngle << std::endl;
+
+		if (Math::abs(ballLeftAngle) < ballInWayAngleThreshold || Math::abs(ballRightAngle) < ballInWayAngleThreshold) {
 			return true;
 		}
 		
