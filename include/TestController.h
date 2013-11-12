@@ -287,7 +287,7 @@ public:
 
 private:
 	void setupStates();
-	void updateVisionDebugInfo(Vision::Results* visionResults);
+	void updateVisionInfo(Vision::Results* visionResults);
 	bool isRobotNearLine(Vision::Results* visionResults, bool ignoreCenterSample = false);
 	bool isRobotInCorner(Vision::Results* visionResults);
 	bool wasNearLineLately(double threshold = 1.0);
@@ -309,6 +309,7 @@ private:
 	float blueGoalDistance;
 	float yellowGoalDistance;
 	float lastTargetGoalAngle;
+	float lastClosestGoalDistance;
 	Vision::ColorDistance whiteDistance;
 	Vision::ColorDistance blackDistance;
 	double lastTurnAroundTime;
