@@ -678,9 +678,6 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 	lastSearchTime = Util::millitime();
 	
 	if (robot->dribbler->gotBall()) {
-		ai->dbg("gotBall", true);
-		ai->dbgs("action", "Switch to aim");
-
 		robot->dribbler->start();
 
 		ai->setState("aim");
@@ -708,11 +705,10 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 	}
 
 	ai->dbg("ballSearchDir", ballSearchDir);
-	ai->dbg("lastTurnAroundTime", ai->lastTurnAroundTime);
+	//ai->dbg("lastTurnAroundTime", ai->lastTurnAroundTime);
 	ai->dbg("timeSinceLastTurnAround", ai->lastTurnAroundTime != -1.0 ? Util::duration(ai->lastTurnAroundTime) : -1.0);
 	ai->dbg("hasTasks", robot->hasTasks());
 	ai->dbg("timeSinceLastSearch", timeSinceLastSearch);
-	ai->dbg("hasTasks", robot->hasTasks());
 
 	float searchOmega = Math::PI;
 
@@ -806,15 +802,15 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 		float rightLine = -1.0f;
 
 		if (
-			visionResults->front->whiteDistance.left != -1.0f && visionResults->front->whiteDistance.left < nearLineDistance
-			&& visionResults->front->blackDistance.left != 1-.0f&& visionResults->front->blackDistance.left < nearLineDistance
+			visionResults->front->whiteDistance.left != -1.0f
+			&& visionResults->front->blackDistance.left != -1.0f
 		) {
 			leftLine = (visionResults->front->whiteDistance.left + visionResults->front->blackDistance.left) / 2.0f;
 		}
 
 		if (
-			visionResults->front->whiteDistance.right != -1.0f && visionResults->front->whiteDistance.right < nearLineDistance
-			&& visionResults->front->blackDistance.right != 1-.0f&& visionResults->front->blackDistance.right < nearLineDistance
+			visionResults->front->whiteDistance.right != -1.0f
+			&& visionResults->front->blackDistance.right != -1.0f
 		) {
 			rightLine = (visionResults->front->whiteDistance.right + visionResults->front->blackDistance.right) / 2.0f;
 		}
@@ -824,21 +820,21 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 
 		if (leftLine != -1.0f || rightLine != -1.0f) {
 			if (
-				(leftLine != -1.0f && leftLine < nearLineDistance)
-				&& (rightLine != -1.0f && rightLine < nearLineDistance)
+				leftLine != -1.0f && leftLine < nearLineDistance
+				&& rightLine != -1.0f && rightLine < nearLineDistance
 			) {
 				// we're probably in a corner
-
 				robot->turnBy(Math::degToRad(135.0f), Math::TWO_PI);
 
 				return;
 			} else {
 				float omegaPower;
 
+				// TODO Decide dir once?
 				if (leftLine != -1.0f && (rightLine == -1.0f || leftLine < rightLine)) {
 					omegaPower = Math::map(leftLine, 0.0f, nearLineDistance * 2.0f, 1.0f, 0.0f);
 				} else {
-					omegaPower = /*-1.0f * */Math::map(rightLine, 0.0f, nearLineDistance * 2.0f, 1.0f, 0.0f);
+					omegaPower = -1.0f * Math::map(rightLine, 0.0f, nearLineDistance * 2.0f, 1.0f, 0.0f);
 				}
 
 				omega = omegaPower * omegaP;
