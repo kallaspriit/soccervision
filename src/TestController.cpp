@@ -45,7 +45,7 @@
  * - try accelerating dribbler
  * - better drive-into-goal avoidance
  * - avoid goal collision, sample top quarter area pixels for unsegmented/goal colors, drive left from them
- * - check why fetch behind sometimes messes it up
+ * - check why fetch behind sometimes messes it up (render in web UI)
  * - cancel fetch ball behind and escape corner if robot out is detected
  * - fake ball in dribbler for more time if escaping corner / always complete it (if not out)
  *
@@ -797,7 +797,7 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 			return;
 		}
 
-		float nearLineDistance = 0.5f;
+		float nearLineDistance = 1.0f;
 		float omegaP = 1.0f;
 		float forwardSpeed = 1.0f;
 		float omega = 0.0f;
@@ -827,24 +827,37 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 				rightLine = (visionResults->front->whiteDistance.right + visionResults->front->blackDistance.right) / 2.0f;
 			}
 
-			if (leftLine != -1.0f && rightLine != -1.0f) {
-				// we're probably in a corner
+			ai->dbg("leftLine", leftLine);
+			ai->dbg("rightLine", rightLine);
 
-				robot->turnBy(Math::degToRad(180.0f));
+			if (leftLine != -1.0f || rightLine != -1.0f) {
+				if (
+					(leftLine != -1.0f && leftLine < nearLineDistance)
+					&& (rightLine != -1.0f && rightLine < nearLineDistance)
+				) {
+					// we're probably in a corner
 
-				return;
-			} else if (leftLine != -1.0f || rightLine != -1.0f) {
-				float omegaPower;
+					robot->turnBy(Math::degToRad(180.0f), Math::TWO_PI);
 
-				if (leftLine != -1.0f && (rightLine == -1.0f || leftLine < rightLine)) {
-					omegaPower = Math::map(leftLine, 0.0f, nearLineDistance, 1.0f, 0.0f);
+					return;
 				} else {
-					omegaPower = -1.0f * Math::map(rightLine, 0.0f, nearLineDistance, 1.0f, 0.0f);
-				}
+					float omegaPower;
 
-				omega = omegaPower * omegaP;
+					if (leftLine != -1.0f && (rightLine == -1.0f || leftLine < rightLine)) {
+						omegaPower = Math::map(leftLine, 0.0f, nearLineDistance, 1.0f, 0.0f);
+					} else {
+						omegaPower = -1.0f * Math::map(rightLine, 0.0f, nearLineDistance, 1.0f, 0.0f);
+					}
+
+					omega = omegaPower * omegaP;
+
+					ai->dbg("omegaPower", omegaPower);
+				}
 			}
 		}
+
+		ai->dbg("forwardSpeed", forwardSpeed);
+		ai->dbg("omega", omega);
 
 		robot->setTargetDir(forwardSpeed, 0.0f, omega);
 	}
