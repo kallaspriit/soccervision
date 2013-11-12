@@ -49,6 +49,7 @@
  * - cancel fetch ball behind and escape corner if robot out is detected
  * - fake ball in dribbler for more time if escaping corner / always complete it (if not out)
  * - ignore camera image if fetching frame takes a long time
+ * - rotate around its axis when was near any goals lately
  *
  *
  * DEMO
@@ -1700,7 +1701,8 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 	bool validWindow = false;
 	bool isKickTooSoon = lastKickTime != -1.0 && timeSinceLastKick < minKickInterval;
 
-	if (isBallInWay) {
+	// limit ball avoidance time
+	if (isBallInWay && avoidBallDuration < 2.0f) {
 		float anotherBallCloseDistance = 0.3f;
 		Object* nextClosestBall = visionResults->getNextClosestBall(Dir::FRONT);
 		bool nearbyAnotherBall = nextClosestBall != NULL && nextClosestBall->getDribblerDistance() < anotherBallCloseDistance;
