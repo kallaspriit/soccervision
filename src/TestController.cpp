@@ -723,9 +723,9 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 		return;
 	}
 
-	if (robot->hasTasks()) {
+	/*if (robot->hasTasks()) {
 		return;
-	}
+	}*/
 
 	robot->stop();
 
