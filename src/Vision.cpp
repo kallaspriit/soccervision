@@ -1849,19 +1849,19 @@ bool Vision::Results::isBallInWay(ObjectList balls, int goalY) {
 			continue;
 		}
 
-		
 		float ballLeftX = ball->distanceX - ballDiameter * 1.5f;
 		float ballRightX = ball->distanceX + ballDiameter * 1.5f;
 
 		float ballLeftAngle = atan2(ballLeftX, ball->distanceY);
 		float ballRightAngle = atan2(ballRightX, ball->distanceY);
 
-		std::cout << "@ ball angle: " << ball->angle << ", left: " << ballLeftAngle << ", right: " << ballRightAngle << std::endl;
+		//std::cout << "@ ball angle: " << ball->angle << ", left: " << ballLeftAngle << ", right: " << ballRightAngle << std::endl;
 
 		if (
 			Math::abs(ballLeftAngle) < ballInWayAngleThreshold
 			|| Math::abs(ball->angle) < ballInWayAngleThreshold
 			|| Math::abs(ballRightAngle) < ballInWayAngleThreshold
+			|| (ballLeftAngle < -ballInWayAngleThreshold && ballRightAngle > ballInWayAngleThreshold)
 		) {
 			return true;
 		}
