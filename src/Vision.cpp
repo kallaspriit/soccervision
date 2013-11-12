@@ -1836,10 +1836,12 @@ bool Vision::Results::isBallInGoal(Object* ball, Object* blueGoal, Object* yello
 bool Vision::Results::isBallInWay(ObjectList balls, int goalY) {
 	Object* blueGoal = getLargestGoal(Side::BLUE);
 	Object* yellowGoal = getLargestGoal(Side::YELLOW);
+
 	int startY = Config::goalPathSenseStartY;
 	int halfWidth = Config::cameraWidth / 2;
 	float ballDiameter = 0.043f;
-	float ballInWayAngleThreshold = Math::degToRad(4.0f);
+	//float ballInWayAngleThreshold = Math::degToRad(4.0f);
+	float ballInWayDistanceThreshold = ballDiameter * 2.0f;
 	Object* ball;
 	float checkWidth;
 
@@ -1851,7 +1853,8 @@ bool Vision::Results::isBallInWay(ObjectList balls, int goalY) {
 			continue;
 		}
 
-		float ballLeftX = ball->distanceX - ballDiameter * 1.5f;
+		// angle based
+		/*float ballLeftX = ball->distanceX - ballDiameter * 1.5f;
 		float ballRightX = ball->distanceX + ballDiameter * 1.5f;
 
 		float ballLeftAngle = atan2(ballLeftX, ball->distanceY);
@@ -1865,6 +1868,11 @@ bool Vision::Results::isBallInWay(ObjectList balls, int goalY) {
 			|| Math::abs(ballRightAngle) < ballInWayAngleThreshold
 			|| (ballLeftAngle < -ballInWayAngleThreshold && ballRightAngle > ballInWayAngleThreshold)
 		) {
+			return true;
+		}*/
+
+		// distance based
+		if (Math::abs(ball->distanceX) < ballInWayDistanceThreshold) {
 			return true;
 		}
 		
