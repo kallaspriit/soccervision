@@ -1841,7 +1841,7 @@ bool Vision::Results::isBallInWay(ObjectList balls, int goalY) {
 	int halfWidth = Config::cameraWidth / 2;
 	float ballDiameter = 0.043f;
 	//float ballInWayAngleThreshold = Math::degToRad(4.0f);
-	float ballInWayDistanceThreshold = ballDiameter * 4.0f;
+	//float ballInWayDistanceThreshold = ballDiameter * 4.0f;
 	Object* ball;
 	float checkWidth;
 
@@ -1869,6 +1869,8 @@ bool Vision::Results::isBallInWay(ObjectList balls, int goalY) {
 		) {
 			return true;
 		}*/
+
+		float ballInWayDistanceThreshold = Math::map(ball->getDribblerDistance(), 0.0f, 2.0f, ballDiameter * 3.0f, ballDiameter * 6.0f);
 
 		// distance based
 		if (Math::abs(ball->distanceX) < ballInWayDistanceThreshold / 2.0f) {
