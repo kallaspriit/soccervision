@@ -840,7 +840,7 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 				) {
 					// we're probably in a corner
 
-					robot->turnBy(Math::degToRad(180.0f), Math::TWO_PI);
+					robot->turnBy(Math::degToRad(135.0f), Math::TWO_PI);
 
 					return;
 				} else {
@@ -849,7 +849,7 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 					if (leftLine != -1.0f && (rightLine == -1.0f || leftLine < rightLine)) {
 						omegaPower = Math::map(leftLine, nearLineDistance, nearLineDistance * 2.0f, 1.0f, 0.0f);
 					} else {
-						omegaPower = -1.0f * Math::map(rightLine, nearLineDistance, nearLineDistance * 2.0f, 1.0f, 0.0f);
+						omegaPower = /*-1.0f * */Math::map(rightLine, nearLineDistance, nearLineDistance * 2.0f, 1.0f, 0.0f);
 					}
 
 					omega = omegaPower * omegaP;
