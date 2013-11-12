@@ -1847,11 +1847,11 @@ bool Vision::Results::isBallInWay(ObjectList balls, int goalY) {
 
 	for (ObjectListItc it = balls.begin(); it != balls.end(); it++) {
 		ball = *it;
-		checkWidth = ball->width * 2.5f;
-
-		if (isBallInGoal(ball, blueGoal, yellowGoal) || ball->getDribblerDistance() < 0.02f) {
+		
+		// TODO Add back
+		/*if (isBallInGoal(ball, blueGoal, yellowGoal) || ball->getDribblerDistance() < 0.02f) {
 			continue;
-		}
+		}*/
 
 		// angle based
 		/*float ballLeftX = ball->distanceX - ballDiameter * 1.5f;
@@ -1876,6 +1876,9 @@ bool Vision::Results::isBallInWay(ObjectList balls, int goalY) {
 			return true;
 		}
 		
+		// pixels based
+		checkWidth = ball->width * 2.5f;
+
 		/*if (
 			ball->x - checkWidth < halfWidth && ball->x + checkWidth > halfWidth
 			&& ball->y - ball->height < startY && ball->y  + ball->height > goalY
