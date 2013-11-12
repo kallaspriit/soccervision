@@ -48,6 +48,7 @@
  * - check why fetch behind sometimes messes it up (render in web UI)
  * - cancel fetch ball behind and escape corner if robot out is detected
  * - fake ball in dribbler for more time if escaping corner / always complete it (if not out)
+ * - ignore camera image if fetching frame takes a long time
  *
  *
  * DEMO
