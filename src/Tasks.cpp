@@ -402,7 +402,8 @@ void DriveBehindBallTask::onStart(Robot& robot, float dt) {
 	arcDistance = offsetDistance * Math::TWO_PI / 4.0f; // quarter of a circle
 	startTravelledDistance = robot.getTravelledDistance();
 	travelledDistance = 0.0f;
-	totalDistance = ballDistance + arcDistance;
+	ballSideDistance = Math::sqrt(Math::pow(ballDistance, 2.0f) + Math::pow(offsetDistance, 2.0f));
+	totalDistance = ballSideDistance + arcDistance;
 }
 
 bool DriveBehindBallTask::onStep(Robot& robot, float dt) {
@@ -416,19 +417,13 @@ bool DriveBehindBallTask::onStep(Robot& robot, float dt) {
 		return false;
 	}
 
-	float useSpeed = Math::map(travelledDistance, 0.0f, ballDistance, speed, speed / 2.0f);
-
-	float deaccelerationDuration = 0.5f;
-	float sideSpeed = Math::map(travelledDistance, ballDistance, ballDistance + arcDistance, 0.0f, useSpeed);
-	//float forwardSpeed = Math::map(duration, 0.0f, deaccelerationDuration, startSpeed, useSpeed) - sideSpeed;
+	float useSpeed = Math::map(travelledDistance, 0.0f, ballSideDistance, speed, speed / 2.0f);
+	float sideSpeed = Math::map(travelledDistance, ballSideDistance, totalDistance, 0.0f, useSpeed);
 	float forwardSpeed = useSpeed - sideSpeed;
-	/*float brakeMultiplier = Math::map(travelledDistance, totalDistance - arcDistance, totalDistance, 1.0f, 0.0f);
 
-	std::cout << "@ BRAKE MULTIPLIER: " << brakeMultiplier << ", SPEED: " << (forwardSpeed * brakeMultiplier) << ", TD: " << travelledDistance << "/" << totalDistance << std::endl;*/
-	
 	Math::Vector dirVector = Math::Vector::createForwardVec(targetAngle, forwardSpeed/* * brakeMultiplier*/);
 
-	dirVector.y += side * sideSpeed/* * brakeMultiplier*/;
+	dirVector.y += side * sideSpeed;
 
 	robot.setTargetDir(dirVector.x, dirVector.y);
 

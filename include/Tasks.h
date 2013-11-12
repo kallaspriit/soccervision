@@ -193,6 +193,7 @@ class DriveBehindBallTask : public Task {
 
 	private:
 		float ballDistance;
+		float ballSideDistance;
 		float targetAngle;
 		float speed;
 		float offsetDistance;
