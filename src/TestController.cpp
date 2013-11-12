@@ -1246,7 +1246,7 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 		return;
 	}
 
-	float reverseBlindSpeed = 1.5f;
+	float reverseBlindSpeed = 1.25f;
 	//float reverseBlindSpeed = 0.5f; // test slow
 	float offsetDistance = 0.2f;
 	bool isBallGhost = false;
@@ -1410,7 +1410,7 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 	}
 
 	float targetApproachSpeed = 3.0f;
-	float accelerateAcceleration = 3.0f;
+	float accelerateAcceleration = 2.5f;
 	float probableBallLostDistance = 0.75f;
 	float targetAngle = ai->getTargetAngle(goal->distanceX * (goal->behind ? -1.0f : 1.0f), goal->distanceY * (goal->behind ? -1.0f : 1.0f), ball->distanceX * (ball->behind ? -1.0f : 1.0f), ball->distanceY * (ball->behind ? -1.0f : 1.0f), offsetDistance, targetMode);
 	//float forwardSpeed = approachP * Math::map(stateDuration, 0.0f, startAccelerationDuration, 0.0f, 1.0f);
