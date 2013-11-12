@@ -335,11 +335,11 @@ bool Vision::isValidBall(Object* ball, Dir dir) {
         return false;
     }
 
-	float sizeRatio = (float)ball->width / (float)ball->height;
+	/*float sizeRatio = (float)ball->width / (float)ball->height;
 
 	if (sizeRatio > Config::maxBallSizeRatio || sizeRatio < 1.0f / Config::maxBallSizeRatio) {
 		return false;
-	}
+	}*/
 
 	// check that a ball is not seen on the dribbler
 	if (ball->y - ball->height / 2 > Config::cameraHeight - 70) {
@@ -1837,7 +1837,7 @@ bool Vision::Results::isBallInWay(ObjectList balls, int goalY) {
 	int startY = Config::goalPathSenseStartY;
 	int halfWidth = Config::cameraWidth / 2;
 	float ballDiameter = 0.043f;
-	float ballInWayAngleThreshold = Math::degToRad(5.0f);
+	float ballInWayAngleThreshold = Math::degToRad(4.0f);
 	Object* ball;
 	float checkWidth;
 
