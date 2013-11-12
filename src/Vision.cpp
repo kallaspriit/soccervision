@@ -1871,7 +1871,7 @@ bool Vision::Results::isBallInWay(ObjectList balls, int goalY) {
 		}*/
 
 		// distance based
-		if (Math::abs(ball->distanceX) < ballInWayDistanceThreshold) {
+		if (Math::abs(ball->distanceX) < ballInWayDistanceThreshold / 2.0f) {
 			return true;
 		}
 		
