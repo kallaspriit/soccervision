@@ -169,7 +169,8 @@ namespace Config {
 	const float jumpAngleStopMultiplier = 1.0f;
 
 	// how much should the centerline be inside the goal to kick ball
-	const float goalKickThreshold = 0.25f;
+	//const float goalKickThreshold = 0.25f;
+	const float goalKickThreshold = 0.4f;
 
 	// particle filter robot localizer parameters
 	const int robotLocalizerParticleCount = 1000;
