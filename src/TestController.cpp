@@ -832,7 +832,7 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 
 			if (nearBothFrames > 10) {
 				// we're probably in a corner
-				robot->turnBy(Math::degToRad(135.0f), Math::TWO_PI);
+				robot->turnBy(Math::degToRad(searchDir * 135.0f), Math::TWO_PI);
 
 				nearBothFrames = 0;
 
@@ -842,12 +842,14 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 
 				// TODO Decide dir once?
 				if (leftLine != -1.0f && (rightLine == -1.0f || leftLine < rightLine)) {
-					omegaPower = Math::map(leftLine, 0.0f, nearLineDistance * 2.0f, 1.0f, 0.0f);
+					omegaPower = Math::map(leftLine, nearLineDistance, nearLineDistance * 2.0f, 1.0f, 0.0f);
+					searchDir = 1.0f;
 				} else {
-					omegaPower = -1.0f * Math::map(rightLine, 0.0f, nearLineDistance * 2.0f, 1.0f, 0.0f);
+					omegaPower = Math::map(rightLine, nearLineDistance, nearLineDistance * 2.0f, 1.0f, 0.0f);
+					searchDir = -1.0f;
 				}
 
-				omega = omegaPower * omegaP;
+				omega = searchDir * omegaPower * omegaP;
 
 				ai->dbg("omegaPower", omegaPower);
 			}
