@@ -661,6 +661,8 @@ void TestController::FindBallState::onEnter(Robot* robot, Parameters parameters)
 		}
 	}
 
+	nearBothFrames = 0;
+
 	/*if (lastSearchTime != -1.0) {
 		timeSinceLastSearch = Util::duration(lastSearchTime);
 
@@ -793,7 +795,7 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 			return;
 		}
 
-		float nearLineDistance = 1.0f;
+		float nearLineDistance = 0.5f;
 		float omegaP = Math::PI;
 		float forwardSpeed = 1.0f;
 		float omega = 0.0f;
@@ -823,8 +825,16 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 				leftLine != -1.0f && leftLine < nearLineDistance
 				&& rightLine != -1.0f && rightLine < nearLineDistance
 			) {
+				nearBothFrames++;
+			} else {
+				nearBothFrames = 0;
+			}
+
+			if (nearBothFrames > 10) {
 				// we're probably in a corner
 				robot->turnBy(Math::degToRad(135.0f), Math::TWO_PI);
+
+				nearBothFrames = 0;
 
 				return;
 			} else {
@@ -843,6 +853,7 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 			}
 		}
 
+		ai->dbg("nearBothFrames", nearBothFrames);
 		ai->dbg("forwardSpeed", forwardSpeed);
 		ai->dbg("omega", omega);
 

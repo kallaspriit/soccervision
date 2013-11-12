@@ -96,8 +96,8 @@ public:
 	class FindBallState : public State {
 
 	public:
+		FindBallState(TestController* ai) : State(ai), searchDir(1.0f), lastSearchTime(-1.0), lastTurnTime(-1.0), timeSinceLastSearch(-1.0), nearBothFrames(0) {}
 		void onEnter(Robot* robot, Parameters parameters);
-		FindBallState(TestController* ai) : State(ai), searchDir(1.0f), lastSearchTime(-1.0), lastTurnTime(-1.0), timeSinceLastSearch(-1.0) {}
 		void step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration, float combinedDuration);
 
 	private:
@@ -105,6 +105,7 @@ public:
 		double lastSearchTime;
 		double lastTurnTime;
 		double timeSinceLastSearch;
+		int nearBothFrames;
 
 	};
 
