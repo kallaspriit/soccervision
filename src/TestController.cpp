@@ -1305,8 +1305,8 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 	if (ownGoal != NULL) {
 		float minFetchBehindGoalBallDistance = 0.6f;
 
-		Vision::Distance goalLeftDistance = visionResults->front->vision->getDistance(ownGoal->y + ownGoal->height / 2, ownGoal->x - ownGoal->width / 2);
-		Vision::Distance goalRightDistance = visionResults->front->vision->getDistance(ownGoal->y + ownGoal->height / 2, ownGoal->x + ownGoal->width / 2);
+		Vision::Distance goalLeftDistance = visionResults->front->vision->getDistance(ownGoal->x - ownGoal->width / 2, ownGoal->y + ownGoal->height / 2);
+		Vision::Distance goalRightDistance = visionResults->front->vision->getDistance(ownGoal->x + ownGoal->width / 2, ownGoal->y + ownGoal->height / 2);
 		
 		Math::Point goalCenterPos = Math::Point(ownGoal->distanceX, ownGoal->distanceY);
 		Math::Point goalLeftPos = Math::Point(goalLeftDistance.x, goalLeftDistance.y);

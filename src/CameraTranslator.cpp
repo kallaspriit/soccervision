@@ -50,7 +50,7 @@ CameraTranslator::CameraPosition CameraTranslator::undistort(int distortedX, int
 	if (distortedX < 0) distortedX = 0;
 	if (distortedX > cameraWidth - 1) distortedX = cameraWidth - 1;
 	if (distortedY < 0) distortedY = 0;
-	if (distortedY > cameraWidth - 1) distortedY = cameraHeight - 1;
+	if (distortedY > cameraHeight - 1) distortedY = cameraHeight - 1;
 
 	int undistortedX = xMap[distortedY][distortedX];
 	int undistortedY = yMap[distortedY][distortedX];
