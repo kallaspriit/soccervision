@@ -689,19 +689,27 @@ void TestController::FindBallState::onEnter(Robot* robot, Parameters parameters)
 		}
 	}
 
+	lastBallSearchDir = Dir::ANY;
 	nearBothFrames = 0;
+	wasSearchingRecently = false;
 
-	/*if (lastSearchTime != -1.0) {
+	if (lastSearchTime != -1.0) {
 		timeSinceLastSearch = Util::duration(lastSearchTime);
 
-		if (timeSinceLastSearch < 0.2 && Util::duration(lastTurnTime) >= 2.0) {
+		if (timeSinceLastSearch < 0.2) {
+			std::cout << "! Time since last search: " << timeSinceLastSearch << std::endl;
+
+			wasSearchingRecently = true;
+		}
+
+		/*if (timeSinceLastSearch < 0.2 && Util::duration(lastTurnTime) >= 2.0) {
 			std::cout << "! Time since last search: " << timeSinceLastSearch << ", turning 90deg" << std::endl;
 
 			robot->turnBy(Math::degToRad(90.0f) * searchDir, Math::TWO_PI);
 
 			lastTurnTime = Util::millitime();
-		}
-	}*/
+		}*/
+	}
 }
 
 void TestController::FindBallState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration, float combinedDuration) {
@@ -725,10 +733,20 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 
 	if (ai->lastTurnAroundTime != -1.0 && Util::duration(ai->lastTurnAroundTime) < 2.0) {
 		ballSearchDir = Dir::FRONT;
+	} else if (wasSearchingRecently) {
+		if (lastBallSearchDir == Dir::REAR) {
+			ballSearchDir = Dir::FRONT;
+		} else {
+			ballSearchDir = Dir::REAR;
+		}
 	}
 
 	Object* ball = visionResults->getClosestBall(ballSearchDir);
 	Object* goal = visionResults->getLargestGoal(ai->targetSide, Dir::FRONT);
+
+	if (ball == NULL && ballSearchDir != Dir::ANY && stateDuration > 1.0f) {
+		ball = visionResults->getClosestBall(Dir::ANY);
+	}
 
 	if (ball != NULL) {
 		ai->setLastBall(ball);
@@ -906,6 +924,8 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 		ai->dbg("omega", omega);
 
 		robot->setTargetDir(forwardSpeed, 0.0f, omega);
+
+		lastBallSearchDir = ballSearchDir;
 	}
 }
 

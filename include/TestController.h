@@ -106,6 +106,8 @@ public:
 		double lastTurnTime;
 		double timeSinceLastSearch;
 		int nearBothFrames;
+		Dir lastBallSearchDir;
+		bool wasSearchingRecently;
 
 	};
 
