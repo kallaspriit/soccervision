@@ -712,14 +712,14 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 	ai->dbg("hasTasks", robot->hasTasks());
 	ai->dbg("timeSinceLastSearch", timeSinceLastSearch);
 
-	float searchOmega = Math::PI;
-
-	if (stateDuration > Math::TWO_PI / searchOmega) {
-		searchOmega /= 2.0f;
-	}
-
 	double minTurnBreak = 2.0;
+	float searchPeriod = 1.5f;
+	float searchOmega = Math::TWO_PI / searchPeriod;
 
+	/*if (stateDuration > Math::TWO_PI / searchOmega) {
+		searchOmega /= 2.0f;
+	}*/
+	
 	ai->dbg("ballVisible", ball != NULL);
 	ai->dbg("goalVisible", goal != NULL);
 	ai->dbg("searchDir", searchDir);
@@ -792,6 +792,12 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 
 		if (robot->hasTasks()) {
 			// wait until tasks complete
+			return;
+		}
+
+		if (stateDuration < searchPeriod) {
+			robot->setTargetOmega(searchOmega * searchDir);
+
 			return;
 		}
 
