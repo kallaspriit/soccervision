@@ -1198,8 +1198,8 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 		return;
 	}
 
-	//float reverseBlindSpeed = 1.5f;
-	float reverseBlindSpeed = 0.5f; // test slow
+	float reverseBlindSpeed = 1.5f;
+	//float reverseBlindSpeed = 0.5f; // test slow
 	float offsetDistance = 0.2f;
 	bool isBallGhost = false;
 
