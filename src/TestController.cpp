@@ -849,10 +849,10 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 				// TODO Decide dir once?
 				if (leftLine != -1.0f && (rightLine == -1.0f || leftLine < rightLine)) {
 					omegaPower = Math::map(leftLine, nearLineDistance, nearLineDistance * 2.0f, 1.0f, 0.0f);
-					searchDir = 1.0f;
+					//searchDir = 1.0f;
 				} else {
 					omegaPower = Math::map(rightLine, nearLineDistance, nearLineDistance * 2.0f, 1.0f, 0.0f);
-					searchDir = -1.0f;
+					//searchDir = -1.0f;
 				}
 
 				omega = searchDir * omegaPower * omegaP;
@@ -861,7 +861,7 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 			}
 		}
 
-		float swirveP = Math::PI;
+		float swirveP = 1.5f;
 		float swirveFrequency = 1.0f;
 		float swirveOmega = Math::sin(robot->getTravelledDistance() * swirveFrequency) * swirveP;
 
