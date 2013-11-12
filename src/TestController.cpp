@@ -858,7 +858,7 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 				}
 
 				omega = searchDir * omegaPower * omegaP;
-
+				
 				ai->dbg("omegaPower", omegaPower);
 			}
 		}
