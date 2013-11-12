@@ -799,11 +799,11 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 			robot->setTargetOmega(searchOmega * searchDir);
 
 			return;
-		} else if (stateDuration > 10.0f) {
+		}/* else if (stateDuration > 10.0f) {
 			ai->setState("find-ball");
 
 			return;
-		}
+		}*/
 
 		float nearLineDistance = 0.5f;
 		float omegaP = Math::PI;
