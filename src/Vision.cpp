@@ -1846,13 +1846,17 @@ bool Vision::Results::isBallInWay(ObjectList balls, int goalY) {
 		if (isBallInGoal(ball, blueGoal, yellowGoal)) {
 			continue;
 		}
+
+		if (Math::abs(ball->angle) < Math::degToRad(5.0f)) {
+			return true;
+		}
 		
-		if (
+		/*if (
 			ball->x - checkWidth < halfWidth && ball->x + checkWidth > halfWidth
 			&& ball->y - ball->height < startY && ball->y  + ball->height > goalY
 		) {
 			return true;
-		}
+		}*/
 	}
 
 	return false;
