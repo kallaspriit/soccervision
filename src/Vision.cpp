@@ -1837,7 +1837,7 @@ bool Vision::Results::isBallInWay(ObjectList balls, int goalY) {
 	int startY = Config::goalPathSenseStartY;
 	int halfWidth = Config::cameraWidth / 2;
 	float ballDiameter = 0.043f;
-	float ballInWayAngleThreshold = Math::degToRad(3.0f);
+	float ballInWayAngleThreshold = Math::degToRad(5.0f);
 	Object* ball;
 	float checkWidth;
 
