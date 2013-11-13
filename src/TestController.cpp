@@ -772,6 +772,7 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 	ai->dbg("ballVisible", ball != NULL);
 	ai->dbg("goalVisible", goal != NULL);
 	ai->dbg("searchDir", searchDir);
+	ai->dbg("focusedOnGoal", focusedOnGoal);
 
 	if (ball != NULL) {
 		if (robot->hasTasks()) {
@@ -876,9 +877,15 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 
 		// first turn towards one of the goals
 		if (!focusedOnGoal) {
-			Object* goal = visionResults->getLargestGoal(Side::UNKNOWN, Dir::FRONT);
+			Object* goal = visionResults->getLargestGoal(Side::BLUE, Dir::FRONT);
+
+			if (goal == NULL) {
+				goal = visionResults->getLargestGoal(Side::YELLOW, Dir::FRONT);
+			}
 
 			if (goal != NULL && goal->distance > Config::fieldWidth / 2.0f) {
+				ai->dbg("lookAtGoal", goal->type);
+
 				robot->lookAt(goal);
 
 				if (Math::abs(goal->angle) < Math::degToRad(5.0f)) {
