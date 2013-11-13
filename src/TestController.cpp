@@ -2059,6 +2059,12 @@ void TestController::ReturnFieldState::step(float dt, Vision::Results* visionRes
 
 		return;
 	} else if (ai->isRobotOutFront || queuedApproachGoal) {
+		float searchSpeed = Math::PI;
+
+		if (stateDuration > Math::TWO_PI / searchSpeed) {
+			searchSpeed /= 2.0f;
+		}
+
 		queuedApproachGoal = true;
 
 		Object* goal = visionResults->getLargestGoal(Side::UNKNOWN, Dir::FRONT);
@@ -2072,7 +2078,7 @@ void TestController::ReturnFieldState::step(float dt, Vision::Results* visionRes
 				queuedApproachGoal = false;
 			}
 		} else {
-			robot->setTargetOmega(findBallState->searchDir * Math::PI);
+			robot->setTargetOmega(findBallState->searchDir * searchSpeed);
 		}
 
 		return;
