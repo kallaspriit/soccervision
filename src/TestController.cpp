@@ -128,6 +128,8 @@ void TestController::setupStates() {
 }
 
 void TestController::step(float dt, Vision::Results* visionResults) {
+	messages.clear();
+
 	updateVisionInfo(visionResults);
 
 	currentStateDuration += dt;
@@ -266,45 +268,46 @@ void TestController::updateVisionInfo(Vision::Results* visionResults) {
 	Object* blueGoal = visionResults->getLargestGoal(Side::BLUE);
 	Object* yellowGoal = visionResults->getLargestGoal(Side::YELLOW);
 
+	// update the closest goal distance
 	if (blueGoal != NULL || yellowGoal != NULL) {
 		float currentClosestGoalDistance = -1.0f;
-		Side closestGoalSide = Side::UNKNOWN;
 
 		if (blueGoal != NULL && blueGoal->distanceY > 0.0f && blueGoal->distanceY < Config::fieldWidth && blueGoal->distanceY < 2.0f && (currentClosestGoalDistance == -1.0f || blueGoal->distanceY < currentClosestGoalDistance)) {
 			currentClosestGoalDistance = getObjectClosestDistance(visionResults, blueGoal);
-
-			closestGoalSide = Side::BLUE;
 		}
 
 		if (yellowGoal != NULL && yellowGoal->distanceY > 0.0f && yellowGoal->distanceY < Config::fieldWidth && yellowGoal->distanceY < 2.0f && (currentClosestGoalDistance == -1.0f || yellowGoal->distanceY < currentClosestGoalDistance)) {
 			currentClosestGoalDistance = getObjectClosestDistance(visionResults, yellowGoal);
-
-			closestGoalSide = Side::YELLOW;
 		}
 
 		if (currentClosestGoalDistance != -1.0f) {
 			lastClosestGoalDistanceAvg.add(currentClosestGoalDistance);
 
-			// take ten averages
+			// take some averages, single frame distances flicker
 			if (lastClosestGoalDistanceAvg.full()) {
 				lastClosestGoalDistance = lastClosestGoalDistanceAvg.value();
 			}
 		}
 	}
 
+	// used just for debugging
 	blueGoalDistance = blueGoal != NULL ? blueGoal->distance : 0.0f;
 	yellowGoalDistance = yellowGoal != NULL ? yellowGoal->distance : 0.0f;
+	whiteDistance = visionResults->front->whiteDistance;
+	blackDistance = visionResults->front->blackDistance;
 
+	// update target goal distance
 	float currentTargetGoalDistance = -1.0f;
 
 	if (targetSide == Side::BLUE && blueGoal != NULL) {
-		if (blueGoal->distance <= 6.0f) {
+		// filter goalsdetected very far away
+		if (blueGoal->distance > 0.0f && blueGoal->distance <= 6.0f) {
 			lastTargetGoalAngle = blueGoal->angle;
 		}
 
 		currentTargetGoalDistance = getObjectClosestDistance(visionResults, blueGoal);
 	} else if (targetSide == Side::YELLOW && yellowGoal != NULL) {
-		if (yellowGoal->distance <= 6.0f) {
+		if (yellowGoal->distance > 0.0f && yellowGoal->distance <= 6.0f) {
 			lastTargetGoalAngle = yellowGoal->angle;
 		}
 
@@ -319,9 +322,7 @@ void TestController::updateVisionInfo(Vision::Results* visionResults) {
 		}
 	}
 
-	whiteDistance = visionResults->front->whiteDistance;
-	blackDistance = visionResults->front->blackDistance;
-
+	// check whether robot is detected to be out for some frames
 	if (visionResults->isRobotOut(Dir::FRONT)) {
 		framesRobotOutFront++;
 	} else {
@@ -336,6 +337,8 @@ void TestController::updateVisionInfo(Vision::Results* visionResults) {
 
 	isRobotOutFront = framesRobotOutFront >= 10;
 	isRobotOutRear = framesRobotOutRear >= 10;
+
+	// store whether robot is near line or in corner
 	isNearLine = isRobotNearLine(visionResults);
 	isInCorner = isRobotInCorner(visionResults);
 
@@ -360,7 +363,7 @@ bool TestController::isRobotNearLine(Vision::Results* visionResults, bool ignore
 	float blackMin = visionResults->front->blackDistance.min;
 
 	if (ignoreCenterSample) {
-		// recalculate minimum distances without the center sample
+		// recalculate minimum distances without the center sample which may be a white spot on the ball
 		whiteMin = -1.0f;
 		blackMin = -1.0f;
 
@@ -404,6 +407,7 @@ bool TestController::isRobotInCorner(Vision::Results* visionResults) {
 		return false;
 	}
 
+	// dont perform corner maneuvers when the robot is out
 	if (isRobotOutFront || isRobotOutRear) {
 		return false;
 	}
@@ -418,14 +422,16 @@ bool TestController::isRobotInCorner(Vision::Results* visionResults) {
 		return false;
 	}*/
 
+	// we need left and right samples
 	if (visionResults->front->whiteDistance.left == -1.0f || visionResults->front->whiteDistance.right == -1.0f) {
 		return false;
 	}
 
+	// calculate maximum color distances at corners
 	float maxCornerDistanceWhite = Math::max(visionResults->front->whiteDistance.left, visionResults->front->whiteDistance.right);
 	float maxCornerDistanceBlack = Math::max(visionResults->front->blackDistance.left, visionResults->front->blackDistance.right);
 
-	// robot is in corner if any of the center 3 samples are further than the furthest side samples (both white and black)
+	// robot is in corner if any of the center 3 samples are further than the furthest side samples (check both white and black)
 	if (
 		(
 			(visionResults->front->whiteDistance.leftMiddle != -1.0f && visionResults->front->whiteDistance.leftMiddle > maxCornerDistanceWhite)
@@ -443,8 +449,8 @@ bool TestController::isRobotInCorner(Vision::Results* visionResults) {
 	return false;
 };
 
-bool TestController::isRobotNearGoal() {
-	return lastClosestGoalDistance != -1.0f && lastClosestGoalDistance < 0.8f;
+bool TestController::isRobotNearGoal(float threshold) {
+	return lastClosestGoalDistance != -1.0f && lastClosestGoalDistance < threshold;
 }
 
 bool TestController::isRobotNearTargetGoal(float threshold) {
@@ -477,44 +483,31 @@ void TestController::setLastBall(Object* ball) {
 	lastBallTime = Util::millitime();
 }
 
-float TestController::getObjectClosestDistance(Vision::Results* visionResults, Object* object) {
-	Vision::Distance leftDistance = visionResults->front->vision->getDistance(object->x - object->width / 2, object->y + object->height / 2);
-	Vision::Distance rightDistance = visionResults->front->vision->getDistance(object->x + object->width / 2, object->y + object->height / 2);
-		
-	return Math::min(Math::min(leftDistance.y, rightDistance.y), object->distanceY);
-}
-
 Object* TestController::getLastBall(Dir dir) {
-	if (lastBall == NULL) {
-		//std::cout << "@ No ghost ball exists" << std::endl;
-
-		return NULL;
-	}
-
 	// only return last seen ball if its fresh enough
-	if (lastBall == NULL || Util::duration(lastBallTime) > 0.25) {
-		//std::cout << "@ Invalid ghost ball, too old: " << Util::duration(lastBallTime) << std::endl;
-
+	if (lastBall == NULL || lastBallTime == -1.0 || Util::duration(lastBallTime) > 0.25) {
 		return NULL;
 	}
 
 	// make sure the ball is on the right side
 	if (dir != Dir::ANY && (lastBall->behind && dir == Dir::FRONT) || (!lastBall->behind && dir == Dir::REAR)) {
-		//std::cout << "@ Invalid ghost ball, wrong dir: " << lastBall->behind << std::endl;
-
 		return NULL;
 	}
 
 	// use this only for balls far away as they're likely to be badly visible
 	if (lastBall->distance < 1.0f) {
-		//std::cout << "@ Invalid ghost ball, too near: " << lastBall->distance << std::endl;
-
 		return NULL;
 	}
 
-	//std::cout << "@ Using ghost ball, age: " << Util::duration(lastBallTime) << ", distance: " << lastBall->distance << std::endl;
-
 	return lastBall;
+}
+
+float TestController::getObjectClosestDistance(Vision::Results* visionResults, Object* object) {
+	// calculate the closest object bottom distance, corners might be closer than center
+	Vision::Distance leftDistance = visionResults->front->vision->getDistance(object->x - object->width / 2, object->y + object->height / 2);
+	Vision::Distance rightDistance = visionResults->front->vision->getDistance(object->x + object->width / 2, object->y + object->height / 2);
+		
+	return Math::min(Math::min(leftDistance.y, rightDistance.y), object->distanceY);
 }
 
 std::string TestController::getJSON() {
@@ -526,8 +519,9 @@ std::string TestController::getJSON() {
 		stream << "\"" << (it->first) << "\": \"" << (it->second) << "\",";
 	}
 
-	messages.clear();
+	//messages.clear();
 
+	//send some debug information to the client
 	stream << "\"currentState\": \"" << currentStateName << "\",";
 	stream << "\"stateDuration\": \"" << currentStateDuration << "\",";
 	stream << "\"combinedDuration\": \"" << combinedStateDuration << "\",";
