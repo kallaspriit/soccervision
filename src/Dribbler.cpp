@@ -22,7 +22,7 @@ void Dribbler::stop() {
 
 void Dribbler::onKick() {
 	ballLostTime = Config::dribblerBallLostThreshold; // make it large so the ball is not faked after kick
-	//ballDetected = false;
+	ballDetected = false;
 }
 
 void Dribbler::step(float dt) {
