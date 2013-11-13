@@ -1726,6 +1726,7 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 	}
 	
 	Object* goal = visionResults->getLargestGoal(ai->targetSide, Dir::FRONT);
+	Object* rearGoal = visionResults->getLargestGoal(Side::UNKNOWN, Dir::REAR);
 
 	ai->dbg("goalVisible", goal != NULL);
 	ai->dbg("nearLine", nearLine);
@@ -1769,6 +1770,7 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 			&& !escapeCornerPerformed
 			//&& !ai->isRobotNearGoal()
 			&& ai->isRobotNearTargetGoal()
+			&& (rearGoal == NULL || ai->getObjectClosestDistance(visionResults, rearGoal) > 1.5f)
 		) {
 			ai->setState("escape-corner");
 
