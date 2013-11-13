@@ -1,7 +1,7 @@
 #include "BaseAI.h"
 #include "Robot.h"
 
-BaseAI::BaseAI(Robot* robot, Communication* com) : Controller(robot, com), currentState(NULL), currentStateName(""), totalDuration(0.0f), currentStateDuration(0.0f), combinedStateDuration(0.0f) {
+BaseAI::BaseAI(Robot* robot, Communication* com) : Controller(robot, com), currentState(NULL), currentStateName(""), lastStateName(""), totalDuration(0.0f), currentStateDuration(0.0f), combinedStateDuration(0.0f) {
 
 }
 
@@ -40,6 +40,7 @@ void BaseAI::setState(std::string state, Parameters parameters) {
 
 	if (state != currentStateName) {
 		combinedStateDuration = 0.0f;
+		lastStateName = currentStateName;
 		currentStateName = state;
 	}
 

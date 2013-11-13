@@ -41,6 +41,7 @@ protected:
 	States states;
 	State* currentState;
 	std::string currentStateName;
+	std::string lastStateName;
 	float totalDuration;
 	float currentStateDuration;
 	float combinedStateDuration;

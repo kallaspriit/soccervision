@@ -738,7 +738,6 @@ void TestController::FindBallState::onEnter(Robot* robot, Parameters parameters)
 		}
 	}
 
-	lastBallSearchDir = Dir::ANY;
 	nearBothFrames = 0;
 	wasSearchingRecently = false;
 	focusedOnGoal = false;
@@ -787,7 +786,7 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 
 		ai->dbgs("search", "front due to recent turn around");
 	} else if (wasSearchingRecently) {
-		if (lastBallSearchDir == Dir::REAR) {
+		if (ai->lastStateName == "fetch-ball-behind") {
 			ballSearchDir = Dir::FRONT;
 
 			ai->dbgs("search", "front due recent search from rear");
@@ -812,7 +811,6 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 	}
 
 	ai->dbg("ballSearchDir", ballSearchDir);
-	ai->dbg("lastBallSearchDir", lastBallSearchDir);
 	ai->dbg("wasSearchingRecently", wasSearchingRecently);
 	//ai->dbg("lastTurnAroundTime", ai->lastTurnAroundTime);
 	ai->dbg("timeSinceLastTurnAround", ai->lastTurnAroundTime != -1.0 ? Util::duration(ai->lastTurnAroundTime) : -1.0);
@@ -1043,8 +1041,6 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 		ai->dbg("omega", omega);
 
 		robot->setTargetDir(forwardSpeed, 0.0f, omega);
-
-		lastBallSearchDir = ballSearchDir;
 	}
 }
 
