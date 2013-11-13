@@ -125,6 +125,9 @@ bool ProcessThread::fetchFrame() {
 		if (timeTaken > 0.03) {
 			std::cout << "- Fetching camera #" << camera->getSerial() << " frame took: " << timeTaken << std::endl;
 
+			// don't use this invalid frame
+			return false;
+
 			// camera has failed
 			/*if (timeTaken > 0.031) {
 				int serial = camera->getSerial();
