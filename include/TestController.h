@@ -298,8 +298,8 @@ private:
 	bool isRobotInCorner(Vision::Results* visionResults);
 	bool isRobotNearGoal();
 	bool isRobotNearTargetGoal();
-	bool wasNearLineLately(double threshold = 1.0);
-	bool wasInCornerLately(double threshold = 1.0);
+	bool wasNearLineLately(double threshold = 1.5);
+	bool wasInCornerLately(double threshold = 1.5);
 	void resetLastBall();
 	void setLastBall(Object* ball);
 	Object* getLastBall(Dir dir = Dir::ANY);
