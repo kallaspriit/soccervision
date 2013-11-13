@@ -269,7 +269,7 @@ void TestController::updateVisionInfo(Vision::Results* visionResults) {
 	Object* yellowGoal = visionResults->getLargestGoal(Side::YELLOW);
 
 	if (blueGoal != NULL || yellowGoal != NULL) {
-		float currentClosestGoalDistance;
+		float currentClosestGoalDistance = -1.0f;
 
 		if (blueGoal != NULL && blueGoal->distance < Config::fieldWidth / 2.0f && (lastClosestGoalDistance == -1.0f || blueGoal->distance < lastClosestGoalDistance)) {
 			currentClosestGoalDistance = blueGoal->distance;
@@ -279,11 +279,13 @@ void TestController::updateVisionInfo(Vision::Results* visionResults) {
 			currentClosestGoalDistance = yellowGoal->distance;
 		}
 
-		lastClosestGoalDistanceAvg.add(currentClosestGoalDistance);
+		if (currentClosestGoalDistance != -1.0f) {
+			lastClosestGoalDistanceAvg.add(currentClosestGoalDistance);
 
-		// take ten averages
-		if (lastClosestGoalDistanceAvg.full()) {
-			lastClosestGoalDistance = lastClosestGoalDistanceAvg.value();
+			// take ten averages
+			if (lastClosestGoalDistanceAvg.full()) {
+				lastClosestGoalDistance = lastClosestGoalDistanceAvg.value();
+			}
 		}
 	}
 
