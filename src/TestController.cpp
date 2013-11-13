@@ -841,6 +841,26 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 			return;
 		}
 
+		if (ai->isRobotOutRear) {
+			robot->turnBy(Math::degToRad(180.0f));
+
+			return;
+		}
+
+		if (ai->isRobotOutFront) {
+			Object* goal = visionResults->getLargestGoal(Side::UNKNOWN, Dir::FRONT);
+
+			if (goal != NULL && goal->distance > Config::fieldWidth / 2.0f) {
+				// drive towards any goal far away
+				robot->setTargetDir(1.0f, 0.0f);
+				robot->lookAt(goal);
+			} else {
+				robot->setTargetOmega(Math::PI);
+			}
+
+			return;
+		}
+
 		if (stateDuration < searchPeriod / 2.0f) {
 			robot->setTargetOmega(searchOmega * searchDir);
 
