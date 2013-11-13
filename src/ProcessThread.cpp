@@ -40,13 +40,17 @@ ProcessThread::~ProcessThread() {
 void* ProcessThread::run() {
 	gotFrame = fetchFrame();
 
+	if (!gotFrame) {
+		return NULL;
+	}
+
+	if (frame == NULL) {
+		return NULL;
+	}
+
 	if (visionResult != NULL) {
 		delete visionResult;
 		visionResult = NULL;
-	}
-
-	if (!gotFrame || frame == NULL) {
-		return NULL;
 	}
 
 	done = false;
@@ -121,7 +125,7 @@ bool ProcessThread::fetchFrame() {
 		if (timeTaken > 0.03) {
 			std::cout << "- Fetching camera #" << camera->getSerial() << " frame took: " << timeTaken << std::endl;
 
-			frame = NULL;
+			//frame = NULL;
 
 			// don't use this invalid frame
 			return false;
