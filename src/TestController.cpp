@@ -1935,7 +1935,7 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 		validKickFrames = 0;
 	}
 
-	bool performKick = validKickFrames >= 10; // probably too large
+	bool performKick = validKickFrames >= 2;
 
 	if (performKick) {
 		robot->kick();
