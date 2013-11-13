@@ -315,6 +315,7 @@ private:
 	float yellowGoalDistance;
 	float lastTargetGoalAngle;
 	float lastClosestGoalDistance;
+	Math::Avg lastClosestGoalDistanceAvg;
 	Vision::ColorDistance whiteDistance;
 	Vision::ColorDistance blackDistance;
 	double lastTurnAroundTime;
@@ -324,6 +325,7 @@ private:
 	bool isRobotOutRear;
 	bool isNearLine;
 	bool isInCorner;
+	int inCornerFrames;
 
 	double lastCommandTime;
 	double lastBallTime;
