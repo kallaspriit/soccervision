@@ -321,6 +321,7 @@ private:
 	float lastClosestGoalDistance;
 	float lastTargetGoalDistance;
 	Math::Avg lastClosestGoalDistanceAvg;
+	Math::Avg lastTargetGoalDistanceAvg;
 	Vision::ColorDistance whiteDistance;
 	Vision::ColorDistance blackDistance;
 	double lastTurnAroundTime;

@@ -287,12 +287,6 @@ void TestController::updateVisionInfo(Vision::Results* visionResults) {
 			// take ten averages
 			if (lastClosestGoalDistanceAvg.full()) {
 				lastClosestGoalDistance = lastClosestGoalDistanceAvg.value();
-
-				if (closestGoalSide == targetSide) {
-					lastTargetGoalDistance = lastClosestGoalDistance;
-				} else {
-					lastTargetGoalDistance = -1.0f;
-				}
 			}
 		}
 	}
@@ -300,13 +294,27 @@ void TestController::updateVisionInfo(Vision::Results* visionResults) {
 	blueGoalDistance = blueGoal != NULL ? blueGoal->distance : 0.0f;
 	yellowGoalDistance = yellowGoal != NULL ? yellowGoal->distance : 0.0f;
 
+	float currentTargetGoalDistance = -1.0f;
+
 	if (targetSide == Side::BLUE && blueGoal != NULL) {
 		if (blueGoal->distance <= 6.0f) {
 			lastTargetGoalAngle = blueGoal->angle;
 		}
+
+		currentTargetGoalDistance = getObjectClosestDistance(visionResults, blueGoal);
 	} else if (targetSide == Side::YELLOW && yellowGoal != NULL) {
 		if (yellowGoal->distance <= 6.0f) {
 			lastTargetGoalAngle = yellowGoal->angle;
+		}
+
+		currentTargetGoalDistance = getObjectClosestDistance(visionResults, yellowGoal);
+	}
+
+	if (currentTargetGoalDistance != -1.0f && currentTargetGoalDistance > 0.0f && currentTargetGoalDistance < Config::fieldWidth) {
+		lastTargetGoalDistanceAvg.add(currentTargetGoalDistance);
+
+		if (lastTargetGoalDistanceAvg.full()) {
+			lastTargetGoalDistance = lastTargetGoalDistanceAvg.value();
 		}
 	}
 
