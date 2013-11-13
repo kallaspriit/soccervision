@@ -74,7 +74,7 @@
  * - show configuring colors in the web UI
  */
 
-TestController::TestController(Robot* robot, Communication* com) : BaseAI(robot, com), targetSide(Side::BLUE), manualSpeedX(0.0f), manualSpeedY(0.0f), manualOmega(0.0f), manualDribblerSpeed(0), manualKickStrength(0), blueGoalDistance(0.0f), yellowGoalDistance(0.0f), lastCommandTime(-1.0), lastBallTime(-1.0), lastNearLineTime(-1.0), lastInCornerTime(-1.0), lastTargetGoalAngle(0.0f), lastBall(NULL), lastTurnAroundTime(-1.0), lastClosestGoalDistance(-1.0f), framesRobotOutFront(0), framesRobotOutRear(0), isRobotOutFront(false), isRobotOutRear(false), isNearLine(false), isInCorner(false), inCornerFrames(0) {
+TestController::TestController(Robot* robot, Communication* com) : BaseAI(robot, com), targetSide(Side::BLUE), manualSpeedX(0.0f), manualSpeedY(0.0f), manualOmega(0.0f), manualDribblerSpeed(0), manualKickStrength(0), blueGoalDistance(0.0f), yellowGoalDistance(0.0f), lastCommandTime(-1.0), lastBallTime(-1.0), lastNearLineTime(-1.0), lastInCornerTime(-1.0), lastTargetGoalAngle(0.0f), lastBall(NULL), lastTurnAroundTime(-1.0), lastClosestGoalDistance(-1.0f), lastTargetGoalDistance(-1.0f), framesRobotOutFront(0), framesRobotOutRear(0), isRobotOutFront(false), isRobotOutRear(false), isNearLine(false), isInCorner(false), inCornerFrames(0) {
 	setupStates();
 };
 
@@ -266,13 +266,18 @@ void TestController::updateVisionInfo(Vision::Results* visionResults) {
 
 	if (blueGoal != NULL || yellowGoal != NULL) {
 		float currentClosestGoalDistance = -1.0f;
+		Side closestGoalSide = Side::UNKNOWN;
 
 		if (blueGoal != NULL && blueGoal->distance < Config::fieldWidth / 2.0f && (currentClosestGoalDistance == -1.0f || blueGoal->distance < currentClosestGoalDistance)) {
 			currentClosestGoalDistance = blueGoal->distance;
+
+			closestGoalSide = Side::BLUE;
 		}
 
 		if (yellowGoal != NULL && yellowGoal->distance < Config::fieldWidth / 2.0f && (currentClosestGoalDistance == -1.0f || yellowGoal->distance < currentClosestGoalDistance)) {
 			currentClosestGoalDistance = yellowGoal->distance;
+
+			closestGoalSide = Side::YELLOW;
 		}
 
 		if (currentClosestGoalDistance != -1.0f) {
@@ -281,6 +286,12 @@ void TestController::updateVisionInfo(Vision::Results* visionResults) {
 			// take ten averages
 			if (lastClosestGoalDistanceAvg.full()) {
 				lastClosestGoalDistance = lastClosestGoalDistanceAvg.value();
+
+				if (closestGoalSide == targetSide) {
+					lastTargetGoalDistance = lastClosestGoalDistance;
+				} else {
+					lastTargetGoalDistance = -1.0f;
+				}
 			}
 		}
 	}
@@ -504,6 +515,7 @@ std::string TestController::getJSON() {
 	stream << "\"blueGoalDistance\": " << blueGoalDistance << ",";
 	stream << "\"yellowGoalDistance\": " << yellowGoalDistance << ",";
 	stream << "\"lastClosestGoalDistance\": " << lastClosestGoalDistance << ",";
+	stream << "\"lastTargetGoalDistance\": " << lastTargetGoalDistance << ",";
 	stream << "\"isRobotOutFront\": " << (isRobotOutFront ? "true" : "false") << ",";
 	stream << "\"isRobotOutRear\": " << (isRobotOutRear ? "true" : "false") << ",";
 	stream << "\"isInCorner\": " << (isInCorner ? "true" : "false") << ",";

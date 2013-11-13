@@ -317,6 +317,7 @@ private:
 	float yellowGoalDistance;
 	float lastTargetGoalAngle;
 	float lastClosestGoalDistance;
+	float lastTargetGoalDistance;
 	Math::Avg lastClosestGoalDistanceAvg;
 	Vision::ColorDistance whiteDistance;
 	Vision::ColorDistance blackDistance;
