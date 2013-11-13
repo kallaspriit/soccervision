@@ -1333,13 +1333,12 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 		if (ball != NULL && !ball->behind) {
 			ai->setState("fetch-ball-direct");
 		} else {
+			// switch to searching for balls, search in the same direction as approached ball behind
 			Parameters parameters;
 
 			if (searchDir != 0.0f) {
 				parameters["search-dir"] = Util::toString(searchDir);
 			}
-
-			std::cout << "@ Behind to find ball, no goal" << std::endl;
 
 			ai->setState("find-ball", parameters);
 		}
@@ -1352,12 +1351,11 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 		ball == NULL
 		|| (lastBallDistance != -1.0f && ball->getDribblerDistance() > lastBallDistance * 1.25f)
 	) {
-		// don't perform the blind reverse if the ball was lost at too great of a distance, also if last seen ball was ghost
+		// don't perform the blind reverse if the ball was lost at too great of a distance
 		if (!hadBall || lastBallDistance > 0.8f) {
-			std::cout << "@ Behind to find ball, had ball: " << hadBall << ", lastBallDistance: " << lastBallDistance << std::endl;
-
 			ai->setState("find-ball");
 		} else {
+			// perform the blind reverse maneuver
 			reversePerformed = true;
 
 			robot->driveBehindBall(lastBallDistance, lastTargetAngle, reverseBlindSpeed, offsetDistance * 1.0f, targetMode == TargetMode::LEFT ? 1.0f : -1.0f);
@@ -1373,10 +1371,12 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 	lostBallTime = -1.0;
 	lastBallDistance = ballDistance;
 
+	// store ball initial distance
 	if (startBallDistance == -1.0f) {
 		startBallDistance = ballDistance;
 	}
 
+	// decide on which side to approach it, use the side already more direct
 	// TODO Maybe not go outside near line?
 	if (targetMode == TargetMode::UNDECIDED) {
 		if (ball->angle + goal->angle > 0.0f) {
@@ -1391,11 +1391,13 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 	ai->dbg("ballDistance", ballDistance);
 	ai->dbg("targetMode", targetMode);
 
+	// find our own goal
 	Side ownSide = ai->targetSide == Side::YELLOW ? Side::BLUE : Side::YELLOW;
 	Object* ownGoal = visionResults->getLargestGoal(ownSide, Dir::REAR);
 
 	// make sure we don't reverse into our own goal
 	if (ownGoal != NULL) {
+		// calculate distance between the ball and our own goal, including edges of the goal
 		float minFetchBehindGoalBallDistance = 0.6f;
 
 		Vision::Distance goalLeftDistance = visionResults->front->vision->getDistance(ownGoal->x - ownGoal->width / 2, ownGoal->y + ownGoal->height / 2);
@@ -1423,6 +1425,7 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 
 		double minTurnBreak = 2.0;
 
+		// perform turn around if ball is too close to own goal, might reverse into it
 		if (
 			avgBallGoalDistance.full()
 			&& avgBallGoalDistance.value() < minFetchBehindGoalBallDistance
@@ -1459,9 +1462,13 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 	float accelerateAcceleration = 2.5f;
 	float probableBallLostDistance = 0.75f;
 	float targetAngle = ai->getTargetAngle(goal->distanceX * (goal->behind ? -1.0f : 1.0f), goal->distanceY * (goal->behind ? -1.0f : 1.0f), ball->distanceX * (ball->behind ? -1.0f : 1.0f), ball->distanceY * (ball->behind ? -1.0f : 1.0f), offsetDistance, targetMode);
-	//float forwardSpeed = approachP * Math::map(stateDuration, 0.0f, startAccelerationDuration, 0.0f, 1.0f);
 	forwardSpeed = Math::getAcceleratedSpeed(forwardSpeed, targetApproachSpeed, dt, accelerateAcceleration);
 	float deacceleratedSpeed = Math::map(ballDistance, probableBallLostDistance, probableBallLostDistance * 2.0f, reverseBlindSpeed, forwardSpeed);
+
+	robot->setTargetDir(Math::Rad(targetAngle), deacceleratedSpeed);
+	robot->lookAt(goal);
+
+	lastTargetAngle = targetAngle;
 
 	ai->dbg("ballAngle", Math::radToDeg(ball->angle));
 	ai->dbg("ballDistanceX", ball->distanceX);
@@ -1469,11 +1476,6 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 	ai->dbg("forwardSpeed", forwardSpeed);
 	ai->dbg("deacceleratedSpeed", deacceleratedSpeed);
 	ai->dbg("targetAngle", Math::radToDeg(targetAngle));
-
-	robot->setTargetDir(Math::Rad(targetAngle), deacceleratedSpeed);
-	robot->lookAt(goal);
-
-	lastTargetAngle = targetAngle;
 }
 
 void TestController::FetchBallNearState::onEnter(Robot* robot, Parameters parameters) {
@@ -1487,8 +1489,6 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	robot->stop();
 	
 	if (robot->dribbler->gotBall()) {
-		ai->dbg("gotBall", true);
-
 		robot->dribbler->start();
 
 		ai->setState("aim");
