@@ -339,7 +339,7 @@ void TestController::updateVisionInfo(Vision::Results* visionResults) {
 		inCornerFrames = 0;
 	}
 
-	if (inCornerFrames >= 10) {
+	if (inCornerFrames >= 5) {
 		lastInCornerTime = Util::millitime();
 	}
 }
