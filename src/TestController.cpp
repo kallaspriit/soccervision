@@ -519,8 +519,6 @@ std::string TestController::getJSON() {
 		stream << "\"" << (it->first) << "\": \"" << (it->second) << "\",";
 	}
 
-	//messages.clear();
-
 	//send some debug information to the client
 	stream << "\"currentState\": \"" << currentStateName << "\",";
 	stream << "\"stateDuration\": \"" << currentStateDuration << "\",";
@@ -548,6 +546,7 @@ std::string TestController::getJSON() {
 	return stream.str();
 }
 
+// calculates the angle to approach the ball at to get behind it or to the side of it
 float TestController::getTargetAngle(float goalX, float goalY, float ballX, float ballY, float D, TestController::TargetMode targetMode) {
 	float targetX1;
 	float targetX2;
@@ -636,14 +635,13 @@ float TestController::getTargetAngle(float goalX, float goalY, float ballX, floa
 		targetY = targetY1;
 	}
 
-	float targetAngle = atan2(targetX, targetY);
-
-	return targetAngle;
+	return atan2(targetX, targetY);
 }
 
 void TestController::ManualControlState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration, float combinedDuration) {
 	double time = Util::millitime();
 
+	// failsafe stops movement if no new commands received for some time
 	if (ai->lastCommandTime == -1.0 || time - ai->lastCommandTime < 0.5) {
 		robot->setTargetDir(ai->manualSpeedX, ai->manualSpeedY, ai->manualOmega);
 		robot->dribbler->setTargetSpeed(-ai->manualDribblerSpeed);
@@ -655,7 +653,7 @@ void TestController::ManualControlState::step(float dt, Vision::Results* visionR
 		}
 	} else {
 		robot->stop();
-		robot->dribbler->setTargetSpeed(0);
+		robot->dribbler->stop();
 	}
 }
 
@@ -723,9 +721,11 @@ void TestController::TurnByState::step(float dt, Vision::Results* visionResults,
 }
 
 void TestController::FindBallState::onEnter(Robot* robot, Parameters parameters) {
+	// accepts parameter to set which direction to start searching at
 	if (parameters.find("search-dir") != parameters.end()) {
 		searchDir = Util::toFloat(parameters["search-dir"]);
 	} else {
+		// otherwise the search direction is based on last seen target goal angle to turn the shortest path
 		if (ai->lastTargetGoalAngle > 0.0f) {
 			searchDir = 1.0f;
 		} else {
@@ -733,33 +733,28 @@ void TestController::FindBallState::onEnter(Robot* robot, Parameters parameters)
 		}
 	}
 
+	// reset runtime parameters
 	nearBothFrames = 0;
 	wasSearchingRecently = false;
 	focusedOnGoal = false;
 	queuedApproachGoal = false;
+	timeSinceLastSearch = -1.0;
 
 	if (lastSearchTime != -1.0) {
 		timeSinceLastSearch = Util::duration(lastSearchTime);
 
 		if (timeSinceLastSearch < 0.2) {
-			std::cout << "! Time since last search: " << timeSinceLastSearch << std::endl;
-
 			wasSearchingRecently = true;
 		}
-
-		/*if (timeSinceLastSearch < 0.2 && Util::duration(lastTurnTime) >= 2.0) {
-			std::cout << "! Time since last search: " << timeSinceLastSearch << ", turning 90deg" << std::endl;
-
-			robot->turnBy(Math::degToRad(90.0f) * searchDir, Math::TWO_PI);
-
-			lastTurnTime = Util::millitime();
-		}*/
 	}
 }
 
 void TestController::FindBallState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration, float combinedDuration) {
+	robot->stop();
+	
 	lastSearchTime = Util::millitime();
 	
+	// switch to aim if got ball
 	if (robot->dribbler->gotBall()) {
 		robot->dribbler->start();
 
@@ -768,20 +763,16 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 		return;
 	}
 
-	/*if (robot->hasTasks()) {
-		return;
-	}*/
-
-	robot->stop();
-
 	Dir ballSearchDir = Dir::ANY;
 
 	if (ai->lastTurnAroundTime != -1.0 && Util::duration(ai->lastTurnAroundTime) < 2.0) {
+		// search from front if just performed turn around towards ball behind
 		ballSearchDir = Dir::FRONT;
 
 		ai->dbgs("search", "front due to recent turn around");
 	} else if (wasSearchingRecently) {
 		if (ai->lastStateName == "fetch-ball-behind") {
+			// search from front if recently fetching from behind failed
 			ballSearchDir = Dir::FRONT;
 
 			ai->dbgs("search", "front due recent search from rear");
@@ -801,29 +792,24 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 		ball = visionResults->getClosestBall(Dir::ANY);
 	}
 
+	// store last seen ball
 	if (ball != NULL) {
 		ai->setLastBall(ball);
 	}
 
 	ai->dbg("ballSearchDir", ballSearchDir);
 	ai->dbg("wasSearchingRecently", wasSearchingRecently);
-	//ai->dbg("lastTurnAroundTime", ai->lastTurnAroundTime);
 	ai->dbg("timeSinceLastTurnAround", ai->lastTurnAroundTime != -1.0 ? Util::duration(ai->lastTurnAroundTime) : -1.0);
 	ai->dbg("hasTasks", robot->hasTasks());
 	ai->dbg("timeSinceLastSearch", timeSinceLastSearch);
-
-	double minTurnBreak = 2.0;
-	float searchPeriod = 2.0f;
-	float searchOmega = Math::TWO_PI / searchPeriod;
-
-	/*if (stateDuration > Math::TWO_PI / searchOmega) {
-		searchOmega /= 2.0f;
-	}*/
-	
 	ai->dbg("ballVisible", ball != NULL);
 	ai->dbg("goalVisible", goal != NULL);
 	ai->dbg("searchDir", searchDir);
 	ai->dbg("focusedOnGoal", focusedOnGoal);
+
+	double minTurnBreak = 2.0;
+	float searchPeriod = 2.0f;
+	float searchOmega = Math::TWO_PI / searchPeriod;
 
 	if (ball != NULL) {
 		if (robot->hasTasks()) {
@@ -835,6 +821,7 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 		ai->dbg("ballAngle", Math::radToDeg(ball->angle));
 
 		if (!ball->behind) {
+			// switch to fetching ball is ball found in front
 			if (goal != NULL) {
 				ai->setState("fetch-ball-front");
 			} else {
@@ -842,12 +829,15 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 			}
 		} else if (ai->lastTurnAroundTime == -1.0 || Util::duration(ai->lastTurnAroundTime) > minTurnBreak) {
 			if (goal != NULL) {
+				// ball behind and target goal in front, fetch it from behind
 				ai->setState("fetch-ball-behind");
 			} else {
+				// ball found behind but no goal visible, turn around
 				float turnAngle = ball->angle;
 				float underturnAngle = Math::degToRad(15.0f);
 				float turnSpeed = Math::TWO_PI;
 
+				// turn slightly less than actual ball angle, inertia can take further
 				if (turnAngle < 0.0f) {
 					turnAngle += underturnAngle;
 					searchDir = -1.0f;
@@ -860,6 +850,7 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 				ai->dbg("turnSpeed", turnSpeed);
 				ai->dbg("searchDir", searchDir);
 
+				// start turn by angle task
 				robot->turnBy(turnAngle, turnSpeed);
 
 				ai->lastTurnAroundTime = Util::millitime();
@@ -867,83 +858,38 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 
 			return;
 		} else {
+			// ball is behind but turn around already executed lately, keep on turning
 			robot->setTargetOmega(searchOmega * searchDir);
 		}
 	} else {
-		// drives to the center of the field
-		/*if (!robot->hasTasks()) {
-			// drive to the center of the field after a round of searching
-			if (stateDuration > 2.0f) {
-				Math::Point robotPos(robot->getPosition().x, robot->getPosition().y);
-				Math::Point centerPos(Config::fieldWidth / 2.0f, Config::fieldHeight / 2.0f);
-
-				if (robotPos.getDistanceTo(centerPos) > 0.5f) {
-					std::cout << "! Driving to the center of the field" << std::endl;
-
-					robot->driveTo(Config::fieldWidth / 2.0f, Config::fieldHeight / 2.0f, robot->getPosition().orientation + Math::PI, 1.0f);
-
-					return;
-				}
-			}
-
-			robot->setTargetOmega(searchOmega * searchDir);
-		}*/
-
-		// drive until near a line, turn, repeat
-
+		// wait until tasks complete
 		if (robot->hasTasks()) {
-			// wait until tasks complete
+			
 			return;
 		}
 
+		// robot is out, return to the playing area
 		if (ai->isRobotOutFront || ai->isRobotOutRear) {
 			ai->setState("return-field");
 
 			return;
 		}
 
-		/*if (ai->isRobotOutRear) {
-			robot->turnBy(Math::degToRad(180.0f), Math::TWO_PI);
-
-			return;
-		}
-
-		if (ai->isRobotOutFront || queuedApproachGoal) {
-			queuedApproachGoal = true;
-
-			Object* goal = visionResults->getLargestGoal(Side::UNKNOWN, Dir::FRONT);
-
-			if (goal != NULL && goal->distance > Config::fieldWidth / 3.0f) {
-				robot->lookAt(goal);
-
-				if (Math::abs(goal->angle) < Math::degToRad(5.0f)) {
-					robot->setTargetDirFor(1.0f, 0.0f, 0.0f, 1.0f);
-
-					queuedApproachGoal = false;
-				}
-			} else {
-				robot->setTargetOmega(searchDir * Math::PI);
-			}
-
-			return;
-		}*/
-
+		// just spin for half a search period, two cameras should cover the whole field
 		if (stateDuration < searchPeriod / 2.0f) {
 			robot->setTargetOmega(searchOmega * searchDir);
 
 			return;
 		}
 
-		// first turn towards one of the goals
+		// first turn towards one of the goals to get started in the right direction
 		if (!focusedOnGoal) {
-			Object* goal = visionResults->getLargestGoal(Side::BLUE, Dir::FRONT);
-
-			if (goal == NULL) {
-				goal = visionResults->getLargestGoal(Side::YELLOW, Dir::FRONT);
-			}
-
+			// find the furhtest away goal
+			Object* goal = visionResults->getFurthestGoal(Dir::FRONT);
+			
+			// only consider goals far away not to drive into own goal if next to it
 			if (goal != NULL && goal->distance > Config::fieldWidth / 3.0f) {
-				ai->dbg("lookAtGoal", goal->type);
+				ai->dbg("focusGoalType", goal->type);
 
 				robot->lookAt(goal);
 
