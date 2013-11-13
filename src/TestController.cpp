@@ -85,7 +85,7 @@ void TestController::reset() {
 	std::cout << "! Reset test-controller" << std::endl;
 
 	com->send("reset");
-	targetSide = Side::YELLOW;
+	targetSide = Side::YELLOW; // will be switched to blue in handleToggleSideCommand()
 	totalDuration = 0.0f;
 	currentStateDuration = 0.0f;
 	currentState = NULL;
@@ -96,8 +96,6 @@ void TestController::reset() {
 }
 
 void TestController::onEnter() {
-	std::cout << "! Now using offensive AI algorithm" << std::endl;
-
 	reset();
 }
 
@@ -1485,6 +1483,8 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 	forwardSpeed = Math::getAcceleratedSpeed(forwardSpeed, targetApproachSpeed, dt, accelerateAcceleration);
 	float deacceleratedSpeed = Math::map(ballDistance, probableBallLostDistance, probableBallLostDistance * 2.0f, reverseBlindSpeed, forwardSpeed);
 
+	ai->dbg("ballAngle", Math::radToDeg(ball->angle));
+	ai->dbg("ballDistanceX", ball->distanceX);
 	ai->dbg("offsetDistance", offsetDistance);
 	ai->dbg("forwardSpeed", forwardSpeed);
 	ai->dbg("deacceleratedSpeed", deacceleratedSpeed);
@@ -1570,7 +1570,10 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 
 	if (enterBallDistance == -1.0f) {
 		enterBallDistance = ballDistance;
-	} else if (ballDistance > enterBallDistance + 0.1f || ballDistance > nearDistance) {
+	} else if (
+		(ballDistance > enterBallDistance + 0.1f || ballDistance > nearDistance)
+		&& stateDuration >= 0.5f
+	) {
 		// ball has gotten further than when started, probably messed it up, switch to faster fetch
 		ai->setState("fetch-ball-front");
 
