@@ -2052,8 +2052,10 @@ void TestController::ReturnFieldState::step(float dt, Vision::Results* visionRes
 		return;
 	}
 
+	FindBallState* findBallState = (FindBallState*)ai->states["find-ball"];
+
 	if (ai->isRobotOutRear) {
-		robot->turnBy(Math::degToRad(180.0f), Math::TWO_PI);
+		robot->turnBy(Math::degToRad(180.0f) * findBallState->searchDir, Math::TWO_PI);
 
 		return;
 	} else if (ai->isRobotOutFront || queuedApproachGoal) {
@@ -2070,8 +2072,6 @@ void TestController::ReturnFieldState::step(float dt, Vision::Results* visionRes
 				queuedApproachGoal = false;
 			}
 		} else {
-			FindBallState* findBallState = (FindBallState*)ai->states["find-ball"];
-
 			robot->setTargetOmega(findBallState->searchDir * Math::PI);
 		}
 
