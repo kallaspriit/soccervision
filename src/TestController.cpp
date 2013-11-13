@@ -345,7 +345,7 @@ void TestController::updateVisionInfo(Vision::Results* visionResults) {
 }
 
 bool TestController::isRobotNearLine(Vision::Results* visionResults, bool ignoreCenterSample) {
-	float nearLineDistance = 0.5f;
+	float nearLineDistance = 0.6f;
 	float whiteMin = visionResults->front->whiteDistance.min;
 	float blackMin = visionResults->front->blackDistance.min;
 
