@@ -385,7 +385,7 @@ bool TestController::isRobotInCorner(Vision::Results* visionResults) {
 	}
 
 	// probably a straight line if the difference is very small
-	if (visionResults->front->whiteDistance.max - visionResults->front->whiteDistance.min < 0.05f) {
+	if (visionResults->front->whiteDistance.max - visionResults->front->whiteDistance.min < 0.02f) {
 		return false;
 	}
 
