@@ -842,7 +842,7 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 		}
 
 		if (ai->isRobotOutRear) {
-			robot->turnBy(Math::degToRad(180.0f));
+			robot->turnBy(Math::degToRad(180.0f), Math::TWO_PI);
 
 			return;
 		}
