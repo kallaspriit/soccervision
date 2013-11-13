@@ -1806,7 +1806,7 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 		}
 
 		// start searching for own goal after almost full rotation
-		if (spinDuration > searchPeriod / 2.0f) {
+		if (spinDuration > searchPeriod / 1.25f) {
 			//float approachOwnGoalSideSpeed = 0.5f;
 			float reverseTime = 1.5f;
 			float approachOwnGoalMinDistance = 1.5f;
