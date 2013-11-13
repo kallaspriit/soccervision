@@ -438,7 +438,7 @@ bool TestController::isRobotNearGoal() {
 }
 
 bool TestController::isRobotNearTargetGoal() {
-	return lastTargetGoalDistance != -1.0f && lastTargetGoalDistance < Config::fieldWidth / 2.0f;
+	return lastTargetGoalDistance != -1.0f && lastTargetGoalDistance < 2.0f;
 }
 
 bool TestController::wasNearLineLately(double threshold) {
