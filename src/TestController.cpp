@@ -432,6 +432,10 @@ bool TestController::isRobotNearGoal() {
 	return lastClosestGoalDistance != -1.0f && lastClosestGoalDistance < 0.8f;
 }
 
+bool TestController::isRobotNearTargetGoal() {
+	return lastTargetGoalDistance != -1.0f && lastTargetGoalDistance < Config::fieldWidth / 2.0f;
+}
+
 bool TestController::wasNearLineLately(double threshold) {
 	return lastNearLineTime != -1.0 && Util::duration(lastNearLineTime) < threshold;
 }
@@ -1742,8 +1746,9 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 			//ai->isRobotInCorner(visionResults)
 			ai->wasInCornerLately()
 			&& (lastEscapeCornerTime == -1.0 || Util::duration(lastEscapeCornerTime) > 1.0)
-			&& !escapeCornerPerformed
+			//&& !escapeCornerPerformed
 			&& !ai->isRobotNearGoal()
+			&& ai->isRobotNearTargetGoal()
 		) {
 			ai->setState("escape-corner");
 

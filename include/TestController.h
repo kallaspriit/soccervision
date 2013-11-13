@@ -297,6 +297,7 @@ private:
 	bool isRobotNearLine(Vision::Results* visionResults, bool ignoreCenterSample = false);
 	bool isRobotInCorner(Vision::Results* visionResults);
 	bool isRobotNearGoal();
+	bool isRobotNearTargetGoal();
 	bool wasNearLineLately(double threshold = 1.0);
 	bool wasInCornerLately(double threshold = 1.0);
 	void resetLastBall();
