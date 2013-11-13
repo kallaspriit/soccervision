@@ -52,6 +52,7 @@
  * - rotate around its axis when was near any goals lately
  * - find ball drive between goals
  * - read and check all logic code
+ * - make returning to field seperate state, use in find ball, fetch ball direct
  *
  *
  * DEMO
