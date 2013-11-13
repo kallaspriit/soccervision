@@ -854,7 +854,7 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 		if (ai->isRobotOutFront) {
 			Object* goal = visionResults->getLargestGoal(Side::UNKNOWN, Dir::FRONT);
 
-			if (goal != NULL && goal->distance > Config::fieldWidth / 2.0f) {
+			if (goal != NULL && goal->distance > Config::fieldWidth / 3.0f) {
 				// drive towards any goal far away
 				//robot->setTargetDir(1.0f, 0.0f);
 				robot->lookAt(goal);
@@ -883,10 +883,16 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 				goal = visionResults->getLargestGoal(Side::YELLOW, Dir::FRONT);
 			}
 
-			if (goal != NULL && goal->distance > Config::fieldWidth / 2.0f) {
+			if (goal != NULL && goal->distance > Config::fieldWidth / 3.0f) {
 				ai->dbg("lookAtGoal", goal->type);
 
 				robot->lookAt(goal);
+
+				if (goal->angle > 0.0f) {
+					searchDir = 1.0f;
+				} else {
+					searchDir = -1.0f;
+				}
 
 				if (Math::abs(goal->angle) < Math::degToRad(5.0f)) {
 					focusedOnGoal = true;
