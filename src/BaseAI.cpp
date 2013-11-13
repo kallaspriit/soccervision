@@ -29,7 +29,7 @@ void BaseAI::setState(std::string state, Parameters parameters) {
 	State* newState = states[state];
 
 	if (currentState != NULL) {
-		std::cout << "! Switched state from " << currentStateName << " to " << state << std::endl;
+		std::cout << "! Switched state from " << currentStateName << " to " << state << ", lasted: " << currentStateDuration << std::endl;
 
 		currentState->onExit(robot);
 	} else {
