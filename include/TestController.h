@@ -108,6 +108,7 @@ public:
 		int nearBothFrames;
 		Dir lastBallSearchDir;
 		bool wasSearchingRecently;
+		bool focusedOnGoal;
 
 	};
 

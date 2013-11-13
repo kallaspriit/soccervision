@@ -694,6 +694,7 @@ void TestController::FindBallState::onEnter(Robot* robot, Parameters parameters)
 	lastBallSearchDir = Dir::ANY;
 	nearBothFrames = 0;
 	wasSearchingRecently = false;
+	focusedOnGoal = false;
 
 	if (lastSearchTime != -1.0) {
 		timeSinceLastSearch = Util::duration(lastSearchTime);
@@ -871,11 +872,24 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 			robot->setTargetOmega(searchOmega * searchDir);
 
 			return;
-		}/* else if (stateDuration > 10.0f) {
-			ai->setState("find-ball");
+		}
 
-			return;
-		}*/
+		// first turn towards one of the goals
+		if (!focusedOnGoal) {
+			Object* goal = visionResults->getLargestGoal(Side::UNKNOWN, Dir::FRONT);
+
+			if (goal != NULL && goal->distance > Config::fieldWidth / 2.0f) {
+				robot->lookAt(goal);
+
+				if (Math::abs(goal->angle) < Math::degToRad(5.0f)) {
+					focusedOnGoal = true;
+				}
+			} else {
+				robot->setTargetOmega(Math::PI);
+
+				return;
+			}
+		}
 
 		float nearLineDistance = 0.5f;
 		float omegaP = Math::PI;
