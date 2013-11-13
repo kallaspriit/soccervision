@@ -1293,7 +1293,8 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 		if (ownGoal != NULL && ownGoal->distance < 0.3f) {
 			robot->clearTasks();
 
-			ai->setState("find-ball");
+			// own goal was close, start searching for new ball, front first
+			ai->setState("fetch-ball-front");
 		}
 
 		ai->dbg("ownGoalDistance", ownGoal != NULL ? ownGoal->distance : -1.0f);
@@ -1303,8 +1304,8 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 
 	// switch to searching for ball after reverse maneuver has been performed
 	if (reversePerformed) {
-		// TODO Should it consider balls in fron in first order after this?
-		ai->setState("find-ball");
+		// start searching for ball, front first
+		ai->setState("fetch-ball-front");
 
 		return;
 	}
@@ -1353,7 +1354,14 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 	) {
 		// don't perform the blind reverse if the ball was lost at too great of a distance
 		if (!hadBall || lastBallDistance > 0.8f) {
-			ai->setState("find-ball");
+			// switch to searching for balls, search in the same direction as approached ball behind
+			Parameters parameters;
+
+			if (searchDir != 0.0f) {
+				parameters["search-dir"] = Util::toString(searchDir);
+			}
+
+			ai->setState("find-ball", parameters);
 		} else {
 			// perform the blind reverse maneuver
 			reversePerformed = true;
@@ -1588,12 +1596,14 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 	ai->dbg("gotBall", robot->dribbler->gotBall());
 	ai->dbg("escapeCornerPerformed", escapeCornerPerformed);
 	
+	// switch to searchinf for ball if lost it
 	if (!robot->dribbler->gotBall()) {
 		ai->setState("find-ball");
 
 		return;
 	}
 
+	// attempt to get back on the field if out
 	if (ai->isRobotOutFront || ai->isRobotOutRear) {
 		// no point to aim if robot is out
 		std::cout << "! Robot is out, kicking" << std::endl;
@@ -1614,10 +1624,11 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 
 	ai->dbg("goalVisible", goal != NULL);
 	ai->dbg("nearLine", nearLine);
-	ai->dbg("ai->wasInCornerLately()", ai->wasInCornerLately());
-	ai->dbg("ai->lastTargetGoalAngle", ai->lastTargetGoalAngle);
+	ai->dbg("wasInCornerLately", ai->wasInCornerLately());
+	ai->dbg("lastTargetGoalAngle", ai->lastTargetGoalAngle);
 	ai->dbg("timeSinceEscapeCorner", lastEscapeCornerTime == -1.0 ? -1.0 : Util::duration(lastEscapeCornerTime));
 
+	// configuration parameters
 	float searchPeriod = Config::robotSpinAroundDribblerPeriod;
 	float reversePeriod = 1.0f;
 	float reverseSpeed = 1.5f;
@@ -1625,6 +1636,7 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 	int weakKickStrength = 2250; // kicks it a bit, but might stay on the field in new place
 
 	if (goal == NULL) {
+		// no goal visible, start searching for it
 		if (searchGoalDir == 0.0f) {
 			if (ai->lastTargetGoalAngle > 0.0f) {
 				searchGoalDir = 1.0f;
@@ -1633,9 +1645,9 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 			}
 		}
 
+		// if aiming has taken too long, perform a weak kick and give up
 		if (combinedDuration > maxAimDuration) {
 			Side ownSide = ai->targetSide == Side::YELLOW ? Side::BLUE : Side::YELLOW;
-
 			Object* ownGoalFront = visionResults->getLargestGoal(ownSide, Dir::FRONT);
 
 			// only perform the give-up weak kick if not looking towards own goal
@@ -1648,11 +1660,10 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 			}
 		}
 
+		// escape from corner if near one lately, only do it near own goal and also when near line and target goal, only do it once and when there is no goal neaby at the rear
 		if (
 			(ai->wasInCornerLately() || (ai->wasNearLineLately() && ai->isRobotNearTargetGoal(1.2f)))
-			&& (lastEscapeCornerTime == -1.0 || Util::duration(lastEscapeCornerTime) > 1.0)
 			&& !escapeCornerPerformed
-			//&& !ai->isRobotNearGoal()
 			&& ai->isRobotNearTargetGoal()
 			&& (rearGoal == NULL || ai->getObjectClosestDistance(visionResults, rearGoal) > 1.5f)
 		) {
@@ -1666,7 +1677,7 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 		spinDuration += dt;
 
 		if (ai->isRobotNearGoal()) {
-			// spin around robot axis near goal
+			// spin around robot axis near goal to avoid moving goal spinning off-axis
 			robot->setTargetOmega(searchGoalDir * Math::PI);
 		} else {
 			/*if (nearLine) {
@@ -1701,7 +1712,6 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 
 		// start searching for own goal after almost full rotation
 		if (spinDuration > searchPeriod / 1.25f) {
-			//float approachOwnGoalSideSpeed = 0.5f;
 			float reverseTime = 1.5f;
 			float approachOwnGoalMinDistance = 1.5f;
 			float accelerationPeriod = 1.5f;
