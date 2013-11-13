@@ -53,6 +53,7 @@
  * - find ball drive between goals
  * - read and check all logic code
  * - make returning to field seperate state, use in find ball, fetch ball direct
+ * - fix find goal, drive towards own when aiming
  *
  *
  * DEMO
