@@ -128,10 +128,6 @@ void TestController::setupStates() {
 void TestController::step(float dt, Vision::Results* visionResults) {
 	updateVisionInfo(visionResults);
 
-	/*if (visionResults->isRobotOut()) {
-		setState("return-field");
-	}*/
-	
 	currentStateDuration += dt;
 	combinedStateDuration += dt;
 	totalDuration += dt;
@@ -870,7 +866,13 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 			return;
 		}
 
-		if (ai->isRobotOutRear) {
+		if (ai->isRobotOutFront || ai->isRobotOutRear) {
+			ai->setState("return-field");
+
+			return;
+		}
+
+		/*if (ai->isRobotOutRear) {
 			robot->turnBy(Math::degToRad(180.0f), Math::TWO_PI);
 
 			return;
@@ -882,8 +884,6 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 			Object* goal = visionResults->getLargestGoal(Side::UNKNOWN, Dir::FRONT);
 
 			if (goal != NULL && goal->distance > Config::fieldWidth / 3.0f) {
-				// drive towards any goal far away
-				//robot->setTargetDir(1.0f, 0.0f);
 				robot->lookAt(goal);
 
 				if (Math::abs(goal->angle) < Math::degToRad(5.0f)) {
@@ -896,7 +896,7 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 			}
 
 			return;
-		}
+		}*/
 
 		if (stateDuration < searchPeriod / 2.0f) {
 			robot->setTargetOmega(searchOmega * searchDir);
@@ -1196,6 +1196,12 @@ void TestController::FetchBallDirectState::step(float dt, Vision::Results* visio
 		}
 
 		ai->setState("aim", parameters);
+
+		return;
+	}
+
+	if (ai->isRobotOutFront || ai->isRobotOutRear) {
+		ai->setState("return-field");
 
 		return;
 	}
@@ -2009,23 +2015,45 @@ void TestController::AccelerateState::step(float dt, Vision::Results* visionResu
 	ai->dbg("dt", dt);
 }
 
+void TestController::ReturnFieldState::onEnter(Robot* robot, Parameters parameters) {
+	queuedApproachGoal = false;
+}
+
 void TestController::ReturnFieldState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration, float combinedDuration) {
 	robot->stop();
 
-	Object* blueGoal = visionResults->getLargestGoal(Side::BLUE);
-	Object* yellowGoal = visionResults->getLargestGoal(Side::YELLOW);
-	Object* goal = blueGoal != NULL ? blueGoal : yellowGoal != NULL ? yellowGoal : NULL;
-
-	if (goal != NULL) {
-		robot->setTargetDir(1.5f, 0.0f);
-		robot->lookAt(goal);
-	} else {
-		robot->setTargetOmega(Math::PI);
+	if (robot->hasTasks()) {
+		return;
 	}
 
-	if (stateDuration > 3.0f) {
+	if (ai->isRobotOutRear) {
+		robot->turnBy(Math::degToRad(180.0f), Math::TWO_PI);
+
+		return;
+	} else if (ai->isRobotOutFront || queuedApproachGoal) {
+		queuedApproachGoal = true;
+
+		Object* goal = visionResults->getLargestGoal(Side::UNKNOWN, Dir::FRONT);
+
+		if (goal != NULL && goal->distance > Config::fieldWidth / 3.0f) {
+			robot->lookAt(goal);
+
+			if (Math::abs(goal->angle) < Math::degToRad(5.0f)) {
+				robot->setTargetDirFor(1.0f, 0.0f, 0.0f, 1.0f);
+
+				queuedApproachGoal = false;
+			}
+		} else {
+			FindBallState* findBallState = (FindBallState*)ai->states["find-ball"];
+
+			robot->setTargetOmega(findBallState->searchDir * Math::PI);
+		}
+
+		return;
+	} else {
 		ai->setState("find-ball");
 	}
+
 }
 
 void TestController::EscapeCornerState::onEnter(Robot* robot, Parameters parameters) {

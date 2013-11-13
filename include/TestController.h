@@ -100,8 +100,9 @@ public:
 		void onEnter(Robot* robot, Parameters parameters);
 		void step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration, float combinedDuration);
 
-	private:
 		float searchDir;
+
+	private:
 		double lastSearchTime;
 		double lastTurnTime;
 		double timeSinceLastSearch;
@@ -228,11 +229,12 @@ public:
 	class ReturnFieldState : public State {
 
 	public:
-		ReturnFieldState(TestController* ai) : State(ai) {}
+		ReturnFieldState(TestController* ai) : State(ai), queuedApproachGoal(false) {}
+		void onEnter(Robot* robot, Parameters parameters);
 		void step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration, float combinedDuration);
 
 	private:
-		float driveTowardsGoalTime;
+		bool queuedApproachGoal;
 
 	};
 
