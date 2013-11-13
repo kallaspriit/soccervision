@@ -271,11 +271,11 @@ void TestController::updateVisionInfo(Vision::Results* visionResults) {
 	if (blueGoal != NULL || yellowGoal != NULL) {
 		float currentClosestGoalDistance = -1.0f;
 
-		if (blueGoal != NULL && blueGoal->distance < Config::fieldWidth / 2.0f && (lastClosestGoalDistance == -1.0f || blueGoal->distance < lastClosestGoalDistance)) {
+		if (blueGoal != NULL && blueGoal->distance < Config::fieldWidth / 2.0f && (currentClosestGoalDistance == -1.0f || blueGoal->distance < currentClosestGoalDistance)) {
 			currentClosestGoalDistance = blueGoal->distance;
 		}
 
-		if (yellowGoal != NULL && yellowGoal->distance < Config::fieldWidth / 2.0f && (lastClosestGoalDistance == -1.0f || yellowGoal->distance < lastClosestGoalDistance)) {
+		if (yellowGoal != NULL && yellowGoal->distance < Config::fieldWidth / 2.0f && (currentClosestGoalDistance == -1.0f || yellowGoal->distance < currentClosestGoalDistance)) {
 			currentClosestGoalDistance = yellowGoal->distance;
 		}
 
