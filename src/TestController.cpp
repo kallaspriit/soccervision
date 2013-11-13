@@ -884,8 +884,7 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 
 		// first turn towards one of the goals to get started in the right direction
 		if (!focusedOnGoal) {
-			// find the furhtest away goal
-			Object* goal = visionResults->getFurthestGoal(Dir::FRONT);
+			Object* goal = visionResults->getLargestGoal(Side::UNKNOWN, Dir::FRONT);
 			
 			// only consider goals far away not to drive into own goal if next to it
 			if (goal != NULL && goal->distance > Config::fieldWidth / 3.0f) {
@@ -1293,8 +1292,8 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 		if (ownGoal != NULL && ownGoal->distance < 0.3f) {
 			robot->clearTasks();
 
-			// own goal was close, start searching for new ball, front first
-			ai->setState("fetch-ball-front");
+			// own goal was close, start searching for new ball
+			ai->setState("find-ball");
 		}
 
 		ai->dbg("ownGoalDistance", ownGoal != NULL ? ownGoal->distance : -1.0f);
@@ -1304,8 +1303,8 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 
 	// switch to searching for ball after reverse maneuver has been performed
 	if (reversePerformed) {
-		// start searching for ball, front first
-		ai->setState("fetch-ball-front");
+		// start searching for ball
+		ai->setState("find-ball");
 
 		return;
 	}
@@ -1897,7 +1896,7 @@ void TestController::ReturnFieldState::step(float dt, Vision::Results* visionRes
 		queuedApproachGoal = true;
 
 		// search for any furthest goal
-		Object* goal = visionResults->getFurthestGoal(Dir::FRONT);
+		Object* goal = visionResults->getLargestGoal(Side::UNKNOWN, Dir::FRONT);
 
 		if (goal != NULL && goal->distance > Config::fieldWidth / 3.0f) {
 			robot->lookAt(goal);
