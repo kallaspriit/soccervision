@@ -1717,6 +1717,7 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 			float accelerationPeriod = 1.5f;
 			float reverseSpeed = 1.0f;
 
+			// jump back to the beginning of aim state after reversing for some time, performing the sping again
 			if (reverseDuration > reverseTime) {
 				ai->setState("aim");
 
@@ -1725,16 +1726,16 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 
 			// didn't find our goal in time, search for opponent goal and drive towards it instead
 			Side ownSide = ai->targetSide == Side::YELLOW ? Side::BLUE : Side::YELLOW;
-
 			Object* ownGoal = visionResults->getLargestGoal(ownSide, Dir::REAR);
 
+			// make sure we don't get too close to our own goal
 			if (ownGoal != NULL && ownGoal->distance > approachOwnGoalMinDistance) {
 				float accelerationMultiplier = Math::map(reverseDuration, 0, accelerationPeriod, 0.0f, 1.0f);
 				float acceleratedReverseSpeed = -reverseSpeed * accelerationMultiplier;
 
+				// reverse towards own goal, looking at it
 				robot->setTargetDir(
 					acceleratedReverseSpeed,
-					//approachOwnGoalSideSpeed * (ownGoal->angle > 0.0f ? 1.0f : -1.0f) * accelerationMultiplier,
 					0.0f,
 					0.0f
 				);
@@ -1748,24 +1749,20 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 			}
 		}
 
-		//ai->dbg("spinPeriod", spinPeriod);
-
-		// TODO Replace this with travelledOmega
-		//float waitUntilSearchOwnGoalTime = 3.0f;
-
 		return;
 	}
 
 	ai->dbg("goalVisible", true);
 
-	robot->setTargetDir(0.0f, 0.0f, 0.0f);
-
+	// configuration
 	float avoidBallSpeed = 0.75f;
 	float minForwardSpeed = 0.2f;
 	float minBallAvoidSideSpeed = 0.25f;
 	float maxRobotKickOmega = Math::PI / 4.0f;
 	float maxBallAvoidTime = 1.5f;
 	double minKickInterval = 1.0;
+
+	// need to decide whether kicking is a good idea
 	int halfWidth = Config::cameraWidth / 2;
 	int leftEdge = goal->x - goal->width / 2;
 	int rightEdge = goal->x + goal->width / 2;
@@ -1782,11 +1779,14 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 		isBallInWay = false;
 	}
 
+	// drive sideways if there's a ball in the way
 	if (isBallInWay) {
+		// check whether there's another ball close by
 		float anotherBallCloseDistance = 0.3f;
 		Object* nextClosestBall = visionResults->getNextClosestBall(Dir::FRONT);
 		bool nearbyAnotherBall = nextClosestBall != NULL && nextClosestBall->getDribblerDistance() < anotherBallCloseDistance;
 
+		// decide which way to avoid the balls once
 		if (avoidBallSide == TargetMode::UNDECIDED) {
 			// make sure to drive near the centerline of the field not out further
 			if (robot->getPosition().y < Config::fieldHeight / 2.0f) {
@@ -1796,6 +1796,7 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 			}
 		}
 
+		// don't move forwards near another ball not to drive into it
 		if (nearbyAnotherBall) {
 			forwardSpeed = 0.0f;
 		}
@@ -1810,6 +1811,7 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 		ai->dbg("nearbyAnotherBall", nearbyAnotherBall);
 	}
 
+	// check whether the aiming is precise enough
 	if (!goal->behind) {
 		if (
 			leftEdge + goalKickThresholdPixels < halfWidth
@@ -1833,6 +1835,7 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 
 	bool performKick = validKickFrames >= 2;
 
+	// only perform the kick if valid view has been observed for a couple of frames
 	if (performKick) {
 		robot->kick();
 
@@ -1863,6 +1866,142 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 	ai->dbg("sideSpeed", sideSpeed);
 	ai->dbg("whiteDistance", visionResults->front->whiteDistance.min);
 	ai->dbg("robotOmega", robot->getOmega());
+}
+
+void TestController::ReturnFieldState::onEnter(Robot* robot, Parameters parameters) {
+	queuedApproachGoal = false;
+}
+
+void TestController::ReturnFieldState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration, float combinedDuration) {
+	robot->stop();
+
+	if (robot->hasTasks()) {
+		return;
+	}
+
+	FindBallState* findBallState = (FindBallState*)ai->states["find-ball"];
+
+	if (ai->isRobotOutRear) {
+		// turn half a turn in the same dir as normal find ball would
+		robot->turnBy(Math::degToRad(180.0f) * findBallState->searchDir, Math::TWO_PI);
+
+		return;
+	} else if (ai->isRobotOutFront || queuedApproachGoal) {
+		// robot is out from front camera, search for a goal and focus on it before starting moving
+		float searchSpeed = Math::PI;
+
+		if (stateDuration > Math::TWO_PI / searchSpeed) {
+			searchSpeed /= 2.0f;
+		}
+
+		queuedApproachGoal = true;
+
+		// search for any furthest goal
+		Object* goal = visionResults->getFurthestGoal(Dir::FRONT);
+
+		if (goal != NULL && goal->distance > Config::fieldWidth / 3.0f) {
+			robot->lookAt(goal);
+
+			if (Math::abs(goal->angle) < Math::degToRad(5.0f)) {
+				// make a blind dash towards the goal
+				robot->setTargetDirFor(1.0f, 0.0f, 0.0f, 1.0f);
+
+				queuedApproachGoal = false;
+			}
+		} else {
+			// no such goal is visible, spin and search for it
+			robot->setTargetOmega(findBallState->searchDir * searchSpeed);
+
+			// hasn't found goal, drive towards line instead
+			if (stateDuration > 5.0f) {
+				// keep turning until line is horizontal enough
+				if (
+					visionResults->front->whiteDistance.left != -1.0f
+					&& visionResults->front->whiteDistance.right != -1.0f
+					&& visionResults->front->blackDistance.left != -1.0f
+					&& visionResults->front->blackDistance.right != -1.0f
+					&& Math::abs(visionResults->front->whiteDistance.left - visionResults->front->whiteDistance.right) < 0.05f
+				) {
+					robot->setTargetDirFor(1.0f, 0.0f, 0.0f, 1.0f);
+
+					queuedApproachGoal = false;
+				}
+			}
+		}
+
+		return;
+	} else {
+		ai->setState("find-ball");
+	}
+
+}
+
+void TestController::EscapeCornerState::onEnter(Robot* robot, Parameters parameters) {
+	startTravelledDistance = robot->getTravelledDistance();
+}
+
+void TestController::EscapeCornerState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration, float combinedDuration) {
+	robot->stop();
+	robot->dribbler->start();
+
+	if (!robot->dribbler->gotBall()) {
+		ai->setState("find-ball");
+
+		return;
+	}
+
+	if (ai->isRobotOutFront || ai->isRobotOutRear) {
+		// no point to mess with a ball that's already out
+		robot->kick();
+
+		ai->setState("find-ball");
+
+		return;
+	}
+
+	// configuration
+	float reverseP = 1.0f;
+	float sideP = 0.5f;
+	float accelerationDuration = 1.5f;
+	float outOfCornerLineDistance = 0.5f;
+	float maxSideSpeedDiff = 0.2f;
+	float reverseDistance = 0.5f;
+
+	float stateTravelledDistance = robot->getTravelledDistance() - startTravelledDistance;
+
+	ai->dbg("stateTravelledDistance", stateTravelledDistance);
+
+	// check if enough distance has been travelled
+	if (stateTravelledDistance > reverseDistance) {
+		Parameters parameters;
+
+		parameters["escape-corner-performed"] = "1";
+
+		// notify aim state that escaping from corner has already been performed
+		ai->setState("aim", parameters);
+
+		return;
+	}
+
+	float sideSpeed = 0.0f;
+	float reverseSpeed = reverseP * Math::map(stateDuration, 0.0f, accelerationDuration, 0.0f, 1.0f);
+
+	// apply some side speed to steer towards the center of the corner
+	if (ai->whiteDistance.left != -1.0f && ai->whiteDistance.right != -1.0f) {
+		float diff = Math::abs(ai->whiteDistance.left - ai->whiteDistance.right);
+		float side = ai->whiteDistance.left < ai->whiteDistance.right ? 1.0f : -1.0f;
+
+		ai->dbg("diff", diff);
+		ai->dbg("side", side);
+		ai->dbg("whiteDistance.min", ai->whiteDistance.min);
+
+		sideSpeed = sideP * side * Math::map(diff, 0.0f, maxSideSpeedDiff, 0.0, 1.0f);
+	}
+
+	robot->setTargetDir(-reverseSpeed, sideSpeed);
+
+	ai->dbg("reverseSpeed", reverseSpeed);
+	ai->dbg("sideSpeed", sideSpeed);
 }
 
 void TestController::DriveCircleState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration, float combinedDuration) {
@@ -1953,141 +2092,6 @@ void TestController::AccelerateState::step(float dt, Vision::Results* visionResu
 	ai->dbg("targetApproachSpeed", targetApproachSpeed);
 	ai->dbg("forwardSpeed", forwardSpeed);
 	ai->dbg("dt", dt);
-}
-
-void TestController::ReturnFieldState::onEnter(Robot* robot, Parameters parameters) {
-	queuedApproachGoal = false;
-}
-
-void TestController::ReturnFieldState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration, float combinedDuration) {
-	robot->stop();
-
-	if (robot->hasTasks()) {
-		return;
-	}
-
-	FindBallState* findBallState = (FindBallState*)ai->states["find-ball"];
-
-	if (ai->isRobotOutRear) {
-		robot->turnBy(Math::degToRad(180.0f) * findBallState->searchDir, Math::TWO_PI);
-
-		return;
-	} else if (ai->isRobotOutFront || queuedApproachGoal) {
-		float searchSpeed = Math::PI;
-
-		if (stateDuration > Math::TWO_PI / searchSpeed) {
-			searchSpeed /= 2.0f;
-		}
-
-		queuedApproachGoal = true;
-
-		Object* goal = visionResults->getLargestGoal(Side::UNKNOWN, Dir::FRONT);
-
-		if (goal != NULL && goal->distance > Config::fieldWidth / 3.0f) {
-			robot->lookAt(goal);
-
-			if (Math::abs(goal->angle) < Math::degToRad(5.0f)) {
-				robot->setTargetDirFor(1.0f, 0.0f, 0.0f, 1.0f);
-
-				queuedApproachGoal = false;
-			}
-		} else {
-			robot->setTargetOmega(findBallState->searchDir * searchSpeed);
-
-			// hasn't found goal, drive towards line instead
-			if (stateDuration > 5.0f) {
-				// keep turning until line is horizontal enough
-				if (
-					visionResults->front->whiteDistance.left != -1.0f
-					&& visionResults->front->whiteDistance.right != -1.0f
-					&& visionResults->front->blackDistance.left != -1.0f
-					&& visionResults->front->blackDistance.right != -1.0f
-					&& Math::abs(visionResults->front->whiteDistance.left - visionResults->front->whiteDistance.right) < 0.05f
-				) {
-					robot->setTargetDirFor(1.0f, 0.0f, 0.0f, 1.0f);
-
-					queuedApproachGoal = false;
-				}
-			}
-		}
-
-		return;
-	} else {
-		ai->setState("find-ball");
-	}
-
-}
-
-void TestController::EscapeCornerState::onEnter(Robot* robot, Parameters parameters) {
-	startTravelledDistance = robot->getTravelledDistance();
-}
-
-void TestController::EscapeCornerState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration, float combinedDuration) {
-	robot->stop();
-	robot->dribbler->start();
-
-	if (!robot->dribbler->gotBall()) {
-		ai->setState("find-ball");
-
-		return;
-	}
-
-	if (ai->isRobotOutFront || ai->isRobotOutRear) {
-		// no point to aim if robot is out
-		std::cout << "! Robot is out, kicking" << std::endl;
-
-		robot->kick();
-
-		ai->setState("find-ball");
-
-		return;
-	}
-
-	float reverseP = 1.0f;
-	float sideP = 0.5f;
-	float accelerationDuration = 1.5f;
-	float outOfCornerLineDistance = 0.5f;
-	float maxSideSpeedDiff = 0.2f;
-	float reverseDistance = 0.5f;
-
-	float stateTravelledDistance = robot->getTravelledDistance() - startTravelledDistance;
-
-	ai->dbg("stateTravelledDistance", stateTravelledDistance);
-
-	if (stateTravelledDistance > reverseDistance) {
-		Parameters parameters;
-
-		parameters["escape-corner-performed"] = "1";
-
-		ai->setState("aim", parameters);
-
-		return;
-	}
-
-	float sideSpeed = 0.0f;
-	float reverseSpeed = reverseP * Math::map(stateDuration, 0.0f, accelerationDuration, 0.0f, 1.0f);
-
-	if (ai->whiteDistance.left != -1.0f && ai->whiteDistance.right != -1.0f) {
-		/*if (ai->whiteDistance.min > outOfCornerLineDistance) {
-			ai->setState("aim");
-
-			return;
-		}*/
-
-		float diff = Math::abs(ai->whiteDistance.left - ai->whiteDistance.right);
-		float side = ai->whiteDistance.left < ai->whiteDistance.right ? 1.0f : -1.0f;
-
-		ai->dbg("diff", diff);
-		ai->dbg("side", side);
-		ai->dbg("whiteDistance.min", ai->whiteDistance.min);
-
-		sideSpeed = sideP * side * Math::map(diff, 0.0f, maxSideSpeedDiff, 0.0, 1.0f);
-	}
-
-	robot->setTargetDir(-reverseSpeed, sideSpeed);
-
-	ai->dbg("reverseSpeed", reverseSpeed);
-	ai->dbg("sideSpeed", sideSpeed);
 }
 
 void TestController::DriveHomeState::onEnter(Robot* robot, Parameters parameters) {
