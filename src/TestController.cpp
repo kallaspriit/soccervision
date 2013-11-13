@@ -737,12 +737,20 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 
 	if (ai->lastTurnAroundTime != -1.0 && Util::duration(ai->lastTurnAroundTime) < 2.0) {
 		ballSearchDir = Dir::FRONT;
+
+		ai->dbgs("search", "front due to recent turn around");
 	} else if (wasSearchingRecently) {
 		if (lastBallSearchDir == Dir::REAR) {
 			ballSearchDir = Dir::FRONT;
+
+			ai->dbgs("search", "front due recent search from rear");
 		} else {
 			ballSearchDir = Dir::REAR;
+
+			ai->dbgs("search", "rear due recent search from front");
 		}
+	} else {
+		ai->dbgs("search", "any closest");
 	}
 
 	Object* ball = visionResults->getClosestBall(ballSearchDir);
@@ -757,6 +765,8 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 	}
 
 	ai->dbg("ballSearchDir", ballSearchDir);
+	ai->dbg("lastBallSearchDir", lastBallSearchDir);
+	ai->dbg("wasSearchingRecently", wasSearchingRecently);
 	//ai->dbg("lastTurnAroundTime", ai->lastTurnAroundTime);
 	ai->dbg("timeSinceLastTurnAround", ai->lastTurnAroundTime != -1.0 ? Util::duration(ai->lastTurnAroundTime) : -1.0);
 	ai->dbg("hasTasks", robot->hasTasks());
