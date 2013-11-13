@@ -1708,7 +1708,7 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 
 		robot->kick();
 
-		ai->setState("find-ball");
+		ai->setState("return-field");
 
 		return;
 	}
@@ -1771,54 +1771,15 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 
 		spinDuration += dt;
 
-		if (ai->isRobotNearGoal()) {
-			// spin around robot axis near goal
-			robot->setTargetOmega(searchGoalDir * Math::PI);
-		} else {
-			/*if (nearLine) {
-				// spin around dribbler with acceleration and initial reverse
-				float spinAccelerationTime = 1.5f;
-				float spinReverseDuration = 0.75f;
-				float spinSlowdownMultiplier = 4.0f;
-				float spinReverseSpeed = 0.4f;
-				float spinRadius = Config::robotSpinAroundDribblerRadius;
-				float spinPeriod = Math::map(spinDuration, 0.0f, spinAccelerationTime, Config::robotSpinAroundDribblerPeriod * spinSlowdownMultiplier, Config::robotSpinAroundDribblerPeriod);
-		
-				float spinSpeed = (2.0f * Math::PI * spinRadius) / spinPeriod;
-				float spinOmega = (2.0f * Math::PI) / spinPeriod;
-				float spinForwardSpeed = 0.0f;
-
-				if (spinDuration < spinReverseDuration) {
-					spinForwardSpeed = Math::map(spinDuration, 0.0f, spinReverseDuration, 0.0f, -spinReverseSpeed);
-				} else {
-					spinForwardSpeed = Math::map(spinDuration, 0.0f, spinAccelerationTime, 0.0f, Config::robotSpinAroundDribblerForwardSpeed);
-				}
-
-				if (searchGoalDir == -1.0f) {
-					spinSpeed *= -1.0f;
-					spinOmega *= -1.0f;
-				}
-
-				robot->setTargetDir(spinForwardSpeed, -spinSpeed, spinOmega);
-			} else {*/
-				robot->spinAroundDribbler(searchGoalDir == -1.0f, searchPeriod);
-			//}
-		}
-
-		//ai->dbg("spinPeriod", spinPeriod);
-
-		// TODO Replace this with travelledOmega
-		float waitUntilSearchOwnGoalTime = 3.0f;
-
 		// start searching for own goal after almost full rotation
-		if (stateDuration > waitUntilSearchOwnGoalTime) {
+		if (spinDuration > searchPeriod) {
 			//float approachOwnGoalSideSpeed = 0.5f;
 			float reverseDuration = 1.5f;
 			float approachOwnGoalMinDistance = 1.5f;
 			float accelerationPeriod = 1.5f;
 			float reverseSpeed = 1.0f;
 
-			if (stateDuration > waitUntilSearchOwnGoalTime + reverseDuration) {
+			if (spinDuration > searchPeriod + reverseDuration) {
 				ai->setState("aim");
 
 				return;
@@ -1850,7 +1811,46 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 				ai->dbg("accelerationMultiplier", accelerationMultiplier);
 				ai->dbg("acceleratedReverseSpeed", acceleratedReverseSpeed);
 			}
+		} else {
+			if (ai->isRobotNearGoal()) {
+				// spin around robot axis near goal
+				robot->setTargetOmega(searchGoalDir * Math::PI);
+			} else {
+				/*if (nearLine) {
+					// spin around dribbler with acceleration and initial reverse
+					float spinAccelerationTime = 1.5f;
+					float spinReverseDuration = 0.75f;
+					float spinSlowdownMultiplier = 4.0f;
+					float spinReverseSpeed = 0.4f;
+					float spinRadius = Config::robotSpinAroundDribblerRadius;
+					float spinPeriod = Math::map(spinDuration, 0.0f, spinAccelerationTime, Config::robotSpinAroundDribblerPeriod * spinSlowdownMultiplier, Config::robotSpinAroundDribblerPeriod);
+		
+					float spinSpeed = (2.0f * Math::PI * spinRadius) / spinPeriod;
+					float spinOmega = (2.0f * Math::PI) / spinPeriod;
+					float spinForwardSpeed = 0.0f;
+
+					if (spinDuration < spinReverseDuration) {
+						spinForwardSpeed = Math::map(spinDuration, 0.0f, spinReverseDuration, 0.0f, -spinReverseSpeed);
+					} else {
+						spinForwardSpeed = Math::map(spinDuration, 0.0f, spinAccelerationTime, 0.0f, Config::robotSpinAroundDribblerForwardSpeed);
+					}
+
+					if (searchGoalDir == -1.0f) {
+						spinSpeed *= -1.0f;
+						spinOmega *= -1.0f;
+					}
+
+					robot->setTargetDir(spinForwardSpeed, -spinSpeed, spinOmega);
+				} else {*/
+					robot->spinAroundDribbler(searchGoalDir == -1.0f, searchPeriod);
+				//}
+			}
 		}
+
+		//ai->dbg("spinPeriod", spinPeriod);
+
+		// TODO Replace this with travelledOmega
+		//float waitUntilSearchOwnGoalTime = 3.0f;
 
 		return;
 	}
