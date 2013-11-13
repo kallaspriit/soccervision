@@ -2086,6 +2086,8 @@ void TestController::ReturnFieldState::step(float dt, Vision::Results* visionRes
 				if (
 					visionResults->front->whiteDistance.left != -1.0f
 					&& visionResults->front->whiteDistance.right != -1.0f
+					&& visionResults->front->blackDistance.left != -1.0f
+					&& visionResults->front->blackDistance.right != -1.0f
 					&& Math::abs(visionResults->front->whiteDistance.left - visionResults->front->whiteDistance.right) < 0.05f
 				) {
 					robot->setTargetDirFor(1.0f, 0.0f, 0.0f, 1.0f);
