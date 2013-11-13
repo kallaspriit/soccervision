@@ -2078,11 +2078,11 @@ void TestController::ReturnFieldState::step(float dt, Vision::Results* visionRes
 				queuedApproachGoal = false;
 			}
 		} else {
-			if (stateDuration < 5.0f) {
-				robot->setTargetOmega(findBallState->searchDir * searchSpeed);
-			} else {
-				// hasn't found goal, drive towards line instead
-				// turn until line is horizontal enough
+			robot->setTargetOmega(findBallState->searchDir * searchSpeed);
+
+			// hasn't found goal, drive towards line instead
+			if (stateDuration > 5.0f) {
+				// keep turning until line is horizontal enough
 				if (
 					visionResults->front->whiteDistance.left != -1.0f
 					&& visionResults->front->whiteDistance.right != -1.0f
