@@ -852,8 +852,12 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 
 			if (goal != NULL && goal->distance > Config::fieldWidth / 2.0f) {
 				// drive towards any goal far away
-				robot->setTargetDir(1.0f, 0.0f);
+				//robot->setTargetDir(1.0f, 0.0f);
 				robot->lookAt(goal);
+
+				if (Math::abs(goal->angle) < Math::degToRad(5.0f)) {
+					robot->setTargetDirFor(1.0f, 0.0f, 0.0f, 1.0f);
+				}
 			} else {
 				robot->setTargetOmega(Math::PI);
 			}
