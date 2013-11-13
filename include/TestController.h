@@ -109,6 +109,7 @@ public:
 		Dir lastBallSearchDir;
 		bool wasSearchingRecently;
 		bool focusedOnGoal;
+		bool queuedApproachGoal;
 
 	};
 

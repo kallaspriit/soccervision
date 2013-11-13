@@ -695,6 +695,7 @@ void TestController::FindBallState::onEnter(Robot* robot, Parameters parameters)
 	nearBothFrames = 0;
 	wasSearchingRecently = false;
 	focusedOnGoal = false;
+	queuedApproachGoal = false;
 
 	if (lastSearchTime != -1.0) {
 		timeSinceLastSearch = Util::duration(lastSearchTime);
@@ -851,7 +852,9 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 			return;
 		}
 
-		if (ai->isRobotOutFront) {
+		if (ai->isRobotOutFront || queuedApproachGoal) {
+			queuedApproachGoal = true;
+
 			Object* goal = visionResults->getLargestGoal(Side::UNKNOWN, Dir::FRONT);
 
 			if (goal != NULL && goal->distance > Config::fieldWidth / 3.0f) {
@@ -861,6 +864,8 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 
 				if (Math::abs(goal->angle) < Math::degToRad(5.0f)) {
 					robot->setTargetDirFor(1.0f, 0.0f, 0.0f, 1.0f);
+
+					queuedApproachGoal = false;
 				}
 			} else {
 				robot->setTargetOmega(Math::PI);
