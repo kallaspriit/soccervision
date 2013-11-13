@@ -1751,7 +1751,7 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 			(ai->wasInCornerLately() || (ai->wasNearLineLately() && ai->isRobotNearTargetGoal(1.5f)))
 			&& (lastEscapeCornerTime == -1.0 || Util::duration(lastEscapeCornerTime) > 1.0)
 			&& !escapeCornerPerformed
-			&& !ai->isRobotNearGoal()
+			//&& !ai->isRobotNearGoal()
 			&& ai->isRobotNearTargetGoal()
 		) {
 			ai->setState("escape-corner");
