@@ -1768,7 +1768,7 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 			// spin around robot axis near goal
 			robot->setTargetOmega(searchGoalDir * Math::PI);
 		} else {
-			if (nearLine) {
+			/*if (nearLine) {
 				// spin around dribbler with acceleration and initial reverse
 				float spinAccelerationTime = 1.5f;
 				float spinReverseDuration = 0.75f;
@@ -1793,9 +1793,9 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 				}
 
 				robot->setTargetDir(spinForwardSpeed, -spinSpeed, spinOmega);
-			} else {
+			} else {*/
 				robot->spinAroundDribbler(searchGoalDir == -1.0f, searchPeriod);
-			}
+			//}
 		}
 
 		//ai->dbg("spinPeriod", spinPeriod);
