@@ -1481,7 +1481,6 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 void TestController::FetchBallNearState::onEnter(Robot* robot, Parameters parameters) {
 	enterVelocity = robot->getVelocity();
 	enterDistance = -1.0f;
-	enterBallDistance = -1.0f;
 	smallestForwardSpeed = -1.0f;
 }
 
@@ -1496,20 +1495,15 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 		return;
 	}
 	
+	// fetches a nearby ball, focusing on the target goal
 	Object* ball = visionResults->getClosestBall(Dir::FRONT);
 	Object* goal = visionResults->getLargestGoal(ai->targetSide, Dir::FRONT);
 
 	ai->dbg("ballVisible", ball != NULL);
 	ai->dbg("goalVisible", goal != NULL);
-	ai->dbg("enterBallDistance", enterBallDistance);
-
-	if (ball != NULL) {
-		ai->setLastBall(ball);
-	} else {
-		ball = ai->getLastBall(Dir::FRONT);
-	}
 
 	if (goal == NULL) {
+		// can't see the goal, switch to direct fetch if ball available, otherwise start searching for ball
 		if (ball != NULL) {
 			ai->setState("fetch-ball-direct");
 		} else {
@@ -1519,39 +1513,25 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 		return;
 	}
 
-	if (ball != NULL && ball->behind) {
-		ai->setState("fetch-ball-behind");
-
-		return;
-	}
-
+	// switch to searching for ball if not visible any more
 	if (ball == NULL) {
 		ai->setState("find-ball");
 
 		return;
 	}
 
+	// configuration parameters
 	float ballDistance = ball->getDribblerDistance();
+	float minAllowedApproachSpeed = 0.5f;
+	float nearDistance = 0.35f;
+	float maxSideSpeedDistance = 0.1f;
+	float sideP = 0.5f;
 
+	// store ball first sighting distance
 	if (enterDistance == -1.0f) {
 		enterDistance = ballDistance;
-	}
-
-	//float approachP = 1.5f;
-	//float sideP = 0.5f;
-	//float sideP = 0.5f;
-	//float nearZeroSpeedAngle = 10.0f;
-	float minAllowedApproachSpeed = 0.5f;
-	//float nearZeroSpeedAngle = Math::map(ballDistance, 0.0f, 0.75f, 5.0f, 20.0f);
-	//float nearMaxSideSpeedAngle = 35.0f;
-	float nearDistance = 0.35f;
-	//float maxSideSpeedDistance = 0.2f;
-	//float nearMaxSideSpeedAngle = nearZeroSpeedAngle * 2.0f;
-
-	if (enterBallDistance == -1.0f) {
-		enterBallDistance = ballDistance;
 	} else if (
-		(ballDistance > enterBallDistance + 0.1f || ballDistance > nearDistance)
+		(ballDistance > enterDistance + 0.2f || ballDistance > nearDistance)
 		&& stateDuration >= 0.5f
 	) {
 		// ball has gotten further than when started, probably messed it up, switch to faster fetch
@@ -1560,29 +1540,18 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 		return;
 	}
 
-	//if (ai->parameters[0].length() > 0) approachP = Util::toFloat(ai->parameters[0]);
-	//if (ai->parameters[1].length() > 0) sideP = Util::toFloat(ai->parameters[1]);
-	//if (ai->parameters[2].length() > 0) nearZeroSpeedAngle = Util::toFloat(ai->parameters[2]);
-
-	//float forwardSpeed = Math::min(approachP * Math::map(Math::abs(Math::radToDeg(ball->angle)), 0.0f, nearZeroSpeedAngle, 1.0f, 0.0f), enterVelocity);
-	//float forwardSpeed = 0.0f;
-	//float sideSpeed = sideP * Math::sign(ball->distanceX) * Math::map(Math::abs(Math::radToDeg(ball->angle)), 0.0f, nearMaxSideSpeedAngle, 0.0f, 1.0f);
-	//float maxSideSpeedDistance = Math::map(ballDistance, 0.0f, nearDistance, 0.025f, 0.10f);
-	//float maxSideSpeedDistance = 0.05f;
-	float maxSideSpeedDistance = 0.1f;
-	//float sideP = Math::map(ballDistance, 0.0f, nearDistance, 0.2f, 0.4f);
-	float sideP = 0.5f;
+	// calculate movement
 	float approachP = Math::map(ballDistance, 0.0f, enterDistance, 0.5f, Math::max(enterVelocity, minAllowedApproachSpeed));
 	float sidePower = Math::map(Math::abs(ball->distanceX), 0.0f, maxSideSpeedDistance, 0.0f, 1.0f);
 	float sideSpeed = sideP * Math::sign(ball->distanceX) * sidePower;
 	float forwardSpeed = approachP * (1.0f - sidePower);
 	float limitedForwardSpeed = Math::min(forwardSpeed, Math::max(enterVelocity, minAllowedApproachSpeed));
 	
-	/*if (smallestForwardSpeed == -1.0f || forwardSpeed < smallestForwardSpeed) {
-		smallestForwardSpeed = forwardSpeed;
-	}
+	// don't really need the dribbler before capturing ball
+	//robot->dribbler->start();
 
-	float limitedForwardSpeed = Math::map(smallestForwardSpeed, 0.0f, enterVelocity, 0.5f, enterVelocity);*/
+	robot->setTargetDir(limitedForwardSpeed, sideSpeed);
+	robot->lookAt(goal);
 
 	ai->dbg("approachP", approachP);
 	ai->dbg("sideP", sideP);
@@ -1595,14 +1564,7 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	ai->dbg("enterDistance", enterDistance);
 	ai->dbg("ballAngle", (Math::radToDeg(ball->angle)));
 	ai->dbg("goalAngle", (Math::radToDeg(goal->angle)));
-	//ai->dbg("nearZeroSpeedAngle", nearZeroSpeedAngle);
 	ai->dbg("ball->distanceX", ball->distanceX);
-
-	// disable dribbler without ball
-	//robot->dribbler->start();
-
-	robot->setTargetDir(limitedForwardSpeed, sideSpeed);
-	robot->lookAt(goal);
 }
 
 void TestController::AimState::onEnter(Robot* robot, Parameters parameters) {
