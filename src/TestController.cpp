@@ -51,6 +51,7 @@
  * - ignore camera image if fetching frame takes a long time
  * - rotate around its axis when was near any goals lately
  * - find ball drive between goals
+ * - read and check all logic code
  *
  *
  * DEMO
