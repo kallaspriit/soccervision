@@ -32,28 +32,29 @@
  * + don't fake ball in dribbler after kicking
  * + can fetch behind be made faster?
  * + when aiming, turn around dribbler with acceleration and don't move forward or event slightly reverse at the beginning
- * - reverse towards own goal while aiming based on travelledRotation not time
+ * / reverse towards own goal while aiming based on travelledRotation not time
  * + come home state, drives to corner based on localization, white lines (eq side distance approach)
- * - make sure robot doesn't drive into own goal if balls close to it, over line
- * - thinks it's near the line too often when actually not
+ * + make sure robot doesn't drive into own goal if balls close to it, over line
+ * + thinks it's near the line too often when actually not
  * + apply max distance on escape from corner
- * - search: drive straigh until near line white-black, turn 45 degrees, repeat, turn rotating
- * - check turnBy -150.4 degrees
- * - need better fetch ball near
- * - kicks through other balls if other balls very close
+ * + search: drive straigh until near line white-black, turn 45 degrees, repeat, turn rotating
+ * + check turnBy -150.4 degrees
+ * + need better fetch ball near
+ * + kicks through other balls if other balls very close
  * - make localizer use angle to goal
  * - try accelerating dribbler
- * - better drive-into-goal avoidance
- * - avoid goal collision, sample top quarter area pixels for unsegmented/goal colors, drive left from them
- * - check why fetch behind sometimes messes it up (render in web UI)
- * - cancel fetch ball behind and escape corner if robot out is detected
- * - fake ball in dribbler for more time if escaping corner / always complete it (if not out)
+ * + better drive-into-goal avoidance
+ * / avoid goal collision, sample top quarter area pixels for unsegmented/goal colors, drive left from them
+ * + check why fetch behind sometimes messes it up (render in web UI)
+ * / cancel fetch ball behind and escape corner if robot out is detected
+ * + fake ball in dribbler for more time if escaping corner / always complete it (if not out)
  * - ignore camera image if fetching frame takes a long time
- * - rotate around its axis when was near any goals lately
- * - find ball drive between goals
+ * + rotate around its axis when was near any goals lately
+ * / find ball drive between goals
  * - read and check all logic code
- * - make returning to field seperate state, use in find ball, fetch ball direct
- * - fix find goal, drive towards own when aiming
+ * + make returning to field seperate state, use in find ball, fetch ball direct
+ * + fix find goal, drive towards own when aiming
+ * - check if kick window calculaton is reasonable
  *
  *
  * DEMO
@@ -1686,6 +1687,7 @@ void TestController::AimState::onEnter(Robot* robot, Parameters parameters) {
 	spinDuration = 0.0f;
 	reverseDuration = 0.0f;
 	avoidBallDuration = 0.0f;
+	validKickFrames = 0;
 	nearLine = false;
 	escapeCornerPerformed = false;
 
@@ -1866,7 +1868,7 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 	float minForwardSpeed = 0.2f;
 	float minBallAvoidSideSpeed = 0.25f;
 	float maxRobotKickOmega = Math::PI / 4.0f;
-	float maxBallAvoidTime = 2.0f;
+	float maxBallAvoidTime = 1.5f;
 	double minKickInterval = 1.0;
 	int halfWidth = Config::cameraWidth / 2;
 	int leftEdge = goal->x - goal->width / 2;
@@ -1925,7 +1927,15 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 	forwardSpeed = Math::max(forwardSpeed, minForwardSpeed);
 
 	bool isRobotOmegaLowEnough = Math::abs(robot->getOmega()) <= maxRobotKickOmega;
-	bool performKick = validWindow && !isKickTooSoon && !isBallInWay && isRobotOmegaLowEnough;
+	bool isFrameValid = validWindow && !isKickTooSoon && !isBallInWay && isRobotOmegaLowEnough;
+
+	if (isFrameValid) {
+		validKickFrames++;
+	} else {
+		validKickFrames = 0;
+	}
+
+	bool performKick = validKickFrames >= 10; // probably too large
 
 	if (performKick) {
 		robot->kick();
@@ -1940,10 +1950,12 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 
 	ai->dbg("performKick", performKick);
 	ai->dbg("validWindow", validWindow);
+	ai->dbg("isFrameValid", isFrameValid);
 	ai->dbg("isKickTooSoon", isKickTooSoon);
 	ai->dbg("isBallInWay", isBallInWay);
 	ai->dbg("isRobotOmegaLowEnough", isRobotOmegaLowEnough);
 	ai->dbg("avoidBallSide", avoidBallSide);
+	ai->dbg("validKickFrames", validKickFrames);
 	ai->dbg("leftEdge", leftEdge);
 	ai->dbg("rightEdge", rightEdge);
 	ai->dbg("halfWidth", halfWidth);

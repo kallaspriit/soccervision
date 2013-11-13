@@ -186,7 +186,7 @@ public:
 	class AimState : public State {
 
 	public:
-		AimState(TestController* ai) : State(ai), lastKickTime(-1.0), lastEscapeCornerTime(-1.0), avoidBallSide(TargetMode::UNDECIDED), searchGoalDir(0.0f), spinDuration(0.0f), reverseDuration(0.0f), avoidBallDuration(0.0f), nearLine(false), escapeCornerPerformed(false) {}
+		AimState(TestController* ai) : State(ai), lastKickTime(-1.0), lastEscapeCornerTime(-1.0), avoidBallSide(TargetMode::UNDECIDED), searchGoalDir(0.0f), spinDuration(0.0f), reverseDuration(0.0f), avoidBallDuration(0.0f), nearLine(false), escapeCornerPerformed(false), validKickFrames(0) {}
 		void onEnter(Robot* robot, Parameters parameters);
 		void step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration, float combinedDuration);
 
@@ -200,6 +200,7 @@ public:
 		float avoidBallDuration;
 		bool nearLine;
 		bool escapeCornerPerformed;
+		int validKickFrames;
 	};
 
 	class DriveCircleState : public State {
