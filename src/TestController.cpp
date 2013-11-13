@@ -868,7 +868,7 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 					queuedApproachGoal = false;
 				}
 			} else {
-				robot->setTargetOmega(Math::PI);
+				robot->setTargetOmega(searchDir * Math::PI);
 			}
 
 			return;
@@ -903,7 +903,7 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 					focusedOnGoal = true;
 				}
 			} else {
-				robot->setTargetOmega(Math::PI);
+				robot->setTargetOmega(searchDir * Math::PI);
 
 				return;
 			}
