@@ -269,13 +269,13 @@ void TestController::updateVisionInfo(Vision::Results* visionResults) {
 		Side closestGoalSide = Side::UNKNOWN;
 
 		if (blueGoal != NULL && blueGoal->distanceY > 0.0f && blueGoal->distanceY < Config::fieldWidth && blueGoal->distanceY < 2.0f && (currentClosestGoalDistance == -1.0f || blueGoal->distanceY < currentClosestGoalDistance)) {
-			currentClosestGoalDistance = blueGoal->distanceY;
+			currentClosestGoalDistance = getObjectClosestDistance(visionResults, blueGoal);
 
 			closestGoalSide = Side::BLUE;
 		}
 
 		if (yellowGoal != NULL && yellowGoal->distanceY > 0.0f && yellowGoal->distanceY < Config::fieldWidth && yellowGoal->distanceY < 2.0f && (currentClosestGoalDistance == -1.0f || yellowGoal->distanceY < currentClosestGoalDistance)) {
-			currentClosestGoalDistance = yellowGoal->distanceY;
+			currentClosestGoalDistance = getObjectClosestDistance(visionResults, yellowGoal);
 
 			closestGoalSide = Side::YELLOW;
 		}
@@ -465,6 +465,13 @@ void TestController::setLastBall(Object* ball) {
 	lastBall->copyFrom(ball);
 
 	lastBallTime = Util::millitime();
+}
+
+float TestController::getObjectClosestDistance(Vision::Results* visionResults, Object* object) {
+	Vision::Distance leftDistance = visionResults->front->vision->getDistance(object->x - object->width / 2, object->y + object->height / 2);
+	Vision::Distance rightDistance = visionResults->front->vision->getDistance(object->x + object->width / 2, object->y + object->height / 2);
+		
+	return Math::min(Math::min(leftDistance.y, rightDistance.y), object->distanceY);
 }
 
 Object* TestController::getLastBall(Dir dir) {

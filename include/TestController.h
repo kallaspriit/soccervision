@@ -302,6 +302,7 @@ private:
 	bool wasInCornerLately(double threshold = 1.5);
 	void resetLastBall();
 	void setLastBall(Object* ball);
+	float getObjectClosestDistance(Vision::Results* visionResults, Object* object);
 	Object* getLastBall(Dir dir = Dir::ANY);
 
 	DebouncedButton toggleGoBtn;
