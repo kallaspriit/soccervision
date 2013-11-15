@@ -93,7 +93,7 @@ XimeaCamera::Frame* XimeaCamera::getFrame() {
 	}
 
     //xiGetImage(device, 1000, &image);
-    xiGetImage(device, 32, &image);
+    xiGetImage(device, 64, &image);
 
     if (image.bp == NULL) {
         return NULL;
