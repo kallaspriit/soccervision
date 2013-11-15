@@ -765,7 +765,8 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 
 	Dir ballSearchDir = Dir::ANY;
 
-	if (ai->lastTurnAroundTime != -1.0 && Util::duration(ai->lastTurnAroundTime) < 2.0) {
+	// can introduce ignoring balls nearby
+	/*if (ai->lastTurnAroundTime != -1.0 && Util::duration(ai->lastTurnAroundTime) < 2.0) {
 		// search from front if just performed turn around towards ball behind
 		ballSearchDir = Dir::FRONT;
 
@@ -783,7 +784,7 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 		}
 	} else {
 		ai->dbgs("search", "any closest");
-	}
+	}*/
 
 	Object* ball = visionResults->getClosestBall(ballSearchDir);
 	Object* goal = visionResults->getLargestGoal(ai->targetSide, Dir::FRONT);
