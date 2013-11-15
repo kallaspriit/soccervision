@@ -41,7 +41,8 @@ void Communication::send(std::string message) {
 	}
 
 	if (message.substr(0, 6) != "speeds" && message.substr(0, 6) != "charge") {
-		std::cout << "> " << message << std::endl;
+		// incoming message
+		//std::cout << "> " << message << std::endl;
 	}
 
 	message += "\n";
@@ -148,7 +149,8 @@ void Communication::onReceive(const boost::system::error_code& error, size_t byt
 		//std::string msg = std::string(receiveBuffer.data(), bytesReceived);
 
 		if (msg.substr(0, 7) != "<speeds") {
-			std::cout << "< " << msg << ", bytesReceived: " << bytesReceived << std::endl;
+			// outgoing message
+			//std::cout << "< " << msg << ", bytesReceived: " << bytesReceived << std::endl;
 		}
 
 		boost::mutex::scoped_lock lock(messagesMutex);
