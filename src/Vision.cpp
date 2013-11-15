@@ -411,7 +411,7 @@ bool Vision::isBallInGoal(Object* ball, Dir dir) {
 
 		float surroundMetric = getSurroundMetric(
 			ball->x,
-			(int)((float)ball->y - (float)ballRadius * 0.75f),
+			(int)((float)ball->y - (float)ballRadius * 0.25f),
 			senseRadius,
 			goalColors,
 			"",
