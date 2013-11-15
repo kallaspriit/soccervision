@@ -1770,7 +1770,7 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 
 	// configuration
 	float avoidBallSpeed = 0.75f;
-	float minForwardSpeed = 0.2f;
+	float minForwardSpeed = 0.1f;
 	float minBallAvoidSideSpeed = 0.25f;
 	float maxRobotKickOmega = Math::PI / 4.0f;
 	float maxBallAvoidTime = 1.5f;
@@ -1847,7 +1847,7 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 		validKickFrames = 0;
 	}
 
-	bool performKick = validKickFrames >= 2;
+	bool performKick = validKickFrames >= 4;
 
 	// only perform the kick if valid view has been observed for a couple of frames
 	if (performKick) {
@@ -1968,7 +1968,7 @@ void TestController::EscapeCornerState::step(float dt, Vision::Results* visionRe
 		// no point to mess with a ball that's already out
 		robot->kick();
 
-		ai->setState("find-ball");
+		ai->setState("return-field");
 
 		return;
 	}
