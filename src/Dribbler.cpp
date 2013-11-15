@@ -31,7 +31,8 @@ void Dribbler::step(float dt) {
 	double delayStopPeriod = 0.1;
 
 	if (stopRequestedTime != -1.0 && Util::duration(stopRequestedTime) >= delayStopPeriod) {
-		setTargetOmega(0);
+		//setTargetOmega(0);
+		setTargetOmega(-Config::robotDribblerSpeed / 5);
 
 		stopRequestedTime = -1.0;
 	}
