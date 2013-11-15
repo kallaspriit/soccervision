@@ -1822,13 +1822,14 @@ bool Vision::Results::isBallInGoal(Object* ball) {
 }
 
 bool Vision::Results::isBallInGoal(Object* ball, Object* blueGoal, Object* yellowGoal) {
-	if (
+	// causes problems with balls near the goal when looking at the goal at a large angle
+	/*if (
 		(blueGoal != NULL && blueGoal->behind == ball->behind && blueGoal->contains(ball))
 		|| (yellowGoal != NULL && yellowGoal->behind == ball->behind && yellowGoal->contains(ball))
 	) {
 		//std::cout << "@ Ball in goal, ball distance: " << ball->distance << ", blue goal: " << (blueGoal != NULL ? Util::toString(blueGoal->distance) : "n/a") << ", yellow goal: " << (yellowGoal != NULL ? Util::toString(yellowGoal->distance) : "n/a") << std::endl;
 		return true;
-	}
+	}*/
 
 	return false;
 }
