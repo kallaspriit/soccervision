@@ -405,7 +405,8 @@ bool Vision::isValidBall(Object* ball, Dir dir) {
 }
 
 bool Vision::isBallInGoal(Object* ball, Dir dir) {
-	if (ball->distance < Config::ballInGoalConsiderMaxDistance) {
+	// think's the ball is in goal when it's near the side posts
+	/*if (ball->distance < Config::ballInGoalConsiderMaxDistance) {
 		int ballRadius = getBallRadius(ball->width, ball->height);
 		int senseRadius = getBallSenseRadius(ballRadius, ball->distance);
 
@@ -424,7 +425,7 @@ bool Vision::isBallInGoal(Object* ball, Dir dir) {
 
 			return true;
 		}
-	}
+	}*/
 
 	/*if (dir == Dir::FRONT) {
 		for (ObjectListItc it = frontGoals.begin(); it != frontGoals.end(); it++) {
