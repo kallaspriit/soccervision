@@ -40,13 +40,13 @@ ProcessThread::~ProcessThread() {
 void* ProcessThread::run() {
 	gotFrame = fetchFrame();
 
-	if (visionResult != NULL) {
-		delete visionResult;
-		visionResult = NULL;
-	}
-
 	if (!gotFrame || frame == NULL) {
 		if (faulty) {
+			if (visionResult != NULL) {
+				delete visionResult;
+				visionResult = NULL;
+			}
+
 			// fetching frame failed, create empty result set
 			visionResult = new Vision::Result();
 			visionResult->vision = vision;
@@ -57,6 +57,11 @@ void* ProcessThread::run() {
 		}
 
 		return NULL;
+	}
+
+	if (visionResult != NULL) {
+		delete visionResult;
+		visionResult = NULL;
 	}
 
 	done = false;
