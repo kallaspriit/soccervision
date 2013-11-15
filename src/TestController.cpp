@@ -322,21 +322,23 @@ void TestController::updateVisionInfo(Vision::Results* visionResults) {
 		}
 	}
 
+	int robotOutFramesThreshold = 10;
+
 	// check whether robot is detected to be out for some frames
 	if (visionResults->isRobotOut(Dir::FRONT)) {
-		framesRobotOutFront++;
+		framesRobotOutFront = Math::min(framesRobotOutFront + 1, robotOutFramesThreshold);
 	} else {
-		framesRobotOutFront = 0;
+		framesRobotOutFront = Math::max(framesRobotOutFront - 1, 0);
 	}
 
 	if (visionResults->isRobotOut(Dir::REAR)) {
-		framesRobotOutRear++;
+		framesRobotOutRear = Math::min(framesRobotOutRear + 1, robotOutFramesThreshold);
 	} else {
-		framesRobotOutRear = 0;
+		framesRobotOutRear = Math::max(framesRobotOutRear - 1, 0);
 	}
 
-	isRobotOutFront = framesRobotOutFront >= 10;
-	isRobotOutRear = framesRobotOutRear >= 10;
+	isRobotOutFront = framesRobotOutFront >= robotOutFramesThreshold;
+	isRobotOutRear = framesRobotOutRear >= robotOutFramesThreshold;
 
 	// store whether robot is near line or in corner
 	isNearLine = isRobotNearLine(visionResults);
@@ -346,10 +348,12 @@ void TestController::updateVisionInfo(Vision::Results* visionResults) {
 		lastNearLineTime = Util::millitime();
 	}
 
+	int robotInCornerFramesThreshold = 3;
+
 	if (isInCorner) {
-		inCornerFrames++;
+		inCornerFrames = Math::min(inCornerFrames + 1, robotInCornerFramesThreshold);
 	} else {
-		inCornerFrames = 0;
+		inCornerFrames = Math::max(inCornerFrames - 1, 0);
 	}
 
 	if (inCornerFrames >= 3) {
@@ -863,16 +867,15 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 			robot->setTargetOmega(searchOmega * searchDir);
 		}
 	} else {
-		// wait until tasks complete
-		if (robot->hasTasks()) {
-			
-			return;
-		}
-
 		// robot is out, return to the playing area
 		if (ai->isRobotOutFront || ai->isRobotOutRear) {
 			ai->setState("return-field");
 
+			return;
+		}
+
+		// wait until tasks complete
+		if (robot->hasTasks()) {
 			return;
 		}
 
@@ -989,6 +992,7 @@ void TestController::FetchBallFrontState::reset(Robot* robot) {
 	startBrakingDistance = -1.0f;
 	startBrakingVelocity = -1.0f;
 	lastBallDistance = -1.0f;
+	lastTargetAngle = 0.0f;
 }
 
 void TestController::FetchBallFrontState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration, float combinedDuration) {
@@ -1032,6 +1036,15 @@ void TestController::FetchBallFrontState::step(float dt, Vision::Results* vision
 
 	// can't see the ball any more, switch to searching for it
 	if (ball == NULL) {
+		Parameters parameters;
+
+		// start searching the ball on the side that it was lost at
+		if (lastTargetAngle > 0.0f) {
+			parameters["search-dir"] = "1.0f";
+		} else {
+			parameters["search-dir"] = "-1.0f";
+		}
+
 		ai->setState("find-ball");
 
 		return;
@@ -1119,6 +1132,7 @@ void TestController::FetchBallFrontState::step(float dt, Vision::Results* vision
 	robot->lookAt(Math::Rad(lookAngle));
 
 	lastBallDistance = ballDistance;
+	lastTargetAngle = targetAngle;
 
 	ai->dbg("forwardSpeed", forwardSpeed);
 	ai->dbg("limitedSpeed", limitedSpeed);
