@@ -40,17 +40,19 @@ ProcessThread::~ProcessThread() {
 void* ProcessThread::run() {
 	gotFrame = fetchFrame();
 
-	if (!gotFrame) {
-		return NULL;
-	}
-
-	if (frame == NULL) {
-		return NULL;
-	}
-
 	if (visionResult != NULL) {
 		delete visionResult;
 		visionResult = NULL;
+	}
+
+	if (!gotFrame || frame == NULL) {
+		// fetching frame failed, create empty result set
+		visionResult = new Vision::Result();
+		visionResult->vision = vision;
+
+		std::cout << "@ Camera failed, creating blank results" << std::endl;
+
+		return NULL;
 	}
 
 	done = false;
