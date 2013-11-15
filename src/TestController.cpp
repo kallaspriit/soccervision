@@ -1045,7 +1045,7 @@ void TestController::FetchBallFrontState::step(float dt, Vision::Results* vision
 			parameters["search-dir"] = "-1.0f";
 		}
 
-		ai->setState("find-ball");
+		ai->setState("find-ball", parameters);
 
 		return;
 	}
