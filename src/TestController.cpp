@@ -326,15 +326,15 @@ void TestController::updateVisionInfo(Vision::Results* visionResults) {
 
 	// check whether robot is detected to be out for some frames
 	if (visionResults->isRobotOut(Dir::FRONT)) {
-		framesRobotOutFront = Math::min(framesRobotOutFront + 1, robotOutFramesThreshold);
+		framesRobotOutFront = (int)Math::min((float)(framesRobotOutFront + 1), (float)robotOutFramesThreshold);
 	} else {
-		framesRobotOutFront = Math::max(framesRobotOutFront - 1, 0);
+		framesRobotOutFront = (int)Math::max((float)(framesRobotOutFront - 1), 0.0f);
 	}
 
 	if (visionResults->isRobotOut(Dir::REAR)) {
-		framesRobotOutRear = Math::min(framesRobotOutRear + 1, robotOutFramesThreshold);
+		framesRobotOutRear = (int)Math::min((float)(framesRobotOutRear + 1), (float)robotOutFramesThreshold);
 	} else {
-		framesRobotOutRear = Math::max(framesRobotOutRear - 1, 0);
+		framesRobotOutRear = (int)Math::max((float)(framesRobotOutRear - 1), 0);
 	}
 
 	isRobotOutFront = framesRobotOutFront >= robotOutFramesThreshold;
@@ -351,9 +351,9 @@ void TestController::updateVisionInfo(Vision::Results* visionResults) {
 	int robotInCornerFramesThreshold = 3;
 
 	if (isInCorner) {
-		inCornerFrames = Math::min(inCornerFrames + 1, robotInCornerFramesThreshold);
+		inCornerFrames = (int)Math::min((float)(inCornerFrames + 1), (float)robotInCornerFramesThreshold);
 	} else {
-		inCornerFrames = Math::max(inCornerFrames - 1, 0);
+		inCornerFrames = (int)Math::max((float)(inCornerFrames - 1), 0);
 	}
 
 	if (inCornerFrames >= 3) {
