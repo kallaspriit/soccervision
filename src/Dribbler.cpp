@@ -8,6 +8,12 @@ Dribbler::Dribbler(int id) : Wheel(id), ballDetected(false), everDetectedBall(fa
 
 };
 
+void Dribbler::prime() {
+	setTargetSpeed(-Config::robotDribblerSpeed / 5);
+
+	stopRequestedTime = -1.0;
+}
+
 void Dribbler::start() {
 	setTargetSpeed(-Config::robotDribblerSpeed);
 
@@ -31,8 +37,8 @@ void Dribbler::step(float dt) {
 	double delayStopPeriod = 0.1;
 
 	if (stopRequestedTime != -1.0 && Util::duration(stopRequestedTime) >= delayStopPeriod) {
-		//setTargetOmega(0);
-		setTargetOmega(-Config::robotDribblerSpeed / 5);
+		setTargetOmega(0);
+		//setTargetOmega(-Config::robotDribblerSpeed / 5);
 
 		stopRequestedTime = -1.0;
 	}

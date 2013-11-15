@@ -9,6 +9,7 @@ class Dribbler : public Wheel {
 public:
 	Dribbler(int id);
 
+	void prime();
 	void start();
 	void stop();
 	void onKick();

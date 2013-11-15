@@ -1508,6 +1508,7 @@ void TestController::FetchBallNearState::onEnter(Robot* robot, Parameters parame
 
 void TestController::FetchBallNearState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration, float combinedDuration) {
 	robot->stop();
+	robot->dribbler->prime();
 	
 	if (robot->dribbler->gotBall()) {
 		robot->dribbler->start();
