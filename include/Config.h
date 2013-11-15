@@ -87,7 +87,7 @@ namespace Config {
 	const int maxBallSenseRadius = 250;
 
 	// ball is considered to be in the goal if it's surrounded by goal colors by more than this
-	const float ballInGoalSurroundThreshold = 0.5f;
+	const float ballInGoalSurroundThreshold = 0.6f;
 
 	// whether ball is in the goal is considered only if it's closer than this
 	const float ballInGoalConsiderMaxDistance = 1.0f;
