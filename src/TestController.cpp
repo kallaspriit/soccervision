@@ -1258,6 +1258,10 @@ void TestController::FetchBallDirectState::step(float dt, Vision::Results* visio
 	robot->setTargetDir(forwardSpeed, 0.0f);
 	robot->lookAt(ball);
 
+	if (ballDistance < nearBallDistance) {
+		robot->dribbler->prime();
+	}
+
 	ai->dbg("realSpeed", realSpeed);
 	ai->dbg("nearLineFrames", nearLineFrames);
 	ai->dbg("nearLine", nearLine);
