@@ -29,6 +29,7 @@ public:
 	Vision::Result* visionResult;
 
 	bool gotFrame;
+	bool faulty;
 	unsigned char* frame;
 	unsigned char* dataYUYV;
 	unsigned char* dataY;

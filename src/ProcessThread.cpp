@@ -9,7 +9,7 @@
 
 #include <iostream>
 
-ProcessThread::ProcessThread(BaseCamera* camera, Blobber* blobber, Vision* vision) : Thread(), dir(dir), camera(camera), blobber(blobber), vision(vision), visionResult(NULL), debug(false), gotFrame(false), done(true) {
+ProcessThread::ProcessThread(BaseCamera* camera, Blobber* blobber, Vision* vision) : Thread(), dir(dir), camera(camera), blobber(blobber), vision(vision), visionResult(NULL), debug(false), gotFrame(false), faulty(false), done(true) {
 	frame = NULL;
 	width = blobber->getWidth();
 	height = blobber->getHeight();
@@ -46,11 +46,15 @@ void* ProcessThread::run() {
 	}
 
 	if (!gotFrame || frame == NULL) {
-		// fetching frame failed, create empty result set
-		visionResult = new Vision::Result();
-		visionResult->vision = vision;
+		if (faulty) {
+			// fetching frame failed, create empty result set
+			visionResult = new Vision::Result();
+			visionResult->vision = vision;
 
-		std::cout << "@ Camera failed, creating blank results" << std::endl;
+			std::cout << "- Getting frame failed and faulty camera detected, creating blank results" << std::endl;
+		} else {
+			std::cout << "! Getting frame failed, using previous data" << std::endl;
+		}
 
 		return NULL;
 	}
@@ -126,6 +130,8 @@ bool ProcessThread::fetchFrame() {
 
 		if (timeTaken > 0.03) {
 			std::cout << "- Fetching camera #" << camera->getSerial() << " frame took: " << timeTaken << std::endl;
+
+			faulty = true;
 
 			//frame = NULL;
 
