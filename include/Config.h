@@ -69,7 +69,7 @@ namespace Config {
 	const int goalTopMaxY = 10;
 
 	// surround metric is taken into account if ball bottom is below this threshold
-	const int surroundSenseThresholdY = cameraHeight - 100;
+	const int surroundSenseThresholdY = cameraHeight - 180;
 
 	// minimum object metric thresholds to be considered valid
 	const float minValidBallSurroundThreshold = 0.5f;
