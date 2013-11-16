@@ -1864,7 +1864,7 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 	forwardSpeed = Math::max(forwardSpeed, minForwardSpeed);
 
 	bool isRobotOmegaLowEnough = Math::abs(robot->getOmega()) <= maxRobotKickOmega;
-	bool isFrameValid = validWindow && !isKickTooSoon && !isBallInWay && !isGoalPathObstructed && isRobotOmegaLowEnough;
+	bool isFrameValid = validWindow && !isKickTooSoon && !isBallInWay && !isGoalPathObstructed && isRobotOmegaLowEnough && robot->dribbler->gotBall(true);
 
 	if (isFrameValid) {
 		validKickFrames++;

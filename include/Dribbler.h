@@ -14,7 +14,7 @@ public:
 	void stop();
 	void onKick();
 	bool isActive() const { return targetOmega > 0; }
-	bool gotBall() const;
+	bool gotBall(bool definitive = false) const;
 	bool handleCommand(const Command& cmd);
 	double getBallInDribblerTime() { return ballInDribblerTime; }
 	double getBallLostTime() { return ballLostTime; }
