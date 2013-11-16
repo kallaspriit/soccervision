@@ -1874,8 +1874,7 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 		validKickFrames = 0;
 	}
 
-	//bool performKick = validKickFrames >= 4;
-	bool performKick = validKickFrames >= 1;
+	bool performKick = validKickFrames >= 4;
 
 	// only perform the kick if valid view has been observed for a couple of frames
 	if (performKick) {
