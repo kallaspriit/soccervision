@@ -1783,7 +1783,7 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 	ai->dbg("goalVisible", true);
 
 	// configuration
-	float avoidBallSpeed = 0.75f;
+	float avoidBallSpeed = 0.65f;
 	float minForwardSpeed = 0.1f;
 	float minBallAvoidSideSpeed = 0.25f;
 	float maxRobotKickOmega = Math::PI / 4.0f;
@@ -1842,10 +1842,10 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 
 		avoidBallDuration += dt;
 
-		sideSpeed = (avoidBallSide == TargetMode::LEFT ? -1.0f : 1.0f) * Math::map(avoidBallDuration, 0.0f, 0.5f, 0.0f, avoidBallSpeed);
+		sideSpeed = (avoidBallSide == TargetMode::LEFT ? -1.0f : 1.0f) * Math::map(avoidBallDuration, 0.0f, 1.0f, 0.0f, avoidBallSpeed);
 	
 		// not sure if this is good after all
-		forwardSpeed = Math::map(goal->distance, 0.5f, 1.0f, 0.0f, Math::abs(sideSpeed) / 2.0f);
+		forwardSpeed = Math::map(goal->distance, 0.5f, 1.0f, 0.0f, Math::abs(sideSpeed));
 
 		ai->dbg("nearbyAnotherBall", nearbyAnotherBall);
 	}
