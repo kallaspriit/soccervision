@@ -1024,6 +1024,7 @@ Obstruction Vision::getGoalPathObstruction() {
 	int validCountLeft = 0;
 	int validCountRight = 0;
 	int goalColorCount = 0;
+	bool running = true;
 
 	// TODO make sure finds target side color in the end
 	// sample points every step distances
@@ -1042,6 +1043,8 @@ Obstruction Vision::getGoalPathObstruction() {
 						if (debug) {
 							canvas.drawMarker(pos.x, pos.y, 255, 0, 0);
 						}
+
+						running = false;
 
 						break;
 					} else {
@@ -1079,6 +1082,10 @@ Obstruction Vision::getGoalPathObstruction() {
 					canvas.drawMarker(pos.x, pos.y, 128, 0, 0);
 				}
 			}
+		}
+
+		if (!running) {
+			break;
 		}
 	}
 
