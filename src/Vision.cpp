@@ -1009,7 +1009,7 @@ Obstruction Vision::getGoalPathObstruction() {
 	//float corridorWidth = 0.1f;
 	float yStep = 0.1f;
 	float xStep = 0.1f;
-	float xSteps = 4;
+	float xSteps = 4.0f;
 	float startDistance = 0.2f;
 	float endDistance = 6.0f; // TODO Something smarter?
 	int stopGoalColorCount = 10; // stop searching any further if found this many goal colors
@@ -1028,7 +1028,7 @@ Obstruction Vision::getGoalPathObstruction() {
 	// TODO make sure finds target side color in the end
 	// sample points every step distances
 	for (yDistance = startDistance; yDistance < endDistance; yDistance += yStep) {
-		for (xDistance = -xStep * xSteps / 2; xDistance < xStep * xSteps / 2; xDistance += xStep) {
+		for (xDistance = -xStep * xSteps / 2 + xStep / 2.0f; xDistance < xStep * xSteps / 2; xDistance += xStep) {
 			// find corridor positions
 			pos = cameraTranslator->getCameraPosition(xDistance, yDistance);
 			color = getColorAt(pos.x, pos.y);
