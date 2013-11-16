@@ -1096,7 +1096,7 @@ Obstruction Vision::getGoalPathObstruction() {
 	float rightValidSamplesRatio = (float)validCountRight / (float)(sampleCount / 2);
 
 	// not reliable near the goal with few samples
-	if (sampleCount > 50) {
+	if (sampleCount > 50 && goalDistance > 1.5f) {
 		bool obstructed = leftValidSamplesRatio < (1.0f - goalPathObstructedThreshold) || rightValidSamplesRatio < (1.0f - goalPathObstructedThreshold);
 
 		if (obstructed) {
