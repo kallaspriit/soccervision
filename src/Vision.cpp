@@ -1066,10 +1066,18 @@ Obstruction Vision::getGoalPathObstruction() {
 						validCountRight++;
 					}
 				} else {
-					canvas.drawMarker(pos.x, pos.y, 128, 0, 0);
+					if (debug) {
+						canvas.drawMarker(pos.x, pos.y, 128, 0, 0);
+					}
 				}
 
 				sampleCount++;
+			} else {
+				sampleCount++;
+
+				if (debug) {
+					canvas.drawMarker(pos.x, pos.y, 128, 0, 0);
+				}
 			}
 		}
 	}
