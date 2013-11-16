@@ -1087,7 +1087,7 @@ Obstruction Vision::getGoalPathObstruction() {
 		}
 	}
 
-	std::cout << "@ Obstruction ratio left: " << leftValidSamplesRatio << ", right: " << rightValidSamplesRatio << ", side: " << (obstruction == Obstruction::LEFT ? "LEFT" : obstruction == Obstruction::RIGHT ? "RIGHT" : "NONE") << std::endl;
+	//std::cout << "@ Obstruction ratio left: " << leftValidSamplesRatio << ", right: " << rightValidSamplesRatio << ", side: " << (obstruction == Obstruction::LEFT ? "LEFT" : obstruction == Obstruction::RIGHT ? "RIGHT" : "NONE") << std::endl;
 
 	return obstruction;
 }
