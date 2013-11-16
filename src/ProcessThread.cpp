@@ -56,7 +56,7 @@ void* ProcessThread::run() {
 
 			std::cout << "- Getting frame failed and faulty camera detected, creating blank results" << std::endl;
 		} else {
-			std::cout << "! Getting frame failed, using previous data" << std::endl;
+			//std::cout << "! Getting frame failed, using previous data" << std::endl;
 		}
 
 		return NULL;
