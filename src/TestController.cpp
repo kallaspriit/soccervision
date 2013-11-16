@@ -1788,6 +1788,8 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 	int goalKickThresholdPixels = (int)((float)goal->width * Config::goalKickThreshold);
 	double timeSinceLastKick = lastKickTime != 0.0 ? Util::duration(lastKickTime) : -1.0;
 	bool isBallInWay = visionResults->isBallInWay(visionResults->front->balls, goal->y + goal->height / 2);
+	Obstruction goalPathObstruction = visionResults->front->goalPathObstruction;
+	bool isGoalPathObstructed = goalPathObstruction != Obstruction::NONE;
 	float forwardSpeed = 0.0f;
 	float sideSpeed = 0.0f;
 	bool validWindow = false;
@@ -1796,6 +1798,7 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 	// limit ball avoidance time
 	if (isBallInWay && avoidBallDuration > maxBallAvoidTime) {
 		isBallInWay = false;
+		isGoalPathObstructed = false;
 	}
 
 	// drive sideways if there's a ball in the way
@@ -1830,6 +1833,15 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 		ai->dbg("nearbyAnotherBall", nearbyAnotherBall);
 	}
 
+	// decide avoidance side based on goal path obstruction
+	if (isGoalPathObstructed && avoidBallSide == TargetMode::UNDECIDED) {
+		if (goalPathObstruction == Obstruction::LEFT) {
+			avoidBallSide = TargetMode::RIGHT;
+		} else {
+			avoidBallSide = TargetMode::LEFT;
+		}
+	}
+
 	// check whether the aiming is precise enough
 	if (!goal->behind) {
 		if (
@@ -1844,7 +1856,7 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 	forwardSpeed = Math::max(forwardSpeed, minForwardSpeed);
 
 	bool isRobotOmegaLowEnough = Math::abs(robot->getOmega()) <= maxRobotKickOmega;
-	bool isFrameValid = validWindow && !isKickTooSoon && !isBallInWay && isRobotOmegaLowEnough;
+	bool isFrameValid = validWindow && !isKickTooSoon && !isBallInWay && !isGoalPathObstructed && isRobotOmegaLowEnough;
 
 	if (isFrameValid) {
 		validKickFrames++;
