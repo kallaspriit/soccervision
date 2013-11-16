@@ -1834,12 +1834,16 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 	}
 
 	// decide avoidance side based on goal path obstruction
-	if (isGoalPathObstructed && avoidBallSide == TargetMode::UNDECIDED) {
-		if (goalPathObstruction == Obstruction::LEFT) {
-			avoidBallSide = TargetMode::RIGHT;
-		} else {
-			avoidBallSide = TargetMode::LEFT;
+	if (isGoalPathObstructed) {
+		if (avoidBallSide == TargetMode::UNDECIDED) {
+			if (goalPathObstruction == Obstruction::LEFT) {
+				avoidBallSide = TargetMode::RIGHT;
+			} else {
+				avoidBallSide = TargetMode::LEFT;
+			}
 		}
+
+		avoidBallDuration += dt;
 	}
 
 	// check whether the aiming is precise enough
