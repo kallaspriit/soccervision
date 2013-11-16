@@ -1024,6 +1024,7 @@ Obstruction Vision::getGoalPathObstruction() {
 	int validCountLeft = 0;
 	int validCountRight = 0;
 	int goalColorCount = 0;
+	float goalDistance = -1.0f;
 	bool running = true;
 
 	// TODO make sure finds target side color in the end
@@ -1045,6 +1046,8 @@ Obstruction Vision::getGoalPathObstruction() {
 						}
 
 						running = false;
+
+						goalDistance = getDistance(pos.x, pos.y).y;
 
 						break;
 					} else {
@@ -1105,7 +1108,7 @@ Obstruction Vision::getGoalPathObstruction() {
 		}
 	}
 
-	std::cout << "@ Obstruction ratio samples: " << sampleCount << ", left: " << leftValidSamplesRatio << ", right: " << rightValidSamplesRatio << ", side: " << (obstruction == Obstruction::LEFT ? "LEFT" : obstruction == Obstruction::RIGHT ? "RIGHT" : "NONE") << std::endl;
+	std::cout << "@ Obstruction ratio samples: " << sampleCount << ", goal distance: " << goalDistance << ", left: " << leftValidSamplesRatio << ", right: " << rightValidSamplesRatio << ", side: " << (obstruction == Obstruction::LEFT ? "LEFT" : obstruction == Obstruction::RIGHT ? "RIGHT" : "NONE") << std::endl;
 
 	return obstruction;
 }
