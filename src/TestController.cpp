@@ -1866,7 +1866,7 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 	forwardSpeed = Math::max(forwardSpeed, minForwardSpeed);
 
 	bool isRobotOmegaLowEnough = Math::abs(robot->getOmega()) <= maxRobotKickOmega;
-	bool isFrameValid = validWindow && !isKickTooSoon && !isBallInWay && !isGoalPathObstructed && isRobotOmegaLowEnough && robot->dribbler->gotBall(true);
+	/*bool isFrameValid = validWindow && !isKickTooSoon && !isBallInWay && !isGoalPathObstructed && isRobotOmegaLowEnough && robot->dribbler->gotBall(true);
 
 	if (isFrameValid) {
 		validKickFrames++;
@@ -1874,7 +1874,9 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 		validKickFrames = 0;
 	}
 
-	bool performKick = validKickFrames >= 4;
+	bool performKick = validKickFrames >= 4;*/
+
+	bool performKick = validWindow;
 
 	// only perform the kick if valid view has been observed for a couple of frames
 	if (performKick) {
@@ -1890,7 +1892,7 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 
 	ai->dbg("performKick", performKick);
 	ai->dbg("validWindow", validWindow);
-	ai->dbg("isFrameValid", isFrameValid);
+	//ai->dbg("isFrameValid", isFrameValid);
 	ai->dbg("isKickTooSoon", isKickTooSoon);
 	ai->dbg("isBallInWay", isBallInWay);
 	ai->dbg("isGoalPathObstructed", isGoalPathObstructed);
