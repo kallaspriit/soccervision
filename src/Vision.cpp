@@ -1087,7 +1087,7 @@ Obstruction Vision::getGoalPathObstruction() {
 
 	float validSamplesRatio = (float)validCount / (float)sampleCount;
 
-	bool obstructed = validSamplesRatio < goalPathObstructedThreshold;
+	bool obstructed = validSamplesRatio < (1.0f - goalPathObstructedThreshold);
 
 	if (obstructed) {
 		if (validCountLeft < validCountRight) {
