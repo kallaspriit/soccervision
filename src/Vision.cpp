@@ -43,6 +43,8 @@ Vision::Vision(Blobber* blobber, CameraTranslator* cameraTranslator, Dir dir, in
 
 	goalColors.push_back("yellow-goal");
     goalColors.push_back("blue-goal");
+
+	obstructionSide = Obstruction::NONE;
 }
 
 Vision::~Vision() {
@@ -63,9 +65,9 @@ Vision::Result* Vision::process() {
 	result->goals = processGoals(dir);
     result->balls = processBalls(dir);
 
-	if (dir == Dir::FRONT) {
+	/*if (dir == Dir::FRONT) {
 		updateObstructions();
-	}
+	}*/
 
 	updateColorDistances();
 	updateColorOrder();
@@ -1009,7 +1011,7 @@ Obstruction Vision::getGoalPathObstruction() {
 	float startDistance = 0.2f;
 	float endDistance = 6.0f; // TODO Something smarter?
 	int stopGoalColorCount = 10; // stop searching any further if found this many goal colors
-	float goalPathObstructedThreshold = 0.5f;
+	float goalPathObstructedThreshold = 0.35f;
 
 	float yDistance;
 	float xLeftDistance = -corridorWidth / 2.0f;
@@ -1083,9 +1085,9 @@ Obstruction Vision::getGoalPathObstruction() {
 		}
 	}
 
-	float obstructionRatio = (float)validCount / (float)sampleCount;
+	float validSamplesRatio = (float)validCount / (float)sampleCount;
 
-	bool obstructed = obstructionRatio > goalPathObstructedThreshold;
+	bool obstructed = validSamplesRatio < goalPathObstructedThreshold;
 
 	if (obstructed) {
 		if (validCountLeft < validCountRight) {
@@ -1095,7 +1097,7 @@ Obstruction Vision::getGoalPathObstruction() {
 		}
 	}
 
-	std::cout << "@ Obstruction ratio: " << obstructionRatio << ", left: " << validCountLeft << ", right: " << validCountRight << ", side: " << (obstruction == Obstruction::LEFT ? "LEFT" : obstruction == Obstruction::RIGHT ? "RIGHT" : "NONE") << std::endl;
+	std::cout << "@ Obstruction ratio: " << validSamplesRatio << ", left: " << validCountLeft << ", right: " << validCountRight << ", side: " << (obstruction == Obstruction::LEFT ? "LEFT" : obstruction == Obstruction::RIGHT ? "RIGHT" : "NONE") << std::endl;
 
 	return obstruction;
 }
