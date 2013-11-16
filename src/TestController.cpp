@@ -1696,7 +1696,6 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 		spinDuration += dt;
 
 		if (ai->isRobotNearGoal()) {
-			// spin around robot axis near goal to avoid moving goal spinning off-axis
 			robot->setTargetOmega(searchGoalDir * Math::PI);
 		} else {
 			/*if (nearLine) {
@@ -1724,9 +1723,18 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 				}
 
 				robot->setTargetDir(spinForwardSpeed, -spinSpeed, spinOmega);
-			} else {*/
+			} else {
 				robot->spinAroundDribbler(searchGoalDir == -1.0f, searchPeriod);
-			//}
+			}*/
+
+			// spin around robot axis near goal to avoid moving goal spinning off-axis
+			if (!ai->wasNearLineLately() && stateDuration < 0.2f) {
+				// move forwards a bit, getting better grip of the ball
+				robot->setTargetDir(0.25f, 0.0f);
+			} else {
+				// TODO Accelerate to speed
+				robot->spinAroundDribbler(searchGoalDir == -1.0f, searchPeriod);
+			}
 		}
 
 		// start searching for own goal after almost full rotation
