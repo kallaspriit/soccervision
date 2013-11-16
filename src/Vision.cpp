@@ -1012,7 +1012,7 @@ Obstruction Vision::getGoalPathObstruction() {
 	float xSteps = 4.0f;
 	float startDistance = 0.2f;
 	float endDistance = 6.0f; // TODO Something smarter?
-	int stopGoalColorCount = 10; // stop searching any further if found this many goal colors
+	int stopGoalColorCount = 4; // stop searching any further if found this many goal colors
 	float goalPathObstructedThreshold = 0.35f;
 
 	float xDistance, yDistance;
@@ -1102,7 +1102,7 @@ Obstruction Vision::getGoalPathObstruction() {
 		}
 	}
 
-	//std::cout << "@ Obstruction ratio left: " << leftValidSamplesRatio << ", right: " << rightValidSamplesRatio << ", side: " << (obstruction == Obstruction::LEFT ? "LEFT" : obstruction == Obstruction::RIGHT ? "RIGHT" : "NONE") << std::endl;
+	std::cout << "@ Obstruction ratio samples: " << sampleCount << ", left: " << leftValidSamplesRatio << ", right: " << rightValidSamplesRatio << ", side: " << (obstruction == Obstruction::LEFT ? "LEFT" : obstruction == Obstruction::RIGHT ? "RIGHT" : "NONE") << std::endl;
 
 	return obstruction;
 }
