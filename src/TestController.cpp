@@ -1728,7 +1728,7 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 			}*/
 
 			// spin around robot axis near goal to avoid moving goal spinning off-axis
-			if (!ai->wasNearLineLately() && stateDuration < 1.0f) {
+			if (!ai->wasNearLineLately() && stateDuration < 0.25f) {
 				// move forwards a bit, getting better grip of the ball
 				robot->setTargetDir(0.25f, 0.0f);
 				robot->dribbler->prime();
