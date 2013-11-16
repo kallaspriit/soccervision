@@ -70,6 +70,7 @@ Vision::Result* Vision::process() {
 	result->colorOrder = colorOrder;
 	result->whiteDistance = whiteDistance;
 	result->blackDistance = blackDistance;
+	result->goalPathObstructed = isGoalPathObstructed();
 
 	return result;
 }
@@ -995,6 +996,30 @@ Vision::PathMetric Vision::getPathMetric(int x1, int y1, int x2, int y2, std::ve
 	std::cout << "@ tooManyBlacksInRow: " << tooManyBlacksInRow << std::endl << std::endl;*/
 
 	return PathMetric(percentage, longestInvalidSpree, validColorFound, crossingGreenWhiteBlackGreen || tooManyBlacksInRow);
+}
+
+bool Vision::isGoalPathObstructed() {
+	float corridorWidth = 0.1f;
+	float step = 0.1f;
+	float startDistance = 0.2f;
+	float endDistance = 6.0f; // TODO Something smarter?
+	float yDistance;
+	float xLeftDistance = -corridorWidth / 2.0f;
+	float xRightDistance = corridorWidth / 2.0f;
+	bool debug = canvas.data != NULL;
+
+	// TODO make sure finds target side color in the end
+	for (yDistance = startDistance; yDistance < endDistance; yDistance += step) {
+		CameraTranslator::CameraPosition leftPosition = cameraTranslator->getCameraPosition(xLeftDistance, yDistance);
+		CameraTranslator::CameraPosition rightPosition = cameraTranslator->getCameraPosition(xRightDistance, yDistance);
+
+		if (debug) {
+            canvas.drawMarker(leftPosition.x, leftPosition.y, 200, 0, 0);
+            canvas.drawMarker(rightPosition.x, rightPosition.y, 200, 0, 0);
+        }
+	}
+
+	return false;
 }
 
 float Vision::getColorDistance(std::string colorName, int x1, int y1, int x2, int y2) {
