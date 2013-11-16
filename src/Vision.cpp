@@ -74,7 +74,7 @@ Vision::Result* Vision::process() {
 	result->colorOrder = colorOrder;
 	result->whiteDistance = whiteDistance;
 	result->blackDistance = blackDistance;
-	result->goalPathObstructed = isGoalPathObstructed();
+	result->goalPathObstruction = getGoalPathObstruction();
 
 	return result;
 }
@@ -1002,7 +1002,8 @@ Vision::PathMetric Vision::getPathMetric(int x1, int y1, int x2, int y2, std::ve
 	return PathMetric(percentage, longestInvalidSpree, validColorFound, crossingGreenWhiteBlackGreen || tooManyBlacksInRow);
 }
 
-bool Vision::isGoalPathObstructed() {
+Obstruction Vision::getGoalPathObstruction() {
+	Obstruction obstruction = Obstruction::NONE;
 	float corridorWidth = 0.1f;
 	float step = 0.1f;
 	float startDistance = 0.2f;
@@ -1020,6 +1021,8 @@ bool Vision::isGoalPathObstructed() {
 	CameraTranslator::CameraPosition* pos;
 	int sampleCount = 0;
 	int validCount = 0;
+	int validCountLeft = 0;
+	int validCountRight = 0;
 	int goalColorCount = 0;
 	int sideIndex = 0;
 
@@ -1034,6 +1037,7 @@ bool Vision::isGoalPathObstructed() {
 		rightColor = getColorAt(rightPosition.x, rightPosition.y);
 		
 		// same code for both sides
+		// TODO Replace with stepX, side based on sign
 		for (sideIndex = 0; sideIndex < 2; sideIndex++) {
 			color = sideIndex == 0 ? leftColor : rightColor;
 			pos = sideIndex == 0 ? &leftPosition : &rightPosition;
@@ -1064,6 +1068,12 @@ bool Vision::isGoalPathObstructed() {
 					}
 					
 					validCount++;
+
+					if (sideIndex == 0) {
+						validCountLeft++;
+					} else {
+						validCountRight++;
+					}
 				} else {
 					canvas.drawMarker(pos->x, pos->y, 128, 0, 0);
 				}
@@ -1075,7 +1085,17 @@ bool Vision::isGoalPathObstructed() {
 
 	float obstructionRatio = (float)validCount / (float)sampleCount;
 
-	return obstructionRatio > goalPathObstructedThreshold;
+	bool obstructed = obstructionRatio > goalPathObstructedThreshold;
+
+	if (obstructed) {
+		if (validCountLeft < validCountRight) {
+			obstruction = Obstruction::LEFT;
+		} else {
+			obstruction = Obstruction::RIGHT;
+		}
+	}
+
+	return obstruction;
 }
 
 float Vision::getColorDistance(std::string colorName, int x1, int y1, int x2, int y2) {
