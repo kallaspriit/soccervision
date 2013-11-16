@@ -1085,19 +1085,20 @@ Obstruction Vision::getGoalPathObstruction() {
 		}
 	}
 
-	float validSamplesRatio = (float)validCount / (float)sampleCount;
+	float leftValidSamplesRatio = (float)validCountLeft / (float)(sampleCount / 2);
+	float rightValidSamplesRatio = (float)validCountRight / (float)(sampleCount / 2);
 
-	bool obstructed = validSamplesRatio < (1.0f - goalPathObstructedThreshold);
+	bool obstructed = leftValidSamplesRatio < (1.0f - goalPathObstructedThreshold) || rightValidSamplesRatio < (1.0f - goalPathObstructedThreshold);
 
 	if (obstructed) {
-		if (validCountLeft < validCountRight) {
+		if (leftValidSamplesRatio < rightValidSamplesRatio) {
 			obstruction = Obstruction::LEFT;
 		} else {
 			obstruction = Obstruction::RIGHT;
 		}
 	}
 
-	std::cout << "@ Obstruction ratio: " << validSamplesRatio << ", left: " << validCountLeft << ", right: " << validCountRight << ", side: " << (obstruction == Obstruction::LEFT ? "LEFT" : obstruction == Obstruction::RIGHT ? "RIGHT" : "NONE") << std::endl;
+	std::cout << "@ Obstruction ratio left: " << leftValidSamplesRatio << ", right: " << rightValidSamplesRatio << ", side: " << (obstruction == Obstruction::LEFT ? "LEFT" : obstruction == Obstruction::RIGHT ? "RIGHT" : "NONE") << std::endl;
 
 	return obstruction;
 }
