@@ -58,13 +58,13 @@
  *
  *
  * DEMO
- * - fetch string of balls in front
- * - fetch string of balls behind
- * - fetch diagonal set of balls
- * - fetch ball behind near own goal (turn around)
- * - fetch ball from own/opponent goal corner (near both lines)
- * - fetch ball on the line
- * - fetch ball at large angle from own goal, facing own goal
+ * + fetch string of balls in front
+ * + fetch string of balls behind
+ * + fetch diagonal set of balls
+ * + fetch ball behind near own goal (turn around)
+ * + fetch ball from own/opponent goal corner (near both lines)
+ * + fetch ball on the line
+ * + fetch ball at large angle from own goal, facing own goal
  * - fetch balls from 4 corners (probably includes search)
  * - empty entire field with timer
  * - maximum speed fetching forward/behind
@@ -74,6 +74,8 @@
  * - show robot and ball localization in the web UI
  * - show "back in time" in the web UI
  * - show configuring colors in the web UI
+ * - avoid opponent
+ * - on top of robot
  */
 
 TestController::TestController(Robot* robot, Communication* com) : BaseAI(robot, com), targetSide(Side::BLUE), manualSpeedX(0.0f), manualSpeedY(0.0f), manualOmega(0.0f), manualDribblerSpeed(0), manualKickStrength(0), blueGoalDistance(0.0f), yellowGoalDistance(0.0f), lastCommandTime(-1.0), lastBallTime(-1.0), lastNearLineTime(-1.0), lastInCornerTime(-1.0), lastTargetGoalAngle(0.0f), lastBall(NULL), lastTurnAroundTime(-1.0), lastClosestGoalDistance(-1.0f), lastTargetGoalDistance(-1.0f), framesRobotOutFront(0), framesRobotOutRear(0), isRobotOutFront(false), isRobotOutRear(false), isNearLine(false), isInCorner(false), inCornerFrames(0) {
@@ -1872,7 +1874,8 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 		validKickFrames = 0;
 	}
 
-	bool performKick = validKickFrames >= 4;
+	//bool performKick = validKickFrames >= 4;
+	bool performKick = validKickFrames >= 1;
 
 	// only perform the kick if valid view has been observed for a couple of frames
 	if (performKick) {
