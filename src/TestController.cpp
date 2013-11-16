@@ -1796,13 +1796,13 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 	bool isKickTooSoon = lastKickTime != -1.0 && timeSinceLastKick < minKickInterval;
 
 	// limit ball avoidance time
-	if (isBallInWay && avoidBallDuration > maxBallAvoidTime) {
+	if (avoidBallDuration > maxBallAvoidTime) {
 		isBallInWay = false;
 		isGoalPathObstructed = false;
 	}
 
 	// drive sideways if there's a ball in the way
-	if (isBallInWay) {
+	if (isBallInWay || isGoalPathObstructed) {
 		// check whether there's another ball close by
 		float anotherBallCloseDistance = 0.3f;
 		Object* nextClosestBall = visionResults->getNextClosestBall(Dir::FRONT);
@@ -1810,11 +1810,19 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 
 		// decide which way to avoid the balls once
 		if (avoidBallSide == TargetMode::UNDECIDED) {
-			// make sure to drive near the centerline of the field not out further
-			if (robot->getPosition().y < Config::fieldHeight / 2.0f) {
-				avoidBallSide = ai->targetSide == Side::BLUE ? TargetMode::RIGHT : TargetMode::LEFT;
+			if (isGoalPathObstructed) {
+				if (goalPathObstruction == Obstruction::LEFT) {
+					avoidBallSide = TargetMode::RIGHT;
+				} else {
+					avoidBallSide = TargetMode::LEFT;
+				}
 			} else {
-				avoidBallSide = ai->targetSide == Side::BLUE ? TargetMode::LEFT : TargetMode::RIGHT;
+				// make sure to drive near the centerline of the field not out further
+				if (robot->getPosition().y < Config::fieldHeight / 2.0f) {
+					avoidBallSide = ai->targetSide == Side::BLUE ? TargetMode::RIGHT : TargetMode::LEFT;
+				} else {
+					avoidBallSide = ai->targetSide == Side::BLUE ? TargetMode::LEFT : TargetMode::RIGHT;
+				}
 			}
 		}
 
@@ -1831,19 +1839,6 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 		forwardSpeed = Math::map(goal->distance, 0.5f, 1.0f, 0.0f, Math::abs(sideSpeed) / 2.0f);
 
 		ai->dbg("nearbyAnotherBall", nearbyAnotherBall);
-	}
-
-	// decide avoidance side based on goal path obstruction
-	if (isGoalPathObstructed) {
-		if (avoidBallSide == TargetMode::UNDECIDED) {
-			if (goalPathObstruction == Obstruction::LEFT) {
-				avoidBallSide = TargetMode::RIGHT;
-			} else {
-				avoidBallSide = TargetMode::LEFT;
-			}
-		}
-
-		avoidBallDuration += dt;
 	}
 
 	// check whether the aiming is precise enough
