@@ -20,6 +20,9 @@ ProcessThread::ProcessThread(BaseCamera* camera, Blobber* blobber, Vision* visio
 	classification = new unsigned char[width * height * 3];
 	argb = new unsigned char[width * height * 4];
 	rgb = new unsigned char[width * height * 3];
+
+	visionResult = new Vision::Result();
+	visionResult->vision = vision;
 }
 
 ProcessThread::~ProcessThread() {
