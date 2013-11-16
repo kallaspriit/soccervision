@@ -1064,7 +1064,7 @@ Obstruction Vision::getGoalPathObstruction() {
 
 				if (find(goalObstructedValidColors.begin(), goalObstructedValidColors.end(), std::string(color->name)) != goalObstructedValidColors.end()) {
 					if (debug) {
-						canvas.drawMarker(pos->x, pos->y, 0, 128, 0);
+						canvas.drawMarker(pos->x, pos->y, 0, 255, 0);
 					}
 					
 					validCount++;
@@ -1094,6 +1094,8 @@ Obstruction Vision::getGoalPathObstruction() {
 			obstruction = Obstruction::RIGHT;
 		}
 	}
+
+	std::cout << "@ Obstruction ratio: " << obstructionRatio << ", left: " << validCountLeft << ", right: " << validCountRight << ", side: " << (obstruction == Obstruction::LEFT ? "LEFT" : obstruction == Obstruction::RIGHT ? "RIGHT" : "NONE") << std::endl;
 
 	return obstruction;
 }
