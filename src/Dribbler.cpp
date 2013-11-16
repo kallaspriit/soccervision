@@ -9,7 +9,8 @@ Dribbler::Dribbler(int id) : Wheel(id), ballDetected(false), everDetectedBall(fa
 };
 
 void Dribbler::prime() {
-	setTargetSpeed(-Config::robotDribblerSpeed / 2);
+	setTargetSpeed(-Config::robotDribblerSpeed);
+	//setTargetSpeed(-Config::robotDribblerSpeed / 2);
 
 	stopRequestedTime = -1.0;
 }
