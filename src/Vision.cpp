@@ -1013,7 +1013,7 @@ Obstruction Vision::getGoalPathObstruction() {
 	float startDistance = 0.2f;
 	float endDistance = 6.0f; // TODO Something smarter?
 	int stopGoalColorCount = 4; // stop searching any further if found this many goal colors
-	float goalPathObstructedThreshold = 0.35f;
+	float goalPathObstructedThreshold = 0.4f;
 
 	float xDistance, yDistance;
 	bool debug = canvas.data != NULL;
@@ -1092,13 +1092,16 @@ Obstruction Vision::getGoalPathObstruction() {
 	float leftValidSamplesRatio = (float)validCountLeft / (float)(sampleCount / 2);
 	float rightValidSamplesRatio = (float)validCountRight / (float)(sampleCount / 2);
 
-	bool obstructed = leftValidSamplesRatio < (1.0f - goalPathObstructedThreshold) || rightValidSamplesRatio < (1.0f - goalPathObstructedThreshold);
+	// not reliable near the goal with few samples
+	if (sampleCount > 50) {
+		bool obstructed = leftValidSamplesRatio < (1.0f - goalPathObstructedThreshold) || rightValidSamplesRatio < (1.0f - goalPathObstructedThreshold);
 
-	if (obstructed) {
-		if (leftValidSamplesRatio < rightValidSamplesRatio) {
-			obstruction = Obstruction::LEFT;
-		} else {
-			obstruction = Obstruction::RIGHT;
+		if (obstructed) {
+			if (leftValidSamplesRatio < rightValidSamplesRatio) {
+				obstruction = Obstruction::LEFT;
+			} else {
+				obstruction = Obstruction::RIGHT;
+			}
 		}
 	}
 
