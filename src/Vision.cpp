@@ -1007,7 +1007,7 @@ Vision::PathMetric Vision::getPathMetric(int x1, int y1, int x2, int y2, std::ve
 Obstruction Vision::getGoalPathObstruction() {
 	Obstruction obstruction = Obstruction::NONE;
 	//float corridorWidth = 0.1f;
-	float yStep = 0.1f;
+	float yStep = 0.05f;
 	float xStep = 0.1f;
 	float xSteps = 4.0f;
 	float startDistance = 0.2f;
