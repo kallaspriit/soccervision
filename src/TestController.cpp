@@ -1883,6 +1883,7 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 	ai->dbg("isFrameValid", isFrameValid);
 	ai->dbg("isKickTooSoon", isKickTooSoon);
 	ai->dbg("isBallInWay", isBallInWay);
+	ai->dbg("isGoalPathObstructed", isGoalPathObstructed);
 	ai->dbg("isRobotOmegaLowEnough", isRobotOmegaLowEnough);
 	ai->dbg("avoidBallSide", avoidBallSide);
 	ai->dbg("validKickFrames", validKickFrames);
