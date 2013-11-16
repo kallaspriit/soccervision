@@ -144,6 +144,7 @@ private:
     std::vector<std::string> validGoalPathColors;
     std::vector<std::string> validColorsBelowBall;
     std::vector<std::string> viewObstructedValidColors;
+    std::vector<std::string> goalObstructedValidColors;
     std::vector<std::string> goalColors;
     int width;
     int height;
