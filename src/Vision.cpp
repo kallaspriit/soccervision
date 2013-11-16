@@ -1006,44 +1006,33 @@ Vision::PathMetric Vision::getPathMetric(int x1, int y1, int x2, int y2, std::ve
 
 Obstruction Vision::getGoalPathObstruction() {
 	Obstruction obstruction = Obstruction::NONE;
-	float corridorWidth = 0.1f;
-	float step = 0.1f;
+	//float corridorWidth = 0.1f;
+	float yStep = 0.1f;
+	float xStep = 0.1f;
+	float xSteps = 4;
 	float startDistance = 0.2f;
 	float endDistance = 6.0f; // TODO Something smarter?
 	int stopGoalColorCount = 10; // stop searching any further if found this many goal colors
 	float goalPathObstructedThreshold = 0.35f;
 
-	float yDistance;
-	float xLeftDistance = -corridorWidth / 2.0f;
-	float xRightDistance = corridorWidth / 2.0f;
+	float xDistance, yDistance;
 	bool debug = canvas.data != NULL;
-	Blobber::Color* leftColor;
-	Blobber::Color* rightColor;
 	Blobber::Color* color;
-	CameraTranslator::CameraPosition* pos;
+	CameraTranslator::CameraPosition pos;
 	int sampleCount = 0;
 	int validCount = 0;
 	int validCountLeft = 0;
 	int validCountRight = 0;
 	int goalColorCount = 0;
-	int sideIndex = 0;
 
 	// TODO make sure finds target side color in the end
 	// sample points every step distances
-	for (yDistance = startDistance; yDistance < endDistance; yDistance += step) {
-		// find corridor positions
-		CameraTranslator::CameraPosition leftPosition = cameraTranslator->getCameraPosition(xLeftDistance, yDistance);
-		CameraTranslator::CameraPosition rightPosition = cameraTranslator->getCameraPosition(xRightDistance, yDistance);
-
-		leftColor = getColorAt(leftPosition.x, leftPosition.y);
-		rightColor = getColorAt(rightPosition.x, rightPosition.y);
-		
-		// same code for both sides
-		// TODO Replace with stepX, side based on sign
-		for (sideIndex = 0; sideIndex < 2; sideIndex++) {
-			color = sideIndex == 0 ? leftColor : rightColor;
-			pos = sideIndex == 0 ? &leftPosition : &rightPosition;
-
+	for (yDistance = startDistance; yDistance < endDistance; yDistance += yStep) {
+		for (xDistance = -xStep * xSteps / 2; xDistance < xStep * xSteps / 2; xDistance += xStep) {
+			// find corridor positions
+			pos = cameraTranslator->getCameraPosition(xDistance, yDistance);
+			color = getColorAt(pos.x, pos.y);
+			
 			if (color != NULL) {
 				if (strcmp(color->name, "blue-goal") == 0 || strcmp(color->name, "yellow-goal") == 0) {
 					goalColorCount++;
@@ -1051,13 +1040,13 @@ Obstruction Vision::getGoalPathObstruction() {
 					// stop if found enough goal colors
 					if (goalColorCount >= stopGoalColorCount) {
 						if (debug) {
-							canvas.drawMarker(pos->x, pos->y, 255, 0, 0);
+							canvas.drawMarker(pos.x, pos.y, 255, 0, 0);
 						}
 
 						break;
 					} else {
 						if (debug) {
-							canvas.drawMarker(pos->x, pos->y, 128, 128, 128);
+							canvas.drawMarker(pos.x, pos.y, 128, 128, 128);
 						}
 					}
 
@@ -1066,18 +1055,18 @@ Obstruction Vision::getGoalPathObstruction() {
 
 				if (find(goalObstructedValidColors.begin(), goalObstructedValidColors.end(), std::string(color->name)) != goalObstructedValidColors.end()) {
 					if (debug) {
-						canvas.drawMarker(pos->x, pos->y, 0, 255, 0);
+						canvas.drawMarker(pos.x, pos.y, 0, 255, 0);
 					}
 					
 					validCount++;
 
-					if (sideIndex == 0) {
+					if (xDistance < 0) {
 						validCountLeft++;
 					} else {
 						validCountRight++;
 					}
 				} else {
-					canvas.drawMarker(pos->x, pos->y, 128, 0, 0);
+					canvas.drawMarker(pos.x, pos.y, 128, 0, 0);
 				}
 
 				sampleCount++;
