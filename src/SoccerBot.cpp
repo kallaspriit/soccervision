@@ -514,7 +514,7 @@ void SoccerBot::setupControllers() {
 }
 
 void SoccerBot::setupXimeaCamera(std::string name, XimeaCamera* camera) {
-	camera->setGain(6);
+	camera->setGain(8);
 	//camera->setGain(4);
 	camera->setExposure(10000);
 	camera->setFormat(XI_RAW8);
