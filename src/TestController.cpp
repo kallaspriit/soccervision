@@ -55,6 +55,11 @@
  * + make returning to field seperate state, use in find ball, fetch ball direct
  * + fix find goal, drive towards own when aiming
  * - check if kick window calculaton is reasonable
+ * - don't avoid balls near the goal (distance + bounding box), might bounce both in anyway
+ * - avoid balls away from the center of the field, not towards (so less new balls will come in the way)
+ * - fetch ball front offset zero, kick with speed, brake based on goal aim offset
+ * - path planning to next ball, drive using relative coords and odometry
+ * - simulator in c++ code, emulates robot and vision, ui might be the same web ui
  *
  *
  * DEMO
