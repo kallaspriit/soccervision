@@ -1,0 +1,14 @@
+INSTALL XIMEA API
+1. download from http://www.ximea.com/support/documents/4
+2. create XIMEAROOT environment variable pointing to the SDK path (C:\XIMEA etc)
+
+INSTALL WEBSOCKETPP
+1. download https://github.com/zaphoyd/websocketpp
+2. create WEBSOCKETPPROOT environment variable pointing to the library path (C:\websocketpp etc)
+
+INSTALL BOOTSTRAP
+1. download latest
+2. in boost folder execute
+   > bootstrap
+   > .\b2 runtime-link=static --with-thread --with-date_time --with-regex
+3. create BOOSTROOT environment variable pointing to the library path (C:\boost etc)
