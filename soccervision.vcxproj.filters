@@ -200,6 +200,9 @@
     <ClInclude Include="include\BallLocalizer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\Serial.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\DisplayWindow.cpp">
@@ -380,6 +383,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\BallLocalizer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Serial.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
