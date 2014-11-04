@@ -31,7 +31,7 @@ public:
 	typedef std::map<std::string, State*> States;
 	typedef States::iterator StatesIt;
 
-	BaseAI(Robot* robot, Communication* com);
+	BaseAI(Robot* robot, AbstractCommunication* com);
 	virtual ~BaseAI();
 	virtual void setState(std::string state);
 	virtual void setState(std::string state, Parameters parameters);

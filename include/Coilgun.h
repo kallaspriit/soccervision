@@ -3,12 +3,12 @@
 
 #include "Config.h"
 
-class Communication;
+class AbstractCommunication;
 
 class Coilgun {
 
 public:
-	Coilgun(Communication* com);
+	Coilgun(AbstractCommunication* com);
 	~Coilgun();
 
 	void kick(int microseconds = Config::robotDefaultKickStrength);
@@ -18,7 +18,7 @@ public:
 	void step(float dt);
 
 private:
-	Communication* com;
+	AbstractCommunication* com;
 	double lastKickTime;
 	double lastChargeRequestTime;
 

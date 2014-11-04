@@ -2,7 +2,7 @@
 #define CONTROLLER_H
 
 #include "Vision.h"
-#include "Communication.h"
+#include "AbstractCommunication.h"
 #include "Command.h"
 #include "Config.h"
 
@@ -12,10 +12,10 @@
 class Robot;
 class Command;
 
-class Controller : public Communication::Listener, public Command::Listener {
+class Controller : public AbstractCommunication::Listener, public Command::Listener {
 
 public:
-    Controller(Robot* robot, Communication* com) : robot(robot), com(com) {}
+	Controller(Robot* robot, AbstractCommunication* com) : robot(robot), com(com) {}
 	virtual void onEnter() {}
 	virtual void onExit() {}
 	virtual bool handleRequest(std::string request) { return false; }
@@ -28,7 +28,7 @@ public:
 
 protected:
     Robot* robot;
-	Communication* com;
+	AbstractCommunication* com;
 
 };
 

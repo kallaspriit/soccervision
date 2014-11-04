@@ -4,7 +4,8 @@
 #include "CameraTranslator.h"
 #include "Vision.h"
 #include "DebugRenderer.h"
-#include "Communication.h"
+#include "AbstractCommunication.h"
+#include "EthernetCommunication.h"
 #include "ProcessThread.h"
 #include "Gui.h"
 #include "FpsCounter.h"
@@ -542,7 +543,7 @@ void SoccerBot::setupServer() {
 }
 
 void SoccerBot::setupCommunication() {
-	com = new Communication(Config::communicationHost, Config::communicationPort);
+	com = new EthernetCommunication(Config::communicationHost, Config::communicationPort);
 }
 
 void SoccerBot::addController(std::string name, Controller* controller) {

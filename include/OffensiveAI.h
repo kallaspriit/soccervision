@@ -40,7 +40,7 @@ public:
 
 	};
 
-	OffensiveAI(Robot* robot, Communication* com);
+	OffensiveAI(Robot* robot, AbstractCommunication* com);
 
 	void onEnter();
 	void onExit();

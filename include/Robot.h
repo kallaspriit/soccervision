@@ -8,7 +8,7 @@
 #include "BallLocalizer.h"
 #include "Vision.h"
 #include "Tasks.h"
-#include "Communication.h"
+#include "AbstractCommunication.h"
 #include "Command.h"
 
 #include <string>
@@ -17,13 +17,13 @@ class Wheel;
 class Dribbler;
 class Coilgun;
 class Task;
-class Communication;
+class AbstractCommunication;
 class OdometerLocalizer;
 
-class Robot : public Communication::Listener, public Command::Listener {
+class Robot : public AbstractCommunication::Listener, public Command::Listener {
 
 public:
-    Robot(Communication* com);
+	Robot(AbstractCommunication* com);
     ~Robot();
 
     void setup();
@@ -119,7 +119,7 @@ private:
 	bool frameTargetSpeedSet;
 	Math::Polygon cameraFOV;
 
-	Communication* com;
+	AbstractCommunication* com;
 	Vision::Results* visionResults;
 	Odometer* odometer;
 	Odometer::Movement movement;

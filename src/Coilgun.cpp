@@ -1,11 +1,11 @@
 #include "Coilgun.h"
-#include "Communication.h"
+#include "AbstractCommunication.h"
 #include "Util.h"
 #include "Config.h"
 
 #include <iostream>
 
-Coilgun::Coilgun(Communication* com) : com(com), lastKickTime(0.0), lastChargeRequestTime(0.0) {
+Coilgun::Coilgun(AbstractCommunication* com) : com(com), lastKickTime(0.0), lastChargeRequestTime(0.0) {
 
 };
 

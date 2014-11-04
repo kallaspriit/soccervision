@@ -15,7 +15,7 @@ class ProcessThread;
 class Gui;
 class FpsCounter;
 class Robot;
-class Communication;
+class AbstractCommunication;
 class CameraTranslator;
 
 class SoccerBot {
@@ -91,7 +91,7 @@ private:
 	Server* server;
 	Robot* robot;
 	Controller* activeController;
-	Communication* com;
+	AbstractCommunication* com;
 	ControllerMap controllers;
 	std::string activeControllerName;
 	std::string activeStreamName;
