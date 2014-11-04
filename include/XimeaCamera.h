@@ -5,7 +5,8 @@
 
 #include <Windows.h>
 #include "xiApi.h"
-#include "xiExt.h"
+//#include "xiExt.h"
+//#include "m3Ext.h"
 
 #include <string>
 
