@@ -1,6 +1,7 @@
 #ifndef COMMUNICATION_H
 #define COMMUNICATION_H
 
+#include "AbstractCommunication.h"
 #include "Thread.h"
 
 #include <boost/thread/mutex.hpp>
@@ -13,19 +14,10 @@
 
 using boost::asio::ip::udp;
 
-class Communication : public Thread {
+class Communication : public AbstractCommunication {
 
 public:
-	class Listener {
-
-	public:
-		virtual void handleCommunicationMessage(std::string message) = 0;
-
-	};
-
-	typedef std::queue<std::string> Messages;
-	enum { MAX_SIZE = 10240 };
-
+	
     Communication(std::string host = "127.0.0.1", int port = 8042);
 	~Communication();
 
