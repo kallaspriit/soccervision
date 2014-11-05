@@ -115,7 +115,7 @@ public:
 	*/
 	void writeString(const std::string& s);
 
-	virtual ~Serial() = 0;
+	~Serial();
 
 	/**
 	* Read buffer maximum size

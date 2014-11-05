@@ -2,7 +2,6 @@
 #define ETHERNET_COMMUNICATION_H
 
 #include "AbstractCommunication.h"
-#include "Thread.h"
 
 #include <boost/thread/mutex.hpp>
 #include <boost/asio.hpp>
@@ -43,7 +42,7 @@ private:
 	udp::endpoint endpoint;
 	boost::asio::ip::udp::endpoint remoteEndpoint;
 	Messages messages;
-	std::queue<std::string> queuedMessages;
+	Messages queuedMessages;
 	bool running;
 	mutable boost::mutex messagesMutex;
 };

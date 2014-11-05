@@ -117,6 +117,7 @@
     <ClInclude Include="include\ProcessThread.h" />
     <ClInclude Include="include\Robot.h" />
     <ClInclude Include="include\Serial.h" />
+    <ClInclude Include="include\SerialCommunication.h" />
     <ClInclude Include="include\Server.h" />
     <ClInclude Include="include\SignalHandler.h" />
     <ClInclude Include="include\SoccerBot.h" />
@@ -200,6 +201,7 @@
     <ClCompile Include="src\ProcessThread.cpp" />
     <ClCompile Include="src\Robot.cpp" />
     <ClCompile Include="src\Serial.cpp" />
+    <ClCompile Include="src\SerialCommunication.cpp" />
     <ClCompile Include="src\SignalHandler.cpp" />
     <ClCompile Include="src\SoccerBot.cpp" />
     <ClCompile Include="src\Tasks.cpp" />
