@@ -4,6 +4,12 @@
 #include <string>
 
 namespace Config {
+	enum CommunicationMode {
+		ETHERNET,
+		SERIAL
+	};
+
+	const CommunicationMode communicationMode = SERIAL;
 
 	// camera serials
 	const int frontCameraSerial = 857769553;
@@ -19,6 +25,10 @@ namespace Config {
 	// ethernet communication host and port
 	const std::string communicationHost = "192.168.4.1";
 	const int communicationPort = 8042;
+
+	// serial device and baud
+	const std::string communicationDevice = "COM9";
+	const int communicationBaud = 115200;
 
 	// camera resolution
 	const int cameraWidth = 1280;

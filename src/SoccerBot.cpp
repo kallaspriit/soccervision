@@ -6,6 +6,7 @@
 #include "DebugRenderer.h"
 #include "AbstractCommunication.h"
 #include "EthernetCommunication.h"
+#include "SerialCommunication.h"
 #include "ProcessThread.h"
 #include "Gui.h"
 #include "FpsCounter.h"
@@ -543,7 +544,16 @@ void SoccerBot::setupServer() {
 }
 
 void SoccerBot::setupCommunication() {
-	com = new EthernetCommunication(Config::communicationHost, Config::communicationPort);
+	switch (Config::communicationMode) {
+		case Config::ETHERNET:
+			com = new EthernetCommunication(Config::communicationHost, Config::communicationPort);
+		break;
+
+		case Config::SERIAL:
+			com = new SerialCommunication(Config::communicationDevice, Config::communicationBaud);
+		break;
+	}
+	
 }
 
 void SoccerBot::addController(std::string name, Controller* controller) {
