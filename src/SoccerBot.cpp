@@ -552,6 +552,14 @@ void SoccerBot::setupCommunication() {
 			break;
 
 		case Config::SERIAL:
+			SerialCommunication::PortList portList = SerialCommunication::getPortList();
+
+			std::cout << "! Serial ports:" << std::endl;
+
+			for (unsigned int i = 0; i < portList.numbers.size(); i++) {
+				std::cout << "  > COM" << portList.numbers[i] << " <" << portList.names[i] << ">" << std::endl;
+			}
+
 			com = new SerialCommunication(Config::communicationDevice, Config::communicationBaud);
 			break;
 		}

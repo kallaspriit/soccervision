@@ -16,7 +16,7 @@ public:
 	SerialCommunication(std::string portName, int baud = 115200);
 	~SerialCommunication();
 
-	PortList getPortList();
+	static PortList getPortList();
 	void send(std::string message);
 	bool gotMessages();
 	std::string dequeueMessage();
