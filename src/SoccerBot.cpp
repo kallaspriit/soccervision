@@ -547,24 +547,36 @@ void SoccerBot::setupServer() {
 void SoccerBot::setupCommunication() {
 	try {
 		switch (Config::communicationMode) {
-		case Config::ETHERNET:
-			com = new EthernetCommunication(Config::communicationHost, Config::communicationPort);
+			case Config::ETHERNET:
+				com = new EthernetCommunication(Config::communicationHost, Config::communicationPort);
 			break;
 
-		case Config::SERIAL:
-			SerialCommunication::PortList portList = SerialCommunication::getPortList();
+			case Config::SERIAL:
+				int serialPortNumber = -1;
 
-			std::cout << "! Serial ports:" << std::endl;
+				SerialCommunication::PortList portList = SerialCommunication::getPortList();
 
-			for (unsigned int i = 0; i < portList.numbers.size(); i++) {
-				std::cout << "  > COM" << portList.numbers[i] << " <" << portList.names[i] << ">" << std::endl;
-			}
+				std::cout << "! Serial ports:" << std::endl;
 
-			com = new SerialCommunication(Config::communicationDevice, Config::communicationBaud);
+				for (unsigned int i = 0; i < portList.numbers.size(); i++) {
+					std::cout << "  > COM" << portList.numbers[i] << " <" << portList.names[i] << ">" << std::endl;
+
+					if (portList.names[i].find(Config::serialDeviceContains) != std::string::npos) {
+						std::cout << "    + found serial device containing '" << Config::serialDeviceContains << "' in it's name, using COM" << portList.numbers[i] << std::endl;
+
+						serialPortNumber = portList.numbers[i];
+					}
+				}
+
+				if (serialPortNumber == -1) {
+					throw new std::exception(std::string("com port containing '" + Config::serialDeviceContains + "' not found").c_str());
+				}
+
+				com = new SerialCommunication("COM" + serialPortNumber, Config::serialBaud);
 			break;
 		}
 	} catch (std::exception e) {
-		std::cout << "- Initializing communication failed, using dummy client for testing" << std::endl;
+		std::cout << "- Initializing communication failed (" << e.what() << "), using dummy client for testing" << std::endl;
 
 		com = new DummyCommunication();
 	}

@@ -27,8 +27,8 @@ namespace Config {
 	const int communicationPort = 8042;
 
 	// serial device and baud
-	const std::string communicationDevice = "COM9";
-	const int communicationBaud = 115200;
+	const std::string serialDeviceContains = "mbed";
+	const int serialBaud = 115200;
 
 	// camera resolution
 	const int cameraWidth = 1280;
