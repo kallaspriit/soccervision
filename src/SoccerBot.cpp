@@ -7,6 +7,7 @@
 #include "AbstractCommunication.h"
 #include "EthernetCommunication.h"
 #include "SerialCommunication.h"
+#include "DummyCommunication.h"
 #include "ProcessThread.h"
 #include "Gui.h"
 #include "FpsCounter.h"
@@ -544,16 +545,21 @@ void SoccerBot::setupServer() {
 }
 
 void SoccerBot::setupCommunication() {
-	switch (Config::communicationMode) {
+	try {
+		switch (Config::communicationMode) {
 		case Config::ETHERNET:
 			com = new EthernetCommunication(Config::communicationHost, Config::communicationPort);
-		break;
+			break;
 
 		case Config::SERIAL:
 			com = new SerialCommunication(Config::communicationDevice, Config::communicationBaud);
-		break;
+			break;
+		}
+	} catch (std::exception e) {
+		std::cout << "- Initializing communication failed, using dummy client for testing" << std::endl;
+
+		com = new DummyCommunication();
 	}
-	
 }
 
 void SoccerBot::addController(std::string name, Controller* controller) {

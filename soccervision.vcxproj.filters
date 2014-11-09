@@ -209,6 +209,9 @@
     <ClInclude Include="include\SerialCommunication.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\DummyCommunication.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\DisplayWindow.cpp">

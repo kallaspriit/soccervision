@@ -96,6 +96,7 @@
     <ClInclude Include="include\CameraTranslator.h" />
     <ClInclude Include="include\Coilgun.h" />
     <ClInclude Include="include\Command.h" />
+    <ClInclude Include="include\DummyCommunication.h" />
     <ClInclude Include="include\EthernetCommunication.h" />
     <ClInclude Include="include\Config.h" />
     <ClInclude Include="include\Controller.h" />

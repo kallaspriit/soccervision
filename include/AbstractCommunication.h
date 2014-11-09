@@ -1,19 +1,16 @@
 #ifndef ABSTRACT_COMMUNICATION_H
 #define ABSTRACT_COMMUNICATION_H
 
-#include "Thread.h"
-
 #include <string>
 #include <queue>
 
-class AbstractCommunication : public Thread {
+class AbstractCommunication {
 
 public:
 	class Listener {
 
 	public:
 		virtual void handleCommunicationMessage(std::string message) = 0;
-
 	};
 
 	typedef std::queue<std::string> Messages;
@@ -22,6 +19,7 @@ public:
 	virtual void send(std::string message) = 0;
 	virtual bool gotMessages() = 0;
 	virtual std::string dequeueMessage() = 0;
+	virtual int start() { return 0; };
 	virtual void close() = 0;
 
 };
