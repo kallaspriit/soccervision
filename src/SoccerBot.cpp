@@ -545,7 +545,7 @@ void SoccerBot::setupServer() {
 }
 
 void SoccerBot::setupCommunication() {
-	//try {
+	try {
 		switch (Config::communicationMode) {
 			case Config::ETHERNET:
 				com = new EthernetCommunication(Config::communicationHost, Config::communicationPort);
@@ -574,14 +574,14 @@ void SoccerBot::setupCommunication() {
 
 				std::cout << "! Attempting to open serial COM" << serialPortNumber << " at " << Config::serialBaud << " baud" << std::endl;
 
-				com = new SerialCommunication("COM" + serialPortNumber, Config::serialBaud);
+				com = new SerialCommunication("COM" + Util::toString(serialPortNumber), Config::serialBaud);
 			break;
 		}
-	/*} catch (std::exception e) {
+	} catch (std::exception e) {
 		std::cout << "- Initializing communication failed (" << e.what() << "), using dummy client for testing" << std::endl;
 
 		com = new DummyCommunication();
-	}*/
+	}
 }
 
 void SoccerBot::addController(std::string name, Controller* controller) {
