@@ -5,8 +5,6 @@ VisualStudioVersion = 12.0.30723.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "soccervision", "soccervision.vcxproj", "{E559BAAF-ABF0-4B58-B040-F15350FF6E8B}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Serial", "..\serial\Serial\Serial.vcxproj", "{B6714111-60D4-4D5A-BED4-11AD739EE185}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -17,10 +15,6 @@ Global
 		{E559BAAF-ABF0-4B58-B040-F15350FF6E8B}.Debug|Win32.Build.0 = Debug|Win32
 		{E559BAAF-ABF0-4B58-B040-F15350FF6E8B}.Release|Win32.ActiveCfg = Release|Win32
 		{E559BAAF-ABF0-4B58-B040-F15350FF6E8B}.Release|Win32.Build.0 = Release|Win32
-		{B6714111-60D4-4D5A-BED4-11AD739EE185}.Debug|Win32.ActiveCfg = Debug|Win32
-		{B6714111-60D4-4D5A-BED4-11AD739EE185}.Debug|Win32.Build.0 = Debug|Win32
-		{B6714111-60D4-4D5A-BED4-11AD739EE185}.Release|Win32.ActiveCfg = Release|Win32
-		{B6714111-60D4-4D5A-BED4-11AD739EE185}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
