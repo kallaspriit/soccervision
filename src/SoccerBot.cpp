@@ -572,6 +572,8 @@ void SoccerBot::setupCommunication() {
 					throw new std::exception(std::string("com port containing '" + Config::serialDeviceContains + "' not found").c_str());
 				}
 
+				std::cout << "! Attempting to open serial COM" << serialPortNumber << " at " << Config::serialBaud << " baud" << std::endl;
+
 				com = new SerialCommunication("COM" + serialPortNumber, Config::serialBaud);
 			break;
 		}
