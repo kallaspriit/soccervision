@@ -8,10 +8,15 @@
 class SerialCommunication : public AbstractCommunication, public Thread {
 
 public:
+	struct PortList {
+		std::vector<unsigned int> numbers;
+		std::vector<std::string> names;
+	};
 
 	SerialCommunication(std::string portName, int baud = 115200);
 	~SerialCommunication();
 
+	PortList getPortList();
 	void send(std::string message);
 	bool gotMessages();
 	std::string dequeueMessage();

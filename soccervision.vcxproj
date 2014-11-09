@@ -52,8 +52,8 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>include;$(BOOSTROOT);$(XIMEAROOT)\API;$(WEBSOCKETPPROOT);lib\libyuv\include;lib\pthread\include;lib\websocketpp;lib\jpeg;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;NOMINMAX;WIN32;_WIN32_WINNT=0x0601;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>include;$(BOOSTROOT);$(XIMEAROOT)\API;$(WEBSOCKETPPROOT);lib\libyuv\include;lib\pthread\include;lib\websocketpp;lib\jpeg;lib\enumser;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;NOMINMAX;WIN32;_WIN32_WINNT=0x0601;CENUMERATESERIAL_USE_STL;NO_ENUMSERIAL_USING_CREATEFILE;NO_ENUMSERIAL_USING_QUERYDOSDEVICE;NO_ENUMSERIAL_USING_GETDEFAULTCOMMCONFIG;NO_ENUMSERIAL_USING_SETUPAPI2;NO_ENUMSERIAL_USING_ENUMPORTS;NO_ENUMSERIAL_USING_WMI;NO_ENUMSERIAL_USING_COMDB;NO_ENUMSERIAL_USING_REGISTRY;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -71,8 +71,8 @@
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>include;$(BOOSTROOT);$(XIMEAROOT)\API;$(WEBSOCKETPPROOT);lib\libyuv\include;lib\pthread\include;lib\websocketpp;lib\jpeg;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;NOMINMAX;WIN32;_WIN32_WINNT=0x0601;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>include;$(BOOSTROOT);$(XIMEAROOT)\API;$(WEBSOCKETPPROOT);lib\libyuv\include;lib\pthread\include;lib\websocketpp;lib\jpeg;lib\enumser;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;NOMINMAX;WIN32;_WIN32_WINNT=0x0601;CENUMERATESERIAL_USE_STL;NO_ENUMSERIAL_USING_CREATEFILE;NO_ENUMSERIAL_USING_QUERYDOSDEVICE;NO_ENUMSERIAL_USING_GETDEFAULTCOMMCONFIG;NO_ENUMSERIAL_USING_SETUPAPI2;NO_ENUMSERIAL_USING_ENUMPORTS;NO_ENUMSERIAL_USING_WMI;NO_ENUMSERIAL_USING_COMDB;NO_ENUMSERIAL_USING_REGISTRY;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
@@ -133,6 +133,11 @@
     <ClInclude Include="include\XimeaCamera.h" />
     <ClInclude Include="include\DisplayWindow.h" />
     <ClInclude Include="include\Gui.h" />
+    <ClInclude Include="lib\enumser\AutoHandle.h" />
+    <ClInclude Include="lib\enumser\AutoHeapAlloc.h" />
+    <ClInclude Include="lib\enumser\AutoHModule.h" />
+    <ClInclude Include="lib\enumser\enumser.h" />
+    <ClInclude Include="lib\enumser\StdAfx.h" />
     <ClInclude Include="lib\jpeg\jpge.h" />
     <ClInclude Include="lib\libyuv\include\libyuv.h" />
     <ClInclude Include="lib\libyuv\include\libyuv\basic_types.h" />
@@ -156,6 +161,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="include\Server.cpp" />
+    <ClCompile Include="lib\enumser\enumser.cpp" />
+    <ClCompile Include="lib\enumser\StdAfx.cpp" />
     <ClCompile Include="lib\jpeg\jpge.cpp" />
     <ClCompile Include="lib\libyuv\source\compare.cc" />
     <ClCompile Include="lib\libyuv\source\compare_neon.cc" />

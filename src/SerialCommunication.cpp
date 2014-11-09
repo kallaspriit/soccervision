@@ -1,4 +1,5 @@
 #include "SerialCommunication.h"
+#include "enumser.h"
 
 SerialCommunication::SerialCommunication(std::string portName, int baud) :
 	portName(portName),
@@ -15,6 +16,14 @@ SerialCommunication::~SerialCommunication() {
 	join();
 
 	std::cout << "done!" << std::endl;
+}
+
+SerialCommunication::PortList SerialCommunication::getPortList() {
+	PortList portList;
+
+	CEnumerateSerial::UsingSetupAPI1(portList.numbers, portList.names);
+
+	return portList;
 }
 
 void SerialCommunication::send(std::string message) {
