@@ -130,7 +130,8 @@ namespace Config {
 	const float robotWheelOffset = 0.1167f;
 
 	// how much to substract from observed distance to calculate distance from dribbler
-	const float robotDribblerDistance = 0.17f;
+	//const float robotDribblerDistance = 0.17f;
+	const float robotDribblerDistance = 0.35f; // TODO restore real
 
 	// robot radius
 	const float robotRadius = 0.12425f;
