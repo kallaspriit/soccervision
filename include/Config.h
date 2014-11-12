@@ -133,10 +133,10 @@ namespace Config {
 	const float robotDribblerDistance = 0.17f;
 
 	// robot radius
-	const float robotRadius = 0.125f;
+	const float robotRadius = 0.12425f;
 
 	// radius of a wheel
-	const float robotWheelRadius = 0.034f;
+	const float robotWheelRadius = 0.035f;
 
 	// in how many seconds to spin around the dribbler
 	const float robotSpinAroundDribblerPeriod = 2.0f;
