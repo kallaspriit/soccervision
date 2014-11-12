@@ -20,15 +20,24 @@ public:
 	bool handleCommand(const Command& cmd);
 	double getBallInDribblerTime() { return ballInDribblerTime; }
 	double getBallLostTime() { return ballLostTime; }
+	int getLowerLimit() { return lowerLimit; }
+	int getUpperLimit() { return upperLimit; }
+	void setLowerLimit(int limit);
+	void setUpperLimit(int limit);
+	void setLimits(int lower, int upper);
 	void step(float dt);
 
 private:
+	void applyLimits();
+	
 	AbstractCommunication* com;
 	bool ballDetected;
 	bool everDetectedBall;
 	float ballInDribblerTime;
 	float ballLostTime;
 	double stopRequestedTime;
+	int lowerLimit;
+	int upperLimit;
 
 };
 

@@ -2,14 +2,12 @@
 #include "AbstractCommunication.h"
 #include "Command.h"
 #include "Util.h"
+#include "Maths.h"
 
 #include <iostream>
 
-Dribbler::Dribbler(int id, AbstractCommunication* com) : Wheel(id), com(com), ballDetected(false), everDetectedBall(false), ballInDribblerTime(0.0), ballLostTime(-1.0f), stopRequestedTime(-1.0) {
-	float servoLimitLower = 0.07f;
-	float servoLimitUpper = 0.07f;
-	
-	com->send("servos:" + Util::toString(servoLimitLower) + ":" + Util::toString(servoLimitUpper));
+Dribbler::Dribbler(int id, AbstractCommunication* com) : Wheel(id), com(com), ballDetected(false), everDetectedBall(false), ballInDribblerTime(0.0), ballLostTime(-1.0f), stopRequestedTime(-1.0), lowerLimit(Config::robotDribblerLowerLimit), upperLimit(Config::robotDribblerUpperLimit) {
+	applyLimits();
 };
 
 void Dribbler::prime() {
@@ -36,6 +34,33 @@ void Dribbler::onKick() {
 	ballDetected = false;
 }
 
+void Dribbler::setLowerLimit(int limit) {
+	lowerLimit = Util::limit(limit, 0, 100);
+
+	applyLimits();
+}
+
+void Dribbler::setUpperLimit(int limit) {
+	upperLimit = Util::limit(limit, 0, 100);
+
+	applyLimits();
+}
+
+void Dribbler::setLimits(int lower, int upper) {
+	lowerLimit = Util::limit(lower, 0, 100);
+	upperLimit = Util::limit(upper, 0, 100);
+
+	applyLimits();
+}
+
+void Dribbler::applyLimits() {
+	float servoLimitLower = Math::map(lowerLimit, 0, 100, Config::robotDribblerLimitMin, Config::robotDribblerLimitMax);
+	float servoLimitUpper = Math::map(upperLimit, 0, 100, Config::robotDribblerLimitMin, Config::robotDribblerLimitMax);
+
+	std::cout << "! Setting servo limits to " << lowerLimit << "-" << upperLimit << " (" << servoLimitLower << "-" << servoLimitUpper << ")" << std::endl;
+
+	com->send("servos:" + Util::toString(servoLimitLower) + ":" + Util::toString(servoLimitUpper));
+}
 void Dribbler::step(float dt) {
 	Wheel::step(dt);
 

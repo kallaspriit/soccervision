@@ -272,6 +272,7 @@ public:
     bool handleCommand(const Command& cmd);
 	void handleTargetVectorCommand(const Command& cmd);
 	void handleDribblerCommand(const Command& cmd);
+	void handleAdjustDribblerLimitsCommand(const Command& cmd);
 	void handleKickCommand(const Command& cmd);
 	void handleResetCommand();
 	void handleToggleGoCommand();

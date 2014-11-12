@@ -153,6 +153,10 @@ namespace Config {
 
 	// how fast to spin the dribbler
 	const int robotDribblerSpeed = 100;
+	const int robotDribblerLowerLimit = 0;
+	const int robotDribblerUpperLimit = 100;
+	const float robotDribblerLimitMin = 0.03f;
+	const float robotDribblerLimitMax = 0.125f;
 	
 	// proportional multiplier for looking at object, multiplied by object angle
 	const float lookAtP = 7.0f;

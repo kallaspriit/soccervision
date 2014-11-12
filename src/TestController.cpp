@@ -153,7 +153,9 @@ bool TestController::handleCommand(const Command& cmd) {
         handleTargetVectorCommand(cmd);
     } else if (cmd.name == "set-dribbler" && cmd.parameters.size() == 1) {
         handleDribblerCommand(cmd);
-    } else if (cmd.name == "kick" && cmd.parameters.size() == 1) {
+	} else if (cmd.name == "adjust-dribbler-limits" && cmd.parameters.size() == 2) {
+		handleAdjustDribblerLimitsCommand(cmd);
+	} else if (cmd.name == "kick" && cmd.parameters.size() == 1) {
         handleKickCommand(cmd);
     } else if (cmd.name == "reset-position") {
 		robot->setPosition(Config::fieldWidth / 2.0f, Config::fieldHeight / 2.0f, 0.0f);
@@ -195,6 +197,15 @@ void TestController::handleDribblerCommand(const Command& cmd) {
 	lastCommandTime = Util::millitime();
 }
 
+void TestController::handleAdjustDribblerLimitsCommand(const Command& cmd) {
+	int lowerLimitDelta = Util::toInt(cmd.parameters[0]);
+	int upperLimitDelta = Util::toInt(cmd.parameters[1]);
+	int currentLowerLimit = robot->dribbler->getLowerLimit();
+	int currentUpperLimit = robot->dribbler->getUpperLimit();
+	int scaler = 1;
+	
+	robot->dribbler->setLimits(currentLowerLimit + lowerLimitDelta, currentUpperLimit + upperLimitDelta);
+}
 void TestController::handleKickCommand(const Command& cmd) {
     manualKickStrength = Util::toInt(cmd.parameters[0]);
 

@@ -37,6 +37,14 @@ Dash.Robot.prototype.toggleDribbler = function() {
 	}
 };
 
+Dash.Robot.prototype.adjustDribbler = function(lowerLimitDelta, upperLimitDelta) {
+	if (this.socket.isOpen()) {
+		dash.dbg.log('! Adjusting dribbler limits', lowerLimitDelta, upperLimitDelta);
+
+		this.socket.send('<adjust-dribbler-limits:' + lowerLimitDelta + ':' + upperLimitDelta + '>');
+	}
+};
+
 Dash.Robot.prototype.setDribbler = function(speed) {
 	if (this.socket.isOpen()) {
 		dash.dbg.log('! Setting dribbler speed: ' + speed);
