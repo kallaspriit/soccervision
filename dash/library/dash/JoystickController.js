@@ -36,14 +36,6 @@ Dash.JoystickController.prototype.onButtonDown = function(e) {
 		this.fastMode = !this.fastMode;
 	} else if (e.control == 'LEFT_TOP_SHOULDER') {
 		this.robot.toggleDribbler();
-	} else if (e.control == 'DPAD_UP') {
-		this.robot.adjustDribbler(1, 0);
-	} else if (e.control == 'DPAD_DOWN') {
-		this.robot.adjustDribbler(-1, 0);
-	} else if (e.control == 'DPAD_LEFT') {
-		this.robot.adjustDribbler(0, -1);
-	} else if (e.control == 'DPAD_RIGHT') {
-		this.robot.adjustDribbler(0, 1);
 	} else {
 		console.log('unmapped button pressed: ' + e.control);
 	}
@@ -77,6 +69,18 @@ Dash.JoystickController.prototype.onTick = function(gamepads) {
 
 	if (!this.useGamepad) {
 		return;
+	}
+
+	if (gamepads[0].state.DPAD_UP != 0) {
+		this.robot.adjustDribbler(1, 0);
+	} else if (gamepads[0].state.DPAD_DOWN != 0) {
+		this.robot.adjustDribbler(-1, 0);
+	}
+
+	if (gamepads[0].state.DPAD_LEFT != 0) {
+		this.robot.adjustDribbler(0, -1);
+	} else if (gamepads[0].state.DPAD_RIGHT != 0) {
+		this.robot.adjustDribbler(0, 1);
 	}
 	
 	var speed = dash.config.joystick.speed,
