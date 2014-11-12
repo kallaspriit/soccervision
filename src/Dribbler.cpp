@@ -35,20 +35,20 @@ void Dribbler::onKick() {
 }
 
 void Dribbler::setLowerLimit(int limit) {
-	lowerLimit = Util::limit(limit, 0, 100);
+	lowerLimit = Util::limit((float)limit, 0.0f, 100.0f);
 
 	applyLimits();
 }
 
 void Dribbler::setUpperLimit(int limit) {
-	upperLimit = Util::limit(limit, 0, 100);
+	upperLimit = Util::limit((float)limit, 0.0f, 100.0f);
 
 	applyLimits();
 }
 
 void Dribbler::setLimits(int lower, int upper) {
-	lowerLimit = Util::limit(lower, 0, 100);
-	upperLimit = Util::limit(upper, 0, 100);
+	lowerLimit = Util::limit((float)lower, 0.0f, 100.0f);
+	upperLimit = Util::limit((float)upper, 0.0f, 100.0f);
 
 	applyLimits();
 }
