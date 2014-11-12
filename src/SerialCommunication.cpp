@@ -56,7 +56,7 @@ void SerialCommunication::send(std::string message) {
 		send(queuedMessage);
 	}
 
-	if (message.substr(0, 6) != "speeds" && message.substr(0, 6) != "charge") {
+	if (message.substr(0, 6) != "speeds") {
 		// incoming message
 		std::cout << "SEND > " << message << std::endl;
 	}
