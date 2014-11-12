@@ -54,10 +54,10 @@ void SerialCommunication::send(std::string message) {
 		send(queuedMessage);
 	}
 
-	//if (message.substr(0, 6) != "speeds" && message.substr(0, 6) != "charge") {
+	if (message.substr(0, 6) != "speeds" && message.substr(0, 6) != "charge") {
 		// incoming message
-		//std::cout << "SEND > " << message << std::endl;
-	//}
+		std::cout << "SEND > " << message << std::endl;
+	}
 
 	message += "\n";
 
@@ -89,7 +89,7 @@ std::string SerialCommunication::dequeueMessage() {
 
 	messages.pop();
 
-	//std::cout << "RECV < " << message << std::endl;
+	std::cout << "RECV < " << message << std::endl;
 
 	return message;
 }
