@@ -42,7 +42,7 @@ void SerialCommunication::send(std::string message) {
 
 		return;
 	} else if (serial.errorStatus()) {
-		std::cerr << "Error: serial port unexpectedly closed" << std::endl;
+		std::cout << "Error: serial port unexpectedly closed" << std::endl;
 
 		return;
 	}
