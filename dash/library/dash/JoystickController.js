@@ -30,11 +30,11 @@ Dash.JoystickController.prototype.init = function() {
 };
 
 Dash.JoystickController.prototype.onButtonDown = function(e) {
-	if (e.control == 'RB') {
+	if (e.control == 'RIGHT_TOP_SHOULDER') {
 		this.robot.kick();
-	} else if (e.control == 'Y') {
+	} else if (e.control == 'FACE_4') {
 		this.fastMode = !this.fastMode;
-	} else if (e.control == 'LB') {
+	} else if (e.control == 'LEFT_TOP_SHOULDER') {
 		this.robot.toggleDribbler();
 	}
 };

@@ -6,7 +6,9 @@ SerialCommunication::SerialCommunication(std::string portName, int baud) :
 	baud(baud),
 	serial(portName, baud)
 {
+	std::cout << "! Starting communication serial to " << portName << " @ " << baud << std::endl;
 
+	serial.setCallback(boost::bind(&SerialCommunication::received, this, _1, _2));
 }
 
 SerialCommunication::~SerialCommunication() {
@@ -54,10 +56,10 @@ void SerialCommunication::send(std::string message) {
 		send(queuedMessage);
 	}
 
-	if (message.substr(0, 6) != "speeds" && message.substr(0, 6) != "charge") {
+	//if (message.substr(0, 6) != "speeds" && message.substr(0, 6) != "charge") {
 		// incoming message
 		std::cout << "SEND > " << message << std::endl;
-	}
+	//}
 
 	message += "\n";
 
@@ -99,9 +101,7 @@ void SerialCommunication::close() {
 }
 
 void* SerialCommunication::run() {
-	std::cout << "! Starting communication serial to " << portName << " @ " << baud << std::endl;
-
-	serial.setCallback(boost::bind(&SerialCommunication::received, this, _1, _2));
+	
 
 	return NULL;
 }
