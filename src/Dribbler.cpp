@@ -55,7 +55,7 @@ void Dribbler::setLimits(int lower, int upper) {
 
 void Dribbler::applyLimits() {
 	float servoLimitLower = Math::map(lowerLimit, 0, 100, Config::robotDribblerLimitMin, Config::robotDribblerLimitMax);
-	float servoLimitUpper = Config::robotDribblerLimitMax - Math::map(upperLimit, 0, 100, Config::robotDribblerLimitMin, Config::robotDribblerLimitMax);
+	float servoLimitUpper = Config::robotDribblerLimitMin + Config::robotDribblerLimitMax - Math::map(upperLimit, 0, 100, Config::robotDribblerLimitMin, Config::robotDribblerLimitMax);
 
 	std::cout << "! Setting servo limits to " << lowerLimit << "-" << upperLimit << " (" << servoLimitLower << "-" << servoLimitUpper << ")" << std::endl;
 
