@@ -311,6 +311,7 @@ private:
 	DebouncedButton resetBtn;
 
 	Side targetSide;
+	float speedMultiplier;
 	float manualSpeedX;
 	float manualSpeedY;
 	float manualOmega;

@@ -85,6 +85,8 @@
 
 TestController::TestController(Robot* robot, AbstractCommunication* com) : BaseAI(robot, com), targetSide(Side::BLUE), manualSpeedX(0.0f), manualSpeedY(0.0f), manualOmega(0.0f), manualDribblerSpeed(0), manualKickStrength(0), blueGoalDistance(0.0f), yellowGoalDistance(0.0f), lastCommandTime(-1.0), lastBallTime(-1.0), lastNearLineTime(-1.0), lastInCornerTime(-1.0), lastTargetGoalAngle(0.0f), lastBall(NULL), lastTurnAroundTime(-1.0), lastClosestGoalDistance(-1.0f), lastTargetGoalDistance(-1.0f), framesRobotOutFront(0), framesRobotOutRear(0), isRobotOutFront(false), isRobotOutRear(false), isNearLine(false), isInCorner(false), inCornerFrames(0) {
 	setupStates();
+
+	speedMultiplier = 0.25f;
 };
 
 TestController::~TestController() {
@@ -1072,19 +1074,18 @@ void TestController::FetchBallFrontState::step(float dt, Vision::Results* vision
 	}
 
 	// configuration parameters
-	float speedMultiplier = 0.25f; // 1.0f normally
-	float targetApproachSpeed = 3.5f * speedMultiplier;
-	float brakingApproachSpeed = 1.5f * speedMultiplier;
-	float maxNearSpeed = 0.75f * speedMultiplier;
-	float minApproachSpeed = 0.75f * speedMultiplier;
+	float targetApproachSpeed = 3.5f * ai->speedMultiplier;
+	float brakingApproachSpeed = 1.5f * ai->speedMultiplier;
+	float maxNearSpeed = 0.75f * ai->speedMultiplier;
+	float minApproachSpeed = 0.75f * ai->speedMultiplier;
+	float accelerateAcceleration = 3.5f * ai->speedMultiplier;
+	float brakeAcceleration = 3.0f * ai->speedMultiplier;
 	float maxOffsetDistanceAngleDiff = 45.0f;
 	float maxAngleDiffDistance = 0.6f;
 	float focusBetweenBallGoalAngle = 15.0f;
 	float maxAngleBrakingAngle = 40.0f;
 	float maxBallBrakingAngle = 10.0f;
 	float nearDistance = 0.35f;
-	float accelerateAcceleration = 3.5f * speedMultiplier;
-	float brakeAcceleration = 3.0f;
 	float retratingBallDistanceDiff = 0.2f;
 	float offsetDistance = 0.25f;
 
@@ -1235,10 +1236,10 @@ void TestController::FetchBallDirectState::step(float dt, Vision::Results* visio
 	}
 
 	// configuration parameters
-	float targetApproachSpeed = 3.5f;
+	float targetApproachSpeed = 3.5f * ai->speedMultiplier;
 	float minApproachSpeed = 0.3f;
-	float accelerateAcceleration = 2.8f;
-	float brakeAcceleration = 2.5f;
+	float accelerateAcceleration = 2.8f * ai->speedMultiplier;
+	float brakeAcceleration = 2.5f * ai->speedMultiplier;
 	float nearLineSpeed = 0.25f;
 	float nearBallDistance = 0.3f;
 	float realSpeed = robot->getVelocity();
