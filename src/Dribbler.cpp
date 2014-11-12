@@ -1,11 +1,15 @@
 #include "Dribbler.h"
+#include "AbstractCommunication.h"
 #include "Command.h"
 #include "Util.h"
 
 #include <iostream>
 
-Dribbler::Dribbler(int id) : Wheel(id), ballDetected(false), everDetectedBall(false), ballInDribblerTime(0.0), ballLostTime(-1.0f), stopRequestedTime(-1.0) {
-
+Dribbler::Dribbler(int id, AbstractCommunication* com) : Wheel(id), com(com), ballDetected(false), everDetectedBall(false), ballInDribblerTime(0.0), ballLostTime(-1.0f), stopRequestedTime(-1.0) {
+	float servoLimitLower = 0.07f;
+	float servoLimitUpper = 0.07f;
+	
+	com->send("servos:" + Util::toString(servoLimitLower) + ":" + Util::toString(servoLimitUpper));
 };
 
 void Dribbler::prime() {

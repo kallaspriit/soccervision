@@ -4,10 +4,12 @@
 #include "Config.h"
 #include "Wheel.h"
 
+class AbstractCommunication;
+
 class Dribbler : public Wheel {
 
 public:
-	Dribbler(int id);
+	Dribbler(int id, AbstractCommunication* com);
 
 	void prime();
 	void start();
@@ -21,6 +23,7 @@ public:
 	void step(float dt);
 
 private:
+	AbstractCommunication* com;
 	bool ballDetected;
 	bool everDetectedBall;
 	float ballInDribblerTime;

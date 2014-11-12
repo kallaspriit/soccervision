@@ -110,7 +110,7 @@ void Robot::setupWheels() {
 }
 
 void Robot::setupDribbler() {
-	dribbler = new Dribbler(Config::dribblerId);
+	dribbler = new Dribbler(Config::dribblerId, com);
 }
 
 void Robot::setupCoilgun() {
