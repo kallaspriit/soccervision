@@ -521,7 +521,8 @@ void SoccerBot::setupXimeaCamera(std::string name, XimeaCamera* camera) {
 	//camera->setGain(4);
 	camera->setExposure(Config::cameraExposure);
 	camera->setFormat(XI_RAW8);
-	camera->setAutoWhiteBalance(false);
+	//camera->setAutoWhiteBalance(false);
+	camera->setAutoWhiteBalance(true);
 	camera->setAutoExposureGain(false);
 	camera->setQueueSize(12); // TODO Affects anything?
 
