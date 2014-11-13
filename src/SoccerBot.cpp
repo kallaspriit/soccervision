@@ -335,7 +335,7 @@ void SoccerBot::broadcastFrame(unsigned char* rgb, unsigned char* classification
 	}
 
 	std::string base64Classification = Util::base64Encode(jpegBuffer, jpegBufferSize);
-	std::string frameResponse = Util::json("frame", "{\"rgb\": \"" + base64Rgb + "\",\"classification\": \"" + base64Classification + "\",\"activeStream\":\"" + activeStreamName + "\",\"cameraK\":" + Util::toString(Util::cameraCorrectionK) + ",\"cameraZoom\":" + Util::toString(Util::cameraCorrectionZoom) + "}");
+	std::string frameResponse = Util::json("frame", "{\"rgb\": \"" + base64Rgb + "\",\"classification\": \"" + base64Classification + "\",\"activeStream\":\"" + activeStreamName + "\"}");
 
 	server->broadcast(frameResponse);
 }
@@ -720,10 +720,10 @@ void SoccerBot::handleCameraChoiceCommand(Command::Parameters parameters) {
 }
 
 void SoccerBot::handleCameraAdjustCommand(Command::Parameters parameters) {
-	Util::cameraCorrectionK = Util::toFloat(parameters[0]);
-	Util::cameraCorrectionZoom = Util::toFloat(parameters[1]);
+	//Util::cameraCorrectionK = Util::toFloat(parameters[0]);
+	//Util::cameraCorrectionZoom = Util::toFloat(parameters[1]);
 
-	std::cout << "! Adjust camera correction k: " << Util::cameraCorrectionK << ", zoom: " << Util::cameraCorrectionZoom << std::endl;
+	//std::cout << "! Adjust camera correction k: " << Util::cameraCorrectionK << ", zoom: " << Util::cameraCorrectionZoom << std::endl;
 }
 
 void SoccerBot::handleStreamChoiceCommand(Command::Parameters parameters) {

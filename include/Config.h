@@ -49,8 +49,8 @@ namespace Config {
 	// constants for camera correction
 	//const float cameraCorrectionK = 0.00000049f;
 	//const float cameraCorrectionZoom = 0.969f;
-	const float cameraCorrectionK = -0.00000013f;
-	const float cameraCorrectionZoom = 1.100f;
+	//const float cameraCorrectionK = -0.00000013f;
+	//const float cameraCorrectionZoom = 1.100f;
 
 	// field dimensions
 	const float fieldWidth = 4.5f;
