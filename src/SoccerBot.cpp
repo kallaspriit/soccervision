@@ -900,6 +900,8 @@ std::string SoccerBot::getStateJSON() {
 		stream << "\"playing\":false,";
 	}
 
+	stream << "\"cameraTranslator\":" << frontCameraTranslator->getJSON() << ",";
+
 	stream << "\"fps\":" << fpsCounter->getFps();
 
     stream << "}";

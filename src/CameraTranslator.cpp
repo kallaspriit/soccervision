@@ -149,3 +149,22 @@ std::istream& operator >> (std::istream& inputStream, CameraTranslator::CameraMa
 
 	return inputStream;  
 }
+
+std::string CameraTranslator::getJSON() {
+	std::stringstream stream;
+
+	stream << "{";
+
+	stream << "\"A\": " << A << ",";
+	stream << "\"B\": " << B << ",";
+	stream << "\"C\": " << C << ",";
+	stream << "\"k1\": " << k1 << ",";
+	stream << "\"k2\": " << k2 << ",";
+	stream << "\"k3\": " << k3 << ",";
+	stream << "\"horizon\": " << horizon << ",";
+	stream << "\"distortionFocus\": " << distortionFocus << "";
+
+	stream << "}";
+
+	return stream.str();
+}

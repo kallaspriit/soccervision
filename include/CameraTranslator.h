@@ -45,9 +45,7 @@ public:
 	CameraPosition getCameraPosition(float dx, float dy);
 	CameraTranslator::CameraPosition CameraTranslator::undistort(int x, int y);
 	CameraTranslator::CameraPosition CameraTranslator::distort(int x, int y);
-
-private:
-	friend std::istream& operator >> (std::istream& inputStream, CameraMap& map);
+	std::string getJSON();
 
 	float A;
 	float B;
@@ -57,6 +55,10 @@ private:
 	float k3;
 	float horizon;
 	float distortionFocus;
+
+private:
+	friend std::istream& operator >> (std::istream& inputStream, CameraMap& map);
+
 	int cameraWidth;
 	int cameraHeight;
 	CameraMap xMap;
