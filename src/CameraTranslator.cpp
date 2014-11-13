@@ -9,7 +9,7 @@ CameraTranslator::WorldPosition CameraTranslator::getWorldPosition(int cameraX, 
 	float pixelVerticalCoord = undistorted.y - this->horizon;
 	int pixelRight = undistorted.x - this->cameraWidth / 2;
 
-	float worldY = this->A + this->B / pixelVerticalCoord;
+	float worldY = this->B + this->A / pixelVerticalCoord;
 	float worldX = C * (float)pixelRight / pixelVerticalCoord;
 
 	float worldDistance = sqrt(pow(worldX, 2) + pow(worldY, 2));
@@ -19,7 +19,7 @@ CameraTranslator::WorldPosition CameraTranslator::getWorldPosition(int cameraX, 
 }
 
 CameraTranslator::CameraPosition CameraTranslator::getCameraPosition(float worldX, float worldY) {
-	float pixelVerticalCoord = this->B / ((worldY * 1000.0f) - this->A);
+	float pixelVerticalCoord = this->A / ((worldY * 1000.0f) - this->B);
 	float pixelRight = (worldX * 1000.0f) * pixelVerticalCoord / this->C;
 
 	float cameraY = pixelVerticalCoord + this->horizon;
