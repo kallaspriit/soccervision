@@ -678,7 +678,10 @@ void SoccerBot::handleServerMessage(Server::Message* message) {
                 handleScreenshotCommand(command.parameters);
             } else if (command.name == "list-screenshots") {
                 handleListScreenshotsCommand(message);
-            } else {
+			} else if (command.name == "camera-translator") {
+				handleCameraTranslatorCommand(command.parameters);
+			}
+			else {
 				std::cout << "- Unsupported command: " << command.name << " " << Util::toString(command.parameters) << std::endl;
 			}
 		}
@@ -824,6 +827,37 @@ void SoccerBot::handleScreenshotCommand(Command::Parameters parameters) {
 
 void SoccerBot::handleListScreenshotsCommand(Server::Message* message) {
 	broadcastScreenshots();
+}
+
+void SoccerBot::handleCameraTranslatorCommand(Command::Parameters parameters) {
+	float A = Util::toFloat(parameters[0]);
+	float B = Util::toFloat(parameters[1]);
+	float C = Util::toFloat(parameters[2]);
+	float k1 = Util::toFloat(parameters[3]);
+	float k2 = Util::toFloat(parameters[4]);
+	float k3 = Util::toFloat(parameters[5]);
+	float horizon = Util::toFloat(parameters[6]);
+	float distortionFocus = Util::toFloat(parameters[7]);
+
+	std::cout << "! Updating camera translator constants" << std::endl;
+
+	frontCameraTranslator->A = A;
+	frontCameraTranslator->B = B;
+	frontCameraTranslator->C = C;
+	frontCameraTranslator->k1 = k1;
+	frontCameraTranslator->k2 = k2;
+	frontCameraTranslator->k3 = k3;
+	frontCameraTranslator->horizon = horizon;
+	frontCameraTranslator->distortionFocus = distortionFocus;
+
+	rearCameraTranslator->A = A;
+	rearCameraTranslator->B = B;
+	rearCameraTranslator->C = C;
+	rearCameraTranslator->k1 = k1;
+	rearCameraTranslator->k2 = k2;
+	rearCameraTranslator->k3 = k3;
+	rearCameraTranslator->horizon = horizon;
+	rearCameraTranslator->distortionFocus = distortionFocus;
 }
 
 void SoccerBot::handleCommunicationMessages() {

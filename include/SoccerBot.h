@@ -56,6 +56,7 @@ public:
 	void handleBlobberClearCommand(Command::Parameters parameters);
 	void handleScreenshotCommand(Command::Parameters parameters);
 	void handleListScreenshotsCommand(Server::Message* message);
+	void handleCameraTranslatorCommand(Command::Parameters parameters);
 
 	void handleCommunicationMessages();
 	void handleCommunicationMessage(std::string message);
