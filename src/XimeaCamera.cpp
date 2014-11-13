@@ -70,10 +70,10 @@ bool XimeaCamera::open(int serial) {
     //xiSetParamInt(device, XI_PRM_ACQ_BUFFER_SIZE, 70*1000*1000);
     //xiSetParamInt(device, XI_PRM_BUFFERS_QUEUE_SIZE, 1);
     //xiSetParamInt(device, XI_PRM_RECENT_FRAME, 1);
-    //xiSetParamInt(device, XI_PRM_AUTO_WB, 0);
-    //xiSetParamFloat(device, XI_PRM_WB_KR, 1.0f);
-    //xiSetParamFloat(device, XI_PRM_WB_KG, 1.0f);
-    xiSetParamFloat(device, XI_PRM_WB_KB, 3.0f);
+    xiSetParamInt(device, XI_PRM_AUTO_WB, 0);
+    xiSetParamFloat(device, XI_PRM_WB_KR, 0.1f);
+    xiSetParamFloat(device, XI_PRM_WB_KG, 0.1f);
+    xiSetParamFloat(device, XI_PRM_WB_KB, 0.1f);
     //xiSetParamFloat(device, XI_PRM_GAMMAY, 1.0f);
     //xiSetParamFloat(device, XI_PRM_GAMMAC, 1.0f);
     //xiSetParamFloat(device, XI_PRM_SHARPNESS, 0.0f);
