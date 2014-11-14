@@ -752,3 +752,7 @@ TABLE.form.tight TH {
 .ctrl {
 	display: none;
 }
+
+.range-slider {
+	width: 250px;
+}

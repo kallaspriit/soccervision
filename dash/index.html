@@ -96,6 +96,15 @@
 			<div class="modal" id="blobber-view">
 				<canvas id="blobber-canvas"></canvas>
 			</div>
+			<div class="modal" id="camera-translator">
+				<table id="camera-translator-table">
+					<tr>
+						<td>A</td>
+						<td><input class="range-slider camera-translator-constant" data-name="A" type="range" min="0" max="10"></td>
+						<td>300</td>
+					</tr>
+				</table>
+			</div>
 			<div id="gamepad"></div>
 			<div id="options">
 				<table class="ctrl manual-ctrl test-ctrl" style="width: 100%;">
@@ -120,7 +129,8 @@
 			<div id="buttons">
 				<button id="host-btn">Host</button>
 				<button id="fetch-frame-btn" class="live-only">Show Video</button>
-				
+				<button id="toggle-camera-translator-btn" class="live-only">Calibrate lens</button>
+
 				<select name="controller-choice" id="controller-choice" class="live-only seperated" disabled="disabled">
 					<option value="">-- Select Controller --</option>
 					<!--option value="manual">Manual Controller</option-->

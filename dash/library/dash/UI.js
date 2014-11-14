@@ -13,6 +13,7 @@ Dash.UI = function() {
 	this.frameCanvas = null;
 	this.currentStateIndex = 0;
 	this.repeatedLogCount = 0;
+	this.extractedCameraTranslator = false;
 };
 
 Dash.UI.prototype = new Dash.Bindable();
@@ -498,7 +499,11 @@ Dash.UI.prototype.initControls = function() {
 		dash.socket.send('<get-frame>');
 		dash.socket.send('<list-screenshots>');
 	});
-	
+
+	$('#toggle-camera-translator-btn').click(function() {
+		dash.ui.showModal('camera-translator');
+	});
+
 	$('#show-blobber-btn').click(function() {
 		dash.ui.showModal('blobber-view');
 	});
@@ -978,6 +983,71 @@ Dash.UI.prototype.addState = function(state) {
 	if (live) {
 		this.showState(this.states.length - 1);
 	}
+
+	if (!this.extractedCameraTranslator) {
+		this._loadCameraTranslator(
+			state.frontCameraTranslator,
+			state.rearCameraTranslator
+		);
+
+		this.extractedCameraTranslator = true;
+	}
+};
+
+Dash.UI.prototype._loadCameraTranslator = function(front, rear) {
+	console.log('translator', front, rear);
+
+	var constants = front,
+		$table = $('#camera-translator-table'),
+		rangeMultiplier = 4,
+		constantName,
+		constantValue,
+		minValue,
+		maxValue,
+		step,
+		temp;
+
+	$table.empty();
+
+	for (constantName in constants) {
+		constantValue = constants[constantName];
+		maxValue = constantValue * rangeMultiplier;
+		minValue = constantValue - constantValue * rangeMultiplier;
+		step = Math.abs(constantValue) / 100;
+
+		if (maxValue < minValue) {
+			temp = maxValue;
+			maxValue = minValue;
+			minValue = temp;
+		}
+
+		$table.append(
+			'<tr>' +
+			'	<td>' + constantName + '</td>' +
+			'	<td><input class="range-slider camera-translator-constant" data-name="' + constantName + '" type="range" value="' + constantValue * 1000 + '" min="' + minValue * 1000 + '" max="' + maxValue * 1000 + '" step="' + step * 1000 + '"></td>' +
+			'	<td class="camera-translator-constant-value-' + constantName + '">' + constantValue.toPrecision(4) + '</td>' +
+			'</tr>'
+		);
+	}
+
+	var $sliders = $('.camera-translator-constant');
+
+	$sliders.on('input', function() {
+		var constantName = $(this).data('name'),
+			value = (parseFloat($(this).val()) / 1000).toPrecision(5),
+			$valueWrap = $('.camera-translator-constant-value-' + constantName + ''),
+			values = [];
+
+		$valueWrap.html(value);
+
+		$sliders.each(function() {
+			values.push(parseFloat($(this).val()) / 1000);
+		});
+
+		dash.ui.robot.setCameraTranslatorConstants.apply(dash.ui.robot, values);
+
+		console.log(values);
+	});
 };
 
 Dash.UI.prototype.showState = function(index) {
