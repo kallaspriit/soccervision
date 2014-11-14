@@ -204,7 +204,7 @@ void DebugRenderer::renderGrid(unsigned char* image, Vision* vision, int width, 
 	canvas.height = height;
 
 	float minDistanceY = 0.0f;
-	float maxDistanceY = 10.0f;
+	float maxDistanceY = 4.0f;
 	float stepX = 0.25f;
 	float stepY = 0.25f;
 	float minDistanceX = -4.0f;
@@ -245,7 +245,7 @@ void DebugRenderer::renderGrid(unsigned char* image, Vision* vision, int width, 
 
 			distorted = vision->getCameraTranslator()->distort(x, pos.y + 1);
 
-			if (lastTextY == -1 || lastTextY - distorted.y >= 10) {
+			if (lastTextY == -1 || lastTextY - distorted.y >= 8) {
 				canvas.drawText(distorted.x, distorted.y, Util::toString(distanceY), 0, 0, 0);
 
 				lastTextY = distorted.y;

@@ -839,7 +839,7 @@ void SoccerBot::handleCameraTranslatorCommand(Command::Parameters parameters) {
 	float horizon = Util::toFloat(parameters[6]);
 	float distortionFocus = Util::toFloat(parameters[7]);
 
-	std::cout << "! Updating camera translator constants" << std::endl;
+	//std::cout << "! Updating camera translator constants" << std::endl;
 
 	frontCameraTranslator->A = A;
 	frontCameraTranslator->B = B;
