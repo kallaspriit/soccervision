@@ -11,8 +11,10 @@
 class CameraTranslator {
 
 public:
-	//typedef std::vector <int> CameraMapRow;
-	typedef std::vector <float> CameraMapRow;
+	//typedef int CameraMapItem;
+	typedef float CameraMapItem;
+	typedef std::vector <CameraMapItem> CameraMapRow;
+	//typedef std::vector <float> CameraMapRow;
 	typedef std::vector <CameraMapRow> CameraMap;
 
 	struct WorldPosition {

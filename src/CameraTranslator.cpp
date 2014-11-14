@@ -52,8 +52,8 @@ CameraTranslator::CameraPosition CameraTranslator::undistort(int distortedX, int
 	if (distortedY < 0) distortedY = 0;
 	if (distortedY > cameraHeight - 1) distortedY = cameraHeight - 1;
 
-	int undistortedX = xMap[distortedY][distortedX];
-	int undistortedY = yMap[distortedY][distortedX];
+	int undistortedX = (int)xMap[distortedY][distortedX];
+	int undistortedY = (int)yMap[distortedY][distortedX];
 
 	return CameraPosition(
 		undistortedX,
@@ -128,7 +128,7 @@ std::istream& operator >> (std::istream& inputStream, CameraTranslator::CameraMa
 	CameraTranslator::CameraMapRow mapRow;
 
 	std::string lineString;
-	int field;
+	CameraTranslator::CameraMapItem field;
 
 	while (getline(inputStream, lineString)) {
 		mapRow.clear();
