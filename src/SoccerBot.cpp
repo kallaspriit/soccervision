@@ -405,18 +405,27 @@ void SoccerBot::setupVision() {
 
 	std::cout << "done!" << std::endl;
 
+	float A = 290.0f;
+	float B = -0.04f;
+	float C = 0.20689130201672276f;
+	float k1 = -2.829515376853199426e-01f;
+	float k2 = 7.099480368253494045e-02f;
+	float k3 = -7.076742557435421188e-03f;
+	float horizon = 163.41286f;
+	float distortionFocus = 6.904681785333543758e+02f;
+
 	// TODO Add to config or load from file
 	frontCameraTranslator->setConstants(
-		108.81935671519336f, -0.025382067623573618f, 0.20689130201672276f,
-		-2.829515376853199426e-01f, 7.099480368253494045e-02f, -7.076742557435421188e-03f,
-		163.41286f, 6.904681785333543758e+02f,
+		A, B, C,
+		k1, k2, k3,
+		horizon, distortionFocus,
 		Config::cameraWidth, Config::cameraHeight
 	);
 
 	rearCameraTranslator->setConstants(
-		108.81935671519336f, -0.025382067623573618f, 0.20689130201672276f,
-		-2.829515376853199426e-01f, 7.099480368253494045e-02f, -7.076742557435421188e-03f,
-		163.41286f, 6.904681785333543758e+02f,
+		A, B, C,
+		k1, k2, k3,
+		horizon, distortionFocus,
 		Config::cameraWidth, Config::cameraHeight
 	);
 
