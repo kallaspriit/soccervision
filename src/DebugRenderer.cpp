@@ -212,6 +212,7 @@ void DebugRenderer::renderGrid(unsigned char* image, Vision* vision, int width, 
 	float distanceX = 0.0f, distanceY = 0.0f;
 	int counter = 0;
 	int lastTextY = -1;
+	int xOverflow = 500;
 	Math::Point screenCoords;
 	CameraTranslator::CameraPosition pos;
 	CameraTranslator::CameraPosition distorted;
@@ -221,11 +222,11 @@ void DebugRenderer::renderGrid(unsigned char* image, Vision* vision, int width, 
 		for (distanceY = minDistanceY; distanceY <= maxDistanceY; distanceY += stepY) {
 			pos = vision->getPixelAt(distanceX, distanceY);
 
-			for (int x = 0; x < Config::cameraWidth; x += 3) {
+			for (int x = -xOverflow; x < Config::cameraWidth + xOverflow; x += 3) {
 				distorted = vision->getCameraTranslator()->distort(x, pos.y);
 				//undistorted = vision->getCameraTranslator()->undistort(distorted.x, distorted.y);
 
-				canvas.setPixelAt(x, pos.y, 128, 0, 0);
+				//canvas.setPixelAt(x, pos.y, 128, 0, 0);
 				canvas.setPixelAt(distorted.x, distorted.y, 0, 0, 128);
 				//canvas.setPixelAt(undistorted.x, undistorted.y, 128, 0, 0);
 			}
