@@ -11,8 +11,8 @@
 class CameraTranslator {
 
 public:
-	//typedef int CameraMapItem;
-	typedef float CameraMapItem;
+	typedef int CameraMapItem;
+	//typedef float CameraMapItem;
 	typedef std::vector <CameraMapItem> CameraMapRow;
 	//typedef std::vector <float> CameraMapRow;
 	typedef std::vector <CameraMapRow> CameraMap;

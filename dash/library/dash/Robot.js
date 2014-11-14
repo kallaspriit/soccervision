@@ -100,3 +100,10 @@ Dash.Robot.prototype.testRectangle = function() {
 	
 	dash.socket.send('<test-rectangle>');
 };
+
+// dash.ui.robot.setCameraTranslatorConstants(108.81935671519336, -0.025382067623573618, 0.20689130201672276, -2.829515376853199426e-01, 7.099480368253494045e-02, -7.076742557435421188e-03, 163.41286, 6.904681785333543758e+02);
+Dash.Robot.prototype.setCameraTranslatorConstants = function(A, B, C, k1, k2, k3, horizon, distortionFocus) {
+	dash.dbg.log('! Sending camera translator constants', A, B, C, k1, k2, k3, horizon, distortionFocus);
+
+	dash.socket.send('<camera-translator:' + A + ':' + B + ':' + C + ':' + k1 + ':' + k2 + ':' + k3 + ':' + horizon + ':' + distortionFocus + '>');
+};

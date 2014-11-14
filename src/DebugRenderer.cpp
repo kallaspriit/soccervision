@@ -225,7 +225,7 @@ void DebugRenderer::renderGrid(unsigned char* image, Vision* vision, int width, 
 				distorted = vision->getCameraTranslator()->distort(x, pos.y);
 				//undistorted = vision->getCameraTranslator()->undistort(distorted.x, distorted.y);
 
-				//canvas.setPixelAt(x, y, 0, 0, 128);
+				canvas.setPixelAt(x, pos.y, 128, 0, 0);
 				canvas.setPixelAt(distorted.x, distorted.y, 0, 0, 128);
 				//canvas.setPixelAt(undistorted.x, undistorted.y, 128, 0, 0);
 			}
@@ -245,7 +245,7 @@ void DebugRenderer::renderGrid(unsigned char* image, Vision* vision, int width, 
 			distorted = vision->getCameraTranslator()->distort(x, pos.y + 1);
 
 			if (lastTextY == -1 || lastTextY - distorted.y >= 10) {
-				canvas.drawText(distorted.x, distorted.y, Util::toString(distanceY), 128, 128, 128);
+				canvas.drawText(distorted.x, distorted.y, Util::toString(distanceY), 0, 0, 0);
 
 				lastTextY = distorted.y;
 			}
