@@ -406,7 +406,7 @@ void SoccerBot::setupVision() {
 	std::cout << "done!" << std::endl;
 
 	// TODO Add to config or load from file
-	frontCameraTranslator->setConstants(
+	/*frontCameraTranslator->setConstants(
 		108.81935671519336f, -0.025382067623573618f, 0.20689130201672276f,
 		-2.829515376853199426e-01f, 7.099480368253494045e-02f, -7.076742557435421188e-03f,
 		163.41286f, 6.904681785333543758e+02f,
@@ -417,6 +417,21 @@ void SoccerBot::setupVision() {
 		108.81935671519336f, -0.025382067623573618f, 0.20689130201672276f,
 		-2.829515376853199426e-01f, 7.099480368253494045e-02f, -7.076742557435421188e-03f,
 		163.41286f, 6.904681785333543758e+02f,
+		Config::cameraWidth, Config::cameraHeight
+	);*/
+
+	frontCameraTranslator->setConstants(
+		//-67.5f, 256000.0f, 189.5f,
+		-49.274208f, 238068.968750f, 173.179504f,
+		-2.0971206246161431e-001f, 1.3804267164342868e-001f, -1.2815466847742417e-002f,
+		-16.678467f, 1.2402373257077263e+003f,
+		Config::cameraWidth, Config::cameraHeight
+	);
+
+	rearCameraTranslator->setConstants(
+		27.0f, 191500.0f, 143.3f,
+		-2.0971206246161431e-001f, 1.3804267164342868e-001f, -1.2815466847742417e-002f,
+		-30.5f, 1.2402373257077263e+003f,
 		Config::cameraWidth, Config::cameraHeight
 	);
 
