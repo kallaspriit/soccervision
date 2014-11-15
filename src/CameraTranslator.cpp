@@ -55,6 +55,8 @@ CameraTranslator::CameraPosition CameraTranslator::undistort(int distortedX, int
 	int undistortedX = (int)undistortMapX[distortedY][distortedX];
 	int undistortedY = (int)undistortMapY[distortedY][distortedX];
 
+	std::cout << "@ UNDISTORT " << distortedX << "x" << distortedY << " to " << undistortedX << "x" << undistortedY << std::endl;
+
 	return CameraPosition(
 		undistortedX,
 		undistortedY
