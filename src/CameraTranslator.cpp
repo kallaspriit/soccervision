@@ -52,8 +52,8 @@ CameraTranslator::CameraPosition CameraTranslator::undistort(int distortedX, int
 	if (distortedY < 0) distortedY = 0;
 	if (distortedY > cameraHeight - 1) distortedY = cameraHeight - 1;
 
-	int undistortedX = (int)xMap[distortedY][distortedX];
-	int undistortedY = (int)yMap[distortedY][distortedX];
+	int undistortedX = (int)undistortMapX[distortedY][distortedX];
+	int undistortedY = (int)undistortMapY[distortedY][distortedX];
 
 	return CameraPosition(
 		undistortedX,
@@ -87,35 +87,45 @@ CameraTranslator::CameraPosition CameraTranslator::distort(int undistortedX, int
 }
 
 bool CameraTranslator::loadUndistortionMapping(std::string xFilename, std::string yFilename){
+	return loadMapping(xFilename, yFilename, undistortMapX, undistortMapY);
+}
+
+bool CameraTranslator::loadDistortionMapping(std::string xFilename, std::string yFilename){
+	return loadMapping(xFilename, yFilename, distortMapX, distortMapY);
+}
+
+bool CameraTranslator::loadMapping(std::string xFilename, std::string yFilename, CameraMap& mapX, CameraMap& mapY){
 	std::ifstream fileStream;
 
 	fileStream.open(xFilename);
 
 	if (fileStream.is_open()) {
-		fileStream >> xMap;
+		fileStream >> mapX;
 
 		if (!fileStream.eof()) {
-			std::cout << "- Failed to load xMap" << std::endl;
+			std::cout << "- Failed to load x map from " << xFilename << std::endl;
 
 			return false;
 		}
-	} else {
-		std::cout << "- Failed to open xMap file" << std::endl;
+	}
+	else {
+		std::cout << "- Failed to open map file " << xFilename << std::endl;
 	}
 
 	fileStream.close();
 	fileStream.open(yFilename);
 
 	if (fileStream.is_open()) {
-		fileStream >> yMap;
+		fileStream >> mapY;
 
 		if (!fileStream.eof()) {
-			std::cout << "- Failed to load yMap" << std::endl;
+			std::cout << "- Failed to load y map from " << yFilename << std::endl;
 
 			return false;
 		}
-	} else {
-		std::cout << "- Failed to open yMap file" << std::endl;
+	}
+	else {
+		std::cout << "- Failed to open y map file " << yFilename << std::endl;
 	}
 
 	fileStream.close();

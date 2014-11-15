@@ -396,12 +396,30 @@ void SoccerBot::setupVision() {
 
 	std::cout << "done!" << std::endl;
 
+	std::cout << "  > loading front camera distorion mappings.. ";
+
+	frontCameraTranslator->loadDistortionMapping(
+		Config::distortMappingFilenameFrontX,
+		Config::distortMappingFilenameFrontY
+		);
+
+	std::cout << "done!" << std::endl;
+
 	std::cout << "  > loading rear camera undistorion mappings.. ";
 
 	rearCameraTranslator->loadUndistortionMapping(
 		Config::undistortMappingFilenameRearX,
 		Config::undistortMappingFilenameRearY
 	);
+
+	std::cout << "done!" << std::endl;
+
+	std::cout << "  > loading rear camera distorion mappings.. ";
+
+	rearCameraTranslator->loadDistortionMapping(
+		Config::distortMappingFilenameRearX,
+		Config::distortMappingFilenameRearY
+		);
 
 	std::cout << "done!" << std::endl;
 

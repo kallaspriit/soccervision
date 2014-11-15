@@ -43,7 +43,9 @@ public:
 		float horizon, float distortionFocus,
 		int cameraWidth, int cameraHeight);
 
+	bool loadMapping(std::string xFilename, std::string yFilename, CameraMap& mapX, CameraMap& mapY);
 	bool loadUndistortionMapping(std::string xFilename, std::string yFilename);
+	bool loadDistortionMapping(std::string xFilename, std::string yFilename);
 	WorldPosition getWorldPosition(int cameraX, int cameraY);
 	CameraPosition getCameraPosition(float dx, float dy);
 	CameraTranslator::CameraPosition CameraTranslator::undistort(int x, int y);
@@ -64,8 +66,10 @@ private:
 
 	int cameraWidth;
 	int cameraHeight;
-	CameraMap xMap;
-	CameraMap yMap;
+	CameraMap undistortMapX;
+	CameraMap undistortMapY;
+	CameraMap distortMapX;
+	CameraMap distortMapY;
 
 };
 

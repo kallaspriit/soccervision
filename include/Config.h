@@ -238,6 +238,10 @@ namespace Config {
 	const std::string undistortMappingFilenameFrontY = "config/undistort-mapping-front-y.csv";
 	const std::string undistortMappingFilenameRearX = "config/undistort-mapping-rear-x.csv";
 	const std::string undistortMappingFilenameRearY = "config/undistort-mapping-rear-y.csv";
+	const std::string distortMappingFilenameFrontX = "config/distort-mapping-front-x.csv";
+	const std::string distortMappingFilenameFrontY = "config/distort-mapping-front-y.csv";
+	const std::string distortMappingFilenameRearX = "config/distort-mapping-rear-x.csv";
+	const std::string distortMappingFilenameRearY = "config/distort-mapping-rear-y.csv";
 	const std::string screenshotsDirectory = "screenshots";
 
 } // namespace Config
