@@ -218,12 +218,13 @@ void DebugRenderer::renderGrid(unsigned char* image, Vision* vision, int width, 
 	CameraTranslator::CameraPosition distorted;
 	CameraTranslator::CameraPosition undistorted;
 
-	for (distanceX = minDistanceX; distanceX <= maxDistanceX; distanceX += stepX) {
-		for (distanceY = minDistanceY; distanceY <= maxDistanceY; distanceY += stepY) {
-			stepY *= 2.0f;
+	for (distanceY = minDistanceY; distanceY <= maxDistanceY; distanceY += stepY) {
+		stepY *= 2.0f;
+
+		for (distanceX = minDistanceX; distanceX <= maxDistanceX; distanceX += stepX) {
 			pos = vision->getCameraTranslator()->getCameraPosition(distanceX, distanceY);
 
-			canvas.setPixelAt(pos.x, pos.y, 128, 0, 0);
+			canvas.setPixelAt(pos.x, pos.y, 0, 0, 128);
 
 			/*for (int x = -xOverflow; x < Config::cameraWidth + xOverflow; x += 3) {
 				distorted = vision->getCameraTranslator()->distort(x, pos.y);
@@ -244,15 +245,7 @@ void DebugRenderer::renderGrid(unsigned char* image, Vision* vision, int width, 
 			}*/
 
 			//px = 10 + (counter % 10) * 30;
-			int x = Config::cameraWidth / 2 - 15;
-
-			distorted = vision->getCameraTranslator()->distort(x, pos.y + 1);
-
-			if (lastTextY == -1 || lastTextY - distorted.y >= 8) {
-				canvas.drawText(distorted.x, distorted.y, Util::toString(distanceY), 0, 0, 0);
-
-				lastTextY = distorted.y;
-			}
+			
 
 			/*for (distanceX = minDistanceX; distanceX < maxDistanceX; distanceX += stepX) {
 				for (int y = 0; y < Config::cameraHeight; y++) {
@@ -261,6 +254,16 @@ void DebugRenderer::renderGrid(unsigned char* image, Vision* vision, int width, 
 			}*/
 
 			counter++;
+		}
+
+		int x = Config::cameraWidth / 2 - 15;
+
+		distorted = vision->getCameraTranslator()->getCameraPosition(0, distanceY);
+
+		if (lastTextY == -1 || lastTextY - distorted.y >= 8) {
+			canvas.drawText(distorted.x, distorted.y, Util::toString(distanceY), 0, 0, 0);
+
+			lastTextY = distorted.y;
 		}
 	}
 
