@@ -1817,7 +1817,9 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 	int halfWidth = Config::cameraWidth / 2;
 	int leftEdge = goal->x - goal->width / 2;
 	int rightEdge = goal->x + goal->width / 2;
-	int goalKickThresholdPixels = (int)((float)goal->width * Config::goalKickThreshold);
+	int goalWidth = goal->width;
+	int goalHalfWidth = goalWidth / 2;
+	int goalKickThresholdPixels = (int)((float)goalHalfWidth * (1.0f - Config::goalKickThreshold));
 	double timeSinceLastKick = lastKickTime != 0.0 ? Util::duration(lastKickTime) : -1.0;
 	bool isBallInWay = visionResults->isBallInWay(visionResults->front->balls, goal->y + goal->height / 2);
 	Obstruction goalPathObstruction = visionResults->front->goalPathObstruction;
@@ -1895,7 +1897,7 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 		validKickFrames = 0;
 	}
 
-	bool performKick = validKickFrames >= 4;
+	bool performKick = validKickFrames >= Config::goalKickValidFrames;
 
 	// only perform the kick if valid view has been observed for a couple of frames
 	if (performKick) {
