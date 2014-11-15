@@ -219,7 +219,7 @@ void DebugRenderer::renderGrid(unsigned char* image, Vision* vision, int width, 
 	CameraTranslator::CameraPosition undistorted;
 
 	for (distanceY = minDistanceY; distanceY <= maxDistanceY; distanceY += stepY) {
-		//stepY *= 2.0f;
+		
 
 		for (distanceX = minDistanceX; distanceX <= maxDistanceX; distanceX += stepX) {
 			pos = vision->getCameraTranslator()->getCameraPosition(distanceX, distanceY);
@@ -261,10 +261,12 @@ void DebugRenderer::renderGrid(unsigned char* image, Vision* vision, int width, 
 		distorted = vision->getCameraTranslator()->getCameraPosition(0, distanceY);
 
 		//if (lastTextY == -1 || lastTextY - distorted.y >= 8) {
-			canvas.drawText(distorted.x, distorted.y, Util::toString(distanceY), 0, 0, 0);
+			canvas.drawText(distorted.x, distorted.y, Util::toString(distanceY) + "m", 0, 0, 0);
 
 			lastTextY = distorted.y;
 		//}
+
+		stepY *= 2.0f;
 	}
 
 	
