@@ -273,7 +273,8 @@ void Gui::onElementClick(Element* element) {
 			blobberFront->clearColors();
 			blobberRear->clearColors();
 		} else if (button->type == 3) {
-			std::cout << "CLEAR SELECTED" << std::endl;
+			blobberFront->clearColor(selectedColorName);
+			blobberRear->clearColor(selectedColorName);
 		}
 		else if (button->type == 4) {
 			quitRequested = true;

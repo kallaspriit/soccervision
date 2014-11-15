@@ -12,7 +12,7 @@ public:
 	DummyCommunication() {};
 
 	void send(std::string message) {
-		std::cout << "SEND: " << message << std::endl;
+		//std::cout << "SEND: " << message << std::endl;
 	};
 
 	bool gotMessages() {
