@@ -351,13 +351,13 @@ bool Vision::isValidBall(Object* ball, Dir dir) {
 		return false;
 	}*/
 
-	/*if (!ball->behind && ball->y + ball->height / 2 > Config::cameraHeight - 80) {
-		std::cout << "@ BALL ON ROBOT IN FRONT" << std::endl;
+	if (!ball->behind && ball->y - ball->height / 2 > Config::cameraHeight - 85) {
+		//std::cout << "@ BALL ON ROBOT IN FRONT" << std::endl;
 
 		return false;
-	}*/
+	}
 
-	if (ball->behind && ball->y + ball->height / 2 > Config::cameraHeight - 135) {
+	if (ball->behind && ball->y - ball->height / 2 > Config::cameraHeight - 135) {
 		//std::cout << "@ BALL ON ROBOT FROM BEHIND" << std::endl;
 
 		return false;
