@@ -46,23 +46,25 @@ void CameraTranslator::setConstants(
 	this->cameraHeight = cameraHeight;
 }
 
-CameraTranslator::CameraPosition CameraTranslator::undistort(int distortedX, int distortedY) {
-	int padding = 10; // TODO should be 0 for perfect mapping
-
-	if (distortedX < padding) distortedX = padding;
-	if (distortedX > cameraWidth - padding - 1) distortedX = cameraWidth - padding - 1;
-	if (distortedY < padding) distortedY = padding;
-	if (distortedY > cameraHeight - padding - 1) distortedY = cameraHeight - padding - 1;
-
-	int undistortedX = (int)undistortMapX[distortedY][distortedX];
-	int undistortedY = (int)undistortMapY[distortedY][distortedX];
-
-	//std::cout << "@ UNDISTORT " << distortedX << "x" << distortedY << " to " << undistortedX << "x" << undistortedY << std::endl;
+CameraTranslator::CameraPosition CameraTranslator::getMappingPosition(int x, int y, CameraMap& mapX, CameraMap& mapY) {
+	if (x < 0) x = 0;
+	if (x > cameraWidth - 1) x = cameraWidth - 1;
+	if (y < 0) y = 0;
+	if (y > cameraHeight - 1) y = cameraHeight - 1;
 
 	return CameraPosition(
-		undistortedX,
-		undistortedY
+		(int)undistortMapX[y][x],
+		(int)undistortMapY[y][x]
 	);
+}
+
+
+CameraTranslator::CameraPosition CameraTranslator::undistort(int distortedX, int distortedY) {
+	return getMappingPosition(distortedX, distortedY, undistortMapX, undistortMapY);
+}
+
+CameraTranslator::CameraPosition CameraTranslator::distort(int undistortedX, int undistortedY) {
+	return getMappingPosition(undistortedX, undistortedY, distortMapX, distortMapY);
 }
 
 // equasion-based solution
@@ -90,21 +92,6 @@ CameraTranslator::CameraPosition CameraTranslator::undistort(int distortedX, int
 		distortedY
 	);
 }*/
-
-CameraTranslator::CameraPosition CameraTranslator::distort(int undistortedX, int undistortedY) {
-	if (undistortedX < 0) undistortedX = 0;
-	if (undistortedX > cameraWidth - 1) undistortedX = cameraWidth - 1;
-	if (undistortedY < 0) undistortedY = 0;
-	if (undistortedY > cameraHeight - 1) undistortedY = cameraHeight - 1;
-
-	int distortedX = (int)distortMapX[undistortedY][undistortedX];
-	int distortedY = (int)distortMapY[undistortedY][undistortedX];
-
-	return CameraPosition(
-		distortedX,
-		distortedY
-	);
-}
 
 bool CameraTranslator::loadUndistortionMapping(std::string xFilename, std::string yFilename){
 	return loadMapping(xFilename, yFilename, undistortMapX, undistortMapY);

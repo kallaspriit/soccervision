@@ -48,8 +48,9 @@ public:
 	bool loadDistortionMapping(std::string xFilename, std::string yFilename);
 	WorldPosition getWorldPosition(int cameraX, int cameraY);
 	CameraPosition getCameraPosition(float dx, float dy);
-	CameraTranslator::CameraPosition CameraTranslator::undistort(int x, int y);
-	CameraTranslator::CameraPosition CameraTranslator::distort(int x, int y);
+	CameraTranslator::CameraPosition undistort(int x, int y);
+	CameraTranslator::CameraPosition distort(int x, int y);
+	CameraTranslator::CameraPosition getMappingPosition(int x, int y, CameraMap& mapX, CameraMap& mapY);
 	std::string getJSON();
 
 	float A;
