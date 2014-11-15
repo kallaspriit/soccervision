@@ -527,13 +527,9 @@ void SoccerBot::setupCameras() {
 }
 
 void SoccerBot::setupRobot() {
-	std::cout << "! Setting up the robot.. ";
-
 	robot = new Robot(com);
 
 	robot->setup();
-
-	std::cout << "done!" << std::endl;
 }
 
 void SoccerBot::setupControllers() {
