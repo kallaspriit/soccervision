@@ -193,11 +193,27 @@ CameraTranslator::CameraMapSet CameraTranslator::generateInverseMap(CameraMap& m
 	CameraMap inverseMapX;
 	CameraMap inverseMapY;
 	CameraMapItem x, y;
+	CameraTranslator::CameraMapRow mapRowX;
+	CameraTranslator::CameraMapRow mapRowY;
 
 	unsigned int rowCount = mapX.size();
 	unsigned int colCount = mapX[0].size();
 
 	for (unsigned int row = 0; row < rowCount; row++) {
+		mapRowX.clear();
+		mapRowY.clear();
+
+		for (unsigned int col = 0; col < colCount; col++) {
+			mapRowX.push_back(col);
+			mapRowY.push_back(row);
+		}
+
+		inverseMapX.push_back(mapRowX);
+		inverseMapY.push_back(mapRowY);
+	}
+
+	for (unsigned int row = 0; row < rowCount; row++) {
+
 		for (unsigned int col = 0; col < colCount; col++) {
 			x = mapX[row][col];
 			y = mapY[row][col];
