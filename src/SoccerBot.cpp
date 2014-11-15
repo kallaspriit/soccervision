@@ -615,6 +615,12 @@ void SoccerBot::setupCommunication() {
 
 		com = new DummyCommunication();
 	}
+	catch (...) {
+		std::cout << "failed!" << std::endl;
+		std::cout << "- Initializing communication failed, using dummy client for testing" << std::endl;
+
+		com = new DummyCommunication();
+	}
 }
 
 void SoccerBot::addController(std::string name, Controller* controller) {
