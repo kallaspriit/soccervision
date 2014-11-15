@@ -53,8 +53,8 @@ CameraTranslator::CameraPosition CameraTranslator::getMappingPosition(int x, int
 	if (y > cameraHeight - 1) y = cameraHeight - 1;
 
 	return CameraPosition(
-		(int)undistortMapX[y][x],
-		(int)undistortMapY[y][x]
+		(int)mapX[y][x],
+		(int)mapY[y][x]
 	);
 }
 
