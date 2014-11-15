@@ -189,6 +189,23 @@ std::istream& operator >> (std::istream& inputStream, CameraTranslator::CameraMa
 	return inputStream;  
 }
 
+CameraTranslator::CameraMapSet CameraTranslator::generateInverseMap(CameraMap& mapX, CameraMap& mapY) {
+	CameraMap inverseMapX;
+	CameraMap inverseMapY;
+	CameraMapItem x, y;
+
+	std::cout << "X SIZE: " << mapX.size() << ", CAMERA HEIGHT: " << Config::cameraHeight << std::endl;
+	std::cout << "Y SIZE: " << mapY.size() << ", CAMERA WIDTH: " << Config::cameraWidth << std::endl;
+
+	/*for (int row = 0; row < mapX.size(); row++) {
+		for (int col = 0; col < mapY.size(); col++) {
+			x = mapX[row][col]
+		}
+	}*/
+
+	return CameraMapSet(inverseMapX, inverseMapY);
+}
+
 std::string CameraTranslator::getJSON() {
 	std::stringstream stream;
 
