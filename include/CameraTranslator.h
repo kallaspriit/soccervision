@@ -51,6 +51,7 @@ public:
 	CameraTranslator::CameraPosition undistort(int x, int y);
 	CameraTranslator::CameraPosition distort(int x, int y);
 	CameraTranslator::CameraPosition getMappingPosition(int x, int y, CameraMap& mapX, CameraMap& mapY);
+	CameraTranslator::CameraPosition getAvgMappingPosition(int x, int y, CameraMap& mapX, CameraMap& mapY);
 	std::string getJSON();
 
 	float A;

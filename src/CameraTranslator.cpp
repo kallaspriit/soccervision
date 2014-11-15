@@ -58,9 +58,31 @@ CameraTranslator::CameraPosition CameraTranslator::getMappingPosition(int x, int
 	);
 }
 
+CameraTranslator::CameraPosition CameraTranslator::getAvgMappingPosition(int x, int y, CameraMap& mapX, CameraMap& mapY) {
+	int brushSize = 10;
+	int xSum = 0;
+	int ySum = 0;
+	int sampleCount = 0;
+
+	for (int dx = -brushSize / 2; dx < brushSize / 2; dx++) {
+		for (int dy = -brushSize / 2; dy < brushSize / 2; dy++) {
+			CameraPosition sample = getMappingPosition(x + dx, y + dy, mapX, mapY);
+
+			xSum += sample.x;
+			ySum += sample.y;
+			sampleCount++;
+		}
+	}
+
+	return CameraPosition(
+		xSum / sampleCount,
+		ySum / sampleCount
+	);
+}
 
 CameraTranslator::CameraPosition CameraTranslator::undistort(int distortedX, int distortedY) {
-	return getMappingPosition(distortedX, distortedY, undistortMapX, undistortMapY);
+	//return getMappingPosition(distortedX, distortedY, undistortMapX, undistortMapY);
+	return getAvgMappingPosition(distortedX, distortedY, undistortMapX, undistortMapY);
 }
 
 CameraTranslator::CameraPosition CameraTranslator::distort(int undistortedX, int undistortedY) {
