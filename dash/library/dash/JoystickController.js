@@ -34,7 +34,7 @@ Dash.JoystickController.prototype.onButtonDown = function(e) {
 		this.robot.kick();
 	} else if (e.control == 'FACE_4') {
 		this.fastMode = !this.fastMode;
-	} else if (e.control == 'FACE_1') {
+	} else if (e.control == 'FACE_3') {
 		dash.socket.send('<run-find-ball>');
 	} else if (e.control == 'FACE_2') {
 		dash.socket.send('<run-manual-control>');
