@@ -336,7 +336,7 @@ bool Vision::isValidGoal(Object* goal, Side side) {
 }
 
 bool Vision::isValidBall(Object* ball, Dir dir) {
-	int ballMinArea = (int)Math::map(ball->distance, 0.0f, 5.0f, 32.0f, 4.0f);
+	int ballMinArea = (int)Math::map(ball->distance, 0.0f, 5.0f, 32.0f, 2.0f);
 
     //if (ball->area < Config::ballMinArea) {
     if (ball->area < ballMinArea) {
