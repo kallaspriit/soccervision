@@ -19,6 +19,7 @@ public:
 	static void renderObstructions(unsigned char* image, Obstruction obstruction, int width = Config::cameraWidth, int height = Config::cameraHeight);
 	static void renderObjectHighlight(unsigned char* image, Object* object, int red = 255, int green = 255, int blue = 255, int width = Config::cameraWidth, int height = Config::cameraHeight);
 	static void renderGrid(unsigned char* image, Vision* vision, int width = Config::cameraWidth, int height = Config::cameraHeight);
+	static void renderMapping(unsigned char* image, Vision* vision, int width = Config::cameraWidth, int height = Config::cameraHeight);
 };
 
 #endif // DEBUGRENDERER_H

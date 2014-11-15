@@ -273,3 +273,26 @@ void DebugRenderer::renderGrid(unsigned char* image, Vision* vision, int width, 
 		}
 	}
 }
+
+void DebugRenderer::renderMapping(unsigned char* image, Vision* vision, int width, int height) {
+	Canvas canvas = Canvas();
+
+	canvas.data = image;
+	canvas.width = width;
+	canvas.height = height;
+
+	CameraTranslator* translator = vision->getCameraTranslator();
+
+	int step = 3;
+
+	int x, y;
+	CameraTranslator::CameraPosition pos;
+
+	for (x = 0; x < Config::cameraWidth; x += step) {
+		for (y = 0; y < Config::cameraHeight; y += step) {
+			pos = translator->undistort(x, y);
+
+			canvas.setPixelAt(pos.x, pos.y, 128, 128, 128);
+		}
+	}
+}

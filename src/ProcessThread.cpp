@@ -121,6 +121,7 @@ void* ProcessThread::run() {
 		DebugRenderer::renderGoals(rgb, visionResult->goals);
 		//DebugRenderer::renderObstructions(rgb, visionResult->obstructionSide);
 		DebugRenderer::renderObstructions(rgb, visionResult->goalPathObstruction);
+		DebugRenderer::renderMapping(rgb, vision);
 		// TODO Show whether a ball is in the way
 	}
 
