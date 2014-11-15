@@ -62,6 +62,10 @@ Gui::Gui(HINSTANCE instance, Blobber* blobberFront, Blobber* blobberRear, int wi
 
 	createButton("Clear all", 20 + 160 + 10, 40, 100, 2);
 
+	if (selectedColorName != "") {
+		createButton("Clear selected", 20 + 280 + 10, 40, 100, 2);
+	}
+
 	createButton("Quit", Config::cameraWidth - 80, 20, 60, 3);
 }
 
