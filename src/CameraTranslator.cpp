@@ -47,15 +47,17 @@ void CameraTranslator::setConstants(
 }
 
 CameraTranslator::CameraPosition CameraTranslator::undistort(int distortedX, int distortedY) {
-	if (distortedX < 0) distortedX = 0;
-	if (distortedX > cameraWidth - 1) distortedX = cameraWidth - 1;
-	if (distortedY < 0) distortedY = 0;
-	if (distortedY > cameraHeight - 1) distortedY = cameraHeight - 1;
+	int padding = 10; // TODO should be 0 for perfect mapping
+
+	if (distortedX < padding) distortedX = padding;
+	if (distortedX > cameraWidth - padding - 1) distortedX = cameraWidth - padding - 1;
+	if (distortedY < padding) distortedY = padding;
+	if (distortedY > cameraHeight - padding - 1) distortedY = cameraHeight - padding - 1;
 
 	int undistortedX = (int)undistortMapX[distortedY][distortedX];
 	int undistortedY = (int)undistortMapY[distortedY][distortedX];
 
-	std::cout << "@ UNDISTORT " << distortedX << "x" << distortedY << " to " << undistortedX << "x" << undistortedY << std::endl;
+	//std::cout << "@ UNDISTORT " << distortedX << "x" << distortedY << " to " << undistortedX << "x" << undistortedY << std::endl;
 
 	return CameraPosition(
 		undistortedX,
