@@ -206,7 +206,7 @@ void DebugRenderer::renderGrid(unsigned char* image, Vision* vision, int width, 
 	float minDistanceY = 0.0f;
 	float maxDistanceY = 4.0f;
 	float stepX = 0.25f;
-	float stepY = 0.25f;
+	float stepY = 0.125f;
 	float minDistanceX = -4.0f;
 	float maxDistanceX = 4.0f;
 	float distanceX = 0.0f, distanceY = 0.0f;
@@ -220,13 +220,14 @@ void DebugRenderer::renderGrid(unsigned char* image, Vision* vision, int width, 
 
 	//for (distanceX = minDistanceX; distanceX <= maxDistanceX; distanceX += stepX) {
 		for (distanceY = minDistanceY; distanceY <= maxDistanceY; distanceY += stepY) {
+			stepY *= 2.0f;
 			pos = vision->getPixelAt(distanceX, distanceY);
 
 			for (int x = -xOverflow; x < Config::cameraWidth + xOverflow; x += 3) {
 				distorted = vision->getCameraTranslator()->distort(x, pos.y);
 				//undistorted = vision->getCameraTranslator()->undistort(distorted.x, distorted.y);
 
-				//canvas.setPixelAt(x, pos.y, 128, 0, 0);
+				canvas.setPixelAt(x, pos.y, 128, 0, 0);
 				canvas.setPixelAt(distorted.x, distorted.y, 0, 0, 128);
 				//canvas.setPixelAt(undistorted.x, undistorted.y, 128, 0, 0);
 			}
