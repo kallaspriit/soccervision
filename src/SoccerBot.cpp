@@ -405,13 +405,17 @@ void SoccerBot::setupVision() {
 
 	std::cout << "done!" << std::endl;
 
-	float A = 290.0f;
-	float B = -0.04f;
-	float C = 0.20689130201672276f;
+	//float A = 290.0f;
+	//float B = -0.04f;
+	//float C = 0.20689130201672276f;
+	//float horizon = -300.0f;
+	float A = 112.47327016157051f;
+	float B = -0.031616397029845825f;
+	float C = 0.20863806269966359f;
+	float horizon = 161.2852f;
 	float k1 = -0.28f;
 	float k2 = 0.07f;
 	float k3 = -0.0075f;
-	float horizon = -300.0f;
 	float distortionFocus = 6.904681785333543758e+02f;
 
 	// TODO Add to config or load from file
