@@ -70,7 +70,7 @@ void DebugRenderer::renderBalls(unsigned char* image, Vision* vision, const Obje
         //canvas.drawLine(ball->x - ball->width / 2, ball->y + ball->height / 2, ball->x + ball->width / 2, ball->y - ball->height / 2);
 
 		sprintf(buf, "%.2fm x %.2fm  %.1f deg", ball->distanceX, ball->distanceY, Math::radToDeg(ball->angle));
-        canvas.drawText(ball->x - ball->width / 2 + 2, ball->y - ball->height / 2 - 22, buf);
+        canvas.drawText(ball->x - ball->width / 2 + 2, ball->y + ball->height / 2 + 12, buf);
 
 		//correctedX = ball->x;
 		//correctedY = ball->y + ball->height / 2;
@@ -80,7 +80,7 @@ void DebugRenderer::renderBalls(unsigned char* image, Vision* vision, const Obje
 		//Util::correctCameraPoint(correctedX, correctedY);
 
 		sprintf(buf, "%d x %d - %d x %d", ball->x, ball->y + ball->height / 2, undistortedPos.x, undistortedPos.y);
-        canvas.drawText(ball->x - ball->width / 2 + 2, ball->y + ball->height / 2 + 12, buf);
+        canvas.drawText(ball->x - ball->width / 2 + 2, ball->y + ball->height / 2 + 2, buf);
 
         //int boxArea = ball->width * ball->height;
 
