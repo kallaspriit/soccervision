@@ -202,6 +202,8 @@ CameraTranslator::CameraMapSet CameraTranslator::generateInverseMap(CameraMap& m
 			x = mapX[row][col];
 			y = mapY[row][col];
 
+			std::cout << "SET " << row << "x" << col << " to " << x << "x" << y << std::endl;
+
 			inverseMapX[row][col] = col;
 			inverseMapY[row][col] = row;
 
