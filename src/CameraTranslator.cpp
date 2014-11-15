@@ -197,11 +197,18 @@ CameraTranslator::CameraMapSet CameraTranslator::generateInverseMap(CameraMap& m
 	std::cout << "X SIZE: " << mapX.size() << ", CAMERA HEIGHT: " << Config::cameraHeight << std::endl;
 	std::cout << "Y SIZE: " << mapX[0].size() << ", CAMERA WIDTH: " << Config::cameraWidth << std::endl;
 
-	/*for (int row = 0; row < mapX.size(); row++) {
-		for (int col = 0; col < mapY.size(); col++) {
-			x = mapX[row][col]
+	for (int row = 0; row < mapX.size(); row++) {
+		for (int col = 0; col < mapX[row].size(); col++) {
+			x = mapX[row][col];
+			y = mapY[row][col];
+
+			inverseMapX[row][col] = col;
+			inverseMapY[row][col] = row;
+
+			inverseMapX[y][x] = col;
+			inverseMapY[y][x] = row;
 		}
-	}*/
+	}
 
 	return CameraMapSet(inverseMapX, inverseMapY);
 }

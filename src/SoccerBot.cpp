@@ -406,7 +406,9 @@ void SoccerBot::setupVision() {
 	std::cout << "done!" << std::endl;
 
 	std::cout << "  > generating front camera undistortion mappings.. ";
-	frontCameraTranslator->generateInverseMap(frontCameraTranslator->distortMapX, frontCameraTranslator->distortMapY);
+	CameraTranslator::CameraMapSet mapSet = frontCameraTranslator->generateInverseMap(frontCameraTranslator->distortMapX, frontCameraTranslator->distortMapY);
+	frontCameraTranslator->undistortMapX = mapSet.x;
+	frontCameraTranslator->undistortMapY = mapSet.y;
 	std::cout << "done!" << std::endl;
 	
 	std::cout << "  > loading rear camera undistorion mappings.. ";
