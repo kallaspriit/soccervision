@@ -283,7 +283,7 @@ void DebugRenderer::renderMapping(unsigned char* image, Vision* vision, int widt
 
 	CameraTranslator* translator = vision->getCameraTranslator();
 
-	int step = 3;
+	int step = 10;
 
 	int x, y;
 	CameraTranslator::CameraPosition pos;
