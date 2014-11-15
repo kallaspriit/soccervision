@@ -203,12 +203,12 @@ void DebugRenderer::renderGrid(unsigned char* image, Vision* vision, int width, 
 	canvas.width = width;
 	canvas.height = height;
 
-	float minDistanceY = 0.0f;
 	float maxDistanceY = 4.0f;
 	float stepX = 0.01f;
 	float minDistanceX = -4.0f;
 	float maxDistanceX = 4.0f;
-	float distanceX = 0.0f, distanceY = 0.125f;
+	float distanceX = 0.0f, distanceY = 0.0f;
+	float distanceStartY = 0.125f;
 	int counter = 0;
 	int lastTextY = -1;
 	int xOverflow = 500;
@@ -217,7 +217,7 @@ void DebugRenderer::renderGrid(unsigned char* image, Vision* vision, int width, 
 	CameraTranslator::CameraPosition distorted;
 	CameraTranslator::CameraPosition undistorted;
 
-	for (distanceY = minDistanceY; distanceY <= maxDistanceY; distanceY *= 2.0f) {
+	for (distanceY = distanceStartY; distanceY <= maxDistanceY; distanceY *= 2.0f) {
 		
 
 		for (distanceX = minDistanceX; distanceX <= maxDistanceX; distanceX += stepX) {
