@@ -154,7 +154,7 @@ namespace Config {
 	const float robotfluidOmegaStep = 6.28f;
 
 	// how fast to spin the dribbler
-	const int robotDribblerSpeed = 100;
+	const int robotDribblerSpeed = 150;
 	const int robotDribblerLowerLimit = 18;
 	const int robotDribblerUpperLimit = 23;
 	const float robotDribblerLimitMin = 0.03f;
