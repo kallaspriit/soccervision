@@ -218,8 +218,6 @@ void DebugRenderer::renderGrid(unsigned char* image, Vision* vision, int width, 
 	CameraTranslator::CameraPosition undistorted;
 
 	for (distanceY = distanceStartY; distanceY <= maxDistanceY; distanceY *= 2.0f) {
-		
-
 		for (distanceX = minDistanceX; distanceX <= maxDistanceX; distanceX += stepX) {
 			pos = vision->getCameraTranslator()->getCameraPosition(distanceX, distanceY);
 
@@ -266,7 +264,12 @@ void DebugRenderer::renderGrid(unsigned char* image, Vision* vision, int width, 
 		//}
 	}
 
-	
+	// draw vertical dots at each 10x increment
+	for (distanceX = minDistanceX; distanceX <= maxDistanceX; distanceX += stepX * 10.0f) {
+		for (distanceY = 0.0f; distanceY < maxDistanceY; distanceY += stepX) {
+			pos = vision->getCameraTranslator()->getCameraPosition(distanceX, distanceY);
 
-	
+			canvas.setPixelAt(pos.x, pos.y, 0, 0, 128);
+		}
+	}
 }
