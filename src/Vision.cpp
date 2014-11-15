@@ -351,9 +351,14 @@ bool Vision::isValidBall(Object* ball, Dir dir) {
 		return false;
 	}*/
 
-	// check that a ball is not seen on the dribbler
-	if (ball->y - ball->height / 2 > Config::cameraHeight - 70) {
-		//std::cout << "@ BALL ON DRIBBLER" << std::endl;
+	/*if (!ball->behind && ball->y + ball->height / 2 > Config::cameraHeight - 80) {
+		std::cout << "@ BALL ON ROBOT IN FRONT" << std::endl;
+
+		return false;
+	}*/
+
+	if (ball->behind && ball->y + ball->height / 2 > Config::cameraHeight - 135) {
+		//std::cout << "@ BALL ON ROBOT FROM BEHIND" << std::endl;
 
 		return false;
 	}
