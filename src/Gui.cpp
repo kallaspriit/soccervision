@@ -61,12 +61,9 @@ Gui::Gui(HINSTANCE instance, Blobber* blobberFront, Blobber* blobberRear, int wi
 	}
 
 	createButton("Clear all", 20 + 160 + 10, 40, 100, 2);
+	clearSelectedBtn = createButton("Clear selected", 20 + 280 + 10, 40, 140, 3, false);
 
-	if (selectedColorName != "") {
-		createButton("Clear selected", 20 + 280 + 10, 40, 100, 2);
-	}
-
-	createButton("Quit", Config::cameraWidth - 80, 20, 60, 3);
+	createButton("Quit", Config::cameraWidth - 80, 20, 60, 4);
 }
 
 Gui::~Gui() {
@@ -91,8 +88,8 @@ DisplayWindow* Gui::createWindow(int width, int height, std::string name) {
 	return window;
 }
 
-Gui::Button* Gui::createButton(std::string text, int x, int y, int width, int type, void* data) {
-	Button* button = new Button(text, x, y, width, type, data);
+Gui::Button* Gui::createButton(std::string text, int x, int y, int width, int type, bool visible, void* data) {
+	Button* button = new Button(text, x, y, width, type, visible, data);
 
 	addMouseListener(button);
 
@@ -245,9 +242,13 @@ void Gui::onElementClick(Element* element) {
 			if (button->type == 1) {
 				if (button->text != selectedColorName) {
 					selectedColorName = button->text;
+
+					clearSelectedBtn->setVisible(true);
 				} else {
 					selectedColorName = "";
 					unset = true;
+
+					clearSelectedBtn->setVisible(false);
 				}
 			}
 
@@ -272,6 +273,9 @@ void Gui::onElementClick(Element* element) {
 			blobberFront->clearColors();
 			blobberRear->clearColors();
 		} else if (button->type == 3) {
+			std::cout << "CLEAR SELECTED" << std::endl;
+		}
+		else if (button->type == 4) {
 			quitRequested = true;
 		}
 	}
@@ -336,11 +340,15 @@ Gui::Element::Element() : lastInteractionTime(0.0) {
 
 }
 
-Gui::Button::Button(std::string text, int x, int y, int width, int type, void* data) : Element(), text(text), x(x), y(y), width(width), type(type), data(data), over(false), active(false) {
+Gui::Button::Button(std::string text, int x, int y, int width, int type, bool visible, void* data) : Element(), text(text), x(x), y(y), width(width), type(type), visible(visible), data(data), over(false), active(false) {
 
 }
 
 void Gui::Button::draw(unsigned char* image, int imageWidth, int imageHeight) {
+	if (!visible) {
+		return;
+	}
+
 	canvas.width = imageWidth;
 	canvas.height = imageHeight;
 	canvas.data = image;

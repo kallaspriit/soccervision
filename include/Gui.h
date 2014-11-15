@@ -30,10 +30,11 @@ public:
 
 	class Button : public Element {
 		public:
-			Button(std::string text, int x, int y, int width = 0, int type = 0, void* data = NULL);
+			Button(std::string text, int x, int y, int width = 0, int type = 0, bool visible = true, void* data = NULL);
 			void draw(unsigned char* image, int imageWidth = Config::cameraWidth, int imageHeight = Config::cameraHeight);
 			bool contains(int x, int y);
 			void onMouseMove(int x, int y, DisplayWindow* win);
+			void setVisible(bool visible) { this->visible = visible; }
 
 			std::string text;
 			int x;
@@ -42,6 +43,7 @@ public:
 			int type;
 			void* data;
 			bool active;
+			bool visible;
 
 		private:
 			int getWidth();
@@ -54,7 +56,7 @@ public:
     ~Gui();
 
 	DisplayWindow* createWindow(int width, int height, std::string name);
-	Button* createButton(std::string text, int x, int y, int width = 0, int type = 0, void* data = NULL);
+	Button* createButton(std::string text, int x, int y, int width = 0, int type = 0, bool visible = true, void* data = NULL);
 	void drawElements(unsigned char* image, int width, int height);
 	bool isMouseOverElement(int x, int y);
     bool update();
@@ -88,6 +90,7 @@ private:
 	DisplayWindow* activeWindow;
 	Blobber* blobberFront;
 	Blobber* blobberRear;
+	Button* clearSelectedBtn;
 	std::vector<Element*> elements;
 	std::string selectedColorName;
 	int width;
