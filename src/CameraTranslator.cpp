@@ -61,7 +61,8 @@ CameraTranslator::CameraPosition CameraTranslator::undistort(int distortedX, int
 	);
 }
 
-CameraTranslator::CameraPosition CameraTranslator::distort(int undistortedX, int undistortedY) {
+// equasion-based solution
+/*CameraTranslator::CameraPosition CameraTranslator::distort(int undistortedX, int undistortedY) {
 	// conversion for distorting  (normalization?)
 	float x = ((float)undistortedX - (float)cameraWidth / 2.0f) / distortionFocus;
 	float y = ((float)undistortedY - (float)cameraHeight / 2.0f) / distortionFocus;
@@ -79,6 +80,21 @@ CameraTranslator::CameraPosition CameraTranslator::distort(int undistortedX, int
 	// convert back
 	int distortedX = (int)(x * distortionFocus + cameraWidth / 2.0f);
 	int distortedY = (int)(y * distortionFocus + cameraHeight / 2.0f);
+
+	return CameraPosition(
+		distortedX,
+		distortedY
+	);
+}*/
+
+CameraTranslator::CameraPosition CameraTranslator::distort(int undistortedX, int undistortedY) {
+	if (undistortedX < 0) undistortedX = 0;
+	if (undistortedX > cameraWidth - 1) undistortedX = cameraWidth - 1;
+	if (undistortedY < 0) undistortedY = 0;
+	if (undistortedY > cameraHeight - 1) undistortedY = cameraHeight - 1;
+
+	int distortedX = (int)distortMapX[undistortedY][undistortedX];
+	int distortedY = (int)distortMapY[undistortedY][undistortedX];
 
 	return CameraPosition(
 		distortedX,
