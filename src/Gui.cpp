@@ -1,5 +1,5 @@
 #include "Gui.h"
-#include "SoccerBot.h"
+#include "CameraTranslator.h"
 #include "DebugRenderer.h"
 #include "ImageProcessor.h"
 #include "Util.h"
@@ -8,7 +8,7 @@
 
 LRESULT CALLBACK WinProc(HWND hWnd,UINT message,WPARAM wParam,LPARAM lParam);
 
-Gui::Gui(HINSTANCE instance, SoccerBot* bot, Blobber* blobberFront, Blobber* blobberRear, int width, int height) : instance(instance), bot(bot), blobberFront(blobberFront), blobberRear(blobberRear), width(width), height(height), activeWindow(NULL), quitRequested(false) {
+Gui::Gui(HINSTANCE instance, CameraTranslator* frontCameraTranslator, CameraTranslator* rearCameraTranslator, Blobber* blobberFront, Blobber* blobberRear, int width, int height) : instance(instance), frontCameraTranslator(frontCameraTranslator), rearCameraTranslator(rearCameraTranslator), blobberFront(blobberFront), blobberRear(blobberRear), width(width), height(height), activeWindow(NULL), quitRequested(false) {
 	WNDCLASSEX wClass;
 	ZeroMemory(&wClass, sizeof(WNDCLASSEX));
 
@@ -105,14 +105,20 @@ void Gui::drawElements(unsigned char* image, int width, int height) {
 	}
 }
 
-void Gui::drawMouse(unsigned char* image, int width, int height) {
+void Gui::drawMouse(CameraTranslator* cameraTranslator, unsigned char* image, int width, int height) {
 	Canvas canvas;
 
 	canvas.width = width;
 	canvas.height = height;
 	canvas.data = image;
 
-	canvas.drawBox(mouseX, mouseY, 10, 10, 255, 0, 0);
+	CameraTranslator::CameraPosition distorted = cameraTranslator->distort(mouseX, mouseY);
+	CameraTranslator::CameraPosition undistorted = cameraTranslator->undistort(mouseX, mouseY);
+
+	char buf[256];
+
+	sprintf(buf, "distorted: %dx%d, undistorted: %dx%d", distorted.x, distorted.y, undistorted.x, undistorted.y);
+	canvas.drawText(mouseX, mouseY, buf, 0, 0, 128);
 }
 
 bool Gui::isMouseOverElement(int x, int y) {
@@ -147,7 +153,7 @@ void Gui::setFrontImages(unsigned char* rgb, unsigned char* yuyv, unsigned char*
 
 	drawElements(rgb, width, height);
 	drawElements(classification, width, height);
-	drawMouse(rgb, width, height);
+	drawMouse(frontCameraTranslator, rgb, width, height);
 
 	if (activeWindow == frontClassification || activeWindow == frontRGB) {
 		if (!isMouseOverElement(mouseX, mouseY)) {
@@ -168,7 +174,7 @@ void Gui::setRearImages(unsigned char* rgb, unsigned char* yuyv, unsigned char* 
 
 	drawElements(rgb, width, height);
 	drawElements(classification, width, height);
-	drawMouse(rgb, width, height);
+	drawMouse(rearCameraTranslator, rgb, width, height);
 
 	if (activeWindow == rearClassification || activeWindow == rearRGB) {
 		if (!isMouseOverElement(mouseX, mouseY)) {

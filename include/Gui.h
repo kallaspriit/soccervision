@@ -11,7 +11,7 @@
 #include <vector>
 #include <string>
 
-class SoccerBot;
+class CameraTranslator;
 class Command;
 class Vision;
 class Blobber;
@@ -53,13 +53,13 @@ public:
 			bool over;
 	};
 
-    Gui(HINSTANCE instance, SoccerBot* bot, Blobber* blobberFront, Blobber* blobberRear, int width, int height);
+	Gui(HINSTANCE instance, CameraTranslator* frontCameraTranslator, CameraTranslator* rearCameraTranslator, Blobber* blobberFront, Blobber* blobberRear, int width, int height);
     ~Gui();
 
 	DisplayWindow* createWindow(int width, int height, std::string name);
 	Button* createButton(std::string text, int x, int y, int width = 0, int type = 0, bool visible = true, void* data = NULL);
 	void drawElements(unsigned char* image, int width, int height);
-	void drawMouse(unsigned char* image, int width, int height);
+	void drawMouse(CameraTranslator* cameraTranslator, unsigned char* image, int width, int height);
 	bool isMouseOverElement(int x, int y);
     bool update();
 	bool isQuitRequested() { return quitRequested; }
@@ -90,7 +90,8 @@ private:
 	DisplayWindow* frontClassification;
 	DisplayWindow* rearClassification;
 	DisplayWindow* activeWindow;
-	SoccerBot* bot;
+	CameraTranslator* frontCameraTranslator;
+	CameraTranslator* rearCameraTranslator;
 	Blobber* blobberFront;
 	Blobber* blobberRear;
 	Button* clearSelectedBtn;
