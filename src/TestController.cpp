@@ -1853,7 +1853,8 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 	}
 
 	// drive sideways if there's a ball in the way
-	if (isBallInWay || isGoalPathObstructed) {
+	//if (isBallInWay || isGoalPathObstructed) {
+	if (isGoalPathObstructed) {
 		// check whether there's another ball close by
 		float anotherBallCloseDistance = 0.3f;
 		Object* nextClosestBall = visionResults->getNextClosestBall(Dir::FRONT);
