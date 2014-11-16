@@ -194,9 +194,10 @@ std::istream& operator >> (std::istream& inputStream, CameraTranslator::CameraMa
 CameraTranslator::CameraMapSet CameraTranslator::generateInverseMap(CameraMap& mapX, CameraMap& mapY) {
 	CameraMap inverseMapX;
 	CameraMap inverseMapY;
-	CameraMapItem x, y;
+	//CameraMapItem x, y;
 	CameraTranslator::CameraMapRow mapRowX;
 	CameraTranslator::CameraMapRow mapRowY;
+	CameraPosition distorted;
 
 	unsigned int rowCount = mapX.size();
 	unsigned int colCount = mapX[0].size();
@@ -218,12 +219,14 @@ CameraTranslator::CameraMapSet CameraTranslator::generateInverseMap(CameraMap& m
 
 	for (unsigned int row = 0; row < rowCount; row++) {
 		for (unsigned int col = 0; col < colCount; col++) {
-			x = mapX[row][col];
-			y = mapY[row][col];
+			//x = mapX[row][col];
+			//y = mapY[row][col];
 
-			if (y >= 0 && y < rowCount && x >= 0 && x < colCount) {
-				inverseMapX[y][x] = col;
-				inverseMapY[y][x] = row;
+			distorted = distort(col, row);
+
+			if (distorted.y >= 0 && distorted.y < rowCount && distorted.x >= 0 && distorted.x < colCount) {
+				inverseMapX[distorted.y][distorted.x] = col;
+				inverseMapY[distorted.y][distorted.x] = row;
 			}
 		}
 	}
