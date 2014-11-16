@@ -6,6 +6,8 @@
 CameraTranslator::WorldPosition CameraTranslator::getWorldPosition(int cameraX, int cameraY) {
 	CameraPosition undistorted = undistort(cameraX, cameraY);
 
+	std::cout << "UNDISTORT " << cameraX << "x" << cameraY << " to " << undistorted.x << "x" << undistorted.y << std::endl;
+
 	float pixelVerticalCoord = undistorted.y - this->horizon;
 	int pixelRight = undistorted.x - this->cameraWidth / 2;
 
