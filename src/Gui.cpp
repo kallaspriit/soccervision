@@ -102,6 +102,14 @@ void Gui::drawElements(unsigned char* image, int width, int height) {
 	for (std::vector<Element*>::const_iterator i = elements.begin(); i != elements.end(); i++) {
 		(*i)->draw(image, width, height);
 	}
+
+	Canvas canvas;
+
+	canvas.width = width;
+	canvas.height = height;
+	canvas.data = image;
+
+	canvas.drawBox(mouseX, mouseY, 10, 10, 255, 0, 0);
 }
 
 bool Gui::isMouseOverElement(int x, int y) {
