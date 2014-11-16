@@ -268,9 +268,6 @@ CameraTranslator::CameraMapSet CameraTranslator::generateInverseMap(CameraMap& m
 				}
 
 				if (inverseMapX[senseY][senseX] != NaN && inverseMapY[senseY][senseX] != NaN) {
-					//inverseMapX[row][col] = inverseMapX[senseY][senseX];
-					//inverseMapY[row][col] = inverseMapY[senseY][senseX];
-
 					// store the changes in a vector and play it back later not to affect other NaN values from generated values
 					mapChangeSet.push_back(CameraMapChange(row, col, inverseMapX[senseY][senseX], inverseMapY[senseY][senseX]));
 
