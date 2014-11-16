@@ -85,7 +85,7 @@ namespace Config {
 
 	// minimum object metric thresholds to be considered valid
 	const float minValidBallSurroundThreshold = 0.5f;
-	const float minValidBallPathThreshold = 0.75f;
+	const float minValidBallPathThreshold = 0.65f;
 	const float minValidGoalPathThreshold = 0.65f;
 
 	// the ball/goal bottom needs to be below this line to consider path metric
