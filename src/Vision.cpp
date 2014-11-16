@@ -1005,10 +1005,10 @@ Vision::PathMetric Vision::getPathMetric(int x1, int y1, int x2, int y2, std::ve
 	bool validColorFound = requiredColor == "" || requiredColorFound;
 	bool isOut = crossingGreenWhiteBlackGreen || tooManyBlacksInRow;
 
-	std::cout << "@ blacksInRow: " << blacksInRow << std::endl;
+	/*std::cout << "@ blacksInRow: " << blacksInRow << std::endl;
 	std::cout << "@ previousBlack: " << previousBlack << std::endl;
 	std::cout << "@ crossingGreenWhiteBlackGreen: " << crossingGreenWhiteBlackGreen << std::endl;
-	std::cout << "@ tooManyBlacksInRow: " << tooManyBlacksInRow << std::endl << std::endl;
+	std::cout << "@ tooManyBlacksInRow: " << tooManyBlacksInRow << std::endl << std::endl;*/
 
 	return PathMetric(percentage, longestInvalidSpree, validColorFound, isOut);
 }
