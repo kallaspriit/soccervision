@@ -46,7 +46,7 @@ float Coilgun::getChipKickDurationByDistance(float distanceMeters) {
 	// https://docs.google.com/spreadsheets/d/1ARV-47Fz91zb0l3KWDKGF0UaeSvyiEqHsW1mHZ_QlIk/edit#gid=275766663
 	// y = 1.103E-7x^4 - 9.764E-5x^3 + 0.014x^2
 
-	float distanceCm = distanceMeters * 10;
+	float distanceCm = distanceMeters * 100.0f;
 
 	float a = 1.103E-7f;
 	float b = 9.764E-5f;
@@ -54,7 +54,11 @@ float Coilgun::getChipKickDurationByDistance(float distanceMeters) {
 	float d = 11.672f;
 	float e = 908.503f;
 
-	return Math::pow(a * distanceCm, 4) - Math::pow(b * distanceCm, 3) + Math::pow(c * distanceCm, 2) + d * distanceCm + e;
+	return Math::pow(a * distanceCm, 4)
+		- Math::pow(b * distanceCm, 3)
+		+ Math::pow(c * distanceCm, 2)
+		+ d * distanceCm
+		+ e;
 }
 
 void Coilgun::step(float dt) {
