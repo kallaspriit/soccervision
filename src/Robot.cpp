@@ -229,6 +229,12 @@ void Robot::step(float dt, Vision::Results* visionResults) {
     stream << "\"realOmega\":" << wheelRR->getRealOmega();
     stream << "},";
 
+
+	stream << "\"dribbler\": {";
+	stream << "\"isRaised\":" << (dribbler->isRaised() ? "true" : "false") << ",";
+	stream << "\"isLowered\":" << (dribbler->isLowered() ? "true" : "false") << ",";
+	stream << "},";
+
 	debugBallList("ballsRaw", stream, visibleBalls);
 	debugBallList("ballsFiltered", stream, ballLocalizer->balls);
 

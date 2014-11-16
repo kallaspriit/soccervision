@@ -6,7 +6,7 @@
 
 #include <iostream>
 
-Dribbler::Dribbler(int id, AbstractCommunication* com) : Wheel(id), com(com), ballDetected(false), everDetectedBall(false), ballInDribblerTime(0.0), ballLostTime(-1.0f), stopRequestedTime(-1.0), lowerLimit(Config::robotDribblerNormalLowerLimit), upperLimit(Config::robotDribblerNormalUpperLimit) {
+Dribbler::Dribbler(int id, AbstractCommunication* com) : Wheel(id), com(com), ballDetected(false), everDetectedBall(false), isRaiseRequested(false), timeSinceRaised(0.0f), timeSinceLowered(0.0f), ballInDribblerTime(0.0), ballLostTime(-1.0f), stopRequestedTime(-1.0), lowerLimit(Config::robotDribblerNormalLowerLimit), upperLimit(Config::robotDribblerNormalUpperLimit) {
 	applyLimits();
 };
 
@@ -55,10 +55,14 @@ void Dribbler::setLimits(int lower, int upper) {
 
 void Dribbler::useNormalLimits() {
 	setLimits(Config::robotDribblerNormalLowerLimit, Config::robotDribblerNormalUpperLimit);
+
+	isRaiseRequested = false;
 }
 
 void Dribbler::useChipKickLimits() {
 	setLimits(Config::robotDribblerChipKickLowerLimit, Config::robotDribblerChipKickUpperLimit);
+
+	isRaiseRequested = true;
 }
 
 void Dribbler::applyLimits() {
@@ -101,7 +105,23 @@ void Dribbler::step(float dt) {
 		}
 	}
 
+	if (isRaiseRequested) {
+		timeSinceRaised += dt;
+		timeSinceLowered = 0.0f;
+	} else {
+		timeSinceLowered += dt;
+		timeSinceRaised = 0.0f;
+	}
+
 	//std::cout << "ballInDribblerTime: " << ballInDribblerTime << ", ballLostTime: " << ballLostTime << ", got ball: " << (gotBall() ? "yes" : "no") << std::endl;
+}
+
+bool Dribbler::isRaised() {
+	return timeSinceRaised >= Config::robotDribblerMoveDuration;
+}
+
+bool Dribbler::isLowered() {
+	return timeSinceLowered >= Config::robotDribblerMoveDuration;
 }
 
 bool Dribbler::gotBall(bool definitive) const {

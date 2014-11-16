@@ -16,6 +16,8 @@ public:
 	void stop();
 	void onKick();
 	bool isActive() const { return targetOmega > 0; }
+	bool isRaised();
+	bool isLowered();
 	bool gotBall(bool definitive = false) const;
 	bool handleCommand(const Command& cmd);
 	double getBallInDribblerTime() { return ballInDribblerTime; }
@@ -35,6 +37,9 @@ private:
 	AbstractCommunication* com;
 	bool ballDetected;
 	bool everDetectedBall;
+	bool isRaiseRequested;
+	float timeSinceRaised;
+	float timeSinceLowered;
 	float ballInDribblerTime;
 	float ballLostTime;
 	double stopRequestedTime;
