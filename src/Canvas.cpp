@@ -387,7 +387,7 @@ void Canvas::drawChar(int imageX, int imageY, int index, int red, int green, int
     }
 }
 
-void Canvas::drawText(int imageX, int imageY, std::string text, int red, int green, int blue) {
+void Canvas::drawText(int imageX, int imageY, std::string text, int red, int green, int blue, bool clearBackground) {
 	if (data == NULL) {
         return;
     }
@@ -399,7 +399,9 @@ void Canvas::drawText(int imageX, int imageY, std::string text, int red, int gre
 
     const char* str = text.c_str();
 
-	fillBox(imageX - paddingHor - 1, imageY - paddingVer + 1, text.length() * charWidth + paddingHor * 2, charHeight + paddingVer * 2, 255, 255, 255);
+	if (clearBackground) {
+		fillBox(imageX - paddingHor - 1, imageY - paddingVer + 1, text.length() * charWidth + paddingHor * 2, charHeight + paddingVer * 2, 255, 255, 255);
+	}
 
     for (unsigned int i = 0; i < text.size(); i++) {
 		drawChar(imageX + i * charWidth, imageY, str[i], red, green, blue);

@@ -376,10 +376,10 @@ void Gui::Button::draw(unsigned char* image, int imageWidth, int imageHeight) {
 	if (active) {
 		canvas.fillBox(x, y, getWidth(), getHeight(), 255, 0, 0);
 		canvas.drawBox(x, y, getWidth(), getHeight(), 255, over ? 0 : 255, over ? 0 : 255);
-		canvas.drawText(x + 6, y + 4, text, 255, 255, 255);
+		canvas.drawText(x + 6, y + 4, text, 255, 255, 255, false);
 	} else {
 		canvas.drawBox(x, y, getWidth(), getHeight(), over ? 255 : 0, over ? 0 : 0, over ? 0 : 255);
-		canvas.drawText(x + 6, y + 4, text, over ? 255 : 0, over ? 0 : 0, over ? 0 : 255);
+		canvas.drawText(x + 6, y + 4, text, over ? 255 : 0, over ? 0 : 0, over ? 0 : 255, false);
 	}
 }
 
