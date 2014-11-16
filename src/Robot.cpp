@@ -232,7 +232,7 @@ void Robot::step(float dt, Vision::Results* visionResults) {
 
 	stream << "\"dribbler\": {";
 	stream << "\"isRaised\":" << (dribbler->isRaised() ? "true" : "false") << ",";
-	stream << "\"isLowered\":" << (dribbler->isLowered() ? "true" : "false") << ",";
+	stream << "\"isLowered\":" << (dribbler->isLowered() ? "true" : "false");
 	stream << "},";
 
 	debugBallList("ballsRaw", stream, visibleBalls);
