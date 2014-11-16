@@ -641,7 +641,7 @@ A:hover {
 	border-radius: 3px;
 	z-index: 1;
 }
-.wheel-graph:hover {
+#wheel-graphs .wheel-graph:hover {
 	width: 600px;
 	height: 400px;
 	z-index: 2;
@@ -684,6 +684,12 @@ A:hover {
 #wheel-graphs.full #wheel-graph-rr {
 	left: 50%;
 	top: 50%;
+}
+
+#voltage-graph {
+	left: 0;
+	top: 420px;
+	width: 210px;
 }
 
 /* Form table */

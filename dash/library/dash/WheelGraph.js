@@ -34,8 +34,10 @@ Dash.WheelGraph.prototype.render = function(state, name) {
 	
 	var x = this.width,
 		currentState = state,
-		multiplier = this.height * 0.007,
-		range = 100,
+		ref = currentState.robot[name].ref || 0.007,
+		drawLines = currentState.robot[name].drawLines ? true : false,
+		multiplier = this.height * ref,
+		range = 500,
 		first = true,
 		skipCount = 1,
 		info,
@@ -49,14 +51,16 @@ Dash.WheelGraph.prototype.render = function(state, name) {
 	// draw target omega
 	
 	this.c.strokeStyle = '#333';
-	
-	for (var lineOmega = -range; lineOmega <= range; lineOmega += 10) {
-		y = lineOmega * multiplier + this.height / 2;
-		
-		this.c.beginPath();
-		this.c.moveTo(0, y);
-		this.c.lineTo(this.width, y);
-		this.c.stroke();
+
+	if (drawLines) {
+		for (var lineOmega = -range; lineOmega <= range; lineOmega += 10) {
+			y = lineOmega * multiplier + this.height / 2;
+
+			this.c.beginPath();
+			this.c.moveTo(0, y);
+			this.c.lineTo(this.width, y);
+			this.c.stroke();
+		}
 	}
 	
 	this.c.strokeStyle = '#AA0';

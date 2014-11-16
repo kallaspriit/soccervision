@@ -1845,6 +1845,7 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 	float sideSpeed = 0.0f;
 	bool validWindow = false;
 	bool isKickTooSoon = lastKickTime != -1.0 && timeSinceLastKick < minKickInterval;
+	bool isLowVoltage = robot->coilgun->isLowVoltage();
 
 	// limit ball avoidance time
 	if (avoidBallDuration > maxBallAvoidTime) {
@@ -1854,7 +1855,7 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 
 	// drive sideways if there's a ball in the way
 	//if (isBallInWay || isGoalPathObstructed) {
-	if (isGoalPathObstructed) {
+	if (isGoalPathObstructed || (isBallInWay && isLowVoltage)) {
 		// check whether there's another ball close by
 		float anotherBallCloseDistance = 0.3f;
 		Object* nextClosestBall = visionResults->getNextClosestBall(Dir::FRONT);
@@ -1907,7 +1908,12 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 	forwardSpeed = Math::max(forwardSpeed, minForwardSpeed);
 
 	bool isRobotOmegaLowEnough = Math::abs(robot->getOmega()) <= maxRobotKickOmega;
-	bool isFrameValid = validWindow && !isKickTooSoon && !isGoalPathObstructed && isRobotOmegaLowEnough && robot->dribbler->gotBall(true);
+	bool isFrameValid = validWindow
+		&& !isKickTooSoon
+		&& !isGoalPathObstructed
+		&& isRobotOmegaLowEnough
+		&& robot->dribbler->gotBall(true)
+		&& (!isLowVoltage || !isBallInWay);
 
 	if (isFrameValid) {
 		validKickFrames++;

@@ -13,6 +13,7 @@ Dash.Renderer = function(id) {
 		RL: null,
 		RR: null
 	};
+	this.voltageGraph = null;
 };
 
 Dash.Renderer.prototype.init = function() {
@@ -44,6 +45,9 @@ Dash.Renderer.prototype.init = function() {
 		RL: new Dash.WheelGraph('wheel-graph-rl'),
 		RR: new Dash.WheelGraph('wheel-graph-rr')
 	};
+
+	this.voltageGraph = new Dash.WheelGraph('voltage-graph');
+	this.voltageGraph.init();
 	
 	for (var name in this.wheelGraphs) {
 		this.wheelGraphs[name].init();
@@ -428,4 +432,17 @@ Dash.Renderer.prototype.renderState = function(state) {
 	this.wheelGraphs.FR.render.apply(this.wheelGraphs.FR, [state, 'wheelFR']);
 	this.wheelGraphs.RL.render.apply(this.wheelGraphs.RL, [state, 'wheelRL']);
 	this.wheelGraphs.RR.render.apply(this.wheelGraphs.RR, [state, 'wheelRR']);
+
+	var graphVoltage = -(state.robot.coilgun.voltage - 200);
+
+	// fake the voltage reading to be a wheel..
+	state.robot.coilGraph = {
+		stalled: false,
+		targetOmega: graphVoltage,
+		realOmega: graphVoltage,
+		ref: 0.0025,
+		drawLines: false
+	};
+
+	this.voltageGraph.render.apply(this.voltageGraph, [state, 'coilGraph']);
 };

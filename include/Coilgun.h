@@ -17,6 +17,7 @@ public:
 	void charge();
 	void discharge();
 	bool isReady() { return false; } // TODO New communication
+	bool isLowVoltage() { return voltage < Config::robotCoilgunLowVoltageThreshold;  }
 	float getChipKickDurationByDistance(float distance);
 	float getVoltage() { return voltage; }
 	bool handleCommand(const Command& cmd);
