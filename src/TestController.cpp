@@ -1704,7 +1704,8 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 
 		// escape from corner if near one lately, only do it near own goal and also when near line and target goal, only do it once and when there is no goal neaby at the rear
 		if (
-			(ai->wasInCornerLately() || (ai->wasNearLineLately() && ai->isRobotNearTargetGoal(1.2f)))
+			//(ai->wasInCornerLately() || (ai->wasNearLineLately() && ai->isRobotNearTargetGoal(1.2f)))
+			ai->wasInCornerLately()
 			&& !escapeCornerPerformed
 			&& ai->isRobotNearTargetGoal()
 			&& (rearGoal == NULL || ai->getObjectClosestDistance(visionResults, rearGoal) > 1.5f)

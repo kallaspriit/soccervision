@@ -35,7 +35,9 @@ Dash.JoystickController.prototype.onButtonDown = function(e) {
 	} else if (e.control == 'FACE_4') {
 		this.fastMode = !this.fastMode;
 	} else if (e.control == 'FACE_3') {
-		dash.socket.send('<run-find-ball>');
+		dash.ui.toggleTargetSide();
+		window.setTimeout(function() { dash.ui.toggleTargetSide(); }, 200);
+		window.setTimeout(function() { dash.socket.send('<run-find-ball>'); }, 200);
 	} else if (e.control == 'FACE_2') {
 		dash.socket.send('<run-manual-control>');
 	} else if (e.control == 'LEFT_TOP_SHOULDER') {
