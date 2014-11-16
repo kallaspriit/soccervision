@@ -387,14 +387,6 @@ void SoccerBot::setupVision() {
 	frontCameraTranslator = new CameraTranslator();
 	rearCameraTranslator = new CameraTranslator();
 
-	/*std::cout << "  > loading front camera undistorion mappings.. ";
-
-	frontCameraTranslator->loadUndistortionMapping(
-		Config::undistortMappingFilenameFrontX,
-		Config::undistortMappingFilenameFrontY
-	);
-
-	std::cout << "done!" << std::endl;*/
 
 	//float A = 290.0f;
 	//float B = -0.04f;
@@ -424,12 +416,19 @@ void SoccerBot::setupVision() {
 		Config::cameraWidth, Config::cameraHeight
 	);
 
-	std::cout << "  > loading front camera distotion mappings.. ";
+	std::cout << "  > loading front camera distortion mappings.. ";
 	frontCameraTranslator->loadDistortionMapping(
 		Config::distortMappingFilenameFrontX,
 		Config::distortMappingFilenameFrontY
 	);
 	std::cout << "done!" << std::endl;
+
+	/*std::cout << "  > loading front camera undistorion mappings.. ";
+	frontCameraTranslator->loadUndistortionMapping(
+	Config::undistortMappingFilenameFrontX,
+	Config::undistortMappingFilenameFrontY
+	);
+	std::cout << "done!" << std::endl;*/
 
 	std::cout << "  > generating front camera undistortion mappings.. ";
 	CameraTranslator::CameraMapSet mapSet = frontCameraTranslator->generateInverseMap(frontCameraTranslator->distortMapX, frontCameraTranslator->distortMapY);
