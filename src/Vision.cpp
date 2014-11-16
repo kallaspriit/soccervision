@@ -992,7 +992,7 @@ Vision::PathMetric Vision::getPathMetric(int x1, int y1, int x2, int y2, std::ve
 		(lastColor == "black" && sawWhite)
 		|| (firstColor == "white" && sawWhiteBeforeBlack && lastColor == "green")
 	) {
-		//std::cout << "@ OUT LATE" << std::endl;
+		std::cout << "@ OUT LATE" << std::endl;
 
 		crossingGreenWhiteBlackGreen = true;
 	}
