@@ -1923,7 +1923,11 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 			// TODO calulate distance to aim for
 			float chipKickDistance = 2.0f;
 
-			robot->chipKick(chipKickDistance);
+			if (robot->dribbler->getBallInDribblerTime() >= 0.5f) {
+				robot->chipKick(chipKickDistance);
+			} else {
+				ai->dbg("waitingBallToSettle", true);
+			}
 		} else {
 			robot->kick();
 		}
@@ -1956,6 +1960,7 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 	ai->dbg("sideSpeed", sideSpeed);
 	ai->dbg("whiteDistance", visionResults->front->whiteDistance.min);
 	ai->dbg("robotOmega", robot->getOmega());
+	ai->dbg("ballInDribblerTime", robot->dribbler->getBallInDribblerTime());
 }
 
 void TestController::ReturnFieldState::onEnter(Robot* robot, Parameters parameters) {

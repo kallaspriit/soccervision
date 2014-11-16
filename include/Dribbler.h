@@ -20,8 +20,8 @@ public:
 	bool isLowered();
 	bool gotBall(bool definitive = false) const;
 	bool handleCommand(const Command& cmd);
-	double getBallInDribblerTime() { return ballInDribblerTime; }
-	double getBallLostTime() { return ballLostTime; }
+	float getBallInDribblerTime() { return ballInDribblerTime; }
+	float getBallLostTime() { return ballLostTime; }
 	int getLowerLimit() { return lowerLimit; }
 	int getUpperLimit() { return upperLimit; }
 	void setLowerLimit(int limit);
