@@ -444,18 +444,18 @@ void SoccerBot::setupVision() {
 	);
 	std::cout << "done!" << std::endl;
 
-	std::cout << "  > loading rear camera distorion mappings.. ";
+	/*std::cout << "  > loading rear camera distorion mappings.. ";
 	rearCameraTranslator->loadDistortionMapping(
 		Config::distortMappingFilenameRearX,
 		Config::distortMappingFilenameRearY
 	);
-	std::cout << "done!" << std::endl;
+	std::cout << "done!" << std::endl;*/
 
-	/*std::cout << "  > generating rear camera undistortion mappings.. ";
+	std::cout << "  > generating rear camera undistortion mappings.. ";
 	mapSet = rearCameraTranslator->generateInverseMap(rearCameraTranslator->distortMapX, rearCameraTranslator->distortMapY);
 	rearCameraTranslator->undistortMapX = mapSet.x;
 	rearCameraTranslator->undistortMapY = mapSet.y;
-	std::cout << "done!" << std::endl;*/
+	std::cout << "done!" << std::endl;
 
 	// TODO Remove this test
 	/*for (int x = 0; x <= Config::cameraWidth; x += Config::cameraWidth / 2) {
