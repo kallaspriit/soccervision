@@ -392,10 +392,12 @@ void SoccerBot::setupVision() {
 	//float B = -0.04f;
 	//float C = 0.20689130201672276f;
 	//float horizon = -300.0f;
-	float A = 112.47327016157051f;
+	float A = 112.5f;
 	float B = -0.031616397029845825f;
 	float C = 0.20863806269966359f;
-	float horizon = 161.2852f;
+	float horizon = 167.74f;
+
+	// TODO these are not actually currently used any more, remove at some point
 	float k1 = -0.28f;
 	float k2 = 0.07f;
 	float k3 = -0.0075f;
