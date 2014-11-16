@@ -424,7 +424,7 @@ void SoccerBot::setupVision() {
 		Config::cameraWidth, Config::cameraHeight
 	);
 
-	std::cout << "  > loading front camera distorion mappings.. ";
+	std::cout << "  > loading front camera distotion mappings.. ";
 	frontCameraTranslator->loadDistortionMapping(
 		Config::distortMappingFilenameFrontX,
 		Config::distortMappingFilenameFrontY
@@ -437,17 +437,18 @@ void SoccerBot::setupVision() {
 	frontCameraTranslator->undistortMapY = mapSet.y;
 	std::cout << "done!" << std::endl;
 	
-	std::cout << "  > loading rear camera undistorion mappings.. ";
-	rearCameraTranslator->loadUndistortionMapping(
-		Config::undistortMappingFilenameRearX,
-		Config::undistortMappingFilenameRearY
-	);
-	std::cout << "done!" << std::endl;
 
-	/*std::cout << "  > loading rear camera distorion mappings.. ";
+	std::cout << "  > loading rear camera distortion mappings.. ";
 	rearCameraTranslator->loadDistortionMapping(
 		Config::distortMappingFilenameRearX,
 		Config::distortMappingFilenameRearY
+	);
+	std::cout << "done!" << std::endl;
+
+	/*std::cout << "  > loading rear camera undistorion mappings.. ";
+	rearCameraTranslator->loadUndistortionMapping(
+	Config::undistortMappingFilenameRearX,
+	Config::undistortMappingFilenameRearY
 	);
 	std::cout << "done!" << std::endl;*/
 
@@ -456,16 +457,6 @@ void SoccerBot::setupVision() {
 	rearCameraTranslator->undistortMapX = mapSet.x;
 	rearCameraTranslator->undistortMapY = mapSet.y;
 	std::cout << "done!" << std::endl;
-
-	// TODO Remove this test
-	/*for (int x = 0; x <= Config::cameraWidth; x += Config::cameraWidth / 2) {
-		for (int y = 0; y <= Config::cameraHeight; y+= Config::cameraHeight / 2) {
-			CameraTranslator::CameraPosition distorted = rearCameraTranslator->distort(x, y);
-			CameraTranslator::CameraPosition undistorted = rearCameraTranslator->undistort(x, y);
-
-			//std::cout << "@ " << x << "x" << y << " DISTORTED: " << distorted.x << "x" << distorted.y << " UNDISTORTED: " << undistorted.x << "x" << undistorted.y << std::endl;
-		}
-	}*/
 
 	frontVision = new Vision(frontBlobber, frontCameraTranslator, Dir::FRONT, Config::cameraWidth, Config::cameraHeight);
 	rearVision = new Vision(rearBlobber, rearCameraTranslator, Dir::REAR, Config::cameraWidth, Config::cameraHeight);
