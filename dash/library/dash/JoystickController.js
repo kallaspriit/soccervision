@@ -32,6 +32,8 @@ Dash.JoystickController.prototype.init = function() {
 Dash.JoystickController.prototype.onButtonDown = function(e) {
 	if (e.control == 'RIGHT_TOP_SHOULDER') {
 		this.robot.kick();
+	} else if (e.control == 'RIGHT_BOTTOM_SHOULDER') {
+		this.robot.chipKick(2.0);
 	} else if (e.control == 'FACE_4') {
 		this.fastMode = !this.fastMode;
 	} else if (e.control == 'FACE_3') {
@@ -44,6 +46,10 @@ Dash.JoystickController.prototype.onButtonDown = function(e) {
 		dash.socket.send('<run-manual-control>');
 	} else if (e.control == 'LEFT_TOP_SHOULDER') {
 		this.robot.toggleDribbler();
+	} else if (e.control == 'DPAD_UP') {
+		this.robot.useChipKickDribblerLimits();
+	} else if (e.control == 'DPAD_DOWN') {
+		this.robot.useNormalDribblerLimits();
 	} else {
 		console.log('unmapped button pressed: ' + e.control);
 	}
@@ -79,7 +85,7 @@ Dash.JoystickController.prototype.onTick = function(gamepads) {
 		return;
 	}
 
-	if (gamepads[0].state.DPAD_UP != 0) {
+	/*if (gamepads[0].state.DPAD_UP != 0) {
 		this.robot.adjustDribbler(1, 0);
 	} else if (gamepads[0].state.DPAD_DOWN != 0) {
 		this.robot.adjustDribbler(-1, 0);
@@ -89,7 +95,7 @@ Dash.JoystickController.prototype.onTick = function(gamepads) {
 		this.robot.adjustDribbler(0, -1);
 	} else if (gamepads[0].state.DPAD_RIGHT != 0) {
 		this.robot.adjustDribbler(0, 1);
-	}
+	}*/
 	
 	var speed = dash.config.joystick.speed,
 		turnRate = dash.config.joystick.turnRate,
