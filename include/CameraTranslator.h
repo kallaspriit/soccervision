@@ -15,7 +15,7 @@ public:
 	typedef int CameraMapItem;
 	typedef std::vector <CameraMapItem> CameraMapRow;
 	typedef std::vector <CameraMapRow> CameraMap;
-
+	
 	struct CameraMapSet {
 		CameraMapSet(CameraMap x, CameraMap y) : x(x), y(y) {}
 
@@ -41,6 +41,8 @@ public:
 		int y;
 	};
 
+	typedef std::vector <CameraPosition> CameraPositionSet;
+
 	CameraTranslator() : A(0.0f), B(0.0f), C(0.0f), k1(0.0f), k2(0.0f), k3(0.0f), horizon(0.0f), cameraWidth(0), cameraHeight(0) {}
 
 	void setConstants(
@@ -55,10 +57,11 @@ public:
 	CameraMapSet generateInverseMap(CameraMap& mapX, CameraMap& mapY);
 	WorldPosition getWorldPosition(int cameraX, int cameraY);
 	CameraPosition getCameraPosition(float dx, float dy);
-	CameraTranslator::CameraPosition undistort(int x, int y);
-	CameraTranslator::CameraPosition distort(int x, int y);
-	CameraTranslator::CameraPosition getMappingPosition(int x, int y, CameraMap& mapX, CameraMap& mapY);
-	CameraTranslator::CameraPosition getAvgMappingPosition(int x, int y, CameraMap& mapX, CameraMap& mapY);
+	CameraPosition undistort(int x, int y);
+	CameraPosition distort(int x, int y);
+	CameraPosition getMappingPosition(int x, int y, CameraMap& mapX, CameraMap& mapY);
+	CameraPosition getAvgMappingPosition(int x, int y, CameraMap& mapX, CameraMap& mapY);
+	CameraPositionSet CameraTranslator::getSpiral(int width, int height);
 	std::string getJSON();
 
 	float A;

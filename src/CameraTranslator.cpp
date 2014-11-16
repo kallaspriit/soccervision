@@ -202,7 +202,6 @@ CameraTranslator::CameraMapSet CameraTranslator::generateInverseMap(CameraMap& m
 
 	unsigned int rowCount = mapX.size();
 	unsigned int colCount = mapX[0].size();
-	int nanCount = 0;
 
 	for (unsigned int row = 0; row < rowCount; row++) {
 		mapRowX.clear();
@@ -237,6 +236,12 @@ CameraTranslator::CameraMapSet CameraTranslator::generateInverseMap(CameraMap& m
 		}
 	}
 
+	CameraPositionSet spiralPositions = getSpiral(100, 100);
+	int dx, dy;
+	bool substituteFound;
+	int nanCount = 0;
+	int failCount = 0;
+
 	for (unsigned int row = 0; row < rowCount; row++) {
 		for (unsigned int col = 0; col < colCount; col++) {
 			if (inverseMapX[row][col] != NaN) {
@@ -244,12 +249,55 @@ CameraTranslator::CameraMapSet CameraTranslator::generateInverseMap(CameraMap& m
 			}
 
 			nanCount++;
+
+			substituteFound = false;
+
+			for (int i = 0; i < spiralPositions.size(); i++) {
+				CameraPosition spiralPos = spiralPositions[i];
+
+				dx = spiralPos.x;
+				dy = spiralPos.y;
+
+				if (inverseMapX[row + dy][col + dx] != NaN) {
+					inverseMapX[row][col] = inverseMapX[row + dy][col + dx];
+
+					break;
+				}
+			}
+
+			if (!substituteFound) {
+				failCount++;
+			}
 		}
 	}
 
-	std::cout << "there are " << nanCount << " invalid values.. ";
+	std::cout << "there were " << nanCount << " invalid values, failed to get subtitite for " << failCount << " values.. ";
 
 	return CameraMapSet(inverseMapX, inverseMapY);
+}
+
+CameraTranslator::CameraPositionSet CameraTranslator::getSpiral(int width, int height) {
+	CameraTranslator::CameraPositionSet positions;
+
+	int x, y, dx, dy;
+	x = y = dx = 0;
+	dy = -1;
+	int t = std::max(width, height);
+	int maxI = t*t;
+	for (int i = 0; i < maxI; i++){
+		if ((-width / 2 <= x) && (x <= width / 2) && (-height / 2 <= y) && (y <= height / 2)){
+			positions.push_back(CameraPosition(x, y));
+		}
+		if ((x == y) || ((x < 0) && (x == -y)) || ((x > 0) && (x == 1 - y))){
+			t = dx;
+			dx = -dy;
+			dy = t;
+		}
+		x += dx;
+		y += dy;
+	}
+
+	return positions;
 }
 
 std::string CameraTranslator::getJSON() {
