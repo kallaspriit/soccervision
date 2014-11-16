@@ -194,6 +194,7 @@ std::istream& operator >> (std::istream& inputStream, CameraTranslator::CameraMa
 CameraTranslator::CameraMapSet CameraTranslator::generateInverseMap(CameraMap& mapX, CameraMap& mapY) {
 	CameraMap inverseMapX;
 	CameraMap inverseMapY;
+	CameraMapItem NaN = INT_MAX;
 	//CameraMapItem x, y;
 	CameraTranslator::CameraMapRow mapRowX;
 	CameraTranslator::CameraMapRow mapRowY;
@@ -201,6 +202,7 @@ CameraTranslator::CameraMapSet CameraTranslator::generateInverseMap(CameraMap& m
 
 	unsigned int rowCount = mapX.size();
 	unsigned int colCount = mapX[0].size();
+	int nanCount = 0;
 
 	for (unsigned int row = 0; row < rowCount; row++) {
 		mapRowX.clear();
@@ -209,8 +211,8 @@ CameraTranslator::CameraMapSet CameraTranslator::generateInverseMap(CameraMap& m
 		for (unsigned int col = 0; col < colCount; col++) {
 			//mapRowX.push_back(col);
 			//mapRowY.push_back(row);
-			mapRowX.push_back(-100000);
-			mapRowY.push_back(-100000);
+			mapRowX.push_back(NaN);
+			mapRowY.push_back(NaN);
 		}
 
 		inverseMapX.push_back(mapRowX);
@@ -234,6 +236,18 @@ CameraTranslator::CameraMapSet CameraTranslator::generateInverseMap(CameraMap& m
 			}
 		}
 	}
+
+	for (unsigned int row = 0; row < rowCount; row++) {
+		for (unsigned int col = 0; col < colCount; col++) {
+			if (inverseMapX[row][col] != NaN) {
+				continue;
+			}
+
+			nanCount++;
+		}
+	}
+
+	std::cout << "there are " << nanCount << " invalid values.. ";
 
 	return CameraMapSet(inverseMapX, inverseMapY);
 }

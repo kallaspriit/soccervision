@@ -291,8 +291,8 @@ void DebugRenderer::renderMapping(unsigned char* image, Vision* vision, int widt
 
 	for (x = 0; x < Config::cameraWidth; x += step) {
 		for (y = 0; y < Config::cameraHeight; y += step) {
-			//pos = translator->undistort(x, y);
-			pos = translator->distort(x, y);
+			pos = translator->undistort(x, y);
+			//pos = translator->distort(x, y);
 
 			canvas.setPixelAt(pos.x, pos.y, 0, 0, 0);
 		}
