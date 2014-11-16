@@ -41,8 +41,6 @@ public:
 	bool isStalled();
 	bool hasTasks() { return getCurrentTask() != NULL; }
 
-	void chipKick(float distance = 1.0f);
-
     void setTargetDir(float x, float y, float omega = 0.0f);
     void setTargetDir(const Math::Angle& dir, float speed = 1.0f, float omega = 0.0f);
 	void setTargetOmega(float omega) { targetOmega = omega; }
@@ -50,6 +48,7 @@ public:
     void setPosition(float x, float y, float orientation);
 	void stop();
 	void kick(int microseconds = Config::robotDefaultKickStrength);
+	void chipKick(float distance = 1.0f, bool lowerDribblerAfterwards = true);
 	void clearTasks() { tasks.clear(); }
     void handleTasks(float dt);
 
@@ -117,6 +116,7 @@ private:
 	bool coilgunCharged;
 
 	bool chipKickRequested;
+	bool requestedChipKickLowerDribbler;
 	float requestedChipKickDistance;
 
     TaskQueue tasks;

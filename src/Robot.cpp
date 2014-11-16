@@ -12,7 +12,7 @@
 #include <map>
 #include <sstream>
 
-Robot::Robot(AbstractCommunication* com) : com(com), wheelFL(NULL), wheelFR(NULL), wheelRL(NULL), wheelRR(NULL), coilgun(NULL), robotLocalizer(NULL), odometerLocalizer(NULL), ballLocalizer(NULL), odometer(NULL), visionResults(NULL), chipKickRequested(false), requestedChipKickDistance(0.0f) {
+Robot::Robot(AbstractCommunication* com) : com(com), wheelFL(NULL), wheelFR(NULL), wheelRL(NULL), wheelRR(NULL), coilgun(NULL), robotLocalizer(NULL), odometerLocalizer(NULL), ballLocalizer(NULL), odometer(NULL), visionResults(NULL), chipKickRequested(false), requestedChipKickLowerDribbler(false), requestedChipKickDistance(0.0f) {
     targetOmega = 0;
     targetDir = Math::Vector(0, 0);
    
@@ -337,21 +337,6 @@ void Robot::updateBallLocalizer(Vision::Results* visionResults, float dt) {
 	//std::cout << "@ UP front: " << frontBalls.size() << ", rear: " << rearBalls.size() << ", merged: " << visibleBalls.size() << std::endl;
 }
 
-void Robot::handleQueuedChipKickRequest() {
-	if (!chipKickRequested) {
-		return;
-	}
-
-	if (dribbler->isRaised()) {
-		std::cout << "! Dribbler is now raised, chip-kicking targeting distance of " << requestedChipKickDistance << " meters" << std::endl;
-
-		coilgun->chipKick(requestedChipKickDistance);
-
-		chipKickRequested = false;
-		requestedChipKickDistance = 0.0f;
-	}
-}
-
 void Robot::setTargetDir(float x, float y, float omega) {
 	//std::cout << "! Setting robot target direction: " << x << "x" << y << " @ " << omega << std::endl;
 
@@ -405,11 +390,15 @@ void Robot::kick(int microseconds) {
 	dribbler->handleCommand(lostBallCmd);*/
 }
 
-void Robot::chipKick(float distance) {
+void Robot::chipKick(float distance, bool lowerDribblerAfterwards) {
 	if (dribbler->isRaised()) {
 		std::cout << "! Dribbler is raised, chip-kicking immediately targeting " << distance << " meters" << std::endl;
 
 		coilgun->chipKick(distance);
+
+		if (lowerDribblerAfterwards) {
+			dribbler->useNormalLimits();
+		}
 
 		return;
 	}
@@ -417,9 +406,25 @@ void Robot::chipKick(float distance) {
 	std::cout << "! Dribbler is not raised, queuing chip-kicking targeting " << distance << " meters" << std::endl;
 
 	chipKickRequested = true;
+	requestedChipKickLowerDribbler = lowerDribblerAfterwards;
 	requestedChipKickDistance = distance;
 
 	dribbler->useChipKickLimits();
+}
+
+void Robot::handleQueuedChipKickRequest() {
+	if (!chipKickRequested) {
+		return;
+	}
+
+	if (dribbler->isRaised()) {
+		std::cout << "! Dribbler is now raised, chip-kicking targeting distance of " << requestedChipKickDistance << " meters" << std::endl;
+
+		chipKick(requestedChipKickDistance, requestedChipKickLowerDribbler);
+
+		chipKickRequested = false;
+		requestedChipKickDistance = 0.0f;
+	}
 }
 
 void Robot::setPosition(float x, float y, float orientation) {
