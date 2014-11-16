@@ -390,7 +390,7 @@ void Robot::kick(int microseconds) {
 	dribbler->handleCommand(lostBallCmd);*/
 }
 
-void Robot::chipKick(float distance, bool lowerDribblerAfterwards) {
+bool Robot::chipKick(float distance, bool lowerDribblerAfterwards) {
 	if (dribbler->isRaised()) {
 		std::cout << "! Dribbler is raised, chip-kicking immediately targeting " << distance << " meters" << std::endl;
 
@@ -400,14 +400,14 @@ void Robot::chipKick(float distance, bool lowerDribblerAfterwards) {
 			dribbler->useNormalLimits();
 		}
 
-		return;
+		return true;
 	}
 
 	if (chipKickRequested) {
 		requestedChipKickLowerDribbler = lowerDribblerAfterwards;
 		requestedChipKickDistance = distance;
 
-		return;
+		return false;
 	}
 
 	std::cout << "! Dribbler is not raised, queuing chip-kicking targeting " << distance << " meters" << std::endl;
@@ -417,6 +417,8 @@ void Robot::chipKick(float distance, bool lowerDribblerAfterwards) {
 	requestedChipKickDistance = distance;
 
 	dribbler->useChipKickLimits();
+
+	return false;
 }
 
 void Robot::handleQueuedChipKickRequest() {

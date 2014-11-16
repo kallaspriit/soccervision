@@ -54,12 +54,20 @@ void Dribbler::setLimits(int lower, int upper) {
 }
 
 void Dribbler::useNormalLimits() {
+	if (!isRaiseRequested) {
+		return;
+	}
+
 	setLimits(Config::robotDribblerNormalLowerLimit, Config::robotDribblerNormalUpperLimit);
 
 	isRaiseRequested = false;
 }
 
 void Dribbler::useChipKickLimits() {
+	if (isRaiseRequested) {
+		return;
+	}
+
 	setLimits(Config::robotDribblerChipKickLowerLimit, Config::robotDribblerChipKickUpperLimit);
 
 	isRaiseRequested = true;

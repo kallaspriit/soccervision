@@ -48,7 +48,7 @@ public:
     void setPosition(float x, float y, float orientation);
 	void stop();
 	void kick(int microseconds = Config::robotDefaultKickStrength);
-	void chipKick(float distance = 1.0f, bool lowerDribblerAfterwards = true);
+	bool chipKick(float distance = 1.0f, bool lowerDribblerAfterwards = true);
 	void clearTasks() { tasks.clear(); }
     void handleTasks(float dt);
 

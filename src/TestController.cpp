@@ -1916,6 +1916,7 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 	}
 
 	bool performKick = validKickFrames >= Config::goalKickValidFrames;
+	bool wasKicked = false;
 
 	// only perform the kick if valid view has been observed for a couple of frames
 	if (performKick) {
@@ -1924,17 +1925,23 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 				// TODO calulate distance to aim for
 				float chipKickDistance = Math::max(goal->distance - 0.0f, 0.5f);
 
-				robot->chipKick(chipKickDistance);
+				if (robot->chipKick(chipKickDistance)) {
+					wasKicked = true;
+				}
 			} else {
 				ai->dbg("waitingBallToSettle", true);
 			}
 		} else {
 			robot->kick();
+
+			wasKicked = true;
 		}
 
-		ai->resetLastBall();
+		if (wasKicked) {
+			ai->resetLastBall();
 
-		lastKickTime = Util::millitime();
+			lastKickTime = Util::millitime();
+		}
 	} else {
 		robot->setTargetDir(forwardSpeed, sideSpeed);
 		robot->lookAt(goal);
