@@ -187,14 +187,14 @@ void Robot::step(float dt, Vision::Results* visionResults) {
 	Math::Position odometerPosition = odometerLocalizer->getPosition();
 
 	// use localizer position
-	/*x = localizerPosition.x;
+	x = localizerPosition.x;
 	y = localizerPosition.y;
-	orientation = localizerPosition.orientation;*/
+	orientation = localizerPosition.orientation;
 
 	// use odometer position
-	x = odometerPosition.x;
+	/*x = odometerPosition.x;
 	y = odometerPosition.y;
-	orientation = odometerPosition.orientation;
+	orientation = odometerPosition.orientation;*/
 
 	std::stringstream stream;
 
