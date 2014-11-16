@@ -60,7 +60,7 @@ public:
 	CameraPosition undistort(int x, int y);
 	CameraPosition distort(int x, int y);
 	CameraPosition getMappingPosition(int x, int y, CameraMap& mapX, CameraMap& mapY);
-	CameraPosition getAvgMappingPosition(int x, int y, CameraMap& mapX, CameraMap& mapY);
+	//CameraPosition getAvgMappingPosition(int x, int y, CameraMap& mapX, CameraMap& mapY);
 	CameraPositionSet CameraTranslator::getSpiral(int width, int height);
 	std::string getJSON();
 

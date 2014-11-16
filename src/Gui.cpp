@@ -106,7 +106,7 @@ void Gui::drawElements(unsigned char* image, int width, int height) {
 }
 
 void Gui::drawMouse(CameraTranslator* cameraTranslator, unsigned char* image, int width, int height) {
-	Canvas canvas;
+	/*Canvas canvas;
 
 	canvas.width = width;
 	canvas.height = height;
@@ -118,7 +118,7 @@ void Gui::drawMouse(CameraTranslator* cameraTranslator, unsigned char* image, in
 	char buf[256];
 
 	sprintf(buf, "distorted: %dx%d, undistorted: %dx%d", distorted.x, distorted.y, undistorted.x, undistorted.y);
-	canvas.drawText(mouseX, mouseY, buf, 0, 0, 128);
+	canvas.drawText(mouseX, mouseY, buf, 0, 0, 128);*/
 }
 
 bool Gui::isMouseOverElement(int x, int y) {

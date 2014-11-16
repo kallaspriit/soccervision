@@ -60,7 +60,7 @@ CameraTranslator::CameraPosition CameraTranslator::getMappingPosition(int x, int
 	);
 }
 
-CameraTranslator::CameraPosition CameraTranslator::getAvgMappingPosition(int x, int y, CameraMap& mapX, CameraMap& mapY) {
+/*CameraTranslator::CameraPosition CameraTranslator::getAvgMappingPosition(int x, int y, CameraMap& mapX, CameraMap& mapY) {
 	int brushSize = 10;
 	int xSum = 0;
 	int ySum = 0;
@@ -80,11 +80,11 @@ CameraTranslator::CameraPosition CameraTranslator::getAvgMappingPosition(int x, 
 		xSum / sampleCount,
 		ySum / sampleCount
 	);
-}
+}*/
 
 CameraTranslator::CameraPosition CameraTranslator::undistort(int distortedX, int distortedY) {
-	//return getMappingPosition(distortedX, distortedY, undistortMapX, undistortMapY);
-	return getAvgMappingPosition(distortedX, distortedY, undistortMapX, undistortMapY);
+	return getMappingPosition(distortedX, distortedY, undistortMapX, undistortMapY);
+	//return getAvgMappingPosition(distortedX, distortedY, undistortMapX, undistortMapY);
 }
 
 CameraTranslator::CameraPosition CameraTranslator::distort(int undistortedX, int undistortedY) {
@@ -229,7 +229,7 @@ CameraTranslator::CameraMapSet CameraTranslator::generateInverseMap(CameraMap& m
 
 			//std::cout << distorted.x << "x" << distorted.y << std::endl;
 
-			if (distorted.y >= 0 && distorted.y < rowCount && distorted.x >= 0 && distorted.x < colCount) {
+			if (distorted.y >= 0 && distorted.y < (int)rowCount && distorted.x >= 0 && distorted.x < (int)colCount) {
 				inverseMapX[distorted.y][distorted.x] = col;
 				inverseMapY[distorted.y][distorted.x] = row;
 			}
