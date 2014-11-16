@@ -1920,10 +1920,10 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 	// only perform the kick if valid view has been observed for a couple of frames
 	if (performKick) {
 		if (isBallInWay) {
-			// TODO calulate distance to aim for
-			float chipKickDistance = 2.0f;
+			if (robot->dribbler->getBallInDribblerTime() >= 0.2f) {
+				// TODO calulate distance to aim for
+				float chipKickDistance = Math::max(goal->distance - 0.0f, 0.5f);
 
-			if (robot->dribbler->getBallInDribblerTime() >= 0.5f) {
 				robot->chipKick(chipKickDistance);
 			} else {
 				ai->dbg("waitingBallToSettle", true);
