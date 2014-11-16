@@ -236,7 +236,8 @@ void Robot::step(float dt, Vision::Results* visionResults) {
 	stream << "},";
 
 	stream << "\"coilgun\": {";
-	stream << "\"voltage\":" << coilgun->getVoltage();
+	stream << "\"voltage\":" << coilgun->getVoltage() << ",";
+	stream << "\"isLowVoltage\":" << coilgun->isLowVoltage();
 	stream << "},";
 
 	debugBallList("ballsRaw", stream, visibleBalls);
