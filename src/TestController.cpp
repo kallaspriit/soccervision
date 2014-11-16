@@ -1924,7 +1924,7 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 		if (isBallInWay) {
 			if (robot->dribbler->getBallInDribblerTime() >= 0.2f) {
 				// TODO calulate distance to aim for
-				float chipKickDistance = Math::max(goal->distance - 0.0f, 0.5f);
+				float chipKickDistance = Math::max(goal->distance - 1.0f, 0.5f);
 
 				if (robot->chipKick(chipKickDistance)) {
 					wasKicked = true;
