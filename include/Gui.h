@@ -11,6 +11,7 @@
 #include <vector>
 #include <string>
 
+class SoccerBot;
 class Command;
 class Vision;
 class Blobber;
@@ -52,7 +53,7 @@ public:
 			bool over;
 	};
 
-    Gui(HINSTANCE instance, Blobber* blobberFront, Blobber* blobberRear, int width, int height);
+    Gui(HINSTANCE instance, SoccerBot* bot, Blobber* blobberFront, Blobber* blobberRear, int width, int height);
     ~Gui();
 
 	DisplayWindow* createWindow(int width, int height, std::string name);
@@ -89,6 +90,7 @@ private:
 	DisplayWindow* frontClassification;
 	DisplayWindow* rearClassification;
 	DisplayWindow* activeWindow;
+	SoccerBot* bot;
 	Blobber* blobberFront;
 	Blobber* blobberRear;
 	Button* clearSelectedBtn;

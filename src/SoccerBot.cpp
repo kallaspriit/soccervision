@@ -486,6 +486,7 @@ void SoccerBot::setupGui() {
 
 	gui = new Gui(
 		GetModuleHandle(0),
+		this,
 		frontBlobber, rearBlobber,
 		Config::cameraWidth, Config::cameraHeight
 	);

@@ -1,4 +1,5 @@
 #include "Gui.h"
+#include "SoccerBot.h"
 #include "DebugRenderer.h"
 #include "ImageProcessor.h"
 #include "Util.h"
@@ -7,7 +8,7 @@
 
 LRESULT CALLBACK WinProc(HWND hWnd,UINT message,WPARAM wParam,LPARAM lParam);
 
-Gui::Gui(HINSTANCE instance, Blobber* blobberFront, Blobber* blobberRear, int width, int height) : instance(instance), blobberFront(blobberFront), blobberRear(blobberRear), width(width), height(height), activeWindow(NULL), quitRequested(false) {
+Gui::Gui(HINSTANCE instance, SoccerBot* bot, Blobber* blobberFront, Blobber* blobberRear, int width, int height) : instance(instance), bot(bot), blobberFront(blobberFront), blobberRear(blobberRear), width(width), height(height), activeWindow(NULL), quitRequested(false) {
 	WNDCLASSEX wClass;
 	ZeroMemory(&wClass, sizeof(WNDCLASSEX));
 
