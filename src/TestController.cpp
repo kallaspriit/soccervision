@@ -227,7 +227,7 @@ void TestController::handleChipKickCommand(const Command& cmd) {
 
 	std::cout << "! Chip-kicking to distance: " << distance << "m" << std::endl;
 
-	robot->coilgun->chipKick(distance);
+	robot->chipKick(distance);
 }
 
 void TestController::handleResetCommand() {

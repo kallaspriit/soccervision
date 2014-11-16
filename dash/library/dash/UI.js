@@ -1136,6 +1136,14 @@ Dash.UI.prototype.showStateStats = function(state) {
 	} else {
 		$('#ball-indicator').removeClass('got-ball');
 	}
+
+	if (state.robot.dribbler.isRaised) {
+		$('#dribbler-indicator').removeClass().addClass('dribbler-raised');
+	} else if (state.robot.dribbler.isLowered) {
+		$('#dribbler-indicator').removeClass().addClass('dribbler-lowered');
+	} else {
+		$('#dribbler-indicator').removeClass().addClass('dribbler-moving');
+	}
 	
 	//$('#fps-indicator').html(state.fps + ' FPS');
 	

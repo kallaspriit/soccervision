@@ -41,6 +41,8 @@ public:
 	bool isStalled();
 	bool hasTasks() { return getCurrentTask() != NULL; }
 
+	void chipKick(float distance = 1.0f);
+
     void setTargetDir(float x, float y, float omega = 0.0f);
     void setTargetDir(const Math::Angle& dir, float speed = 1.0f, float omega = 0.0f);
 	void setTargetOmega(float omega) { targetOmega = omega; }
@@ -98,6 +100,7 @@ private:
 	void updateMeasurements();
 	void updateBallLocalizer(Vision::Results* visionResults, float dt);
 	void debugBallList(std::string name, std::stringstream& stream, BallLocalizer::BallList balls);
+	void handleQueuedChipKickRequest();
 
     float x;
     float y;
@@ -112,6 +115,9 @@ private:
     float lastDt;
     float totalTime;
 	bool coilgunCharged;
+
+	bool chipKickRequested;
+	float requestedChipKickDistance;
 
     TaskQueue tasks;
 	Math::Vector targetDir;

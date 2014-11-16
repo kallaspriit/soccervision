@@ -284,6 +284,28 @@ A:hover {
 	color: #FFF;
 }
 
+#dribbler-indicator {
+	display: none;
+	position: absolute;
+	width: 32px;
+	height: 32px;
+	left: 52px;
+	bottom: 10px;
+	background: url(../images/dribbler-positions.png) no-repeat 0px 0px;
+}
+#dribbler-indicator.dribbler-raised {
+	display: block;
+	background-position: 0px 0px;
+}
+#dribbler-indicator.dribbler-moving {
+	display: block;
+	background-position: -32px 0px;
+}
+#dribbler-indicator.dribbler-lowered {
+	display: block;
+	background-position: -64px 0px;
+}
+
 /* Tasks */
 #tasks {
     position: absolute;
