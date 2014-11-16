@@ -66,8 +66,10 @@ void Dribbler::useChipKickLimits() {
 }
 
 void Dribbler::applyLimits() {
-	float servoLimitLower = Math::map((float)lowerLimit, 0.0f, 100.0f, Config::robotDribblerLimitMin, Config::robotDribblerLimitMax);
-	float servoLimitUpper = Config::robotDribblerLimitMin + Config::robotDribblerLimitMax - Math::map((float)upperLimit, 0.0f, 100.0f, Config::robotDribblerLimitMin, Config::robotDribblerLimitMax);
+	float min = (float)Config::robotDribblerLimitMin;
+	float max = (float)Config::robotDribblerLimitMax;
+	float servoLimitLower = Math::map((float)lowerLimit, 0.0f, 100.0f, min, max);
+	float servoLimitUpper = min + max - Math::map((float)upperLimit, 0.0f, 100.0f, min, max);
 
 	std::cout << "! Setting servo limits to " << lowerLimit << "-" << upperLimit << " (" << servoLimitLower << "-" << servoLimitUpper << ")" << std::endl;
 

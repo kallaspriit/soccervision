@@ -160,8 +160,8 @@ namespace Config {
 	const int robotDribblerChipKickLowerLimit = 100;
 	const int robotDribblerChipKickUpperLimit = 100;
 	const float robotDribblerMoveDuration = 0.5f;
-	const float robotDribblerLimitMin = 0.03f;
-	const float robotDribblerLimitMax = 0.125f;
+	const int robotDribblerLimitMin = 600;
+	const int robotDribblerLimitMax = 2500;
 	
 	// proportional multiplier for looking at object, multiplied by object angle
 	const float lookAtP = 7.0f;
