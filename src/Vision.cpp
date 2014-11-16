@@ -988,14 +988,15 @@ Vision::PathMetric Vision::getPathMetric(int x1, int y1, int x2, int y2, std::ve
         }
     }
 
-	if (
+	// TODO improve and restore, can cause false positives when there are balls in front of other balls
+	/*if (
 		(lastColor == "black" && sawWhite)
 		|| (firstColor == "white" && sawWhiteBeforeBlack && lastColor == "green")
 	) {
 		std::cout << "@ OUT LATE" << std::endl;
 
 		crossingGreenWhiteBlackGreen = true;
-	}
+	}*/
 
 	if (senseCounter < 20) {
 		return PathMetric(1.0f, 0, true, false);
