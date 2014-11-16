@@ -244,7 +244,7 @@ CameraTranslator::CameraMapSet CameraTranslator::generateInverseMap(CameraMap& m
 
 	for (unsigned int row = 0; row < rowCount; row++) {
 		for (unsigned int col = 0; col < colCount; col++) {
-			if (inverseMapX[row][col] != NaN) {
+			if (inverseMapX[row][col] != NaN && inverseMapY[row][col] != NaN) {
 				continue;
 			}
 
@@ -264,8 +264,9 @@ CameraTranslator::CameraMapSet CameraTranslator::generateInverseMap(CameraMap& m
 					continue;
 				}
 
-				if (inverseMapX[senseY][senseX] != NaN) {
+				if (inverseMapX[senseY][senseX] != NaN && inverseMapY[senseY][senseX] != NaN) {
 					inverseMapX[row][col] = inverseMapX[senseY][senseX];
+					inverseMapY[row][col] = inverseMapY[senseY][senseX];
 
 					substituteFound = true;
 
