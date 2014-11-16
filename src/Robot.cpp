@@ -235,6 +235,10 @@ void Robot::step(float dt, Vision::Results* visionResults) {
 	stream << "\"isLowered\":" << (dribbler->isLowered() ? "true" : "false");
 	stream << "},";
 
+	stream << "\"coilgun\": {";
+	stream << "\"voltage\":" << coilgun->getVoltage();
+	stream << "},";
+
 	debugBallList("ballsRaw", stream, visibleBalls);
 	debugBallList("ballsFiltered", stream, ballLocalizer->balls);
 

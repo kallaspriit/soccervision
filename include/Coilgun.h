@@ -18,6 +18,7 @@ public:
 	void discharge();
 	bool isReady() { return false; } // TODO New communication
 	float getChipKickDurationByDistance(float distance);
+	float getVoltage() { return voltage; }
 	bool handleCommand(const Command& cmd);
 	void step(float dt);
 
@@ -28,6 +29,7 @@ private:
 	double lastKickTime;
 	double lastChargeRequestTime;
 	float timeSinceLastVoltageReading;
+	float voltage;
 
 };
 
