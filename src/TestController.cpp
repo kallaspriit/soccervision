@@ -61,7 +61,11 @@
  * - fetch ball front offset zero, kick with speed, brake based on goal aim offset
  * - path planning to next ball, drive using relative coords and odometry
  * - simulator in c++ code, emulates robot and vision, ui might be the same web ui
- *
+ * - prefer balls near own goal - faster to move forwards and can annoy opponent
+ * - prefer balls from the rear camera when own goal is visible
+ * - drive behind the furthest not closest ball behind the robot, avoid hitting other balls on the way
+ * - make sure the ball in the way is not too close when chip-kicking
+ * - chip kick over the furthest ball in the way not based on goal distance - can save some charge in the caps
  *
  * DEMO
  * + fetch string of balls in front
@@ -1929,7 +1933,7 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 	if (performKick) {
 		if (isBallInWay) {
 			if (robot->dribbler->getBallInDribblerTime() >= 0.2f) {
-				// TODO calulate distance to aim for
+				// TODO closest ball may be too close to kick over
 				float chipKickDistance = Math::max(goal->distance - 1.0f, 0.5f);
 
 				if (robot->chipKick(chipKickDistance)) {

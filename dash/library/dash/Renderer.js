@@ -437,7 +437,7 @@ Dash.Renderer.prototype.renderState = function(state) {
 
 	// fake the voltage reading to be a wheel..
 	state.robot.coilGraph = {
-		stalled: false,
+		stalled: state.robot.coilgun.isLowVoltage,
 		targetOmega: graphVoltage,
 		realOmega: graphVoltage,
 		ref: 0.0025,
