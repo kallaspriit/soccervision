@@ -102,7 +102,9 @@ void Gui::drawElements(unsigned char* image, int width, int height) {
 	for (std::vector<Element*>::const_iterator i = elements.begin(); i != elements.end(); i++) {
 		(*i)->draw(image, width, height);
 	}
+}
 
+void Gui::drawMouse(unsigned char* image, int width, int height) {
 	Canvas canvas;
 
 	canvas.width = width;
@@ -144,6 +146,7 @@ void Gui::setFrontImages(unsigned char* rgb, unsigned char* yuyv, unsigned char*
 
 	drawElements(rgb, width, height);
 	drawElements(classification, width, height);
+	drawMouse(rgb, width, height);
 
 	if (activeWindow == frontClassification || activeWindow == frontRGB) {
 		if (!isMouseOverElement(mouseX, mouseY)) {
@@ -164,6 +167,7 @@ void Gui::setRearImages(unsigned char* rgb, unsigned char* yuyv, unsigned char* 
 
 	drawElements(rgb, width, height);
 	drawElements(classification, width, height);
+	drawMouse(rgb, width, height);
 
 	if (activeWindow == rearClassification || activeWindow == rearRGB) {
 		if (!isMouseOverElement(mouseX, mouseY)) {
