@@ -237,6 +237,7 @@ CameraTranslator::CameraMapSet CameraTranslator::generateInverseMap(CameraMap& m
 	}
 
 	CameraPositionSet spiralPositions = getSpiral(100, 100);
+	int spiralPosCount = spiralPositions.size();
 	int dx, dy, senseX, senseY;
 	bool substituteFound;
 	int nanCount = 0;
@@ -252,7 +253,7 @@ CameraTranslator::CameraMapSet CameraTranslator::generateInverseMap(CameraMap& m
 
 			substituteFound = false;
 
-			for (int i = 0; i < spiralPositions.size(); i++) {
+			for (int i = 0; i < spiralPosCount; i++) {
 				CameraPosition spiralPos = spiralPositions[i];
 
 				dx = spiralPos.x;
@@ -260,7 +261,7 @@ CameraTranslator::CameraMapSet CameraTranslator::generateInverseMap(CameraMap& m
 				senseX = col + dx;
 				senseY = row + dy;
 
-				if (senseX < 0 || senseX > colCount - 1 || senseY < 0 || senseY > rowCount - 1) {
+				if (senseX < 0 || senseX >(int)colCount - 1 || senseY < 0 || senseY >(int)rowCount - 1) {
 					continue;
 				}
 
