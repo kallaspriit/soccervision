@@ -222,7 +222,7 @@ CameraTranslator::CameraMapSet CameraTranslator::generateInverseMap(CameraMap& m
 			//x = mapX[row][col];
 			//y = mapY[row][col];
 
-			std::cout << "D " << col << "x" << row << ".. ";
+			//std::cout << "D " << col << "x" << row << ".. ";
 
 			distorted = distort(col, row);
 
