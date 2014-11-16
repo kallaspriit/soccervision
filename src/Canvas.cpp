@@ -392,10 +392,17 @@ void Canvas::drawText(int imageX, int imageY, std::string text, int red, int gre
         return;
     }
 
+	int paddingHor = 4;
+	int paddingVer = 2;
+	int charWidth = 9;
+	int charHeight = 7;
+
     const char* str = text.c_str();
 
+	fillBox(imageX - paddingHor, imageY - paddingVer, text.length() * charWidth + paddingHor * 2, charHeight + paddingVer * 2, 255, 255, 255);
+
     for (unsigned int i = 0; i < text.size(); i++) {
-        drawChar(imageX + i * 9, imageY, str[i], red, green, blue);
+		drawChar(imageX + i * charWidth, imageY, str[i], red, green, blue);
     }
 }
 
