@@ -1906,7 +1906,7 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 	forwardSpeed = Math::max(forwardSpeed, minForwardSpeed);
 
 	bool isRobotOmegaLowEnough = Math::abs(robot->getOmega()) <= maxRobotKickOmega;
-	bool isFrameValid = validWindow && !isKickTooSoon && !isBallInWay && !isGoalPathObstructed && isRobotOmegaLowEnough && robot->dribbler->gotBall(true);
+	bool isFrameValid = validWindow && !isKickTooSoon && !isGoalPathObstructed && isRobotOmegaLowEnough && robot->dribbler->gotBall(true);
 
 	if (isFrameValid) {
 		validKickFrames++;
@@ -1918,7 +1918,14 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 
 	// only perform the kick if valid view has been observed for a couple of frames
 	if (performKick) {
-		robot->kick();
+		if (isBallInWay) {
+			// TODO calulate distance to aim for
+			float chipKickDistance = 2.0f;
+
+			robot->chipKick(chipKickDistance);
+		} else {
+			robot->kick();
+		}
 
 		ai->resetLastBall();
 
