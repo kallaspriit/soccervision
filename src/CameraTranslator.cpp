@@ -206,8 +206,10 @@ CameraTranslator::CameraMapSet CameraTranslator::generateInverseMap(CameraMap& m
 		mapRowY.clear();
 
 		for (unsigned int col = 0; col < colCount; col++) {
-			mapRowX.push_back(col);
-			mapRowY.push_back(row);
+			//mapRowX.push_back(col);
+			//mapRowY.push_back(row);
+			mapRowX.push_back(-1000);
+			mapRowY.push_back(-1000);
 		}
 
 		inverseMapX.push_back(mapRowX);
@@ -215,7 +217,6 @@ CameraTranslator::CameraMapSet CameraTranslator::generateInverseMap(CameraMap& m
 	}
 
 	for (unsigned int row = 0; row < rowCount; row++) {
-
 		for (unsigned int col = 0; col < colCount; col++) {
 			x = mapX[row][col];
 			y = mapY[row][col];
