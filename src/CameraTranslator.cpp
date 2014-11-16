@@ -267,6 +267,8 @@ CameraTranslator::CameraMapSet CameraTranslator::generateInverseMap(CameraMap& m
 				if (inverseMapX[senseY][senseX] != NaN) {
 					inverseMapX[row][col] = inverseMapX[senseY][senseX];
 
+					substituteFound = true;
+
 					break;
 				}
 			}
