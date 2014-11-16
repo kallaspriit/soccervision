@@ -236,7 +236,9 @@ CameraTranslator::CameraMapSet CameraTranslator::generateInverseMap(CameraMap& m
 		}
 	}
 
+	// fix NaN's
 	CameraPositionSet spiralPositions = getSpiral(100, 100);
+	CameraMapChangeSet mapChangeSet;
 	int spiralPosCount = spiralPositions.size();
 	int dx, dy, senseX, senseY;
 	bool substituteFound;
@@ -266,8 +268,11 @@ CameraTranslator::CameraMapSet CameraTranslator::generateInverseMap(CameraMap& m
 				}
 
 				if (inverseMapX[senseY][senseX] != NaN && inverseMapY[senseY][senseX] != NaN) {
-					inverseMapX[row][col] = inverseMapX[senseY][senseX];
-					inverseMapY[row][col] = inverseMapY[senseY][senseX];
+					//inverseMapX[row][col] = inverseMapX[senseY][senseX];
+					//inverseMapY[row][col] = inverseMapY[senseY][senseX];
+
+					// store the changes in a vector and play it back later not to affect other NaN values from generated values
+					mapChangeSet.push_back(CameraMapChange(row, col, inverseMapX[senseY][senseX], inverseMapY[senseY][senseX]));
 
 					substituteFound = true;
 
@@ -279,6 +284,15 @@ CameraTranslator::CameraMapSet CameraTranslator::generateInverseMap(CameraMap& m
 				failCount++;
 			}
 		}
+	}
+
+	while (mapChangeSet.size() > 0) {
+		CameraMapChange mapChange = mapChangeSet.back();
+
+		inverseMapX[mapChange.row][mapChange.col] = mapChange.xVal;
+		inverseMapY[mapChange.row][mapChange.col] = mapChange.yVal;
+
+		mapChangeSet.pop_back();
 	}
 
 	std::cout << "there were " << nanCount << " invalid values, failed to get subtitite for " << failCount << " values.. ";

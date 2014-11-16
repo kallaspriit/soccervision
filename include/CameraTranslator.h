@@ -23,6 +23,17 @@ public:
 		CameraMap y;
 	};
 
+	struct CameraMapChange {
+		CameraMapChange(int row, int col, CameraMapItem xVal, CameraMapItem yVal) : row(row), col(col), xVal(xVal), yVal(yVal) {}
+
+		int row;
+		int col;
+		CameraMapItem xVal;
+		CameraMapItem yVal;
+	};
+
+	typedef std::vector <CameraMapChange> CameraMapChangeSet;
+
 	struct WorldPosition {
 		WorldPosition() : dx(0.0f), dy(0.0f), distance(0.0f), angle(0.0f) {}
 		WorldPosition(float dx, float dy, float distance, float angle) : dx(dx), dy(dy), distance(distance), angle(angle) {}
