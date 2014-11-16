@@ -157,6 +157,10 @@ bool TestController::handleCommand(const Command& cmd) {
         handleDribblerCommand(cmd);
 	} else if (cmd.name == "adjust-dribbler-limits" && cmd.parameters.size() == 2) {
 		handleAdjustDribblerLimitsCommand(cmd);
+	} else if (cmd.name == "dribbler-normal-limits") {
+		robot->dribbler->useNormalLimits();
+	} else if (cmd.name == "dribbler-chip-kick-limits") {
+		robot->dribbler->useChipKickLimits();
 	} else if (cmd.name == "kick" && cmd.parameters.size() == 1) {
         handleKickCommand(cmd);
     } else if (cmd.name == "reset-position") {

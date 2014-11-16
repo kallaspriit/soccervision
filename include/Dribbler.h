@@ -25,6 +25,8 @@ public:
 	void setLowerLimit(int limit);
 	void setUpperLimit(int limit);
 	void setLimits(int lower, int upper);
+	void useNormalLimits();
+	void useChipKickLimits();
 	void step(float dt);
 
 private:

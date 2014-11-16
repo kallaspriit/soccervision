@@ -45,6 +45,18 @@ Dash.Robot.prototype.adjustDribbler = function(lowerLimitDelta, upperLimitDelta)
 	}
 };
 
+Dash.Robot.prototype.useNormalDribblerLimits = function() {
+	if (this.socket.isOpen()) {
+		this.socket.send('<dribbler-normal-limits>');
+	}
+};
+
+Dash.Robot.prototype.useChipKickDribblerLimits = function() {
+	if (this.socket.isOpen()) {
+		this.socket.send('<dribbler-chip-kick-limits>');
+	}
+};
+
 Dash.Robot.prototype.setDribbler = function(speed) {
 	if (this.socket.isOpen()) {
 		dash.dbg.log('! Setting dribbler speed: ' + speed);

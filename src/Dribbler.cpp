@@ -6,7 +6,7 @@
 
 #include <iostream>
 
-Dribbler::Dribbler(int id, AbstractCommunication* com) : Wheel(id), com(com), ballDetected(false), everDetectedBall(false), ballInDribblerTime(0.0), ballLostTime(-1.0f), stopRequestedTime(-1.0), lowerLimit(Config::robotDribblerLowerLimit), upperLimit(Config::robotDribblerUpperLimit) {
+Dribbler::Dribbler(int id, AbstractCommunication* com) : Wheel(id), com(com), ballDetected(false), everDetectedBall(false), ballInDribblerTime(0.0), ballLostTime(-1.0f), stopRequestedTime(-1.0), lowerLimit(Config::robotDribblerNormalLowerLimit), upperLimit(Config::robotDribblerNormalUpperLimit) {
 	applyLimits();
 };
 
@@ -51,6 +51,14 @@ void Dribbler::setLimits(int lower, int upper) {
 	upperLimit = (int)Util::limit((float)upper, 0.0f, 100.0f);
 
 	applyLimits();
+}
+
+void Dribbler::useNormalLimits() {
+	setLimits(Config::robotDribblerNormalLowerLimit, Config::robotDribblerNormalUpperLimit);
+}
+
+void Dribbler::useChipKickLimits() {
+	setLimits(Config::robotDribblerChipKickLowerLimit, Config::robotDribblerChipKickUpperLimit);
 }
 
 void Dribbler::applyLimits() {
