@@ -12,9 +12,11 @@ public:
 	~Coilgun();
 
 	void kick(int microseconds = Config::robotDefaultKickStrength);
+	void chipKick(float distance);
 	void charge();
 	void discharge();
 	bool isReady() { return false; } // TODO New communication
+	float getChipKickDurationByDistance(float distance);
 	void step(float dt);
 
 private:

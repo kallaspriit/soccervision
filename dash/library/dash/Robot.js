@@ -14,12 +14,25 @@ Dash.Robot.prototype.setController = function(name) {
 	}
 };
 
-Dash.Robot.prototype.kick = function() {
+Dash.Robot.prototype.kick = function(duration) {
+	duration = duration || 2000;
+
 	if (this.socket.isOpen()) {
-		dash.dbg.log('! Kicking');
+		dash.dbg.log('! Kicking for duration: ' + duration + 'usec');
 		
 		//this.socket.send('<kick:5000>');
-		this.socket.send('<kick:2000>');
+		this.socket.send('<kick:' + duration + '>');
+	}
+};
+
+Dash.Robot.prototype.chipKick = function(distance) {
+	distance = distance || 1.0;
+
+	if (this.socket.isOpen()) {
+		dash.dbg.log('! Chip-kicking to distance: ' + distance + 'm');
+
+		//this.socket.send('<kick:5000>');
+		this.socket.send('<chip-kick:' + distance + '>');
 	}
 };
 

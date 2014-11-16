@@ -2,6 +2,7 @@
 
 #include "Robot.h"
 #include "Dribbler.h"
+#include "Coilgun.h"
 #include "Command.h"
 
 /**
@@ -163,7 +164,9 @@ bool TestController::handleCommand(const Command& cmd) {
 		robot->dribbler->useChipKickLimits();
 	} else if (cmd.name == "kick" && cmd.parameters.size() == 1) {
         handleKickCommand(cmd);
-    } else if (cmd.name == "reset-position") {
+	} else if (cmd.name == "chip-kick" && cmd.parameters.size() == 1) {
+		handleChipKickCommand(cmd);
+	} else if (cmd.name == "reset-position") {
 		robot->setPosition(Config::fieldWidth / 2.0f, Config::fieldHeight / 2.0f, 0.0f);
     } else if (cmd.name == "stop") {
         handleResetCommand();
@@ -212,10 +215,19 @@ void TestController::handleAdjustDribblerLimitsCommand(const Command& cmd) {
 	
 	robot->dribbler->setLimits(currentLowerLimit + lowerLimitDelta, currentUpperLimit + upperLimitDelta);
 }
+
 void TestController::handleKickCommand(const Command& cmd) {
     manualKickStrength = Util::toInt(cmd.parameters[0]);
 
 	lastCommandTime = Util::millitime();
+}
+
+void TestController::handleChipKickCommand(const Command& cmd) {
+	float distance = Util::toFloat(cmd.parameters[0]);
+
+	std::cout << "! Chip-kicking to distance: " << distance << "m" << std::endl;
+
+	robot->coilgun->chipKick(distance);
 }
 
 void TestController::handleResetCommand() {

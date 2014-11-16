@@ -274,6 +274,7 @@ public:
 	void handleDribblerCommand(const Command& cmd);
 	void handleAdjustDribblerLimitsCommand(const Command& cmd);
 	void handleKickCommand(const Command& cmd);
+	void handleChipKickCommand(const Command& cmd);
 	void handleResetCommand();
 	void handleToggleGoCommand();
 	void handleToggleSideCommand();
