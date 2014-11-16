@@ -563,7 +563,9 @@ bool Robot::handleCommand(const Command& cmd) {
 	if (wheelFR->handleCommand(cmd)) handled = true;
 	if (wheelRL->handleCommand(cmd)) handled = true;
 	if (wheelRR->handleCommand(cmd)) handled = true;
+
 	if (dribbler->handleCommand(cmd)) handled = true;
+	if (coilgun->handleCommand(cmd)) handled = true;
 
 	return handled;
 }

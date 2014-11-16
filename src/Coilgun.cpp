@@ -3,10 +3,11 @@
 #include "Util.h"
 #include "Maths.h"
 #include "Config.h"
+#include "Command.h"
 
 #include <iostream>
 
-Coilgun::Coilgun(AbstractCommunication* com) : com(com), lastKickTime(0.0), lastChargeRequestTime(0.0) {
+Coilgun::Coilgun(AbstractCommunication* com) : com(com), lastKickTime(0.0), lastChargeRequestTime(0.0), timeSinceLastVoltageReading(0.0f) {
 
 };
 
@@ -65,4 +66,27 @@ void Coilgun::step(float dt) {
 	/*if (Util::duration(lastChargeRequestTime) >= 1.0) {
 		charge();
 	}*/
+
+	timeSinceLastVoltageReading += dt;
+
+	// request voltage readings 5 times per second
+	if (timeSinceLastVoltageReading > 0.2f) {
+		requestVoltageReading();
+	}
+}
+
+void Coilgun::requestVoltageReading() {
+	com->send("adc");
+}
+
+bool Coilgun::handleCommand(const Command& cmd) {
+	if (cmd.name == "adc") {
+		float voltage = Util::toFloat(cmd.parameters[0]);
+
+		std::cout << "VOLTAGE: " << voltage << std::endl;
+		
+		return true;
+	}
+
+	return false;
 }

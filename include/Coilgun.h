@@ -4,6 +4,7 @@
 #include "Config.h"
 
 class AbstractCommunication;
+class Command;
 
 class Coilgun {
 
@@ -17,12 +18,16 @@ public:
 	void discharge();
 	bool isReady() { return false; } // TODO New communication
 	float getChipKickDurationByDistance(float distance);
+	bool handleCommand(const Command& cmd);
 	void step(float dt);
 
 private:
+	void requestVoltageReading();
+
 	AbstractCommunication* com;
 	double lastKickTime;
 	double lastChargeRequestTime;
+	float timeSinceLastVoltageReading;
 
 };
 
