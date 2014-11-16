@@ -1917,6 +1917,7 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 
 	bool performKick = validKickFrames >= Config::goalKickValidFrames;
 	bool wasKicked = false;
+	bool waitingBallToSettle = false;
 
 	// only perform the kick if valid view has been observed for a couple of frames
 	if (performKick) {
@@ -1929,7 +1930,7 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 					wasKicked = true;
 				}
 			} else {
-				ai->dbg("waitingBallToSettle", true);
+				waitingBallToSettle = true;
 			}
 		} else {
 			robot->kick();
@@ -1950,7 +1951,8 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 	ai->dbg("performKick", performKick);
 	ai->dbg("validWindow", validWindow);
 	ai->dbg("isFrameValid", isFrameValid);
-	ai->dbg("isKickTooSoon", isKickTooSoon);
+	ai->dbg("isKickTooSoon", waitingBallToSettle);
+	ai->dbg("waitingBallToSettle", true);
 	ai->dbg("isBallInWay", isBallInWay);
 	ai->dbg("isGoalPathObstructed", isGoalPathObstructed);
 	ai->dbg("isRobotOmegaLowEnough", isRobotOmegaLowEnough);
