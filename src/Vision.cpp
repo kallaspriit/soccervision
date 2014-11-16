@@ -340,7 +340,7 @@ bool Vision::isValidBall(Object* ball, Dir dir) {
 
     //if (ball->area < Config::ballMinArea) {
     if (ball->area < ballMinArea) {
-		std::cout << "@ BALL AREA TOO SMALL: " << ball->area << " VS " << Config::ballMinArea << std::endl;
+		//std::cout << "@ BALL AREA TOO SMALL: " << ball->area << " VS " << Config::ballMinArea << std::endl;
 
         return false;
     }
@@ -352,13 +352,13 @@ bool Vision::isValidBall(Object* ball, Dir dir) {
 	}*/
 
 	if (!ball->behind && ball->y - ball->height / 2 > Config::cameraHeight - 85) {
-		std::cout << "@ BALL ON ROBOT IN FRONT" << std::endl;
+		//std::cout << "@ BALL ON ROBOT IN FRONT" << std::endl;
 
 		return false;
 	}
 
 	if (ball->behind && ball->y - ball->height / 2 > Config::cameraHeight - 135) {
-		std::cout << "@ BALL ON ROBOT FROM BEHIND" << std::endl;
+		//std::cout << "@ BALL ON ROBOT FROM BEHIND" << std::endl;
 
 		return false;
 	}
@@ -379,7 +379,7 @@ bool Vision::isValidBall(Object* ball, Dir dir) {
 		//std::cout << "Surround: " << surroundMetric << std::endl;
 
 		if (surroundMetric != -1.0f && surroundMetric < Config::minValidBallSurroundThreshold) {
-			std::cout << "@ BALL SURROUND FAIL: " << surroundMetric << " VS " << Config::minValidBallSurroundThreshold << std::endl;
+			//std::cout << "@ BALL SURROUND FAIL: " << surroundMetric << " VS " << Config::minValidBallSurroundThreshold << std::endl;
 
 			return false;
 		}
@@ -404,14 +404,14 @@ bool Vision::isValidBall(Object* ball, Dir dir) {
 			//|| !pathMetric.validColorFound
 			//|| pathMetric.invalidSpree > getBallMaxInvalidSpree(ball->y + ball->height / 2)
 		) {
-			std::cout << "@ BALL PATH FAIL: " << pathMetric.percentage << " VS " << Config::minValidBallPathThreshold << ", OUT: " << (pathMetric.out ? "YES" : "NO") << std::endl;
+			//std::cout << "@ BALL PATH FAIL: " << pathMetric.percentage << " VS " << Config::minValidBallPathThreshold << ", OUT: " << (pathMetric.out ? "YES" : "NO") << std::endl;
 
 			return false;
 		}
 	}
 
 	if (isBallInGoal(ball, dir)) {
-		std::cout << "@ BALL IN GOAL FAIL" << std::endl;
+		//std::cout << "@ BALL IN GOAL FAIL" << std::endl;
 
 		return false;
 	}
@@ -1003,13 +1003,14 @@ Vision::PathMetric Vision::getPathMetric(int x1, int y1, int x2, int y2, std::ve
 
 	float percentage = (float)matches / (float)sampleCount;
 	bool validColorFound = requiredColor == "" || requiredColorFound;
+	bool isOut = crossingGreenWhiteBlackGreen || tooManyBlacksInRow;
 
-	/*std::cout << "@ blacksInRow: " << blacksInRow << std::endl;
+	std::cout << "@ blacksInRow: " << blacksInRow << std::endl;
 	std::cout << "@ previousBlack: " << previousBlack << std::endl;
 	std::cout << "@ crossingGreenWhiteBlackGreen: " << crossingGreenWhiteBlackGreen << std::endl;
-	std::cout << "@ tooManyBlacksInRow: " << tooManyBlacksInRow << std::endl << std::endl;*/
+	std::cout << "@ tooManyBlacksInRow: " << tooManyBlacksInRow << std::endl << std::endl;
 
-	return PathMetric(percentage, longestInvalidSpree, validColorFound, crossingGreenWhiteBlackGreen || tooManyBlacksInRow);
+	return PathMetric(percentage, longestInvalidSpree, validColorFound, isOut);
 }
 
 Obstruction Vision::getGoalPathObstruction() {
