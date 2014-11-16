@@ -425,12 +425,10 @@ void SoccerBot::setupVision() {
 	);
 
 	std::cout << "  > loading front camera distorion mappings.. ";
-
 	frontCameraTranslator->loadDistortionMapping(
 		Config::distortMappingFilenameFrontX,
 		Config::distortMappingFilenameFrontY
 	);
-
 	std::cout << "done!" << std::endl;
 
 	std::cout << "  > generating front camera undistortion mappings.. ";
@@ -440,28 +438,24 @@ void SoccerBot::setupVision() {
 	std::cout << "done!" << std::endl;
 	
 	std::cout << "  > loading rear camera undistorion mappings.. ";
-
 	rearCameraTranslator->loadUndistortionMapping(
 		Config::undistortMappingFilenameRearX,
 		Config::undistortMappingFilenameRearY
 	);
-
 	std::cout << "done!" << std::endl;
 
 	std::cout << "  > loading rear camera distorion mappings.. ";
-
 	rearCameraTranslator->loadDistortionMapping(
 		Config::distortMappingFilenameRearX,
 		Config::distortMappingFilenameRearY
 	);
-
 	std::cout << "done!" << std::endl;
 
-	std::cout << "  > generating rear camera undistortion mappings.. ";
+	/*std::cout << "  > generating rear camera undistortion mappings.. ";
 	mapSet = rearCameraTranslator->generateInverseMap(rearCameraTranslator->distortMapX, rearCameraTranslator->distortMapY);
 	rearCameraTranslator->undistortMapX = mapSet.x;
 	rearCameraTranslator->undistortMapY = mapSet.y;
-	std::cout << "done!" << std::endl;
+	std::cout << "done!" << std::endl;*/
 
 	// TODO Remove this test
 	/*for (int x = 0; x <= Config::cameraWidth; x += Config::cameraWidth / 2) {
