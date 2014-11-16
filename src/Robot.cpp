@@ -391,6 +391,13 @@ void Robot::kick(int microseconds) {
 }
 
 void Robot::chipKick(float distance, bool lowerDribblerAfterwards) {
+	if (chipKickRequested) {
+		requestedChipKickLowerDribbler = lowerDribblerAfterwards;
+		requestedChipKickDistance = distance;
+
+		return;
+	}
+
 	if (dribbler->isRaised()) {
 		std::cout << "! Dribbler is raised, chip-kicking immediately targeting " << distance << " meters" << std::endl;
 
