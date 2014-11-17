@@ -1927,7 +1927,7 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 		&& !isGoalPathObstructed
 		&& isRobotOmegaLowEnough
 		&& robot->dribbler->gotBall(true)
-		&& (!isLowVoltage || !isBallInWay);
+		&& !shouldManeuverBallInWay;
 
 	if (isFrameValid) {
 		validKickFrames++;
