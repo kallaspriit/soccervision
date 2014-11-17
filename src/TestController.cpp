@@ -1981,6 +1981,7 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 	ai->dbg("ballInWayCount", ballInWayMetric.ballInWayCount);
 	ai->dbg("closestBallInWayDistance", ballInWayMetric.closestBallInWayDistance);
 	ai->dbg("furthestBallInWayDistance", ballInWayMetric.furthestBallInWayDistance);
+	ai->dbg("shouldManeuverBallInWay", shouldManeuverBallInWay);
 	ai->dbg("isGoalPathObstructed", isGoalPathObstructed);
 	ai->dbg("isRobotOmegaLowEnough", isRobotOmegaLowEnough);
 	ai->dbg("avoidBallSide", avoidBallSide);
