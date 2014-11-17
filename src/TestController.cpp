@@ -1855,6 +1855,11 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 	bool validWindow = false;
 	bool isKickTooSoon = lastKickTime != -1.0 && timeSinceLastKick < minKickInterval;
 	bool isLowVoltage = robot->coilgun->isLowVoltage();
+	bool shouldManeuverBallInWay = isBallInWay && (
+			isLowVoltage
+			|| goal->distance < 1.0f
+			|| Math::abs(ballInWayMetric.furthestBallInWayDistance - goal->distance) < 1.0f
+		);
 
 	// limit ball avoidance time
 	if (avoidBallDuration > maxBallAvoidTime) {
@@ -1864,7 +1869,7 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 
 	// drive sideways if there's a ball in the way
 	//if (isBallInWay || isGoalPathObstructed) {
-	if (isGoalPathObstructed || (isBallInWay && isLowVoltage)) {
+	if (isGoalPathObstructed || shouldManeuverBallInWay) {
 		// check whether there's another ball close by
 		float anotherBallCloseDistance = 0.3f;
 		Object* nextClosestBall = visionResults->getNextClosestBall(Dir::FRONT);
@@ -1939,7 +1944,10 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 		if (isBallInWay) {
 			if (robot->dribbler->getBallInDribblerTime() >= 0.2f) {
 				// TODO closest ball may be too close to kick over
-				float chipKickDistance = Math::max(goal->distance - 1.0f, 0.5f);
+				//float chipKickDistance = Math::max(goal->distance - 1.0f, 0.5f);
+
+				// try to kick 1m past the furhest ball but no further than 1m before the goal, also no less then 0.5m
+				float chipKickDistance = Math::max(Math::min(ballInWayMetric.furthestBallInWayDistance + 1.0f, goal->distance - 1.0f), 0.5f);
 
 				if (robot->chipKick(chipKickDistance)) {
 					wasKicked = true;
