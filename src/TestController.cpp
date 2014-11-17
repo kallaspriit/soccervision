@@ -1974,9 +1974,13 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 	ai->dbg("performKick", performKick);
 	ai->dbg("validWindow", validWindow);
 	ai->dbg("isFrameValid", isFrameValid);
+	ai->dbg("isKickTooSoon", isKickTooSoon);
 	ai->dbg("isKickTooSoon", waitingBallToSettle);
 	ai->dbg("waitingBallToSettle", true);
 	ai->dbg("isBallInWay", isBallInWay);
+	ai->dbg("ballInWayCount", ballInWayMetric.ballInWayCount);
+	ai->dbg("closestBallInWayDistance", ballInWayMetric.closestBallInWayDistance);
+	ai->dbg("furthestBallInWayDistance", ballInWayMetric.furthestBallInWayDistance);
 	ai->dbg("isGoalPathObstructed", isGoalPathObstructed);
 	ai->dbg("isRobotOmegaLowEnough", isRobotOmegaLowEnough);
 	ai->dbg("avoidBallSide", avoidBallSide);
