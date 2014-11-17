@@ -36,14 +36,14 @@ void Coilgun::kick(int microseconds) {
 }
 
 void Coilgun::chipKick(float distanceMeters) {
-	float microseconds = getChipKickDurationByDistance(distanceMeters);
+	int microseconds = getChipKickDurationByDistance(distanceMeters);
 
 	std::cout << "! Chip-kicking to distance of " << distanceMeters << " for " << microseconds << " microseconds" << std::endl;
 
 	com->send("dkick:0:0:" + Util::toString(microseconds) + ":0");
 }
 
-float Coilgun::getChipKickDurationByDistance(float distanceMeters) {
+int Coilgun::getChipKickDurationByDistance(float distanceMeters) {
 	// https://docs.google.com/spreadsheets/d/1ARV-47Fz91zb0l3KWDKGF0UaeSvyiEqHsW1mHZ_QlIk/edit#gid=275766663
 	// y = 1.103E-7x^4 - 9.764E-5x^3 + 0.014x^2
 
@@ -55,11 +55,11 @@ float Coilgun::getChipKickDurationByDistance(float distanceMeters) {
 	float d = 11.672f;
 	float e = 908.503f;
 
-	return Math::pow(a * distanceCm, 4)
+	return (int)(Math::pow(a * distanceCm, 4)
 		- Math::pow(b * distanceCm, 3)
 		+ Math::pow(c * distanceCm, 2)
 		+ d * distanceCm
-		+ e;
+		+ e);
 }
 
 void Coilgun::step(float dt) {
