@@ -55,7 +55,7 @@
  * - read and check all logic code
  * + make returning to field seperate state, use in find ball, fetch ball direct
  * + fix find goal, drive towards own when aiming
- * - check if kick window calculaton is reasonable
+ * + check if kick window calculaton is reasonable
  * - don't avoid balls near the goal (distance + bounding box), might bounce both in anyway
  * - avoid balls away from the center of the field, not towards (so less new balls will come in the way)
  * - fetch ball front offset zero, kick with speed, brake based on goal aim offset
@@ -66,6 +66,10 @@
  * - drive behind the furthest not closest ball behind the robot, avoid hitting other balls on the way
  * - make sure the ball in the way is not too close when chip-kicking
  * - chip kick over the furthest ball in the way not based on goal distance - can save some charge in the caps
+ * - detect two balls close together one after another that can be detected as a single ball (search for a long ball?)
+ * - robot starts to push a ball close by at large angle, avoid it
+ * - make sure that seen goal top outer edges are at large distance (takes distortion into account)
+ * - implement ball search routine, for example drive between the two goals looking at opponent goal
  *
  * DEMO
  * + fetch string of balls in front
@@ -1842,11 +1846,12 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 	int goalHalfWidth = goalWidth / 2;
 	int goalKickThresholdPixels = (int)((float)goalHalfWidth * (1.0f - Config::goalKickThreshold));
 	double timeSinceLastKick = lastKickTime != 0.0 ? Util::duration(lastKickTime) : -1.0;
-	bool isBallInWay = visionResults->isBallInWay(visionResults->front->balls, goal->y + goal->height / 2);
 	Obstruction goalPathObstruction = visionResults->front->goalPathObstruction;
 	bool isGoalPathObstructed = goalPathObstruction != Obstruction::NONE;
 	float forwardSpeed = 0.0f;
 	float sideSpeed = 0.0f;
+	Vision::BallInWayMetric ballInWayMetric = visionResults->getBallInWayMetric(visionResults->front->balls, goal->y + goal->height / 2);
+	bool isBallInWay = ballInWayMetric.isBallInWay;
 	bool validWindow = false;
 	bool isKickTooSoon = lastKickTime != -1.0 && timeSinceLastKick < minKickInterval;
 	bool isLowVoltage = robot->coilgun->isLowVoltage();

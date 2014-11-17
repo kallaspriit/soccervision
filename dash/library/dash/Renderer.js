@@ -422,7 +422,7 @@ Dash.Renderer.prototype.renderState = function(state) {
 		}
 	}
 
-	this.drawMarkers();
+	//this.drawMarkers();
 
 	if (this.renderDriveTo) {
 		this.drawDriveTo();

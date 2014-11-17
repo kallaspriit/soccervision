@@ -67,6 +67,15 @@ public:
 		Vision* vision;
 	};
 
+	struct BallInWayMetric {
+		BallInWayMetric(bool isBallInWay, int ballInWayCount, float closestBallInWayDistance, float furthestBallInWayDistance) : isBallInWay(isBallInWay), ballInWayCount(ballInWayCount), closestBallInWayDistance(closestBallInWayDistance), furthestBallInWayDistance(furthestBallInWayDistance) {}
+
+		bool isBallInWay;
+		int ballInWayCount;
+		float closestBallInWayDistance;
+		float furthestBallInWayDistance;
+	};
+
 	class Results {
 		public:
 			Results() : front(NULL), rear(NULL) {}
@@ -77,7 +86,8 @@ public:
 			Object* getFurthestGoal(Dir dir = Dir::ANY);
 			bool isBallInGoal(Object* ball);
 			bool isBallInGoal(Object* ball, Object* blueGoal, Object* yellowGoal);
-			bool isBallInWay(ObjectList balls, int goalY);
+			BallInWayMetric getBallInWayMetric(ObjectList balls, int goalY);
+			//bool isBallInWay(ObjectList balls, int goalY);
 			bool isRobotOut(Dir dir = Dir::ANY);
 
 			Vision::Result* front;

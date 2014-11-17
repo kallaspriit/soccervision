@@ -1961,7 +1961,7 @@ bool Vision::Results::isBallInGoal(Object* ball, Object* blueGoal, Object* yello
 	return false;
 }
 
-bool Vision::Results::isBallInWay(ObjectList balls, int goalY) {
+Vision::BallInWayMetric Vision::Results::getBallInWayMetric(ObjectList balls, int goalY) {
 	Object* blueGoal = getLargestGoal(Side::BLUE);
 	Object* yellowGoal = getLargestGoal(Side::YELLOW);
 
@@ -1971,7 +1971,11 @@ bool Vision::Results::isBallInWay(ObjectList balls, int goalY) {
 	//float ballInWayAngleThreshold = Math::degToRad(4.0f);
 	//float ballInWayDistanceThreshold = ballDiameter * 4.0f;
 	Object* ball;
-	float checkWidth;
+	//float checkWidth;
+	bool isBallInWay = false;
+	float closestBallInWayDistance = -1.0f;
+	float furthestBallInWayDistance = -1.0f;
+	int ballInWayCount = 0;
 
 	for (ObjectListItc it = balls.begin(); it != balls.end(); it++) {
 		ball = *it;
@@ -2002,11 +2006,20 @@ bool Vision::Results::isBallInWay(ObjectList balls, int goalY) {
 
 		// distance based
 		if (Math::abs(ball->distanceX) < ballInWayDistanceThreshold / 2.0f) {
-			return true;
+			isBallInWay = true;
+			ballInWayCount++;
+
+			if (closestBallInWayDistance == -1.0f || ball->distanceY < closestBallInWayDistance) {
+				closestBallInWayDistance = ball->distanceY;
+			}
+
+			if (furthestBallInWayDistance == -1.0f || ball->distanceY > furthestBallInWayDistance) {
+				furthestBallInWayDistance = ball->distanceY;
+			}
 		}
 		
 		// pixels based
-		checkWidth = ball->width * 2.5f;
+		//checkWidth = ball->width * 2.5f;
 
 		/*if (
 			ball->x - checkWidth < halfWidth && ball->x + checkWidth > halfWidth
@@ -2016,7 +2029,7 @@ bool Vision::Results::isBallInWay(ObjectList balls, int goalY) {
 		}*/
 	}
 
-	return false;
+	return BallInWayMetric(isBallInWay, ballInWayCount, closestBallInWayDistance, furthestBallInWayDistance);
 }
 
 bool Vision::Results::isRobotOut(Dir dir) {
