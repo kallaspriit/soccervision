@@ -164,7 +164,7 @@ namespace Config {
 	const int robotDribblerLimitMax = 2500;
 
 	// coilgun voltage lower then this is considered to be low
-	const float robotCoilgunLowVoltageThreshold = 340.0f;
+	const float robotCoilgunLowVoltageThreshold = 240.0f;
 	
 	// proportional multiplier for looking at object, multiplied by object angle
 	const float lookAtP = 7.0f;
