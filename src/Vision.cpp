@@ -292,7 +292,9 @@ bool Vision::isValidGoal(Object* goal, Side side) {
 	std::string color1 = goal->type == 0 ? "yellow-goal" : "blue-goal";
 	std::string color2 = goal->type == 0 ? "yellow-goal-wide" : "blue-goal-wide";
 
-	getEdgeDistanceMetric(goal->x, goal->y, goal->width, goal->height, color1, color2);
+	EdgeDistanceMetric edgeDistanceMetric = getEdgeDistanceMetric(goal->x, goal->y, goal->width, goal->height, color1, color2);
+
+	std::cout << "EDGE LEFT: " << edgeDistanceMetric.leftTopDistance.distance << ", RIGHT: " << edgeDistanceMetric.rightTopDistance.distance << std::endl;
 
 	if (goal->y + goal->height < Config::goalPathSenseStartY) {
 		PathMetric pathMetric = getPathMetric(
