@@ -1046,6 +1046,9 @@ Vision::EdgeDistanceMetric Vision::getEdgeDistanceMetric(int x, int y, int width
 
 			colorName = std::string(color->name);
 
+			color1 = "blue-goal";
+			color2 = "yellow-goal";
+
 			colorFound = color1.compare(colorName) == 0 || color2.compare(colorName) == 0;
 
 			if (colorFound) {
