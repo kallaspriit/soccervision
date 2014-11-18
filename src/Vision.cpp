@@ -289,6 +289,11 @@ bool Vision::isValidGoal(Object* goal, Side side) {
 		goal->y = y1 + goal->height / 2;
 	}*/
 
+	std::string color1 = goal->type == 0 ? "yellow-goal" : "blue-goal";
+	std::string color2 = goal->type == 0 ? "yellow-goal-wide" : "blue-goal-wide";
+
+	getEdgeDistanceMetric(goal->x, goal->y, goal->width, goal->height, color1, color2);
+
 	if (goal->y + goal->height < Config::goalPathSenseStartY) {
 		PathMetric pathMetric = getPathMetric(
 			Config::cameraWidth / 2,
@@ -1012,6 +1017,51 @@ Vision::PathMetric Vision::getPathMetric(int x1, int y1, int x2, int y2, std::ve
 	std::cout << "@ tooManyBlacksInRow: " << tooManyBlacksInRow << std::endl << std::endl;*/
 
 	return PathMetric(percentage, longestInvalidSpree, validColorFound, isOut);
+}
+
+Vision::EdgeDistanceMetric Vision::getEdgeDistanceMetric(int x, int y, int width, int height, std::string color1, std::string color2) {
+	Distance distance;
+	EdgeDistance leftTopDistance;
+	EdgeDistance rightTopDistance;
+	int leftTopDistanceX = -1;
+	int rightTopDistanceX = -1;
+	Blobber::Color* color;
+	
+	bool colorFound;
+
+	for (int senseX = x; senseX <= x + width; senseX++) {
+		for (int senseY = y; senseY <= y + height; senseY++) {
+			color = getColorAt(x, y);
+
+			if (color == NULL) {
+				continue;
+			}
+
+			colorFound = strcmp(color->name, color1.c_str()) == 0 || strcmp(color->name, color2.c_str()) == 0;
+
+			if (colorFound) {
+				distance = getDistance(senseX, senseY);
+
+				if (leftTopDistanceX == -1 || senseX < leftTopDistanceX) {
+					leftTopDistance = EdgeDistance(senseX, senseY, distance.straight);
+				}
+
+				if (rightTopDistanceX == -1 || senseX > rightTopDistanceX) {
+					rightTopDistance = EdgeDistance(senseX, senseY, distance.straight);
+				}
+			}
+		}
+	}
+
+	if (leftTopDistance.distance != -1) {
+		canvas.fillBoxCentered(leftTopDistance.screenX, leftTopDistance.screenY, 10, 10, 255, 0, 0);
+	}
+
+	if (leftTopDistance.distance != -1) {
+		canvas.fillBoxCentered(rightTopDistance.screenX, rightTopDistance.screenY, 10, 10, 255, 0, 0);
+	}
+
+	return EdgeDistanceMetric(leftTopDistance, rightTopDistance);
 }
 
 Obstruction Vision::getGoalPathObstruction() {

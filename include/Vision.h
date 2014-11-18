@@ -103,6 +103,21 @@ public:
 		float angle;
 	};
 
+	struct EdgeDistance {
+		EdgeDistance(int screenX = -1, int screenY = -1, float distance = -1) : screenX(screenX), screenY(screenY), distance(distance) {}
+
+		int screenX;
+		int screenY;
+		float distance;
+	};
+
+	struct EdgeDistanceMetric {
+		EdgeDistanceMetric(Vision::EdgeDistance leftTopDistance, Vision::EdgeDistance rightTopDistance) : leftTopDistance(leftTopDistance), rightTopDistance(rightTopDistance) {}
+
+		Vision::EdgeDistance leftTopDistance;
+		Vision::EdgeDistance rightTopDistance;
+	};
+
     Vision(Blobber* blobber, CameraTranslator* cameraTranslator, Dir dir, int width, int height);
     ~Vision();
 
@@ -125,6 +140,7 @@ private:
     ObjectList processGoals(Dir dir);
 	float getSurroundMetric(int x, int y, int radius, std::vector<std::string> validColors, std::string requiredColor = "", int side = 0, bool allowNone = false);
     PathMetric getPathMetric(int x1, int y1, int x2, int y2, std::vector<std::string> validColors, std::string requiredColor = "");
+	EdgeDistanceMetric getEdgeDistanceMetric(int x, int y, int width, int height, std::string color1, std::string color2);
 	Obstruction getGoalPathObstruction();
 	float getBlockMetric(int x, int y, int width, int height, std::vector<std::string> validColors, int step = 6);
 	float getUndersideMetric(int x, int y, float distance, int width, int height, std::string targetColor, std::string targetColor2, std::vector<std::string> validColors, bool expand = true);
