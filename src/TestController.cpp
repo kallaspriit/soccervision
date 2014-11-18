@@ -439,7 +439,7 @@ bool TestController::isRobotNearLine(Vision::Results* visionResults, bool ignore
 };
 
 bool TestController::isRobotInCorner(Vision::Results* visionResults) {
-	float tooCloseDistance = 0.3f;
+	float tooCloseDistance = 0.2f;
 	float avgDistance = (visionResults->front->whiteDistance.min + visionResults->front->whiteDistance.max) / 2.0f;
 	
 	if (!isRobotNearLine(visionResults)) {
