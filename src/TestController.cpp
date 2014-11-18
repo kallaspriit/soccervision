@@ -1629,7 +1629,7 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	//robot->dribbler->start();
 
 	// focus between the ball and goal at first and more on the goal as getting closer to it so there wouldn't be a sudden switch in the end
-	float lookAngle = Math::map(ball->angle, 0.0f, maxAngleDiffBallAngle, goal->angle, (goal->angle + ball->angle) / 2.0f);
+	float lookAngle = Math::map(Math::abs(ball->angle), 0.0f, maxAngleDiffBallAngle, goal->angle, (goal->angle + ball->angle) / 2.0f);
 
 	robot->setTargetDir(limitedForwardSpeed, sideSpeed);
 
@@ -1649,6 +1649,7 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	ai->dbg("enterDistance", enterDistance);
 	ai->dbg("ballAngle", (Math::radToDeg(ball->angle)));
 	ai->dbg("goalAngle", (Math::radToDeg(goal->angle)));
+	ai->dbg("lookAngle", lookAngle);
 	ai->dbg("ball->distanceX", ball->distanceX);
 }
 
