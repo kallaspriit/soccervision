@@ -237,7 +237,7 @@ CameraTranslator::CameraMapSet CameraTranslator::generateInverseMap(CameraMap& m
 	}
 
 	// fix NaN's
-	CameraPositionSet spiralPositions = getSpiral(100, 100);
+	CameraPositionSet spiralPositions = getSpiral(120, 120);
 	CameraMapChangeSet mapChangeSet;
 	int spiralPosCount = spiralPositions.size();
 	int dx, dy, senseX, senseY;
