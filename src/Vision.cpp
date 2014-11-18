@@ -296,6 +296,8 @@ bool Vision::isValidGoal(Object* goal, Side side) {
 
 	EdgeDistanceMetric edgeDistanceMetric = getEdgeDistanceMetric(goal->x - halfWidth, goal->y - halfHeight, goal->width, goal->height, color1, color2);
 
+	std::cout << "@ EDGE LEFT: " << edgeDistanceMetric.leftTopDistance.distance << "m, right: " << edgeDistanceMetric.rightTopDistance.distance << "m" << std::endl;
+
 	if (goal->y + goal->height < Config::goalPathSenseStartY) {
 		PathMetric pathMetric = getPathMetric(
 			Config::cameraWidth / 2,
