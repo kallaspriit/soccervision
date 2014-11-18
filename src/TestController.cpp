@@ -1602,7 +1602,7 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	float nearDistance = 0.35f;
 	//float maxSideSpeedDistance = 0.1f; // pushes ball with nose
 	//float maxSideSpeedDistance = 0.065f;
-	float maxSideSpeedBallAngle = 45.0f;
+	float maxSideSpeedBallAngle = 35.0f;
 	float sideP = 0.5f;
 	float maxAngleDiffBallAngle = 45.0f;
 
