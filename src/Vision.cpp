@@ -1033,7 +1033,7 @@ Vision::EdgeDistanceMetric Vision::getEdgeDistanceMetric(int x, int y, int width
 
 	for (int senseX = x; senseX <= x + width; senseX++) {
 		for (int senseY = y; senseY <= y + height; senseY++) {
-			color = getColorAt(x, y);
+			color = getColorAt(senseX, senseY);
 
 			if (color == NULL) {
 				continue;
