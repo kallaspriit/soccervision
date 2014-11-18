@@ -1074,7 +1074,7 @@ Vision::EdgeDistanceMetric Vision::getEdgeDistanceMetric(int x, int y, int width
 
 				break;
 			} else {
-				canvas.setPixelAt(senseX, senseY, 255, 0, 0);
+				canvas.setPixelAt(senseX, senseY, 128, 128, 128);
 			}
 		}
 	}
