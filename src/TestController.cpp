@@ -73,6 +73,9 @@
  * - make sure that seen goal top outer edges are at large distance (takes distortion into account)
  * - implement ball search routine, for example drive between the two goals looking at opponent goal
  * - don't look straight at goal when the ball angle is big but between them
+ * - fetches balls from goal too often
+ * - avoids balls in goal
+ *
  * - make all parameters settable in the UI
  * - implement logviking-style logging with filterable components
  *
@@ -1894,6 +1897,11 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 	if (avoidBallDuration > maxBallAvoidTime) {
 		isBallInWay = false;
 		isGoalPathObstructed = false;
+	}
+
+	// don't avoid balls in goals
+	if (isBallInWay && ballInWayMetric.closestBallInWayDistance + 0.2f >= goal->distance) {
+		isBallInWay = false;
 	}
 
 	// drive sideways if there's a ball in the way
