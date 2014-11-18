@@ -72,6 +72,7 @@
  * - robot starts to push a ball close by at large angle, avoid it
  * - make sure that seen goal top outer edges are at large distance (takes distortion into account)
  * - implement ball search routine, for example drive between the two goals looking at opponent goal
+ * - don't look straight at goal when the ball angle is big but between them
  *
  * DEMO
  * + fetch string of balls in front
@@ -1602,6 +1603,7 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	//float maxSideSpeedDistance = 0.1f; // pushes ball with nose
 	float maxSideSpeedDistance = 0.05f;
 	float sideP = 0.3f;
+	float maxAngleDiffBallAngle = 45.0f;
 
 	// store ball first sighting distance
 	if (enterDistance == -1.0f) {
@@ -1626,8 +1628,14 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	// don't really need the dribbler before capturing ball
 	//robot->dribbler->start();
 
+	// focus between the ball and goal at first and more on the goal as getting closer to it so there wouldn't be a sudden switch in the end
+	float lookAngle = Math::map(ball->angle, 0.0f, maxAngleDiffBallAngle, goal->angle, (goal->angle + ball->angle) / 2.0f);
+
 	robot->setTargetDir(limitedForwardSpeed, sideSpeed);
-	robot->lookAt(goal);
+
+	// TODO don't look straight at goal when the ball angle is big but between them
+	robot->lookAt(Math::Rad(lookAngle));
+	//robot->lookAt(goal);
 	robot->dribbler->prime();
 
 	ai->dbg("approachP", approachP);
