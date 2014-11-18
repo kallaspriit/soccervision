@@ -297,7 +297,7 @@ bool Vision::isValidGoal(Object* goal, Side side) {
 	EdgeDistanceMetric edgeDistanceMetric = getEdgeDistanceMetric(goal->x - halfWidth, goal->y - halfHeight, goal->width, goal->height, color1, color2);
 
 	if (edgeDistanceMetric.leftTopDistance.distance < 5.0f || edgeDistanceMetric.rightTopDistance.distance < 5.0f) {
-		std::cout << "@ GOAL INVALID TOP EDGE DISTANCE LEFT: " << edgeDistanceMetric.leftTopDistance.distance << "m, right: " << edgeDistanceMetric.rightTopDistance.distance << "m" << std::endl;
+		//std::cout << "@ GOAL INVALID TOP EDGE DISTANCE LEFT: " << edgeDistanceMetric.leftTopDistance.distance << "m, right: " << edgeDistanceMetric.rightTopDistance.distance << "m" << std::endl;
 
 		return false;
 	}
