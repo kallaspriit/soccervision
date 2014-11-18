@@ -1029,15 +1029,16 @@ Vision::EdgeDistanceMetric Vision::getEdgeDistanceMetric(int x, int y, int width
 	EdgeDistance rightTopDistance;
 	int leftTopDistanceX = -1;
 	int rightTopDistanceX = -1;
+	int padding = width * 0.2;
 	Blobber::Color* color;
 	bool colorFound;
 
-	for (int senseX = x; senseX <= x + width; senseX++) {
+	for (int senseX = x + padding; senseX <= x + width - padding * 2; senseX++) {
 		for (int senseY = y; senseY <= y + height; senseY++) {
 			color = getColorAt(senseX, senseY);
 
 			if (color == NULL) {
-				canvas.fillBoxCentered(senseX, senseY, 2, 2, 255, 255, 255);
+				//canvas.fillBoxCentered(senseX, senseY, 2, 2, 255, 255, 255);
 
 				continue;
 			}
@@ -1071,7 +1072,7 @@ Vision::EdgeDistanceMetric Vision::getEdgeDistanceMetric(int x, int y, int width
 		canvas.drawText(leftTopDistance.screenX, leftTopDistance.screenY + 10, Util::toString(leftTopDistance.distance) + "m", 0, 0, 0);
 	}
 
-	if (leftTopDistance.distance != -1) {
+	if (rightTopDistance.distance != -1) {
 		canvas.fillBoxCentered(rightTopDistance.screenX, rightTopDistance.screenY, 10, 10, 255, 0, 0);
 		canvas.drawText(rightTopDistance.screenX, rightTopDistance.screenY + 10, Util::toString(rightTopDistance.distance) + "m", 0, 0, 0);
 	}
