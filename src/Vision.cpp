@@ -1030,7 +1030,6 @@ Vision::EdgeDistanceMetric Vision::getEdgeDistanceMetric(int x, int y, int width
 	int leftTopDistanceX = -1;
 	int rightTopDistanceX = -1;
 	Blobber::Color* color;
-	std::string colorName;
 	
 	bool colorFound;
 
@@ -1044,12 +1043,9 @@ Vision::EdgeDistanceMetric Vision::getEdgeDistanceMetric(int x, int y, int width
 				continue;
 			}
 
-			colorName = std::string(color->name);
+			colorFound = color1.compare(color->name) == 0 || color2.compare(color->name) == 0;
 
-			colorFound = colorName == color1 || colorName == color2;
-
-			//if (colorFound) {
-			if (strcmp(color->name, "blue-goal") == 0) {
+			if (colorFound) {
 				distance = getDistance(senseX, senseY);
 
 				if (leftTopDistanceX == -1 || senseX < leftTopDistanceX) {
