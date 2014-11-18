@@ -1038,7 +1038,7 @@ Vision::EdgeDistanceMetric Vision::getEdgeDistanceMetric(int x, int y, int width
 			color = getColorAt(senseX, senseY);
 
 			if (color == NULL) {
-				//canvas.fillBoxCentered(senseX, senseY, 2, 2, 255, 255, 255);
+				//canvas.setPixelAt(senseX, senseY, 255, 255, 255);
 
 				continue;
 			}
@@ -1058,11 +1058,11 @@ Vision::EdgeDistanceMetric Vision::getEdgeDistanceMetric(int x, int y, int width
 					rightTopDistance = senseX;
 				}
 
-				canvas.fillBoxCentered(senseX, senseY, 2, 2, 0, 255, 0);
+				canvas.setPixelAt(senseX, senseY, 0, 255, 0);
 
 				break;
 			} else {
-				canvas.fillBoxCentered(senseX, senseY, 2, 2, 255, 0, 0);
+				canvas.setPixelAt(senseX, senseY, 255, 0, 0);
 			}
 		}
 	}
