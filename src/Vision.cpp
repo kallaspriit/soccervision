@@ -1029,7 +1029,7 @@ Vision::EdgeDistanceMetric Vision::getEdgeDistanceMetric(int x, int y, int width
 	EdgeDistance rightTopDistance;
 	int leftTopDistanceX = -1;
 	int rightTopDistanceX = -1;
-	int padding = width * 0.2;
+	int padding = (int)((float)width * 0.2f);
 	Blobber::Color* color;
 	bool colorFound;
 
