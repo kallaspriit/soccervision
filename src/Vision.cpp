@@ -1042,14 +1042,18 @@ Vision::EdgeDistanceMetric Vision::getEdgeDistanceMetric(int x, int y, int width
 			colorFound = strcmp(color->name, color1.c_str()) == 0 || strcmp(color->name, color2.c_str()) == 0;
 
 			if (colorFound) {
+				std::cout << "FOUND COLOR AT " << senseX << "x" << senseY << std::endl;
+
 				distance = getDistance(senseX, senseY);
 
 				if (leftTopDistanceX == -1 || senseX < leftTopDistanceX) {
 					leftTopDistance = EdgeDistance(senseX, senseY, distance.straight);
+					leftTopDistanceX = senseX;
 				}
 
 				if (rightTopDistanceX == -1 || senseX > rightTopDistanceX) {
 					rightTopDistance = EdgeDistance(senseX, senseY, distance.straight);
+					rightTopDistance = senseX;
 				}
 			}
 		}
