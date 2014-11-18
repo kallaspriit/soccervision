@@ -451,28 +451,28 @@ bool TestController::isRobotInCorner(Vision::Results* visionResults) {
 
 	// too close to the line, it's impossible to make the difference
 	if (avgDistance < tooCloseDistance) {
-		std::cout << "@ TOO CLOSE" << std::endl;
+		//std::cout << "@ TOO CLOSE" << std::endl;
 
 		return false;
 	}
 
 	// probably a straight line if the difference is very small
 	if (visionResults->front->whiteDistance.max - visionResults->front->whiteDistance.min < 0.02f) {
-		std::cout << "@ SMALL DIFF" << std::endl;
+		//std::cout << "@ SMALL DIFF" << std::endl;
 
 		return false;
 	}
 
 	// if the maximum is far, we can be looking at the corner near the line and large distance, dont consider this valid
 	if (visionResults->front->whiteDistance.max > tooCloseDistance * 3.0f) {
-		std::cout << "@ MAX FAR" << std::endl;
+		//std::cout << "@ MAX FAR" << std::endl;
 
 		return false;
 	}
 
 	// dont perform corner maneuvers when the robot is out
 	if (isRobotOutFront || isRobotOutRear) {
-		std::cout << "@ ROBOT OUT" << std::endl;
+		//std::cout << "@ ROBOT OUT" << std::endl;
 
 		return false;
 	}
@@ -489,7 +489,7 @@ bool TestController::isRobotInCorner(Vision::Results* visionResults) {
 
 	// we need left and right samples
 	if (visionResults->front->whiteDistance.left == -1.0f || visionResults->front->whiteDistance.right == -1.0f) {
-		std::cout << "@ MISSING SAMPLE" << std::endl;
+		//std::cout << "@ MISSING SAMPLE" << std::endl;
 
 		return false;
 	}
@@ -513,7 +513,7 @@ bool TestController::isRobotInCorner(Vision::Results* visionResults) {
 		return true;
 	}
 
-	std::cout << "@ NO MATCH" << std::endl;
+	//std::cout << "@ NO MATCH" << std::endl;
 
 	return false;
 };
@@ -1901,6 +1901,8 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 
 	// don't avoid balls in goals
 	if (isBallInWay && ballInWayMetric.closestBallInWayDistance + 0.2f >= goal->distance) {
+		std::cout << "@ NOT AVOIDING BALL IN GOAL, BALL: " << ballInWayMetric.closestBallInWayDistance << "m, goal: " << goal->distance << "m" << std::endl;
+
 		isBallInWay = false;
 	}
 
