@@ -1041,7 +1041,7 @@ Vision::EdgeDistanceMetric Vision::getEdgeDistanceMetric(int x, int y, int width
 				continue;
 			}
 
-			colorFound = strcmp(color->name, color1.c_str()) == 0 || strcmp(color->name, color2.c_str()) == 0;
+			colorFound = color->name == color1 || color->name == color2;
 
 			if (colorFound) {
 				distance = getDistance(senseX, senseY);
@@ -1056,7 +1056,7 @@ Vision::EdgeDistanceMetric Vision::getEdgeDistanceMetric(int x, int y, int width
 					rightTopDistance = senseX;
 				}
 
-				canvas.fillBoxCentered(senseX, senseY, 2, 2, 255, 255, 255);
+				canvas.fillBoxCentered(senseX, senseY, 2, 2, 0, 255, 0);
 
 				break;
 			} else {
