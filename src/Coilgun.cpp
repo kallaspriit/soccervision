@@ -29,9 +29,7 @@ void Coilgun::kick(int microseconds) {
 	if (lastKickTime == 0.0 || Util::duration(lastKickTime) >= Config::minKickInterval) {
 		std::cout << "! Kicking: " << microseconds << std::endl;
 
-		// TODO restore normal kicking, using chip-kicker while straight one is broken
-		//com->send("kick:" + Util::toString(microseconds));
-		chipKick(1.0f);
+		com->send("kick:" + Util::toString(microseconds));
 	} else {
 		std::cout << "! Another kick requested too soon" << std::endl;
 	}
