@@ -1038,6 +1038,8 @@ Vision::EdgeDistanceMetric Vision::getEdgeDistanceMetric(int x, int y, int width
 			color = getColorAt(senseX, senseY);
 
 			if (color == NULL) {
+				canvas.fillBoxCentered(senseX, senseY, 2, 2, 255, 255, 255);
+
 				continue;
 			}
 
@@ -1060,7 +1062,9 @@ Vision::EdgeDistanceMetric Vision::getEdgeDistanceMetric(int x, int y, int width
 
 				break;
 			} else {
-				canvas.fillBoxCentered(senseX, senseY, 2, 2, 128, 128, 128);
+				std::cout << "WRONG: " << color->name << " vs " << color1 << ", " << color2 << std::endl;
+					 
+				canvas.fillBoxCentered(senseX, senseY, 2, 2, 255, 0, 0);
 			}
 		}
 	}
