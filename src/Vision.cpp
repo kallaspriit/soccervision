@@ -1055,7 +1055,7 @@ Vision::EdgeDistanceMetric Vision::getEdgeDistanceMetric(int x, int y, int width
 
 				if (rightTopDistanceX == -1 || senseX > rightTopDistanceX) {
 					rightTopDistance = EdgeDistance(senseX, senseY, distance.straight);
-					rightTopDistance = senseX;
+					rightTopDistanceX = senseX;
 				}
 
 				canvas.setPixelAt(senseX, senseY, 0, 255, 0);
