@@ -289,8 +289,8 @@ bool Vision::isValidGoal(Object* goal, Side side) {
 		goal->y = y1 + goal->height / 2;
 	}*/
 
-	std::string color1 = goal->type == 0 ? "yellow-goal" : "blue-goal";
-	std::string color2 = goal->type == 0 ? "yellow-goal-wide" : "blue-goal-wide";
+	std::string color1 = goal->type == 0 ? "blue-goal" : "yellow-goal";
+	std::string color2 = goal->type == 0 ? "blue-goal-wide" : "yellow-goal-wide";
 	int halfWidth = goal->width / 2;
 	int halfHeight = goal->height / 2;
 
@@ -1030,8 +1030,6 @@ Vision::EdgeDistanceMetric Vision::getEdgeDistanceMetric(int x, int y, int width
 	int leftTopDistanceX = -1;
 	int rightTopDistanceX = -1;
 	Blobber::Color* color;
-	std::string colorName;
-	
 	bool colorFound;
 
 	for (int senseX = x; senseX <= x + width; senseX++) {
@@ -1044,12 +1042,7 @@ Vision::EdgeDistanceMetric Vision::getEdgeDistanceMetric(int x, int y, int width
 				continue;
 			}
 
-			colorName = std::string(color->name);
-
-			color1 = "blue-goal";
-			color2 = "yellow-goal";
-
-			colorFound = color1.compare(colorName) == 0 || color2.compare(colorName) == 0;
+			colorFound = strcmp(color->name, color1.c_str()) == 0 || strcmp(color->name, color2.c_str());
 
 			if (colorFound) {
 				distance = getDistance(senseX, senseY);
