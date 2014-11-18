@@ -73,6 +73,8 @@
  * - make sure that seen goal top outer edges are at large distance (takes distortion into account)
  * - implement ball search routine, for example drive between the two goals looking at opponent goal
  * - don't look straight at goal when the ball angle is big but between them
+ * - make all parameters settable in the UI
+ * - implement logviking-style logging with filterable components
  *
  * DEMO
  * + fetch string of balls in front
@@ -438,13 +440,14 @@ bool TestController::isRobotNearLine(Vision::Results* visionResults, bool ignore
 
 bool TestController::isRobotInCorner(Vision::Results* visionResults) {
 	float tooCloseDistance = 0.3f;
+	float avgDistance = (visionResults->front->whiteDistance.min + visionResults->front->whiteDistance.max) / 2.0f;
 	
 	if (!isRobotNearLine(visionResults)) {
 		return false;
 	}
 
 	// too close to the line, it's impossible to make the difference
-	if (visionResults->front->whiteDistance.min < tooCloseDistance) {
+	if (avgDistance < tooCloseDistance) {
 		std::cout << "@ TOO CLOSE" << std::endl;
 
 		return false;
