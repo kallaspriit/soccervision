@@ -28,7 +28,8 @@ namespace Config {
 
 	// serial device and baud
 	const std::string serialDeviceContains = "mbed";
-	const int serialBaud = 230400;
+	//const int serialBaud = 230400;
+	const int serialBaud = 115200;
 
 	// camera resolution
 	const int cameraWidth = 1280;
