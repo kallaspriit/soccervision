@@ -385,9 +385,7 @@ void Robot::stop() {
 }
 
 void Robot::kick(int microseconds) {
-	// TODO restore normal kicking, using chip-kicker while straight one is broken
-	//coilgun->kick(microseconds);
-	chipKick(1.5f);
+	coilgun->kick(microseconds);
 	dribbler->onKick();
 
 	// TODO Remove this hack once hardware issue is resolved

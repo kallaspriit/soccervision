@@ -1970,7 +1970,9 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 				waitingBallToSettle = true;
 			}
 		} else {
-			robot->kick();
+			// TODO restore normal kicking
+			//robot->kick();
+			robot->chipKick(Math::min(Math::max(goal->distance - 0.5f, 0.5f), 1.5f));
 
 			wasKicked = true;
 		}
