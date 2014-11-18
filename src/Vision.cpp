@@ -296,7 +296,7 @@ bool Vision::isValidGoal(Object* goal, Side side) {
 
 	EdgeDistanceMetric edgeDistanceMetric = getEdgeDistanceMetric(goal->x - halfWidth, goal->y - halfHeight, goal->width, goal->height, color1, color2);
 
-	std::cout << "@ EDGE LEFT: " << edgeDistanceMetric.leftTopDistance.distance << "m, right: " << edgeDistanceMetric.rightTopDistance.distance << "m" << std::endl;
+	//std::cout << "@ EDGE LEFT: " << edgeDistanceMetric.leftTopDistance.distance << "m, right: " << edgeDistanceMetric.rightTopDistance.distance << "m" << std::endl;
 
 	if (goal->y + goal->height < Config::goalPathSenseStartY) {
 		PathMetric pathMetric = getPathMetric(
@@ -1033,7 +1033,7 @@ Vision::EdgeDistanceMetric Vision::getEdgeDistanceMetric(int x, int y, int width
 	Blobber::Color* color;
 	bool colorFound;
 
-	for (int senseX = x + padding; senseX <= x + width - padding * 2; senseX++) {
+	for (int senseX = x + padding; senseX <= x + width - padding; senseX++) {
 		for (int senseY = y; senseY <= y + height; senseY++) {
 			color = getColorAt(senseX, senseY);
 
