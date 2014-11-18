@@ -1053,6 +1053,12 @@ Vision::EdgeDistanceMetric Vision::getEdgeDistanceMetric(int x, int y, int width
 					rightTopDistance = EdgeDistance(senseX, senseY, distance.straight);
 					rightTopDistance = senseX;
 				}
+
+				canvas.fillBoxCentered(senseX, senseY, 2, 2, 255, 255, 255);
+
+				break;
+			} else {
+				canvas.fillBoxCentered(senseX, senseY, 2, 2, 128, 128, 128);
 			}
 		}
 	}
