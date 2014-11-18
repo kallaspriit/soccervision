@@ -298,8 +298,8 @@ bool Vision::isValidGoal(Object* goal, Side side) {
 
 	// also comparing pixel values because distance calculation messes up for very high pixels..
 	if (
-		(edgeDistanceMetric.leftTopDistance.distance < 5.0f && edgeDistanceMetric.leftTopDistance.screenY > Config::goalTopMaxY)
-		|| (edgeDistanceMetric.rightTopDistance.distance < 5.0f && edgeDistanceMetric.rightTopDistance.screenY > Config::goalTopMaxY)
+		(edgeDistanceMetric.leftTopDistance.distance < Config::goalTopMinDistance && edgeDistanceMetric.leftTopDistance.screenY > Config::goalTopMaxY)
+		|| (edgeDistanceMetric.rightTopDistance.distance < Config::goalTopMinDistance && edgeDistanceMetric.rightTopDistance.screenY > Config::goalTopMaxY)
 	) {
 		//std::cout << "@ GOAL INVALID TOP EDGE DISTANCE LEFT: " << edgeDistanceMetric.leftTopDistance.distance << "m, right: " << edgeDistanceMetric.rightTopDistance.distance << "m" << std::endl;
 

@@ -80,6 +80,9 @@ namespace Config {
 	// if a goal starts lower than this value then it's not considered valid
 	const int goalTopMaxY = 10;
 
+	// goal top corners should be at least this far away
+	const float goalTopMinDistance = 4.0f;
+
 	// surround metric is taken into account if ball bottom is below this threshold
 	const int surroundSenseThresholdY = cameraHeight - 180;
 
