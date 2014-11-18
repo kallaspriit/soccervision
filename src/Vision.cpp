@@ -289,8 +289,8 @@ bool Vision::isValidGoal(Object* goal, Side side) {
 		goal->y = y1 + goal->height / 2;
 	}*/
 
-	std::string color1 = goal->type == 0 ? "yellow-goal-wide" : "blue-goal-wide";
-	std::string color2 = goal->type == 0 ? "yellow-goal" : "blue-goal";
+	std::string color1 = goal->type == 0 ? "yellow-goal" : "blue-goal";
+	std::string color2 = goal->type == 0 ? "yellow-goal-wide" : "blue-goal-wide";
 	int halfWidth = goal->width / 2;
 	int halfHeight = goal->height / 2;
 
@@ -1048,7 +1048,8 @@ Vision::EdgeDistanceMetric Vision::getEdgeDistanceMetric(int x, int y, int width
 
 			colorFound = colorName == color1 || colorName == color2;
 
-			if (colorFound) {
+			//if (colorFound) {
+			if (strcmp(color->name, "blue-goal") == 0) {
 				distance = getDistance(senseX, senseY);
 
 				if (leftTopDistanceX == -1 || senseX < leftTopDistanceX) {
