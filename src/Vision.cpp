@@ -1027,13 +1027,13 @@ Vision::EdgeDistanceMetric Vision::getEdgeDistanceMetric(int x, int y, int width
 	Distance distance;
 	EdgeDistance leftTopDistance;
 	EdgeDistance rightTopDistance;
-	int leftTopDistanceX = -1;
-	int rightTopDistanceX = -1;
+	int minLeftY = Config::cameraHeight;
+	int minRightY = Config::cameraHeight;
 	int padding = (int)((float)width * 0.2f);
 	Blobber::Color* color;
 	bool colorFound;
 
-	for (int senseX = x + padding; senseX <= x + width - padding; senseX++) {
+	for (int senseX = x; senseX <= x + width; senseX++) {
 		for (int senseY = y; senseY <= y + height; senseY++) {
 			color = getColorAt(senseX, senseY);
 
@@ -1048,17 +1048,19 @@ Vision::EdgeDistanceMetric Vision::getEdgeDistanceMetric(int x, int y, int width
 			if (colorFound) {
 				distance = getDistance(senseX, senseY);
 
-				if (leftTopDistanceX == -1 || senseX < leftTopDistanceX) {
+				if (senseX > x + padding && senseX < x + 2 * padding && senseY < minLeftY) {
 					leftTopDistance = EdgeDistance(senseX, senseY, distance.straight);
-					leftTopDistanceX = senseX;
+					minLeftY = senseY;
+
+					canvas.setPixelAt(senseX, senseY, 0, 255, 0);
 				}
 
-				if (rightTopDistanceX == -1 || senseX > rightTopDistanceX) {
+				if (senseX < x + width - padding && senseX > x + width - 2 * padding && senseY < minRightY) {
 					rightTopDistance = EdgeDistance(senseX, senseY, distance.straight);
-					rightTopDistanceX = senseX;
-				}
+					minRightY = senseY;
 
-				canvas.setPixelAt(senseX, senseY, 0, 255, 0);
+					canvas.setPixelAt(senseX, senseY, 0, 255, 0);
+				}
 
 				break;
 			} else {
