@@ -61,7 +61,9 @@
  * - fetch ball front offset zero, kick with speed, brake based on goal aim offset
  * - path planning to next ball, drive using relative coords and odometry
  * - simulator in c++ code, emulates robot and vision, ui might be the same web ui
- * - prefer balls near own goal - faster to move forwards and can annoy opponent
+ *
+ * 2014
+ * - prefer balls near own goal - faster to move forwards and can get in opponents way
  * - prefer balls from the rear camera when own goal is visible
  * - drive behind the furthest not closest ball behind the robot, avoid hitting other balls on the way
  * - make sure the ball in the way is not too close when chip-kicking
