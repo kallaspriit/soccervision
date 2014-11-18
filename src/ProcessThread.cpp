@@ -112,11 +112,14 @@ void* ProcessThread::run() {
 		vision->setDebugImage(NULL, 0, 0);
 	}
 
-	visionResult = vision->process();
-
 	if (debug) {
 		DebugRenderer::renderMapping(rgb, vision);
 		DebugRenderer::renderGrid(rgb, vision);
+	}
+
+	visionResult = vision->process();
+
+	if (debug) {
 		DebugRenderer::renderBlobs(classification, blobber);
 		DebugRenderer::renderBalls(rgb, vision, visionResult->balls);
 		DebugRenderer::renderGoals(rgb, visionResult->goals);
