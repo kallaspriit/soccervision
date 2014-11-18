@@ -91,7 +91,7 @@ std::string SerialCommunication::dequeueMessage() {
 
 	messages.pop();
 
-	if (message.substr(0, 7) != "<speeds") {
+	if (message.substr(0, 7) != "<speeds" && message.substr(0, 4) != "<adc") {
 		std::cout << "RECV < " << message << std::endl;
 	}
 
