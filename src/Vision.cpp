@@ -291,10 +291,10 @@ bool Vision::isValidGoal(Object* goal, Side side) {
 
 	std::string color1 = goal->type == 0 ? "yellow-goal" : "blue-goal";
 	std::string color2 = goal->type == 0 ? "yellow-goal-wide" : "blue-goal-wide";
+	int halfWidth = goal->width / 2;
+	int halfHeight = goal->height / 2;
 
-	EdgeDistanceMetric edgeDistanceMetric = getEdgeDistanceMetric(goal->x, goal->y, goal->width, goal->height, color1, color2);
-
-	std::cout << "EDGE LEFT: " << edgeDistanceMetric.leftTopDistance.distance << ", RIGHT: " << edgeDistanceMetric.rightTopDistance.distance << std::endl;
+	EdgeDistanceMetric edgeDistanceMetric = getEdgeDistanceMetric(goal->x - halfWidth, goal->y - halfHeight, goal->width, goal->height, color1, color2);
 
 	if (goal->y + goal->height < Config::goalPathSenseStartY) {
 		PathMetric pathMetric = getPathMetric(
@@ -1042,8 +1042,6 @@ Vision::EdgeDistanceMetric Vision::getEdgeDistanceMetric(int x, int y, int width
 			colorFound = strcmp(color->name, color1.c_str()) == 0 || strcmp(color->name, color2.c_str()) == 0;
 
 			if (colorFound) {
-				std::cout << "FOUND COLOR AT " << senseX << "x" << senseY << std::endl;
-
 				distance = getDistance(senseX, senseY);
 
 				if (leftTopDistanceX == -1 || senseX < leftTopDistanceX) {
@@ -1061,10 +1059,12 @@ Vision::EdgeDistanceMetric Vision::getEdgeDistanceMetric(int x, int y, int width
 
 	if (leftTopDistance.distance != -1) {
 		canvas.fillBoxCentered(leftTopDistance.screenX, leftTopDistance.screenY, 10, 10, 255, 0, 0);
+		canvas.drawText(leftTopDistance.screenX, leftTopDistance.screenY + 10, Util::toString(leftTopDistance.distance) + "m", 0, 0, 0);
 	}
 
 	if (leftTopDistance.distance != -1) {
 		canvas.fillBoxCentered(rightTopDistance.screenX, rightTopDistance.screenY, 10, 10, 255, 0, 0);
+		canvas.drawText(rightTopDistance.screenX, rightTopDistance.screenY + 10, Util::toString(rightTopDistance.distance) + "m", 0, 0, 0);
 	}
 
 	return EdgeDistanceMetric(leftTopDistance, rightTopDistance);
