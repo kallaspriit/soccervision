@@ -1043,7 +1043,8 @@ Vision::EdgeDistanceMetric Vision::getEdgeDistanceMetric(int x, int y, int width
 				continue;
 			}
 
-			colorFound = color->name == color1 || color->name == color2;
+			//colorFound = color->name == color1 || color->name == color2;
+			colorFound = color->name == "blue-goal" || color->name == "blue-goal-wide";
 
 			if (colorFound) {
 				distance = getDistance(senseX, senseY);
@@ -1062,8 +1063,6 @@ Vision::EdgeDistanceMetric Vision::getEdgeDistanceMetric(int x, int y, int width
 
 				break;
 			} else {
-				std::cout << "WRONG: " << color->name << " vs " << color1 << ", " << color2 << std::endl;
-					 
 				canvas.fillBoxCentered(senseX, senseY, 2, 2, 255, 0, 0);
 			}
 		}
