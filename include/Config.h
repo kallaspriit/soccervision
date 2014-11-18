@@ -81,7 +81,8 @@ namespace Config {
 	const int goalTopMaxY = 10;
 
 	// goal top corners should be at least this far away
-	const float goalTopMinDistance = 4.0f;
+	// TODO this should be higher to be helpful but causes false-positives
+	const float goalTopMinDistance = 3.0f;
 
 	// surround metric is taken into account if ball bottom is below this threshold
 	const int surroundSenseThresholdY = cameraHeight - 180;
