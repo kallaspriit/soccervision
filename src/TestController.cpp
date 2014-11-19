@@ -1420,10 +1420,10 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 	float offsetDistance = 0.2f;
 
 	// one possibility would be to fetch the ball furthest away
-	Object* ball = visionResults->getFurthestBall(Dir::REAR);
+	//Object* ball = visionResults->getFurthestBall(Dir::REAR);
 
 	// watch for ball behind and target side goal in front
-	//Object* ball = visionResults->getClosestBall(Dir::REAR);
+	Object* ball = visionResults->getClosestBall(Dir::REAR);
 	Object* goal = visionResults->getLargestGoal(ai->targetSide, Dir::FRONT);
 
 	ai->dbg("ballVisible", ball != NULL);
