@@ -80,9 +80,11 @@ void Coilgun::step(float dt) {
 	timeSinceLastVoltageReading += dt;
 
 	// request voltage readings 5 times per second
-	/*if (timeSinceLastVoltageReading > 0.2f) {
+	if (timeSinceLastVoltageReading > 0.2f) {
 		requestVoltageReading();
-	}*/
+
+		timeSinceLastVoltageReading = 0.0f;
+	}
 }
 
 void Coilgun::requestVoltageReading() {
