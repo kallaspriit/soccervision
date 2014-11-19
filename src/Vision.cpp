@@ -495,11 +495,13 @@ bool Vision::isBallInGoal(Object* ball, Dir dir, ObjectList& goals) {
 			goal = *it;
 
 			if (ball->behind == goal->behind && goal->contains(ball)) {
-				std::cout << "@ BALL IN GOAL" << std::endl;
+				std::cout << "@ BALL IN GOAL AT " << ball->distance << "m" << std::endl;
 
 				return true;
 			}
 		}
+	} else {
+		std::cout << "@ BALL TOO FAR AT " << ball->distance << "m" << std::endl;
 	}
 
 	return false;
