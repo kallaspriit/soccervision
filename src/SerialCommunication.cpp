@@ -125,9 +125,11 @@ void SerialCommunication::received(const char *data, unsigned int len) {
 			
 
 			// remove non-ascii char
-			//if (v[i] >= 32 && v[i] < 0x7f) {
-			partialMessage += v[i];
-			//}
+			if (v[i] >= 32 && v[i] < 0x7f) {
+				partialMessage += v[i];
+			} else {
+				std::cout << "F < " << v[i] << std::endl;
+			}
 		}
 	}
 
