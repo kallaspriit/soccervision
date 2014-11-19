@@ -141,13 +141,17 @@ void SerialCommunication::received(const char *data, unsigned int len) {
 
 	for (unsigned int i = 0; i<v.size(); i++) {
 		if (v[i] == '\n') {
-			boost::mutex::scoped_lock lock(messagesMutex);
+			if (partialMessage.size() > 0) {
+				boost::mutex::scoped_lock lock(messagesMutex);
 
-			messages.push(partialMessage);
+				messages.push(partialMessage);
 
-			//std::cout << "C < " << partialMessage << " [" << messages.size() << "]" << std::endl;
+				//std::cout << "C < " << partialMessage << " [" << messages.size() << "]" << std::endl;
 
-			partialMessage = "";
+				partialMessage = "";
+			} else {
+				std::cout << "@ GOT LINEFEED BUT PARTIAL MESSAGE WAS EMPTY, THIS SHOULD NOT HAPPEN" << std::endl;
+			}
 		} else {
 			if (v[i] == '<') {
 				if (receivingMessage) {
