@@ -1980,6 +1980,7 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 	// limit ball avoidance time
 	if (avoidBallDuration > maxBallAvoidTime) {
 		isBallInWay = false;
+		shouldManeuverBallInWay = false;
 		isGoalPathObstructed = false;
 	}
 
@@ -1988,6 +1989,7 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 		std::cout << "@ NOT AVOIDING BALL IN GOAL, BALL: " << ballInWayMetric.closestBallInWayDistance << "m, goal: " << goal->distance << "m" << std::endl;
 
 		isBallInWay = false;
+		shouldManeuverBallInWay = false;
 	}
 
 	// don't balls faw away near goal
@@ -1995,6 +1997,7 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 		std::cout << "@ NOT AVOIDING DISTANT BALL NEAR GOAL, BALL: " << ballInWayMetric.closestBallInWayDistance << "m, goal: " << goal->distance << "m" << std::endl;
 
 		isBallInWay = false;
+		shouldManeuverBallInWay = false;
 	}
 
 	// drive sideways if there's a ball in the way
