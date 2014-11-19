@@ -1676,8 +1676,8 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	robot->setTargetDir(limitedForwardSpeed, sideSpeed);
 
 	// TODO don't look straight at goal when the ball angle is big but between them
-	robot->lookAt(Math::Rad(lookAngle));
-	//robot->lookAt(goal);
+	//robot->lookAt(Math::Rad(lookAngle));
+	robot->lookAt(goal);
 	robot->dribbler->prime();
 
 	ai->dbg("approachP", approachP);
