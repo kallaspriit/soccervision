@@ -78,7 +78,8 @@
 * + queue serial messages to be sent and send them as a single string at once
 * + serial queue message counter does not decrement one by one, sometimes many values
 * + debug long dt between frames
-* + sometimes high level thinks the dribbler has ball while low-level does not agree
+* - sometimes high level thinks the dribbler has ball while low-level does not agree
+* - drives through the opponent's goal at the start if the first ball on the left is close to it
 *
 *
 * - make all parameters settable in the UI
