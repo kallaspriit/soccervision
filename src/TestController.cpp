@@ -713,8 +713,9 @@ float TestController::getTargetAngle(float goalX, float goalY, float ballX, floa
 void TestController::ManualControlState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration, float combinedDuration) {
 	double time = Util::millitime();
 
-	// reset total duration so it starts from zero in AI states
+	// reset duration so it starts from zero in AI states
 	ai->totalDuration = 0.0f;
+	ai->combinedStateDuration = 0.0f;
 
 	// failsafe stops movement if no new commands received for some time
 	if (ai->lastCommandTime == -1.0 || time - ai->lastCommandTime < 0.5) {
@@ -1077,8 +1078,11 @@ void TestController::FetchBallFrontState::step(float dt, Vision::Results* vision
 		return;
 	}
 
+	// prefer balls on the left for the first few seconds of the match to get the balls in front of own goal first
+	bool preferLeft = combinedDuration < 3.0f;
+
 	// only consider balls in the front camera
-	Object* ball = visionResults->getClosestBall(Dir::FRONT);
+	Object* ball = visionResults->getClosestBall(Dir::FRONT, false, preferLeft);
 	Object* goal = visionResults->getLargestGoal(ai->targetSide, Dir::FRONT);
 
 	bool usingGhost = false;
