@@ -75,6 +75,7 @@
  * - don't look straight at goal when the ball angle is big but between them
  * - fetches balls from goal too often
  * - avoids balls in goal
+ * - queue serial messages to be sent and send them as a single string at once
  *
  * - make all parameters settable in the UI
  * - implement logviking-style logging with filterable components

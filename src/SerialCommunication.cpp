@@ -83,7 +83,11 @@ bool SerialCommunication::gotMessages() {
 std::string SerialCommunication::dequeueMessage() {
 	boost::mutex::scoped_lock lock(messagesMutex);
 
-	if (messages.size() == 0) {
+	int messageCount = messages.size();
+
+	if (messageCount == 0) {
+		std::cout << "R [" << messageCount << "]" << std::endl;
+
 		return "";
 	}
 
@@ -92,7 +96,7 @@ std::string SerialCommunication::dequeueMessage() {
 	messages.pop();
 
 	if (message.substr(0, 7) != "<speeds" && message.substr(0, 4) != "<adc") {
-		std::cout << "R < " << message << " [" << messages.size() << "]" << std::endl;
+		std::cout << "R < " << message << " [" << messageCount << "]" << std::endl;
 	}
 
 	return message;
