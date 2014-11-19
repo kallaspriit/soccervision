@@ -1098,6 +1098,7 @@ void TestController::FetchBallFrontState::step(float dt, Vision::Results* vision
 		}
 	}
 
+	ai->dbg("preferLeft", preferLeft);
 	ai->dbg("ballVisible", ball != NULL);
 	ai->dbg("goalVisible", goal != NULL);
 	ai->dbg("usingGhost", usingGhost);

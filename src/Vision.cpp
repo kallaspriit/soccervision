@@ -1855,7 +1855,9 @@ Object* Vision::Results::getClosestBall(Dir dir, bool nextClosest, bool preferLe
 
 			// fake balls on the left to be closer
 			if (preferLeft && ball->angle < 0.0f) {
-				ballDistance /= 2.0f;
+				std::cout << "@ PREFER LEFT " << ballDistance << std::endl;
+
+				ballDistance *= 0.5f;
 			}
 
 			if (closestBall == NULL || ballDistance < closestDistance) {
