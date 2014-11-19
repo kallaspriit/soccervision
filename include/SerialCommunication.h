@@ -36,7 +36,7 @@ private:
 	Messages sendQueue;
 	char requestBuffer[MAX_SIZE];
 	mutable boost::mutex messagesMutex;
-	
+	bool receivingMessage;
 };
 
 #endif // SERIAL_COMMUNICATION_H

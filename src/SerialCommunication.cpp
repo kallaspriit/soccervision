@@ -4,7 +4,8 @@
 SerialCommunication::SerialCommunication(std::string portName, int baud) :
 	portName(portName),
 	baud(baud),
-	serial(portName, baud)
+	serial(portName, baud),
+	receivingMessage(false)
 {
 	std::cout << "! Starting communication serial to " << portName << " @ " << baud << std::endl;
 
@@ -148,11 +149,26 @@ void SerialCommunication::received(const char *data, unsigned int len) {
 
 			partialMessage = "";
 		} else {
-			// remove non-ascii char
-			if (v[i] >= 32 && v[i] < 0x7f) {
+			if (v[i] == '<') {
+				if (receivingMessage) {
+					std::cout << "@ GOT '<' BUT WAS ALREADY RECEIVING MESSAGE, THIS SHOULD NOT HAPPEN" << std::endl;
+				}
+
+				receivingMessage = true;
+			}
+
+			if (receivingMessage) {
 				partialMessage += v[i];
 			} else {
-				std::cout << "F < " << v[i] << std::endl;
+				std::cout << "@ GOT '" << v[i] << "' BUT AM NOT RECEIVING MESSAGE, THIS SHOULD NOT HAPPEN, IGNORING IT" << std::endl;
+			}
+
+			if (v[i] == '>') {
+				if (!receivingMessage) {
+					std::cout << "@ GOT '>' BUT WAS NOT RECEIVING MESSAGE, THIS SHOULD NOT HAPPEN" << std::endl;
+				}
+
+				receivingMessage = false;
 			}
 		}
 	}
