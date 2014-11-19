@@ -1690,7 +1690,8 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 
 	// configuration parameters
 	float ballDistance = ball->getDribblerDistance();
-	float minAllowedApproachSpeed = 0.5f;
+	//float minAllowedApproachSpeed = 0.5f;
+	float minAllowedApproachSpeed = 0.4f;
 	float nearDistance = 0.35f;
 	//float maxSideSpeedDistance = 0.1f; // pushes ball with nose
 	float maxSideSpeedDistance = 0.065f;
@@ -1713,7 +1714,7 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	}
 
 	// calculate movement
-	float approachP = Math::map(ballDistance, 0.0f, enterDistance, 0.5f, Math::max(enterVelocity, minAllowedApproachSpeed));
+	float approachP = Math::map(ballDistance, 0.0f, enterDistance, minAllowedApproachSpeed, Math::max(enterVelocity, minAllowedApproachSpeed));
 	
 	// distance based
 	//float sidePower = Math::map(Math::abs(ball->distanceX), 0.0f, maxSideSpeedDistance, 0.0f, 1.0f);
