@@ -37,7 +37,7 @@ void SerialCommunication::send(std::string message) {
 
 void SerialCommunication::sync() {
 
-return;
+//return;
 
 	boost::mutex::scoped_lock lock(messagesMutex);
 
