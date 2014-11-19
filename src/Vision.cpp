@@ -1890,6 +1890,10 @@ Object* Vision::Results::getClosestBall(Dir dir, bool nextClosest, bool preferLe
 		}
 	}
 
+	if (closestBall != NULL) {
+		std::cout << "@ CLOSEST DISTANCE: " << closestBall->distance << ", ANGLE: " << Math::radToDeg(closestBall->angle) << std::endl;
+	}
+
 	return nextClosest ? nextClosestBall : closestBall;
 }
 
