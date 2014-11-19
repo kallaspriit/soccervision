@@ -862,8 +862,16 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 		ai->dbgs("search", "any closest");
 	}*/
 
-	Object* ball = visionResults->getClosestBall(ballSearchDir);
+	bool preferRear = false;
+
+	
 	Object* goal = visionResults->getLargestGoal(ai->targetSide, Dir::FRONT);
+
+	if (goal != NULL) {
+		preferRear = true;
+	}
+
+	Object* ball = visionResults->getClosestBall(ballSearchDir, false, false, preferRear);
 
 	if (ball == NULL && ballSearchDir != Dir::ANY && stateDuration > 1.0f) {
 		ball = visionResults->getClosestBall(Dir::ANY);
@@ -874,6 +882,7 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 		ai->setLastBall(ball);
 	}
 
+	ai->dbg("preferRear", preferRear);
 	ai->dbg("ballSearchDir", ballSearchDir);
 	ai->dbg("wasSearchingRecently", wasSearchingRecently);
 	ai->dbg("timeSinceLastTurnAround", ai->lastTurnAroundTime != -1.0 ? Util::duration(ai->lastTurnAroundTime) : -1.0);
