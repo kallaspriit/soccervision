@@ -64,7 +64,7 @@
  *
  * 2014
  * + prefer balls near own goal - faster to move forwards and can get in opponents way
- * - prefer balls from the rear camera when opponent goal is visible
+ * + prefer balls from the rear camera when opponent goal is visible
  * - drive behind the furthest not closest ball behind the robot, avoid hitting other balls on the way
  * - make sure the ball in the way is not too close when chip-kicking
  * - chip kick over the furthest ball in the way not based on goal distance - can save some charge in the caps
