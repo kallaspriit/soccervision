@@ -29,6 +29,23 @@ SerialCommunication::PortList SerialCommunication::getPortList() {
 }
 
 void SerialCommunication::send(std::string message) {
+	sendQueue.push(message);
+}
+
+void SerialCommunication::sync() {
+	boost::mutex::scoped_lock lock(messagesMutex);
+
+	std::string message = "";
+	std::string queuedMessage;
+
+	while (sendQueue.size() > 0) {
+		queuedMessage = sendQueue.front();
+
+		sendQueue.pop();
+
+		message += queuedMessage + "\n";
+	}
+
 	if (message.size() >= MAX_SIZE) {
 		std::cout << "- Too big socket message" << std::endl;
 
@@ -57,11 +74,11 @@ void SerialCommunication::send(std::string message) {
 	}
 
 	/*if (message.substr(0, 6) != "speeds") {
-		// incoming message
-		std::cout << "SEND > " << message << std::endl;
+	// incoming message
+	std::cout << "SEND > " << message << std::endl;
 	}*/
 
-	message += "\n";
+	//message += "\n";
 
 	memcpy(requestBuffer, message.c_str(), message.size());
 	requestBuffer[message.size()] = 0;
@@ -86,7 +103,7 @@ std::string SerialCommunication::dequeueMessage() {
 	int messageCount = messages.size();
 
 	if (messageCount == 0) {
-		std::cout << "R [" << messageCount << "]" << std::endl;
+		//std::cout << "R [" << messageCount << "]" << std::endl;
 
 		return "";
 	}
@@ -96,7 +113,7 @@ std::string SerialCommunication::dequeueMessage() {
 	messages.pop();
 
 	//if (message.substr(0, 7) != "<speeds" && message.substr(0, 4) != "<adc") {
-		std::cout << "R < " << message << " [" << messageCount << "]" << std::endl;
+		//std::cout << "R < " << message << " [" << messageCount << "]" << std::endl;
 	//}
 
 	return message;
@@ -121,7 +138,7 @@ void SerialCommunication::received(const char *data, unsigned int len) {
 
 			messages.push(partialMessage);
 
-			std::cout << "C < " << partialMessage << " [" << messages.size() << "]" << std::endl;
+			//std::cout << "C < " << partialMessage << " [" << messages.size() << "]" << std::endl;
 
 			partialMessage = "";
 		} else {

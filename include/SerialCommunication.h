@@ -21,6 +21,7 @@ public:
 	bool gotMessages();
 	std::string dequeueMessage();
 	void close();
+	void sync();
 
 private:
 	void* run();
@@ -32,6 +33,7 @@ private:
 	std::string partialMessage;
 	Messages messages;
 	Messages queuedMessages;
+	Messages sendQueue;
 	char requestBuffer[MAX_SIZE];
 	mutable boost::mutex messagesMutex;
 	

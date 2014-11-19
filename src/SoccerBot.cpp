@@ -902,10 +902,12 @@ void SoccerBot::handleCommunicationMessages() {
 			break;
 		}
 
-		std::cout << "M < " << message << std::endl;
+		//std::cout << "M < " << message << std::endl;
 
 		handleCommunicationMessage(message);
 	}
+
+	com->sync();
 }
 
 void SoccerBot::handleCommunicationMessage(std::string message) {

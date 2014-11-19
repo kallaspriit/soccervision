@@ -21,6 +21,7 @@ public:
 	virtual std::string dequeueMessage() = 0;
 	virtual int start() { return 0; };
 	virtual void close() = 0;
+	virtual void sync() {};
 
 };
 
