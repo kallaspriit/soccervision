@@ -143,6 +143,10 @@ void SoccerBot::run() {
 			dt = 1.0f / 60.0f;
 		}
 
+		if (dt > 0.2f) {
+			std::cout << "@ LARGE DT: " << dt << std::endl;
+		}
+
 		totalTime += dt;
 
 		//gotFrontFrame = gotRearFrame = false;
