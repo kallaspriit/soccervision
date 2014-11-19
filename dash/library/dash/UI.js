@@ -1195,32 +1195,46 @@ Dash.UI.prototype.showStateStats = function(state) {
 
 Dash.UI.prototype.showControllerState = function(state) {
 	var wrap = $('#controller-state'),
+		entries = [],
 		key,
+		value,
 		sub,
 		parentId,
 		i = 0;
 	
 	wrap.html('');
-	
+
 	if (state != null && typeof(state) == 'object') {
 		for (key in state) {
-			if (typeof(state[key]) === 'object') {
-				parentId = 'controller-parent-' + i;
+			entries.push({
+				key: key,
+				value: state[key]
+			});
+		}
+	}
 
-				wrap.append('<li id="' + parentId + '"><strong>' + key + '</strong><ul></ul></li>');
+	entries = entries.sort(function(a, b) {
+		return a.key < b.key ? -1 : 1;
+	});
+	
+	for (i = 0; i < entries.length; i++) {
+		key = entries[i].key;
+		value =  entries[i].value;
 
-				for (sub in state[key]) {
-					if (sub === 'particles') {
-						continue;
-					}
+		if (typeof(value) === 'object') {
+			parentId = 'controller-parent-' + i;
 
-					$('#' + parentId + ' UL').append('<li><strong>' + sub + '</strong>: ' + state[key][sub] + '</li>')
+			wrap.append('<li id="' + parentId + '"><strong>' + key + '</strong><ul></ul></li>');
+
+			for (sub in value) {
+				if (sub === 'particles') {
+					continue;
 				}
-			} else {
-				wrap.append('<li><strong>' + key + '</strong>: ' + state[key] + '</li>');
-			}
 
-			i++;
+				$('#' + parentId + ' UL').append('<li><strong>' + sub + '</strong>: ' + state[key][sub] + '</li>')
+			}
+		} else {
+			wrap.append('<li><strong>' + key + '</strong>: ' + value + '</li>');
 		}
 	}
 };

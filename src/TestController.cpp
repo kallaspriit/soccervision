@@ -592,7 +592,7 @@ std::string TestController::getJSON() {
 	}
 
 	//send some debug information to the client
-	stream << "\"currentState\": \"" << currentStateName << "\",";
+	stream << "\"#currentState\": \"" << currentStateName << "\",";
 	stream << "\"stateDuration\": \"" << currentStateDuration << "\",";
 	stream << "\"combinedDuration\": \"" << combinedStateDuration << "\",";
 	stream << "\"totalDuration\": \"" << totalDuration << "\",";
