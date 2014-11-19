@@ -1059,6 +1059,8 @@ Vision::EdgeDistanceMetric Vision::getEdgeDistanceMetric(int x, int y, int width
 			colorFound = strcmp(color->name, color1.c_str()) == 0 || strcmp(color->name, color2.c_str());
 
 			if (colorFound) {
+				std::cout << "F1 " << color->name << ", " << color1 << ", " << color2 << std::endl;
+
 				distance = getDistance(senseX, senseY);
 
 				// left
@@ -1105,7 +1107,7 @@ Vision::EdgeDistanceMetric Vision::getEdgeDistanceMetric(int x, int y, int width
 			colorName = std::string(color->name);
 
 			if (colorName == color1 || colorName == color2) {
-				std::cout << "FOUND " << color->name << ", " << color1 << ", " << color2 << std::endl;
+				std::cout << "F2 " << color->name << ", " << color1 << ", " << color2 << std::endl;
 
 				canvas.fillBoxCentered(senseX, senseY, 4, 4, 255, 0, 255);
 				
