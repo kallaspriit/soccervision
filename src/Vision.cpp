@@ -249,10 +249,11 @@ ObjectList Vision::processGoals(Dir dir) {
 				}
 			}
 
-			/*goal->distance = distance.straight;
+			// straight distance is already updated in valid goal check
+			//goal->distance = distance.straight;
 			goal->distanceX = distance.x;
 			goal->distanceY = distance.y;
-			goal->angle = distance.angle;*/
+			goal->angle = distance.angle;
 
 			if (goal->distance < 0.0f) {
 				std::cout << "- Skipping goal with invalid distance: " << goal->distance << std::endl;
