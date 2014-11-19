@@ -138,8 +138,8 @@ public:
 	Math::Point getScreenCoords(float distanceX, float distanceY);
 
 private:
-	ObjectList processBalls(Dir dir);
     ObjectList processGoals(Dir dir);
+	ObjectList processBalls(Dir dir, ObjectList& goals);
 	float getSurroundMetric(int x, int y, int radius, std::vector<std::string> validColors, std::string requiredColor = "", int side = 0, bool allowNone = false);
     PathMetric getPathMetric(int x1, int y1, int x2, int y2, std::vector<std::string> validColors, std::string requiredColor = "");
 	EdgeDistanceMetric getEdgeDistanceMetric(int x, int y, int width, int height, std::string color1, std::string color2);
@@ -151,9 +151,9 @@ private:
 	ColorDistance getColorDistance(std::string colorName);
 	ColorList getViewColorOrder();
 	Object* Vision::mergeGoals(Object* goal1, Object* goal2);
-    bool isValidBall(Object* ball, Dir dir);
+	bool isValidBall(Object* ball, Dir dir, ObjectList& goals);
     bool isValidGoal(Object* goal, Side side);
-	bool isBallInGoal(Object* ball, Dir dir);
+	bool isBallInGoal(Object* ball, Dir dir, ObjectList& goals);
 	int getBallRadius(int width, int height);
 	int getBallSenseRadius(int ballRadius, float distance);
 	int getPixelsBelow(int x, int y, std::vector<std::string> validColors, int allowedWrongPixels = 3);

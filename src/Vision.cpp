@@ -63,7 +63,7 @@ Vision::Result* Vision::process() {
 	result->vision = this;
 
 	result->goals = processGoals(dir);
-    result->balls = processBalls(dir);
+	result->balls = processBalls(dir, result->goals);
 
 	/*if (dir == Dir::FRONT) {
 		updateObstructions();
@@ -81,7 +81,7 @@ Vision::Result* Vision::process() {
 	return result;
 }
 
-ObjectList Vision::processBalls(Dir dir) {
+ObjectList Vision::processBalls(Dir dir, ObjectList& goals) {
 	ObjectList allBalls;
 	ObjectList filteredBalls;
 
@@ -139,7 +139,7 @@ ObjectList Vision::processBalls(Dir dir) {
 	for (ObjectListItc it = mergedBalls.begin(); it != mergedBalls.end(); it++) {
 		Object* ball = *it;
 
-		if (isValidBall(ball, dir)) {
+		if (isValidBall(ball, dir, goals)) {
 			int extendHeightBelow = getPixelsBelow(ball->x, ball->y + ball->height / 2, validColorsBelowBall);
 
 			if (extendHeightBelow > 0) {
@@ -362,7 +362,7 @@ bool Vision::isValidGoal(Object* goal, Side side) {
     return true;
 }
 
-bool Vision::isValidBall(Object* ball, Dir dir) {
+bool Vision::isValidBall(Object* ball, Dir dir, ObjectList& goals) {
 	int ballMinArea = (int)Math::map(ball->distance, 0.0f, 5.0f, 32.0f, 2.0f);
 
     //if (ball->area < Config::ballMinArea) {
@@ -437,7 +437,7 @@ bool Vision::isValidBall(Object* ball, Dir dir) {
 		}
 	}
 
-	if (isBallInGoal(ball, dir)) {
+	if (isBallInGoal(ball, dir, goals)) {
 		//std::cout << "@ BALL IN GOAL FAIL" << std::endl;
 
 		return false;
@@ -446,9 +446,9 @@ bool Vision::isValidBall(Object* ball, Dir dir) {
     return true;
 }
 
-bool Vision::isBallInGoal(Object* ball, Dir dir) {
+bool Vision::isBallInGoal(Object* ball, Dir dir, ObjectList& goals) {
 	// think's the ball is in goal when it's near the side posts
-	if (ball->distance < Config::ballInGoalConsiderMaxDistance) {
+	/*if (ball->distance < Config::ballInGoalConsiderMaxDistance) {
 		int ballRadius = getBallRadius(ball->width, ball->height);
 		int senseRadius = getBallSenseRadius(ballRadius, ball->distance);
 
@@ -467,7 +467,7 @@ bool Vision::isBallInGoal(Object* ball, Dir dir) {
 
 			return true;
 		}
-	}
+	}*/
 
 	/*if (dir == Dir::FRONT) {
 		for (ObjectListItc it = frontGoals.begin(); it != frontGoals.end(); it++) {
