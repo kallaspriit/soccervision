@@ -95,9 +95,9 @@ std::string SerialCommunication::dequeueMessage() {
 
 	messages.pop();
 
-	if (message.substr(0, 7) != "<speeds" && message.substr(0, 4) != "<adc") {
+	//if (message.substr(0, 7) != "<speeds" && message.substr(0, 4) != "<adc") {
 		std::cout << "R < " << message << " [" << messageCount << "]" << std::endl;
-	}
+	//}
 
 	return message;
 }
