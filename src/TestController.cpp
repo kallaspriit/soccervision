@@ -713,6 +713,9 @@ float TestController::getTargetAngle(float goalX, float goalY, float ballX, floa
 void TestController::ManualControlState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration, float combinedDuration) {
 	double time = Util::millitime();
 
+	// reset total duration so it starts from zero in AI states
+	ai->totalDuration = 0.0f;
+
 	// failsafe stops movement if no new commands received for some time
 	if (ai->lastCommandTime == -1.0 || time - ai->lastCommandTime < 0.5) {
 		robot->setTargetDir(ai->manualSpeedX, ai->manualSpeedY, ai->manualOmega);
