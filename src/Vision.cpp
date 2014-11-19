@@ -2219,3 +2219,7 @@ bool Vision::Results::isRobotOut(Dir dir) {
 
 	return false;
 }
+
+int Vision::Results::getVisibleBallCount() {
+	return front->balls.size() + rear->balls.size();
+}

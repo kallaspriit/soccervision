@@ -89,6 +89,7 @@ public:
 			BallInWayMetric getBallInWayMetric(ObjectList balls, int goalY);
 			//bool isBallInWay(ObjectList balls, int goalY);
 			bool isRobotOut(Dir dir = Dir::ANY);
+			int getVisibleBallCount();
 
 			Vision::Result* front;
 			Vision::Result* rear;
