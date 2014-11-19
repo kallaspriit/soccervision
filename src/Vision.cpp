@@ -306,6 +306,11 @@ bool Vision::isValidGoal(Object* goal, Side side) {
 		return false;
 	}
 
+	// set real distance from edge distance metric center distance
+	if (edgeDistanceMetric.centerDistance.distance != -1) {
+		goal->distance = edgeDistanceMetric.centerDistance.distance;
+	}
+
 	//std::cout << "@ EDGE LEFT: " << edgeDistanceMetric.leftTopDistance.distance << "m, right: " << edgeDistanceMetric.rightTopDistance.distance << "m" << std::endl;
 
 	if (goal->y + goal->height < Config::goalPathSenseStartY) {
@@ -1112,7 +1117,7 @@ Vision::EdgeDistanceMetric Vision::getEdgeDistanceMetric(int x, int y, int width
 			color = getColorAt(senseX, senseY);
 
 			if (color == NULL) {
-				canvas.setPixelAt(senseX, senseY, 255, 255, 255);
+				//canvas.setPixelAt(senseX, senseY, 255, 255, 255);
 
 				continue;
 			}
@@ -1120,7 +1125,7 @@ Vision::EdgeDistanceMetric Vision::getEdgeDistanceMetric(int x, int y, int width
 			colorName = std::string(color->name);
 
 			if (colorName == color1 || colorName == color2) {
-				canvas.fillBoxCentered(senseX, senseY, 4, 4, 255, 0, 255);
+				//canvas.fillBoxCentered(senseX, senseY, 4, 4, 255, 0, 255);
 
 				centerSumY += senseY;
 				centerSampleCount++;
@@ -1140,7 +1145,7 @@ Vision::EdgeDistanceMetric Vision::getEdgeDistanceMetric(int x, int y, int width
 		canvas.drawText(centerDistance.screenX, centerDistance.screenY + 10, Util::toString(centerDistance.distance) + "m", 0, 0, 0);
 	}
 
-	return EdgeDistanceMetric(leftTopDistance, rightTopDistance);
+	return EdgeDistanceMetric(leftTopDistance, rightTopDistance, centerDistance);
 }
 
 Obstruction Vision::getGoalPathObstruction() {
