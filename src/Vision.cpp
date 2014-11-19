@@ -1074,8 +1074,6 @@ Vision::EdgeDistanceMetric Vision::getEdgeDistanceMetric(int x, int y, int width
 					minLeftY = senseY;
 
 					canvas.setPixelAt(senseX, senseY, 0, 255, 0);
-
-					break;
 				}
 
 				// right
@@ -1084,13 +1082,9 @@ Vision::EdgeDistanceMetric Vision::getEdgeDistanceMetric(int x, int y, int width
 					minRightY = senseY;
 
 					canvas.setPixelAt(senseX, senseY, 0, 255, 0);
-
-					break;
 				}
 
-				
-			} else {
-				canvas.setPixelAt(senseX, senseY, 128, 128, 128);
+				break;
 			}
 		}
 	}
