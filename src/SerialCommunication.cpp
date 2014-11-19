@@ -91,9 +91,9 @@ std::string SerialCommunication::dequeueMessage() {
 
 	messages.pop();
 
-	//if (message.substr(0, 7) != "<speeds" && message.substr(0, 4) != "<adc") {
+	if (message.substr(0, 7) != "<speeds" && message.substr(0, 4) != "<adc") {
 		std::cout << "R < " << message << " [" << messages.size() << "]" << std::endl;
-	//}
+	}
 
 	return message;
 }
@@ -117,13 +117,10 @@ void SerialCommunication::received(const char *data, unsigned int len) {
 
 			messages.push(partialMessage);
 
-			std::cout << "C < " << partialMessage << " [" << messages.size() << "]" << std::endl;
+			//std::cout << "C < " << partialMessage << " [" << messages.size() << "]" << std::endl;
 
 			partialMessage = "";
 		} else {
-
-			
-
 			// remove non-ascii char
 			if (v[i] >= 32 && v[i] < 0x7f) {
 				partialMessage += v[i];
@@ -133,7 +130,7 @@ void SerialCommunication::received(const char *data, unsigned int len) {
 		}
 	}
 
-	if (partialMessage.size() > 0) {
+	/*if (partialMessage.size() > 0) {
 		std::cout << "P < " << partialMessage << std::endl;
-	}
+	}*/
 }
