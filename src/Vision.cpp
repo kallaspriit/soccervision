@@ -1040,6 +1040,8 @@ Vision::EdgeDistanceMetric Vision::getEdgeDistanceMetric(int x, int y, int width
 	int minLeftY = Config::cameraHeight;
 	int minRightY = Config::cameraHeight;
 	int padding = (int)((float)width * 0.2f);
+	int halfWidth = width / 2;
+	int halfPadding = padding / 2;
 	Blobber::Color* color;
 	bool colorFound;
 
@@ -1058,21 +1060,30 @@ Vision::EdgeDistanceMetric Vision::getEdgeDistanceMetric(int x, int y, int width
 			if (colorFound) {
 				distance = getDistance(senseX, senseY);
 
+				// left
 				if (senseX > x + padding && senseX < x + 2 * padding && senseY < minLeftY) {
 					leftTopDistance = EdgeDistance(senseX, senseY, distance.straight);
 					minLeftY = senseY;
 
 					canvas.setPixelAt(senseX, senseY, 0, 255, 0);
+
+					break;
 				}
 
+				// right
 				if (senseX < x + width - padding && senseX > x + width - 2 * padding && senseY < minRightY) {
 					rightTopDistance = EdgeDistance(senseX, senseY, distance.straight);
 					minRightY = senseY;
 
 					canvas.setPixelAt(senseX, senseY, 0, 255, 0);
+
+					break;
 				}
 
-				break;
+				// center
+				if (senseX > x + halfWidth - halfPadding && senseX < x + halfWidth + halfPadding) {
+					canvas.setPixelAt(senseX, senseY, 255, 255, 0);
+				}
 			} else {
 				canvas.setPixelAt(senseX, senseY, 128, 128, 128);
 			}
