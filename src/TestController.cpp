@@ -77,7 +77,6 @@
  * - avoids balls in goal
  * - queue serial messages to be sent and send them as a single string at once
  * - serial queue message counter does not decrement one by one, sometimes many values
- * - debug long dt between frames
  *
  * - make all parameters settable in the UI
  * - implement logviking-style logging with filterable components
@@ -713,10 +712,6 @@ float TestController::getTargetAngle(float goalX, float goalY, float ballX, floa
 void TestController::ManualControlState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration, float combinedDuration) {
 	double time = Util::millitime();
 
-	// reset duration so it starts from zero in AI states
-	ai->totalDuration = 0.0f;
-	ai->combinedStateDuration = 0.0f;
-
 	// failsafe stops movement if no new commands received for some time
 	if (ai->lastCommandTime == -1.0 || time - ai->lastCommandTime < 0.5) {
 		robot->setTargetDir(ai->manualSpeedX, ai->manualSpeedY, ai->manualOmega);
@@ -1078,11 +1073,8 @@ void TestController::FetchBallFrontState::step(float dt, Vision::Results* vision
 		return;
 	}
 
-	// prefer balls on the left for the first few seconds of the match to get the balls in front of own goal first
-	bool preferLeft = combinedDuration < 3.0f;
-
 	// only consider balls in the front camera
-	Object* ball = visionResults->getClosestBall(Dir::FRONT, false, preferLeft);
+	Object* ball = visionResults->getClosestBall(Dir::FRONT);
 	Object* goal = visionResults->getLargestGoal(ai->targetSide, Dir::FRONT);
 
 	bool usingGhost = false;
@@ -1098,7 +1090,6 @@ void TestController::FetchBallFrontState::step(float dt, Vision::Results* vision
 		}
 	}
 
-	ai->dbg("preferLeft", preferLeft);
 	ai->dbg("ballVisible", ball != NULL);
 	ai->dbg("goalVisible", goal != NULL);
 	ai->dbg("usingGhost", usingGhost);
