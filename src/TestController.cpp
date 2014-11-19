@@ -1512,7 +1512,7 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 	// make sure we don't reverse into our own goal
 	if (ownGoal != NULL) {
 		// calculate distance between the ball and our own goal, including edges of the goal
-		float minFetchBehindGoalBallDistance = 0.6f;
+		float minFetchBehindGoalBallDistance = 0.5f;
 
 		Vision::Distance goalLeftDistance = visionResults->front->vision->getDistance(ownGoal->x - ownGoal->width / 2, ownGoal->y + ownGoal->height / 2);
 		Vision::Distance goalRightDistance = visionResults->front->vision->getDistance(ownGoal->x + ownGoal->width / 2, ownGoal->y + ownGoal->height / 2);
