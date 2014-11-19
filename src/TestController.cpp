@@ -73,13 +73,11 @@
 * + make sure that seen goal top outer edges are at large distance (takes distortion into account)
 * + implement ball search routine, for example drive between the two goals looking at opponent goal
 * + don't look straight at goal when the ball angle is big but between them
-* - don't maneuver from balls far away near goal
-* - drive straight to the goal if the ball to avoid is far away
-* - fetches balls from goal too often
-* - avoids balls in goal
-* - queue serial messages to be sent and send them as a single string at once
-* - serial queue message counter does not decrement one by one, sometimes many values
-* - debug long dt between frames
+* + don't maneuver from balls far away near goal
+* + make ball in goal detection better
+* + queue serial messages to be sent and send them as a single string at once
+* + serial queue message counter does not decrement one by one, sometimes many values
+* + debug long dt between frames
 *
 *
 * - make all parameters settable in the UI
