@@ -592,7 +592,7 @@ std::string TestController::getJSON() {
 	}
 
 	//send some debug information to the client
-	stream << "\"#currentState\": \"" << currentStateName << "\",";
+	stream << "\"currentState\": \"" << currentStateName << "\",";
 	stream << "\"stateDuration\": \"" << currentStateDuration << "\",";
 	stream << "\"combinedDuration\": \"" << combinedStateDuration << "\",";
 	stream << "\"totalDuration\": \"" << totalDuration << "\",";
@@ -1152,7 +1152,7 @@ void TestController::FetchBallFrontState::step(float dt, Vision::Results* vision
 	float maxBallBrakingAngle = 10.0f;
 	float nearDistance = 0.35f;
 	float retratingBallDistanceDiff = 0.2f;
-	float offsetDistance = 0.3f;
+	float offsetDistance = 0.25f;
 
 	float ballDistance = ball->getDribblerDistance();
 	float realSpeed = robot->getVelocity();
@@ -1639,8 +1639,8 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	float minAllowedApproachSpeed = 0.5f;
 	float nearDistance = 0.35f;
 	//float maxSideSpeedDistance = 0.1f; // pushes ball with nose
-	float maxSideSpeedDistance = 0.065f;
-	//float maxSideSpeedBallAngle = 30.0f;
+	//float maxSideSpeedDistance = 0.065f;
+	float maxSideSpeedBallAngle = 35.0f;
 	float sideP = 0.5f;
 	float maxAngleDiffBallAngle = 45.0f;
 
@@ -1659,10 +1659,8 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 
 	// calculate movement
 	float approachP = Math::map(ballDistance, 0.0f, enterDistance, 0.5f, Math::max(enterVelocity, minAllowedApproachSpeed));
-	float sidePower = Math::map(Math::abs(ball->distanceX), 0.0f, maxSideSpeedDistance, 0.0f, 1.0f);
-	
-	// angle based approach can mess up approaching too fast to small angle at distance
-	//float sidePower = Math::map(Math::abs(Math::radToDeg(ball->angle)), 0.0f, maxSideSpeedBallAngle, 0.0f, 1.0f);
+	//float sidePower = Math::map(Math::abs(ball->distanceX), 0.0f, maxSideSpeedDistance, 0.0f, 1.0f);
+	float sidePower = Math::map(Math::abs(Math::radToDeg(ball->angle)), 0.0f, maxSideSpeedBallAngle, 0.0f, 1.0f);
 	float sideSpeed = sideP * Math::sign(ball->distanceX) * sidePower;
 	float forwardSpeed = approachP * (1.0f - sidePower);
 	float limitedForwardSpeed = Math::min(forwardSpeed, Math::max(enterVelocity, minAllowedApproachSpeed));
@@ -1676,8 +1674,8 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	robot->setTargetDir(limitedForwardSpeed, sideSpeed);
 
 	// TODO don't look straight at goal when the ball angle is big but between them
-	//robot->lookAt(Math::Rad(lookAngle));
-	robot->lookAt(goal);
+	robot->lookAt(Math::Rad(lookAngle));
+	//robot->lookAt(goal);
 	robot->dribbler->prime();
 
 	ai->dbg("approachP", approachP);
