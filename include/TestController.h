@@ -335,6 +335,7 @@ private:
 	bool isNearLine;
 	bool isInCorner;
 	int inCornerFrames;
+	int visibleBallCount;
 
 	double lastCommandTime;
 	double lastBallTime;

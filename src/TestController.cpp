@@ -105,7 +105,7 @@
 * - xxx
 */
 
-TestController::TestController(Robot* robot, AbstractCommunication* com) : BaseAI(robot, com), targetSide(Side::BLUE), manualSpeedX(0.0f), manualSpeedY(0.0f), manualOmega(0.0f), manualDribblerSpeed(0), manualKickStrength(0), blueGoalDistance(0.0f), yellowGoalDistance(0.0f), lastCommandTime(-1.0), lastBallTime(-1.0), lastNearLineTime(-1.0), lastInCornerTime(-1.0), lastTargetGoalAngle(0.0f), lastBall(NULL), lastTurnAroundTime(-1.0), lastClosestGoalDistance(-1.0f), lastTargetGoalDistance(-1.0f), framesRobotOutFront(0), framesRobotOutRear(0), isRobotOutFront(false), isRobotOutRear(false), isNearLine(false), isInCorner(false), inCornerFrames(0) {
+TestController::TestController(Robot* robot, AbstractCommunication* com) : BaseAI(robot, com), targetSide(Side::BLUE), manualSpeedX(0.0f), manualSpeedY(0.0f), manualOmega(0.0f), manualDribblerSpeed(0), manualKickStrength(0), blueGoalDistance(0.0f), yellowGoalDistance(0.0f), lastCommandTime(-1.0), lastBallTime(-1.0), lastNearLineTime(-1.0), lastInCornerTime(-1.0), lastTargetGoalAngle(0.0f), lastBall(NULL), lastTurnAroundTime(-1.0), lastClosestGoalDistance(-1.0f), lastTargetGoalDistance(-1.0f), framesRobotOutFront(0), framesRobotOutRear(0), isRobotOutFront(false), isRobotOutRear(false), isNearLine(false), isInCorner(false), inCornerFrames(0), visibleBallCount(0) {
 	setupStates();
 
 	speedMultiplier = 1.0f;
@@ -369,6 +369,7 @@ void TestController::updateVisionInfo(Vision::Results* visionResults) {
 	yellowGoalDistance = yellowGoal != NULL ? yellowGoal->distance : 0.0f;
 	whiteDistance = visionResults->front->whiteDistance;
 	blackDistance = visionResults->front->blackDistance;
+	visibleBallCount = visionResults->getVisibleBallCount();
 
 	// update target goal distance
 	float currentTargetGoalDistance = -1.0f;
@@ -632,7 +633,7 @@ std::string TestController::getJSON() {
 	stream << "\"isRobotOutFront\": " << (isRobotOutFront ? "true" : "false") << ",";
 	stream << "\"isRobotOutRear\": " << (isRobotOutRear ? "true" : "false") << ",";
 	stream << "\"isInCorner\": " << (isInCorner ? "true" : "false") << ",";
-	//stream << "\"visibleBallCount\": " << (visionResults->getVisibleBallCount()) << ",";
+	stream << "\"visibleBallCount\": " << visibleBallCount << ",";
 	stream << "\"wasInCornerLately\": " << (wasInCornerLately() ? "\"true: " + Util::toString(Util::duration(lastInCornerTime)) + "\"" : "false") << ",";
 	stream << "\"isNearLine\": " << (isNearLine ? "true" : "false") << ",";
 	stream << "\"lastTargetGoalAngle\": " << Math::radToDeg(lastTargetGoalAngle);
