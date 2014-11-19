@@ -406,7 +406,7 @@ void DriveBehindBallTask::onStart(Robot& robot, float dt) {
 	ballSideDistance = Math::sqrt(Math::pow(ballDistance, 2.0f) + Math::pow(offsetDistance, 2.0f));
 	totalDistance = ballSideDistance + arcDistance;
 
-	std::cout << "@ Behind arc radius: " << arcRadius << ", arc distance: " << arcDistance << std::endl;
+	//std::cout << "@ Behind arc radius: " << arcRadius << ", arc distance: " << arcDistance << std::endl;
 }
 
 bool DriveBehindBallTask::onStep(Robot& robot, float dt) {

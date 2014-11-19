@@ -38,7 +38,7 @@ void Coilgun::kick(int microseconds) {
 void Coilgun::chipKick(float distanceMeters) {
 	int microseconds = getChipKickDurationByDistance(distanceMeters);
 
-	std::cout << "! Chip-kicking to distance of " << distanceMeters << " meters for " << microseconds << " microseconds" << std::endl;
+	//std::cout << "! Chip-kicking to distance of " << distanceMeters << " meters for " << microseconds << " microseconds" << std::endl;
 
 	com->send("dkick:0:0:" + Util::toString(microseconds) + ":0");
 }
