@@ -1080,12 +1080,33 @@ Vision::EdgeDistanceMetric Vision::getEdgeDistanceMetric(int x, int y, int width
 					break;
 				}
 
-				// center
-				if (senseX > x + halfWidth - halfPadding && senseX < x + halfWidth + halfPadding) {
-					canvas.setPixelAt(senseX, senseY, 255, 255, 0);
-				}
+				
 			} else {
 				canvas.setPixelAt(senseX, senseY, 128, 128, 128);
+			}
+		}
+	}
+
+	for (int senseX = x; senseX <= x + width; senseX++) {
+		for (int senseY = y + height; senseY >= y; senseY--) {
+			if (senseX < x + halfWidth - halfPadding || senseX > x + halfWidth + halfPadding) {
+				continue;
+			}
+
+			color = getColorAt(senseX, senseY);
+
+			if (color == NULL) {
+				//canvas.setPixelAt(senseX, senseY, 255, 255, 255);
+
+				continue;
+			}
+
+			colorFound = strcmp(color->name, color1.c_str()) == 0 || strcmp(color->name, color2.c_str());
+
+			if (colorFound) {
+				canvas.fillBoxCentered(senseX, senseY, 4, 4, 255, 0, 255);
+				
+				break;
 			}
 		}
 	}
