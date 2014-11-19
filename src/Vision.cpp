@@ -1043,6 +1043,7 @@ Vision::EdgeDistanceMetric Vision::getEdgeDistanceMetric(int x, int y, int width
 	int halfWidth = width / 2;
 	int centerWidth = (int)((float)width * 0.1f);
 	Blobber::Color* color;
+	std::string colorName;
 	bool colorFound;
 
 	for (int senseX = x; senseX <= x + width; senseX++) {
@@ -1101,9 +1102,9 @@ Vision::EdgeDistanceMetric Vision::getEdgeDistanceMetric(int x, int y, int width
 				continue;
 			}
 
-			colorFound = strcmp(color->name, color1.c_str()) == 0 || strcmp(color->name, color2.c_str());
+			colorName = std::string(color->name);
 
-			if (colorFound) {
+			if (colorName == color1 || colorName == color2) {
 				std::cout << "FOUND " << color->name << ", " << color1 << ", " << color2 << std::endl;
 
 				canvas.fillBoxCentered(senseX, senseY, 4, 4, 255, 0, 255);
