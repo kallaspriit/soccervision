@@ -309,7 +309,7 @@ bool Vision::isValidGoal(Object* goal, Side side) {
 
 	// set real distance from edge distance metric center distance
 	if (edgeDistanceMetric.centerDistance.distance != -1) {
-		std::cout << "UPDATE GOAL DISTANCE FROM " << goal->distance << " TO " << edgeDistanceMetric.centerDistance.distance << std::endl;
+		//std::cout << "UPDATE GOAL DISTANCE FROM " << goal->distance << " TO " << edgeDistanceMetric.centerDistance.distance << std::endl;
 
 		goal->distance = edgeDistanceMetric.centerDistance.distance;
 	}
