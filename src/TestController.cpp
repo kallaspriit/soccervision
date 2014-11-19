@@ -1987,7 +1987,7 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 
 	// don't avoid balls in goals
 	if (isBallInWay && ballInWayMetric.closestBallInWayDistance + 0.2f >= goal->distance) {
-		std::cout << "@ NOT AVOIDING BALL IN GOAL, BALL: " << ballInWayMetric.closestBallInWayDistance << "m, goal: " << goal->distance << "m" << std::endl;
+		//std::cout << "@ NOT AVOIDING BALL IN GOAL, BALL: " << ballInWayMetric.closestBallInWayDistance << "m, goal: " << goal->distance << "m" << std::endl;
 
 		isBallInWay = false;
 		shouldManeuverBallInWay = false;
@@ -1995,7 +1995,7 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 
 	// don't balls faw away near goal
 	if (isBallInWay && goal->distance > 1.5f && ballInWayMetric.closestBallInWayDistance + 0.5f >= goal->distance) {
-		std::cout << "@ NOT AVOIDING DISTANT BALL NEAR GOAL, BALL: " << ballInWayMetric.closestBallInWayDistance << "m, goal: " << goal->distance << "m" << std::endl;
+		//std::cout << "@ NOT AVOIDING DISTANT BALL NEAR GOAL, BALL: " << ballInWayMetric.closestBallInWayDistance << "m, goal: " << goal->distance << "m" << std::endl;
 
 		isBallInWay = false;
 		shouldManeuverBallInWay = false;
