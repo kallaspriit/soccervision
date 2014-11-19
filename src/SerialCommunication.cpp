@@ -92,7 +92,7 @@ std::string SerialCommunication::dequeueMessage() {
 	messages.pop();
 
 	if (message.substr(0, 7) != "<speeds" && message.substr(0, 4) != "<adc") {
-		std::cout << "R < " << message << std::endl;
+		std::cout << "R < " << message << " [" << messages.size() << "]" << std::endl;
 	}
 
 	return message;
@@ -117,7 +117,7 @@ void SerialCommunication::received(const char *data, unsigned int len) {
 
 			messages.push(partialMessage);
 
-			std::cout << "C < " << partialMessage << std::endl;
+			std::cout << "C < " << partialMessage << " [" << messages.size() << "]" << std::endl;
 
 			partialMessage = "";
 		} else {
