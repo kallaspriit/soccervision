@@ -1058,8 +1058,6 @@ Vision::EdgeDistanceMetric Vision::getEdgeDistanceMetric(int x, int y, int width
 			colorName = std::string(color->name);
 
 			if (colorName == color1 || colorName == color2) {
-				//std::cout << "F1 " << color->name << ", " << color1 << ", " << color2 << std::endl;
-
 				distance = getDistance(senseX, senseY);
 
 				// left
@@ -1089,6 +1087,22 @@ Vision::EdgeDistanceMetric Vision::getEdgeDistanceMetric(int x, int y, int width
 		}
 	}
 
+	if (leftTopDistance.distance != -1) {
+		canvas.fillBoxCentered(leftTopDistance.screenX, leftTopDistance.screenY, 10, 10, 255, 0, 0);
+		canvas.drawText(leftTopDistance.screenX, leftTopDistance.screenY + 10, Util::toString(leftTopDistance.distance) + "m", 0, 0, 0);
+	}
+
+	if (rightTopDistance.distance != -1) {
+		canvas.fillBoxCentered(rightTopDistance.screenX, rightTopDistance.screenY, 10, 10, 255, 0, 0);
+		canvas.drawText(rightTopDistance.screenX, rightTopDistance.screenY + 10, Util::toString(rightTopDistance.distance) + "m", 0, 0, 0);
+	}
+
+	// center distance
+	int centerSumY = 0;
+	int centerSampleCount = 0;
+	int centerAvgY = -1;
+	EdgeDistance centerDistance;
+
 	for (int senseX = x; senseX <= x + width; senseX++) {
 		for (int senseY = y + height; senseY >= y; senseY--) {
 			if (senseX < x + halfWidth - centerWidth / 2 || senseX > x + halfWidth + centerWidth / 2) {
@@ -1106,23 +1120,24 @@ Vision::EdgeDistanceMetric Vision::getEdgeDistanceMetric(int x, int y, int width
 			colorName = std::string(color->name);
 
 			if (colorName == color1 || colorName == color2) {
-				std::cout << "F2 " << color->name << ", " << color1 << ", " << color2 << std::endl;
-
 				canvas.fillBoxCentered(senseX, senseY, 4, 4, 255, 0, 255);
+
+				centerSumY += senseY;
+				centerSampleCount++;
 				
 				break;
 			}
 		}
 	}
 
-	if (leftTopDistance.distance != -1) {
-		canvas.fillBoxCentered(leftTopDistance.screenX, leftTopDistance.screenY, 10, 10, 255, 0, 0);
-		canvas.drawText(leftTopDistance.screenX, leftTopDistance.screenY + 10, Util::toString(leftTopDistance.distance) + "m", 0, 0, 0);
-	}
+	if (centerSampleCount > 0) {
+		centerAvgY = centerSumY / centerSampleCount;
 
-	if (rightTopDistance.distance != -1) {
-		canvas.fillBoxCentered(rightTopDistance.screenX, rightTopDistance.screenY, 10, 10, 255, 0, 0);
-		canvas.drawText(rightTopDistance.screenX, rightTopDistance.screenY + 10, Util::toString(rightTopDistance.distance) + "m", 0, 0, 0);
+		distance = getDistance(x + width / 2, centerAvgY);
+		centerDistance = EdgeDistance(x + width / 2, centerAvgY, distance.straight);
+
+		canvas.fillBoxCentered(centerDistance.screenX, centerDistance.screenY, 10, 10, 255, 0, 0);
+		canvas.drawText(centerDistance.screenX, centerDistance.screenY + 10, Util::toString(centerDistance.distance) + "m", 0, 0, 0);
 	}
 
 	return EdgeDistanceMetric(leftTopDistance, rightTopDistance);
