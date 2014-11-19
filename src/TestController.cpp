@@ -65,14 +65,14 @@
 * 2014
 * + prefer balls near own goal - faster to move forwards and can get in opponents way
 * + prefer balls from the rear camera when opponent goal is visible
-* - drive behind the furthest not closest ball behind the robot, avoid hitting other balls on the way
-* - make sure the ball in the way is not too close when chip-kicking
-* - chip kick over the furthest ball in the way not based on goal distance - can save some charge in the caps
-* - detect two balls close together one after another that can be detected as a single ball (search for a long ball?)
-* - robot starts to push a ball close by at large angle, avoid it
-* - make sure that seen goal top outer edges are at large distance (takes distortion into account)
-* - implement ball search routine, for example drive between the two goals looking at opponent goal
-* - don't look straight at goal when the ball angle is big but between them
+* # drive behind the furthest not closest ball behind the robot, avoid hitting other balls on the way
+*   > not a good idea, pushes balls that get in the way and can go for a ball outside the field
+* + make sure the ball in the way is not too close when chip-kicking
+* + chip kick over the furthest ball in the way not based on goal distance - can save some charge in the caps
+* + robot starts to push a ball close by at large angle, avoid it
+* + make sure that seen goal top outer edges are at large distance (takes distortion into account)
+* + implement ball search routine, for example drive between the two goals looking at opponent goal
+* + don't look straight at goal when the ball angle is big but between them
 * - fetches balls from goal too often
 * - avoids balls in goal
 * - queue serial messages to be sent and send them as a single string at once
