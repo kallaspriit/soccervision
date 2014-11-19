@@ -63,8 +63,8 @@
  * - simulator in c++ code, emulates robot and vision, ui might be the same web ui
  *
  * 2014
- * + prefer balls near own goal - faster to move forwards and can get in opponents way
- * + prefer balls from the rear camera when opponent goal is visible
+ * - prefer balls near own goal - faster to move forwards and can get in opponents way
+ * - prefer balls from the rear camera when own goal is visible
  * - drive behind the furthest not closest ball behind the robot, avoid hitting other balls on the way
  * - make sure the ball in the way is not too close when chip-kicking
  * - chip kick over the furthest ball in the way not based on goal distance - can save some charge in the caps
@@ -862,16 +862,8 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 		ai->dbgs("search", "any closest");
 	}*/
 
-	bool preferRear = false;
-
-	
+	Object* ball = visionResults->getClosestBall(ballSearchDir);
 	Object* goal = visionResults->getLargestGoal(ai->targetSide, Dir::FRONT);
-
-	if (goal != NULL) {
-		preferRear = true;
-	}
-
-	Object* ball = visionResults->getClosestBall(ballSearchDir, false, false, preferRear);
 
 	if (ball == NULL && ballSearchDir != Dir::ANY && stateDuration > 1.0f) {
 		ball = visionResults->getClosestBall(Dir::ANY);
@@ -882,7 +874,6 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 		ai->setLastBall(ball);
 	}
 
-	ai->dbg("preferRear", preferRear);
 	ai->dbg("ballSearchDir", ballSearchDir);
 	ai->dbg("wasSearchingRecently", wasSearchingRecently);
 	ai->dbg("timeSinceLastTurnAround", ai->lastTurnAroundTime != -1.0 ? Util::duration(ai->lastTurnAroundTime) : -1.0);
@@ -1512,7 +1503,7 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 	// make sure we don't reverse into our own goal
 	if (ownGoal != NULL) {
 		// calculate distance between the ball and our own goal, including edges of the goal
-		float minFetchBehindGoalBallDistance = 0.5f;
+		float minFetchBehindGoalBallDistance = 0.6f;
 
 		Vision::Distance goalLeftDistance = visionResults->front->vision->getDistance(ownGoal->x - ownGoal->width / 2, ownGoal->y + ownGoal->height / 2);
 		Vision::Distance goalRightDistance = visionResults->front->vision->getDistance(ownGoal->x + ownGoal->width / 2, ownGoal->y + ownGoal->height / 2);
