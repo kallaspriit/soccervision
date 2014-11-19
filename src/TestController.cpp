@@ -1152,7 +1152,7 @@ void TestController::FetchBallFrontState::step(float dt, Vision::Results* vision
 	float maxBallBrakingAngle = 10.0f;
 	float nearDistance = 0.35f;
 	float retratingBallDistanceDiff = 0.2f;
-	float offsetDistance = 0.25f;
+	float offsetDistance = 0.3f;
 
 	float ballDistance = ball->getDribblerDistance();
 	float realSpeed = robot->getVelocity();
@@ -1640,7 +1640,7 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	float nearDistance = 0.35f;
 	//float maxSideSpeedDistance = 0.1f; // pushes ball with nose
 	//float maxSideSpeedDistance = 0.065f;
-	float maxSideSpeedBallAngle = 35.0f;
+	float maxSideSpeedBallAngle = 30.0f;
 	float sideP = 0.5f;
 	float maxAngleDiffBallAngle = 45.0f;
 
