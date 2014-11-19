@@ -1866,7 +1866,7 @@ Object* Vision::Results::getClosestBall(Dir dir, bool nextClosest, bool preferLe
 				}
 
 				closestBall = ball;
-				closestDistance = ball->distance;
+				closestDistance = ballDistance;
 			}
 		}
 	}
