@@ -1988,6 +1988,13 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 		isBallInWay = false;
 	}
 
+	// don't balls faw away near goal
+	if (isBallInWay && goal->distance > 1.5f && ballInWayMetric.closestBallInWayDistance + 0.5f >= goal->distance) {
+		std::cout << "@ NOT AVOIDING DISTANT BALL NEAR GOAL, BALL: " << ballInWayMetric.closestBallInWayDistance << "m, goal: " << goal->distance << "m" << std::endl;
+
+		isBallInWay = false;
+	}
+
 	// drive sideways if there's a ball in the way
 	//if (isBallInWay || isGoalPathObstructed) {
 	if (isGoalPathObstructed || shouldManeuverBallInWay) {

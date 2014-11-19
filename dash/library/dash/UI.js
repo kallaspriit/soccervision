@@ -171,7 +171,7 @@ Dash.UI.prototype.initSlider = function() {
 		}
 	});
 	
-	this.currentStateIndexWrap.bind('change keyup click', function(e) {
+	this.currentStateIndexWrap.bind('change keyup click mousewheel', function(e) {
 		var newIndex = parseInt(self.currentStateIndexWrap.val()) - 1;
 		
 		if (newIndex > self.states.length - 1) {
