@@ -1718,9 +1718,10 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	
 	// distance based
 	//float sidePower = Math::map(Math::abs(ball->distanceX), 0.0f, maxSideSpeedDistance, 0.0f, 1.0f);
+	float sidePower = Math::map(Math::abs(ball->distanceX), 0.0f, maxSideSpeedDistance, 0.0f, 0.8f);
 
 	// angle based approach can mess up approaching too fast to small angle at distance
-	float sidePower = Math::map(Math::abs(Math::radToDeg(ball->angle)), 0.0f, maxSideSpeedBallAngle, 0.0f, 1.0f);
+	//float sidePower = Math::map(Math::abs(Math::radToDeg(ball->angle)), 0.0f, maxSideSpeedBallAngle, 0.0f, 1.0f);
 
 	float sideSpeed = sideP * Math::sign(ball->distanceX) * sidePower;
 	float forwardSpeed = approachP * (1.0f - sidePower);
@@ -2002,7 +2003,7 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 
 	// drive sideways if there's a ball in the way
 	//if (isBallInWay || isGoalPathObstructed) {
-	if (isGoalPathObstructed || shouldManeuverBallInWay) {
+	if (isGoalPathObstructed || (isBallInWay && shouldManeuverBallInWay)) {
 		// check whether there's another ball close by
 		float anotherBallCloseDistance = 0.3f;
 		Object* nextClosestBall = visionResults->getNextClosestBall(Dir::FRONT);
