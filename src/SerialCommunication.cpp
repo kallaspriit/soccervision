@@ -118,13 +118,13 @@ void SerialCommunication::received(const char *data, unsigned int len) {
 			messages.push(partialMessage);
 
 			if (partialMessage.substr(0, 7) != "<speeds" && partialMessage.substr(0, 4) != "<adc") {
-				std::cout << "COMPLETE < " << partialMessage << std::endl;
+				std::cout << "C < " << partialMessage << std::endl;
 			}
 
 			partialMessage = "";
 		} else {
 
-			std::cout << "PARTIAL < " << v[i] << std::endl;
+			
 
 			// remove non-ascii char
 			//if (v[i] >= 32 && v[i] < 0x7f) {
@@ -132,4 +132,6 @@ void SerialCommunication::received(const char *data, unsigned int len) {
 			//}
 		}
 	}
+
+	std::cout << "P < " << partialMessage << std::endl;
 }
