@@ -160,8 +160,8 @@ namespace Config {
 
 	// how fast to spin the dribbler
 	const int robotDribblerSpeed = 150;
-	const int robotDribblerNormalLowerLimit = 22;
-	const int robotDribblerNormalUpperLimit = 23;
+	const int robotDribblerNormalLowerLimit = 34;
+	const int robotDribblerNormalUpperLimit = 31;
 	const int robotDribblerChipKickLowerLimit = 100;
 	const int robotDribblerChipKickUpperLimit = 100;
 	const float robotDribblerMoveDuration = 0.6f;
