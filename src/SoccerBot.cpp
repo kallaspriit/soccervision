@@ -902,6 +902,8 @@ void SoccerBot::handleCommunicationMessages() {
 			break;
 		}
 
+		std::cout << "M < " << message << std::endl;
+
 		handleCommunicationMessage(message);
 	}
 }
