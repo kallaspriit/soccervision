@@ -121,7 +121,7 @@ void SerialCommunication::received(const char *data, unsigned int len) {
 
 			messages.push(partialMessage);
 
-			//std::cout << "C < " << partialMessage << " [" << messages.size() << "]" << std::endl;
+			std::cout << "C < " << partialMessage << " [" << messages.size() << "]" << std::endl;
 
 			partialMessage = "";
 		} else {
