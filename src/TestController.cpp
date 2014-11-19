@@ -78,6 +78,7 @@
 * + queue serial messages to be sent and send them as a single string at once
 * + serial queue message counter does not decrement one by one, sometimes many values
 * + debug long dt between frames
+* + sometimes high level thinks the dribbler has ball while low-level does not agree
 *
 *
 * - make all parameters settable in the UI
