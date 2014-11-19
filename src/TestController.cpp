@@ -2006,7 +2006,7 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 				//float chipKickDistance = Math::max(goal->distance - 1.0f, 0.5f);
 
 				// try to kick 1m past the furhest ball but no further than 1m before the goal, also no less then 0.5m
-				float chipKickDistance = Math::max(Math::min(ballInWayMetric.furthestBallInWayDistance + 1.2f, goal->distance - 1.0f), 0.5f);
+				float chipKickDistance = Math::max(Math::min(ballInWayMetric.furthestBallInWayDistance + 1.3f, goal->distance - 0.8f), 1.0f);
 
 				if (robot->chipKick(chipKickDistance)) {
 					wasKicked = true;
@@ -2017,7 +2017,7 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 		} else {
 			// TODO restore normal kicking
 			//robot->kick();
-			robot->chipKick(Math::min(Math::max(goal->distance - 0.5f, 0.5f), 1.5f));
+			robot->chipKick(Math::min(Math::max(goal->distance - 0.5f, 1.0f), 1.5f));
 
 			wasKicked = true;
 		}
