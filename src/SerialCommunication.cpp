@@ -29,6 +29,8 @@ SerialCommunication::PortList SerialCommunication::getPortList() {
 }
 
 void SerialCommunication::send(std::string message) {
+	boost::mutex::scoped_lock lock(messagesMutex);
+
 	sendQueue.push(message);
 }
 
@@ -37,6 +39,7 @@ void SerialCommunication::sync() {
 
 	std::string message = "";
 	std::string queuedMessage;
+	int messageCount = sendQueue.size();
 
 	while (sendQueue.size() > 0) {
 		queuedMessage = sendQueue.front();
@@ -79,6 +82,8 @@ void SerialCommunication::sync() {
 	}*/
 
 	//message += "\n";
+
+	std::cout << "SEND " << messageCount << " MESSAGES: " << message << std::endl;
 
 	memcpy(requestBuffer, message.c_str(), message.size());
 	requestBuffer[message.size()] = 0;
