@@ -78,6 +78,7 @@
 * + queue serial messages to be sent and send them as a single string at once
 * + serial queue message counter does not decrement one by one, sometimes many values
 * + debug long dt between frames
+* + search from front at the very beginning not to go after a ball seen on the operators hand
 * - sometimes high level thinks the dribbler has ball while low-level does not agree
 * - drives through the opponent's goal at the start if the first ball on the left is close to it
 *
@@ -898,6 +899,11 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 	} else {
 	ai->dbgs("search", "any closest");
 	}*/
+
+	// search from front at the very beginning not to go after a ball seen on the operators hand
+	if (combinedDuration < 1.5f) {
+		ballSearchDir = Dir::FRONT;
+	}
 
 	bool preferRear = false;
 

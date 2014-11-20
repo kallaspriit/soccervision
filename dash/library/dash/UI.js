@@ -961,7 +961,7 @@ Dash.UI.prototype.addState = function(state) {
 		state.previous = null;
 	}
 
-	if (this.states.length >= 10000) {
+	if (this.states.length >= 1000) {
 		this.states.shift();
 		full = true;
 	}
