@@ -903,7 +903,7 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 	}*/
 
 	// search from front at the very beginning not to go after a ball seen on the operators hand
-	if (combinedDuration < 1.5f) {
+	if (totalDuration < 1.5f) {
 		ballSearchDir = Dir::FRONT;
 	}
 
@@ -1144,7 +1144,7 @@ void TestController::FetchBallFrontState::step(float dt, Vision::Results* vision
 	}
 
 	// prefer balls on the left for the first few seconds of the match to get the balls in front of own goal first
-	bool preferLeft = combinedDuration < 3.0f;
+	bool preferLeft = totalDuration < 3.0f;
 
 	// only consider balls in the front camera
 	Object* ball = visionResults->getClosestBall(Dir::FRONT, false, preferLeft);
