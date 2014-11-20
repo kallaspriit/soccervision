@@ -165,7 +165,7 @@ void SerialCommunication::received(const char *data, unsigned int len) {
 			if (receivingMessage) {
 				partialMessage += v[i];
 			} else {
-				std::cout << "# '" << v[i] << std::endl;
+				//std::cout << "# '" << v[i] << std::endl;
 			}
 
 			if (v[i] == '>') {
