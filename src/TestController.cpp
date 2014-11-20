@@ -81,6 +81,7 @@
 * + search from front at the very beginning not to go after a ball seen on the operators hand
 * - sometimes high level thinks the dribbler has ball while low-level does not agree
 * - drives through the opponent's goal at the start if the first ball on the left is close to it
+* - show apparent goal locations in dash
 *
 *
 * - make all parameters settable in the UI
@@ -2104,8 +2105,8 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 		}
 		else {
 			// TODO restore normal kicking
-			//robot->kick();
-			robot->chipKick(Math::min(Math::max(goal->distance - 0.5f, 1.0f), 1.5f));
+			robot->kick();
+			//robot->chipKick(Math::min(Math::max(goal->distance - 0.5f, 1.0f), 1.5f));
 
 			wasKicked = true;
 		}

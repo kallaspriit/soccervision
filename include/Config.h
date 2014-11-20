@@ -216,7 +216,7 @@ namespace Config {
 	const float robotMaxApproachSpeed = 2.0f;
 
 	// default kick strength in microseconds
-	const int robotDefaultKickStrength = 3000;
+	const int robotDefaultKickStrength = 2000;
 
 	// minimum kick interval
 	const double minKickInterval = 1.0;
