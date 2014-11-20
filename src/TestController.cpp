@@ -79,6 +79,7 @@
 * + serial queue message counter does not decrement one by one, sometimes many values
 * + debug long dt between frames
 * + search from front at the very beginning not to go after a ball seen on the operators hand
+* - should prefer balls from the rear more often
 * - sometimes high level thinks the dribbler has ball while low-level does not agree
 * - drives through the opponent's goal at the start if the first ball on the left is close to it
 * - show apparent goal locations in dash
