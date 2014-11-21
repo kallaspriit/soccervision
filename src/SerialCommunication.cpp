@@ -53,7 +53,7 @@ void SerialCommunication::sync() {
 		message += queuedMessage + "\n";
 
 		if (queuedMessage.substr(0, 6) != "speeds" && queuedMessage.substr(0, 3) != "adc") {
-			std::cout << "SEND > " << queuedMessage << std::endl;
+			std::cout << "SEND: " << queuedMessage << std::endl;
 		}
 	}
 
@@ -124,9 +124,8 @@ std::string SerialCommunication::dequeueMessage() {
 
 	messages.pop();
 
-	//if (message.substr(0, 7) != "<speeds" && message.substr(0, 4) != "<adc") {
-	if (message.substr(0, 1) != "<") {
-		std::cout << "R '" << message << "' [" << messageCount << "]" << std::endl;
+	if (message.substr(0, 7) != "<speeds" && message.substr(0, 4) != "<adc") {
+		std::cout << "RECV: '" << message << "' [" << messageCount << "]" << std::endl;
 	}
 
 	return message;
