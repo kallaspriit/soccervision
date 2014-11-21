@@ -1665,7 +1665,7 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	robot->stop();
 
 	if (robot->dribbler->gotBall()) {
-		robot->kick();
+		//robot->kick();
 
 		return;
 	}
@@ -1699,6 +1699,7 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	float ballDistance = ball->getDribblerDistance();
 	float nearDistance = 0.35f;
 	float maxSideSpeedDistance = 0.1f;
+	float ballMovedAwayDistance = 0.2f;
 	float sideP = 0.5f;
 	float approachP = 1.0f;
 	
@@ -1706,20 +1707,22 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	if (enterDistance == -1.0f) {
 		enterDistance = ballDistance;
 	} else if (
-		(ballDistance > enterDistance + 0.2f || ballDistance > nearDistance)
+		ballDistance > enterDistance + ballMovedAwayDistance
 		&& stateDuration >= 0.5f
 	) {
 		// ball has gotten further than when started, probably messed it up, switch to faster fetch
 		//ai->setState("fetch-ball-front");
 
-		//return;
+		return;
 	}
 
 	float sidePower = Math::map(Math::abs(ball->distanceX), 0.0f, maxSideSpeedDistance, 0.0f, 1.0f);
 	float sideSpeed = sideP * Math::sign(ball->distanceX) * sidePower;
-	//float forwardSpeed = approachP * (1.0f - sidePower);
+	float forwardSpeed = approachP * (1.0f - sidePower);
 	//float forwardSpeed = approachP;
-	float forwardSpeed = 0.0f;
+	
+	sideSpeed = 0.0f;
+	forwardSpeed = 0.0f;
 
 	robot->dribbler->useChipKickLimits();
 	robot->coilgun->kickOnceGotBall();
