@@ -83,7 +83,7 @@ void Coilgun::kickOnceGotBall() {
 
 	std::cout << "! Kicking once got the ball" << std::endl;
 
-	com->send("bdkick:1000:0:0:0");
+	com->send("bdkick:" + Util::toString(Config::robotDefaultKickStrength) + ":0:0:0");
 
 	isKickingOnceGotBall = true;
 }
