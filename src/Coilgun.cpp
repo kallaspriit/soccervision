@@ -30,6 +30,8 @@ void Coilgun::kick(int microseconds) {
 		std::cout << "! Kicking: " << microseconds << std::endl;
 
 		com->send("kick:" + Util::toString(microseconds));
+
+		lastKickTime = Util::millitime();
 	} else {
 		std::cout << "! Another kick requested too soon" << std::endl;
 	}
