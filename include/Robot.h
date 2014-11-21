@@ -52,8 +52,8 @@ public:
 	void clearTasks() { tasks.clear(); }
     void handleTasks(float dt);
 
-	void lookAt(Object* object);
-	void lookAt(const Math::Angle& angle);
+	void lookAt(Object* object, float lookAtP = Config::lookAtP);
+	void lookAt(const Math::Angle& angle, float lookAtP = Config::lookAtP);
 	void lookAtBehind(Object* object);
 	void lookAtBehind(const Math::Angle& angle);
 	void turnBy(float angle, float speed = 1.0f);

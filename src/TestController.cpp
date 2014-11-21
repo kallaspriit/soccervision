@@ -1704,6 +1704,7 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	float ballMovedAwayDistance = 0.2f;
 	float sideP = 0.3f;
 	float approachP = 1.5f;
+	float lookAtGoalP = Config::lookAtP / 2.0f;
 	
 	// store ball first sighting distance
 	if (enterDistance == -1.0f) {
@@ -1726,7 +1727,7 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	//forwardSpeed = 0.0f;
 
 	robot->setTargetDir(forwardSpeed, sideSpeed);
-	robot->lookAt(goal);
+	robot->lookAt(goal, lookAtGoalP);
 
 	ai->dbg("ballDistance", ballDistance);
 	ai->dbg("forwardSpeed", forwardSpeed);

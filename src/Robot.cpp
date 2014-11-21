@@ -458,16 +458,16 @@ Task* Robot::getCurrentTask() {
     return tasks.front();
 }
 
-void Robot::lookAt(Object* object) {
+void Robot::lookAt(Object* object, float lookAtP) {
     if (object == NULL) {
 		return;
 	}
 
-	lookAt(Math::Rad(object->angle));
+	lookAt(Math::Rad(object->angle), lookAtP);
 }
 
-void Robot::lookAt(const Math::Angle& angle) {
-	setTargetOmega(Math::limit(angle.rad() * Config::lookAtP, Math::degToRad(Config::lookAtMaxSpeedAngle) * Config::lookAtP));
+void Robot::lookAt(const Math::Angle& angle, float lookAtP) {
+	setTargetOmega(Math::limit(angle.rad() * lookAtP, Math::degToRad(Config::lookAtMaxSpeedAngle) * Config::lookAtP));
 }
 
 void Robot::lookAtBehind(Object* object) {
