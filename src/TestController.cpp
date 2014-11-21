@@ -1663,9 +1663,9 @@ void TestController::FetchBallNearState::onEnter(Robot* robot, Parameters parame
 
 void TestController::FetchBallNearState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration, float combinedDuration) {
 	robot->stop();
-	robot->dribbler->useChipKickLimits();
+	//robot->dribbler->useChipKickLimits();
 	robot->coilgun->kickOnceGotBall();
-	//robot->dribbler->start();
+	robot->dribbler->start();
 
 	/*if (robot->dribbler->gotBall()) {
 		robot->kick();
