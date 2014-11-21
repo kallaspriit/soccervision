@@ -1702,6 +1702,7 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	float ballDistance = ball->getDribblerDistance();
 	float nearDistance = 0.35f;
 	float maxSideSpeedDistance = 0.5f;
+	float maxSideSpeedBallAngle = 30.0f;
 	float ballMovedAwayDistance = 0.2f;
 	float sideP = 2.0f;
 	float maxSideSpeed = 1.5f;
@@ -1721,7 +1722,8 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 		return;
 	}
 
-	float sidePower = Math::map(Math::abs(ball->distanceX), 0.0f, maxSideSpeedDistance, 0.0f, 1.0f);
+	//float sidePower = Math::map(Math::abs(ball->distanceX), 0.0f, maxSideSpeedDistance, 0.0f, 1.0f);
+	float sidePower = Math::map(Math::abs(Math::radToDeg(ball->angle)), 0.0f, maxSideSpeedBallAngle, 0.0f, 1.0f);
 	float sideSpeed = Math::sign(ball->distanceX) * Math::min(sideP * sidePower, maxSideSpeed);
 	float forwardSpeed = approachP * (1.0f - sidePower);
 	
