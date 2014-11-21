@@ -51,6 +51,10 @@ void SerialCommunication::sync() {
 		sendQueue.pop();
 
 		message += queuedMessage + "\n";
+
+		if (queuedMessage.substr(0, 6) != "speeds") {
+			std::cout << "SEND > " << queuedMessage << std::endl;
+		}
 	}
 
 	if (message.size() >= MAX_SIZE) {
@@ -81,13 +85,12 @@ void SerialCommunication::sync() {
 	}
 
 	/*if (message.substr(0, 6) != "speeds") {
-	// incoming message
-	std::cout << "SEND > " << message << std::endl;
+		std::cout << "SEND > " << message << std::endl;
 	}*/
 
 	//message += "\n";
 
-	std::cout << "SEND " << messageCount << " MESSAGES: " << message << std::endl;
+	//std::cout << "SEND " << messageCount << " MESSAGES: " << message << std::endl;
 
 	memcpy(requestBuffer, message.c_str(), message.size());
 	requestBuffer[message.size()] = 0;
