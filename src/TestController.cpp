@@ -1878,6 +1878,7 @@ void TestController::AimState::onEnter(Robot* robot, Parameters parameters) {
 
 void TestController::AimState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration, float combinedDuration) {
 	robot->stop();
+	robot->dribbler->useNormalLimits();
 	robot->dribbler->start();
 
 	ai->dbg("gotBall", robot->dribbler->gotBall());
@@ -2327,6 +2328,7 @@ void TestController::EscapeCornerState::onEnter(Robot* robot, Parameters paramet
 
 void TestController::EscapeCornerState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration, float combinedDuration) {
 	robot->stop();
+	robot->dribbler->useNormalLimits();
 	robot->dribbler->start();
 
 	if (!robot->dribbler->gotBall()) {
@@ -2425,6 +2427,7 @@ void TestController::AccelerateState::onEnter(Robot* robot, Parameters parameter
 
 void TestController::AccelerateState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration, float combinedDuration) {
 	robot->stop();
+	robot->dribbler->useNormalLimits();
 
 	if (robot->dribbler->gotBall()) {
 		robot->dribbler->start();
