@@ -34,6 +34,7 @@ private:
 	float timeSinceLastVoltageReading;
 	float voltage;
 	bool isKickingOnceGotBall;
+	int kickOnceGotBallMissedFrames;
 
 };
 

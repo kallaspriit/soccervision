@@ -382,7 +382,6 @@ void Robot::stop() {
 
 	setTargetDir(0, 0, 0);
 	dribbler->stop();
-	coilgun->cancelKickOnceGotBall();
 }
 
 void Robot::kick(int microseconds) {

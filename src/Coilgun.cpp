@@ -7,7 +7,7 @@
 
 #include <iostream>
 
-Coilgun::Coilgun(AbstractCommunication* com) : com(com), lastKickTime(0.0), lastChargeRequestTime(0.0), timeSinceLastVoltageReading(0.0f), voltage(0.0f), isKickingOnceGotBall(false){
+Coilgun::Coilgun(AbstractCommunication* com) : com(com), lastKickTime(0.0), lastChargeRequestTime(0.0), timeSinceLastVoltageReading(0.0f), voltage(0.0f), isKickingOnceGotBall(false), kickOnceGotBallMissedFrames(0) {
 
 };
 
@@ -110,6 +110,17 @@ void Coilgun::step(float dt) {
 		requestVoltageReading();
 
 		timeSinceLastVoltageReading = 0.0f;
+	}
+
+	if (isKickingOnceGotBall) {
+		kickOnceGotBallMissedFrames = 0;
+	}
+	else {
+		kickOnceGotBallMissedFrames++;
+	}
+
+	if (kickOnceGotBallMissedFrames >= 2) {
+		cancelKickOnceGotBall();
 	}
 }
 
