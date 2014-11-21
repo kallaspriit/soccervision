@@ -1137,7 +1137,7 @@ void TestController::FetchBallFrontState::reset(Robot* robot) {
 
 void TestController::FetchBallFrontState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration, float combinedDuration) {
 	robot->stop();
-	robot->dribbler->useNormalLimits();
+	//robot->dribbler->useNormalLimits();
 
 	if (robot->dribbler->gotBall()) {
 		robot->dribbler->start();
@@ -1306,7 +1306,7 @@ void TestController::FetchBallDirectState::onEnter(Robot* robot, Parameters para
 
 void TestController::FetchBallDirectState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration, float combinedDuration) {
 	robot->stop();
-	robot->dribbler->useNormalLimits();
+	//robot->dribbler->useNormalLimits();
 
 	if (robot->dribbler->gotBall()) {
 		ai->dbg("gotBall", true);
@@ -1718,6 +1718,8 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 		bool isBallInWay = ballInWayMetric.isBallInWay;
 
 		if (isBallInWay) {
+			robot->dribbler->useChipKickLimits();
+
 			ai->setState("fetch-ball-direct");
 
 			return;
@@ -1900,7 +1902,7 @@ void TestController::AimState::onEnter(Robot* robot, Parameters parameters) {
 
 void TestController::AimState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration, float combinedDuration) {
 	robot->stop();
-	robot->dribbler->useNormalLimits();
+	//robot->dribbler->useNormalLimits();
 	robot->dribbler->start();
 
 	ai->dbg("gotBall", robot->dribbler->gotBall());
