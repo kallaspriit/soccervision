@@ -1711,14 +1711,14 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 
 	float ballNearDistance = 0.3f;
 
-	// switch to aim state if there's a ball in way when the ball is close
+	// switch to fetch-ball-direct and aim state if there's a ball in way when the ball is close
 	if (ball->distance < ballNearDistance) {
 		Vision::BallInWayMetric ballInWayMetric = visionResults->getBallInWayMetric(visionResults->front->balls, goal->y + goal->height / 2);
 		
 		bool isBallInWay = ballInWayMetric.isBallInWay;
 
 		if (isBallInWay) {
-			ai->setState("aim");
+			ai->setState("fetch-ball-direct");
 
 			return;
 		}
