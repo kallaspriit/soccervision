@@ -1720,6 +1720,7 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 		if (isBallInWay) {
 			robot->dribbler->useChipKickLimits();
 
+			// TODO check that have sufficient voltage..
 			useChipKick = true;
 		}
 	}
