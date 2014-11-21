@@ -14,7 +14,7 @@ module.exports = function (grunt) {
 		connect: {
 			dash: {
 				options: {
-					hostname: 'localhost',
+					hostname: '0.0.0.0',
 					port: 8084,
 					base: './',
 					keepalive: true

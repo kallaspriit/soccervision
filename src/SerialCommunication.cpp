@@ -52,7 +52,7 @@ void SerialCommunication::sync() {
 
 		message += queuedMessage + "\n";
 
-		if (queuedMessage.substr(0, 6) != "speeds") {
+		if (queuedMessage.substr(0, 6) != "speeds" && queuedMessage.substr(0, 3) != "adc") {
 			std::cout << "SEND > " << queuedMessage << std::endl;
 		}
 	}
