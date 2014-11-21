@@ -35,6 +35,7 @@ public:
 	void cancelKickOnceGotBall();
 	void charge();
 	void discharge();
+	bool wasKickedSinceLastAsked();
 	bool isReady() { return false; } // TODO New communication
 	bool isLowVoltage() { return voltage < Config::robotCoilgunLowVoltageThreshold;  }
 	int getChipKickDurationByDistance(float distance);
@@ -51,6 +52,7 @@ private:
 	float timeSinceLastVoltageReading;
 	float voltage;
 	bool isKickingOnceGotBall;
+	bool kickedSinceLastAsked;
 	int kickOnceGotBallMissedFrames;
 	KickParameters kickOnceGotBallParameters;
 

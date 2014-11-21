@@ -749,6 +749,10 @@ float TestController::getTargetAngle(float goalX, float goalY, float ballX, floa
 	return atan2(targetX, targetY);
 }
 
+float TestController::getChipKickDistance(Vision::BallInWayMetric ballInWayMetric, float goalDistance) {
+	return Math::max(Math::min(ballInWayMetric.furthestBallInWayDistance + 1.0f, goalDistance - 0.8f), 0.75f);
+}
+
 void TestController::ManualControlState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration, float combinedDuration) {
 	double time = Util::millitime();
 
@@ -1681,6 +1685,10 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 		return;
 	}*/
 
+	if (robot->coilgun->wasKickedSinceLastAsked()) {
+		useChipKick = false;
+	}
+
 	Object* ball = visionResults->getClosestBall(Dir::FRONT);
 	Object* goal = visionResults->getLargestGoal(ai->targetSide, Dir::FRONT);
 
@@ -1713,7 +1721,7 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	float ballNearDistance = 0.3f;
 
 	// decide to use chip-kicker if there's a ball in way when the ball is close
-	if (ball->distance < ballNearDistance) {
+	if (!useChipKick && ball->distance < ballNearDistance) {
 		ballInWayMetric = visionResults->getBallInWayMetric(visionResults->front->balls, goal->y + goal->height / 2);
 		
 		bool isBallInWay = ballInWayMetric.isBallInWay;
@@ -1725,8 +1733,7 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	}
 
 	if (useChipKick) {
-		// TODO same calculation exists in aim state, define it once somewhere
-		float chipKickDistance = Math::max(Math::min(ballInWayMetric.furthestBallInWayDistance + 1.3f, goal->distance - 0.8f), 1.0f);
+		float chipKickDistance = ai->getChipKickDistance(ballInWayMetric, goal->distance);
 
 		robot->dribbler->useChipKickLimits();
 		robot->coilgun->kickOnceGotBall(0, 0, chipKickDistance, 0);
@@ -2227,7 +2234,7 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 				//float chipKickDistance = Math::max(goal->distance - 1.0f, 0.5f);
 
 				// try to kick 1m past the furhest ball but no further than 1m before the goal, also no less then 0.5m
-				float chipKickDistance = Math::max(Math::min(ballInWayMetric.furthestBallInWayDistance + 1.3f, goal->distance - 0.8f), 1.0f);
+				float chipKickDistance = ai->getChipKickDistance(ballInWayMetric, goal->distance);
 
 				if (robot->chipKick(chipKickDistance)) {
 					wasKicked = true;
