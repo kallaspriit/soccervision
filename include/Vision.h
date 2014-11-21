@@ -68,6 +68,7 @@ public:
 	};
 
 	struct BallInWayMetric {
+		BallInWayMetric() : isBallInWay(false), ballInWayCount(0), closestBallInWayDistance(0.0f), furthestBallInWayDistance(0.0f) {}
 		BallInWayMetric(bool isBallInWay, int ballInWayCount, float closestBallInWayDistance, float furthestBallInWayDistance) : isBallInWay(isBallInWay), ballInWayCount(ballInWayCount), closestBallInWayDistance(closestBallInWayDistance), furthestBallInWayDistance(furthestBallInWayDistance) {}
 
 		bool isBallInWay;

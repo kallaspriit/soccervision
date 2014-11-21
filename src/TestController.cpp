@@ -1709,11 +1709,12 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 		return;
 	}
 
+	Vision::BallInWayMetric ballInWayMetric;
 	float ballNearDistance = 0.3f;
 
 	// decide to use chip-kicker if there's a ball in way when the ball is close
 	if (ball->distance < ballNearDistance) {
-		Vision::BallInWayMetric ballInWayMetric = visionResults->getBallInWayMetric(visionResults->front->balls, goal->y + goal->height / 2);
+		ballInWayMetric = visionResults->getBallInWayMetric(visionResults->front->balls, goal->y + goal->height / 2);
 		
 		bool isBallInWay = ballInWayMetric.isBallInWay;
 
@@ -1724,11 +1725,14 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	}
 
 	if (useChipKick) {
+		// TODO same calculation exists in aim state, define it once somewhere
+		float chipKickDistance = Math::max(Math::min(ballInWayMetric.furthestBallInWayDistance + 1.3f, goal->distance - 0.8f), 1.0f);
+
 		robot->dribbler->useChipKickLimits();
-		robot->coilgun->kickOnceGotBall(0, 0, 2.0f, 0);
+		robot->coilgun->kickOnceGotBall(0, 0, chipKickDistance, 0);
 	} else {
 		robot->dribbler->useNormalLimits();
-		robot->coilgun->kickOnceGotBall(0, Config::robotDefaultKickStrength, 0, 0);
+		robot->coilgun->kickOnceGotBall(Config::robotDefaultKickStrength, 0, 0, 0);
 	}
 
 	// configuration parameters
