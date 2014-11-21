@@ -7,7 +7,7 @@
 
 #include <iostream>
 
-Coilgun::Coilgun(AbstractCommunication* com) : com(com), lastKickTime(0.0), lastChargeRequestTime(0.0), timeSinceLastVoltageReading(0.0f), voltage(0.0f) {
+Coilgun::Coilgun(AbstractCommunication* com) : com(com), lastKickTime(0.0), lastChargeRequestTime(0.0), timeSinceLastVoltageReading(0.0f), voltage(0.0f), isKickingOnceGotBall(false){
 
 };
 
@@ -74,6 +74,28 @@ int Coilgun::getChipKickDurationByDistance(float distanceMeters) {
 		+ d);
 }
 
+void Coilgun::kickOnceGotBall() {
+	if (isKickingOnceGotBall) {
+		return;
+	}
+
+	std::cout << "! Kicking once got the ball" << std::endl;
+
+	com->send("bdkick:1000:0:0:0");
+
+	isKickingOnceGotBall = true;
+}
+
+void Coilgun::cancelKickOnceGotBall() {
+	if (!isKickingOnceGotBall) {
+		return;
+	}
+
+	std::cout << "! Cancelling kicking once got the ball" << std::endl;
+
+	com->send("nokick");
+}
+
 void Coilgun::step(float dt) {
 	/*if (Util::duration(lastChargeRequestTime) >= 1.0) {
 		charge();
@@ -87,6 +109,10 @@ void Coilgun::step(float dt) {
 
 		timeSinceLastVoltageReading = 0.0f;
 	}
+
+	if (isKickingOnceGotBall) {
+		cancelKickOnceGotBall();
+	}
 }
 
 void Coilgun::requestVoltageReading() {
@@ -96,6 +122,12 @@ void Coilgun::requestVoltageReading() {
 bool Coilgun::handleCommand(const Command& cmd) {
 	if (cmd.name == "adc") {
 		voltage = Util::toFloat(cmd.parameters[0]);
+
+		return true;
+	} else if (cmd.name == "kicked") {
+		std::cout << "! Kick once got ball kicked the ball" << std::endl;
+
+		isKickingOnceGotBall = false;
 
 		return true;
 	}

@@ -14,6 +14,8 @@ public:
 
 	void kick(int microseconds = Config::robotDefaultKickStrength);
 	void chipKick(float distance);
+	void kickOnceGotBall();
+	void cancelKickOnceGotBall();
 	void charge();
 	void discharge();
 	bool isReady() { return false; } // TODO New communication
@@ -31,6 +33,7 @@ private:
 	double lastChargeRequestTime;
 	float timeSinceLastVoltageReading;
 	float voltage;
+	bool isKickingOnceGotBall;
 
 };
 
