@@ -81,6 +81,7 @@
 * + search from front at the very beginning not to go after a ball seen on the operators hand
 * + should prefer balls from the rear more often
 * - improve fetch-ball-near - could be faster and mess up less (still pushes with edge)
+* - fetch first ball using fetch-ball-direct (if near own goal)?
 * - sometimes high level thinks the dribbler has ball while low-level does not agree
 * - drives through the opponent's goal at the start if the first ball on the left is close to it
 * - show apparent goal locations in dash
@@ -1706,6 +1707,21 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 		}
 
 		return;
+	}
+
+	float ballNearDistance = 0.3f;
+
+	// switch to aim state if there's a ball in way when the ball is close
+	if (ball->distance < ballNearDistance) {
+		Vision::BallInWayMetric ballInWayMetric = visionResults->getBallInWayMetric(visionResults->front->balls, goal->y + goal->height / 2);
+		
+		bool isBallInWay = ballInWayMetric.isBallInWay;
+
+		if (isBallInWay) {
+			ai->setState("aim");
+
+			return;
+		}
 	}
 
 	// configuration parameters
