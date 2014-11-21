@@ -1701,10 +1701,10 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	// configuration parameters
 	float ballDistance = ball->getDribblerDistance();
 	float nearDistance = 0.35f;
-	float maxSideSpeedDistance = 0.2f;
+	float maxSideSpeedDistance = 0.3f;
 	float maxSideSpeedBallAngle = 30.0f;
 	float ballMovedAwayDistance = 0.2f;
-	float sideP = 0.5f;
+	float sideP = 0.7f;
 	//float maxSideSpeed = 1.5f;
 	//float approachP = 1.0f;
 	float lookAtGoalP = Config::lookAtP / 2.0f;
