@@ -1662,6 +1662,8 @@ void TestController::FetchBallNearState::onEnter(Robot* robot, Parameters parame
 }
 
 void TestController::FetchBallNearState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration, float combinedDuration) {
+	bool isolated = false;
+	
 	robot->stop();
 	//robot->dribbler->useChipKickLimits();
 	robot->coilgun->kickOnceGotBall();
@@ -1681,19 +1683,22 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 
 	if (goal == NULL) {
 		// can't see the goal, switch to direct fetch if ball available, otherwise start searching for ball
-		/*if (ball != NULL) {
-			ai->setState("fetch-ball-direct");
+		if (isolated != true) {
+			if (ball != NULL) {
+				ai->setState("fetch-ball-direct");
+			} else {
+				ai->setState("find-ball");
+			}
 		}
-		else {
-			ai->setState("find-ball");
-		}*/
 
 		return;
 	}
 
 	// switch to searching for ball if not visible any more
 	if (ball == NULL) {
-		//ai->setState("find-ball");
+		if (isolated != true) {
+			ai->setState("find-ball");
+		}
 
 		return;
 	}
@@ -1717,7 +1722,9 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 		&& stateDuration >= 0.5f
 	) {
 		// ball has gotten further than when started, probably messed it up, switch to faster fetch
-		//ai->setState("fetch-ball-front");
+		if (isolated != true) {
+			ai->setState("fetch-ball-front");
+		}
 
 		return;
 	}
