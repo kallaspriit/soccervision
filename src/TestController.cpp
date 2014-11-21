@@ -1712,12 +1712,13 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 		// ball has gotten further than when started, probably messed it up, switch to faster fetch
 		//ai->setState("fetch-ball-front");
 
-		return;
+		//return;
 	}
 
 	float sidePower = Math::map(Math::abs(ball->distanceX), 0.0f, maxSideSpeedDistance, 0.0f, 1.0f);
 	float sideSpeed = sideP * Math::sign(ball->distanceX) * sidePower;
-	float forwardSpeed = approachP * (1.0f - sidePower);
+	//float forwardSpeed = approachP * (1.0f - sidePower);
+	float forwardSpeed = 0.2f;
 
 	robot->dribbler->useChipKickLimits();
 	robot->setTargetDir(forwardSpeed, sideSpeed);
