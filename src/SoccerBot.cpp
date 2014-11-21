@@ -415,6 +415,12 @@ void SoccerBot::setupVision() {
 		Config::cameraWidth, Config::cameraHeight
 	);
 
+	// rear parameters
+	A = 115.17643572430453f;
+	B = -0.027947155237625226f;
+	C = 0.20762976575066086f;
+	horizon = 133.5461f;
+
 	rearCameraTranslator->setConstants(
 		A, B, C,
 		k1, k2, k3,
