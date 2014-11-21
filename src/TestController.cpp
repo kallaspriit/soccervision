@@ -1698,8 +1698,8 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	// configuration parameters
 	float ballDistance = ball->getDribblerDistance();
 	float nearDistance = 0.35f;
-	float maxSideSpeedDistance = 0.05f;
-	float sideP = 0.4f;
+	float maxSideSpeedDistance = 0.1f;
+	float sideP = 0.5f;
 	float approachP = 1.0f;
 	
 	// store ball first sighting distance
@@ -1717,8 +1717,8 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 
 	float sidePower = Math::map(Math::abs(ball->distanceX), 0.0f, maxSideSpeedDistance, 0.0f, 1.0f);
 	float sideSpeed = sideP * Math::sign(ball->distanceX) * sidePower;
-	float forwardSpeed = approachP * (1.0f - sidePower);
-	//float forwardSpeed = 0.2f;
+	//float forwardSpeed = approachP * (1.0f - sidePower);
+	float forwardSpeed = approachP;
 
 	robot->dribbler->useChipKickLimits();
 	robot->setTargetDir(forwardSpeed, sideSpeed);
