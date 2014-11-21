@@ -75,6 +75,8 @@ int Coilgun::getChipKickDurationByDistance(float distanceMeters) {
 }
 
 void Coilgun::kickOnceGotBall() {
+	kickOnceGotBallMissedFrames = 0;
+
 	if (isKickingOnceGotBall) {
 		return;
 	}
@@ -112,10 +114,7 @@ void Coilgun::step(float dt) {
 		timeSinceLastVoltageReading = 0.0f;
 	}
 
-	if (isKickingOnceGotBall) {
-		kickOnceGotBallMissedFrames = 0;
-	}
-	else {
+	if (!isKickingOnceGotBall) {
 		kickOnceGotBallMissedFrames++;
 	}
 
