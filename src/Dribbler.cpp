@@ -131,9 +131,9 @@ void Dribbler::step(float dt) {
 
 	useChipKickLimitsMissedFrames++;
 
-	if (useChipKickLimitsMissedFrames >= 2) {
+	/*if (useChipKickLimitsMissedFrames >= 2) {
 		useNormalLimits();
-	}
+	}*/
 
 	//std::cout << "ballInDribblerTime: " << ballInDribblerTime << ", ballLostTime: " << ballLostTime << ", got ball: " << (gotBall() ? "yes" : "no") << std::endl;
 }
