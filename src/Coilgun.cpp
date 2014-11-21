@@ -111,10 +111,6 @@ void Coilgun::step(float dt) {
 
 		timeSinceLastVoltageReading = 0.0f;
 	}
-
-	if (isKickingOnceGotBall) {
-		cancelKickOnceGotBall();
-	}
 }
 
 void Coilgun::requestVoltageReading() {
