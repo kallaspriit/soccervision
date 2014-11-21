@@ -172,7 +172,7 @@ public:
 	class FetchBallNearState : public State {
 
 	public:
-		FetchBallNearState(TestController* ai) : State(ai), enterDistance(-1.0f), enterVelocity(0.0f), smallestForwardSpeed(-1.0f) {}
+		FetchBallNearState(TestController* ai) : State(ai), enterDistance(-1.0f), enterVelocity(0.0f), smallestForwardSpeed(-1.0f), useChipKick(false) {}
 		void onEnter(Robot* robot, Parameters parameters);
 		void step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration, float combinedDuration);
 
@@ -180,6 +180,7 @@ public:
 		float enterDistance;
 		float enterVelocity;
 		float smallestForwardSpeed;
+		bool useChipKick;
 
 	};
 

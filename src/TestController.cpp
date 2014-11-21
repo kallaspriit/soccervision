@@ -1664,6 +1664,7 @@ void TestController::FetchBallNearState::onEnter(Robot* robot, Parameters parame
 	enterVelocity = robot->getVelocity();
 	enterDistance = -1.0f;
 	smallestForwardSpeed = -1.0f;
+	useChipKick = false;
 }
 
 void TestController::FetchBallNearState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration, float combinedDuration) {
@@ -1672,7 +1673,6 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	robot->stop();
 	//robot->dribbler->useChipKickLimits();
 	robot->dribbler->useNormalLimits();
-	robot->coilgun->kickOnceGotBall();
 	robot->dribbler->start();
 
 	/*if (robot->dribbler->gotBall()) {
@@ -1711,7 +1711,7 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 
 	float ballNearDistance = 0.3f;
 
-	// switch to fetch-ball-direct and aim state if there's a ball in way when the ball is close
+	// decide to use chip-kicker if there's a ball in way when the ball is close
 	if (ball->distance < ballNearDistance) {
 		Vision::BallInWayMetric ballInWayMetric = visionResults->getBallInWayMetric(visionResults->front->balls, goal->y + goal->height / 2);
 		
@@ -1720,10 +1720,14 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 		if (isBallInWay) {
 			robot->dribbler->useChipKickLimits();
 
-			ai->setState("fetch-ball-direct");
-
-			return;
+			useChipKick = true;
 		}
+	}
+
+	if (useChipKick) {
+		robot->coilgun->kickOnceGotBall(0, 0, 2.0f, 0);
+	} else {
+		robot->coilgun->kickOnceGotBall(0, Config::robotDefaultKickStrength, 0, 0);
 	}
 
 	// configuration parameters
@@ -1780,6 +1784,7 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	ai->dbg("ballAngle", (Math::radToDeg(ball->angle)));
 	ai->dbg("goalAngle", (Math::radToDeg(goal->angle)));
 	ai->dbg("ball->distanceX", ball->distanceX);
+	ai->dbg("useChipKick", useChipKick);
 }
 
 /*void TestController::FetchBallNearState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration, float combinedDuration) {

@@ -74,16 +74,24 @@ int Coilgun::getChipKickDurationByDistance(float distanceMeters) {
 		+ d);
 }
 
-void Coilgun::kickOnceGotBall() {
+void Coilgun::kickOnceGotBall(int mainDuration, int mainDelay, float chipDistance, int chipDelay) {
 	kickOnceGotBallMissedFrames = 0;
 
-	if (isKickingOnceGotBall) {
+	KickParameters kickParameters = KickParameters(mainDuration, mainDelay, chipDistance, chipDelay);
+
+	if (isKickingOnceGotBall && kickParameters.areSameAs(kickOnceGotBallParameters)) {
 		return;
 	}
 
-	std::cout << "! Kicking once got the ball" << std::endl;
+	kickOnceGotBallParameters = kickParameters;
 
-	com->send("bdkick:" + Util::toString(Config::robotDefaultKickStrength) + ":0:0:0");
+	int chipDuration = kickOnceGotBallParameters.chipDistance > 0 ? getChipKickDurationByDistance(kickOnceGotBallParameters.chipDistance) : 0;
+
+	std::string parametersStr = Util::toString(kickOnceGotBallParameters.mainDuration) + ":" + Util::toString(kickOnceGotBallParameters.mainDelay) + Util::toString(chipDuration) + ":" + Util::toString(kickOnceGotBallParameters.chipDelay);
+
+	std::cout << "! Kicking once got the ball: " << parametersStr << std::endl;
+
+	com->send("bdkick:" + parametersStr);
 
 	isKickingOnceGotBall = true;
 }
@@ -98,6 +106,7 @@ void Coilgun::cancelKickOnceGotBall() {
 	com->send("nokick");
 
 	isKickingOnceGotBall = false;
+	kickOnceGotBallParameters = KickParameters();
 }
 
 void Coilgun::step(float dt) {
@@ -136,7 +145,7 @@ bool Coilgun::handleCommand(const Command& cmd) {
 		isKickingOnceGotBall = false;
 
 		if (isKickingOnceGotBall) {
-			kickOnceGotBall();
+			kickOnceGotBall(kickOnceGotBallParameters.mainDuration, kickOnceGotBallParameters.mainDelay, kickOnceGotBallParameters.chipDistance, kickOnceGotBallParameters.chipDelay);
 		}
 
 		return true;
