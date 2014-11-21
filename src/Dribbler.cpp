@@ -6,7 +6,7 @@
 
 #include <iostream>
 
-Dribbler::Dribbler(int id, AbstractCommunication* com) : Wheel(id), com(com), ballDetected(false), everDetectedBall(false), isRaiseRequested(false), timeSinceRaised(0.0f), timeSinceLowered(0.0f), ballInDribblerTime(0.0), ballLostTime(-1.0f), stopRequestedTime(-1.0), lowerLimit(Config::robotDribblerNormalLowerLimit), upperLimit(Config::robotDribblerNormalUpperLimit) {
+Dribbler::Dribbler(int id, AbstractCommunication* com) : Wheel(id), com(com), ballDetected(false), everDetectedBall(false), isRaiseRequested(false), timeSinceRaised(0.0f), timeSinceLowered(0.0f), ballInDribblerTime(0.0), ballLostTime(-1.0f), stopRequestedTime(-1.0), lowerLimit(Config::robotDribblerNormalLowerLimit), upperLimit(Config::robotDribblerNormalUpperLimit), useChipKickLimitsMissedFrames(0) {
 	applyLimits();
 };
 
@@ -58,15 +58,21 @@ void Dribbler::useNormalLimits() {
 		return;
 	}
 
+	std::cout << "! Now using normal dribbler limits" << std::endl;
+
 	setLimits(Config::robotDribblerNormalLowerLimit, Config::robotDribblerNormalUpperLimit);
 
 	isRaiseRequested = false;
 }
 
 void Dribbler::useChipKickLimits() {
+	useChipKickLimitsMissedFrames = 0;
+
 	if (isRaiseRequested) {
 		return;
 	}
+
+	std::cout << "! Now using chip-kick dribbler limits" << std::endl;
 
 	setLimits(Config::robotDribblerChipKickLowerLimit, Config::robotDribblerChipKickUpperLimit);
 
@@ -121,6 +127,12 @@ void Dribbler::step(float dt) {
 	} else {
 		timeSinceLowered += dt;
 		timeSinceRaised = 0.0f;
+	}
+
+	useChipKickLimitsMissedFrames++;
+
+	if (useChipKickLimitsMissedFrames >= 2) {
+		useNormalLimits();
 	}
 
 	//std::cout << "ballInDribblerTime: " << ballInDribblerTime << ", ballLostTime: " << ballLostTime << ", got ball: " << (gotBall() ? "yes" : "no") << std::endl;

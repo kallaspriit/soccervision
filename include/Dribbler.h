@@ -45,7 +45,7 @@ private:
 	double stopRequestedTime;
 	int lowerLimit;
 	int upperLimit;
-
+	int useChipKickLimitsMissedFrames;
 };
 
 #endif //DRIBBLER_H
