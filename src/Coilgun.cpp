@@ -135,6 +135,10 @@ bool Coilgun::handleCommand(const Command& cmd) {
 
 		isKickingOnceGotBall = false;
 
+		if (isKickingOnceGotBall) {
+			kickOnceGotBall();
+		}
+
 		return true;
 	}
 
