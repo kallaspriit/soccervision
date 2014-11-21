@@ -94,6 +94,8 @@ void Coilgun::cancelKickOnceGotBall() {
 	std::cout << "! Cancelling kicking once got the ball" << std::endl;
 
 	com->send("nokick");
+
+	isKickingOnceGotBall = false;
 }
 
 void Coilgun::step(float dt) {
