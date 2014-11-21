@@ -1672,7 +1672,7 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	
 	robot->stop();
 	//robot->dribbler->useChipKickLimits();
-	robot->dribbler->useNormalLimits();
+	//robot->dribbler->useNormalLimits();
 	robot->dribbler->start();
 
 	/*if (robot->dribbler->gotBall()) {
@@ -1718,16 +1718,16 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 		bool isBallInWay = ballInWayMetric.isBallInWay;
 
 		if (isBallInWay) {
-			robot->dribbler->useChipKickLimits();
-
 			// TODO check that have sufficient voltage..
 			useChipKick = true;
 		}
 	}
 
 	if (useChipKick) {
+		robot->dribbler->useChipKickLimits();
 		robot->coilgun->kickOnceGotBall(0, 0, 2.0f, 0);
 	} else {
+		robot->dribbler->useNormalLimits();
 		robot->coilgun->kickOnceGotBall(0, Config::robotDefaultKickStrength, 0, 0);
 	}
 
