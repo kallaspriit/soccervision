@@ -1665,6 +1665,7 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	robot->stop();
 	robot->dribbler->useChipKickLimits();
 	robot->coilgun->kickOnceGotBall();
+	robot->dribbler->start();
 
 	/*if (robot->dribbler->gotBall()) {
 		robot->kick();
@@ -1702,7 +1703,8 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	float nearDistance = 0.35f;
 	float maxSideSpeedDistance = 0.5f;
 	float ballMovedAwayDistance = 0.2f;
-	float sideP = 1.5f;
+	float sideP = 2.5f;
+	float maxSideSpeed = 1.5f;
 	float approachP = 1.5f;
 	float lookAtGoalP = Config::lookAtP / 2.0f;
 	
@@ -1720,7 +1722,7 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	}
 
 	float sidePower = Math::map(Math::abs(ball->distanceX), 0.0f, maxSideSpeedDistance, 0.0f, 1.0f);
-	float sideSpeed = sideP * Math::sign(ball->distanceX) * sidePower;
+	float sideSpeed = Math::sign(ball->distanceX) * Math::min(sideP * sidePower, maxSideSpeed);
 	float forwardSpeed = approachP * (1.0f - sidePower);
 	
 	//sideSpeed = 0.0f;
