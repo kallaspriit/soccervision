@@ -87,7 +87,7 @@ void SerialCommunication::sync() {
 
 	//message += "\n";
 
-	//std::cout << "SEND " << messageCount << " MESSAGES: " << message << std::endl;
+	std::cout << "SEND " << messageCount << " MESSAGES: " << message << std::endl;
 
 	memcpy(requestBuffer, message.c_str(), message.size());
 	requestBuffer[message.size()] = 0;
