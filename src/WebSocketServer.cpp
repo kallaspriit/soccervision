@@ -11,12 +11,14 @@ WebSocketServer::~WebSocketServer() {
 }
 
 void WebSocketServer::listen(int port) {
+	std::cout << "! Starting web-socket server" << std::endl;
+
 	server = new websocketpp::server<websocketpp::config::asio>();
 
 	try {
         /*server->set_access_channels(websocketpp::log::alevel::all);
         server->clear_access_channels(websocketpp::log::alevel::frame_payload);*/
-        server->clear_access_channels(websocketpp::log::alevel::all);
+        //server->clear_access_channels(websocketpp::log::alevel::all);
         server->init_asio();
 
         server->set_open_handler(websocketpp::lib::bind(&WebSocketServer::onOpen, this, websocketpp::lib::placeholders::_1));
@@ -28,12 +30,14 @@ void WebSocketServer::listen(int port) {
         server->start_accept();
         server->run();
     } catch (const std::exception & e) {
-        std::cout << e.what() << std::endl;
+        std::cout << "- WebSocket error: " << e.what() << std::endl;
     } catch (websocketpp::lib::error_code e) {
-        std::cout << e.message() << std::endl;
+		std::cout << "- WebSocket error: " << e.message() << std::endl;
     } catch (...) {
         std::cout << "other exception" << std::endl;
     }
+
+	std::cout << "! Web-socket server killed" << std::endl;
 }
 
 void WebSocketServer::stop() {
