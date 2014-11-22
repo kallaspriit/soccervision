@@ -24,6 +24,7 @@ public:
 	typedef Listeners::const_iterator ListenersIt;
 	typedef std::set<websocketpp::connection_hdl> Connections;
 	typedef Connections::iterator ConnectionsIt;
+	typedef websocketpp::server<websocketpp::config::asio> Server;
 
 	WebSocketServer();
 	~WebSocketServer();
@@ -39,7 +40,7 @@ private:
 	void onClose(websocketpp::connection_hdl connection);
 	void onMessage(websocketpp::connection_hdl connection, websocketpp::server<websocketpp::config::asio>::message_ptr msg);
 
-	websocketpp::server<websocketpp::config::asio>* server;
+	Server* server;
 	Listeners listeners;
 	Connections connections;
 
