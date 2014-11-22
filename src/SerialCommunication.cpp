@@ -148,7 +148,7 @@ void SerialCommunication::received(const char *data, unsigned int len) {
 		} else {
 			if (v[i] == '<') {
 				if (receivingMessage) {
-					//std::cout << "@ GOT '<' BUT WAS ALREADY RECEIVING MESSAGE, THIS SHOULD NOT HAPPEN" << std::endl;
+					std::cout << "@ GOT '<' BUT WAS ALREADY RECEIVING MESSAGE, THIS SHOULD NOT HAPPEN" << std::endl;
 				}
 
 				receivingMessage = true;
@@ -157,12 +157,12 @@ void SerialCommunication::received(const char *data, unsigned int len) {
 			if (receivingMessage) {
 				partialMessage += v[i];
 			} else {
-				//std::cout << "# '" << v[i] << std::endl;
+				std::cout << "# '" << v[i] << std::endl;
 			}
 
 			if (v[i] == '>') {
 				if (!receivingMessage) {
-					//std::cout << "@ GOT '>' BUT WAS NOT RECEIVING MESSAGE, THIS SHOULD NOT HAPPEN" << std::endl;
+					std::cout << "@ GOT '>' BUT WAS NOT RECEIVING MESSAGE, THIS SHOULD NOT HAPPEN" << std::endl;
 				}
 
 				receivingMessage = false;
@@ -177,7 +177,7 @@ void SerialCommunication::received(const char *data, unsigned int len) {
 					partialMessage = "";
 				}
 				else {
-					//std::cout << "@ GOT LINEFEED BUT PARTIAL MESSAGE WAS EMPTY, THIS SHOULD NOT HAPPEN" << std::endl;
+					std::cout << "@ GOT '<' BUT PARTIAL MESSAGE WAS EMPTY, THIS SHOULD NOT HAPPEN" << std::endl;
 				}
 			}
 		}
