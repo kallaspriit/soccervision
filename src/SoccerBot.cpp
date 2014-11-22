@@ -255,8 +255,6 @@ void SoccerBot::run() {
 			if (gui->isQuitRequested()) {
 				running = false;
 			}
-
-			std::cout << "FRAME" << std::endl;
 		}
 		
 		/*if (fpsCounter->frameNumber % 60 == 0) {
@@ -285,6 +283,8 @@ void SoccerBot::run() {
 		}
 
 		//std::cout << "! Total time: " << Util::timerEnd(startTime) << std::endl;
+
+		std::cout << "FRAME" << std::endl;
 	}
 
 	com->send("reset");
