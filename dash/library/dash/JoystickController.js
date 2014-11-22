@@ -37,11 +37,16 @@ Dash.JoystickController.prototype.onButtonDown = function(e) {
 	} else if (e.control == 'FACE_4') {
 		this.fastMode = !this.fastMode;
 	} else if (e.control == 'FACE_3') {
-		/*dash.ui.toggleTargetSide();
-		window.setTimeout(function() { dash.ui.toggleTargetSide(); }, 200);
-		window.setTimeout(function() { dash.socket.send('<run-find-ball>'); }, 200);*/
+		dash.ui.toggleTargetSide();
+		window.setTimeout(function() { dash.ui.toggleTargetSide(); }, 250);
+		window.setTimeout(function() {
+			dash.ui.states = [];
+			dash.socket.send('<run-find-ball>');
+		}, 250);
 
-		dash.socket.send('<run-find-ball>');
+		/*dash.ui.states = [];
+
+		dash.socket.send('<run-find-ball>');*/
 		//dash.socket.send('<run-fetch-ball-near>');
 	} else if (e.control == 'FACE_2') {
 		dash.socket.send('<run-manual-control>');

@@ -80,6 +80,7 @@
 * + debug long dt between frames
 * + search from front at the very beginning not to go after a ball seen on the operators hand
 * + should prefer balls from the rear more often
+* - fetch ball direct thinks it's near a line too often and is then very slow
 * - dribbler thinks it's got the ball some time after bdkick reported kicked ball, should not
 * - improve fetch-ball-near - could be faster and mess up less (still pushes with edge)
 * - fetch first ball using fetch-ball-direct (if near own goal)?
@@ -1339,8 +1340,8 @@ void TestController::FetchBallFrontState::step(float dt, Vision::Results* vision
 
 void TestController::FetchBallDirectState::onEnter(Robot* robot, Parameters parameters) {
 	forwardSpeed = robot->getVelocity();
-	nearLineFrames = 0;
-	nearLine = false;
+	//nearLineFrames = 0;
+	//nearLine = false;
 }
 
 void TestController::FetchBallDirectState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration, float combinedDuration) {
@@ -1355,7 +1356,8 @@ void TestController::FetchBallDirectState::step(float dt, Vision::Results* visio
 		// tell the aim state that we were near the line when approaching, might not see that close by
 		Parameters parameters;
 
-		if (nearLine) {
+		//if (nearLine) {
+		if (ai->wasNearLineLately()) {
 			parameters["near-line"] = "1";
 		}
 
@@ -1408,7 +1410,7 @@ void TestController::FetchBallDirectState::step(float dt, Vision::Results* visio
 	float accelerateAcceleration = 2.8f * ai->speedMultiplier;
 	float brakeAcceleration = 2.5f * ai->speedMultiplier;
 	float nearLineSpeed = 0.25f;
-	float nearBallDistance = 0.3f;
+	float nearBallDistance = 0.2f;
 	float realSpeed = robot->getVelocity();
 	float ballDistance = ball->getDribblerDistance();
 	float brakeDistance = Math::getAccelerationDistance(forwardSpeed, 0.0f, brakeAcceleration);
@@ -1429,16 +1431,18 @@ void TestController::FetchBallDirectState::step(float dt, Vision::Results* visio
 	forwardSpeed = Math::max(Math::getAcceleratedSpeed(forwardSpeed, targetApproachSpeed, dt, accelerateAcceleration), minApproachSpeed);
 
 	// limit the speed low near the white-black line to avoid driving the ball out
-	if (nearLine || ai->isRobotNearLine(visionResults, true)) {
-		nearLineFrames++;
+	//if (nearLine || ai->isRobotNearLine(visionResults, true)) {
+	if (ai->wasNearLineLately()) {
+		/*nearLineFrames++;
 
 		// the robot needs to be detected near the line for several frames to be considered true
 		if (nearLineFrames >= 10) {
 			nearLine = true;
-		}
+		}*/
 
 		// limit ball near line
-		if (nearLine && ballDistance < nearBallDistance) {
+		//if (nearLine && ballDistance < nearBallDistance) {
+		if (ballDistance < nearBallDistance) {
 			forwardSpeed = nearLineSpeed;
 
 			ai->dbg("lineLimited", true);
@@ -1453,8 +1457,9 @@ void TestController::FetchBallDirectState::step(float dt, Vision::Results* visio
 	}
 
 	ai->dbg("realSpeed", realSpeed);
-	ai->dbg("nearLineFrames", nearLineFrames);
-	ai->dbg("nearLine", nearLine);
+	//ai->dbg("nearLineFrames", nearLineFrames);
+	//ai->dbg("nearLine", nearLine);
+	ai->dbg("wasNearLineLately", ai->wasNearLineLately());
 	ai->dbg("ballDistance", ballDistance);
 	ai->dbg("brakeDistance", brakeDistance);
 	ai->dbg("targetApproachSpeed", targetApproachSpeed);
