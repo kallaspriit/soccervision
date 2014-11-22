@@ -284,7 +284,7 @@ void SoccerBot::run() {
 
 		//std::cout << "! Total time: " << Util::timerEnd(startTime) << std::endl;
 
-		std::cout << "FRAME" << std::endl;
+		//std::cout << "FRAME" << std::endl;
 	}
 
 	com->send("reset");
@@ -617,7 +617,7 @@ void SoccerBot::setupCommunication() {
 				}
 
 // TODO remove test
-serialPortNumber = 12;
+//serialPortNumber = 12;
 
 				com = new SerialCommunication("COM" + Util::toString(serialPortNumber), Config::serialBaud);
 
