@@ -41,8 +41,8 @@ Dash.JoystickController.prototype.onButtonDown = function(e) {
 		window.setTimeout(function() { dash.ui.toggleTargetSide(); }, 200);
 		window.setTimeout(function() { dash.socket.send('<run-find-ball>'); }, 200);*/
 
-		//dash.socket.send('<run-find-ball>');
-		dash.socket.send('<run-fetch-ball-near>');
+		dash.socket.send('<run-find-ball>');
+		//dash.socket.send('<run-fetch-ball-near>');
 	} else if (e.control == 'FACE_2') {
 		dash.socket.send('<run-manual-control>');
 	} else if (e.control == 'LEFT_TOP_SHOULDER') {

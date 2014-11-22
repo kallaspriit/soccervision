@@ -150,15 +150,14 @@ bool Coilgun::handleCommand(const Command& cmd) {
 
 		return true;
 	} else if (cmd.name == "kicked") {
-		std::cout << "! Kick once got ball kicked the ball" << std::endl;
+		std::cout << "! Kicked" << std::endl;
 
 		isKickingOnceGotBall = false;
+		kickedSinceLastAsked = true;
 
 		if (isKickingOnceGotBall) {
 			kickOnceGotBall(kickOnceGotBallParameters.mainDuration, kickOnceGotBallParameters.mainDelay, kickOnceGotBallParameters.chipDistance, kickOnceGotBallParameters.chipDelay);
 		}
-
-		kickedSinceLastAsked = true;
 
 		return true;
 	}
