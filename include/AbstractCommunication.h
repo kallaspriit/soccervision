@@ -14,7 +14,7 @@ public:
 	};
 
 	typedef std::queue<std::string> Messages;
-	enum { MAX_SIZE = 10240 };
+	enum { MAX_SIZE = 512 };
 
 	virtual void send(std::string message) = 0;
 	virtual bool gotMessages() = 0;

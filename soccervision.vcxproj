@@ -96,6 +96,7 @@
     <ClInclude Include="include\CameraTranslator.h" />
     <ClInclude Include="include\Coilgun.h" />
     <ClInclude Include="include\Command.h" />
+    <ClInclude Include="include\ComPortCommunication.h" />
     <ClInclude Include="include\DummyCommunication.h" />
     <ClInclude Include="include\EthernetCommunication.h" />
     <ClInclude Include="include\Config.h" />
@@ -191,6 +192,7 @@
     <ClCompile Include="src\CameraTranslator.cpp" />
     <ClCompile Include="src\Coilgun.cpp" />
     <ClCompile Include="src\Command.cpp" />
+    <ClCompile Include="src\ComPortCommunication.cpp" />
     <ClCompile Include="src\EthernetCommunication.cpp" />
     <ClCompile Include="src\DebouncedButton.cpp" />
     <ClCompile Include="src\DebugRenderer.cpp" />
