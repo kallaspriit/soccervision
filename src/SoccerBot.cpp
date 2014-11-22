@@ -7,6 +7,7 @@
 #include "AbstractCommunication.h"
 #include "EthernetCommunication.h"
 #include "SerialCommunication.h"
+#include "ComPortCommunication.h"
 #include "DummyCommunication.h"
 #include "ProcessThread.h"
 #include "Gui.h"
@@ -585,10 +586,14 @@ void SoccerBot::setupCommunication() {
 	try {
 		switch (Config::communicationMode) {
 			case Config::ETHERNET:
+				std::cout << "! Using ethernet communication" << std::endl;
+
 				com = new EthernetCommunication(Config::communicationHost, Config::communicationPort);
 			break;
 
-			case Config::SERIAL:
+			case Config::SERIAL: {
+				std::cout << "! Using serial communication" << std::endl;
+
 				int serialPortNumber = -1;
 
 				SerialCommunication::PortList portList = SerialCommunication::getPortList();
@@ -612,7 +617,35 @@ void SoccerBot::setupCommunication() {
 				com = new SerialCommunication("COM" + Util::toString(serialPortNumber), Config::serialBaud);
 
 				std::cout << "! Opened serial COM" << serialPortNumber << " at " << Config::serialBaud << " baud" << std::endl;
-			break;
+			} break;
+
+			case Config::COM: {
+				std::cout << "! Using com port communication" << std::endl;
+
+				int serialPortNumber = -1;
+
+				ComPortCommunication::PortList portList = ComPortCommunication::getPortList();
+
+				std::cout << "! Serial ports:" << std::endl;
+
+				for (unsigned int i = 0; i < portList.numbers.size(); i++) {
+					std::cout << "  > COM" << portList.numbers[i] << " <" << portList.names[i] << ">" << std::endl;
+
+					if (portList.names[i].find(Config::serialDeviceContains) != std::string::npos) {
+						std::cout << "    + found serial device containing '" << Config::serialDeviceContains << "' in it's name, using COM" << portList.numbers[i] << std::endl;
+
+						serialPortNumber = portList.numbers[i];
+					}
+				}
+
+				if (serialPortNumber == -1) {
+					throw new std::exception(std::string("com port containing '" + Config::serialDeviceContains + "' not found").c_str());
+				}
+
+				com = new ComPortCommunication("COM" + Util::toString(serialPortNumber), Config::serialBaud);
+
+				std::cout << "! Opened serial COM" << serialPortNumber << " at " << Config::serialBaud << " baud" << std::endl;
+			} break;
 		}
 	} catch (std::exception e) {
 		std::cout << "failed!" << std::endl;

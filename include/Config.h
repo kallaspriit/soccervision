@@ -6,10 +6,11 @@
 namespace Config {
 	enum CommunicationMode {
 		ETHERNET,
-		SERIAL
+		SERIAL,
+		COM
 	};
 
-	const CommunicationMode communicationMode = SERIAL;
+	const CommunicationMode communicationMode = COM;
 
 	// camera serials
 	const int frontCameraSerial = 857769553;
