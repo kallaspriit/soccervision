@@ -617,7 +617,7 @@ void SoccerBot::setupCommunication() {
 				}
 
 // TODO remove test
-//serialPortNumber = 12;
+serialPortNumber = 12;
 
 				com = new SerialCommunication("COM" + Util::toString(serialPortNumber), Config::serialBaud);
 
