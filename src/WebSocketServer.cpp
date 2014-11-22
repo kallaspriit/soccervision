@@ -18,7 +18,7 @@ void WebSocketServer::listen(int port) {
 	try {
         /*server->set_access_channels(websocketpp::log::alevel::all);
         server->clear_access_channels(websocketpp::log::alevel::frame_payload);*/
-        //server->clear_access_channels(websocketpp::log::alevel::all);
+        server->clear_access_channels(websocketpp::log::alevel::all);
         server->init_asio();
 
         server->set_open_handler(websocketpp::lib::bind(&WebSocketServer::onOpen, this, websocketpp::lib::placeholders::_1));
