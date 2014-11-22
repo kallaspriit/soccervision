@@ -619,7 +619,13 @@ void SoccerBot::setupCommunication() {
 // TODO remove test
 serialPortNumber = 12;
 
-				com = new SerialCommunication("COM" + Util::toString(serialPortNumber), Config::serialBaud);
+				std::string comPortName = "COM" + Util::toString(serialPortNumber);
+
+				if (serialPortNumber > 9) {
+					comPortName = "\\\\.\\" + comPortName;
+				}
+
+				com = new SerialCommunication(comPortName, Config::serialBaud);
 
 				std::cout << "! Opened serial COM" << serialPortNumber << " at " << Config::serialBaud << " baud" << std::endl;
 			} break;
