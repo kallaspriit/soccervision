@@ -379,9 +379,6 @@
     <ClCompile Include="src\WebSocketServer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="include\Server.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\DebouncedButton.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -425,6 +422,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\ComPortCommunication.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Server.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

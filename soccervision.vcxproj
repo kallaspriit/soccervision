@@ -161,7 +161,6 @@
     <ClInclude Include="src\MouseListener.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="include\Server.cpp" />
     <ClCompile Include="lib\enumser\enumser.cpp" />
     <ClCompile Include="lib\enumser\StdAfx.cpp" />
     <ClCompile Include="lib\jpeg\jpge.cpp" />
@@ -212,6 +211,7 @@
     <ClCompile Include="src\Robot.cpp" />
     <ClCompile Include="src\Serial.cpp" />
     <ClCompile Include="src\SerialCommunication.cpp" />
+    <ClCompile Include="src\Server.cpp" />
     <ClCompile Include="src\SignalHandler.cpp" />
     <ClCompile Include="src\SoccerBot.cpp" />
     <ClCompile Include="src\Tasks.cpp" />
