@@ -561,7 +561,7 @@ bool Robot::handleCommand(const Command& cmd) {
 		std::cout << "! Received discharged, charging" << std::endl;
 
 		// TODO Add back
-		com->send("charge");
+		//com->send("charge");
 	}
 
 	if (wheelFL->handleCommand(cmd)) handled = true;
