@@ -25,6 +25,7 @@ public:
 	typedef std::set<websocketpp::connection_hdl> Connections;
 	typedef Connections::iterator ConnectionsIt;
 	typedef websocketpp::server<websocketpp::config::asio> Server;
+	//typedef websocketpp::server<websocketpp::config::core> Server;
 
 	WebSocketServer();
 	~WebSocketServer();

@@ -13,7 +13,7 @@ WebSocketServer::~WebSocketServer() {
 void WebSocketServer::listen(int port) {
 	std::cout << "! Starting web-socket server" << std::endl;
 
-	server = new websocketpp::server<websocketpp::config::asio>();
+	server = new Server();
 
 	try {
         /*server->set_access_channels(websocketpp::log::alevel::all);
