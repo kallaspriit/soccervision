@@ -1759,7 +1759,7 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	bool isBallInWay = false;
 
 	// decide to use chip-kicker if there's a ball in way when the ball is close
-	if (!useChipKick && ball->distance < ballNearDistance) {
+	if (!useChipKick && ball->distance < ballNearDistance && stateDuration >= 0.5f) {
 		ballInWayMetric = visionResults->getBallInWayMetric(visionResults->front->balls, goal->y + goal->height / 2);
 		
 		isBallInWay = ballInWayMetric.ballInWayCount >= 2 && ai->shouldAvoidBallInWay(ballInWayMetric, goal->distance);
