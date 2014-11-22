@@ -184,7 +184,8 @@ namespace Config {
 	const float ballInDribblerThreshold = 0.0f;
 
 	// how long must the ball have not been detected to be considered lost (seconds)
-	const float dribblerBallLostThreshold = 0.3f;
+	//const float dribblerBallLostThreshold = 0.3f;
+	const float dribblerBallLostThreshold = 0.1f;
 
 	// omega threshold for the robot to be considered not spinning any more
 	const float rotationStoppedOmegaThreshold = 0.25f;

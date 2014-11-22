@@ -147,11 +147,11 @@ bool Dribbler::isLowered() {
 }
 
 bool Dribbler::gotBall(bool definitive) const {
-	if (!definitive && !ballDetected && ballLostTime != -1.0f && ballLostTime < Config::dribblerBallLostThreshold) {
+	/*if (!definitive && !ballDetected && ballLostTime != -1.0f && ballLostTime < Config::dribblerBallLostThreshold) {
 		//std::cout << "! Faking got ball, actually lost for: " << ballLostTime << std::endl;
 
 		return true;
-	}
+	}*/
 
 	return ballDetected;
 
