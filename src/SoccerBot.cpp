@@ -714,11 +714,15 @@ std::string SoccerBot::getActiveControllerName() {
 void SoccerBot::handleServerMessages() {
 	Server::Message* message;
 
+	std::cout << "! Handling server messages.. ";
+
 	while ((message = server->dequeueMessage()) != NULL) {
 		handleServerMessage(message);
 
 		delete message;
 	}
+
+	std::cout << "done!" << std::endl;
 }
 
 void SoccerBot::handleServerMessage(Server::Message* message) {
