@@ -80,6 +80,7 @@
 * + debug long dt between frames
 * + search from front at the very beginning not to go after a ball seen on the operators hand
 * + should prefer balls from the rear more often
+* - dribbler thinks it's got the ball some time after bdkick reported kicked ball, should not
 * - improve fetch-ball-near - could be faster and mess up less (still pushes with edge)
 * - fetch first ball using fetch-ball-direct (if near own goal)?
 * - sometimes high level thinks the dribbler has ball while low-level does not agree
@@ -751,6 +752,40 @@ float TestController::getTargetAngle(float goalX, float goalY, float ballX, floa
 
 float TestController::getChipKickDistance(Vision::BallInWayMetric ballInWayMetric, float goalDistance) {
 	return Math::max(Math::min(ballInWayMetric.furthestBallInWayDistance + 1.0f, goalDistance - 0.8f), 0.75f);
+}
+
+bool TestController::shouldAvoidBallInWay(Vision::BallInWayMetric ballInWayMetric, float goalDistance) {
+	if (!ballInWayMetric.isBallInWay) {
+		return false;
+	}
+
+	// don't avoid balls in goals
+	if (ballInWayMetric.closestBallInWayDistance + 0.2f >= goalDistance) {
+		//std::cout << "@ NOT AVOIDING BALL IN GOAL, BALL: " << ballInWayMetric.closestBallInWayDistance << "m, goal: " << goal->distance << "m" << std::endl;
+
+		return false;
+	}
+
+	// don't balls faw away near goal
+	if (goalDistance > 1.5f && ballInWayMetric.closestBallInWayDistance + 0.5f >= goalDistance) {
+		//std::cout << "@ NOT AVOIDING DISTANT BALL NEAR GOAL, BALL: " << ballInWayMetric.closestBallInWayDistance << "m, goal: " << goal->distance << "m" << std::endl;
+
+		return false;
+	}
+
+	return true;
+}
+
+bool TestController::shouldManeuverBallInWay(Vision::BallInWayMetric ballInWayMetric, float goalDistance, bool isLowVoltage) {
+	bool avoid = shouldAvoidBallInWay(ballInWayMetric, goalDistance);
+
+	if (!avoid) {
+		return false;
+	}
+
+	return isLowVoltage
+		|| goalDistance < 1.0f
+		|| Math::abs(ballInWayMetric.furthestBallInWayDistance - goalDistance) < 1.0f;
 }
 
 void TestController::ManualControlState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration, float combinedDuration) {
@@ -1726,7 +1761,7 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	if (!useChipKick && ball->distance < ballNearDistance) {
 		ballInWayMetric = visionResults->getBallInWayMetric(visionResults->front->balls, goal->y + goal->height / 2);
 		
-		bool isBallInWay = ballInWayMetric.isBallInWay;
+		bool isBallInWay = ai->shouldAvoidBallInWay(ballInWayMetric, goal->distance);
 
 		if (isBallInWay) {
 			// TODO check that have sufficient voltage..
@@ -2119,37 +2154,17 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 	float forwardSpeed = 0.0f;
 	float sideSpeed = 0.0f;
 	Vision::BallInWayMetric ballInWayMetric = visionResults->getBallInWayMetric(visionResults->front->balls, goal->y + goal->height / 2);
-	bool isBallInWay = ballInWayMetric.isBallInWay;
 	bool validWindow = false;
 	bool isKickTooSoon = lastKickTime != -1.0 && timeSinceLastKick < minKickInterval;
 	bool isLowVoltage = robot->coilgun->isLowVoltage();
-	bool shouldManeuverBallInWay = isBallInWay && (
-		isLowVoltage
-		|| goal->distance < 1.0f
-		|| Math::abs(ballInWayMetric.furthestBallInWayDistance - goal->distance) < 1.0f
-		);
+	bool isBallInWay = ai->shouldAvoidBallInWay(ballInWayMetric, goal->distance);
+	bool shouldManeuverBallInWay = ai->shouldManeuverBallInWay(ballInWayMetric, goal->distance, isLowVoltage);
 
 	// limit ball avoidance time
 	if (avoidBallDuration > maxBallAvoidTime) {
 		isBallInWay = false;
 		shouldManeuverBallInWay = false;
 		isGoalPathObstructed = false;
-	}
-
-	// don't avoid balls in goals
-	if (isBallInWay && ballInWayMetric.closestBallInWayDistance + 0.2f >= goal->distance) {
-		//std::cout << "@ NOT AVOIDING BALL IN GOAL, BALL: " << ballInWayMetric.closestBallInWayDistance << "m, goal: " << goal->distance << "m" << std::endl;
-
-		isBallInWay = false;
-		shouldManeuverBallInWay = false;
-	}
-
-	// don't balls faw away near goal
-	if (isBallInWay && goal->distance > 1.5f && ballInWayMetric.closestBallInWayDistance + 0.5f >= goal->distance) {
-		//std::cout << "@ NOT AVOIDING DISTANT BALL NEAR GOAL, BALL: " << ballInWayMetric.closestBallInWayDistance << "m, goal: " << goal->distance << "m" << std::endl;
-
-		isBallInWay = false;
-		shouldManeuverBallInWay = false;
 	}
 
 	// drive sideways if there's a ball in the way
