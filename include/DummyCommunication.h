@@ -25,6 +25,9 @@ public:
 
 	void close() {};
 
+private:
+	void* run() { return NULL; }
+
 };
 
 #endif // DUMMY_COMMUNICATION_H

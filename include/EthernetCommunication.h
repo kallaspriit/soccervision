@@ -2,7 +2,6 @@
 #define ETHERNET_COMMUNICATION_H
 
 #include "AbstractCommunication.h"
-#include "Thread.h"
 
 #include <boost/thread/mutex.hpp>
 #include <boost/asio.hpp>
@@ -14,7 +13,7 @@
 
 using boost::asio::ip::udp;
 
-class EthernetCommunication : public AbstractCommunication, public Thread {
+class EthernetCommunication : public AbstractCommunication {
 
 public:
 	

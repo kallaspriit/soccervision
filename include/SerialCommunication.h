@@ -2,10 +2,9 @@
 #define SERIAL_COMMUNICATION_H
 
 #include "AbstractCommunication.h"
-#include "Thread.h"
 #include "Serial.h"
 
-class SerialCommunication : public AbstractCommunication, public Thread {
+class SerialCommunication : public AbstractCommunication {
 
 public:
 	struct PortList {
