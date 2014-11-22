@@ -83,6 +83,7 @@
 * - fetch ball direct thinks it's near a line too often and is then very slow
 * - dribbler thinks it's got the ball some time after bdkick reported kicked ball, should not
 * - improve fetch-ball-near - could be faster and mess up less (still pushes with edge)
+* - experiment with getClosesBall based on distanceY not normal distance
 * - fetch first ball using fetch-ball-direct (if near own goal)?
 * - sometimes high level thinks the dribbler has ball while low-level does not agree
 * - drives through the opponent's goal at the start if the first ball on the left is close to it
@@ -771,14 +772,14 @@ bool TestController::shouldAvoidBallInWay(Vision::BallInWayMetric ballInWayMetri
 	}
 
 	// don't avoid balls in goals
-	if (ballInWayMetric.closestBallInWayDistance + 0.5f >= goalDistance) {
+	if (Math::abs(ballInWayMetric.closestBallInWayDistance - goalDistance) <= 0.6f) {
 		//std::cout << "@ NOT AVOIDING BALL IN GOAL, BALL: " << ballInWayMetric.closestBallInWayDistance << "m, goal: " << goal->distance << "m" << std::endl;
 
 		return false;
 	}
 
-	// don't balls faw away near goal
-	if (goalDistance > 1.5f && ballInWayMetric.closestBallInWayDistance + 0.5f >= goalDistance) {
+	// don't avoid balls far away near a goal
+	if (goalDistance > 1.5f && Math::abs(ballInWayMetric.closestBallInWayDistance - goalDistance) <= 0.8f) {
 		//std::cout << "@ NOT AVOIDING DISTANT BALL NEAR GOAL, BALL: " << ballInWayMetric.closestBallInWayDistance << "m, goal: " << goal->distance << "m" << std::endl;
 
 		return false;
@@ -1777,7 +1778,7 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	int ballInWayFramesThreshold = 3;
 
 	// decide to use chip-kicker if there's a ball in way when the ball is close, add some delay so ball just hit wouldn't get counted
-	if (!useChipKick && ball->distance < ballNearDistance && stateDuration >= 0.5f) {
+	if (ball->distance < ballNearDistance && stateDuration >= 0.5f) {
 		ballInWayMetric = visionResults->getBallInWayMetric(visionResults->front->balls, goal->y + goal->height / 2);
 		
 		isBallInWay = ballInWayMetric.ballInWayCount >= 2 && ai->shouldAvoidBallInWay(ballInWayMetric, goal->distance);
@@ -1790,8 +1791,6 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 				useChipKick = true;
 
 				chipKickDistance = ai->getChipKickDistance(ballInWayMetric, goal->distance);
-
-				std::cout << "! Decided to chip-kick to " << chipKickDistance << " meters" << std::endl;
 			}
 		}
 	}
@@ -1861,6 +1860,7 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	ai->dbg("useChipKick", useChipKick);
 	ai->dbg("isBallInWay", isBallInWay);
 	ai->dbg("ballInWayFrames", ballInWayFrames);
+	ai->dbg("chipKickDistance", chipKickDistance);
 }
 
 /*void TestController::FetchBallNearState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration, float combinedDuration) {
