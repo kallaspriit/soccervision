@@ -760,7 +760,7 @@ bool TestController::shouldAvoidBallInWay(Vision::BallInWayMetric ballInWayMetri
 	}
 
 	// don't avoid balls in goals
-	if (ballInWayMetric.closestBallInWayDistance + 0.2f >= goalDistance) {
+	if (ballInWayMetric.closestBallInWayDistance + 0.5f >= goalDistance) {
 		//std::cout << "@ NOT AVOIDING BALL IN GOAL, BALL: " << ballInWayMetric.closestBallInWayDistance << "m, goal: " << goal->distance << "m" << std::endl;
 
 		return false;
@@ -1756,12 +1756,13 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 
 	Vision::BallInWayMetric ballInWayMetric;
 	float ballNearDistance = 0.3f;
+	bool isBallInWay = false;
 
 	// decide to use chip-kicker if there's a ball in way when the ball is close
 	if (!useChipKick && ball->distance < ballNearDistance) {
 		ballInWayMetric = visionResults->getBallInWayMetric(visionResults->front->balls, goal->y + goal->height / 2);
 		
-		bool isBallInWay = ai->shouldAvoidBallInWay(ballInWayMetric, goal->distance);
+		isBallInWay = ai->shouldAvoidBallInWay(ballInWayMetric, goal->distance);
 
 		if (isBallInWay) {
 			// TODO check that have sufficient voltage..
@@ -1834,6 +1835,7 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	ai->dbg("goalAngle", (Math::radToDeg(goal->angle)));
 	ai->dbg("ball->distanceX", ball->distanceX);
 	ai->dbg("useChipKick", useChipKick);
+	ai->dbg("isBallInWay", isBallInWay);
 }
 
 /*void TestController::FetchBallNearState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration, float combinedDuration) {
