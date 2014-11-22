@@ -557,12 +557,12 @@ void Robot::handleCommunicationMessage(std::string message) {
 bool Robot::handleCommand(const Command& cmd) {
 	bool handled = false;
 
-	if (cmd.name == "discharged") {
+	/*if (cmd.name == "discharged") {
 		std::cout << "! Received discharged, charging" << std::endl;
 
 		// TODO Add back
-		//com->send("charge");
-	}
+		com->send("charge");
+	}*/
 
 	if (wheelFL->handleCommand(cmd)) handled = true;
 	if (wheelFR->handleCommand(cmd)) handled = true;
