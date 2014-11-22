@@ -255,6 +255,8 @@ void SoccerBot::run() {
 			if (gui->isQuitRequested()) {
 				running = false;
 			}
+
+			std::cout << "FRAME" << std::endl;
 		}
 		
 		/*if (fpsCounter->frameNumber % 60 == 0) {
