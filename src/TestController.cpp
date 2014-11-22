@@ -114,7 +114,7 @@
 * - xxx
 */
 
-TestController::TestController(Robot* robot, AbstractCommunication* com) : BaseAI(robot, com), targetSide(Side::BLUE), manualSpeedX(0.0f), manualSpeedY(0.0f), manualOmega(0.0f), manualDribblerSpeed(0), manualKickStrength(0), blueGoalDistance(0.0f), yellowGoalDistance(0.0f), lastCommandTime(-1.0), lastBallTime(-1.0), lastNearLineTime(-1.0), lastInCornerTime(-1.0), lastTargetGoalAngle(0.0f), lastBall(NULL), lastTurnAroundTime(-1.0), lastClosestGoalDistance(-1.0f), lastTargetGoalDistance(-1.0f), framesRobotOutFront(0), framesRobotOutRear(0), isRobotOutFront(false), isRobotOutRear(false), isNearLine(false), isInCorner(false), inCornerFrames(0), visibleBallCount(0) {
+TestController::TestController(Robot* robot, AbstractCommunication* com) : BaseAI(robot, com), targetSide(Side::BLUE), manualSpeedX(0.0f), manualSpeedY(0.0f), manualOmega(0.0f), manualDribblerSpeed(0), manualKickStrength(0), blueGoalDistance(0.0f), yellowGoalDistance(0.0f), lastCommandTime(-1.0), lastBallTime(-1.0), lastNearLineTime(-1.0), lastInCornerTime(-1.0), lastTargetGoalAngle(0.0f), lastBall(NULL), lastTurnAroundTime(-1.0), lastClosestGoalDistance(-1.0f), lastTargetGoalDistance(-1.0f), framesRobotOutFront(0), framesRobotOutRear(0), isRobotOutFront(false), isRobotOutRear(false), isNearLine(false), isInCorner(false), inCornerFrames(0), nearLineFrames(0), visibleBallCount(0) {
 	setupStates();
 
 	speedMultiplier = 1.0f;
@@ -431,10 +431,20 @@ void TestController::updateVisionInfo(Vision::Results* visionResults) {
 	isNearLine = isRobotNearLine(visionResults);
 	isInCorner = isRobotInCorner(visionResults);
 
+	// near line detection
+	int robotNearLineFramesThreshold = 3;
+	
 	if (isNearLine) {
-		lastNearLineTime = Util::millitime();
+		nearLineFrames = (int)Math::min((float)(nearLineFrames + 1), (float)robotNearLineFramesThreshold);
+	} else {
+		nearLineFrames = (int)Math::max((float)(nearLineFrames - 1), 0);
 	}
 
+	if (nearLineFrames >= 3) {
+		lastNearLineTime = Util::millitime();
+	}
+	
+	// in corner detection
 	int robotInCornerFramesThreshold = 3;
 
 	if (isInCorner) {
