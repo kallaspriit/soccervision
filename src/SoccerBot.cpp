@@ -905,12 +905,8 @@ void SoccerBot::handleCameraTranslatorCommand(Command::Parameters parameters) {
 void SoccerBot::handleCommunicationMessages() {
 	std::string message;
 
-	while (true) {
+	while (com->gotMessages()) {
 		message = com->dequeueMessage();
-
-		if (message.size() == 0) {
-			break;
-		}
 
 		//std::cout << "M < " << message << std::endl;
 
