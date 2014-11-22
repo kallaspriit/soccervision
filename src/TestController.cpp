@@ -1762,7 +1762,7 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	if (!useChipKick && ball->distance < ballNearDistance) {
 		ballInWayMetric = visionResults->getBallInWayMetric(visionResults->front->balls, goal->y + goal->height / 2);
 		
-		isBallInWay = ai->shouldAvoidBallInWay(ballInWayMetric, goal->distance);
+		isBallInWay = ballInWayMetric.ballInWayCount >= 2 && ai->shouldAvoidBallInWay(ballInWayMetric, goal->distance);
 
 		if (isBallInWay) {
 			// TODO check that have sufficient voltage..
