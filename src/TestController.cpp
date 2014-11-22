@@ -1704,6 +1704,7 @@ void TestController::FetchBallNearState::onEnter(Robot* robot, Parameters parame
 	enterDistance = -1.0f;
 	smallestForwardSpeed = -1.0f;
 	useChipKick = false;
+	chipKickDistance = 0.0f;
 }
 
 void TestController::FetchBallNearState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration, float combinedDuration) {
@@ -1758,7 +1759,7 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	float ballNearDistance = 0.3f;
 	bool isBallInWay = false;
 
-	// decide to use chip-kicker if there's a ball in way when the ball is close
+	// decide to use chip-kicker if there's a ball in way when the ball is close, add some delay so ball just hit wouldn't get counted
 	if (!useChipKick && ball->distance < ballNearDistance && stateDuration >= 0.5f) {
 		ballInWayMetric = visionResults->getBallInWayMetric(visionResults->front->balls, goal->y + goal->height / 2);
 		
@@ -1767,12 +1768,14 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 		if (isBallInWay) {
 			// TODO check that have sufficient voltage..
 			useChipKick = true;
+
+			chipKickDistance = ai->getChipKickDistance(ballInWayMetric, goal->distance);
+
+			std::cout << "! Decided to chip-kick to " << chipKickDistance << " meters" << std::endl;
 		}
 	}
 
 	if (useChipKick) {
-		float chipKickDistance = ai->getChipKickDistance(ballInWayMetric, goal->distance);
-
 		robot->dribbler->useChipKickLimits();
 		robot->coilgun->kickOnceGotBall(0, 0, chipKickDistance, 0);
 	} else {
