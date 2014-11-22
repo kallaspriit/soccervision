@@ -612,18 +612,18 @@ void SoccerBot::setupCommunication() {
 					}
 				}
 
+// TODO remove test
+serialPortNumber = 12;
+
 				if (serialPortNumber == -1) {
 					throw new std::exception(std::string("com port containing '" + Config::serialDeviceContains + "' not found").c_str());
 				}
 
-// TODO remove test
-serialPortNumber = 12;
-
 				std::string comPortName = "COM" + Util::toString(serialPortNumber);
 
-				if (serialPortNumber > 9) {
+				/*if (serialPortNumber > 9) {
 					comPortName = "\\\\.\\" + comPortName;
-				}
+				}*/
 
 				com = new SerialCommunication(comPortName, Config::serialBaud);
 
