@@ -1720,6 +1720,7 @@ void TestController::FetchBallNearState::onEnter(Robot* robot, Parameters parame
 	smallestForwardSpeed = -1.0f;
 	useChipKick = false;
 	chipKickDistance = 0.0f;
+	ballInWayFrames = 0;
 }
 
 void TestController::FetchBallNearState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration, float combinedDuration) {
@@ -1773,6 +1774,7 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	Vision::BallInWayMetric ballInWayMetric;
 	float ballNearDistance = 0.3f;
 	bool isBallInWay = false;
+	int ballInWayFramesThreshold = 3;
 
 	// decide to use chip-kicker if there's a ball in way when the ball is close, add some delay so ball just hit wouldn't get counted
 	if (!useChipKick && ball->distance < ballNearDistance && stateDuration >= 0.5f) {
@@ -1781,12 +1783,16 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 		isBallInWay = ballInWayMetric.ballInWayCount >= 2 && ai->shouldAvoidBallInWay(ballInWayMetric, goal->distance);
 
 		if (isBallInWay) {
-			// TODO check that have sufficient voltage..
-			useChipKick = true;
+			ballInWayFrames++;
 
-			chipKickDistance = ai->getChipKickDistance(ballInWayMetric, goal->distance);
+			if (ballInWayFrames >= ballInWayFramesThreshold) {
+				// TODO check that have sufficient voltage..
+				useChipKick = true;
 
-			std::cout << "! Decided to chip-kick to " << chipKickDistance << " meters" << std::endl;
+				chipKickDistance = ai->getChipKickDistance(ballInWayMetric, goal->distance);
+
+				std::cout << "! Decided to chip-kick to " << chipKickDistance << " meters" << std::endl;
+			}
 		}
 	}
 
@@ -1854,6 +1860,7 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	ai->dbg("ball->distanceX", ball->distanceX);
 	ai->dbg("useChipKick", useChipKick);
 	ai->dbg("isBallInWay", isBallInWay);
+	ai->dbg("ballInWayFrames", ballInWayFrames);
 }
 
 /*void TestController::FetchBallNearState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration, float combinedDuration) {
