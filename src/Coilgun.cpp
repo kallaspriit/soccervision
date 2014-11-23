@@ -89,7 +89,7 @@ void Coilgun::kickOnceGotBall(int mainDuration, int mainDelay, float chipDistanc
 
 	std::string parametersStr = Util::toString(kickOnceGotBallParameters.mainDuration) + ":" + Util::toString(kickOnceGotBallParameters.mainDelay) + ":" + Util::toString(chipDuration) + ":" + Util::toString(kickOnceGotBallParameters.chipDelay);
 
-	std::cout << "! Kicking once got the ball: " << parametersStr << std::endl;
+	//std::cout << "! Kicking once got the ball: " << parametersStr << std::endl;
 
 	com->send("bdkick:" + parametersStr);
 
@@ -101,7 +101,7 @@ void Coilgun::cancelKickOnceGotBall() {
 		return;
 	}
 
-	std::cout << "! Cancelling kicking once got the ball" << std::endl;
+	//std::cout << "! Cancelling kicking once got the ball" << std::endl;
 
 	com->send("nokick");
 
@@ -150,7 +150,7 @@ bool Coilgun::handleCommand(const Command& cmd) {
 
 		return true;
 	} else if (cmd.name == "kicked") {
-		std::cout << "! Kicked" << std::endl;
+		//std::cout << "! Kicked" << std::endl;
 
 		isKickingOnceGotBall = false;
 		kickedSinceLastAsked = true;

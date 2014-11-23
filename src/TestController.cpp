@@ -1740,7 +1740,7 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	}*/
 
 	if (robot->coilgun->wasKickedSinceLastAsked()) {
-		std::cout << "! Coilgun kicked since last requested" << std::endl;
+		//std::cout << "! Coilgun kicked since last requested" << std::endl;
 
 		useChipKick = false;
 	}
