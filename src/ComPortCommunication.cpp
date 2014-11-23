@@ -87,6 +87,10 @@ void ComPortCommunication::sync() {
 
 	boost::mutex::scoped_lock lock(messagesMutex);
 
+	if (sendQueue.size() == 0) {
+		return;
+	}
+
 	std::string message = "";
 	std::string queuedMessage;
 	int messageCount = sendQueue.size();
@@ -185,7 +189,7 @@ void* ComPortCommunication::run() {
 	std::cout << "! Running COM port thread" << std::endl;
 
 	while (opened) {
-		sync();
+		//sync();
 
 		DWORD numRead;
 
