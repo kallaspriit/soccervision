@@ -253,8 +253,8 @@ void Serial::writeEnd(const boost::system::error_code& error)
 	else {
 		std::cout << "- Boost serial write end error: " << error << std::endl;
 
-		setErrorStatus(true);
-		doClose();
+		//setErrorStatus(true);
+		//doClose();
 	}
 }
 
