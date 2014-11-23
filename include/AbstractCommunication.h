@@ -34,7 +34,7 @@ public:
 		speedDribbler = dribbler;
 	}
 
-private:
+protected:
 	int speedFL;
 	int speedFR;
 	int speedRL;

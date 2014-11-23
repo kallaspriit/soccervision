@@ -1,4 +1,5 @@
 #include "SerialCommunication.h"
+#include "Util.h"
 #include "enumser.h"
 
 SerialCommunication::SerialCommunication(std::string portName, int baud) :
@@ -45,6 +46,17 @@ void SerialCommunication::sync() {
 	std::string queuedMessage;
 	int messageCount = sendQueue.size();
 
+	// TODO sends speeds only when the queue is empty
+	if (sendQueue.size() == 0) {
+		sendQueue.push("speeds:"
+			+ Util::toString(speedFL) + ":"
+			+ Util::toString(speedFR) + ":"
+			+ Util::toString(speedRL) + ":"
+			+ Util::toString(speedRR) + ":"
+			+ Util::toString(speedDribbler)
+		);
+	}
+
 	while (sendQueue.size() > 0) {
 		queuedMessage = sendQueue.front();
 
@@ -55,6 +67,9 @@ void SerialCommunication::sync() {
 		//if (queuedMessage.substr(0, 6) != "speeds" && queuedMessage.substr(0, 3) != "adc") {
 			std::cout << "SEND: " << queuedMessage << std::endl;
 		//}
+
+		// TODO only sends one message at a time, remove the break once serial works again
+		break;
 	}
 
 	if (message.size() >= MAX_SIZE) {
