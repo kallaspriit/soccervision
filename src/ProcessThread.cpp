@@ -114,7 +114,7 @@ void* ProcessThread::run() {
 
 	if (debug) {
 		DebugRenderer::renderMapping(rgb, vision);
-		DebugRenderer::renderGrid(rgb, vision);
+		//DebugRenderer::renderGrid(rgb, vision);
 	}
 
 	visionResult = vision->process();
