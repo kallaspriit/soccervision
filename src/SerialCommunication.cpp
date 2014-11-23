@@ -151,6 +151,12 @@ void SerialCommunication::close() {
 }
 
 void* SerialCommunication::run() {
+	while (serial.isOpen()) {
+		sync();
+
+		Util::sleep(20);
+	}
+
 	return NULL;
 }
 
