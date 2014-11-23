@@ -141,8 +141,7 @@ bool Coilgun::wasKickedSinceLastAsked() {
 }
 
 void Coilgun::requestVoltageReading() {
-	// TODO add back
-	//com->send("adc");
+	com->send("adc");
 }
 
 bool Coilgun::handleCommand(const Command& cmd) {
