@@ -189,7 +189,7 @@ void* ComPortCommunication::run() {
 	std::cout << "! Running COM port thread" << std::endl;
 
 	while (opened) {
-		//sync();
+		sync();
 
 		DWORD numRead;
 
