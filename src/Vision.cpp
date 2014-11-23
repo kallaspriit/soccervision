@@ -250,7 +250,7 @@ ObjectList Vision::processGoals(Dir dir) {
 			}
 
 			// straight distance is already updated in valid goal check
-			//goal->distance = distance.straight;
+			goal->distance = distance.straight;
 			goal->distanceX = distance.x;
 			goal->distanceY = distance.y;
 			goal->angle = distance.angle;
