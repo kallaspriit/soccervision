@@ -47,7 +47,7 @@ void SerialCommunication::sync() {
 	int messageCount = sendQueue.size();
 
 	// TODO sends speeds only when the queue is empty
-	if (sendQueue.size() == 0) {
+	if (sendQueue.size() == 0 && !speedsSent) {
 		sendQueue.push("speeds:"
 			+ Util::toString(speedFL) + ":"
 			+ Util::toString(speedFR) + ":"
@@ -55,6 +55,12 @@ void SerialCommunication::sync() {
 			+ Util::toString(speedRR) + ":"
 			+ Util::toString(speedDribbler)
 		);
+
+		speedsSent = true;
+	}
+
+	if (sendQueue.size() == 0) {
+		return;
 	}
 
 	while (sendQueue.size() > 0) {
@@ -155,7 +161,7 @@ void* SerialCommunication::run() {
 		sync();
 
 		//Util::sleep(16);
-		Util::sleep(50);
+		//Util::sleep(50);
 	}
 
 	return NULL;

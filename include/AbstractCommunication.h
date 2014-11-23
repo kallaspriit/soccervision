@@ -32,6 +32,7 @@ public:
 		speedRL = RL;
 		speedRR = RR;
 		speedDribbler = dribbler;
+		speedsSent = false;
 	}
 
 protected:
@@ -40,6 +41,7 @@ protected:
 	int speedRL;
 	int speedRR;
 	int speedDribbler;
+	bool speedsSent;
 
 };
 
