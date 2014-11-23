@@ -251,6 +251,8 @@ void Serial::writeEnd(const boost::system::error_code& error)
 			boost::bind(&Serial::writeEnd, this, asio::placeholders::error));
 	}
 	else {
+		std::cout << "- Boost serial write end error: " << error << std::endl;
+
 		setErrorStatus(true);
 		doClose();
 	}
