@@ -399,10 +399,10 @@ void SoccerBot::setupVision() {
 	//float B = -0.04f;
 	//float C = 0.20689130201672276f;
 	//float horizon = -300.0f;
-	float A = 95.625f;
-	float B = -0.041734f;
-	float C = 0.20863806269966359f;
-	float horizon = 167.74f;
+	float A = 120.11218157847301f;
+	float B = -0.037205566171594123f;
+	float C = 0.2124259596292023f;
+	float horizon = 119.40878f;
 
 	// TODO these are not actually currently used any more, remove at some point
 	float k1 = -0.28f;
@@ -419,10 +419,10 @@ void SoccerBot::setupVision() {
 	);
 
 	// rear parameters
-	A = 105.75f;
-	B = -0.0325f;
-	C = 0.20762976575066086f;
-	horizon = 124.13f;
+	A = 116.87509670118826f;
+	B = -0.024224799830663904f;
+	C = 0.20843106680747164f;
+	horizon = 123.73853f;
 
 	rearCameraTranslator->setConstants(
 		A, B, C,
