@@ -4,3 +4,4 @@
 /*.ilk
 /dash/.idea
 /dash/node_modules
+/dash/server/node_modules
