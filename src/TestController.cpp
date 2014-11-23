@@ -1774,7 +1774,7 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	}
 
 	Vision::BallInWayMetric ballInWayMetric;
-	float ballNearDistance = 0.3f;
+	float ballNearDistance = 0.4f;
 	bool isBallInWay = false;
 	int ballInWayFramesThreshold = 3;
 
