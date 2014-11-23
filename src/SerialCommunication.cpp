@@ -160,7 +160,7 @@ void* SerialCommunication::run() {
 	while (serial.isOpen()) {
 		sync();
 
-		//Util::sleep(16);
+		Util::sleep(16);
 		//Util::sleep(50);
 	}
 
