@@ -961,7 +961,7 @@ void SoccerBot::handleCommunicationMessages() {
 		handleCommunicationMessage(message);
 	}
 
-	//com->sync();
+	com->sync();
 }
 
 void SoccerBot::handleCommunicationMessage(std::string message) {
