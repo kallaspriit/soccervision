@@ -50,7 +50,8 @@ serialPort.on('open', function () {
 		//send('11111');
 
 		send('adc');
+		send('speeds:5:5:5:5:0');
 
 		counter++;
-	}, 16);
+	}, 10);
 });

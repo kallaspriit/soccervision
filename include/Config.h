@@ -11,8 +11,8 @@ namespace Config {
 	};
 
 	//const CommunicationMode communicationMode = ETHERNET;
-	const CommunicationMode communicationMode = SERIAL;
-	//const CommunicationMode communicationMode = COM;
+	//const CommunicationMode communicationMode = SERIAL;
+	const CommunicationMode communicationMode = COM;
 
 	// camera serials
 	const int frontCameraSerial = 857769553;
