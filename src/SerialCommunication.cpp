@@ -65,7 +65,7 @@ void SerialCommunication::sync() {
 		message += queuedMessage + "\n";
 
 		//if (queuedMessage.substr(0, 6) != "speeds" && queuedMessage.substr(0, 3) != "adc") {
-			std::cout << "SEND: " << queuedMessage << " [" << sendQueue.size() << "]" << std::endl;
+		//	std::cout << "SEND: " << queuedMessage << " [" << sendQueue.size() << "]" << std::endl;
 		//}
 
 		// TODO only sends one message at a time, remove the break once serial works again
@@ -140,7 +140,7 @@ std::string SerialCommunication::dequeueMessage() {
 	messages.pop();
 
 	//if (message.substr(0, 7) != "<speeds" && message.substr(0, 4) != "<adc") {
-		std::cout << "RECV: '" << message << "' [" << (messageCount - 1) << "]" << std::endl;
+	//	std::cout << "RECV: '" << message << "' [" << (messageCount - 1) << "]" << std::endl;
 	//}
 
 	return message;
