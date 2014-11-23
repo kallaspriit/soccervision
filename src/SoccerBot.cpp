@@ -613,7 +613,7 @@ void SoccerBot::setupCommunication() {
 				}
 
 // TODO remove test
-serialPortNumber = 14;
+//serialPortNumber = 14;
 
 				if (serialPortNumber == -1) {
 					throw new std::exception(std::string("com port containing '" + Config::serialDeviceContains + "' not found").c_str());

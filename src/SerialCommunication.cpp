@@ -25,7 +25,7 @@ SerialCommunication::~SerialCommunication() {
 SerialCommunication::PortList SerialCommunication::getPortList() {
 	PortList portList;
 
-	CEnumerateSerial::UsingSetupAPI1(portList.numbers, portList.names);
+	CEnumerateSerial::UsingSetupAPI2(portList.numbers, portList.names);
 
 	return portList;
 }
