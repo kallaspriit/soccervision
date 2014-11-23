@@ -88,6 +88,7 @@
 * - sometimes high level thinks the dribbler has ball while low-level does not agree
 * - drives through the opponent's goal at the start if the first ball on the left is close to it
 * - show apparent goal locations in dash
+* - calculate goal distance from center of goal moving down finding first green pixel
 *
 *
 * - make all parameters settable in the UI

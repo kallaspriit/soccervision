@@ -25,6 +25,22 @@ public:
 	virtual void close() = 0;
 	virtual void sync() {};
 
+	// temporary speeds hack
+	void setSpeeds(int FL, int FR, int RL, int RR, int dribbler) {
+		speedFL = FL;
+		speedFR = FR;
+		speedRL = RL;
+		speedRR = RR;
+		speedDribbler = dribbler;
+	}
+
+private:
+	int speedFL;
+	int speedFR;
+	int speedRL;
+	int speedRR;
+	int speedDribbler;
+
 };
 
 #endif // ABSTRACT_COMMUNICATION_H

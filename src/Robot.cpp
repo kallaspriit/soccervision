@@ -151,13 +151,22 @@ void Robot::step(float dt, Vision::Results* visionResults) {
 	coilgun->step(dt);
 	dribbler->step(dt);
 
-	com->send("speeds:"
+	com->setSpeeds(
+		(int)Math::round(wheelFL->getTargetSpeed()),
+		(int)Math::round(wheelFR->getTargetSpeed()),
+		(int)Math::round(wheelRL->getTargetSpeed()),
+		(int)Math::round(wheelRR->getTargetSpeed()),
+		(int)Math::round(dribbler->getTargetSpeed())
+	);
+
+	// TODO restore once serial is working correctly
+	/*com->send("speeds:"
 		+ Util::toString((int)Math::round(wheelFL->getTargetSpeed())) + ":"
 		+ Util::toString((int)Math::round(wheelFR->getTargetSpeed())) + ":"
 		+ Util::toString((int)Math::round(wheelRL->getTargetSpeed())) + ":"
 		+ Util::toString((int)Math::round(wheelRR->getTargetSpeed())) + ":"
 		+ Util::toString((int)Math::round(dribbler->getTargetSpeed()))
-	);
+	);*/
 
 	movement = odometer->calculateMovement(
 		wheelFL->getRealOmega(),
