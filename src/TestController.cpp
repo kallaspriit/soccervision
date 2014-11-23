@@ -764,7 +764,7 @@ float TestController::getTargetAngle(float goalX, float goalY, float ballX, floa
 }
 
 float TestController::getChipKickDistance(Vision::BallInWayMetric ballInWayMetric, float goalDistance) {
-	return Math::max(Math::min(ballInWayMetric.furthestBallInWayDistance + 1.0f, goalDistance - 0.8f), 0.75f);
+	return Math::max(Math::min(ballInWayMetric.furthestBallInWayDistance + 1.0f, goalDistance - 1.0f), 0.75f);
 }
 
 bool TestController::shouldAvoidBallInWay(Vision::BallInWayMetric ballInWayMetric, float goalDistance) {
