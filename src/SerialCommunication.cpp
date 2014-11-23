@@ -105,7 +105,7 @@ void SerialCommunication::sync() {
 
 	//message += "\n";
 
-	//std::cout << "SEND " << messageCount << " MESSAGES: " << message << std::endl;
+	std::cout << "SEND: " << message << " [" << sendQueue.size() << "]" << std::endl;
 
 	memcpy(requestBuffer, message.c_str(), message.size());
 	requestBuffer[message.size()] = 0;
@@ -140,7 +140,7 @@ std::string SerialCommunication::dequeueMessage() {
 	messages.pop();
 
 	//if (message.substr(0, 7) != "<speeds" && message.substr(0, 4) != "<adc") {
-	//	std::cout << "RECV: '" << message << "' [" << (messageCount - 1) << "]" << std::endl;
+		std::cout << "RECV: '" << message << "' [" << (messageCount - 1) << "]" << std::endl;
 	//}
 
 	return message;
