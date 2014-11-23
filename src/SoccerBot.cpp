@@ -953,8 +953,6 @@ void SoccerBot::handleCameraTranslatorCommand(Command::Parameters parameters) {
 void SoccerBot::handleCommunicationMessages() {
 	std::string message;
 
-	com->sync();
-
 	while (com->gotMessages()) {
 		message = com->dequeueMessage();
 
@@ -962,6 +960,8 @@ void SoccerBot::handleCommunicationMessages() {
 
 		handleCommunicationMessage(message);
 	}
+
+	com->sync();
 }
 
 void SoccerBot::handleCommunicationMessage(std::string message) {
