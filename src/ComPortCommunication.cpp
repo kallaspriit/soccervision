@@ -185,6 +185,8 @@ void* ComPortCommunication::run() {
 	std::cout << "! Running COM port thread" << std::endl;
 
 	while (opened) {
+		sync();
+
 		DWORD numRead;
 
 		BOOL ret = ReadFile(commHandle, readBuffer, MAX_SIZE - 1, &numRead, NULL);
