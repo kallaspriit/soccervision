@@ -1,4 +1,4 @@
-var port = 'COM9',
+var port = 'COM14',
 	baud = 115200,
 	//baud = 9600,
 	serialport = require('serialport'),
@@ -29,7 +29,7 @@ serialPort.on('open', function () {
 		//pendingRequests--;
 
 		if (cmd === '<idle>') {
-			send('0000000000000000000000000000000000000000000000000000000000000000-' + counter);
+			//send('0000000000000000000000000000000000000000000000000000000000000000-' + counter);
 			//send(counter);
 		} else {
 			pendingRequests--;
@@ -49,6 +49,8 @@ serialPort.on('open', function () {
 		send(counter++);*/
 		//send('11111');
 
+		send('adc');
+
 		counter++;
-	}, 10);
+	}, 16);
 });

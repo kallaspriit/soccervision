@@ -30,7 +30,8 @@ namespace Config {
 	const int communicationPort = 8042;
 
 	// serial device and baud
-	const std::string serialDeviceContains = "mbed";
+	//const std::string serialDeviceContains = "mbed";
+	const std::string serialDeviceContains = "Mbed Virtual";
 	//const int serialBaud = 230400;
 	const int serialBaud = 115200;
 	//const int serialBaud = 57600;
