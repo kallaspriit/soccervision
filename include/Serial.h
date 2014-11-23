@@ -120,7 +120,7 @@ public:
 	/**
 	* Read buffer maximum size
 	*/
-	static const int readBufferSize = 4096;
+	static const int readBufferSize = 10240;
 private:
 
 	/**
