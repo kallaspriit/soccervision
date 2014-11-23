@@ -155,7 +155,7 @@ void* SerialCommunication::run() {
 		sync();
 
 		//Util::sleep(16);
-		Util::sleep(32);
+		Util::sleep(50);
 	}
 
 	return NULL;
