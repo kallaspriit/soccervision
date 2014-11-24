@@ -96,7 +96,7 @@ public:
 	class FindBallState : public State {
 
 	public:
-		FindBallState(TestController* ai) : State(ai), searchDir(1.0f), lastSearchTime(-1.0), lastTurnTime(-1.0), timeSinceLastSearch(-1.0), nearBothFrames(0), wasSearchingRecently(false), focusedOnGoal(false), queuedApproachGoal(false) {}
+		FindBallState(TestController* ai) : State(ai), searchDir(1.0f), lastSearchTime(-1.0), lastTurnTime(-1.0), timeSinceLastSearch(-1.0), nearBothFrames(0), wasSearchingRecently(false), focusedOnGoal(false), queuedApproachGoal(false), useFetchBallDirectOnceFound(false) {}
 		void onEnter(Robot* robot, Parameters parameters);
 		void step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration, float combinedDuration);
 
@@ -110,6 +110,7 @@ public:
 		bool wasSearchingRecently;
 		bool focusedOnGoal;
 		bool queuedApproachGoal;
+		bool useFetchBallDirectOnceFound;
 
 	};
 

@@ -930,8 +930,7 @@ void TestController::FindBallState::onEnter(Robot* robot, Parameters parameters)
 	// accepts parameter to set which direction to start searching at
 	if (parameters.find("search-dir") != parameters.end()) {
 		searchDir = Util::toFloat(parameters["search-dir"]);
-	}
-	else {
+	} else {
 		// otherwise the search direction is based on last seen target goal angle to turn the shortest path
 		if (ai->lastTargetGoalAngle > 0.0f) {
 			searchDir = 1.0f;
@@ -939,6 +938,12 @@ void TestController::FindBallState::onEnter(Robot* robot, Parameters parameters)
 		else {
 			searchDir = -1.0f;
 		}
+	}
+
+	if (parameters.find("fetch-ball-direct-once-found") != parameters.end()) {
+		useFetchBallDirectOnceFound = true;
+	} else {
+		useFetchBallDirectOnceFound = false;
 	}
 
 	// reset runtime parameters
@@ -1046,14 +1051,12 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 
 		if (!ball->behind) {
 			// switch to fetching ball is ball found in front
-			if (goal != NULL) {
+			if (goal != NULL && !useFetchBallDirectOnceFound) {
 				ai->setState("fetch-ball-front");
-			}
-			else {
+			} else {
 				ai->setState("fetch-ball-direct");
 			}
-		}
-		else if (ai->lastTurnAroundTime == -1.0 || Util::duration(ai->lastTurnAroundTime) > minTurnBreak) {
+		} else if (ai->lastTurnAroundTime == -1.0 || Util::duration(ai->lastTurnAroundTime) > minTurnBreak) {
 			if (goal != NULL) {
 				// ball behind and target goal in front, fetch it from behind
 				ai->setState("fetch-ball-behind");
@@ -1277,10 +1280,13 @@ void TestController::FetchBallFrontState::step(float dt, Vision::Results* vision
 
 		// start searching the ball on the side that it was lost at
 		if (lastTargetAngle > 0.0f) {
-		parameters["search-dir"] = "1.0f";
+			parameters["search-dir"] = "1.0f";
 		} else {
-		parameters["search-dir"] = "-1.0f";
+			parameters["search-dir"] = "-1.0f";
 		}
+
+		// make it use fetch-ball-direct if finds ball
+		parameters["fetch-ball-direct-once-found"] = "1";
 
 		ai->setState("find-ball", parameters);
 
@@ -1822,6 +1828,9 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 			else {
 				parameters["search-dir"] = "-1.0f";
 			}
+
+			// make it use fetch-ball-direct if finds ball
+			parameters["fetch-ball-direct-once-found"] = "1";
 
 			ai->setState("find-ball", parameters);
 
