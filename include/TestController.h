@@ -174,6 +174,7 @@ public:
 	public:
 		FetchBallNearState(TestController* ai) : State(ai), enterDistance(-1.0f), enterVelocity(0.0f), smallestForwardSpeed(-1.0f), useChipKick(false), chipKickDistance(0.0f), ballInWayFrames(0) {}
 		void onEnter(Robot* robot, Parameters parameters);
+		void onExit(Robot* robot);
 		void step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration, float combinedDuration);
 
 	private:

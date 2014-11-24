@@ -1761,13 +1761,20 @@ void TestController::FetchBallNearState::onEnter(Robot* robot, Parameters parame
 	ballInWayFrames = 0;
 }
 
+void TestController::FetchBallNearState::onExit(Robot* robot) {
+	robot->coilgun->cancelKickOnceGotBall();
+	robot->dribbler->useNormalLimits();
+}
+
 void TestController::FetchBallNearState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration, float combinedDuration) {
 	bool isolated = false;
 	
 	robot->stop();
-	//robot->dribbler->useChipKickLimits();
+
+	// always use chip-kick limits and no dribbler
+	robot->dribbler->useChipKickLimits();
 	//robot->dribbler->useNormalLimits();
-	robot->dribbler->start();
+	//robot->dribbler->start();
 
 	/*if (robot->dribbler->gotBall()) {
 		robot->kick();
@@ -1809,11 +1816,21 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 		return;
 	}
 
-	bool isNearGoal = ai->wasNearGoalLately();
+	bool wasNearGoalLately = ai->wasNearGoalLately();
 
 	// avoid driving into goal so try to find a ball from the rear camera
-	if (isNearGoal) {
-		ai->setState("fetch-ball-behind");
+	if (wasNearGoalLately) {
+		ball = visionResults->getClosestBall(Dir::REAR);
+
+		// fetch ball from rear if available
+		if (ball != NULL) {
+			ai->setState("fetch-ball-behind");
+		} else {
+			// turn by 90 degrees and hope something good better shows up
+			robot->turnBy(Math::degToRad(90.0f));
+
+			ai->setState("fetch-ball-behind");
+		}
 
 		return;
 	}
@@ -1842,13 +1859,13 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	}
 
 	if (useChipKick) {
-		robot->dribbler->useChipKickLimits();
+		//robot->dribbler->useChipKickLimits();
 		robot->coilgun->kickOnceGotBall(0, 0, chipKickDistance, 0);
 	} else {
 		// reduce kick strength when goal is close
 		int kickStrength = (int)Math::map(goal->distance, 1.0f, 4.0f, (float)Config::robotDefaultKickStrength / 2.0f, (float)Config::robotDefaultKickStrength);
 
-		robot->dribbler->useNormalLimits();
+		//robot->dribbler->useNormalLimits();
 		robot->coilgun->kickOnceGotBall(kickStrength, 0, 0, 0);
 	}
 
@@ -1908,7 +1925,7 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	ai->dbg("ball->distanceX", ball->distanceX);
 	ai->dbg("useChipKick", useChipKick);
 	ai->dbg("isBallInWay", isBallInWay);
-	ai->dbg("isNearGoal", isNearGoal);
+	ai->dbg("wasNearGoalLately", wasNearGoalLately);
 	ai->dbg("ballInWayFrames", ballInWayFrames);
 	ai->dbg("chipKickDistance", chipKickDistance);
 }
