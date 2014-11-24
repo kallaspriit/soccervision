@@ -1811,6 +1811,13 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 
 	bool isNearGoal = ai->wasNearGoalLately();
 
+	// avoid driving into goal so try to find a ball from the rear camera
+	if (isNearGoal) {
+		ai->setState("fetch-ball-behind");
+
+		return;
+	}
+
 	Vision::BallInWayMetric ballInWayMetric;
 	float ballNearDistance = 0.4f;
 	bool isBallInWay = false;
