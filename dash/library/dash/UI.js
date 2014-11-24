@@ -645,10 +645,16 @@ Dash.UI.prototype.initControls = function() {
 	$('#frame-img, #frame-classification, #frame-canvas').bind('contextmenu', function(e) {
 		e.preventDefault();
 	});
+
+	$('#camera-opacity').on('input', function() {
+		$('#frame-classification').css('opacity', $(this).val() / 100);
+	});
 	
 	$('#frame-img, #frame-classification, #frame-canvas').mousedown(function(e) {
-		var x = e.offsetX % 640 * 2, // times two since the image is half size
-			y = e.offsetY * 2,
+		var sizeMult = 1,
+			//sizeMult = 2,
+			x = e.offsetX % (1280 / sizeMult) * sizeMult, // times two since the image is half size
+			y = e.offsetY * sizeMult,
 			mode = 2,
 			color = $('#threshold-class').val(),
 			brush = $('#threshold-brush').val(),

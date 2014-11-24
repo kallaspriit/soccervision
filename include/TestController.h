@@ -288,6 +288,7 @@ public:
 	float getChipKickDistance(Vision::BallInWayMetric ballInWayMetric, float goalDistance);
 	bool shouldAvoidBallInWay(Vision::BallInWayMetric ballInWayMetric, float goalDistance);
 	bool shouldManeuverBallInWay(Vision::BallInWayMetric ballInWayMetric, float goalDistance, bool isLowVoltage);
+	bool isNearGoal(float distanceThreshold = 0.2f);
 
     void step(float dt, Vision::Results* visionResults);
 	Side getTargetSide() { return targetSide; }

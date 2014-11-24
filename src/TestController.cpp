@@ -82,6 +82,7 @@
 * + should prefer balls from the rear more often
 * + sometimes high level thinks the dribbler has ball while low-level does not agree
 * - fetch ball direct thinks it's near a line too often and is then very slow
+* - fetch ball near chip kick dribbler sometimes is still in the way
 * - dribbler thinks it's got the ball some time after bdkick reported kicked ball, should not
 * - improve fetch-ball-near - could be faster and mess up less (still pushes with edge)
 * - experiment with getClosesBall based on distanceY not normal distance
@@ -803,6 +804,19 @@ bool TestController::shouldManeuverBallInWay(Vision::BallInWayMetric ballInWayMe
 	return isLowVoltage
 		|| goalDistance < 1.0f
 		|| Math::abs(ballInWayMetric.furthestBallInWayDistance - goalDistance) < 1.0f;
+}
+
+bool TestController::isNearGoal(float distanceThreshold) {
+	float blackThreshold = distanceThreshold;
+	float whiteThreshold = distanceThreshold + 0.05f;
+	float goalThreshold = distanceThreshold + 0.3f;
+
+	return whiteDistance.center < whiteThreshold
+		&& blackDistance.center < distanceThreshold
+		&& (
+			(blueGoalDistance > 0 && blueGoalDistance < goalThreshold)
+			|| (yellowGoalDistance > 0 && yellowGoalDistance < goalThreshold)
+		);
 }
 
 void TestController::ManualControlState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration, float combinedDuration) {
@@ -1777,6 +1791,8 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 		return;
 	}
 
+	bool isNearGoal = ai->isNearGoal();
+
 	Vision::BallInWayMetric ballInWayMetric;
 	float ballNearDistance = 0.4f;
 	bool isBallInWay = false;
@@ -1867,6 +1883,7 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	ai->dbg("ball->distanceX", ball->distanceX);
 	ai->dbg("useChipKick", useChipKick);
 	ai->dbg("isBallInWay", isBallInWay);
+	ai->dbg("isNearGoal", isNearGoal);
 	ai->dbg("ballInWayFrames", ballInWayFrames);
 	ai->dbg("chipKickDistance", chipKickDistance);
 }

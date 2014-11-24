@@ -161,7 +161,8 @@ A:hover {
 	overflow: visible;
 	z-index: 100;
 }
-#frame-img {
+#frame-img,
+#frame-classification {
 	position: absolute;
 	left: 0;
 	top: 0;
@@ -170,13 +171,9 @@ A:hover {
 	z-index: 1;
 }
 #frame-classification {
-	position: absolute;
 	left: 640px;
-	top: 0;
-	width: 640px;
-	height: 512px;
-	z-index: 1;
 }
+
 #frame-canvas {
 	position: absolute;
 	left: 0;
@@ -185,10 +182,43 @@ A:hover {
 	height: 512px;
 	z-index: 2;
 }
+
+/* overlay */
+#frame-img,
+#frame-classification {
+	width: 1280px;
+	height: 1024px;
+}
+#frame-classification {
+	left: 0;
+	opacity: 0.8;
+}
+#camera-view {
+	width: 1280px;
+	height: 1024px;
+	top: 110px;
+}
+#frame-canvas {
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 1280px;
+	height: 1024px;
+	z-index: 2;
+}
+
+
 #camera-view-controls {
 	position: absolute;
 	left: 0;
 	top: -30px;
+	width: 100%;
+}
+#camera-opacity {
+	position: absolute;
+	right: 0;
+	top: 0;
+	width: 200px;
 }
 #blobber-view {
 	width: 1280px;

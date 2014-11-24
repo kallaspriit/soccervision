@@ -34,6 +34,8 @@ Dash.FrameCanvas.prototype.init = function() {
 		$('#threshold-brush OPTION:eq(' + newIndex + ')').attr('selected', 'selected');
 
 		self.render(e.originalEvent.offsetX, e.originalEvent.offsetY);
+
+		e.preventDefault();
 	});
 };
 
