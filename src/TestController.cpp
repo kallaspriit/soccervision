@@ -80,12 +80,16 @@
 * + debug long dt between frames
 * + search from front at the very beginning not to go after a ball seen on the operators hand
 * + should prefer balls from the rear more often
+* + sometimes high level thinks the dribbler has ball while low-level does not agree
 * - fetch ball direct thinks it's near a line too often and is then very slow
 * - dribbler thinks it's got the ball some time after bdkick reported kicked ball, should not
 * - improve fetch-ball-near - could be faster and mess up less (still pushes with edge)
 * - experiment with getClosesBall based on distanceY not normal distance
+* - avoid driving into the goal (watch for gree-white-black distances)
 * - fetch first ball using fetch-ball-direct (if near own goal)?
-* - sometimes high level thinks the dribbler has ball while low-level does not agree
+* - sometimes does not choose balls from behind?
+* - prefer balls from behind when front is near a line and sees opponent goal? would spend less time on balls outside
+* - perhaps should calculate main coilgun duration to get the ball into the goal but not kick too hard
 * - drives through the opponent's goal at the start if the first ball on the left is close to it
 * - show apparent goal locations in dash
 * - calculate goal distance from center of goal moving down finding first green pixel
@@ -1800,8 +1804,11 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 		robot->dribbler->useChipKickLimits();
 		robot->coilgun->kickOnceGotBall(0, 0, chipKickDistance, 0);
 	} else {
+		// reduce kick strength when goal is close
+		float kickStrength = Math::map(goal->distance, 1.0f, 4.0f, Config::robotDefaultKickStrength / 2.0f, Config::robotDefaultKickStrength);
+
 		robot->dribbler->useNormalLimits();
-		robot->coilgun->kickOnceGotBall(Config::robotDefaultKickStrength, 0, 0, 0);
+		robot->coilgun->kickOnceGotBall(kickStrength, 0, 0, 0);
 	}
 
 	// configuration parameters
