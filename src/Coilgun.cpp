@@ -110,9 +110,9 @@ void Coilgun::cancelKickOnceGotBall() {
 }
 
 void Coilgun::step(float dt) {
-	/*if (Util::duration(lastChargeRequestTime) >= 1.0) {
+	if (voltage < 20.0f && Util::duration(lastChargeRequestTime) >= 1.0) {
 		charge();
-	}*/
+	}
 
 	timeSinceLastVoltageReading += dt;
 
