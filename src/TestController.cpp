@@ -994,10 +994,9 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 	}*/
 
 	// search from front at the very beginning not to go after a ball seen on the operators hand
-	// TODO add back once tested
-	/*if (totalDuration < 1.5f) {
+	if (totalDuration < 1.5f) {
 		ballSearchDir = Dir::FRONT;
-	}*/
+	}
 
 	bool preferRear = false;
 
