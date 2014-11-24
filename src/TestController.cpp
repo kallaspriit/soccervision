@@ -623,8 +623,10 @@ void TestController::setLastBall(Object* ball) {
 }
 
 Object* TestController::getLastBall(Dir dir) {
+	float ghostBallLifetime = 0.016f * 2.0f; // couple of frames
+
 	// only return last seen ball if its fresh enough
-	if (lastBall == NULL || lastBallTime == -1.0 || Util::duration(lastBallTime) > 0.25) {
+	if (lastBall == NULL || lastBallTime == -1.0 || Util::duration(lastBallTime) > ghostBallLifetime) {
 		return NULL;
 	}
 
