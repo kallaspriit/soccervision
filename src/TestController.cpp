@@ -812,8 +812,8 @@ bool TestController::isNearGoal(float distanceThreshold) {
 	float whiteThreshold = distanceThreshold + 0.05f;
 	float goalThreshold = distanceThreshold + 0.3f;
 
-	return (whiteDistance.center > 0 && whiteDistance.center < whiteThreshold)
-		&& (blackDistance.center > 0 && blackDistance.center < distanceThreshold)
+	return (whiteDistance.min > 0 && whiteDistance.min < whiteThreshold)
+		&& (blackDistance.min > 0 && blackDistance.min < distanceThreshold)
 		&& (
 			(blueGoalDistance > 0 && blueGoalDistance < goalThreshold)
 			|| (yellowGoalDistance > 0 && yellowGoalDistance < goalThreshold)
