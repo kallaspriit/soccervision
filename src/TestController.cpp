@@ -1821,10 +1821,10 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 		robot->coilgun->kickOnceGotBall(0, 0, chipKickDistance, 0);
 	} else {
 		// reduce kick strength when goal is close
-		float kickStrength = Math::map(goal->distance, 1.0f, 4.0f, Config::robotDefaultKickStrength / 2.0f, Config::robotDefaultKickStrength);
+		float kickStrength = Math::map(goal->distance, 1.0f, 4.0f, (float)Config::robotDefaultKickStrength / 2.0f, (float)Config::robotDefaultKickStrength);
 
 		robot->dribbler->useNormalLimits();
-		robot->coilgun->kickOnceGotBall(kickStrength, 0, 0, 0);
+		robot->coilgun->kickOnceGotBall((int)kickStrength, 0, 0, 0);
 	}
 
 	// configuration parameters
