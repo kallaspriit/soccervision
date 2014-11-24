@@ -121,7 +121,7 @@
 * - xxx
 */
 
-TestController::TestController(Robot* robot, AbstractCommunication* com) : BaseAI(robot, com), targetSide(Side::BLUE), manualSpeedX(0.0f), manualSpeedY(0.0f), manualOmega(0.0f), manualDribblerSpeed(0), manualKickStrength(0), blueGoalDistance(0.0f), yellowGoalDistance(0.0f), lastCommandTime(-1.0), lastBallTime(-1.0), lastNearLineTime(-1.0), lastInCornerTime(-1.0), lastTargetGoalAngle(0.0f), lastBall(NULL), lastTurnAroundTime(-1.0), lastClosestGoalDistance(-1.0f), lastTargetGoalDistance(-1.0f), framesRobotOutFront(0), framesRobotOutRear(0), isRobotOutFront(false), isRobotOutRear(false), isNearLine(false), isInCorner(false), inCornerFrames(0), nearLineFrames(0), visibleBallCount(0) {
+TestController::TestController(Robot* robot, AbstractCommunication* com) : BaseAI(robot, com), targetSide(Side::BLUE), manualSpeedX(0.0f), manualSpeedY(0.0f), manualOmega(0.0f), manualDribblerSpeed(0), manualKickStrength(0), blueGoalDistance(0.0f), yellowGoalDistance(0.0f), lastCommandTime(-1.0), lastBallTime(-1.0), lastNearLineTime(-1.0), lastNearGoalTime(-1.0), lastInCornerTime(-1.0), lastTargetGoalAngle(0.0f), lastBall(NULL), lastTurnAroundTime(-1.0), lastClosestGoalDistance(-1.0f), lastTargetGoalDistance(-1.0f), framesRobotOutFront(0), framesRobotOutRear(0), isRobotOutFront(false), isRobotOutRear(false), isNearLine(false), isInCorner(false), inCornerFrames(0), nearLineFrames(0), nearGoalFrames(0), visibleBallCount(0) {
 	setupStates();
 
 	speedMultiplier = 1.0f;
@@ -436,6 +436,7 @@ void TestController::updateVisionInfo(Vision::Results* visionResults) {
 
 	// store whether robot is near line or in corner
 	isNearLine = isRobotNearLine(visionResults);
+	isNearGoal = isRobotNearGoal();
 	isInCorner = isRobotInCorner(visionResults);
 
 	// near line detection
@@ -449,6 +450,19 @@ void TestController::updateVisionInfo(Vision::Results* visionResults) {
 
 	if (nearLineFrames >= 3) {
 		lastNearLineTime = Util::millitime();
+	}
+
+	// near goal detection
+	int robotNearGoalFramesThreshold = 3;
+
+	if (isNearGoal) {
+		nearGoalFrames = (int)Math::min((float)(nearGoalFrames + 1), (float)robotNearGoalFramesThreshold);
+	} else {
+		nearGoalFrames = (int)Math::max((float)(nearGoalFrames - 1), 0);
+	}
+
+	if (nearGoalFrames >= 3) {
+		lastNearGoalTime = Util::millitime();
 	}
 	
 	// in corner detection
@@ -571,9 +585,9 @@ bool TestController::isRobotInCorner(Vision::Results* visionResults) {
 	return false;
 };
 
-bool TestController::isRobotNearGoal(float threshold) {
+/*bool TestController::isRobotNearGoal(float threshold) {
 	return lastClosestGoalDistance != -1.0f && lastClosestGoalDistance < threshold;
-}
+}*/
 
 bool TestController::isRobotNearTargetGoal(float threshold) {
 	return lastTargetGoalDistance != -1.0f && lastTargetGoalDistance < threshold;
@@ -583,6 +597,9 @@ bool TestController::wasNearLineLately(double threshold) {
 	return lastNearLineTime != -1.0 && Util::duration(lastNearLineTime) < threshold;
 }
 
+bool TestController::wasNearGoalLately(double threshold) {
+	return lastNearGoalTime != -1.0 && Util::duration(lastNearGoalTime) < threshold;
+}
 bool TestController::wasInCornerLately(double threshold) {
 	return lastInCornerTime != -1.0 && Util::duration(lastInCornerTime) < threshold;
 }
@@ -659,7 +676,7 @@ std::string TestController::getJSON() {
 	stream << "\"isRobotOutFront\": " << (isRobotOutFront ? "true" : "false") << ",";
 	stream << "\"isRobotOutRear\": " << (isRobotOutRear ? "true" : "false") << ",";
 	stream << "\"isInCorner\": " << (isInCorner ? "true" : "false") << ",";
-	stream << "\"isNearGoal\": " << (isNearGoal() ? "true" : "false") << ",";
+	stream << "\"isNearGoal\": " << (isNearGoal ? "true" : "false") << ",";
 	stream << "\"visibleBallCount\": " << visibleBallCount << ",";
 	stream << "\"wasInCornerLately\": " << (wasInCornerLately() ? "\"true: " + Util::toString(Util::duration(lastInCornerTime)) + "\"" : "false") << ",";
 	stream << "\"isNearLine\": " << (isNearLine ? "true" : "false") << ",";
@@ -807,7 +824,7 @@ bool TestController::shouldManeuverBallInWay(Vision::BallInWayMetric ballInWayMe
 		|| Math::abs(ballInWayMetric.furthestBallInWayDistance - goalDistance) < 1.0f;
 }
 
-bool TestController::isNearGoal(float distanceThreshold) {
+bool TestController::isRobotNearGoal(float distanceThreshold) {
 	float whiteThreshold = distanceThreshold;
 	float blackThreshold = distanceThreshold + 0.05f; // black is further away
 	float goalThreshold = distanceThreshold + 0.3f; // goal can be seen even further at some angles
@@ -1792,7 +1809,7 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 		return;
 	}
 
-	bool isNearGoal = ai->isNearGoal();
+	bool isNearGoal = ai->wasNearGoalLately();
 
 	Vision::BallInWayMetric ballInWayMetric;
 	float ballNearDistance = 0.4f;

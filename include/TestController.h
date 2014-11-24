@@ -288,7 +288,6 @@ public:
 	float getChipKickDistance(Vision::BallInWayMetric ballInWayMetric, float goalDistance);
 	bool shouldAvoidBallInWay(Vision::BallInWayMetric ballInWayMetric, float goalDistance);
 	bool shouldManeuverBallInWay(Vision::BallInWayMetric ballInWayMetric, float goalDistance, bool isLowVoltage);
-	bool isNearGoal(float distanceThreshold = 0.2f);
 
     void step(float dt, Vision::Results* visionResults);
 	Side getTargetSide() { return targetSide; }
@@ -304,9 +303,11 @@ private:
 	void updateVisionInfo(Vision::Results* visionResults);
 	bool isRobotNearLine(Vision::Results* visionResults, bool ignoreCenterSample = false);
 	bool isRobotInCorner(Vision::Results* visionResults);
-	bool isRobotNearGoal(float threshold = 0.8f);
+	//bool isRobotNearGoal(float threshold = 0.8f);
+	bool isRobotNearGoal(float distanceThreshold = 0.2f);
 	bool isRobotNearTargetGoal(float threshold = 2.0f);
 	bool wasNearLineLately(double threshold = 1.5);
+	bool wasNearGoalLately(double threshold = 1.0);
 	bool wasInCornerLately(double threshold = 1.5);
 	void resetLastBall();
 	void setLastBall(Object* ball);
@@ -339,14 +340,17 @@ private:
 	bool isRobotOutFront;
 	bool isRobotOutRear;
 	bool isNearLine;
+	bool isNearGoal;
 	bool isInCorner;
 	int inCornerFrames;
 	int nearLineFrames;
+	int nearGoalFrames;
 	int visibleBallCount;
 
 	double lastCommandTime;
 	double lastBallTime;
 	double lastNearLineTime;
+	double lastNearGoalTime;
 	double lastInCornerTime;
 
 	Object* lastBall;
