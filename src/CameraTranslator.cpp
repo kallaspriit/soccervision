@@ -327,7 +327,7 @@ Math::PointList CameraTranslator::getPointsBetween(float x1, float y1, float x2,
 	float dx = x2 - x1;
 	float dy = y2 - y1;
 	float a = dy / dx;
-	float stepX = Math::sqrt(Math::pow(step, 2) / (1 + Math::pow(a, 2)));
+	float stepX = step * Math::sqrt(1 / (1 + Math::pow(a, 2))) * Math::sign(dx);
 	float stepY = a * stepX;
 	float posX = x1, posY = y1;
 
