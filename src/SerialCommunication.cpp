@@ -47,7 +47,7 @@ void SerialCommunication::sync() {
 	int messageCount = sendQueue.size();
 
 	// TODO sends speeds only when the queue is empty
-	if (sendQueue.size() == 0 && !speedsSent) {
+	/*if (sendQueue.size() == 0 && !speedsSent) {
 		sendQueue.push("speeds:"
 			+ Util::toString(speedFL) + ":"
 			+ Util::toString(speedFR) + ":"
@@ -57,7 +57,7 @@ void SerialCommunication::sync() {
 		);
 
 		speedsSent = true;
-	}
+	}*/
 
 	if (sendQueue.size() == 0) {
 		return;
@@ -75,7 +75,7 @@ void SerialCommunication::sync() {
 		//}
 
 		// TODO only sends one message at a time, remove the break once serial works again
-		break;
+		//break;
 	}
 
 	if (message.size() >= MAX_SIZE) {
