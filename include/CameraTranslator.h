@@ -1,6 +1,8 @@
 #ifndef CAMERATRANSLATOR_H
 #define CAMERATRANSLATOR_H
 
+#include "Maths.h"
+
 #include <math.h>
 #include <string>
 #include <vector>
@@ -73,6 +75,7 @@ public:
 	CameraPosition getMappingPosition(int x, int y, CameraMap& mapX, CameraMap& mapY);
 	//CameraPosition getAvgMappingPosition(int x, int y, CameraMap& mapX, CameraMap& mapY);
 	CameraPositionSet CameraTranslator::getSpiral(int width, int height);
+	Math::PointList getPointsBetween(float x1, float y1, float x2, float y2, float distanceStepMeters);
 	std::string getJSON();
 
 	float A;

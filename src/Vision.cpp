@@ -718,7 +718,7 @@ float Vision::getSurroundMetric(int x, int y, int radius, std::vector<std::strin
 }
 
 Vision::PathMetric Vision::getPathMetric(int x1, int y1, int x2, int y2, std::vector<std::string> validColors, std::string requiredColor) {
-	x1 = (int)Math::limit((float)x1, 0.0f, (float)Config::cameraWidth);
+	/*x1 = (int)Math::limit((float)x1, 0.0f, (float)Config::cameraWidth);
 	x2 = (int)Math::limit((float)x2, 0.0f, (float)Config::cameraWidth);
 	y1 = (int)Math::limit((float)y1, 0.0f, (float)Config::cameraHeight);
 	y2 = (int)Math::limit((float)y2, 0.0f, (float)Config::cameraHeight);
@@ -899,7 +899,7 @@ Vision::PathMetric Vision::getPathMetric(int x1, int y1, int x2, int y2, std::ve
                 }
             }
         }
-    }
+    }*/
 
     int matches = 0;
 	int blacksInRow = 0;
@@ -913,20 +913,42 @@ Vision::PathMetric Vision::getPathMetric(int x1, int y1, int x2, int y2, std::ve
 	int previousBlack = 0;
 	bool crossingGreenWhiteBlackGreen = false;
 	bool tooManyBlacksInRow = false;
+	int invalidSpree = 0;
+	int longestInvalidSpree = 0;
 	std::string firstColor = "";
 	std::string lastColor = "";
 
-	int start = originalX1 < originalX2 ? 0 : senseCounter - 1;
-	int step = originalX1 < originalX2 ? 1 : -1;
+	//int start = originalX1 < originalX2 ? 0 : senseCounter - 1;
+	//int step = originalX1 < originalX2 ? 1 : -1;
 	int sampleCount = 0;
 	float distanceStep = 0.05f;
-	float distance1, distance2;
+	//float distance1, distance2;
 
-    for (int i = start; (originalX1 < originalX2 ? i < senseCounter : i >= 0); i += step) {
-        x = senseX[i];
-        y = senseY[i];
+	CameraTranslator::WorldPosition worldPos1 = cameraTranslator->getWorldPosition(x1, y1);
+	CameraTranslator::WorldPosition worldPos2 = cameraTranslator->getWorldPosition(x2, y2);
 
-		if (y > Config::cameraHeight / 4) {
+	float worldPosX1 = worldPos1.dx;
+	float worldPosY1 = worldPos1.dy;
+	float worldPosX2 = worldPos2.dx;
+	float worldPosY2 = worldPos2.dy;
+
+	Math::PointList sensePointsWorld = cameraTranslator->getPointsBetween(worldPosX1, worldPosY1, worldPosX2, worldPosY2, 0.05f);
+
+	int x, y;
+
+	//for (int i = start; (originalX1 < originalX2 ? i < senseCounter : i >= 0); i += step) {
+	for (Math::PointListIt it = sensePointsWorld.begin(); it != sensePointsWorld.end(); it++) {
+		Math::Point worldPoint = *it;
+
+		CameraTranslator::CameraPosition camPos = cameraTranslator->getCameraPosition(worldPoint.x, worldPoint.y);
+   
+		x = camPos.x;
+		y = camPos.y;
+
+        //x = senseX[i];
+        //y = senseY[i];
+
+		/*if (y > Config::cameraHeight / 4) {
 			// sample less points near by and more in the distance
 			distance1 = getDistance(x, y).straight;
 			distance2 = Math::round(distance1 / distanceStep, 0) * distanceStep;
@@ -934,7 +956,7 @@ Vision::PathMetric Vision::getPathMetric(int x1, int y1, int x2, int y2, std::ve
 			if (Math::abs(distance1 - distance2) > distanceStep / 5.0f) {
 				continue;
 			}
-		}
+		}*/
 
 		sampleCount++;
 
@@ -1039,7 +1061,8 @@ Vision::PathMetric Vision::getPathMetric(int x1, int y1, int x2, int y2, std::ve
 		crossingGreenWhiteBlackGreen = true;
 	}*/
 
-	if (senseCounter < 20) {
+	//if (senseCounter < 20) {
+	if (sensePointsWorld.size() < 20) {
 		return PathMetric(1.0f, 0, true, false);
 	}
 
