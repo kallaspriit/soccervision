@@ -439,6 +439,7 @@ Dash.Renderer.prototype.renderState = function(state) {
 	state.robot.coilGraph = {
 		stalled: state.robot.coilgun.isLowVoltage,
 		targetOmega: graphVoltage,
+		filteredTargetOmega: graphVoltage,
 		realOmega: graphVoltage,
 		ref: 0.0025,
 		drawLines: false

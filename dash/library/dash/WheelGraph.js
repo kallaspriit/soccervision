@@ -68,7 +68,8 @@ Dash.WheelGraph.prototype.render = function(state, name) {
 	
 	while (currentState != null && x >= 0) {
 		info = currentState.robot[name];
-		targetOmega = parseFloat(info.targetOmega);
+		//targetOmega = parseFloat(info.targetOmega);
+		targetOmega = parseFloat(info.filteredTargetOmega);
 		y = targetOmega * multiplier + this.height / 2;
 
 		if (first) {
