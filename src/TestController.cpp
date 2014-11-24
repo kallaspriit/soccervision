@@ -1273,7 +1273,7 @@ void TestController::FetchBallFrontState::step(float dt, Vision::Results* vision
 	// can't see the ball any more, switch to searching for it
 	if (ball == NULL) {
 		// can start keep losing the ball and turning to it
-		/*Parameters parameters;
+		Parameters parameters;
 
 		// start searching the ball on the side that it was lost at
 		if (lastTargetAngle > 0.0f) {
@@ -1282,9 +1282,9 @@ void TestController::FetchBallFrontState::step(float dt, Vision::Results* vision
 		parameters["search-dir"] = "-1.0f";
 		}
 
-		ai->setState("find-ball", parameters);*/
+		ai->setState("find-ball", parameters);
 
-		ai->setState("find-ball");
+		//ai->setState("find-ball");
 
 		return;
 	}
