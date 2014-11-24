@@ -37,12 +37,16 @@ void EthernetCommunication::send(std::string message) {
 		std::string queuedMessage = queuedMessages.front();
 		queuedMessages.pop();
 
+		//if (queuedMessage.substr(0, 6) != "speeds" && queuedMessage.substr(0, 3) != "adc") {
+			std::cout << "SEND FROM QUEUE: " << queuedMessage << " [" << queuedMessages.size() << "]" << std::endl;
+		//}
+
 		send(queuedMessage);
 	}
 
 	if (message.substr(0, 6) != "speeds" && message.substr(0, 6) != "charge") {
 		// incoming message
-		//std::cout << "> " << message << std::endl;
+		std::cout << "SEND: " << message << std::endl;
 	}
 
 	message += "\n";
@@ -148,10 +152,10 @@ void EthernetCommunication::onReceive(const boost::system::error_code& error, si
 		std::string msg = std::string(receiveBuffer, bytesReceived);
 		//std::string msg = std::string(receiveBuffer.data(), bytesReceived);
 
-		if (msg.substr(0, 7) != "<speeds") {
+		//if (msg.substr(0, 7) != "<speeds") {
 			// outgoing message
-			//std::cout << "< " << msg << ", bytesReceived: " << bytesReceived << std::endl;
-		}
+			std::cout << "RECV: " << msg << ", bytesReceived: " << bytesReceived << std::endl;
+		//}
 
 		boost::mutex::scoped_lock lock(messagesMutex);
 		messages.push(msg);
