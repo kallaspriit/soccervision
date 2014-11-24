@@ -1035,6 +1035,7 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 	ai->dbg("goalVisible", goal != NULL);
 	ai->dbg("searchDir", searchDir);
 	ai->dbg("focusedOnGoal", focusedOnGoal);
+	ai->dbg("useFetchBallDirectOnceFound", useFetchBallDirectOnceFound);
 
 	double minTurnBreak = 2.0;
 	float searchPeriod = 2.0f;
