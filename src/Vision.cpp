@@ -351,7 +351,7 @@ bool Vision::isValidGoal(Object* goal, Side side) {
 		//std::cout << "@ GOAL NOT TOP ENOUGH: " << (goal->y - goal->height / 2) << " VS " << Config::goalTopMaxY << std::endl;
 
 		// TODO restore in some form
-		//return false;
+		return false;
 	}
 
 	/*if (undersideMetric < Config::goalMinUndersideMetric) {

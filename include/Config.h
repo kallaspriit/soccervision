@@ -84,7 +84,8 @@ namespace Config {
 	const int goalCertainArea = 10000;
 
 	// if a goal starts lower than this value then it's not considered valid
-	const int goalTopMaxY = 10;
+	//const int goalTopMaxY = 10;
+	const int goalTopMaxY = 165; // the wide-angle lens is very distorted..
 
 	// goal top corners should be at least this far away
 	// TODO this should be higher to be helpful but causes false-positives
