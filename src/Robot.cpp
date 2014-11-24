@@ -217,25 +217,29 @@ void Robot::step(float dt, Vision::Results* visionResults) {
 
     stream << "\"wheelFL\": {";
 	stream << "\"stalled\":" << (wheelFL->isStalled() ? "true" : "false") << ",";
-    stream << "\"targetOmega\":" << wheelFL->getTargetOmega() << ",";
+	stream << "\"targetOmega\":" << wheelFL->getTargetOmega() << ",";
+	stream << "\"filteredTargetOmega\":" << wheelFL->getFilteredTargetOmega() << ",";
     stream << "\"realOmega\":" << wheelFL->getRealOmega();
     stream << "},";
 
     stream << "\"wheelFR\": {";
 	stream << "\"stalled\":" << (wheelFR->isStalled() ? "true" : "false") << ",";
     stream << "\"targetOmega\":" << wheelFR->getTargetOmega() << ",";
+	stream << "\"filteredTargetOmega\":" << wheelFR->getFilteredTargetOmega() << ",";
     stream << "\"realOmega\":" << wheelFR->getRealOmega();
     stream << "},";
 
     stream << "\"wheelRL\": {";
 	stream << "\"stalled\":" << (wheelRL->isStalled() ? "true" : "false") << ",";
     stream << "\"targetOmega\":" << wheelRL->getTargetOmega() << ",";
+	stream << "\"filteredTargetOmega\":" << wheelRL->getFilteredTargetOmega() << ",";
     stream << "\"realOmega\":" << wheelRL->getRealOmega();
     stream << "},";
 
     stream << "\"wheelRR\": {";
 	stream << "\"stalled\":" << (wheelRR->isStalled() ? "true" : "false") << ",";
     stream << "\"targetOmega\":" << wheelRR->getTargetOmega() << ",";
+	stream << "\"filteredTargetOmega\":" << wheelRR->getFilteredTargetOmega() << ",";
     stream << "\"realOmega\":" << wheelRR->getRealOmega();
     stream << "},";
 

@@ -12,7 +12,8 @@ public:
 
     virtual void setTargetOmega(float omega);
     virtual void setTargetSpeed(int speed);
-    virtual float getTargetOmega() const;
+	virtual float getTargetOmega() const;
+	virtual float getFilteredTargetOmega() const;
     virtual float getTargetSpeed() const;
     virtual float getRealOmega() const;
 	virtual bool isStalled();
@@ -27,6 +28,7 @@ public:
 protected:
     int id;
     float targetOmega;
+	float filteredTargetOmega;
     float realOmega;
 	int stallCounter;
 
