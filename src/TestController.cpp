@@ -1458,7 +1458,7 @@ void TestController::FetchBallDirectState::step(float dt, Vision::Results* visio
 	float targetApproachSpeed = 3.5f * ai->speedMultiplier;
 	float minApproachSpeed = 0.3f;
 	float accelerateAcceleration = 2.8f * ai->speedMultiplier;
-	float brakeAcceleration = 2.5f * ai->speedMultiplier;
+	float brakeAcceleration = 2.0f * ai->speedMultiplier;
 	float nearLineSpeed = 0.4f;
 	float nearBallDistance = 0.1f;
 	float realSpeed = robot->getVelocity();
@@ -1760,6 +1760,7 @@ void TestController::FetchBallNearState::onEnter(Robot* robot, Parameters parame
 	smallestForwardSpeed = -1.0f;
 	useChipKick = false;
 	chipKickDistance = 0.0f;
+	lastBallAngle = 0.0f;
 	ballInWayFrames = 0;
 }
 
@@ -1812,11 +1813,25 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	// switch to searching for ball if not visible any more
 	if (ball == NULL) {
 		if (isolated != true) {
-			ai->setState("find-ball");
+			Parameters parameters;
+
+			// make sure to search in the dir the ball was last seen
+			if (lastBallAngle > 0.0f) {
+				parameters["search-dir"] = "1.0f";
+			}
+			else {
+				parameters["search-dir"] = "-1.0f";
+			}
+
+			ai->setState("find-ball", parameters);
+
+			//ai->setState("find-ball");
 		}
 
 		return;
 	}
+
+	lastBallAngle = ball->angle;
 
 	bool wasNearGoalLately = ai->wasNearGoalLately();
 

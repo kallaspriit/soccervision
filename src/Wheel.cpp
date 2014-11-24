@@ -47,7 +47,7 @@ bool Wheel::isStalled() {
 }
 
 void Wheel::step(float dt) {
-	float maxAccelerationPerSecond = Math::PI * 40.0f;
+	float maxAccelerationPerSecond = Math::PI * 60.0f;
 
 	if (filteredTargetOmega < targetOmega) {
 		filteredTargetOmega = Math::min(filteredTargetOmega + maxAccelerationPerSecond * dt, targetOmega);
