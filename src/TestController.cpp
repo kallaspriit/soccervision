@@ -808,9 +808,9 @@ bool TestController::shouldManeuverBallInWay(Vision::BallInWayMetric ballInWayMe
 }
 
 bool TestController::isNearGoal(float distanceThreshold) {
-	float blackThreshold = distanceThreshold;
-	float whiteThreshold = distanceThreshold + 0.05f;
-	float goalThreshold = distanceThreshold + 0.3f;
+	float whiteThreshold = distanceThreshold;
+	float blackThreshold = distanceThreshold + 0.05f; // black is further away
+	float goalThreshold = distanceThreshold + 0.3f; // goal can be seen even further at some angles
 
 	return (whiteDistance.min > 0 && whiteDistance.min < whiteThreshold)
 		&& (blackDistance.min > 0 && blackDistance.min < blackThreshold)
