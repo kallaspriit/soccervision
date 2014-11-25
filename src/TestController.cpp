@@ -1013,8 +1013,7 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 	// search from front at the very beginning not to go after a ball seen on the operators hand
 	if (totalDuration < 1.5f) {
 		ballSearchDir = Dir::FRONT;
-	}
-	else if (searchRearAfterKick) {
+	} else if (searchRearAfterKick) {
 		// if just kicked ball then prefer rear camera so we wouldn't go after the ball we just kicked
 		ballSearchDir = Dir::REAR;
 	}
