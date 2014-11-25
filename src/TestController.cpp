@@ -1037,7 +1037,7 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 	bool searchRearAfterKick = robot->coilgun->getTimeSinceLastKicked() < 1.5f;
 
 	// search from front at the very beginning not to go after a ball seen on the operators hand
-	if (totalDuration < 1.5f) {
+	if (totalDuration < 0.75f) {
 		ballSearchDir = Dir::FRONT;
 	} else if (searchRearAfterKick) {
 		// if just kicked ball then prefer rear camera so we wouldn't go after the ball we just kicked

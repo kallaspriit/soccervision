@@ -37,6 +37,7 @@ Dash.JoystickController.prototype.onButtonDown = function(e) {
 	} else if (e.control == 'FACE_4') { // yellow Y
 		//this.fastMode = !this.fastMode;
 		// find ball instantly
+		dash.ui.states = [];
 		dash.ui.robot.resetPosition();
 		dash.socket.send('<run-find-ball>');
 	} else if (e.control == 'FACE_3') { // blue X
