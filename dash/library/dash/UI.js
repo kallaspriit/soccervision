@@ -550,8 +550,32 @@ Dash.UI.prototype.initControls = function() {
 		dash.socket.send('<' + $(this).data('cmd') + '>');
 	});
 
+	$('.send-parameter-field').each(function() {
+		var index = $(this).data('index'),
+			value = parseFloat(window.localStorage['parameter-' + index]);
+
+		if (isNaN(value)) {
+			value = 0.0;
+		}
+
+		$(this).val(value);
+	});
+
 	$('.send-parameter-field').keyup(function() {
-		dash.socket.send('<parameter:' + $(this).data('index') + ':' + $(this).val() + '>');
+		$('.send-parameter-field').each(function() {
+			var index = $(this).data('index'),
+				value = parseFloat($(this).val());
+
+			if (!isNaN(value)) {
+				window.localStorage['parameter-' + index] = value;
+			}
+		});
+
+		var value = parseFloat($(this).val());
+
+		if (!isNaN(value)) {
+			dash.socket.send('<parameter:' + $(this).data('index') + ':' + value + '>');
+		}
 	});
 	
 	/*$('#test-turn-btn').click(function() {
