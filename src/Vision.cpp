@@ -903,7 +903,7 @@ Vision::PathMetric Vision::getPathMetric(int x1, int y1, int x2, int y2, std::ve
 
     int matches = 0;
 	int blacksInRow = 0;
-	int maxBlacksInRow = 10;
+	int maxBlacksInRow = 3;
     bool debug = canvas.data != NULL;
     bool requiredColorFound = false;
 	bool sawGreen = false;
@@ -973,11 +973,11 @@ Vision::PathMetric Vision::getPathMetric(int x1, int y1, int x2, int y2, std::ve
 				blacksInRow++;
 
 				// TODO Review
-				/*if (blacksInRow > maxBlacksInRow) {
+				if (blacksInRow > maxBlacksInRow) {
 					tooManyBlacksInRow = true;
 
 					break;
-				}*/
+				}
 			} else {
 				blacksInRow = 0;
 			}
