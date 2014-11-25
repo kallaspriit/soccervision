@@ -916,6 +916,10 @@ void TestController::ManualControlState::step(float dt, Vision::Results* visionR
 
 void TestController::WatchBallState::onEnter(Robot* robot, Parameters parameters) {
 	pid.reset();
+	pid.setInputLimits(-1.0f, 1.0f);
+	pid.setOutputLimits(-2.0f, 2.0f);
+	pid.setMode(AUTO_MODE);
+	pid.setBias(0.0f);
 }
 
 void TestController::WatchBallState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration, float combinedDuration) {
@@ -956,11 +960,6 @@ void TestController::WatchBallState::step(float dt, Vision::Results* visionResul
 	float targetValue = 0.0f;
 	float currentValue = ball->angle;
 	float currentError = targetValue - currentValue;
-
-	pid.setInputLimits(-1.0f, 1.0f);
-	pid.setOutputLimits(-2.0f, 2.0f);
-	pid.setMode(AUTO_MODE);
-	pid.setBias(0.0f);
 
 	pid.setSetPoint(targetValue);
 	pid.setProcessValue(currentValue);
