@@ -1064,9 +1064,9 @@ Vision::PathMetric Vision::getPathMetric(int x1, int y1, int x2, int y2, std::ve
 	}*/
 
 	//if (senseCounter < 20) {
-	if (sensePointsWorld.size() < 20) {
+	/*if (sensePointsWorld.size() < 20) {
 		return PathMetric(1.0f, 0, true, false);
-	}
+	}*/
 
 	float percentage = (float)matches / (float)sampleCount;
 	bool validColorFound = requiredColor == "" || requiredColorFound;
