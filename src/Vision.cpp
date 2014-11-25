@@ -932,7 +932,7 @@ Vision::PathMetric Vision::getPathMetric(int x1, int y1, int x2, int y2, std::ve
 	float worldPosX2 = worldPos2.dx;
 	float worldPosY2 = worldPos2.dy;
 
-	Math::PointList sensePointsWorld = cameraTranslator->getPointsBetween(worldPosX1, worldPosY1, worldPosX2, worldPosY2, 0.05f);
+	Math::PointList sensePointsWorld = cameraTranslator->getPointsBetween(worldPosX1, worldPosY1, worldPosX2, worldPosY2, 0.01f);
 
 	int x, y;
 

@@ -382,7 +382,7 @@ A:hover {
 /* Controller states */
 #controller-state {
     position: absolute;
-    top: 200px;
+    top: 20px;
     left: 20px;
     margin: 0;
     padding: 4px;
