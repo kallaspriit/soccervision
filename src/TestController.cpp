@@ -1052,7 +1052,8 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 
 	Object* ball = visionResults->getClosestBall(ballSearchDir, false, false, preferRear);
 
-	if (ball == NULL && ballSearchDir != Dir::ANY && stateDuration > 1.0f) {
+	// avoid switching search direction for a few frames
+	if (ball == NULL && ballSearchDir != Dir::ANY && stateDuration >= 0.032f) {
 		ball = visionResults->getClosestBall(Dir::ANY);
 	}
 
