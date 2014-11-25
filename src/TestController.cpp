@@ -924,8 +924,9 @@ void TestController::WatchBallState::onEnter(Robot* robot, Parameters parameters
 
 void TestController::WatchBallState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration, float combinedDuration) {
 	Object* ball = visionResults->getClosestBall(Dir::FRONT);
+	Object* goal = visionResults->getLargestGoal(ai->targetSide, Dir::FRONT);
 
-	if (ball == NULL) {
+	if (goal == NULL || ball == NULL) {
 		robot->setTargetDir(ai->manualSpeedX, ai->manualSpeedY, ai->manualOmega);
 
 		return;
@@ -967,6 +968,7 @@ void TestController::WatchBallState::step(float dt, Vision::Results* visionResul
 	float sideSpeed = -pid.compute();
 	
 	robot->setTargetDir(0.0f, sideSpeed);
+	robot->lookAt(goal);
 
 	ai->dbg("1. P", pid.getPParam());
 	ai->dbg("2. I", pid.getIParam());
