@@ -43,7 +43,7 @@ public:
 	class WatchBallState : public State {
 
 	public:
-		WatchBallState(TestController* ai) : State(ai), kP(1.0f), kI(0.0f), kD(0.0f), pid(kP, kI, kD, 0.016f) {}
+		WatchBallState(TestController* ai) : State(ai), kP(2.5f), kI(0.0f), kD(0.0025f), pid(kP, kI, kD, 0.016f) {}
 		void onEnter(Robot* robot, Parameters parameters);
 		void step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration, float combinedDuration);
 
@@ -182,7 +182,8 @@ public:
 	class FetchBallNearState : public State {
 
 	public:
-		FetchBallNearState(TestController* ai) : State(ai), enterDistance(-1.0f), enterVelocity(0.0f), smallestForwardSpeed(-1.0f), useChipKick(false), chipKickDistance(0.0f), lastBallAngle(0.0f), ballInWayFrames(0) {}
+		FetchBallNearState(TestController* ai) : State(ai), enterDistance(-1.0f), enterVelocity(0.0f), smallestForwardSpeed(-1.0f), useChipKick(false), chipKickDistance(0.0f), lastBallAngle(0.0f), ballInWayFrames(0),
+			kP(2.5f), kI(0.0f), kD(0.0025f), pid(kP, kI, kD, 0.016f) {}
 		void onEnter(Robot* robot, Parameters parameters);
 		void onExit(Robot* robot);
 		void step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration, float combinedDuration);
@@ -195,6 +196,11 @@ public:
 		float chipKickDistance;
 		float lastBallAngle;
 		int ballInWayFrames;
+
+		PID pid;
+		float kP;
+		float kI;
+		float kD;
 	};
 
 	class AimState : public State {

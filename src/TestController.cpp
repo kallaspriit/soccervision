@@ -1879,6 +1879,8 @@ void TestController::FetchBallNearState::onEnter(Robot* robot, Parameters parame
 	chipKickDistance = 0.0f;
 	lastBallAngle = 0.0f;
 	ballInWayFrames = 0;
+
+	pid.reset();
 }
 
 void TestController::FetchBallNearState::onExit(Robot* robot) {
@@ -2049,12 +2051,21 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 		return;
 	}
 
+	pid.setInputLimits(-1.0f, 1.0f);
+	pid.setOutputLimits(-2.0f, 2.0f);
+	pid.setMode(AUTO_MODE);
+	pid.setBias(0.0f);
+
+	pid.setSetPoint(0.0f);
+	pid.setProcessValue(-ball->distanceX);
+
 	//float sidePower = Math::map(Math::abs(ball->distanceX), 0.0f, maxSideSpeedDistance, 0.0f, 1.0f);
-	float sidePower = Math::map(Math::abs(Math::radToDeg(ball->angle)), 0.0f, maxSideSpeedBallAngle, 0.0f, 1.0f);
+	//float sidePower = Math::map(Math::abs(Math::radToDeg(ball->angle)), 0.0f, maxSideSpeedBallAngle, 0.0f, 1.0f);
+	float sidePower = pid.compute();
 
 	float maxSideSpeed = Math::map(ball->distance, 0.0f, 0.3f, 0.5f, 1.5f);
 	float sideSpeed = Math::sign(ball->distanceX) * Math::min(sideP * sidePower, maxSideSpeed);
-	
+
 	float approachP = Math::map(ball->distance, 0.0f, 1.0f, 0.25f, 2.0f);
 	float forwardSpeed = approachP * (1.0f - sidePower);
 
