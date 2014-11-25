@@ -1075,6 +1075,7 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 		ballSearchDir = Dir::FRONT;
 	} else if (kickedLately) {
 		// if just kicked ball then prefer rear camera so we wouldn't go after the ball we just kicked
+		// this is not a good idea when there are several balls nearby in front of the robot
 		//ballSearchDir = Dir::REAR;
 		preferRear = true;
 	}
