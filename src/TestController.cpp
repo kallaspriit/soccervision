@@ -942,7 +942,6 @@ void TestController::WatchBallState::step(float dt, Vision::Results* visionResul
 		std::cout << "! Updated PID params P: " << paramP << ", I: " << paramI << ", D: " << paramD << std::endl;
 
 		pid.setTunings(paramP, paramI, paramD);
-		pid.reset();
 
 		ai->parameters[0] = Util::toString(paramP);
 		ai->parameters[1] = Util::toString(paramI);
