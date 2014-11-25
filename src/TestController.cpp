@@ -957,7 +957,7 @@ void TestController::WatchBallState::step(float dt, Vision::Results* visionResul
 	float currentValue = ball->angle;
 	float currentError = targetValue - currentValue;
 
-	pid.setInputLimits(-1.0f, 1.0f);
+	pid.setInputLimits(-45.0f, 45.0f);
 	pid.setOutputLimits(-2.0f, 2.0f);
 	pid.setMode(AUTO_MODE);
 	pid.setBias(0.0f);
