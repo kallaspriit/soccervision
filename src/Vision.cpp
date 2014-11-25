@@ -397,7 +397,8 @@ bool Vision::isValidBall(Object* ball, Dir dir, ObjectList& goals) {
 	if (ball->y + ballRadius < Config::surroundSenseThresholdY) {
 		float surroundMetric = getSurroundMetric(
 			ball->x,
-			(int)((float)ball->y + (float)ballRadius * 0.75f),
+			//(int)((float)ball->y + (float)ballRadius * 0.75f),
+			(int)((float)ball->y + (float)ballRadius * Math::map(ball->distance, 0.0f, 2.0f, 0.75f, 0.2f)),
 			senseRadius,
 			validBallBgColors,
 			"",
