@@ -2408,6 +2408,8 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 		robot->lookAt(goal);
 	}
 
+	float timeSinceLastKicked = robot->coilgun->getTimeSinceLastKicked();
+
 	ai->dbg("performKick", performKick);
 	ai->dbg("useChipKick", useChipKick);
 	ai->dbg("chipKickDistance", chipKickDistance);
@@ -2437,6 +2439,7 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 	ai->dbg("whiteDistance", visionResults->front->whiteDistance.min);
 	ai->dbg("robotOmega", robot->getOmega());
 	ai->dbg("ballInDribblerTime", robot->dribbler->getBallInDribblerTime());
+	ai->dbgs("timeSinceLastKicked", timeSinceLastKicked < 170000 ? Util::toString(timeSinceLastKicked) : "never");
 }
 
 void TestController::ReturnFieldState::onEnter(Robot* robot, Parameters parameters) {
