@@ -19,6 +19,7 @@ public:
 	typedef Messages::iterator MessagesIt;
 	typedef std::map<int, std::string> Params;
 	typedef std::vector<std::string> StateList;
+	typedef StateList::iterator StateListIt;
 
 	class State : public BaseAI::State {
 

@@ -699,6 +699,18 @@ std::string TestController::getJSON() {
 	stream << "\"wasInCornerLately\": " << (wasInCornerLately() ? "\"true: " + Util::toString(Util::duration(lastInCornerTime)) + "\"" : "false") << ",";
 	stream << "\"isNearLine\": " << (isNearLine ? "true" : "false") << ",";
 	stream << "\"lastTargetGoalAngle\": " << Math::radToDeg(lastTargetGoalAngle) << ",";
+	stream << "\"stateChanges\": [";
+
+	for (StateListIt it = stateChanges.begin(); it != stateChanges.end(); it++) {
+		if (it != stateChanges.begin()) {
+			stream << ", ";
+		}
+
+		stream << "\"" << *it << "\"";
+	}
+
+	stream << "],";
+
 	stream << "\"timeSinceLastKicked\": \"" << (timeSinceLastKicked < 170000 ? Util::toString(timeSinceLastKicked) : "never") << "\"";
 
 	stream << "}";
