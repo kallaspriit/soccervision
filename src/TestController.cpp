@@ -1829,10 +1829,11 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 		return;
 	}*/
 
-	if (robot->coilgun->wasKickedSinceLastAsked()) {
-		//std::cout << "! Coilgun kicked since last requested" << std::endl;
+	// avoid going after the ball that was just kicked
+	if (robot->coilgun->getTimeSinceLastKicked() < 0.5f) {
+		ai->setState("find-ball");
 
-		useChipKick = false;
+		return;
 	}
 
 	Object* ball = visionResults->getClosestBall(Dir::FRONT);

@@ -34,9 +34,12 @@ Dash.JoystickController.prototype.onButtonDown = function(e) {
 		this.robot.kick();
 	} else if (e.control == 'RIGHT_BOTTOM_SHOULDER') {
 		this.robot.chipKick(2.0);
-	} else if (e.control == 'FACE_4') {
-		this.fastMode = !this.fastMode;
-	} else if (e.control == 'FACE_3') {
+	} else if (e.control == 'FACE_4') { // yellow Y
+		//this.fastMode = !this.fastMode;
+		// find ball instantly
+		dash.ui.robot.resetPosition();
+		dash.socket.send('<run-find-ball>');
+	} else if (e.control == 'FACE_3') { // blue X
 		dash.ui.toggleTargetSide();
 		window.setTimeout(function() { dash.ui.toggleTargetSide(); }, 250);
 		window.setTimeout(function() {
@@ -48,7 +51,7 @@ Dash.JoystickController.prototype.onButtonDown = function(e) {
 
 		dash.socket.send('<run-find-ball>');*/
 		//dash.socket.send('<run-fetch-ball-near>');
-	} else if (e.control == 'FACE_2') {
+	} else if (e.control == 'FACE_2') { // red B
 		dash.socket.send('<run-manual-control>');
 	} else if (e.control == 'LEFT_TOP_SHOULDER') {
 		this.robot.toggleDribbler();

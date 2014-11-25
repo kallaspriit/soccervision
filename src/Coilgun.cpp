@@ -7,7 +7,7 @@
 
 #include <iostream>
 
-Coilgun::Coilgun(AbstractCommunication* com) : com(com), lastKickTime(0.0), lastChargeRequestTime(0.0), timeSinceLastVoltageReading(0.0f), voltage(0.0f), isKickingOnceGotBall(false), kickedSinceLastAsked(false), kickOnceGotBallMissedFrames(0) {
+Coilgun::Coilgun(AbstractCommunication* com) : com(com), lastKickTime(0.0), lastChargeRequestTime(0.0), timeSinceLastVoltageReading(0.0f), voltage(0.0f), isKickingOnceGotBall(false), kickOnceGotBallMissedFrames(0) {
 
 };
 
@@ -138,16 +138,6 @@ void Coilgun::step(float dt) {
 	}
 }
 
-bool Coilgun::wasKickedSinceLastAsked() {
-	if (!kickedSinceLastAsked) {
-		return false;
-	} else {
-		kickedSinceLastAsked = false;
-
-		return true;
-	}
-}
-
 void Coilgun::requestVoltageReading() {
 	com->send("adc");
 }
@@ -161,7 +151,6 @@ bool Coilgun::handleCommand(const Command& cmd) {
 		//std::cout << "! Kicked" << std::endl;
 
 		isKickingOnceGotBall = false;
-		kickedSinceLastAsked = true;
 		lastKickTime = Util::millitime();
 
 		if (isKickingOnceGotBall) {
