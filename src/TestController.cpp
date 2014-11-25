@@ -950,6 +950,12 @@ void TestController::WatchBallState::step(float dt, Vision::Results* visionResul
 	float sideSpeed = pid.compute();
 
 	robot->setTargetDir(0.0f, sideSpeed);
+
+	ai->dbg("P", pid.getPParam());
+	ai->dbg("I", pid.getIParam());
+	ai->dbg("D", pid.getDParam());
+	ai->dbg("accumulatedError", pid.getAccumulatedError());
+	ai->dbg("sideSpeed", sideSpeed);
 }
 
 void TestController::WatchGoalState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration, float combinedDuration) {
