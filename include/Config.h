@@ -178,7 +178,8 @@ namespace Config {
 	const float robotCoilgunLowVoltageThreshold = 240.0f;
 	
 	// proportional multiplier for looking at object, multiplied by object angle
-	const float lookAtP = 7.0f;
+	//const float lookAtP = 7.0f;
+	const float lookAtP = 5.5f;
 
 	// maximum look-at omega is achived is object is at this angle or more
 	const float lookAtMaxSpeedAngle = 30.0f;
