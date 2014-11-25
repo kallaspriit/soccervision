@@ -416,7 +416,8 @@ bool Vision::isValidBall(Object* ball, Dir dir, ObjectList& goals) {
 		}
 	}
 
-	if (pathMetricSenseY - 20 > Config::ballPathSenseStartY) {
+	// don't calculate path metric if senseY is too low
+	if (Config::ballPathSenseStartY - pathMetricSenseY > 50) {
 		PathMetric pathMetric = getPathMetric(
 			Config::cameraWidth / 2,
 			Config::ballPathSenseStartY,
