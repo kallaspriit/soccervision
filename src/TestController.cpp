@@ -2074,11 +2074,19 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	pid.setSetPoint(0.0f);
 	pid.setProcessValue(ball->distanceX);
 
+	//maxSideSpeed = Math::map(ball->distance, 0.0f, 0.3f, maxSideSpeed / 4.0f, maxSideSpeed);
+
 	float sideSpeed = -pid.compute();
+
 	float sidePower = Math::abs(sideSpeed / maxSideSpeed);
+
+	// increase side power near the ball
+	sidePower = Math::min(sidePower * Math::map(ball->distance, 0.0f, 0.5f, 4.0f, 1.0f), 1.0f);
 
 	float approachP = Math::map(ball->distance, 0.0f, 1.0f, 0.25f, 2.0f);
 	float forwardSpeed = approachP * (1.0f - sidePower);
+
+	//float forwardSpeed = Math::map(ball->distance, 0.0f, 0.5f, 0.3f, ent)
 
 	// don't move forwards if very close to the ball and the ball is quite far sideways
 	if (ball->distanceY < 0.2f && Math::abs(ball->distanceX) > 0.03f) {
