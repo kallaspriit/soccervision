@@ -125,7 +125,7 @@
 * - xxx
 */
 
-TestController::TestController(Robot* robot, AbstractCommunication* com) : BaseAI(robot, com), targetSide(Side::BLUE), manualSpeedX(0.0f), manualSpeedY(0.0f), manualOmega(0.0f), manualDribblerSpeed(0), manualKickStrength(0), blueGoalDistance(0.0f), yellowGoalDistance(0.0f), lastCommandTime(-1.0), lastBallTime(-1.0), lastNearLineTime(-1.0), lastNearGoalTime(-1.0), lastInCornerTime(-1.0), lastTargetGoalAngle(0.0f), lastBall(NULL), lastTurnAroundTime(-1.0), lastClosestGoalDistance(-1.0f), lastTargetGoalDistance(-1.0f), framesRobotOutFront(0), framesRobotOutRear(0), isRobotOutFront(false), isRobotOutRear(false), isNearLine(false), isInCorner(false), isBallInWay(false), inCornerFrames(0), nearLineFrames(0), nearGoalFrames(0), visibleBallCount(0) {
+TestController::TestController(Robot* robot, AbstractCommunication* com) : BaseAI(robot, com), targetSide(Side::BLUE), manualSpeedX(0.0f), manualSpeedY(0.0f), manualOmega(0.0f), manualDribblerSpeed(0), manualKickStrength(0), blueGoalDistance(0.0f), yellowGoalDistance(0.0f), lastCommandTime(-1.0), lastBallTime(-1.0), lastNearLineTime(-1.0), lastNearGoalTime(-1.0), lastInCornerTime(-1.0), lastTargetGoalAngle(0.0f), lastBall(NULL), lastTurnAroundTime(-1.0), lastClosestGoalDistance(-1.0f), lastTargetGoalDistance(-1.0f), framesRobotOutFront(0), framesRobotOutRear(0), isRobotOutFront(false), isRobotOutRear(false), isNearLine(false), isInCorner(false), isBallInWay(false), isAvoidingBallInWay(false), inCornerFrames(0), nearLineFrames(0), nearGoalFrames(0), visibleBallCount(0) {
 	setupStates();
 
 	speedMultiplier = 1.0f;
@@ -456,9 +456,13 @@ void TestController::updateVisionInfo(Vision::Results* visionResults) {
 	isInCorner = isRobotInCorner(visionResults);
 
 	if (targetGoal != NULL) {
-		isBallInWay = visionResults->getBallInWayMetric(visionResults->front->balls, targetGoal->y + targetGoal->height / 2).isBallInWay;
+		Vision::BallInWayMetric ballInWayMetric = visionResults->getBallInWayMetric(visionResults->front->balls, targetGoal->y + targetGoal->height / 2);
+
+		isBallInWay = ballInWayMetric.isBallInWay;
+		isAvoidingBallInWay = shouldAvoidBallInWay(ballInWayMetric, targetGoal->distance);
 	} else {
 		isBallInWay = false;
+		isAvoidingBallInWay = false;
 	}
 
 	// near line detection
@@ -1927,15 +1931,17 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	Vision::BallInWayMetric ballInWayMetric;
 	float ballNearDistance = 0.4f;
 	bool isBallInWay = false;
+	bool shouldAvoidBallInWay = false;
 	int ballInWayFramesThreshold = 3;
 
 	// decide to use chip-kicker if there's a ball in way when the ball is close, add some delay so ball just hit wouldn't get counted
 	if (ball->distance < ballNearDistance && stateDuration >= 0.5f) {
 		ballInWayMetric = visionResults->getBallInWayMetric(visionResults->front->balls, goal->y + goal->height / 2);
 		
-		isBallInWay = ballInWayMetric.ballInWayCount >= 2 && ai->shouldAvoidBallInWay(ballInWayMetric, goal->distance);
-
-		if (isBallInWay) {
+		isBallInWay = ballInWayMetric.isBallInWay;
+		shouldAvoidBallInWay = isBallInWay && ballInWayMetric.ballInWayCount >= 2 && ai->shouldAvoidBallInWay(ballInWayMetric, goal->distance);
+		
+		if (shouldAvoidBallInWay) {
 			ballInWayFrames++;
 
 			if (ballInWayFrames >= ballInWayFramesThreshold) {
@@ -2014,6 +2020,7 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	ai->dbg("ball->distanceX", ball->distanceX);
 	ai->dbg("useChipKick", useChipKick);
 	ai->dbg("isBallInWay", isBallInWay);
+	ai->dbg("shouldAvoidBallInWay", shouldAvoidBallInWay);
 	ai->dbg("wasNearGoalLately", wasNearGoalLately);
 	ai->dbg("ballInWayFrames", ballInWayFrames);
 	ai->dbg("chipKickDistance", chipKickDistance);
