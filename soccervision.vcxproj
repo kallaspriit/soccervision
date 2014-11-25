@@ -116,6 +116,7 @@
     <ClInclude Include="include\OdometerLocalizer.h" />
     <ClInclude Include="include\OffensiveAI.h" />
     <ClInclude Include="include\ParticleFilterLocalizer.h" />
+    <ClInclude Include="include\PID.h" />
     <ClInclude Include="include\ProcessThread.h" />
     <ClInclude Include="include\Robot.h" />
     <ClInclude Include="include\Serial.h" />
@@ -207,6 +208,7 @@
     <ClCompile Include="src\OdometerLocalizer.cpp" />
     <ClCompile Include="src\OffensiveAI.cpp" />
     <ClCompile Include="src\ParticleFilterLocalizer.cpp" />
+    <ClCompile Include="src\PID.cpp" />
     <ClCompile Include="src\ProcessThread.cpp" />
     <ClCompile Include="src\Robot.cpp" />
     <ClCompile Include="src\Serial.cpp" />
