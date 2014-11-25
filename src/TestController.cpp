@@ -657,6 +657,8 @@ float TestController::getObjectClosestDistance(Vision::Results* visionResults, O
 std::string TestController::getJSON() {
 	std::stringstream stream;
 
+	float timeSinceLastKicked = robot->coilgun->getTimeSinceLastKicked();
+
 	stream << "{";
 
 	for (MessagesIt it = messages.begin(); it != messages.end(); it++) {
@@ -685,7 +687,8 @@ std::string TestController::getJSON() {
 	stream << "\"visibleBallCount\": " << visibleBallCount << ",";
 	stream << "\"wasInCornerLately\": " << (wasInCornerLately() ? "\"true: " + Util::toString(Util::duration(lastInCornerTime)) + "\"" : "false") << ",";
 	stream << "\"isNearLine\": " << (isNearLine ? "true" : "false") << ",";
-	stream << "\"lastTargetGoalAngle\": " << Math::radToDeg(lastTargetGoalAngle);
+	stream << "\"lastTargetGoalAngle\": " << Math::radToDeg(lastTargetGoalAngle) << ",";
+	stream << "\"timeSinceLastKicked\": " << (timeSinceLastKicked < 170000 ? Util::toString(timeSinceLastKicked) : "never");
 
 	stream << "}";
 
@@ -2408,8 +2411,6 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 		robot->lookAt(goal);
 	}
 
-	float timeSinceLastKicked = robot->coilgun->getTimeSinceLastKicked();
-
 	ai->dbg("performKick", performKick);
 	ai->dbg("useChipKick", useChipKick);
 	ai->dbg("chipKickDistance", chipKickDistance);
@@ -2439,7 +2440,6 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 	ai->dbg("whiteDistance", visionResults->front->whiteDistance.min);
 	ai->dbg("robotOmega", robot->getOmega());
 	ai->dbg("ballInDribblerTime", robot->dribbler->getBallInDribblerTime());
-	ai->dbgs("timeSinceLastKicked", timeSinceLastKicked < 170000 ? Util::toString(timeSinceLastKicked) : "never");
 }
 
 void TestController::ReturnFieldState::onEnter(Robot* robot, Parameters parameters) {
