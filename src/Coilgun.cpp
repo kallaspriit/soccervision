@@ -16,6 +16,8 @@ Coilgun::~Coilgun() {
 }
 
 void Coilgun::charge() {
+	std::cout << "! Requesting charging" << std::endl;
+
 	com->send("charge");
 
 	lastChargeRequestTime = Util::millitime();
