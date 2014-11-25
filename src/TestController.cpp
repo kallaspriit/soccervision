@@ -934,12 +934,12 @@ void TestController::WatchBallState::step(float dt, Vision::Results* visionResul
 	float paramD = Util::toFloat(ai->parameters[2]);
 
 	if (
-		Math::abs(paramP - pid.getPParam()) < 0.0001f
-		|| Math::abs(paramI - pid.getIParam()) < 0.0001f
-		|| Math::abs(paramD - pid.getDParam()) < 0.0001f
+		Math::abs(paramP - pid.getPParam()) < 0.001f
+		|| Math::abs(paramI - pid.getIParam()) < 0.001f
+		|| Math::abs(paramD - pid.getDParam()) < 0.001f
 	) {
 	//if (paramP != pid.getPParam() || paramI != pid.getIParam() || paramD != pid.getDParam()) {
-		std::cout << "! Updated PID params P: " << paramP << ", I: " << paramI << ", D: " << paramD << ", REAL P: " << pid.getPParam() << ", I: " << pid.getIParam() << ", D: " << pid.getDParam() << ", DIFF P: " << Math::abs(paramP - pid.getPParam()) << ", DIFF I: " << Math::abs(paramI - pid.getIParam()) << ", DIFF D: " << Math::abs(paramP - pid.getDParam()) << std::endl;
+		std::cout << "! Updated PID params P: " << paramP << ", I: " << paramI << ", D: " << paramD << ", REAL P: " << pid.getPParam() << ", I: " << pid.getIParam() << ", D: " << pid.getDParam() << ", DIFF P: " << Math::abs(paramP - pid.getPParam()) * 10000.0f << ", DIFF I: " << Math::abs(paramI - pid.getIParam()) * 10000.0f << ", DIFF D: " << Math::abs(paramD - pid.getDParam()) * 10000.0f << std::endl;
 
 		pid.setTunings(paramP, paramI, paramD);
 		pid.reset();
