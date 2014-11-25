@@ -929,6 +929,17 @@ void TestController::WatchBallState::step(float dt, Vision::Results* visionResul
 
 	// make ball distanceX zero
 
+	float paramP = Util::toFloat(ai->parameters[0]);
+	float paramI = Util::toFloat(ai->parameters[1]);
+	float paramD = Util::toFloat(ai->parameters[2]);
+
+	if (paramP != pid.getPParam() || paramI != pid.getIParam() || paramD != pid.getDParam()) {
+		std::cout << "! Updated PID params P: " << paramP << ", I: " << paramI << ", D: " << paramD << std::endl;
+
+		pid.setTunings(paramP, paramI, paramD);
+		pid.reset();
+	}
+
 	pid.setInputLimits(-1.0f, 1.0f);
 	pid.setOutputLimits(-0.5f, 0.5f);
 	pid.setMode(AUTO_MODE);

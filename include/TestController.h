@@ -43,12 +43,14 @@ public:
 	class WatchBallState : public State {
 
 	public:
-		WatchBallState(TestController* ai) : State(ai), pid(4.0f, 0.0f, 0.0f, 0.016f) {}
+		WatchBallState(TestController* ai) : State(ai), kP(1.0f), kI(0.0f), kD(0.0f), pid(kP, kI, kD, 0.016f) {}
 		void step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration, float combinedDuration);
 
 	private:
 		PID pid;
-
+		float kP;
+		float kI;
+		float kD;
 	};
 
 	class WatchGoalState : public State {
