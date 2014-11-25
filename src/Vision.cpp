@@ -975,8 +975,6 @@ Vision::PathMetric Vision::getPathMetric(int x1, int y1, int x2, int y2, std::ve
 				// TODO Review
 				if (blacksInRow > maxBlacksInRow) {
 					tooManyBlacksInRow = true;
-
-					break;
 				}
 			} else {
 				blacksInRow = 0;
@@ -998,14 +996,12 @@ Vision::PathMetric Vision::getPathMetric(int x1, int y1, int x2, int y2, std::ve
 
 					break;
 				}
-			} else if (!sawWhite /*&& sawGreen*/ && strcmp(color->name, "white") == 0) {
+			} else if (strcmp(color->name, "white") == 0) {
 				sawWhite = true;
 
-				if (debug) {
-					canvas.drawMarker(x, y, 128, 128, 128);
-
-					continue;
-				}
+				// avoid not seeing balls from outside the playing field
+				blacksInRow = 0;
+				tooManyBlacksInRow = false;
 			}
 			
 			if (strcmp(color->name, "black") == 0) {
