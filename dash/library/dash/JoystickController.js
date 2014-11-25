@@ -39,7 +39,8 @@ Dash.JoystickController.prototype.onButtonDown = function(e) {
 		// find ball instantly
 		dash.ui.states = [];
 		dash.ui.robot.resetPosition();
-		dash.socket.send('<run-find-ball>');
+		//dash.socket.send('<run-find-ball>');
+		dash.socket.send('<run-watch-ball>');
 	} else if (e.control == 'FACE_3') { // blue X
 		dash.ui.toggleTargetSide();
 		window.setTimeout(function() { dash.ui.toggleTargetSide(); }, 250);
