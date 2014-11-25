@@ -1877,7 +1877,12 @@ void TestController::FetchBallNearState::onEnter(Robot* robot, Parameters parame
 	chipKickDistance = 0.0f;
 	lastBallAngle = 0.0f;
 	ballInWayFrames = 0;
+	maxSideSpeed = 2.0f;
 
+	pid.setInputLimits(-1.0f, 1.0f);
+	pid.setOutputLimits(-maxSideSpeed, maxSideSpeed);
+	pid.setMode(AUTO_MODE);
+	pid.setBias(0.0f);
 	pid.reset();
 }
 
@@ -2059,33 +2064,17 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	float paramI = Util::toFloat(ai->parameters[1]);
 	float paramD = Util::toFloat(ai->parameters[2]);
 
-	if (
-		Math::abs(paramP - pid.getPParam()) > 0.00001f
-		|| Math::abs(paramI - pid.getIParam()) > 0.00001f
-		|| Math::abs(paramD - pid.getDParam()) > 0.00001f
-	) {
-	//if (paramP != pid.getPParam() || paramI != pid.getIParam() || paramD != pid.getDParam()) {
+	if (paramP != pid.getPParam() || paramI != pid.getIParam() || paramD != pid.getDParam()) {
 		std::cout << "! Updated PID params P: " << paramP << ", I: " << paramI << ", D: " << paramD << std::endl;
 
 		pid.setTunings(paramP, paramI, paramD);
 		pid.reset();
-
-		/*ai->parameters[0] = Util::toString(paramP);
-		ai->parameters[1] = Util::toString(paramI);
-		ai->parameters[2] = Util::toString(paramD);*/
 	}
 
-	float maxSideSpeed = 2.0f;
-
-	pid.setInputLimits(-1.0f, 1.0f);
-	pid.setOutputLimits(-maxSideSpeed, maxSideSpeed);
-	pid.setMode(AUTO_MODE);
-	pid.setBias(0.0f);
-
 	pid.setSetPoint(0.0f);
-	pid.setProcessValue(-ball->distanceX);
+	pid.setProcessValue(ball->distanceX);
 
-	float sideSpeed = pid.compute();
+	float sideSpeed = -pid.compute();
 	float sidePower = Math::abs(sideSpeed / maxSideSpeed);
 
 	float approachP = Math::map(ball->distance, 0.0f, 1.0f, 0.25f, 2.0f);
