@@ -943,6 +943,10 @@ void TestController::WatchBallState::step(float dt, Vision::Results* visionResul
 
 		pid.setTunings(paramP, paramI, paramD);
 		pid.reset();
+
+		ai->parameters[0] = Util::toString(paramP);
+		ai->parameters[1] = Util::toString(paramI);
+		ai->parameters[2] = Util::toString(paramD);
 	}
 
 	float targetValue = 0.0f;
@@ -954,7 +958,7 @@ void TestController::WatchBallState::step(float dt, Vision::Results* visionResul
 	pid.setMode(AUTO_MODE);
 
 	pid.setSetPoint(targetValue);
-	pid.setProcessValue(currentValue);
+	pid.setProcessValue(-currentValue);
 
 	float sideSpeed = pid.compute();
 	
