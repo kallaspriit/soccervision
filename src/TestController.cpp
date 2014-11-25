@@ -1877,7 +1877,7 @@ void TestController::FetchBallNearState::onEnter(Robot* robot, Parameters parame
 	chipKickDistance = 0.0f;
 	lastBallAngle = 0.0f;
 	ballInWayFrames = 0;
-	maxSideSpeed = 2.0f;
+	maxSideSpeed = 1.5f;
 
 	pid.setInputLimits(-1.0f, 1.0f);
 	pid.setOutputLimits(-maxSideSpeed, maxSideSpeed);
@@ -2037,7 +2037,7 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	float sideP = 0.85f;
 	//float maxSideSpeed = 1.5f;
 	//float approachP = 1.0f;
-	float lookAtGoalP = Config::lookAtP / 2.0f;
+	float lookAtGoalP = Config::lookAtP / 3.0f / 2.0f; // spend less effort on focusing on the goal, improves getting the ball
 	
 	// store ball first sighting distance
 	if (enterDistance == -1.0f) {
@@ -2089,8 +2089,8 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	//forwardSpeed = 0.0f;
 
 	robot->setTargetDir(forwardSpeed, sideSpeed);
-	//robot->lookAt(goal, lookAtGoalP);
-	robot->lookAt(goal);
+	robot->lookAt(goal, lookAtGoalP);
+	//robot->lookAt(goal);
 
 	ai->dbg("ballDistance", ballDistance);
 	ai->dbg("forwardSpeed", forwardSpeed);
