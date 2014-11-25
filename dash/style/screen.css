@@ -340,7 +340,7 @@ A:hover {
 #tasks {
     position: absolute;
     top: 20px;
-    left: 20px;
+    right: 20px;
     margin: 0;
     padding: 4px;
     max-height: 90%;
