@@ -954,7 +954,7 @@ void TestController::WatchBallState::step(float dt, Vision::Results* visionResul
 	pid.setMode(AUTO_MODE);
 
 	pid.setSetPoint(targetValue);
-	pid.setProcessValue(-currentValue);
+	pid.setProcessValue(currentValue);
 
 	float sideSpeed = pid.compute();
 	
