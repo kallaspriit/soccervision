@@ -350,6 +350,7 @@ private:
 	bool isNearLine;
 	bool isNearGoal;
 	bool isInCorner;
+	bool isBallInWay;
 	int inCornerFrames;
 	int nearLineFrames;
 	int nearGoalFrames;

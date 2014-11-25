@@ -125,7 +125,7 @@
 * - xxx
 */
 
-TestController::TestController(Robot* robot, AbstractCommunication* com) : BaseAI(robot, com), targetSide(Side::BLUE), manualSpeedX(0.0f), manualSpeedY(0.0f), manualOmega(0.0f), manualDribblerSpeed(0), manualKickStrength(0), blueGoalDistance(0.0f), yellowGoalDistance(0.0f), lastCommandTime(-1.0), lastBallTime(-1.0), lastNearLineTime(-1.0), lastNearGoalTime(-1.0), lastInCornerTime(-1.0), lastTargetGoalAngle(0.0f), lastBall(NULL), lastTurnAroundTime(-1.0), lastClosestGoalDistance(-1.0f), lastTargetGoalDistance(-1.0f), framesRobotOutFront(0), framesRobotOutRear(0), isRobotOutFront(false), isRobotOutRear(false), isNearLine(false), isInCorner(false), inCornerFrames(0), nearLineFrames(0), nearGoalFrames(0), visibleBallCount(0) {
+TestController::TestController(Robot* robot, AbstractCommunication* com) : BaseAI(robot, com), targetSide(Side::BLUE), manualSpeedX(0.0f), manualSpeedY(0.0f), manualOmega(0.0f), manualDribblerSpeed(0), manualKickStrength(0), blueGoalDistance(0.0f), yellowGoalDistance(0.0f), lastCommandTime(-1.0), lastBallTime(-1.0), lastNearLineTime(-1.0), lastNearGoalTime(-1.0), lastInCornerTime(-1.0), lastTargetGoalAngle(0.0f), lastBall(NULL), lastTurnAroundTime(-1.0), lastClosestGoalDistance(-1.0f), lastTargetGoalDistance(-1.0f), framesRobotOutFront(0), framesRobotOutRear(0), isRobotOutFront(false), isRobotOutRear(false), isNearLine(false), isInCorner(false), isBallInWay(false), inCornerFrames(0), nearLineFrames(0), nearGoalFrames(0), visibleBallCount(0) {
 	setupStates();
 
 	speedMultiplier = 1.0f;
@@ -371,6 +371,7 @@ void TestController::handleTurnByCommand(const Command& cmd) {
 void TestController::updateVisionInfo(Vision::Results* visionResults) {
 	Object* blueGoal = visionResults->getLargestGoal(Side::BLUE);
 	Object* yellowGoal = visionResults->getLargestGoal(Side::YELLOW);
+	Object* targetGoal = NULL;
 
 	// update the closest goal distance
 	if (blueGoal != NULL || yellowGoal != NULL) {
@@ -411,13 +412,14 @@ void TestController::updateVisionInfo(Vision::Results* visionResults) {
 		}
 
 		currentTargetGoalDistance = getObjectClosestDistance(visionResults, blueGoal);
-	}
-	else if (targetSide == Side::YELLOW && yellowGoal != NULL) {
+		targetGoal = blueGoal;
+	} else if (targetSide == Side::YELLOW && yellowGoal != NULL) {
 		if (yellowGoal->distance > 0.0f && yellowGoal->distance <= 6.0f) {
 			lastTargetGoalAngle = yellowGoal->angle;
 		}
 
 		currentTargetGoalDistance = getObjectClosestDistance(visionResults, yellowGoal);
+		targetGoal = yellowGoal;
 	}
 
 	if (currentTargetGoalDistance != -1.0f && currentTargetGoalDistance > 0.0f && currentTargetGoalDistance < Config::fieldWidth) {
@@ -452,6 +454,12 @@ void TestController::updateVisionInfo(Vision::Results* visionResults) {
 	isNearLine = isRobotNearLine(visionResults);
 	isNearGoal = isRobotNearGoal();
 	isInCorner = isRobotInCorner(visionResults);
+
+	if (targetGoal != NULL) {
+		isBallInWay = visionResults->getBallInWayMetric(visionResults->front->balls, targetGoal->y + targetGoal->height / 2).isBallInWay;
+	} else {
+		isBallInWay = false;
+	}
 
 	// near line detection
 	int robotNearLineFramesThreshold = 3;
@@ -698,6 +706,7 @@ std::string TestController::getJSON() {
 	stream << "\"visibleBallCount\": " << visibleBallCount << ",";
 	stream << "\"wasInCornerLately\": " << (wasInCornerLately() ? "\"true: " + Util::toString(Util::duration(lastInCornerTime)) + "\"" : "false") << ",";
 	stream << "\"isNearLine\": " << (isNearLine ? "true" : "false") << ",";
+	stream << "\"isBallInWay\": " << (isBallInWay ? "true" : "false") << ",";
 	stream << "\"lastTargetGoalAngle\": " << Math::radToDeg(lastTargetGoalAngle) << ",";
 	stream << "\"#stateChanges\": [";
 
