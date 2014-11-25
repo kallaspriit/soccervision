@@ -957,7 +957,7 @@ void TestController::WatchBallState::step(float dt, Vision::Results* visionResul
 	float currentValue = ball->angle;
 	float currentError = targetValue - currentValue;
 
-	pid.setInputLimits(-45.0f, 45.0f);
+	pid.setInputLimits(-1.0f, 1.0f);
 	pid.setOutputLimits(-2.0f, 2.0f);
 	pid.setMode(AUTO_MODE);
 	pid.setBias(0.0f);
@@ -2056,16 +2056,18 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	float maxSideSpeed = Math::map(ball->distance, 0.0f, 0.3f, 0.5f, 1.5f);
 	float sideSpeed = Math::sign(ball->distanceX) * Math::min(sideP * sidePower, maxSideSpeed);*/
 
+	float maxSideSpeed = 2.0f;
+
 	pid.setInputLimits(-1.0f, 1.0f);
-	pid.setOutputLimits(-1.0f, 1.0f);
+	pid.setOutputLimits(-maxSideSpeed, maxSideSpeed);
 	pid.setMode(AUTO_MODE);
 	pid.setBias(0.0f);
 
 	pid.setSetPoint(0.0f);
-	pid.setProcessValue(-ball->angle);
+	pid.setProcessValue(-ball->distanceX);
 
-	float sidePower = pid.compute();
-	float sideSpeed = sidePower * 1.5f;
+	float sideSpeed = pid.compute();
+	float sidePower = Math::abs(sideSpeed / maxSideSpeed);
 
 	float approachP = Math::map(ball->distance, 0.0f, 1.0f, 0.25f, 2.0f);
 	float forwardSpeed = approachP * (1.0f - sidePower);
