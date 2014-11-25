@@ -967,7 +967,6 @@ void TestController::WatchBallState::step(float dt, Vision::Results* visionResul
 
 	float sideSpeed = pid.compute();
 	
-
 	robot->setTargetDir(0.0f, sideSpeed);
 
 	ai->dbg("1. P", pid.getPParam());
@@ -2052,18 +2051,21 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	}
 
 	//float sidePower = Math::map(Math::abs(ball->distanceX), 0.0f, maxSideSpeedDistance, 0.0f, 1.0f);
-	float sidePower = Math::map(Math::abs(Math::radToDeg(ball->angle)), 0.0f, maxSideSpeedBallAngle, 0.0f, 1.0f);
+	/*float sidePower = Math::map(Math::abs(Math::radToDeg(ball->angle)), 0.0f, maxSideSpeedBallAngle, 0.0f, 1.0f);
 
 	float maxSideSpeed = Math::map(ball->distance, 0.0f, 0.3f, 0.5f, 1.5f);
-	float sideSpeed = Math::sign(ball->distanceX) * Math::min(sideP * sidePower, maxSideSpeed);
+	float sideSpeed = Math::sign(ball->distanceX) * Math::min(sideP * sidePower, maxSideSpeed);*/
 
 	pid.setInputLimits(-1.0f, 1.0f);
-	pid.setOutputLimits(-2.0f, 2.0f);
+	pid.setOutputLimits(-1.0f, 1.0f);
 	pid.setMode(AUTO_MODE);
 	pid.setBias(0.0f);
 
 	pid.setSetPoint(0.0f);
 	pid.setProcessValue(-ball->angle);
+
+	float sidePower = pid.compute();
+	float sideSpeed = sidePower * 1.5f;
 
 	float approachP = Math::map(ball->distance, 0.0f, 1.0f, 0.25f, 2.0f);
 	float forwardSpeed = approachP * (1.0f - sidePower);
