@@ -914,6 +914,10 @@ void TestController::ManualControlState::step(float dt, Vision::Results* visionR
 	ai->stateChanges.clear();
 }
 
+void TestController::WatchBallState::onEnter(Robot* robot, Parameters parameters) {
+	pid.reset();
+}
+
 void TestController::WatchBallState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration, float combinedDuration) {
 	Object* ball = visionResults->getClosestBall(Dir::FRONT);
 
@@ -956,6 +960,7 @@ void TestController::WatchBallState::step(float dt, Vision::Results* visionResul
 	pid.setInputLimits(-1.0f, 1.0f);
 	pid.setOutputLimits(-1.0f, 1.0f);
 	pid.setMode(AUTO_MODE);
+	pid.setBias(0.0f);
 
 	pid.setSetPoint(targetValue);
 	pid.setProcessValue(-currentValue);
