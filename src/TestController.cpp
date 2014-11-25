@@ -1838,8 +1838,22 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	Object* ball = visionResults->getClosestBall(Dir::FRONT);
 	Object* goal = visionResults->getLargestGoal(ai->targetSide, Dir::FRONT);
 
+	bool usingGhost = false;
+
+	if (ball != NULL) {
+		ai->setLastBall(ball);
+	} else {
+		// use ghost ball if available
+		ball = ai->getLastBall(Dir::FRONT);
+
+		if (ball != NULL) {
+			usingGhost = true;
+		}
+	}
+
 	ai->dbg("ballVisible", ball != NULL);
 	ai->dbg("goalVisible", goal != NULL);
+	ai->dbg("usingGhost", usingGhost);
 
 	if (goal == NULL) {
 		// can't see the goal, switch to direct fetch if ball available, otherwise start searching for ball
