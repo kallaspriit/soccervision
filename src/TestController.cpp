@@ -1006,15 +1006,20 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 	ai->dbgs("search", "any closest");
 	}*/
 
+	Object* goal = visionResults->getLargestGoal(ai->targetSide, Dir::FRONT);
+
+	bool searchRearAfterKick = robot->coilgun->getTimeSinceLastKicked() < 1.5f;
+
 	// search from front at the very beginning not to go after a ball seen on the operators hand
 	if (totalDuration < 1.5f) {
 		ballSearchDir = Dir::FRONT;
 	}
+	else if (searchRearAfterKick) {
+		// if just kicked ball then prefer rear camera so we wouldn't go after the ball we just kicked
+		ballSearchDir = Dir::REAR;
+	}
 
 	bool preferRear = false;
-
-
-	Object* goal = visionResults->getLargestGoal(ai->targetSide, Dir::FRONT);
 
 	if (goal != NULL) {
 		preferRear = true;
@@ -1032,6 +1037,7 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 	}
 
 	ai->dbg("preferRear", preferRear);
+	ai->dbg("searchRearAfterKick", searchRearAfterKick);
 	ai->dbg("ballSearchDir", ballSearchDir);
 	ai->dbg("wasSearchingRecently", wasSearchingRecently);
 	ai->dbg("timeSinceLastTurnAround", ai->lastTurnAroundTime != -1.0 ? Util::duration(ai->lastTurnAroundTime) : -1.0);
