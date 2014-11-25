@@ -82,6 +82,7 @@
 * + should prefer balls from the rear more often
 * + sometimes high level thinks the dribbler has ball while low-level does not agree
 * - avoid going for the ball that it just kicked towards the goal
+* - dribbler should not report having ball when last kick time is very small
 * - fetch ball behind switches to further and further balls, should probably not
 * - fetch ball direct thinks it's near a line too often and is then very slow
 * - fetch ball near chip kick dribbler sometimes is still in the way
@@ -146,6 +147,16 @@ void TestController::reset() {
 
 	setState("manual-control");
 	handleToggleSideCommand();
+}
+
+void TestController::setState(std::string state) {
+	BaseAI::setState(state);
+}
+
+void TestController::setState(std::string state, Parameters parameters) {
+	stateChanges.push_back(state);
+
+	BaseAI::setState(state, parameters);
 }
 
 void TestController::onEnter() {
@@ -867,6 +878,9 @@ void TestController::ManualControlState::step(float dt, Vision::Results* visionR
 		robot->stop();
 		robot->dribbler->stop();
 	}
+
+	// clear the state-list when not playing
+	ai->stateChanges.clear();
 }
 
 void TestController::WatchBallState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration, float combinedDuration) {

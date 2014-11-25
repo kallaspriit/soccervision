@@ -18,6 +18,7 @@ public:
 	typedef std::map<std::string, std::string> Messages;
 	typedef Messages::iterator MessagesIt;
 	typedef std::map<int, std::string> Params;
+	typedef std::vector<std::string> StateList;
 
 	class State : public BaseAI::State {
 
@@ -273,6 +274,9 @@ public:
 	void onEnter();
 	void onExit();
 	void reset();
+	
+	virtual void setState(std::string state);
+	virtual void setState(std::string state, Parameters parameters);
 
     bool handleCommand(const Command& cmd);
 	void handleTargetVectorCommand(const Command& cmd);
@@ -360,7 +364,7 @@ private:
 
 	Params parameters;
 	Messages messages;
-
+	StateList stateChanges;
 };
 
 #endif // TESTCONTROLLER_H
