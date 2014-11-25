@@ -380,7 +380,7 @@ bool Vision::isValidBall(Object* ball, Dir dir, ObjectList& goals) {
 	}*/
 
 	if (!ball->behind && ball->y - ball->height / 2 > Config::cameraHeight - 85) {
-		std::cout << "@ BALL ON ROBOT IN FRONT" << std::endl;
+		//std::cout << "@ BALL ON ROBOT IN FRONT" << std::endl;
 
 		return false;
 	}
@@ -394,7 +394,7 @@ bool Vision::isValidBall(Object* ball, Dir dir, ObjectList& goals) {
 	int ballRadius = getBallRadius(ball->width, ball->height);
 	int senseRadius = getBallSenseRadius(ballRadius, ball->distance);
 	int surroundSenseY = (int)((float)ball->y + (float)ballRadius * Math::map(ball->distance, 0.0f, 2.0f, 0.75f, 0.2f));
-	int pathMetrixSenseY = surroundSenseY + senseRadius;
+	int pathMetricSenseY = surroundSenseY + senseRadius;
 
 	if (ball->y + ballRadius < Config::surroundSenseThresholdY) {
 		float surroundMetric = getSurroundMetric(
@@ -410,20 +410,20 @@ bool Vision::isValidBall(Object* ball, Dir dir, ObjectList& goals) {
 		//std::cout << "Surround: " << surroundMetric << std::endl;
 
 		if (surroundMetric != -1.0f && surroundMetric < Config::minValidBallSurroundThreshold) {
-			std::cout << "@ BALL SURROUND FAIL: " << surroundMetric << " VS " << Config::minValidBallSurroundThreshold << std::endl;
+			//std::cout << "@ BALL SURROUND FAIL: " << surroundMetric << " VS " << Config::minValidBallSurroundThreshold << std::endl;
 
 			return false;
 		}
 	}
 
-	if (pathMetrixSenseY - 20 > Config::ballPathSenseStartY) {
+	if (pathMetricSenseY - 20 > Config::ballPathSenseStartY) {
 		PathMetric pathMetric = getPathMetric(
 			Config::cameraWidth / 2,
 			Config::ballPathSenseStartY,
 			ball->x,
 			//(int)((float)ball->y + (float)ballRadius * 0.75f + (float)senseRadius),
 			//ball->y + ballRadius + senseRadius / 2 + 10,
-			pathMetrixSenseY,
+			pathMetricSenseY,
 			validBallPathColors
 			//,"green"
 		);
@@ -436,14 +436,14 @@ bool Vision::isValidBall(Object* ball, Dir dir, ObjectList& goals) {
 			//|| !pathMetric.validColorFound
 			//|| pathMetric.invalidSpree > getBallMaxInvalidSpree(ball->y + ball->height / 2)
 		) {
-			std::cout << "@ BALL PATH FAIL: " << pathMetric.percentage << " VS " << Config::minValidBallPathThreshold << ", OUT: " << (pathMetric.out ? "YES" : "NO") << std::endl;
+			std::cout << "@ BALL PATH FAIL: " << pathMetric.percentage << " VS " << Config::minValidBallPathThreshold << ", OUT: " << (pathMetric.out ? "YES" : "NO") << " FROM " << Config::ballPathSenseStartY << " TO " << pathMetricSenseY << std::endl;
 
 			return false;
 		}
 	}
 
 	if (isBallInGoal(ball, dir, goals)) {
-		std::cout << "@ BALL IN GOAL FAIL" << std::endl;
+		//std::cout << "@ BALL IN GOAL FAIL" << std::endl;
 
 		return false;
 	}
