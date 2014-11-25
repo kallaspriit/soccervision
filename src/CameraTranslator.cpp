@@ -324,7 +324,7 @@ CameraTranslator::CameraPositionSet CameraTranslator::getSpiral(int width, int h
 Math::PointList CameraTranslator::getPointsBetween(float x1, float y1, float x2, float y2, float step) {
 	Math::PointList points;
 
-	if (x1 < x2) {
+	/*if (x1 < x2) {
 		float tempX = x1;
 		float tempY = y1;
 
@@ -332,7 +332,7 @@ Math::PointList CameraTranslator::getPointsBetween(float x1, float y1, float x2,
 		y1 = y2;
 		x2 = tempX;
 		y2 = tempY;
-	}
+	}*/
 
 	float dx = x2 - x1;
 	float dy = y2 - y1;
