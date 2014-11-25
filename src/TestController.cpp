@@ -81,8 +81,11 @@
 * + search from front at the very beginning not to go after a ball seen on the operators hand
 * + should prefer balls from the rear more often
 * + sometimes high level thinks the dribbler has ball while low-level does not agree
+* - avoid going for the ball that it just kicked towards the goal
+* - fetch ball behind switches to further and further balls, should probably not
 * - fetch ball direct thinks it's near a line too often and is then very slow
 * - fetch ball near chip kick dribbler sometimes is still in the way
+* - does outside of field detection work in all states
 * - dribbler thinks it's got the ball some time after bdkick reported kicked ball, should not
 * - improve fetch-ball-near - could be faster and mess up less (still pushes with edge)
 * - experiment with getClosesBall based on distanceY not normal distance

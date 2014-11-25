@@ -58,7 +58,7 @@ void Dribbler::useNormalLimits() {
 		return;
 	}
 
-	std::cout << "! Now using normal dribbler limits" << std::endl;
+	//std::cout << "! Now using normal dribbler limits" << std::endl;
 
 	setLimits(Config::robotDribblerNormalLowerLimit, Config::robotDribblerNormalUpperLimit);
 
@@ -72,7 +72,7 @@ void Dribbler::useChipKickLimits() {
 		return;
 	}
 
-	std::cout << "! Now using chip-kick dribbler limits" << std::endl;
+	//std::cout << "! Now using chip-kick dribbler limits" << std::endl;
 
 	setLimits(Config::robotDribblerChipKickLowerLimit, Config::robotDribblerChipKickUpperLimit);
 

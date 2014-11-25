@@ -40,6 +40,7 @@ public:
 	bool isLowVoltage() { return voltage < Config::robotCoilgunLowVoltageThreshold;  }
 	int getChipKickDurationByDistance(float distance);
 	float getVoltage() { return voltage; }
+	float getTimeSinceLastKicked();
 	bool handleCommand(const Command& cmd);
 	void step(float dt);
 

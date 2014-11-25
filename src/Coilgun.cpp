@@ -74,6 +74,10 @@ int Coilgun::getChipKickDurationByDistance(float distanceMeters) {
 		+ d);
 }
 
+float Coilgun::getTimeSinceLastKicked() {
+	return (float)(Util::millitime() - lastKickTime);
+}
+
 void Coilgun::kickOnceGotBall(int mainDuration, int mainDelay, float chipDistance, int chipDelay) {
 	kickOnceGotBallMissedFrames = 0;
 
@@ -154,6 +158,7 @@ bool Coilgun::handleCommand(const Command& cmd) {
 
 		isKickingOnceGotBall = false;
 		kickedSinceLastAsked = true;
+		lastKickTime = Util::millitime();
 
 		if (isKickingOnceGotBall) {
 			kickOnceGotBall(kickOnceGotBallParameters.mainDuration, kickOnceGotBallParameters.mainDelay, kickOnceGotBallParameters.chipDistance, kickOnceGotBallParameters.chipDelay);

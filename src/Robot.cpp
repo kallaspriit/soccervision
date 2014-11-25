@@ -250,6 +250,7 @@ void Robot::step(float dt, Vision::Results* visionResults) {
 
 	stream << "\"coilgun\": {";
 	stream << "\"voltage\":" << coilgun->getVoltage() << ",";
+	stream << "\"timeSinceLastKicked\":" << coilgun->getTimeSinceLastKicked() << ",";
 	stream << "\"isLowVoltage\":" << coilgun->isLowVoltage();
 	stream << "},";
 
