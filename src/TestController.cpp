@@ -963,9 +963,9 @@ void TestController::WatchBallState::step(float dt, Vision::Results* visionResul
 	pid.setBias(0.0f);
 
 	pid.setSetPoint(targetValue);
-	pid.setProcessValue(-currentValue);
+	pid.setProcessValue(currentValue);
 
-	float sideSpeed = pid.compute();
+	float sideSpeed = -pid.compute();
 	
 	robot->setTargetDir(0.0f, sideSpeed);
 
@@ -2064,8 +2064,8 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 		Math::abs(paramP - pid.getPParam()) > 0.00001f
 		|| Math::abs(paramI - pid.getIParam()) > 0.00001f
 		|| Math::abs(paramD - pid.getDParam()) > 0.00001f
-		) {
-		//if (paramP != pid.getPParam() || paramI != pid.getIParam() || paramD != pid.getDParam()) {
+	) {
+	//if (paramP != pid.getPParam() || paramI != pid.getIParam() || paramD != pid.getDParam()) {
 		std::cout << "! Updated PID params P: " << paramP << ", I: " << paramI << ", D: " << paramD << std::endl;
 
 		pid.setTunings(paramP, paramI, paramD);
