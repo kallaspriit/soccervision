@@ -938,7 +938,7 @@ void TestController::WatchBallState::step(float dt, Vision::Results* visionResul
 
 	float sideSpeed = pid.compute();
 
-	robot->setTargetDir(sideSpeed, 0.0f);
+	robot->setTargetDir(0.0f, sideSpeed);
 }
 
 void TestController::WatchGoalState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration, float combinedDuration) {
