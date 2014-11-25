@@ -2366,16 +2366,20 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 	bool performKick = validKickFrames >= Config::goalKickValidFrames;
 	bool wasKicked = false;
 	bool waitingBallToSettle = false;
+	bool useChipKick = false;
+	float chipKickDistance = 0.0f;
 
 	// only perform the kick if valid view has been observed for a couple of frames
 	if (performKick) {
 		if (isBallInWay) {
-			if (robot->dribbler->getBallInDribblerTime() >= 0.2f) {
+			useChipKick = robot->dribbler->getBallInDribblerTime() >= 0.2f;
+
+			if (useChipKick) {
 				// TODO closest ball may be too close to kick over
 				//float chipKickDistance = Math::max(goal->distance - 1.0f, 0.5f);
 
 				// try to kick 1m past the furhest ball but no further than 1m before the goal, also no less then 0.5m
-				float chipKickDistance = ai->getChipKickDistance(ballInWayMetric, goal->distance);
+				chipKickDistance = ai->getChipKickDistance(ballInWayMetric, goal->distance);
 
 				if (robot->chipKick(chipKickDistance)) {
 					wasKicked = true;
@@ -2405,6 +2409,8 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 	}
 
 	ai->dbg("performKick", performKick);
+	ai->dbg("useChipKick", useChipKick);
+	ai->dbg("chipKickDistance", chipKickDistance);
 	ai->dbg("validWindow", validWindow);
 	ai->dbg("isFrameValid", isFrameValid);
 	ai->dbg("isKickTooSoon", isKickTooSoon);

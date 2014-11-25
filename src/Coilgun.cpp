@@ -27,7 +27,7 @@ void Coilgun::discharge() {
 
 void Coilgun::kick(int microseconds) {
 	if (lastKickTime == 0.0 || Util::duration(lastKickTime) >= Config::minKickInterval) {
-		std::cout << "! Kicking: " << microseconds << std::endl;
+		//std::cout << "! Kicking: " << microseconds << std::endl;
 
 		com->send("kick:" + Util::toString(microseconds));
 
