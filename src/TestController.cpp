@@ -1366,7 +1366,7 @@ void TestController::FetchBallFrontState::step(float dt, Vision::Results* vision
 	float focusBetweenBallGoalAngle = 15.0f;
 	float maxAngleBrakingAngle = 40.0f;
 	float maxBallBrakingAngle = 10.0f;
-	float nearDistance = 0.35f;
+	float nearDistance = 0.45f;
 	float retratingBallDistanceDiff = 0.2f;
 	float offsetDistance = 0.3f;
 
