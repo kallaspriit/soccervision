@@ -154,6 +154,11 @@ void TestController::setState(std::string state) {
 }
 
 void TestController::setState(std::string state, Parameters parameters) {
+	// limit to 10 entries
+	if (stateChanges.size() >= 10) {
+		stateChanges.erase(stateChanges.begin());
+	}
+
 	stateChanges.push_back(state);
 
 	BaseAI::setState(state, parameters);
@@ -2022,6 +2027,7 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	ai->dbg("ball->distanceX", ball->distanceX);
 	ai->dbg("useChipKick", useChipKick);
 	ai->dbg("isBallInWay", isBallInWay);
+	ai->dbg("ballInWayCount", ballInWayMetric.ballInWayCount);
 	ai->dbg("shouldAvoidBallInWay", shouldAvoidBallInWay);
 	ai->dbg("wasNearGoalLately", wasNearGoalLately);
 	ai->dbg("ballInWayFrames", ballInWayFrames);
