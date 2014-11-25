@@ -193,6 +193,20 @@ Dash.UI.prototype.initSlider = function() {
 	});
 };
 
+Dash.UI.prototype.setupParameterFields = function() {
+	$('.send-parameter-field').each(function() {
+		var index = $(this).data('index'),
+			value = parseFloat(window.localStorage['parameter-' + index]);
+
+		if (isNaN(value)) {
+			value = 0.0;
+		}
+
+		$(this).val(value);
+		dash.socket.send('<parameter:' + index + ':' + value + '>');
+	});
+};
+
 Dash.UI.prototype.initSocket = function() {
 	var self = this,
 		cookieHost = $.cookie('host');
@@ -219,6 +233,8 @@ Dash.UI.prototype.initSocket = function() {
 		//window.setTimeout(function() {
 			dash.socket.send('<get-controller>');
 		//}, 2000);
+
+		self.setupParameterFields();
 	});
 	
 	dash.socket.bind(Dash.Socket.Event.CLOSE, function(e) {
@@ -548,17 +564,6 @@ Dash.UI.prototype.initControls = function() {
 
 	$('.send-cmd-btn').click(function() {
 		dash.socket.send('<' + $(this).data('cmd') + '>');
-	});
-
-	$('.send-parameter-field').each(function() {
-		var index = $(this).data('index'),
-			value = parseFloat(window.localStorage['parameter-' + index]);
-
-		if (isNaN(value)) {
-			value = 0.0;
-		}
-
-		$(this).val(value);
 	});
 
 	$('.send-parameter-field').keyup(function() {
