@@ -945,11 +945,11 @@ void TestController::WatchBallState::step(float dt, Vision::Results* visionResul
 	float currentError = targetValue - currentValue;
 
 	pid.setInputLimits(-1.0f, 1.0f);
-	pid.setOutputLimits(-0.5f, 0.5f);
+	pid.setOutputLimits(-1.0f, 1.0f);
 	pid.setMode(AUTO_MODE);
 
 	pid.setSetPoint(targetValue);
-	pid.setProcessValue(currentValue);
+	pid.setProcessValue(currentError);
 
 	float sideSpeed = pid.compute();
 	
