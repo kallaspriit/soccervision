@@ -979,7 +979,7 @@ Vision::PathMetric Vision::getPathMetric(int x1, int y1, int x2, int y2, std::ve
 					tooManyBlacksInRow = true;
 				}
 
-				if (sawGreen && lastColor == "white" && blacksInRow >= 2) {
+				if (sawGreen && lastColor == "white") {
 					crossingGreenWhiteBlack = true;
 				}
 			} else {
