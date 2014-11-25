@@ -2056,6 +2056,26 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	float maxSideSpeed = Math::map(ball->distance, 0.0f, 0.3f, 0.5f, 1.5f);
 	float sideSpeed = Math::sign(ball->distanceX) * Math::min(sideP * sidePower, maxSideSpeed);*/
 
+	float paramP = Util::toFloat(ai->parameters[0]);
+	float paramI = Util::toFloat(ai->parameters[1]);
+	float paramD = Util::toFloat(ai->parameters[2]);
+
+	if (
+		Math::abs(paramP - pid.getPParam()) > 0.00001f
+		|| Math::abs(paramI - pid.getIParam()) > 0.00001f
+		|| Math::abs(paramD - pid.getDParam()) > 0.00001f
+		) {
+		//if (paramP != pid.getPParam() || paramI != pid.getIParam() || paramD != pid.getDParam()) {
+		std::cout << "! Updated PID params P: " << paramP << ", I: " << paramI << ", D: " << paramD << std::endl;
+
+		pid.setTunings(paramP, paramI, paramD);
+		pid.reset();
+
+		/*ai->parameters[0] = Util::toString(paramP);
+		ai->parameters[1] = Util::toString(paramI);
+		ai->parameters[2] = Util::toString(paramD);*/
+	}
+
 	float maxSideSpeed = 2.0f;
 
 	pid.setInputLimits(-1.0f, 1.0f);
