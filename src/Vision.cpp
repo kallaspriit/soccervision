@@ -394,6 +394,7 @@ bool Vision::isValidBall(Object* ball, Dir dir, ObjectList& goals) {
 	int ballRadius = getBallRadius(ball->width, ball->height);
 	int senseRadius = getBallSenseRadius(ballRadius, ball->distance);
 	int surroundSenseY = (int)((float)ball->y + (float)ballRadius * Math::map(ball->distance, 0.0f, 2.0f, 0.75f, 0.2f));
+	int pathMetrixSenseY = surroundSenseY + senseRadius;
 
 	if (ball->y + ballRadius < Config::surroundSenseThresholdY) {
 		float surroundMetric = getSurroundMetric(
@@ -415,14 +416,14 @@ bool Vision::isValidBall(Object* ball, Dir dir, ObjectList& goals) {
 		}
 	}
 
-	if (ball->y + ballRadius < Config::ballPathSenseStartY) {
+	if (pathMetrixSenseY - 20 > Config::ballPathSenseStartY) {
 		PathMetric pathMetric = getPathMetric(
 			Config::cameraWidth / 2,
 			Config::ballPathSenseStartY,
 			ball->x,
 			//(int)((float)ball->y + (float)ballRadius * 0.75f + (float)senseRadius),
 			//ball->y + ballRadius + senseRadius / 2 + 10,
-			surroundSenseY + senseRadius,
+			pathMetrixSenseY,
 			validBallPathColors
 			//,"green"
 		);
