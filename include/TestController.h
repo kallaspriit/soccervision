@@ -5,6 +5,7 @@
 #include "Vision.h"
 #include "DebouncedButton.h"
 #include "Util.h"
+#include "PID.h"
 #include "Config.h"
 
 #include <map>
@@ -42,8 +43,11 @@ public:
 	class WatchBallState : public State {
 
 	public:
-		WatchBallState(TestController* ai) : State(ai) {}
+		WatchBallState(TestController* ai) : State(ai), pid(4.0f, 0.0f, 0.0f, 0.016f) {}
 		void step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration, float combinedDuration);
+
+	private:
+		PID pid;
 
 	};
 

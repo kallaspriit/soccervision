@@ -923,8 +923,22 @@ void TestController::WatchBallState::step(float dt, Vision::Results* visionResul
 		return;
 	}
 
-	robot->setTargetDir(ai->manualSpeedX, ai->manualSpeedY);
-	robot->lookAt(ball);
+	// look at ball
+	//robot->setTargetDir(ai->manualSpeedX, ai->manualSpeedY);
+	//robot->lookAt(ball);
+
+	// make ball distanceX zero
+
+	pid.setInputLimits(-1.0f, 1.0f);
+	pid.setOutputLimits(-0.5f, 0.5f);
+	pid.setMode(AUTO_MODE);
+
+	pid.setSetPoint(0.0f);
+	pid.setProcessValue(ball->distanceX);
+
+	float sideSpeed = pid.compute();
+
+	robot->setTargetDir(sideSpeed, 0.0f);
 }
 
 void TestController::WatchGoalState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration, float combinedDuration) {
