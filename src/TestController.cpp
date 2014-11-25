@@ -939,13 +939,14 @@ void TestController::WatchBallState::step(float dt, Vision::Results* visionResul
 		|| Math::abs(paramD - pid.getDParam()) < 0.0001f
 	) {
 	//if (paramP != pid.getPParam() || paramI != pid.getIParam() || paramD != pid.getDParam()) {
-		std::cout << "! Updated PID params P: " << paramP << ", I: " << paramI << ", D: " << paramD << std::endl;
+		std::cout << "! Updated PID params P: " << paramP << ", I: " << paramI << ", D: " << paramD << ", REAL P: " << pid.getPParam() << ", I: " << pid.getIParam() << ", D: " << pid.getDParam() << std::endl;
 
 		pid.setTunings(paramP, paramI, paramD);
+		pid.reset();
 
-		ai->parameters[0] = Util::toString(paramP);
+		/*ai->parameters[0] = Util::toString(paramP);
 		ai->parameters[1] = Util::toString(paramI);
-		ai->parameters[2] = Util::toString(paramD);
+		ai->parameters[2] = Util::toString(paramD);*/
 	}
 
 	float targetValue = 0.0f;
