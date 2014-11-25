@@ -969,8 +969,6 @@ Vision::PathMetric Vision::getPathMetric(int x1, int y1, int x2, int y2, std::ve
 				firstColor = std::string(color->name);
 			}
 
-			lastColor = std::string(color->name);
-
 			if (strcmp(color->name, "black") == 0) {
 				blacksInRow++;
 
@@ -1044,6 +1042,8 @@ Vision::PathMetric Vision::getPathMetric(int x1, int y1, int x2, int y2, std::ve
             if (requiredColor != "" && color->name == requiredColor) {
                 requiredColorFound = true;
             }
+
+			lastColor = std::string(color->name);
         } else {
             if (debug) {
                 canvas.drawMarker(x, y, 200, 0, 0);
