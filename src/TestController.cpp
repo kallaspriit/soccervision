@@ -1109,12 +1109,15 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 			} else {
 				ai->setState("fetch-ball-direct");
 			}
-		} else if (ai->lastTurnAroundTime == -1.0 || Util::duration(ai->lastTurnAroundTime) > minTurnBreak) {
+
+			return;
+		} else {
 			if (goal != NULL) {
 				// ball behind and target goal in front, fetch it from behind
 				ai->setState("fetch-ball-behind");
-			}
-			else {
+
+				return;
+			} else if (ai->lastTurnAroundTime == -1.0 || Util::duration(ai->lastTurnAroundTime) > minTurnBreak) {
 				// ball found behind but no goal visible, turn around
 				float turnAngle = ball->angle;
 				float underturnAngle = Math::degToRad(15.0f);
@@ -1138,16 +1141,14 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 				robot->turnBy(turnAngle, turnSpeed);
 
 				ai->lastTurnAroundTime = Util::millitime();
+			} else {
+				// ball is behind but turn around already executed lately, keep on turning
+				robot->setTargetOmega(searchOmega * searchDir);
 			}
 
 			return;
 		}
-		else {
-			// ball is behind but turn around already executed lately, keep on turning
-			robot->setTargetOmega(searchOmega * searchDir);
-		}
-	}
-	else {
+	} else {
 		// robot is out, return to the playing area
 		if (ai->isRobotOutFront || ai->isRobotOutRear) {
 			ai->setState("return-field");
