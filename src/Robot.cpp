@@ -489,8 +489,6 @@ void Robot::lookAt(Object* object, float lookAtP) {
 			leftEdge + goalKickThresholdPixels < halfWidth
 			&& rightEdge - goalKickThresholdPixels > halfWidth
 		) {
-			std::cout << "@ IGNORE LOOKAT" << std::endl;
-
 			return;
 		}
 	}
