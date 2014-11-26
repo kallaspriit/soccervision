@@ -97,11 +97,11 @@ void Coilgun::kickOnceGotBall(int mainDuration, int mainDelay, float chipDistanc
 
 	std::string parametersStr = Util::toString(kickOnceGotBallParameters.mainDuration) + ":" + Util::toString(kickOnceGotBallParameters.mainDelay) + ":" + Util::toString(chipDuration) + ":" + Util::toString(kickOnceGotBallParameters.chipDelay);
 
-	if (chipDistance > 0) {
+	/*if (chipDistance > 0) {
 		std::cout << "! Chip-kicking once got the ball to " << chipDistance << " meters" << std::endl;
 	} else {
 		std::cout << "! Kicking once got the ball: " << parametersStr << std::endl;
-	}
+	}*/
 
 	com->send("bdkick:" + parametersStr);
 
