@@ -2030,6 +2030,7 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 
 	Vision::BallInWayMetric ballInWayMetric;
 	float ballNearDistance = 0.4f;
+	float ballFarDistance = 1.0f;
 	bool isBallInWay = false;
 	bool shouldAvoidBallInWay = false;
 	//int ballInWayFramesThreshold = 3;
@@ -2052,6 +2053,25 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 				chipKickDistance = ai->getChipKickDistance(ballInWayMetric, goal->distance);
 			//}
 		}
+	} else if (ball->distance > ballFarDistance) {
+		// the ball has become far away, probably seeing another ball, search for a new ball
+
+		ai->setState("find-ball");
+
+		return;
+	}
+
+	// store ball first sighting distance
+	if (enterDistance == -1.0f) {
+		enterDistance = ball->distance;
+	} else if (
+		ball->distance > enterDistance + 0.2f
+		&& stateDuration >= 0.5f
+	) {
+		// ball has gotten further than when started, probably messed it up, switch to faster fetch
+		ai->setState("fetch-ball-front");
+
+		return;
 	}
 
 	if (useChipKick) {
