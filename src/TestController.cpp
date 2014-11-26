@@ -2651,13 +2651,15 @@ void TestController::ReturnFieldState::onEnter(Robot* robot, Parameters paramete
 void TestController::ReturnFieldState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration, float combinedDuration) {
 	robot->stop();
 
-	if (robot->hasTasks()) {
+	if (!ai->isRobotOutFront && !ai->isRobotOutRear) {
+		robot->clearTasks();
+
+		ai->setState("find-ball");
+
 		return;
 	}
 
-	if (!ai->isRobotOutFront && !ai->isRobotOutRear) {
-		ai->setState("find-ball");
-
+	if (robot->hasTasks()) {
 		return;
 	}
 
