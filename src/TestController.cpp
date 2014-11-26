@@ -1521,7 +1521,7 @@ void TestController::FetchBallDirectState::onEnter(Robot* robot, Parameters para
 
 void TestController::FetchBallDirectState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration, float combinedDuration) {
 	robot->stop();
-	//robot->dribbler->useNormalLimits();
+	robot->dribbler->useNormalLimits();
 
 	if (robot->dribbler->gotBall()) {
 		ai->dbg("gotBall", true);
@@ -2042,7 +2042,8 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	float ballDistance = ball->getDribblerDistance();
 	float nearDistance = 0.35f;
 	float maxSideSpeedDistance = 0.3f;
-	float maxSideSpeedBallAngle = 45.0f;
+	//float maxSideSpeedBallAngle = 45.0f;
+	float maxSideSpeedBallAngle = 35.0f;
 	float ballMovedAwayDistance = 0.2f;
 	float sideP = 0.85f;
 	//float maxSideSpeed = 1.5f;
