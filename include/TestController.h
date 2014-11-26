@@ -57,8 +57,12 @@ public:
 	class WatchGoalState : public State {
 
 	public:
-		WatchGoalState(TestController* ai) : State(ai) {}
+		WatchGoalState(TestController* ai) : State(ai), pid(5.5f, 1.0f, 0.005f, 0.016f) {}
+		void onEnter(Robot* robot, Parameters parameters);
 		void step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration, float combinedDuration);
+
+	private:
+		PID pid;
 
 	};
 

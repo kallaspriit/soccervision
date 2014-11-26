@@ -180,9 +180,11 @@ namespace Config {
 	// proportional multiplier for looking at object, multiplied by object angle
 	//const float lookAtP = 7.0f;
 	const float lookAtP = 5.5f;
+	const float lookAtI = 1.0f;
+	const float lookAtD = 0.005f;
 
 	// maximum look-at omega is achived is object is at this angle or more
-	const float lookAtMaxSpeedAngle = 30.0f;
+	const float lookAtMaxSpeedAngle = 45.0f;
 
 	// for how many frames must the real wheel speed vary considerably from target speed to be considered stalled
 	const int robotWheelStalledThreshold = 60;

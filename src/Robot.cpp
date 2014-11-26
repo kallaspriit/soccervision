@@ -12,7 +12,7 @@
 #include <map>
 #include <sstream>
 
-Robot::Robot(AbstractCommunication* com) : com(com), wheelFL(NULL), wheelFR(NULL), wheelRL(NULL), wheelRR(NULL), coilgun(NULL), robotLocalizer(NULL), odometerLocalizer(NULL), ballLocalizer(NULL), odometer(NULL), visionResults(NULL), chipKickRequested(false), requestedChipKickLowerDribbler(false), requestedChipKickDistance(0.0f) {
+Robot::Robot(AbstractCommunication* com) : com(com), wheelFL(NULL), wheelFR(NULL), wheelRL(NULL), wheelRR(NULL), coilgun(NULL), robotLocalizer(NULL), odometerLocalizer(NULL), ballLocalizer(NULL), odometer(NULL), visionResults(NULL), chipKickRequested(false), requestedChipKickLowerDribbler(false), requestedChipKickDistance(0.0f), lookAtPid(Config::lookAtP, Config::lookAtI, Config::lookAtD, 0.016f) {
     targetOmega = 0;
     targetDir = Math::Vector(0, 0);
    
@@ -30,6 +30,14 @@ Robot::Robot(AbstractCommunication* com) : com(com), wheelFL(NULL), wheelFR(NULL
 	coilgunCharged = false;
 
 	json = "null";
+
+	float lookAtLimit = Config::lookAtMaxSpeedAngle * Config::lookAtP;
+
+	lookAtPid.setInputLimits(-Config::lookAtMaxSpeedAngle, Config::lookAtMaxSpeedAngle);
+	lookAtPid.setOutputLimits(-lookAtLimit, lookAtLimit);
+	lookAtPid.setMode(AUTO_MODE);
+	lookAtPid.setBias(0.0f);
+	lookAtPid.reset();
 }
 
 Robot::~Robot() {
@@ -498,7 +506,15 @@ void Robot::lookAt(Object* object, float lookAtP, bool stare) {
 }
 
 void Robot::lookAt(const Math::Angle& angle, float lookAtP) {
+	// simple P-controller
 	setTargetOmega(Math::limit(angle.rad() * lookAtP, Math::degToRad(Config::lookAtMaxSpeedAngle) * Config::lookAtP));
+
+	// PID controller
+	/*lookAtPid.setProcessValue(angle.deg());
+
+	float omega = lookAtPid.compute();
+
+	setTargetOmega(-Math::degToRad(omega));*/
 }
 
 void Robot::lookAtBehind(Object* object) {

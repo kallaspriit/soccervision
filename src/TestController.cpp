@@ -919,17 +919,17 @@ void TestController::ManualControlState::step(float dt, Vision::Results* visionR
 }
 
 void TestController::WatchBallState::onEnter(Robot* robot, Parameters parameters) {
-	pid.reset();
+	
 
 	// distanceX based
 	//pid.setInputLimits(-1.0f, 1.0f);
 
 	// angle based
 	pid.setInputLimits(-45.0f, 45.0f);
-	
 	pid.setOutputLimits(-1.5f, 1.5f);
 	pid.setMode(AUTO_MODE);
 	pid.setBias(0.0f);
+	pid.reset();
 }
 
 void TestController::WatchBallState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration, float combinedDuration) {
@@ -957,15 +957,10 @@ void TestController::WatchBallState::step(float dt, Vision::Results* visionResul
 		|| paramI != pid.getIParam()
 		|| paramD != pid.getDParam()
 	) {
-	//if (paramP != pid.getPParam() || paramI != pid.getIParam() || paramD != pid.getDParam()) {
 		std::cout << "! Updated PID params P: " << paramP << ", I: " << paramI << ", D: " << paramD << std::endl;
 
 		pid.setTunings(paramP, paramI, paramD);
 		pid.reset();
-
-		/*ai->parameters[0] = Util::toString(paramP);
-		ai->parameters[1] = Util::toString(paramI);
-		ai->parameters[2] = Util::toString(paramD);*/
 	}
 
 	float targetValue = 0.0f;
@@ -988,6 +983,18 @@ void TestController::WatchBallState::step(float dt, Vision::Results* visionResul
 	ai->dbg("6. sideSpeed", sideSpeed);
 }
 
+void TestController::WatchGoalState::onEnter(Robot* robot, Parameters parameters) {
+	pid.reset();
+
+	float lookAtLimit = Config::lookAtMaxSpeedAngle * Config::lookAtP;
+
+	pid.setInputLimits(-Config::lookAtMaxSpeedAngle, Config::lookAtMaxSpeedAngle);
+	pid.setOutputLimits(-lookAtLimit, lookAtLimit);
+	pid.setMode(AUTO_MODE);
+	pid.setBias(0.0f);
+	pid.reset();
+}
+
 void TestController::WatchGoalState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration, float combinedDuration) {
 	Object* goal = visionResults->getLargestGoal(ai->targetSide, Dir::FRONT);
 
@@ -998,7 +1005,35 @@ void TestController::WatchGoalState::step(float dt, Vision::Results* visionResul
 	}
 
 	robot->setTargetDir(ai->manualSpeedX, ai->manualSpeedY);
-	robot->lookAt(goal);
+	
+	//robot->lookAt(goal);
+
+	float paramP = Util::toFloat(ai->parameters[0]);
+	float paramI = Util::toFloat(ai->parameters[1]);
+	float paramD = Util::toFloat(ai->parameters[2]);
+
+	if (
+		paramP != pid.getPParam()
+		|| paramI != pid.getIParam()
+		|| paramD != pid.getDParam()
+	) {
+		std::cout << "! Updated PID params P: " << paramP << ", I: " << paramI << ", D: " << paramD << std::endl;
+
+		pid.setTunings(paramP, paramI, paramD);
+		pid.reset();
+	}
+
+	pid.setProcessValue(Math::radToDeg(goal->angle));
+
+	float targetOmega = pid.compute();
+
+	robot->setTargetOmega(-Math::degToRad(targetOmega));
+
+	ai->dbg("1. P", pid.getPParam());
+	ai->dbg("2. I", pid.getIParam());
+	ai->dbg("3. D", pid.getDParam());
+	ai->dbg("5. accumulatedError", pid.getAccumulatedError());
+	ai->dbg("6. targetOmega", targetOmega);
 }
 
 void TestController::WatchGoalBehindState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration, float combinedDuration) {
@@ -2019,7 +2054,7 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 		if (ball != NULL) {
 			ai->setState("fetch-ball-behind");
 		} else {
-			// turn by 90 degrees and hope something good better shows up
+			// turn by 90 degrees and hope something better shows up
 			robot->turnBy(Math::degToRad(90.0f));
 
 			ai->setState("fetch-ball-behind");
@@ -2034,6 +2069,8 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	bool isBallInWay = false;
 	bool shouldAvoidBallInWay = false;
 	//int ballInWayFramesThreshold = 3;
+	int ballInWayFramesThreshold = 1;
+	int kickStrength = 0;
 
 	// decide to use chip-kicker if there's a ball in way when the ball is close, add some delay so ball just hit wouldn't get counted
 	if (ball->distance < ballNearDistance) {
@@ -2046,12 +2083,12 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 			ballInWayFrames++;
 
 			// sometimes does not detect several frames
-			//if (ballInWayFrames >= ballInWayFramesThreshold) {
+			if (ballInWayFrames >= ballInWayFramesThreshold) {
 				// TODO check that have sufficient voltage..
 				useChipKick = true;
 
 				chipKickDistance = ai->getChipKickDistance(ballInWayMetric, goal->distance);
-			//}
+			}
 		}
 	} else if (ball->distance > ballFarDistance) {
 		// the ball has become far away, probably seeing another ball, search for a new ball
@@ -2091,7 +2128,7 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 		robot->coilgun->kickOnceGotBall(0, 0, chipKickDistance, 0);
 	} else {
 		// reduce kick strength when goal is close
-		int kickStrength = (int)Math::map(goal->distance, 1.0f, 4.0f, (float)Config::robotDefaultKickStrength / 2.0f, (float)Config::robotDefaultKickStrength);
+		kickStrength = (int)Math::map(goal->distance, 1.0f, 4.0f, (float)Config::robotDefaultKickStrength / 2.0f, (float)Config::robotDefaultKickStrength);
 
 		//robot->dribbler->useNormalLimits();
 		robot->coilgun->kickOnceGotBall(kickStrength, 0, 0, 0);
@@ -2182,6 +2219,7 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	ai->dbg("wasNearGoalLately", wasNearGoalLately);
 	ai->dbg("ballInWayFrames", ballInWayFrames);
 	ai->dbg("chipKickDistance", chipKickDistance);
+	ai->dbg("kickStrength", kickStrength);
 }
 
 /*void TestController::FetchBallNearState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration, float combinedDuration) {

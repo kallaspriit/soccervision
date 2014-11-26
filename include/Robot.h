@@ -10,6 +10,7 @@
 #include "Tasks.h"
 #include "AbstractCommunication.h"
 #include "Command.h"
+#include "PID.h"
 
 #include <string>
 
@@ -132,6 +133,8 @@ private:
 	ParticleFilterLocalizer::Measurements measurements;
 	BallLocalizer::BallList visibleBalls;
 	Math::Polygon currentCameraFOV;
+
+	PID lookAtPid;
 
 	std::string json;
 };
