@@ -173,7 +173,7 @@ namespace Config {
 	const float robotDribblerMoveDuration = 0.6f;
 	const int robotDribblerLimitMin = 600;
 	const int robotDribblerLimitMax = 2500;
-	const float robotDribblerStabilityDelay = 0.2f;
+	const float robotDribblerStabilityDelay = 0.1f;
 
 	// coilgun voltage lower then this is considered to be low
 	const float robotCoilgunLowVoltageThreshold = 240.0f;

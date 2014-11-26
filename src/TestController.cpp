@@ -2450,7 +2450,7 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 		if (ai->wasNearGoalLately(2.0f)) {
 
 			// give the ball some time to stabilize
-			if (robot->dribbler->getBallInDribblerTime() > Config::robotDribblerStabilityDelay) {
+			if (robot->dribbler->getBallInDribblerTime() > Config::robotDribblerStabilityDelay * 2.0f) {
 				robot->setTargetOmega(searchGoalDir * Math::PI);
 			}
 		} else {
