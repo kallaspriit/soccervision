@@ -103,20 +103,29 @@
 * - drives through the opponent's goal at the start if the first ball on the left is close to it
 * - show apparent goal locations in dash
 * - calculate goal distance from center of goal moving down finding first green pixel
+* - prepare laptop to compile new code
+* - prepare another laptop with better battery to use for dash
 *
 * Future
 * - make all parameters settable in the UI
 * - implement logviking-style logging with filterable components
 *
 * Testing scenarious
-* - fetch string of balls in front
-* - fetch string of balls behind
-* - fetch diagonal set of balls
-* - fetch ball behind near own goal (turn around)
-* - fetch ball from own/opponent goal corner (near both lines)
-* - fetch ball on the line
-* - fetch ball at large angle from own goal, facing own goal
-* - fetch balls from 4 corners (probably includes search)
+* - fetch ball from in front of own goal
+* - fetch ball close to own goal from behind
+* - fetch ball close to opponents goal corners
+* - fetch a string of balls straight behind each other
+* - fetch a string of balls diagonally (both diagonals)
+* - fetch ball in opposite corner
+* - fetch a string of balls behind robot (large and small gaps)
+* - find ball/roam field if none visible
+* - fetch ball on the line while opponents goal is visible
+* - fetch ball on the line when goal not visible (do not push out)
+* - fetch balls from corners (near own goal and opponents)
+* - test ball in way at large distance from opponents goal
+* - test ball in way at small distance from opponents goal
+* - test kicking into a very small goal
+* - test returning to field at all sides
 */
 
 TestController::TestController(Robot* robot, AbstractCommunication* com) : BaseAI(robot, com), targetSide(Side::BLUE), manualSpeedX(0.0f), manualSpeedY(0.0f), manualOmega(0.0f), manualDribblerSpeed(0), manualKickStrength(0), blueGoalDistance(0.0f), yellowGoalDistance(0.0f), lastCommandTime(-1.0), lastBallTime(-1.0), lastNearLineTime(-1.0), lastNearGoalTime(-1.0), lastInCornerTime(-1.0), lastTargetGoalAngle(0.0f), lastBall(NULL), lastTurnAroundTime(-1.0), lastClosestGoalDistance(-1.0f), lastTargetGoalDistance(-1.0f), framesRobotOutFront(0), framesRobotOutRear(0), isRobotOutFront(false), isRobotOutRear(false), isNearLine(false), isInCorner(false), isBallInWay(false), isAvoidingBallInWay(false), inCornerFrames(0), nearLineFrames(0), nearGoalFrames(0), visibleBallCount(0) {
