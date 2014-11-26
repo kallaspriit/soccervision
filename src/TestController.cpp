@@ -82,6 +82,7 @@
 * + should prefer balls from the rear more often
 * + sometimes high level thinks the dribbler has ball while low-level does not agree
 * + robot does not keep picking the next ball behind
+* - in fetch ball near, if the ball is very close and the kick window is not clear, send no-kick and fetch direct, special care when dribbler up
 * - avoid going for the ball that it just kicked towards the goal
 * - dribbler should not report having ball when last kick time is very small
 * - when driving behind ball, check whether the robot fits and if not, drive behind the next ball
@@ -2659,7 +2660,8 @@ void TestController::ReturnFieldState::step(float dt, Vision::Results* visionRes
 		queuedApproachGoal = true;
 
 		// search for any furthest goal
-		Object* goal = visionResults->getLargestGoal(Side::UNKNOWN, Dir::FRONT);
+		//Object* goal = visionResults->getLargestGoal(Side::UNKNOWN, Dir::FRONT);
+		Object* goal = visionResults->getFurthestGoal();
 
 		if (goal != NULL && goal->distance > Config::fieldWidth / 3.0f) {
 			robot->lookAt(goal);
