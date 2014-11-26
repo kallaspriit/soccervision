@@ -1684,6 +1684,14 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 		return;
 	}
 
+	if (ai->isRobotOutFront) {
+		robot->clearTasks();
+
+		ai->setState("return-field");
+
+		return;
+	}
+
 	if (robot->hasTasks()) {
 		// even when executing driving behind ball, make sure we don't reverse into our own goal
 		Side ownSide = ai->targetSide == Side::YELLOW ? Side::BLUE : Side::YELLOW;
