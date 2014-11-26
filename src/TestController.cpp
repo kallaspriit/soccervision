@@ -1108,9 +1108,11 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 	ai->dbgs("search", "any closest");
 	}*/
 
+
 	Object* goal = visionResults->getLargestGoal(ai->targetSide, Dir::FRONT);
 
 	bool preferRear = false;
+	bool preferFront = false;
 	bool kickedLately = robot->coilgun->getTimeSinceLastKicked() < 1.5f;
 
 	// search from front at the very beginning not to go after a ball seen on the operators hand
@@ -1121,6 +1123,9 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 		// this is not a good idea when there are several balls nearby in front of the robot
 		//ballSearchDir = Dir::REAR;
 		preferRear = true;
+	} else if (ai->lastStateName == "fetch-ball-behind") {
+		// search from front if recently fetching from behind failed
+		preferFront = true;
 	}
 
 	// starts taking balls behind current one one after another
@@ -1128,7 +1133,7 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 		preferRear = true;
 	}*/
 
-	Object* ball = visionResults->getClosestBall(ballSearchDir, false, false, preferRear);
+	Object* ball = visionResults->getClosestBall(ballSearchDir, false, false, preferRear, preferFront);
 
 	// avoid switching search direction for a few frames
 	if (ball == NULL && ballSearchDir != Dir::ANY && stateDuration >= 0.032f) {
@@ -1141,6 +1146,7 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 	}
 
 	ai->dbg("preferRear", preferRear);
+	ai->dbg("preferFront", preferFront);
 	ai->dbg("kickedLately", kickedLately);
 	ai->dbg("ballSearchDir", ballSearchDir);
 	ai->dbg("wasSearchingRecently", wasSearchingRecently);

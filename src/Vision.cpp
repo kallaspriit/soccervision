@@ -1930,7 +1930,7 @@ void Vision::updateColorOrder() {
 	std::cout << std::endl;*/
 }
 
-Object* Vision::Results::getClosestBall(Dir dir, bool nextClosest, bool preferLeft, bool preferRear) {
+Object* Vision::Results::getClosestBall(Dir dir, bool nextClosest, bool preferLeft, bool preferRear, bool preferFront) {
 	Object* blueGoal = getLargestGoal(Side::BLUE);
 	Object* yellowGoal = getLargestGoal(Side::YELLOW);
 
@@ -1949,6 +1949,11 @@ Object* Vision::Results::getClosestBall(Dir dir, bool nextClosest, bool preferLe
 			}
 
 			ballDistance = ball->distance;
+
+			// fake front ball distances to be closer
+			if (preferFront) {
+				ballDistance *= 0.5f;
+			}
 
 			// fake balls on the left to be closer
 			if (preferLeft && ball->angle < 0.0f) {
