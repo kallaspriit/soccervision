@@ -2036,7 +2036,7 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	//int ballInWayFramesThreshold = 3;
 
 	// decide to use chip-kicker if there's a ball in way when the ball is close, add some delay so ball just hit wouldn't get counted
-	if (ball->distance < ballNearDistance && stateDuration >= 0.5f) {
+	if (ball->distance < ballNearDistance) {
 		ballInWayMetric = visionResults->getBallInWayMetric(visionResults->front->balls, goal->y + goal->height / 2, ball);
 		
 		isBallInWay = ballInWayMetric.isBallInWay;
