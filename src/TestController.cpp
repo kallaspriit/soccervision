@@ -2056,7 +2056,8 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	}
 
 	if (useChipKick) {
-		if (ball->distance < 0.2f && robot->coilgun->isLowVoltage()) {
+		// does not work if the dribbler has no time to come back down, might work with faster servos
+		/*if (ball->distance < 0.2f && robot->coilgun->isLowVoltage()) {
 			std::cout << "@ LOW VOLTAGE, FETCH DIRECT" << std::endl;
 
 			robot->dribbler->useNormalLimits();
@@ -2065,7 +2066,7 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 			ai->setState("fetch-ball-direct");
 
 			return;
-		}
+		}*/
 
 		//robot->dribbler->useChipKickLimits();
 		robot->coilgun->kickOnceGotBall(0, 0, chipKickDistance, 0);
