@@ -2669,6 +2669,8 @@ void TestController::ReturnFieldState::step(float dt, Vision::Results* visionRes
 				robot->setTargetDirFor(2.0f, 0.0f, 0.0f, 1.0f);
 
 				queuedApproachGoal = false;
+
+				return;
 			}
 		}
 		else {
