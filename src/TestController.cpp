@@ -105,6 +105,7 @@
 * - calculate goal distance from center of goal moving down finding first green pixel
 * - prepare laptop to compile new code
 * - prepare another laptop with better battery to use for dash
+* - spin around dribbler while aiming could be accelerating
 *
 * Future
 * - make all parameters settable in the UI

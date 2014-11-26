@@ -153,7 +153,7 @@ namespace Config {
 
 	// in how many seconds to spin around the dribbler
 	//const float robotSpinAroundDribblerPeriod = 2.0f;
-	const float robotSpinAroundDribblerPeriod = 1.0f;
+	const float robotSpinAroundDribblerPeriod = 1.5f;
 	
 	// in how big of a radius to spin around the dribbler
 	const float robotSpinAroundDribblerRadius = 0.1f;
