@@ -86,7 +86,7 @@ void Dribbler::applyLimits() {
 	int servoLimitLower = (int)(Math::map((float)lowerLimit, 0.0f, 100.0f, min, max));
 	int servoLimitUpper = (int)(min + max - Math::map((float)upperLimit, 0.0f, 100.0f, min, max));
 
-	std::cout << "! Setting servo limits to " << lowerLimit << "-" << upperLimit << " (" << servoLimitLower << "-" << servoLimitUpper << ")" << std::endl;
+	//std::cout << "! Setting servo limits to " << lowerLimit << "-" << upperLimit << " (" << servoLimitLower << "-" << servoLimitUpper << ")" << std::endl;
 	
 	com->send("servos:" + Util::toString(servoLimitLower) + ":" + Util::toString(servoLimitUpper));
 
