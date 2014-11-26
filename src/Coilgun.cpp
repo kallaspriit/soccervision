@@ -42,7 +42,7 @@ void Coilgun::kick(int microseconds) {
 void Coilgun::chipKick(float distanceMeters) {
 	int microseconds = getChipKickDurationByDistance(distanceMeters);
 
-	//std::cout << "! Chip-kicking to distance of " << distanceMeters << " meters for " << microseconds << " microseconds" << std::endl;
+	std::cout << "! Chip-kicking to distance of " << distanceMeters << " meters for " << microseconds << " microseconds" << std::endl;
 
 	com->send("dkick:0:0:" + Util::toString(microseconds) + ":0");
 
@@ -97,7 +97,11 @@ void Coilgun::kickOnceGotBall(int mainDuration, int mainDelay, float chipDistanc
 
 	std::string parametersStr = Util::toString(kickOnceGotBallParameters.mainDuration) + ":" + Util::toString(kickOnceGotBallParameters.mainDelay) + ":" + Util::toString(chipDuration) + ":" + Util::toString(kickOnceGotBallParameters.chipDelay);
 
-	//std::cout << "! Kicking once got the ball: " << parametersStr << std::endl;
+	if (chipDistance > 0) {
+		std::cout << "! Chip-kicking once got the ball to " << chipDistance << " meters" << std::endl;
+	} else {
+		std::cout << "! Kicking once got the ball: " << parametersStr << std::endl;
+	}
 
 	com->send("bdkick:" + parametersStr);
 

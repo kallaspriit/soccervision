@@ -1123,9 +1123,10 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 		preferRear = true;
 	}
 
-	if (goal != NULL) {
+	// starts taking balls behind current one one after another
+	/*if (goal != NULL) {
 		preferRear = true;
-	}
+	}*/
 
 	Object* ball = visionResults->getClosestBall(ballSearchDir, false, false, preferRear);
 
