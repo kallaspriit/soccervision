@@ -1533,6 +1533,7 @@ void TestController::FetchBallDirectState::onEnter(Robot* robot, Parameters para
 void TestController::FetchBallDirectState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration, float combinedDuration) {
 	robot->stop();
 	robot->dribbler->useNormalLimits();
+	robot->coilgun->cancelKickOnceGotBall();
 
 	if (robot->dribbler->gotBall()) {
 		ai->dbg("gotBall", true);
