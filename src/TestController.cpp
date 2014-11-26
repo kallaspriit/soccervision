@@ -2446,6 +2446,7 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 		spinDuration += dt;
 
 		//if (ai->isRobotNearGoal()) {
+		// do not turn around the ball if was near the goal lately as might drive into the goal with back end
 		if (ai->wasNearGoalLately()) {
 			robot->setTargetOmega(searchGoalDir * Math::PI);
 		} else {
