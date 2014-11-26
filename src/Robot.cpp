@@ -477,7 +477,7 @@ void Robot::lookAt(Object* object, float lookAtP) {
 		return;
 	}
 
-	if (Math::abs(object->distanceX) < 0.25f) {
+	if ((object->type == Side::BLUE || object->type == Side::YELLOW) && Math::abs(object->distanceX) < 0.25f) {
 		std::cout << "@ IGNORE LOOKAT" << std::endl;
 
 		return;

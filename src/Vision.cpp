@@ -124,7 +124,7 @@ ObjectList Vision::processBalls(Dir dir, ObjectList& goals) {
 			distance.x,
 			distance.y,
             distance.angle,
-			0,
+			3,
 			dir == Dir::FRONT ? false : true
         );
 		
