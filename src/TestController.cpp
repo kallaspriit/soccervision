@@ -81,8 +81,10 @@
 * + search from front at the very beginning not to go after a ball seen on the operators hand
 * + should prefer balls from the rear more often
 * + sometimes high level thinks the dribbler has ball while low-level does not agree
+* + robot does not keep picking the next ball behind
 * - avoid going for the ball that it just kicked towards the goal
 * - dribbler should not report having ball when last kick time is very small
+* - when driving behind ball, check whether the robot fits and if not, drive behind the next ball
 * - fetch ball behind switches to further and further balls, should probably not
 * - fetch ball direct thinks it's near a line too often and is then very slow
 * - fetch ball near chip kick dribbler sometimes is still in the way
