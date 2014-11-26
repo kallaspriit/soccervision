@@ -850,7 +850,7 @@ bool TestController::shouldAvoidBallInWay(Vision::BallInWayMetric ballInWayMetri
 	}
 
 	// don't avoid balls in goals
-	if (Math::abs(ballInWayMetric.closestBallInWayDistance - goalDistance) <= 0.6f) {
+	if (Math::abs(ballInWayMetric.closestBallInWayDistance - goalDistance) <= 0.2f) {
 		//std::cout << "@ NOT AVOIDING BALL IN GOAL, BALL: " << ballInWayMetric.closestBallInWayDistance << "m, goal: " << goal->distance << "m" << std::endl;
 
 		return false;
