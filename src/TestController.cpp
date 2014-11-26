@@ -113,8 +113,9 @@
 * Testing scenarious
 * + fetch ball direct at distance when seeing opponents goal
 * + fetch ball direct at distance when not seeing opponents goal
-* - fetch ball from in front of own goal facing opponents goal
-* - fetch ball from in front of own goal facing own goal
+* + fetch ball from in front of own goal facing opponents goal
+* + fetch ball from in front of own goal facing own goal
+* - fetch ball very close to own goal (should not turn around the ball into the goal)
 * - fetch ball close to own goal from behind
 * - fetch ball close to opponents goal corners
 * - fetch a string of balls straight behind each other
@@ -724,6 +725,7 @@ std::string TestController::getJSON() {
 	stream << "\"isNearGoal\": " << (isNearGoal ? "true" : "false") << ",";
 	stream << "\"visibleBallCount\": " << visibleBallCount << ",";
 	stream << "\"wasInCornerLately\": " << (wasInCornerLately() ? "\"true: " + Util::toString(Util::duration(lastInCornerTime)) + "\"" : "false") << ",";
+	stream << "\"wasInGoalLately\": " << (wasNearGoalLately() ? "\"true: " + Util::toString(Util::duration(lastNearGoalTime)) + "\"" : "false") << ",";
 	stream << "\"isNearLine\": " << (isNearLine ? "true" : "false") << ",";
 	stream << "\"isBallInWay\": " << (isBallInWay ? "true" : "false") << ",";
 	stream << "\"isAvoidingBallInWay\": " << (isAvoidingBallInWay ? "true" : "false") << ",";
