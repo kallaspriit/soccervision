@@ -106,6 +106,7 @@
 * - prepare laptop to compile new code
 * - prepare another laptop with better battery to use for dash
 * - spin around dribbler while aiming could be accelerating
+* - spin around dribbler could be turning around one wrong wheel to always push ball
 *
 * Future
 * - make all parameters settable in the UI
