@@ -1704,9 +1704,15 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 
 			// own goal was close, start searching for new ball
 			ai->setState("find-ball");
+
+			return;
 		}
 
-		if (ai->isRobotOutFront) {
+		Object* ball = visionResults->getClosestBall(Dir::FRONT);
+
+		// dont return to field if there's a ball close by that we're fetching from the edge of field
+		// TODO check that this ball is on the field (path black-white)
+		if (ai->isRobotOutFront && (ball == NULL || ball->distance > 0.5f)) {
 			robot->clearTasks();
 
 			ai->setState("return-field");
