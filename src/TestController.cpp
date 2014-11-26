@@ -1712,13 +1712,13 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 
 		// dont return to field if there's a ball close by that we're fetching from the edge of field
 		// TODO check that this ball is on the field (path black-white)
-		if (ai->isRobotOutFront && (ball == NULL || ball->distance > 0.5f)) {
+		/*if (ai->isRobotOutFront && (ball == NULL || ball->distance > 0.5f)) {
 			robot->clearTasks();
 
 			ai->setState("return-field");
 
 			return;
-		}
+		}*/
 
 		ai->dbg("ownGoalDistance", ownGoal != NULL ? ownGoal->distance : -1.0f);
 
