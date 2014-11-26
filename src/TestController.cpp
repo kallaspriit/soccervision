@@ -86,6 +86,7 @@
 * - dribbler should not report having ball when last kick time is very small
 * - when driving behind ball, check whether the robot fits and if not, drive behind the next ball
 * - fetch ball behind switches to further and further balls, should probably not
+* - while performing drive behind ball, it should check whether it has gone out as well
 * - fetch ball direct thinks it's near a line too often and is then very slow
 * - fetch ball near chip kick dribbler sometimes is still in the way
 * - does outside of field detection work in all states
@@ -1695,6 +1696,14 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 			ai->setState("find-ball");
 		}
 
+		if (ai->isRobotOutFront) {
+			robot->clearTasks();
+
+			ai->setState("return-field");
+
+			return;
+		}
+
 		ai->dbg("ownGoalDistance", ownGoal != NULL ? ownGoal->distance : -1.0f);
 
 		return;
@@ -1750,7 +1759,7 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 	if (
 		ball == NULL
 		|| (lastBallDistance != -1.0f && ball->getDribblerDistance() > lastBallDistance * 1.25f)
-		) {
+	) {
 		// don't perform the blind reverse if the ball was lost at too great of a distance
 		if (!hadBall || lastBallDistance > 0.8f) {
 			// switch to searching for balls, search in the same direction as approached ball behind
