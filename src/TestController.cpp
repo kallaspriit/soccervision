@@ -117,6 +117,7 @@
 * + fetch ball direct at distance when not seeing opponents goal
 * + fetch ball from in front of own goal facing opponents goal
 * + fetch ball from in front of own goal facing own goal
+* + fetch ball on the centerline facing own goal so it turns around (should not lose ball)
 * - fetch ball very close to own goal (should not turn around the ball into the goal)
 * - fetch ball close to own goal from behind
 * - fetch ball close to opponents goal corners
