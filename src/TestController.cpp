@@ -2648,8 +2648,7 @@ void TestController::ReturnFieldState::step(float dt, Vision::Results* visionRes
 		robot->turnBy(Math::degToRad(180.0f) * findBallState->searchDir, Math::TWO_PI);
 
 		return;
-	}
-	else if (ai->isRobotOutFront || queuedApproachGoal) {
+	} else if (ai->isRobotOutFront || queuedApproachGoal) {
 		// robot is out from front camera, search for a goal and focus on it before starting moving
 		float searchSpeed = Math::PI;
 
@@ -2667,7 +2666,7 @@ void TestController::ReturnFieldState::step(float dt, Vision::Results* visionRes
 
 			if (Math::abs(goal->angle) < Math::degToRad(5.0f)) {
 				// make a blind dash towards the goal
-				robot->setTargetDirFor(1.0f, 0.0f, 0.0f, 1.0f);
+				robot->setTargetDirFor(2.0f, 0.0f, 0.0f, 1.0f);
 
 				queuedApproachGoal = false;
 			}
