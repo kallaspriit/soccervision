@@ -7,7 +7,7 @@
 
 #include <iostream>
 
-Dribbler::Dribbler(int id, AbstractCommunication* com, Coilgun* coilgun) : Wheel(id), com(com), coilgun(coilgun), ballDetected(false), everDetectedBall(false), isRaiseRequested(false), timeSinceRaised(0.0f), timeSinceLowered(0.0f), ballInDribblerTime(0.0), ballLostTime(-1.0f), stopRequestedTime(-1.0), lowerLimit(Config::robotDribblerNormalLowerLimit), upperLimit(Config::robotDribblerNormalUpperLimit), useChipKickLimitsMissedFrames(0) {
+Dribbler::Dribbler(int id, AbstractCommunication* com, Coilgun* coilgun) : Wheel(id), com(com), coilgun(coilgun), ballDetected(false), everDetectedBall(false), isRaiseRequested(false), timeSinceRaised(0.0f), timeSinceLowered(0.0f), timeSinceLimitsApplied(0.0f), ballInDribblerTime(0.0), ballLostTime(-1.0f), stopRequestedTime(-1.0), lowerLimit(Config::robotDribblerNormalLowerLimit), upperLimit(Config::robotDribblerNormalUpperLimit), useChipKickLimitsMissedFrames(0) {
 	applyLimits();
 };
 
@@ -86,9 +86,11 @@ void Dribbler::applyLimits() {
 	int servoLimitLower = (int)(Math::map((float)lowerLimit, 0.0f, 100.0f, min, max));
 	int servoLimitUpper = (int)(min + max - Math::map((float)upperLimit, 0.0f, 100.0f, min, max));
 
-	//std::cout << "! Setting servo limits to " << lowerLimit << "-" << upperLimit << " (" << servoLimitLower << "-" << servoLimitUpper << ")" << std::endl;
+	std::cout << "! Setting servo limits to " << lowerLimit << "-" << upperLimit << " (" << servoLimitLower << "-" << servoLimitUpper << ")" << std::endl;
 	
 	com->send("servos:" + Util::toString(servoLimitLower) + ":" + Util::toString(servoLimitUpper));
+
+	timeSinceLimitsApplied = 0.0f;
 }
 void Dribbler::step(float dt) {
 	Wheel::step(dt);
@@ -129,6 +131,13 @@ void Dribbler::step(float dt) {
 		timeSinceLowered += dt;
 		timeSinceRaised = 0.0f;
 	}
+
+	// apply limits just in case periodically
+	if (timeSinceLimitsApplied > 1.0f) {
+		applyLimits();
+	}
+
+	timeSinceLimitsApplied += dt;
 
 	useChipKickLimitsMissedFrames++;
 

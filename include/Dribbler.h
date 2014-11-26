@@ -42,6 +42,7 @@ private:
 	bool isRaiseRequested;
 	float timeSinceRaised;
 	float timeSinceLowered;
+	float timeSinceLimitsApplied;
 	float ballInDribblerTime;
 	float ballLostTime;
 	double stopRequestedTime;
