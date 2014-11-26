@@ -1925,6 +1925,8 @@ void TestController::FetchBallNearState::onEnter(Robot* robot, Parameters parame
 }
 
 void TestController::FetchBallNearState::onExit(Robot* robot) {
+	std::cout << "@EXIT FetchBallNearState" << std::endl;
+
 	robot->coilgun->cancelKickOnceGotBall();
 	robot->dribbler->useNormalLimits();
 }
