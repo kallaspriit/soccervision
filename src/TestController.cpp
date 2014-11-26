@@ -2651,15 +2651,13 @@ void TestController::ReturnFieldState::onEnter(Robot* robot, Parameters paramete
 void TestController::ReturnFieldState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration, float combinedDuration) {
 	robot->stop();
 
-	if (!ai->isRobotOutFront && !ai->isRobotOutRear) {
-		robot->clearTasks();
-
-		ai->setState("find-ball");
-
+	if (robot->hasTasks()) {
 		return;
 	}
 
-	if (robot->hasTasks()) {
+	if (!ai->isRobotOutFront && !ai->isRobotOutRear) {
+		ai->setState("find-ball");
+
 		return;
 	}
 
@@ -2674,7 +2672,7 @@ void TestController::ReturnFieldState::step(float dt, Vision::Results* visionRes
 
 		if (Math::abs(goal->angle) < Math::degToRad(5.0f)) {
 			// make a blind dash towards the goal
-			robot->setTargetDirFor(2.0f, 0.0f, 0.0f, 1.0f);
+			robot->setTargetDirFor(2.0f, 0.0f, 0.0f, 0.75f);
 
 			queuedApproachGoal = false;
 
@@ -2708,7 +2706,7 @@ void TestController::ReturnFieldState::step(float dt, Vision::Results* visionRes
 				&& visionResults->front->blackDistance.right != -1.0f
 				&& Math::abs(visionResults->front->whiteDistance.left - visionResults->front->whiteDistance.right) < 0.05f
 			) {
-				robot->setTargetDirFor(2.0f, 0.0f, 0.0f, 1.0f);
+				robot->setTargetDirFor(2.0f, 0.0f, 0.0f, 0.75f);
 
 				queuedApproachGoal = false;
 			}
