@@ -477,6 +477,12 @@ void Robot::lookAt(Object* object, float lookAtP) {
 		return;
 	}
 
+	if (Math::abs(object->distanceX) < 0.25f) {
+		std::cout << "@ IGNORE LOOKAT" << std::endl;
+
+		return;
+	}
+
 	lookAt(Math::Rad(object->angle), lookAtP);
 }
 
