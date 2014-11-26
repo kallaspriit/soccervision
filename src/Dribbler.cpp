@@ -150,14 +150,14 @@ bool Dribbler::isLowered() {
 bool Dribbler::gotBall(bool definitive) const {
 	// don't show having ball after just having kicked
 	if (coilgun->getTimeSinceLastKicked() < 0.1f) {
-		std::cout << "@ NO BALL AFTER KICK: " << coilgun->getTimeSinceLastKicked() << std::endl;
+		//std::cout << "@ NO BALL AFTER KICK: " << coilgun->getTimeSinceLastKicked() << std::endl;
 
 		return false;
 	}
 
 	// show ball in dribbler if it hasn't been lost for long
 	if (!definitive && !ballDetected && ballLostTime != -1.0f && ballLostTime < Config::dribblerBallLostThreshold) {
-		std::cout << "@ FAKE GOT BALL, ACTUALLY LOST FOR: " << ballLostTime << std::endl;
+		//std::cout << "@ FAKE GOT BALL, ACTUALLY LOST FOR: " << ballLostTime << std::endl;
 
 		return true;
 	}

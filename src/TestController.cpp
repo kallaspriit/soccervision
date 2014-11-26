@@ -134,6 +134,7 @@
 * - test can detect that robot is out from rear
 * - test can detect balls are out
 * - test can detect balls are in goal
+* - test should not think it's got the ball after kicking
 */
 
 TestController::TestController(Robot* robot, AbstractCommunication* com) : BaseAI(robot, com), targetSide(Side::BLUE), manualSpeedX(0.0f), manualSpeedY(0.0f), manualOmega(0.0f), manualDribblerSpeed(0), manualKickStrength(0), blueGoalDistance(0.0f), yellowGoalDistance(0.0f), lastCommandTime(-1.0), lastBallTime(-1.0), lastNearLineTime(-1.0), lastNearGoalTime(-1.0), lastInCornerTime(-1.0), lastTargetGoalAngle(0.0f), lastBall(NULL), lastTurnAroundTime(-1.0), lastClosestGoalDistance(-1.0f), lastTargetGoalDistance(-1.0f), framesRobotOutFront(0), framesRobotOutRear(0), isRobotOutFront(false), isRobotOutRear(false), isNearLine(false), isInCorner(false), isBallInWay(false), isAvoidingBallInWay(false), inCornerFrames(0), nearLineFrames(0), nearGoalFrames(0), visibleBallCount(0) {
@@ -2434,7 +2435,7 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 			&& !escapeCornerPerformed
 			&& ai->isRobotNearTargetGoal()
 			&& (rearGoal == NULL || ai->getObjectClosestDistance(visionResults, rearGoal) > 1.5f)
-			) {
+		) {
 			ai->setState("escape-corner");
 
 			lastEscapeCornerTime = Util::millitime();
@@ -2444,10 +2445,10 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 
 		spinDuration += dt;
 
-		if (ai->isRobotNearGoal()) {
+		//if (ai->isRobotNearGoal()) {
+		if (ai->wasNearGoalLately()) {
 			robot->setTargetOmega(searchGoalDir * Math::PI);
-		}
-		else {
+		} else {
 			/*if (nearLine) {
 			// spin around dribbler with acceleration and initial reverse
 			float spinAccelerationTime = 1.5f;
@@ -2482,8 +2483,7 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 				// move forwards a bit, getting better grip of the ball
 				robot->setTargetDir(0.25f, 0.0f);
 				robot->dribbler->prime();
-			}
-			else {
+			} else {
 				// TODO Accelerate to speed
 				robot->spinAroundDribbler(searchGoalDir == -1.0f, searchPeriod);
 			}
