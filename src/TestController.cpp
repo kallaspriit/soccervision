@@ -2655,9 +2655,30 @@ void TestController::ReturnFieldState::step(float dt, Vision::Results* visionRes
 		return;
 	}
 
+	if (!ai->isRobotOutFront && !ai->isRobotOutRear) {
+		ai->setState("find-ball");
+
+		return;
+	}
+
 	FindBallState* findBallState = (FindBallState*)ai->states["find-ball"];
 
-	if (ai->isRobotOutRear) {
+	// search for any furthest goal
+	Object* goal = visionResults->getLargestGoal(Side::UNKNOWN, Dir::FRONT);
+	//Object* goal = visionResults->getFurthestGoal();
+
+	if (goal != NULL && goal->distance > Config::fieldWidth / 3.0f) {
+		robot->lookAt(goal);
+
+		if (Math::abs(goal->angle) < Math::degToRad(5.0f)) {
+			// make a blind dash towards the goal
+			robot->setTargetDirFor(2.0f, 0.0f, 0.0f, 1.0f);
+
+			queuedApproachGoal = false;
+
+			return;
+		}
+	} else if (ai->isRobotOutRear) {
 		// turn half a turn in the same dir as normal find ball would
 		robot->turnBy(Math::degToRad(180.0f) * findBallState->searchDir, Math::TWO_PI);
 
@@ -2672,46 +2693,27 @@ void TestController::ReturnFieldState::step(float dt, Vision::Results* visionRes
 
 		queuedApproachGoal = true;
 
-		// search for any furthest goal
-		//Object* goal = visionResults->getLargestGoal(Side::UNKNOWN, Dir::FRONT);
-		Object* goal = visionResults->getFurthestGoal();
+		// no such goal is visible, spin and search for it
+		robot->setTargetOmega(findBallState->searchDir * searchSpeed);
 
-		if (goal != NULL && goal->distance > Config::fieldWidth / 3.0f) {
-			robot->lookAt(goal);
-
-			if (Math::abs(goal->angle) < Math::degToRad(5.0f)) {
-				// make a blind dash towards the goal
+		// hasn't found goal, drive towards line instead
+		if (stateDuration > 5.0f) {
+			// keep turning until line is horizontal enough
+			if (
+				visionResults->front->whiteDistance.left != -1.0f
+				&& visionResults->front->whiteDistance.right != -1.0f
+				&& visionResults->front->blackDistance.left != -1.0f
+				&& visionResults->front->blackDistance.right != -1.0f
+				&& Math::abs(visionResults->front->whiteDistance.left - visionResults->front->whiteDistance.right) < 0.05f
+			) {
 				robot->setTargetDirFor(2.0f, 0.0f, 0.0f, 1.0f);
 
 				queuedApproachGoal = false;
-
-				return;
-			}
-		}
-		else {
-			// no such goal is visible, spin and search for it
-			robot->setTargetOmega(findBallState->searchDir * searchSpeed);
-
-			// hasn't found goal, drive towards line instead
-			if (stateDuration > 5.0f) {
-				// keep turning until line is horizontal enough
-				if (
-					visionResults->front->whiteDistance.left != -1.0f
-					&& visionResults->front->whiteDistance.right != -1.0f
-					&& visionResults->front->blackDistance.left != -1.0f
-					&& visionResults->front->blackDistance.right != -1.0f
-					&& Math::abs(visionResults->front->whiteDistance.left - visionResults->front->whiteDistance.right) < 0.05f
-					) {
-					robot->setTargetDirFor(1.0f, 0.0f, 0.0f, 1.0f);
-
-					queuedApproachGoal = false;
-				}
 			}
 		}
 
 		return;
-	}
-	else {
+	} else {
 		ai->setState("find-ball");
 	}
 

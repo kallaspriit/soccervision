@@ -61,6 +61,8 @@ Dash.JoystickController.prototype.onButtonDown = function(e) {
 		this.robot.useChipKickDribblerLimits();
 	} else if (e.control == 'DPAD_DOWN') {
 		this.robot.useNormalDribblerLimits();
+	} else if (e.control == 'SELECT_BACK') { // blue X
+		dash.ui.robot.resetPosition();
 	} else {
 		console.log('unmapped button pressed: ' + e.control);
 	}
