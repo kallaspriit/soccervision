@@ -66,7 +66,7 @@ namespace Config {
 	const float confineMargin = 0.0f;
 
 	// how big is the ball/goal blobs distance to still be considered overlapping
-	const int goalOverlapMargin = 20;
+	const int goalOverlapMargin = 15;
 	const int ballOverlapMargin = 5;
 
 	// minimum areas of blobs for objects
