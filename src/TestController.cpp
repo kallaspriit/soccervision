@@ -2074,10 +2074,10 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 
 	// magic solution..
 	//float sidePower = Math::map(Math::abs(ball->distanceX), 0.0f, maxSideSpeedDistance, 0.0f, 1.0f);
-	float sidePower = Math::map(Math::abs(Math::radToDeg(ball->angle)), 0.0f, maxSideSpeedBallAngle, 0.0f, 1.0f);
+	/*float sidePower = Math::map(Math::abs(Math::radToDeg(ball->angle)), 0.0f, maxSideSpeedBallAngle, 0.0f, 1.0f);
 
 	float maxSideSpeed = Math::map(ball->distance, 0.0f, 0.3f, 0.5f, 1.5f);
-	float sideSpeed = Math::sign(ball->distanceX) * Math::min(sideP * sidePower, maxSideSpeed);
+	float sideSpeed = Math::sign(ball->distanceX) * Math::min(sideP * sidePower, maxSideSpeed);*/
 
 	// PID solution
 	/*float paramP = Util::toFloat(ai->parameters[0]);
@@ -2089,7 +2089,7 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 
 		pid.setTunings(paramP, paramI, paramD);
 		pid.reset();
-	}
+	}*/
 
 	pid.setSetPoint(0.0f);
 	pid.setProcessValue(ball->distanceX);
@@ -2099,7 +2099,6 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 
 	// increase side power near the ball
 	sidePower = Math::min(sidePower * Math::map(ball->distance, 0.0f, 0.5f, 4.0f, 1.0f), 1.0f);
-	*/
 
 	float approachP = Math::map(ball->distance, 0.0f, 1.0f, 0.25f, 2.0f);
 	float forwardSpeed = approachP * (1.0f - sidePower);
