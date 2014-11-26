@@ -477,10 +477,22 @@ void Robot::lookAt(Object* object, float lookAtP) {
 		return;
 	}
 
-	if ((object->type == Side::BLUE || object->type == Side::YELLOW) && Math::abs(object->distanceX) < 0.25f) {
-		std::cout << "@ IGNORE LOOKAT" << std::endl;
+	if ((object->type == Side::BLUE || object->type == Side::YELLOW)) {
+		int halfWidth = Config::cameraWidth / 2;
+		int leftEdge = object->x - object->width / 2;
+		int rightEdge = object->x + object->width / 2;
+		int goalWidth = object->width;
+		int goalHalfWidth = goalWidth / 2;
+		int goalKickThresholdPixels = (int)((float)goalHalfWidth * (1.0f - Config::goalKickThreshold));
 
-		return;
+		if (
+			leftEdge + goalKickThresholdPixels < halfWidth
+			&& rightEdge - goalKickThresholdPixels > halfWidth
+		) {
+			std::cout << "@ IGNORE LOOKAT" << std::endl;
+
+			return;
+		}
 	}
 
 	lookAt(Math::Rad(object->angle), lookAtP);

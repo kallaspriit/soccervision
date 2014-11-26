@@ -2506,7 +2506,7 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 		if (
 			leftEdge + goalKickThresholdPixels < halfWidth
 			&& rightEdge - goalKickThresholdPixels > halfWidth
-			) {
+		) {
 			validWindow = true;
 		}
 	}
