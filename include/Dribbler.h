@@ -5,11 +5,12 @@
 #include "Wheel.h"
 
 class AbstractCommunication;
+class Coilgun;
 
 class Dribbler : public Wheel {
 
 public:
-	Dribbler(int id, AbstractCommunication* com);
+	Dribbler(int id, AbstractCommunication* com, Coilgun* coilgun);
 
 	void prime();
 	void start();
@@ -35,6 +36,7 @@ private:
 	void applyLimits();
 	
 	AbstractCommunication* com;
+	Coilgun* coilgun;
 	bool ballDetected;
 	bool everDetectedBall;
 	bool isRaiseRequested;

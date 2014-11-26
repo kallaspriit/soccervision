@@ -1,12 +1,13 @@
 #include "Dribbler.h"
 #include "AbstractCommunication.h"
 #include "Command.h"
+#include "Coilgun.h"
 #include "Util.h"
 #include "Maths.h"
 
 #include <iostream>
 
-Dribbler::Dribbler(int id, AbstractCommunication* com) : Wheel(id), com(com), ballDetected(false), everDetectedBall(false), isRaiseRequested(false), timeSinceRaised(0.0f), timeSinceLowered(0.0f), ballInDribblerTime(0.0), ballLostTime(-1.0f), stopRequestedTime(-1.0), lowerLimit(Config::robotDribblerNormalLowerLimit), upperLimit(Config::robotDribblerNormalUpperLimit), useChipKickLimitsMissedFrames(0) {
+Dribbler::Dribbler(int id, AbstractCommunication* com, Coilgun* coilgun) : Wheel(id), com(com), coilgun(coilgun), ballDetected(false), everDetectedBall(false), isRaiseRequested(false), timeSinceRaised(0.0f), timeSinceLowered(0.0f), ballInDribblerTime(0.0), ballLostTime(-1.0f), stopRequestedTime(-1.0), lowerLimit(Config::robotDribblerNormalLowerLimit), upperLimit(Config::robotDribblerNormalUpperLimit), useChipKickLimitsMissedFrames(0) {
 	applyLimits();
 };
 
@@ -147,23 +148,21 @@ bool Dribbler::isLowered() {
 }
 
 bool Dribbler::gotBall(bool definitive) const {
-	/*if (!definitive && !ballDetected && ballLostTime != -1.0f && ballLostTime < Config::dribblerBallLostThreshold) {
-		//std::cout << "! Faking got ball, actually lost for: " << ballLostTime << std::endl;
+	// don't show having ball after just having kicked
+	if (coilgun->getTimeSinceLastKicked() < 0.1f) {
+		std::cout << "@ NO BALL AFTER KICK: " << coilgun->getTimeSinceLastKicked() << std::endl;
+
+		return false;
+	}
+
+	// show ball in dribbler if it hasn't been lost for long
+	if (!definitive && !ballDetected && ballLostTime != -1.0f && ballLostTime < Config::dribblerBallLostThreshold) {
+		std::cout << "@ FAKE GOT BALL, ACTUALLY LOST FOR: " << ballLostTime << std::endl;
 
 		return true;
-	}*/
+	}
 
 	return ballDetected;
-
-	/*if (ballDetected && ballInDribblerTime >= Config::ballInDribblerThreshold) {
-		return true;
-	}
-
-	if (!ballDetected && ballLostTime <= Config::dribblerBallLostThreshold) {
-		return true;
-	}
-
-	return false;*/
 }
 
 bool Dribbler::handleCommand(const Command& cmd) {

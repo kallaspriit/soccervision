@@ -65,8 +65,8 @@ void Robot::setup() {
 	setupBallLocalizer();
 	setupOdometerLocalizer();
     setupWheels();
-	setupDribbler();
 	setupCoilgun();
+	setupDribbler();
 	setupOdometer();
 
 	setPosition(Config::fieldWidth / 2.0f, Config::fieldHeight / 2.0f, 0.0f);
@@ -117,12 +117,12 @@ void Robot::setupWheels() {
     wheelRR = new Wheel(Config::wheelRRId);
 }
 
-void Robot::setupDribbler() {
-	dribbler = new Dribbler(Config::dribblerId, com);
-}
-
 void Robot::setupCoilgun() {
 	coilgun = new Coilgun(com);
+}
+
+void Robot::setupDribbler() {
+	dribbler = new Dribbler(Config::dribblerId, com, coilgun);
 }
 
 void Robot::setupOdometer() {

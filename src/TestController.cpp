@@ -82,51 +82,41 @@
 * + should prefer balls from the rear more often
 * + sometimes high level thinks the dribbler has ball while low-level does not agree
 * + robot does not keep picking the next ball behind
+* + avoid going for the ball that it just kicked towards the goal
+* + fetch ball near chip kick dribbler sometimes is still in the way
+* + does outside of field detection work in all states
+* + fetch ball behind switches to further and further balls, should probably not
+* + sometimes does not choose balls from behind?
+* + dribbler thinks it's got the ball some time after bdkick reported kicked ball, should not
+* + perhaps should calculate main coilgun duration to get the ball into the goal but not kick too hard
+* ¤ dribbler should not report having ball when last kick time is very small
 * - in fetch ball near, if the ball is very close and the kick window is not clear, send no-kick and fetch direct, special care when dribbler up
-* - avoid going for the ball that it just kicked towards the goal
-* - dribbler should not report having ball when last kick time is very small
 * - when driving behind ball, check whether the robot fits and if not, drive behind the next ball
-* - fetch ball behind switches to further and further balls, should probably not
-* - while performing drive behind ball, it should check whether it has gone out as well
-* - fetch ball direct thinks it's near a line too often and is then very slow
-* - fetch ball near chip kick dribbler sometimes is still in the way
-* - does outside of field detection work in all states
-* - dribbler thinks it's got the ball some time after bdkick reported kicked ball, should not
+* # while performing drive behind ball, it should check whether it has gone out as well
+*   > not a good idea, can give up fetching balls on the lines
+* ¤ fetch ball direct thinks it's near a line too often and is then very slow
 * - improve fetch-ball-near - could be faster and mess up less (still pushes with edge)
-* - experiment with getClosesBall based on distanceY not normal distance
-* - avoid driving into the goal (watch for gree-white-black distances)
+* ¤ avoid driving into the goal (watch for gree-white-black distances)
 * - fetch first ball using fetch-ball-direct (if near own goal)?
-* - sometimes does not choose balls from behind?
 * - prefer balls from behind when front is near a line and sees opponent goal? would spend less time on balls outside
-* - perhaps should calculate main coilgun duration to get the ball into the goal but not kick too hard
+* ¤ sometimes kicks too far for no apparent reason
 * - drives through the opponent's goal at the start if the first ball on the left is close to it
 * - show apparent goal locations in dash
 * - calculate goal distance from center of goal moving down finding first green pixel
 *
-*
+* Future
 * - make all parameters settable in the UI
 * - implement logviking-style logging with filterable components
 *
-* DEMO
-* + fetch string of balls in front
-* + fetch string of balls behind
-* + fetch diagonal set of balls
-* + fetch ball behind near own goal (turn around)
-* + fetch ball from own/opponent goal corner (near both lines)
-* + fetch ball on the line
-* + fetch ball at large angle from own goal, facing own goal
+* Testing scenarious
+* - fetch string of balls in front
+* - fetch string of balls behind
+* - fetch diagonal set of balls
+* - fetch ball behind near own goal (turn around)
+* - fetch ball from own/opponent goal corner (near both lines)
+* - fetch ball on the line
+* - fetch ball at large angle from own goal, facing own goal
 * - fetch balls from 4 corners (probably includes search)
-* - empty entire field with timer
-* - maximum speed fetching forward/behind
-* - kick ball avoiding a set of other balls
-* - find ball move to center
-* - kick into very small goal
-* - show robot and ball localization in the web UI
-* - show "back in time" in the web UI
-* - show configuring colors in the web UI
-* - avoid opponent
-* - on top of robot
-* - xxx
 */
 
 TestController::TestController(Robot* robot, AbstractCommunication* com) : BaseAI(robot, com), targetSide(Side::BLUE), manualSpeedX(0.0f), manualSpeedY(0.0f), manualOmega(0.0f), manualDribblerSpeed(0), manualKickStrength(0), blueGoalDistance(0.0f), yellowGoalDistance(0.0f), lastCommandTime(-1.0), lastBallTime(-1.0), lastNearLineTime(-1.0), lastNearGoalTime(-1.0), lastInCornerTime(-1.0), lastTargetGoalAngle(0.0f), lastBall(NULL), lastTurnAroundTime(-1.0), lastClosestGoalDistance(-1.0f), lastTargetGoalDistance(-1.0f), framesRobotOutFront(0), framesRobotOutRear(0), isRobotOutFront(false), isRobotOutRear(false), isNearLine(false), isInCorner(false), isBallInWay(false), isAvoidingBallInWay(false), inCornerFrames(0), nearLineFrames(0), nearGoalFrames(0), visibleBallCount(0) {
@@ -1977,6 +1967,12 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 
 		return;
 	}*/
+
+	if (ai->isRobotOutFront || ai->isRobotOutRear) {
+		ai->setState("return-field");
+
+		return;
+	}
 
 	// avoid going after the ball that was just kicked
 	if (robot->coilgun->getTimeSinceLastKicked() < 0.5f) {
