@@ -2033,24 +2033,25 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	float ballNearDistance = 0.4f;
 	bool isBallInWay = false;
 	bool shouldAvoidBallInWay = false;
-	int ballInWayFramesThreshold = 3;
+	//int ballInWayFramesThreshold = 3;
 
 	// decide to use chip-kicker if there's a ball in way when the ball is close, add some delay so ball just hit wouldn't get counted
 	if (ball->distance < ballNearDistance && stateDuration >= 0.5f) {
-		ballInWayMetric = visionResults->getBallInWayMetric(visionResults->front->balls, goal->y + goal->height / 2);
+		ballInWayMetric = visionResults->getBallInWayMetric(visionResults->front->balls, goal->y + goal->height / 2, ball);
 		
 		isBallInWay = ballInWayMetric.isBallInWay;
-		shouldAvoidBallInWay = isBallInWay && ballInWayMetric.ballInWayCount >= 2 && ai->shouldAvoidBallInWay(ballInWayMetric, goal->distance);
+		shouldAvoidBallInWay = isBallInWay && ai->shouldAvoidBallInWay(ballInWayMetric, goal->distance);
 		
 		if (shouldAvoidBallInWay) {
 			ballInWayFrames++;
 
-			if (ballInWayFrames >= ballInWayFramesThreshold) {
+			// sometimes does not detect several frames
+			//if (ballInWayFrames >= ballInWayFramesThreshold) {
 				// TODO check that have sufficient voltage..
 				useChipKick = true;
 
 				chipKickDistance = ai->getChipKickDistance(ballInWayMetric, goal->distance);
-			}
+			//}
 		}
 	}
 

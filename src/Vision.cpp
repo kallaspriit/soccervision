@@ -2164,7 +2164,7 @@ bool Vision::Results::isBallInGoal(Object* ball, Object* blueGoal, Object* yello
 	return false;
 }
 
-Vision::BallInWayMetric Vision::Results::getBallInWayMetric(ObjectList balls, int goalY) {
+Vision::BallInWayMetric Vision::Results::getBallInWayMetric(ObjectList balls, int goalY, Object* ignoreBall) {
 	Object* blueGoal = getLargestGoal(Side::BLUE);
 	Object* yellowGoal = getLargestGoal(Side::YELLOW);
 
@@ -2182,6 +2182,12 @@ Vision::BallInWayMetric Vision::Results::getBallInWayMetric(ObjectList balls, in
 
 	for (ObjectListItc it = balls.begin(); it != balls.end(); it++) {
 		ball = *it;
+
+		if (ignoreBall != NULL && ball == ignoreBall) {
+			std::cout << "@ IGNORING OWN BALL" << std::endl;
+
+			continue;
+		}
 		
 		if (isBallInGoal(ball, blueGoal, yellowGoal) || ball->getDribblerDistance() < 0.02f) {
 			continue;

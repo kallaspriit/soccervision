@@ -87,7 +87,7 @@ public:
 			Object* getFurthestGoal(Dir dir = Dir::ANY);
 			bool isBallInGoal(Object* ball);
 			bool isBallInGoal(Object* ball, Object* blueGoal, Object* yellowGoal);
-			BallInWayMetric getBallInWayMetric(ObjectList balls, int goalY);
+			BallInWayMetric getBallInWayMetric(ObjectList balls, int goalY, Object* ignoreBall = NULL);
 			//bool isBallInWay(ObjectList balls, int goalY);
 			bool isRobotOut(Dir dir = Dir::ANY);
 			int getVisibleBallCount();
