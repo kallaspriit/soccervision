@@ -2447,8 +2447,12 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 
 		//if (ai->isRobotNearGoal()) {
 		// do not turn around the ball if was near the goal lately as might drive into the goal with back end
-		if (ai->wasNearGoalLately()) {
-			robot->setTargetOmega(searchGoalDir * Math::PI);
+		if (ai->wasNearGoalLately(2.0f)) {
+
+			// give the ball some time to stabilize
+			if (robot->dribbler->getBallInDribblerTime() > 0.5f) {
+				robot->setTargetOmega(searchGoalDir * Math::PI);
+			}
 		} else {
 			/*if (nearLine) {
 			// spin around dribbler with acceleration and initial reverse
@@ -2480,12 +2484,17 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 			}*/
 
 			// spin around robot axis near goal to avoid moving goal spinning off-axis
-			if (!ai->wasNearLineLately() && stateDuration < 0.25f) {
+			/*if (!ai->wasNearLineLately() && stateDuration < 0.25f) {
 				// move forwards a bit, getting better grip of the ball
 				robot->setTargetDir(0.25f, 0.0f);
 				robot->dribbler->prime();
 			} else {
 				// TODO Accelerate to speed
+				robot->spinAroundDribbler(searchGoalDir == -1.0f, searchPeriod);
+			}*/
+
+			// give the ball some time to stabilize
+			if (robot->dribbler->getBallInDribblerTime() > 0.5f) {
 				robot->spinAroundDribbler(searchGoalDir == -1.0f, searchPeriod);
 			}
 		}
