@@ -52,7 +52,7 @@ public:
 	void clearTasks() { tasks.clear(); }
     void handleTasks(float dt);
 
-	void lookAt(Object* object, float lookAtP = Config::lookAtP);
+	void lookAt(Object* object, float lookAtP = Config::lookAtP, bool stare = false);
 	void lookAt(const Math::Angle& angle, float lookAtP = Config::lookAtP);
 	void lookAtBehind(Object* object);
 	void lookAtBehind(const Math::Angle& angle);

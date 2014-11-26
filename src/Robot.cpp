@@ -472,12 +472,13 @@ Task* Robot::getCurrentTask() {
     return tasks.front();
 }
 
-void Robot::lookAt(Object* object, float lookAtP) {
+void Robot::lookAt(Object* object, float lookAtP, bool stare) {
     if (object == NULL) {
 		return;
 	}
 
-	if ((object->type == Side::BLUE || object->type == Side::YELLOW)) {
+	// aim state for example sets stare to true so it really focuses on it always
+	if (stare != true && (object->type == Side::BLUE || object->type == Side::YELLOW)) {
 		int halfWidth = Config::cameraWidth / 2;
 		int leftEdge = object->x - object->width / 2;
 		int rightEdge = object->x + object->width / 2;

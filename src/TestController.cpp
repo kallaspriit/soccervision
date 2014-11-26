@@ -1925,8 +1925,6 @@ void TestController::FetchBallNearState::onEnter(Robot* robot, Parameters parame
 }
 
 void TestController::FetchBallNearState::onExit(Robot* robot) {
-	std::cout << "@EXIT FetchBallNearState" << std::endl;
-
 	robot->coilgun->cancelKickOnceGotBall();
 	robot->dribbler->useNormalLimits();
 }
@@ -2613,7 +2611,7 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 	}
 	else {
 		robot->setTargetDir(forwardSpeed, sideSpeed);
-		robot->lookAt(goal);
+		robot->lookAt(goal, Config::lookAtP, true);
 	}
 
 	ai->dbg("performKick", performKick);
