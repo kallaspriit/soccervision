@@ -70,7 +70,7 @@ void DebugRenderer::renderBalls(unsigned char* image, Vision* vision, const Obje
         //canvas.drawLine(ball->x - ball->width / 2, ball->y + ball->height / 2, ball->x + ball->width / 2, ball->y - ball->height / 2);
 
 		//sprintf(buf, "%.2fm x %.2fm  %.1f deg", ball->distanceX, ball->distanceY, Math::radToDeg(ball->angle));
-		sprintf(buf, "%.2fm %.2f  %.1f deg", ball->distanceX, ball->distanceY, Math::radToDeg(ball->angle));
+		sprintf(buf, "%.2fm %.2fm  %.1f deg", ball->distanceX, ball->distanceY, Math::radToDeg(ball->angle));
 
 		if (ball->y + ball->height / 2 < Config::cameraHeight - 50) {
 			canvas.drawText(ball->x - ball->width / 2 + 2, ball->y + ball->height / 2 + 4, buf);
