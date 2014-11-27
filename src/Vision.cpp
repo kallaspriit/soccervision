@@ -290,13 +290,6 @@ bool Vision::isValidGoal(Object* goal, Side side) {
 		goal->y = y1 + goal->height / 2;
 	}*/
 
-	// set real distance from edge distance metric center distance
-	/*if (edgeDistanceMetric.centerDistance.distance != -1) {
-		//std::cout << "UPDATE GOAL DISTANCE FROM " << goal->distance << " TO " << edgeDistanceMetric.centerDistance.distance << std::endl;
-
-		goal->distance = edgeDistanceMetric.centerDistance.distance;
-	}*/
-
 	//std::cout << "@ EDGE LEFT: " << edgeDistanceMetric.leftTopDistance.distance << "m, right: " << edgeDistanceMetric.rightTopDistance.distance << "m" << std::endl;
 
 	if (goal->area < Config::goalMinArea) {
@@ -353,6 +346,13 @@ bool Vision::isValidGoal(Object* goal, Side side) {
 		//std::cout << "@ GOAL INVALID TOP EDGE DISTANCE LEFT: " << edgeDistanceMetric.leftTopDistance.distance << "m, right: " << edgeDistanceMetric.rightTopDistance.distance << "m" << std::endl;
 
 		return false;
+	}
+
+	// set real distance from edge distance metric center distance
+	if (edgeDistanceMetric.centerDistance.distance != -1) {
+		//std::cout << "UPDATE GOAL DISTANCE FROM " << goal->distance << " TO " << edgeDistanceMetric.centerDistance.distance << std::endl;
+
+		goal->distance = edgeDistanceMetric.centerDistance.distance;
 	}
 
 	/*if (undersideMetric < Config::goalMinUndersideMetric) {
@@ -991,7 +991,7 @@ Vision::EdgeDistanceMetric Vision::getEdgeDistanceMetric(int x, int y, int width
 
 			//if (colorName == color1 || colorName == color2) {
 			if (colorName == "green") {
-				canvas.fillBoxCentered(senseX, senseY, 4, 4, 255, 0, 255);
+				//canvas.fillBoxCentered(senseX, senseY, 4, 4, 255, 0, 255);
 
 				centerSumY += senseY;
 				centerSampleCount++;
