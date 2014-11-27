@@ -8,16 +8,22 @@ CameraTranslator::WorldPosition CameraTranslator::getWorldPosition(int cameraX, 
 
 	//std::cout << "UNDISTORT " << cameraX << "x" << cameraY << " to " << undistorted.x << "x" << undistorted.y << std::endl;
 
+	bool isValid = true;
+
 	float pixelVerticalCoord = undistorted.y - this->horizon;
 	int pixelRight = undistorted.x - this->cameraWidth / 2;
 
 	float worldY = this->B + this->A / pixelVerticalCoord;
 	float worldX = C * (float)pixelRight / pixelVerticalCoord;
 
+	if (worldY < 0.0f || worldY > 30.0f) {
+		isValid = false;
+	}
+
 	float worldDistance = sqrt(pow(worldX, 2) + pow(worldY, 2));
 	float worldAngle = atan2(worldX, worldY);
 
-	return WorldPosition(worldX, worldY, worldDistance, worldAngle);
+	return WorldPosition(worldX, worldY, worldDistance, worldAngle, isValid);
 }
 
 CameraTranslator::CameraPosition CameraTranslator::getCameraPosition(float worldX, float worldY) {

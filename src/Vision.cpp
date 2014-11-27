@@ -935,6 +935,11 @@ Vision::PathMetric Vision::getPathMetric(int x1, int y1, int x2, int y2, std::ve
 	CameraTranslator::WorldPosition worldPos1 = cameraTranslator->getWorldPosition(x1, y1);
 	CameraTranslator::WorldPosition worldPos2 = cameraTranslator->getWorldPosition(x2, y2);
 
+	if (!worldPos1.isValid || !worldPos2.isValid) {
+		// fake very bad path metrix
+		return PathMetric(0.0f, 0, false, true, 1000);
+	}
+
 	float worldPosX1 = worldPos1.dx;
 	float worldPosY1 = worldPos1.dy;
 	float worldPosX2 = worldPos2.dx;
