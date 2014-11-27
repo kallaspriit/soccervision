@@ -98,7 +98,7 @@ namespace Config {
 	const float minValidBallSurroundThreshold = 0.5f;
 	const float minValidBallPathThreshold = 0.75f;
 	//const float minValidGoalPathThreshold = 0.65f;
-	const int maxGoalInvalidColorCount = 6;
+	const int maxGoalInvalidColorCount = 10;
 
 	// the ball/goal bottom needs to be below this line to consider path metric
 	const int ballPathSenseStartY = cameraHeight - 160;
