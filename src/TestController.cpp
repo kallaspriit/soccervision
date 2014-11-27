@@ -2093,6 +2093,7 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	if (robot->coilgun->getTimeSinceLastKicked() < 0.032f) {
 		useChipKick = false;
 		enterDistance = -1.0f;
+		ballInWayFrames = 0;
 	}
 
 	Vision::BallInWayMetric ballInWayMetric;
@@ -2106,20 +2107,23 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 
 	// decide to use chip-kicker if there's a ball in way when the ball is close, add some delay so ball just hit wouldn't get counted
 	if (ball->distance < ballNearDistance) {
-		ballInWayMetric = visionResults->getBallInWayMetric(visionResults->front->balls, goal->y + goal->height / 2, ball);
+		// don't choose to chip kick too soon after last kick
+		if (robot->coilgun->getTimeSinceLastKicked() > 0.1f) {
+			ballInWayMetric = visionResults->getBallInWayMetric(visionResults->front->balls, goal->y + goal->height / 2, ball);
 
-		isBallInWay = ballInWayMetric.isBallInWay;
-		shouldAvoidBallInWay = isBallInWay && ai->shouldAvoidBallInWay(ballInWayMetric, goal->distance);
+			isBallInWay = ballInWayMetric.isBallInWay;
+			shouldAvoidBallInWay = isBallInWay && ai->shouldAvoidBallInWay(ballInWayMetric, goal->distance);
 
-		if (shouldAvoidBallInWay) {
-			ballInWayFrames++;
+			if (shouldAvoidBallInWay) {
+				ballInWayFrames++;
 
-			// sometimes does not detect several frames
-			if (ballInWayFrames >= ballInWayFramesThreshold) {
-				// TODO check that have sufficient voltage..
-				useChipKick = true;
+				// sometimes does not detect several frames
+				if (ballInWayFrames >= ballInWayFramesThreshold) {
+					// TODO check that have sufficient voltage..
+					useChipKick = true;
 
-				chipKickDistance = ai->getChipKickDistance(ballInWayMetric, goal->distance);
+					chipKickDistance = ai->getChipKickDistance(ballInWayMetric, goal->distance);
+				}
 			}
 		}
 	} else if (ball->distance > ballFarDistance) {
