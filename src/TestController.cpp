@@ -1769,6 +1769,7 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 			return;
 		}
 
+		// reset these so robot doesn't think it's out when going for a ball on the border
 		ai->framesRobotOutFront = 0;
 		ai->framesRobotOutRear = 0;
 
@@ -1822,11 +1823,78 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 		return;
 	}
 
+	// find our own goal
+	Side ownSide = ai->targetSide == Side::YELLOW ? Side::BLUE : Side::YELLOW;
+	Object* ownGoal = visionResults->getLargestGoal(ownSide, Dir::REAR);
+
+	// make sure we don't reverse into our own goal
+	if (ownGoal != NULL) {
+		// calculate distance between the ball and our own goal, including edges of the goal
+		float minFetchBehindGoalBallDistance = 0.5f;
+
+		Vision::Distance goalLeftDistance = visionResults->front->vision->getDistance(ownGoal->x - ownGoal->width / 2, ownGoal->y + ownGoal->height / 2);
+		Vision::Distance goalRightDistance = visionResults->front->vision->getDistance(ownGoal->x + ownGoal->width / 2, ownGoal->y + ownGoal->height / 2);
+
+		Math::Point goalCenterPos = Math::Point(ownGoal->distanceX, ownGoal->distanceY);
+		Math::Point goalLeftPos = Math::Point(goalLeftDistance.x, goalLeftDistance.y);
+		Math::Point goalRightPos = Math::Point(goalRightDistance.x, goalRightDistance.y);
+		Math::Point ballPos = Math::Point(ball->distanceX, ball->distanceY);
+
+		float goalBallDistanceCenter = goalCenterPos.getDistanceTo(ballPos);
+		float goalBallDistanceLeft = goalLeftPos.getDistanceTo(ballPos);
+		float goalBallDistanceRight = goalRightPos.getDistanceTo(ballPos);
+		float goalBallDistance = Math::min(Math::min(goalBallDistanceCenter, goalBallDistanceLeft), goalBallDistanceRight);
+
+		avgBallGoalDistance.add(goalBallDistance);
+
+		ai->dbg("goalBallDistanceCenter", goalBallDistanceCenter);
+		ai->dbg("goalBallDistanceLeft", goalBallDistanceLeft);
+		ai->dbg("goalBallDistanceRight", goalBallDistanceRight);
+		ai->dbg("goalBallDistance", goalBallDistance);
+		ai->dbg("avgBallGoalDistance", avgBallGoalDistance.value());
+		ai->dbg("avgBallGoalDistanceSize", avgBallGoalDistance.size());
+		ai->dbg("avgBallGoalDistanceFull", avgBallGoalDistance.full());
+
+		double minTurnBreak = 2.0;
+
+		// perform turn around if ball is too close to own goal, might reverse into it
+		if (
+			avgBallGoalDistance.full()
+			&& avgBallGoalDistance.value() < minFetchBehindGoalBallDistance
+			//&& goalBallDistance < minFetchBehindGoalBallDistance
+			&& ownGoal->distance <= 1.0f
+			&& (ai->lastTurnAroundTime == -1.0 || Util::duration(ai->lastTurnAroundTime) > minTurnBreak)
+		) {
+			float turnAngle = ball->angle;
+			float underturnAngle = Math::degToRad(15.0f);
+			float turnSpeed = Math::TWO_PI;
+
+			if (turnAngle < 0.0f) {
+				turnAngle += underturnAngle;
+				searchDir = -1.0f;
+			} else {
+				turnAngle -= underturnAngle;
+				searchDir = 1.0f;
+			}
+
+			ai->dbg("turnAngle", Math::radToDeg(turnAngle));
+			ai->dbg("turnSpeed", turnSpeed);
+
+			turnAroundPerformed = true;
+
+			robot->turnBy(turnAngle, turnSpeed);
+
+			ai->lastTurnAroundTime = Util::millitime();
+
+			return;
+		}
+	}
+
 	// perform reverse if ball is not visible or suddenly seeing another ball further away
 	if (
 		ball == NULL
 		|| (lastBallDistance != -1.0f && ball->getDribblerDistance() > lastBallDistance * 1.25f)
-		) {
+	) {
 		// don't perform the blind reverse if the ball was lost at too great of a distance
 		if (!hadBall || lastBallDistance > 0.8f) {
 			// switch to searching for balls, search in the same direction as approached ball behind
@@ -1873,73 +1941,6 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 
 	ai->dbg("ballDistance", ballDistance);
 	ai->dbg("targetMode", targetMode);
-
-	// find our own goal
-	Side ownSide = ai->targetSide == Side::YELLOW ? Side::BLUE : Side::YELLOW;
-	Object* ownGoal = visionResults->getLargestGoal(ownSide, Dir::REAR);
-
-	// make sure we don't reverse into our own goal
-	if (ownGoal != NULL) {
-		// calculate distance between the ball and our own goal, including edges of the goal
-		float minFetchBehindGoalBallDistance = 0.5f;
-
-		Vision::Distance goalLeftDistance = visionResults->front->vision->getDistance(ownGoal->x - ownGoal->width / 2, ownGoal->y + ownGoal->height / 2);
-		Vision::Distance goalRightDistance = visionResults->front->vision->getDistance(ownGoal->x + ownGoal->width / 2, ownGoal->y + ownGoal->height / 2);
-
-		Math::Point goalCenterPos = Math::Point(ownGoal->distanceX, ownGoal->distanceY);
-		Math::Point goalLeftPos = Math::Point(goalLeftDistance.x, goalLeftDistance.y);
-		Math::Point goalRightPos = Math::Point(goalRightDistance.x, goalRightDistance.y);
-		Math::Point ballPos = Math::Point(ball->distanceX, ball->distanceY);
-
-		float goalBallDistanceCenter = goalCenterPos.getDistanceTo(ballPos);
-		float goalBallDistanceLeft = goalLeftPos.getDistanceTo(ballPos);
-		float goalBallDistanceRight = goalRightPos.getDistanceTo(ballPos);
-		float goalBallDistance = Math::min(Math::min(goalBallDistanceCenter, goalBallDistanceLeft), goalBallDistanceRight);
-
-		avgBallGoalDistance.add(goalBallDistance);
-
-		ai->dbg("goalBallDistanceCenter", goalBallDistanceCenter);
-		ai->dbg("goalBallDistanceLeft", goalBallDistanceLeft);
-		ai->dbg("goalBallDistanceRight", goalBallDistanceRight);
-		ai->dbg("goalBallDistance", goalBallDistance);
-		ai->dbg("avgBallGoalDistance", avgBallGoalDistance.value());
-		ai->dbg("avgBallGoalDistanceSize", avgBallGoalDistance.size());
-		ai->dbg("avgBallGoalDistanceFull", avgBallGoalDistance.full());
-
-		double minTurnBreak = 2.0;
-
-		// perform turn around if ball is too close to own goal, might reverse into it
-		if (
-			avgBallGoalDistance.full()
-			&& avgBallGoalDistance.value() < minFetchBehindGoalBallDistance
-			//&& goalBallDistance < minFetchBehindGoalBallDistance
-			&& ownGoal->distance <= 1.0f
-			&& (ai->lastTurnAroundTime == -1.0 || Util::duration(ai->lastTurnAroundTime) > minTurnBreak)
-			) {
-			float turnAngle = ball->angle;
-			float underturnAngle = Math::degToRad(15.0f);
-			float turnSpeed = Math::TWO_PI;
-
-			if (turnAngle < 0.0f) {
-				turnAngle += underturnAngle;
-				searchDir = -1.0f;
-			} else {
-				turnAngle -= underturnAngle;
-				searchDir = 1.0f;
-			}
-
-			ai->dbg("turnAngle", Math::radToDeg(turnAngle));
-			ai->dbg("turnSpeed", turnSpeed);
-
-			turnAroundPerformed = true;
-
-			robot->turnBy(turnAngle, turnSpeed);
-
-			ai->lastTurnAroundTime = Util::millitime();
-
-			return;
-		}
-	}
 
 	float targetApproachSpeed = 3.0f;
 	float accelerateAcceleration = 2.5f;
@@ -2027,12 +2028,15 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 		return;
 	}
 
-	// avoid going after the ball that was just kicked
-	/*if (robot->coilgun->getTimeSinceLastKicked() < 0.5f) {
-		ai->setState("find-ball");
+	// return to field if got really close to one of the goals
+	Object* closestGoal = visionResults->getLargestGoal(Side::UNKNOWN, Dir::FRONT);
+
+	// back up
+	if (closestGoal != NULL && closestGoal->distance < 0.1f) {
+		robot->setTargetDirFor(-2.0f, 0.0f, 0.0f, 0.5f);
 
 		return;
-	}*/
+	}
 
 	Object* ball = visionResults->getClosestBall(Dir::FRONT);
 	Object* goal = visionResults->getLargestGoal(ai->targetSide, Dir::FRONT);
