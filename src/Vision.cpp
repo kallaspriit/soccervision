@@ -1024,7 +1024,7 @@ Obstruction Vision::getGoalPathObstruction() {
 	Obstruction obstruction = Obstruction::NONE;
 	//float corridorWidth = 0.1f;
 	float yStep = 0.05f;
-	float xStep = 0.1f;
+	float xStep = 0.025f;
 	float xSteps = 4.0f;
 	float startDistance = 0.2f;
 	float endDistance = 6.0f; // TODO Something smarter?
@@ -1035,25 +1035,40 @@ Obstruction Vision::getGoalPathObstruction() {
 	bool debug = canvas.data != NULL;
 	Blobber::Color* color;
 	CameraTranslator::CameraPosition pos;
-	int sampleCount = 0;
 	int validCount = 0;
+	int sampleCountLeft = 0;
+	int sampleCountRight = 0;
 	int validCountLeft = 0;
 	int validCountRight = 0;
 	int goalColorCount = 0;
 	float goalDistance = -1.0f;
+	float maxDistanceY = startDistance;
 	bool running = true;
+	bool isLeft;
 
 	// TODO make sure finds target side color in the end
 	// sample points every step distances
 	for (yDistance = startDistance; yDistance < endDistance; yDistance += yStep) {
 		for (xDistance = -xStep * xSteps / 2 + xStep / 2.0f; xDistance < xStep * xSteps / 2; xDistance += xStep) {
+			isLeft = xDistance < 0;
+			
 			// find corridor positions
 			pos = cameraTranslator->getCameraPosition(xDistance, yDistance);
 			color = getColorAt(pos.x, pos.y);
+
+			if (isLeft) {
+				sampleCountLeft++;
+			} else {
+				sampleCountRight++;
+			}
 			
 			if (color != NULL) {
 				if (strcmp(color->name, "blue-goal") == 0 || strcmp(color->name, "yellow-goal") == 0) {
 					goalColorCount++;
+
+					if (yDistance > maxDistanceY) {
+						maxDistanceY = yDistance;
+					}
 
 					// stop if found enough goal colors
 					if (goalColorCount >= stopGoalColorCount) {
@@ -1092,11 +1107,7 @@ Obstruction Vision::getGoalPathObstruction() {
 						canvas.drawMarker(pos.x, pos.y, 128, 0, 0);
 					}
 				}
-
-				sampleCount++;
 			} else {
-				sampleCount++;
-
 				if (debug) {
 					canvas.drawMarker(pos.x, pos.y, 128, 0, 0);
 				}
@@ -1108,7 +1119,32 @@ Obstruction Vision::getGoalPathObstruction() {
 		}
 	}
 
-	float leftValidSamplesRatio = (float)validCountLeft / (float)(sampleCount / 2);
+	// each sample is 5 centimeters apart
+
+	std::cout << "@ max y: " << maxDistanceY << " meters, left: " << validCountLeft << "/" << sampleCountLeft << ", right: " << validCountRight << "/" << sampleCountRight << std::endl;
+
+	// never mind if we're too close to the goal
+	if (maxDistanceY < 1.0f) {
+		return obstruction;
+	}
+
+	int invalidCountLeft = sampleCountLeft - validCountLeft;
+	int invalidCountRight = sampleCountRight - validCountRight;
+	int maxInvalidCount = 10;
+
+	if (invalidCountLeft > maxInvalidCount || invalidCountRight > maxInvalidCount) {
+		if (invalidCountLeft > maxInvalidCount && invalidCountRight > maxInvalidCount) {
+			obstruction = Obstruction::BOTH;
+		} else if (invalidCountLeft > maxInvalidCount) {
+			obstruction = Obstruction::LEFT;
+		} else {
+			obstruction = Obstruction::RIGHT;
+		}
+	}
+
+	//int invalidCountLeft = sampleCount
+
+	/*float leftValidSamplesRatio = (float)validCountLeft / (float)(sampleCount / 2);
 	float rightValidSamplesRatio = (float)validCountRight / (float)(sampleCount / 2);
 
 	// not reliable near the goal with few samples
@@ -1122,7 +1158,7 @@ Obstruction Vision::getGoalPathObstruction() {
 				obstruction = Obstruction::RIGHT;
 			}
 		}
-	}
+	}*/
 
 	//std::cout << "@ Obstruction ratio samples: " << sampleCount << ", goal distance: " << goalDistance << ", left: " << leftValidSamplesRatio << ", right: " << rightValidSamplesRatio << ", side: " << (obstruction == Obstruction::LEFT ? "LEFT" : obstruction == Obstruction::RIGHT ? "RIGHT" : "NONE") << std::endl;
 

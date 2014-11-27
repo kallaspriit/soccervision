@@ -1206,16 +1206,6 @@ Dash.UI.prototype.showStateStats = function(state) {
 		$('#contents').addClass('no-error');
 	}
 	
-	$('#obstruction-indicator-left, #obstruction-indicator-right').removeClass('active');
-	
-	if (state.isViewObstructed) {
-		$('#obstruction-indicator-left, #obstruction-indicator-right').addClass('active');
-	} else if (state.robotInWay == -1) {
-		$('#obstruction-indicator-left').addClass('active');
-	} else if (state.robotInWay == 1) {
-		$('#obstruction-indicator-right').addClass('active');
-	}
-	
 	this.showControllerState(state.controllerState);
 
 	if (
@@ -1271,6 +1261,16 @@ Dash.UI.prototype.showControllerState = function(state) {
 		} else {
 			wrap.append('<li><strong>' + key + '</strong>: ' + value + '</li>');
 		}
+	}
+
+	$('#obstruction-indicator-left, #obstruction-indicator-right').removeClass('active');
+
+	if (state.obstruction == 3) {
+		$('#obstruction-indicator-left, #obstruction-indicator-right').addClass('active');
+	} else if (state.obstruction == 1) {
+		$('#obstruction-indicator-left').addClass('active');
+	} else if (state.obstruction == 2) {
+		$('#obstruction-indicator-right').addClass('active');
 	}
 };
 
