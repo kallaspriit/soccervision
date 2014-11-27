@@ -1606,8 +1606,9 @@ void TestController::FetchBallDirectState::step(float dt, Vision::Results* visio
 	// return to field if got really close to one of the goals
 	Object* closestGoal = visionResults->getLargestGoal(Side::UNKNOWN, Dir::FRONT);
 
+	// back up
 	if (closestGoal != NULL && closestGoal->distance < 0.1f) {
-		ai->setState("return-field");
+		robot->setTargetDirFor(-2.0f, 0.0f, 0.0f, 0.5f);
 
 		return;
 	}
@@ -2765,7 +2766,7 @@ void TestController::ReturnFieldState::step(float dt, Vision::Results* visionRes
 	}
 
 	// don't let get out of this state too soon or can flicker on edge
-	if (!ai->isRobotOutFront && !ai->isRobotOutRear && stateDuration > 0.5f) {
+	if (!ai->isRobotOutFront && !ai->isRobotOutRear) {
 		ai->setState("find-ball");
 
 		return;
@@ -2815,7 +2816,7 @@ void TestController::ReturnFieldState::step(float dt, Vision::Results* visionRes
 				&& visionResults->front->blackDistance.left != -1.0f
 				&& visionResults->front->blackDistance.right != -1.0f
 				&& Math::abs(visionResults->front->whiteDistance.left - visionResults->front->whiteDistance.right) < 0.05f
-				) {
+			) {
 				robot->setTargetDirFor(2.0f, 0.0f, 0.0f, 0.75f);
 
 				queuedApproachGoal = false;
