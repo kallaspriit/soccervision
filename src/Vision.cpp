@@ -2048,8 +2048,8 @@ Vision::BallInWayMetric Vision::Results::getBallInWayMetric(ObjectList balls, in
 	for (ObjectListItc it = balls.begin(); it != balls.end(); it++) {
 		ball = *it;
 
-		if (ignoreBall != NULL && ball == ignoreBall) {
-			std::cout << "@ IGNORING OWN BALL" << std::endl;
+		if (ignoreBall != NULL && (ball == ignoreBall || Math::abs(ball->distance - ignoreBall->distance) < 0.1f)) {
+			//std::cout << "@ IGNORING OWN BALL" << std::endl;
 
 			continue;
 		}
