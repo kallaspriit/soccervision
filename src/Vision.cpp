@@ -310,7 +310,7 @@ bool Vision::isValidGoal(Object* goal, Side side) {
 		);
 
 		int goalHalfWidth = goal->width / 2;
-		int goalEdgeSensePixels = (int)((float)goalHalfWidth * 0.9f);
+		int goalEdgeSensePixels = (int)((float)goalHalfWidth * 0.85f);
 
 		PathMetric pathMetricLeft = getPathMetric(
 			Config::cameraWidth / 2 - goalEdgeSensePixels,
@@ -540,7 +540,7 @@ int Vision::getGoalMaxInvalidSpree(int y) {
 }*/
 
 int Vision::getBallRadius(int width, int height) {
-	return (int)(Math::max((float)width, (float)height) / 2.0f);
+	return (int)(((float)width + (float)height) / 2.0f);
 }
 
 int Vision::getBallSenseRadius(int ballRadius, float distance) {
