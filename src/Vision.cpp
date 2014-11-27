@@ -250,7 +250,7 @@ ObjectList Vision::processGoals(Dir dir) {
 			}
 
 			// straight distance is already updated in valid goal check
-			goal->distance = distance.straight;
+			//goal->distance = distance.straight;
 			goal->distanceX = distance.x;
 			goal->distanceY = distance.y;
 			goal->angle = distance.angle;
@@ -352,6 +352,7 @@ bool Vision::isValidGoal(Object* goal, Side side) {
 	if (edgeDistanceMetric.centerDistance.distance != -1) {
 		//std::cout << "UPDATE GOAL DISTANCE FROM " << goal->distance << " TO " << edgeDistanceMetric.centerDistance.distance << std::endl;
 
+		// substract goal depth to get distance at the front
 		goal->distance = edgeDistanceMetric.centerDistance.distance - 0.25f;
 	}
 
