@@ -1578,6 +1578,11 @@ void TestController::FetchBallDirectState::step(float dt, Vision::Results* visio
 	robot->dribbler->useNormalLimits();
 	robot->coilgun->cancelKickOnceGotBall();
 
+	// wait for the possible reverse out of goal task to finish
+	if (robot->hasTasks()) {
+		return;
+	}
+
 	if (robot->dribbler->gotBall()) {
 		ai->dbg("gotBall", true);
 
