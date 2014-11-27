@@ -131,6 +131,9 @@
 * + fetch ball behind from center edge of the field when in front of opponents goal facing goal directly
 * - fetch ball very close to the opponent goal (on the line) at the center
 * - fetch ball close to opponents goal corners
+* - should roam the field between white lines if no balls are visible
+* - should find a ball quickly when roaming around when suddenly becomes visible (remove foot etc)
+* - should not get stuck near a goal if a single ball is visible and it's in the goal
 * - fetch a string of balls straight behind each other
 * - fetch a string of balls diagonally (both diagonals)
 * - fetch ball in opposite corner
@@ -1618,7 +1621,7 @@ void TestController::FetchBallDirectState::step(float dt, Vision::Results* visio
 	Object* closestGoal = visionResults->getLargestGoal(Side::UNKNOWN, Dir::FRONT);
 
 	// back up
-	if (closestGoal != NULL && closestGoal->distance < 0.1f) {
+	if (closestGoal != NULL && closestGoal->distance < 0.1f && ai->wasNearGoalLately()) {
 		robot->setTargetDirFor(-2.0f, 0.0f, 0.0f, 0.5f);
 
 		return;
