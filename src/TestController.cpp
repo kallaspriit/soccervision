@@ -719,8 +719,8 @@ std::string TestController::getJSON() {
 	stream << "\"yellowGoalDistance\": " << yellowGoalDistance << ",";
 	stream << "\"lastClosestGoalDistance\": " << lastClosestGoalDistance << ",";
 	stream << "\"lastTargetGoalDistance\": " << lastTargetGoalDistance << ",";
-	stream << "\"isRobotOutFront\": \"" << (isRobotOutFront ? "yes - " + Util::toString(framesRobotOutFront) : "no") << "\",";
-	stream << "\"isRobotOutRear\": \"" << (isRobotOutRear ? "yes - " + Util::toString(framesRobotOutRear) : "no") << "\",";
+	stream << "\"isRobotOutFront\": \"" << ((isRobotOutFront ? "yes - " : "no - ") + Util::toString(framesRobotOutFront)) << "\",";
+	stream << "\"isRobotOutRear\": \"" << ((isRobotOutRear ? "yes - " : "no - ") + Util::toString(framesRobotOutRear)) << "\",";
 	stream << "\"isInCorner\": " << (isInCorner ? "true" : "false") << ",";
 	stream << "\"isNearGoal\": " << (isNearGoal ? "true" : "false") << ",";
 	stream << "\"visibleBallCount\": " << visibleBallCount << ",";
@@ -1752,6 +1752,9 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 
 			return;
 		}
+
+		ai->framesRobotOutFront = 0;
+		ai->framesRobotOutRear = 0;
 
 		ai->dbg("ownGoalDistance", ownGoal != NULL ? ownGoal->distance : -1.0f);
 
