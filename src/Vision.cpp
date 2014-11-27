@@ -5,7 +5,7 @@
 #include <iostream>
 #include <algorithm>
 
-Vision::Vision(Blobber* blobber, CameraTranslator* cameraTranslator, Dir dir, int width, int height) : blobber(blobber), cameraTranslator(cameraTranslator), dir(dir), width(width), height(height), obstructionSide(Obstruction::NONE) {
+Vision::Vision(Blobber* blobber, CameraTranslator* cameraTranslator, Dir dir, int width, int height) : blobber(blobber), cameraTranslator(cameraTranslator), dir(dir), width(width), height(height) {
     validBallBgColors.push_back("green");
     validBallBgColors.push_back("white");
     validBallBgColors.push_back("black");
@@ -43,8 +43,6 @@ Vision::Vision(Blobber* blobber, CameraTranslator* cameraTranslator, Dir dir, in
 
 	goalColors.push_back("yellow-goal");
     goalColors.push_back("blue-goal");
-
-	obstructionSide = Obstruction::NONE;
 }
 
 Vision::~Vision() {
@@ -65,18 +63,18 @@ Vision::Result* Vision::process() {
 	result->goals = processGoals(dir);
 	result->balls = processBalls(dir, result->goals);
 
-	/*if (dir == Dir::FRONT) {
-		updateObstructions();
-	}*/
-
 	updateColorDistances();
 	updateColorOrder();
 
-	result->obstructionSide = obstructionSide;
 	result->colorOrder = colorOrder;
 	result->whiteDistance = whiteDistance;
 	result->blackDistance = blackDistance;
-	result->goalPathObstruction = getGoalPathObstruction();
+
+	if (dir == Dir::FRONT) {
+		result->goalPathObstruction = getGoalPathObstruction();
+	} else {
+		result->goalPathObstruction = Obstruction::NONE;
+	}
 
 	return result;
 }
@@ -1749,36 +1747,6 @@ float Vision::getUndersideMetric(int x1, int y1, float distance, int blockWidth,
 		viewObstructed = false;
 	}
 }*/
-
-void Vision::updateObstructions() {
-	float leftMetric = getBlockMetric(
-		Config::cameraWidth / 2 - Config::obstructionsSenseWidth,
-		Config::obstructionsStartY,
-		Config::obstructionsSenseWidth,
-		Config::obstructionsSenseHeight,
-		viewObstructedValidColors,
-		20
-	);
-
-	float rightMetric = getBlockMetric(
-		Config::cameraWidth / 2,
-		Config::obstructionsStartY,
-		Config::obstructionsSenseWidth,
-		Config::obstructionsSenseHeight,
-		viewObstructedValidColors,
-		20
-	);
-
-	obstructionSide = Obstruction::NONE;
-
-	if (leftMetric < Config::obstructedThreshold && rightMetric < Config::obstructedThreshold) {
-		obstructionSide = Obstruction::BOTH;
-	} else if (leftMetric < Config::obstructedThreshold) {
-		obstructionSide = Obstruction::LEFT;
-	} else if (rightMetric < Config::obstructedThreshold) {
-		obstructionSide = Obstruction::RIGHT;
-	}
-}
 
 void Vision::updateColorDistances() {
 	whiteDistance = getColorDistance("white");

@@ -55,19 +55,6 @@ public:
 		float max;
 	};
 
-	struct Result {
-		Result() : obstructionSide(Obstruction::NONE), goalPathObstruction(Obstruction::NONE), vision(NULL) {}
-
-		ObjectList balls;
-		ObjectList goals;
-		Obstruction obstructionSide;
-		Obstruction goalPathObstruction;
-		ColorList colorOrder;
-		ColorDistance whiteDistance;
-		ColorDistance blackDistance;
-		Vision* vision;
-	};
-
 	struct BallInWayMetric {
 		BallInWayMetric() : isBallInWay(false), ballInWayCount(0), closestBallInWayDistance(0.0f), furthestBallInWayDistance(0.0f) {}
 		BallInWayMetric(bool isBallInWay, int ballInWayCount, float closestBallInWayDistance, float furthestBallInWayDistance) : isBallInWay(isBallInWay), ballInWayCount(ballInWayCount), closestBallInWayDistance(closestBallInWayDistance), furthestBallInWayDistance(furthestBallInWayDistance) {}
@@ -76,6 +63,18 @@ public:
 		int ballInWayCount;
 		float closestBallInWayDistance;
 		float furthestBallInWayDistance;
+	};
+
+	struct Result {
+		Result() : goalPathObstruction(Obstruction::NONE), vision(NULL) {}
+
+		ObjectList balls;
+		ObjectList goals;
+		Obstruction goalPathObstruction;
+		ColorList colorOrder;
+		ColorDistance whiteDistance;
+		ColorDistance blackDistance;
+		Vision* vision;
 	};
 
 	class Results {
@@ -129,8 +128,6 @@ public:
     Result* process();
     Blobber::Color* getColorAt(int x, int y);
 	CameraTranslator* getCameraTranslator() { return cameraTranslator; }
-	bool isViewObstructed() { return obstructionSide != Obstruction::NONE; }
-	Obstruction getObstruction() { return obstructionSide; }
 	Dir getDir() { return dir; }
     Distance getDistance(int x, int y);
 	//float getHorizontalDistance(Dir dir, int x, int y);
@@ -161,7 +158,6 @@ private:
 	int getPixelsBelow(int x, int y, std::vector<std::string> validColors, int allowedWrongPixels = 3);
 	/*int getBallMaxInvalidSpree(int y);
 	int getGoalMaxInvalidSpree(int y);*/
-	void updateObstructions();
 	void updateColorDistances();
 	void updateColorOrder();
 
@@ -178,7 +174,6 @@ private:
     std::vector<std::string> goalColors;
     int width;
     int height;
-	Obstruction obstructionSide;
 	ColorList colorOrder;
 	ColorDistance whiteDistance;
 	ColorDistance blackDistance;
