@@ -521,7 +521,7 @@ bool Vision::isBallInGoal(Object* ball, Dir dir, ObjectList& goals) {
 	for (ObjectListItc it = goals.begin(); it != goals.end(); it++) {
 		goal = *it;
 
-		if (goal->distance < 0.8f && ball->behind == goal->behind && goal->contains(ball)) {
+		if (goal->distance <= 1.0f && ball->behind == goal->behind && goal->contains(ball)) {
 			return true;
 		}
 	}
