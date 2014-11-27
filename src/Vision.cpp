@@ -296,9 +296,9 @@ bool Vision::isValidGoal(Object* goal, Side side) {
 		//std::cout << "@ GOAL INVALID MIN AREA: " << goal->area << " VS " << Config::goalMinArea << std::endl;
 
 		return false;
-	} else if (goal->area > Config::goalCertainArea) {
+	}/* else if (goal->area > Config::goalCertainArea) {
 		return true;
-	}
+	}*/
 
 	if (goal->y - goal->height / 2 > Config::goalTopMaxY) {
 		//std::cout << "@ GOAL NOT TOP ENOUGH: " << (goal->y - goal->height / 2) << " VS " << Config::goalTopMaxY << std::endl;
