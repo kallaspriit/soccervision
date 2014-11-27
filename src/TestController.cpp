@@ -714,7 +714,7 @@ std::string TestController::getJSON() {
 		stream << "\"" << (it->first) << "\": \"" << (it->second) << "\",";
 	}
 
-	Obstruction goalPathObstruction = visionResults->front->goalPathObstruction;
+	Obstruction goalPathObstruction = visionResults->goalPathObstruction;
 	bool isGoalPathObstructed = goalPathObstruction != Obstruction::NONE;
 
 	//send some debug information to the client
@@ -2573,7 +2573,7 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 	int goalHalfWidth = goalWidth / 2;
 	int goalKickThresholdPixels = (int)((float)goalHalfWidth * (1.0f - Config::goalKickThreshold));
 	double timeSinceLastKick = lastKickTime != 0.0 ? Util::duration(lastKickTime) : -1.0;
-	Obstruction goalPathObstruction = visionResults->front->goalPathObstruction;
+	Obstruction goalPathObstruction = visionResults->goalPathObstruction;
 	bool isGoalPathObstructed = goalPathObstruction != Obstruction::NONE;
 	float forwardSpeed = 0.0f;
 	float sideSpeed = 0.0f;

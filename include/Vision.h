@@ -66,11 +66,10 @@ public:
 	};
 
 	struct Result {
-		Result() : goalPathObstruction(Obstruction::NONE), vision(NULL) {}
+		Result() : vision(NULL) {}
 
 		ObjectList balls;
 		ObjectList goals;
-		Obstruction goalPathObstruction;
 		ColorList colorOrder;
 		ColorDistance whiteDistance;
 		ColorDistance blackDistance;
@@ -79,7 +78,7 @@ public:
 
 	class Results {
 		public:
-			Results() : front(NULL), rear(NULL) {}
+			Results() : front(NULL), rear(NULL), goalPathObstruction(Obstruction::NONE) {}
 			Object* getClosestBall(Dir dir = Dir::ANY, bool nextClosest = false, bool preferLeft = false, bool preferRear = false, bool preferFront = false);
 			Object* getFurthestBall(Dir dir = Dir::ANY);
 			Object* getNextClosestBall(Dir dir = Dir::ANY);
@@ -91,6 +90,7 @@ public:
 			//bool isBallInWay(ObjectList balls, int goalY);
 			bool isRobotOut(Dir dir = Dir::ANY);
 			int getVisibleBallCount();
+			Obstruction goalPathObstruction;
 
 			Vision::Result* front;
 			Vision::Result* rear;
@@ -135,6 +135,7 @@ public:
 	//int getPixelRowAt(float distance);
 	CameraTranslator::CameraPosition getPixelAt(float distanceX, float distanceY);
 	Math::Point getScreenCoords(float distanceX, float distanceY);
+	Obstruction getGoalPathObstruction(float goalDistance);
 
 private:
     ObjectList processGoals(Dir dir);
@@ -142,7 +143,6 @@ private:
 	float getSurroundMetric(int x, int y, int radius, std::vector<std::string> validColors, std::string requiredColor = "", int side = 0, bool allowNone = false);
     PathMetric getPathMetric(int x1, int y1, int x2, int y2, std::vector<std::string> validColors, std::string requiredColor = "");
 	EdgeDistanceMetric getEdgeDistanceMetric(int x, int y, int width, int height, std::string color1, std::string color2);
-	Obstruction getGoalPathObstruction();
 	float getBlockMetric(int x, int y, int width, int height, std::vector<std::string> validColors, int step = 6);
 	float getUndersideMetric(int x, int y, float distance, int width, int height, std::string targetColor, std::string targetColor2, std::vector<std::string> validColors, bool expand = true);
 	float getUndersideMetric(int x, int y, float distance, int width, int height, std::string targetColor, std::string targetColor2, std::vector<std::string> validColors, int& minValidX, int& minValidY, int& maxValidX, int& maxValidY, bool expand = true);

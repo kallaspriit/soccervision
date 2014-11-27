@@ -70,12 +70,6 @@ Vision::Result* Vision::process() {
 	result->whiteDistance = whiteDistance;
 	result->blackDistance = blackDistance;
 
-	if (dir == Dir::FRONT) {
-		result->goalPathObstruction = getGoalPathObstruction();
-	} else {
-		result->goalPathObstruction = Obstruction::NONE;
-	}
-
 	return result;
 }
 
@@ -1018,14 +1012,14 @@ Vision::EdgeDistanceMetric Vision::getEdgeDistanceMetric(int x, int y, int width
 	return EdgeDistanceMetric(leftTopDistance, rightTopDistance, centerDistance);
 }
 
-Obstruction Vision::getGoalPathObstruction() {
+Obstruction Vision::getGoalPathObstruction(float goalDistance) {
 	Obstruction obstruction = Obstruction::NONE;
 	//float corridorWidth = 0.1f;
 	float yStep = 0.05f;
 	float xStep = 0.025f;
 	float xSteps = 4.0f;
 	float startDistance = 0.2f;
-	float endDistance = 6.0f; // TODO Something smarter?
+	float endDistance = goalDistance;
 	int stopGoalColorCount = 4; // stop searching any further if found this many goal colors
 	float goalPathObstructedThreshold = 0.4f;
 
@@ -1038,7 +1032,6 @@ Obstruction Vision::getGoalPathObstruction() {
 	int validCountLeft = 0;
 	int validCountRight = 0;
 	int goalColorCount = 0;
-	float goalDistance = -1.0f;
 	float maxDistanceY = startDistance;
 	bool running = true;
 	bool isLeft;
@@ -1068,8 +1061,6 @@ Obstruction Vision::getGoalPathObstruction() {
 						}
 
 						running = false;
-
-						goalDistance = getDistance(pos.x, pos.y).y;
 
 						break;
 					} else {
