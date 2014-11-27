@@ -747,7 +747,7 @@ float Vision::getSurroundMetric(int x, int y, int radius, std::vector<std::strin
 Vision::PathMetric Vision::getPathMetric(int x1, int y1, int x2, int y2, std::vector<std::string> validColors, std::string requiredColor) {
     int matches = 0;
 	int blacksInRow = 0;
-	int maxBlacksInRow = 3;
+	int maxBlacksInRow = 8;
     bool debug = canvas.data != NULL;
     bool requiredColorFound = false;
 	bool sawGreen = false;
