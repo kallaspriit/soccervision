@@ -2115,6 +2115,10 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 		robot->dribbler->useChipKickLimits();
 	} else {
 		robot->dribbler->useNormalLimits();
+
+		if (ball->distance < 0.5f) {
+			robot->dribbler->start();
+		}
 	}
 
 	// store ball first sighting distance
