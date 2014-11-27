@@ -1033,7 +1033,6 @@ Obstruction Vision::getGoalPathObstruction() {
 	bool debug = canvas.data != NULL;
 	Blobber::Color* color;
 	CameraTranslator::CameraPosition pos;
-	int validCount = 0;
 	int sampleCountLeft = 0;
 	int sampleCountRight = 0;
 	int validCountLeft = 0;
@@ -1058,12 +1057,6 @@ Obstruction Vision::getGoalPathObstruction() {
 			pos = cameraTranslator->getCameraPosition(xDistance, yDistance);
 			color = getColorAt(pos.x, pos.y);
 
-			if (isLeft) {
-				sampleCountLeft++;
-			} else {
-				sampleCountRight++;
-			}
-			
 			if (color != NULL) {
 				if (strcmp(color->name, "blue-goal") == 0 || strcmp(color->name, "yellow-goal") == 0) {
 					goalColorCount++;
@@ -1092,20 +1085,35 @@ Obstruction Vision::getGoalPathObstruction() {
 					if (debug) {
 						canvas.drawMarker(pos.x, pos.y, 0, 255, 0);
 					}
-					
-					validCount++;
 
-					if (xDistance < 0) {
+					if (isLeft) {
+						sampleCountLeft++;
 						validCountLeft++;
-					} else {
+					}
+					else {
+						sampleCountRight++;
 						validCountRight++;
 					}
 				} else {
+					if (isLeft) {
+						sampleCountLeft++;
+					}
+					else {
+						sampleCountRight++;
+					}
+
 					if (debug) {
 						canvas.drawMarker(pos.x, pos.y, 128, 0, 0);
 					}
 				}
 			} else {
+				if (isLeft) {
+					sampleCountLeft++;
+				}
+				else {
+					sampleCountRight++;
+				}
+
 				if (debug) {
 					canvas.drawMarker(pos.x, pos.y, 128, 0, 0);
 				}
