@@ -90,6 +90,7 @@
 * + dribbler thinks it's got the ball some time after bdkick reported kicked ball, should not
 * + perhaps should calculate main coilgun duration to get the ball into the goal but not kick too hard
 * ¤ dribbler should not report having ball when last kick time is very small
+* - detect another robot in the way and avoid kicking into it
 * - in fetch ball near, if the ball is very close and the kick window is not clear, send no-kick and fetch direct, special care when dribbler up
 * - when driving behind ball, check whether the robot fits and if not, drive behind the next ball
 * # while performing drive behind ball, it should check whether it has gone out as well
@@ -143,7 +144,7 @@
 * - test does not see goal in invalid places
 */
 
-TestController::TestController(Robot* robot, AbstractCommunication* com) : BaseAI(robot, com), targetSide(Side::BLUE), manualSpeedX(0.0f), manualSpeedY(0.0f), manualOmega(0.0f), manualDribblerSpeed(0), manualKickStrength(0), blueGoalDistance(0.0f), yellowGoalDistance(0.0f), lastCommandTime(-1.0), lastBallTime(-1.0), lastNearLineTime(-1.0), lastNearGoalTime(-1.0), lastInCornerTime(-1.0), lastTargetGoalAngle(0.0f), lastBall(NULL), lastTurnAroundTime(-1.0), lastClosestGoalDistance(-1.0f), lastTargetGoalDistance(-1.0f), framesRobotOutFront(0), framesRobotOutRear(0), isRobotOutFront(false), isRobotOutRear(false), isNearLine(false), isInCorner(false), isBallInWay(false), isAvoidingBallInWay(false), inCornerFrames(0), nearLineFrames(0), nearGoalFrames(0), visibleBallCount(0) {
+TestController::TestController(Robot* robot, AbstractCommunication* com) : BaseAI(robot, com), targetSide(Side::BLUE), manualSpeedX(0.0f), manualSpeedY(0.0f), manualOmega(0.0f), manualDribblerSpeed(0), manualKickStrength(0), blueGoalDistance(0.0f), yellowGoalDistance(0.0f), lastCommandTime(-1.0), lastBallTime(-1.0), lastNearLineTime(-1.0), lastNearGoalTime(-1.0), lastInCornerTime(-1.0), lastTargetGoalAngle(0.0f), lastBall(NULL), lastTurnAroundTime(-1.0), lastClosestGoalDistance(-1.0f), lastTargetGoalDistance(-1.0f), framesRobotOutFront(0), framesRobotOutRear(0), isRobotOutFront(false), isRobotOutRear(false), isNearLine(false), isInCorner(false), isBallInWay(false), isAvoidingBallInWay(false), inCornerFrames(0), nearLineFrames(0), nearGoalFrames(0), visibleBallCount(0), visionResults(NULL) {
 	setupStates();
 
 	speedMultiplier = 1.0f;
@@ -213,6 +214,8 @@ void TestController::setupStates() {
 
 void TestController::step(float dt, Vision::Results* visionResults) {
 	messages.clear();
+
+	this->visionResults = visionResults;
 
 	updateVisionInfo(visionResults);
 
@@ -711,6 +714,9 @@ std::string TestController::getJSON() {
 		stream << "\"" << (it->first) << "\": \"" << (it->second) << "\",";
 	}
 
+	Obstruction goalPathObstruction = visionResults->front->goalPathObstruction;
+	bool isGoalPathObstructed = goalPathObstruction != Obstruction::NONE;
+
 	//send some debug information to the client
 	stream << "\"#currentState\": \"" << currentStateName << "\",";
 	stream << "\"stateDuration\": \"" << currentStateDuration << "\",";
@@ -736,6 +742,7 @@ std::string TestController::getJSON() {
 	stream << "\"isNearLine\": " << (isNearLine ? "true" : "false") << ",";
 	stream << "\"isBallInWay\": " << (isBallInWay ? "true" : "false") << ",";
 	stream << "\"isAvoidingBallInWay\": " << (isAvoidingBallInWay ? "true" : "false") << ",";
+	stream << "\"isGoalPathObstructed\": " << (isGoalPathObstructed ? (goalPathObstruction == Obstruction::BOTH ? "both" : goalPathObstruction == Obstruction::LEFT ? "left" : "right") : "no") << ",";
 	stream << "\"lastTargetGoalAngle\": " << Math::radToDeg(lastTargetGoalAngle) << ",";
 	stream << "\"#stateChanges\": [";
 

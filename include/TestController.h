@@ -340,6 +340,8 @@ private:
 	float getObjectClosestDistance(Vision::Results* visionResults, Object* object);
 	Object* getLastBall(Dir dir = Dir::ANY);
 
+	Vision::Results* visionResults;
+
 	DebouncedButton toggleGoBtn;
 	DebouncedButton toggleSideBtn;
 	DebouncedButton resetBtn;
