@@ -309,11 +309,11 @@ bool Vision::isValidGoal(Object* goal, Side side) {
 	}
 
 	// set real distance from edge distance metric center distance
-	if (edgeDistanceMetric.centerDistance.distance != -1) {
+	/*if (edgeDistanceMetric.centerDistance.distance != -1) {
 		//std::cout << "UPDATE GOAL DISTANCE FROM " << goal->distance << " TO " << edgeDistanceMetric.centerDistance.distance << std::endl;
 
-		//goal->distance = edgeDistanceMetric.centerDistance.distance;
-	}
+		goal->distance = edgeDistanceMetric.centerDistance.distance;
+	}*/
 
 	//std::cout << "@ EDGE LEFT: " << edgeDistanceMetric.leftTopDistance.distance << "m, right: " << edgeDistanceMetric.rightTopDistance.distance << "m" << std::endl;
 
@@ -333,7 +333,7 @@ bool Vision::isValidGoal(Object* goal, Side side) {
 			//|| !pathMetric.validColorFound
 			//|| pathMetric.invalidSpree > getBallMaxInvalidSpree(ball->y + ball->height / 2)
 		) {
-			//std::cout << "@ GOAL PATH FAILS: " << pathMetric.percentage << " VS " << Config::minValidGoalPathThreshold << ", OUT: " << (pathMetric.out ? "YES" : "NO") << std::endl;
+			std::cout << "@ GOAL PATH FAILS: " << pathMetric.percentage << " VS " << Config::minValidGoalPathThreshold << ", OUT: " << (pathMetric.out ? "YES" : "NO") << std::endl;
 
 			return false;
 		}
@@ -909,7 +909,7 @@ Vision::PathMetric Vision::getPathMetric(int x1, int y1, int x2, int y2, std::ve
 
     int matches = 0;
 	int blacksInRow = 0;
-	int maxBlacksInRow = 6;
+	int maxBlacksInRow = 3;
     bool debug = canvas.data != NULL;
     bool requiredColorFound = false;
 	bool sawGreen = false;
