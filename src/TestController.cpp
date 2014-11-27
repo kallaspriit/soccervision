@@ -125,23 +125,24 @@
 * + fetch ball very close to own goal (should not turn around the ball into the goal)
 * + fetch ball close to own goal from behind
 * + fetch ball on the black line in the center of own goal, can push it in and go for it
-* + should reverse out of a goal if gets into it
+* + should reverse out of own goal if gets into it
+* - should reverse out of opponents goal if gets into it
 * + fetch ball behind direct at far distance
 * + fetch ball behind direct at small distance
 * + fetch ball behind from center edge of the field when in front of opponents goal facing goal directly
-* - fetch ball very close to the opponent goal (on the line) at the center
-* - fetch ball close to opponents goal corners
-* - should roam the field between white lines if no balls are visible
-* - should find a ball quickly when roaming around when suddenly becomes visible (remove foot etc)
+* + fetch ball very close to the opponent goal (on the line) at the center
+* + fetch ball close to opponents goal corners
+* + should roam the field between white lines if no balls are visible
+* + should find a ball quickly when roaming around when suddenly becomes visible (remove foot etc)
 * - should not get stuck near a goal if a single ball is visible and it's in the goal
+* - should drive sideways when got ball near side of goal
 * - fetch a string of balls straight behind each other
 * - fetch a string of balls diagonally (both diagonals)
 * - fetch ball in opposite corner
 * - fetch a string of balls behind robot (large and small gaps)
-* - find ball/roam field if none visible
 * - fetch ball on the line while opponents goal is visible
 * - fetch ball on the line when goal not visible (do not push out)
-* - fetch balls from corners (near own goal and opponents)
+* - fetch balls from corners (near own goal and opponents), should back out
 * - fetch ball when opponent is between the ball and the goal
 * - test ball in way at large distance from opponents goal
 * - test ball in way at small distance from opponents goal
