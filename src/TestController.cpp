@@ -146,7 +146,7 @@
 * - test does not see goal in invalid places
 */
 
-TestController::TestController(Robot* robot, AbstractCommunication* com) : BaseAI(robot, com), targetSide(Side::BLUE), manualSpeedX(0.0f), manualSpeedY(0.0f), manualOmega(0.0f), manualDribblerSpeed(0), manualKickStrength(0), blueGoalDistance(0.0f), yellowGoalDistance(0.0f), lastCommandTime(-1.0), lastBallTime(-1.0), lastNearLineTime(-1.0), lastNearGoalTime(-1.0), lastInCornerTime(-1.0), lastTargetGoalAngle(0.0f), lastBall(NULL), lastTurnAroundTime(-1.0), lastClosestGoalDistance(-1.0f), lastTargetGoalDistance(-1.0f), framesRobotOutFront(0), framesRobotOutRear(0), isRobotOutFront(false), isRobotOutRear(false), isNearLine(false), isInCorner(false), isBallInWay(false), isAvoidingBallInWay(false), inCornerFrames(0), nearLineFrames(0), nearGoalFrames(0), visibleBallCount(0), visionResults(NULL) {
+TestController::TestController(Robot* robot, AbstractCommunication* com) : BaseAI(robot, com), targetSide(Side::BLUE), manualSpeedX(0.0f), manualSpeedY(0.0f), manualOmega(0.0f), manualDribblerSpeed(0), manualKickStrength(0), blueGoalDistance(0.0f), yellowGoalDistance(0.0f), lastCommandTime(-1.0), lastBallTime(-1.0), lastNearLineTime(-1.0), lastNearGoalTime(-1.0), lastInCornerTime(-1.0), lastGoalObstructedTime(-1.0), lastTargetGoalAngle(0.0f), lastBall(NULL), lastTurnAroundTime(-1.0), lastClosestGoalDistance(-1.0f), lastTargetGoalDistance(-1.0f), framesRobotOutFront(0), framesRobotOutRear(0), isRobotOutFront(false), isRobotOutRear(false), isNearLine(false), isInCorner(false), isBallInWay(false), isAvoidingBallInWay(false), inCornerFrames(0), nearLineFrames(0), nearGoalFrames(0), visibleBallCount(0), visionResults(NULL) {
 	setupStates();
 
 	speedMultiplier = 1.0f;
@@ -512,6 +512,11 @@ void TestController::updateVisionInfo(Vision::Results* visionResults) {
 	if (inCornerFrames >= 3) {
 		lastInCornerTime = Util::millitime();
 	}
+
+	if (visionResults->goalPathObstruction.left || visionResults->goalPathObstruction.right) {
+		lastGoalObstructedTime = Util::millitime();
+		lastGoalPathObstruction = visionResults->goalPathObstruction;
+	}
 }
 
 bool TestController::isRobotNearLine(Vision::Results* visionResults, bool ignoreCenterSample) {
@@ -696,7 +701,7 @@ std::string TestController::getJSON() {
 		stream << "\"" << (it->first) << "\": \"" << (it->second) << "\",";
 	}
 
-	Vision::Obstruction goalPathObstruction = visionResults->goalPathObstruction;
+	Vision::Obstruction goalPathObstruction = getGoalPathObstruction();
 	bool isGoalPathObstructed = goalPathObstruction.left || goalPathObstruction.right;
 
 	//send some debug information to the client
@@ -879,6 +884,14 @@ bool TestController::shouldManeuverBallInWay(Vision::BallInWayMetric ballInWayMe
 	return isLowVoltage
 		|| goalDistance < 1.0f
 		|| Math::abs(ballInWayMetric.furthestBallInWayDistance - goalDistance) < 1.0f;
+}
+
+Vision::Obstruction TestController::getGoalPathObstruction(float lifetime) {
+	if (Util::duration(lastGoalObstructedTime) <= lifetime) {
+		return lastGoalPathObstruction;
+	} else {
+		return visionResults->goalPathObstruction;
+	}
 }
 
 bool TestController::isRobotNearGoal(float distanceThreshold) {
@@ -2548,7 +2561,7 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 	int goalHalfWidth = goalWidth / 2;
 	int goalKickThresholdPixels = (int)((float)goalHalfWidth * (1.0f - Config::goalKickThreshold));
 	double timeSinceLastKick = lastKickTime != 0.0 ? Util::duration(lastKickTime) : -1.0;
-	Vision::Obstruction goalPathObstruction = visionResults->goalPathObstruction;
+	Vision::Obstruction goalPathObstruction = ai->getGoalPathObstruction();
 	bool isGoalPathObstructed = goalPathObstruction.left || goalPathObstruction.right;
 	float forwardSpeed = 0.0f;
 	float sideSpeed = 0.0f;

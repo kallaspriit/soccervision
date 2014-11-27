@@ -314,6 +314,7 @@ public:
 	float getChipKickDistance(Vision::BallInWayMetric ballInWayMetric, float goalDistance);
 	bool shouldAvoidBallInWay(Vision::BallInWayMetric ballInWayMetric, float goalDistance);
 	bool shouldManeuverBallInWay(Vision::BallInWayMetric ballInWayMetric, float goalDistance, bool isLowVoltage);
+	Vision::Obstruction getGoalPathObstruction(float lifetime = 0.2f);
 
     void step(float dt, Vision::Results* visionResults);
 	Side getTargetSide() { return targetSide; }
@@ -382,8 +383,10 @@ private:
 	double lastNearLineTime;
 	double lastNearGoalTime;
 	double lastInCornerTime;
+	double lastGoalObstructedTime;
 
 	Object* lastBall;
+	Vision::Obstruction lastGoalPathObstruction;
 
 	Params parameters;
 	Messages messages;
