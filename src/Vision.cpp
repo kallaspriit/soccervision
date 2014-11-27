@@ -319,7 +319,7 @@ bool Vision::isValidGoal(Object* goal, Side side) {
 
 		if (
 			pathMetric.invalidColorCount > Config::maxGoalInvalidColorCount
-			//pathMetric.percentage < Config::minValidGoalPathThreshold
+			&& pathMetric.percentage < Config::minValidGoalPathThreshold
 			//|| pathMetric.out
 			//|| !pathMetric.validColorFound
 			//|| pathMetric.invalidSpree > getBallMaxInvalidSpree(ball->y + ball->height / 2)

@@ -107,6 +107,7 @@
 * - prepare another laptop with better battery to use for dash
 * - spin around dribbler while aiming could be accelerating
 * - spin around dribbler could be turning around one wrong wheel to always push ball
+* - don't go for ball if ball distance is detected negative
 *
 * Future
 * - make all parameters settable in the UI

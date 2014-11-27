@@ -181,7 +181,7 @@ Dash.Renderer.prototype.drawIntersections = function(yellowDistance, blueDistanc
 
 	this.c.lineWidth = 1 / this.canvasToWorldRatio;
 
-	if (yellowDistance !== -1) {
+	if (yellowDistance > 0) {
 		this.c.strokeStyle = '#DD0';
 		this.c.beginPath();
 		this.c.arc(0, Dash.Config.field.height / 2, yellowDistance, 0, Math.PI * 2, true);
@@ -189,7 +189,7 @@ Dash.Renderer.prototype.drawIntersections = function(yellowDistance, blueDistanc
 		this.c.stroke();
 	}
 
-	if (blueDistance !== -1) {
+	if (blueDistance > 0) {
 		this.c.strokeStyle = '#00F';
 		this.c.beginPath();
 		this.c.arc(Dash.Config.field.width, Dash.Config.field.height / 2, blueDistance, 0, Math.PI * 2, true);
