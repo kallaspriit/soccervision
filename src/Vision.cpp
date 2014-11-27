@@ -918,7 +918,7 @@ Vision::PathMetric Vision::getPathMetric(int x1, int y1, int x2, int y2, std::ve
 	float percentage = (float)matches / (float)sampleCount;
 	bool validColorFound = requiredColor == "" || requiredColorFound;
 	//bool isOut = crossingGreenWhiteBlackGreen || tooManyBlacksInRow;
-	bool isOut = crossingGreenWhiteBlack || tooManyBlacksInRow;
+	bool isOut = crossingGreenWhiteBlack || (tooManyBlacksInRow && firstColor != "black");
 
 	// fake high percentage if too few samples available
 	if (sampleCount < 5) {
