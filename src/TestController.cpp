@@ -742,7 +742,7 @@ std::string TestController::getJSON() {
 	stream << "\"isNearLine\": " << (isNearLine ? "true" : "false") << ",";
 	stream << "\"isBallInWay\": " << (isBallInWay ? "true" : "false") << ",";
 	stream << "\"isAvoidingBallInWay\": " << (isAvoidingBallInWay ? "true" : "false") << ",";
-	stream << "\"isGoalPathObstructed\": " << (isGoalPathObstructed ? (goalPathObstruction == Obstruction::BOTH ? "both" : goalPathObstruction == Obstruction::LEFT ? "left" : "right") : "no") << ",";
+	stream << "\"isGoalPathObstructed\": \"" << (isGoalPathObstructed ? (goalPathObstruction == Obstruction::BOTH ? "both" : goalPathObstruction == Obstruction::LEFT ? "left" : "right") : "no") << "\",";
 	stream << "\"lastTargetGoalAngle\": " << Math::radToDeg(lastTargetGoalAngle) << ",";
 	stream << "\"#stateChanges\": [";
 
