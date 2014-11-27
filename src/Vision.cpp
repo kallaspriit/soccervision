@@ -290,24 +290,6 @@ bool Vision::isValidGoal(Object* goal, Side side) {
 		goal->y = y1 + goal->height / 2;
 	}*/
 
-	std::string color1 = goal->type == 0 ? "blue-goal" : "yellow-goal";
-	std::string color2 = goal->type == 0 ? "blue-goal-wide" : "yellow-goal-wide";
-	int halfWidth = goal->width / 2;
-	int halfHeight = goal->height / 2;
-
-	EdgeDistanceMetric edgeDistanceMetric = getEdgeDistanceMetric(goal->x - halfWidth, goal->y - halfHeight, goal->width, goal->height, color1, color2);
-
-	// also comparing pixel values because distance calculation messes up for very high pixels..
-	// expect both sides to fail as one of them can get incorecctly labelled
-	if (
-		(edgeDistanceMetric.leftTopDistance.distance < Config::goalTopMinDistance && edgeDistanceMetric.leftTopDistance.screenY > Config::goalTopMaxY)
-		&& (edgeDistanceMetric.rightTopDistance.distance < Config::goalTopMinDistance && edgeDistanceMetric.rightTopDistance.screenY > Config::goalTopMaxY)
-	) {
-		//std::cout << "@ GOAL INVALID TOP EDGE DISTANCE LEFT: " << edgeDistanceMetric.leftTopDistance.distance << "m, right: " << edgeDistanceMetric.rightTopDistance.distance << "m" << std::endl;
-
-		return false;
-	}
-
 	// set real distance from edge distance metric center distance
 	/*if (edgeDistanceMetric.centerDistance.distance != -1) {
 		//std::cout << "UPDATE GOAL DISTANCE FROM " << goal->distance << " TO " << edgeDistanceMetric.centerDistance.distance << std::endl;
@@ -338,6 +320,24 @@ bool Vision::isValidGoal(Object* goal, Side side) {
 
 			return false;
 		}
+	}
+
+	std::string color1 = goal->type == 0 ? "blue-goal" : "yellow-goal";
+	std::string color2 = goal->type == 0 ? "blue-goal-wide" : "yellow-goal-wide";
+	int halfWidth = goal->width / 2;
+	int halfHeight = goal->height / 2;
+
+	EdgeDistanceMetric edgeDistanceMetric = getEdgeDistanceMetric(goal->x - halfWidth, goal->y - halfHeight, goal->width, goal->height, color1, color2);
+
+	// also comparing pixel values because distance calculation messes up for very high pixels..
+	// expect both sides to fail as one of them can get incorecctly labelled
+	if (
+		(edgeDistanceMetric.leftTopDistance.distance < Config::goalTopMinDistance && edgeDistanceMetric.leftTopDistance.screenY > Config::goalTopMaxY)
+		&& (edgeDistanceMetric.rightTopDistance.distance < Config::goalTopMinDistance && edgeDistanceMetric.rightTopDistance.screenY > Config::goalTopMaxY)
+		) {
+		//std::cout << "@ GOAL INVALID TOP EDGE DISTANCE LEFT: " << edgeDistanceMetric.leftTopDistance.distance << "m, right: " << edgeDistanceMetric.rightTopDistance.distance << "m" << std::endl;
+
+		return false;
 	}
 
 	if (goal->area < Config::goalMinArea) {
