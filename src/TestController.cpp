@@ -91,6 +91,7 @@
 * + perhaps should calculate main coilgun duration to get the ball into the goal but not kick too hard
 * ¤ dribbler should not report having ball when last kick time is very small
 * - detect another robot in the way and avoid kicking into it
+* - if got ball and don't see opponents goal, don't just spin in place as the other robot may be in way, focus at own goal from rear and drive from side to side
 * - in fetch ball near, if the ball is very close and the kick window is not clear, send no-kick and fetch direct, special care when dribbler up
 * - when driving behind ball, check whether the robot fits and if not, drive behind the next ball
 * # while performing drive behind ball, it should check whether it has gone out as well
