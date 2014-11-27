@@ -285,12 +285,12 @@ enum Dir {
 	ANY = 3
 };
 
-enum Obstruction {
+/*enum Obstruction {
 	NONE = 0,
 	LEFT = 1,
 	RIGHT = 2,
 	BOTH = 3,
-};
+};*/
 
 enum Decision {
 	UNDECIDED = 0,

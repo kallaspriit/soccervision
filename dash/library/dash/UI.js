@@ -1265,11 +1265,11 @@ Dash.UI.prototype.showControllerState = function(state) {
 
 	$('#obstruction-indicator-left, #obstruction-indicator-right').removeClass('active');
 
-	if (state.obstruction == 3) {
-		$('#obstruction-indicator-left, #obstruction-indicator-right').addClass('active');
-	} else if (state.obstruction == 1) {
+	if (state.obstruction.left) {
 		$('#obstruction-indicator-left').addClass('active');
-	} else if (state.obstruction == 2) {
+	}
+
+	if (state.obstruction.right) {
 		$('#obstruction-indicator-right').addClass('active');
 	}
 };

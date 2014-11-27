@@ -540,7 +540,7 @@ int Vision::getGoalMaxInvalidSpree(int y) {
 }*/
 
 int Vision::getBallRadius(int width, int height) {
-	return (int)(((float)width + (float)height) / 2.0f);
+	return (int)((float)(width + height) / 2.0f);
 }
 
 int Vision::getBallSenseRadius(int ballRadius, float distance) {
@@ -1039,8 +1039,8 @@ Vision::EdgeDistanceMetric Vision::getEdgeDistanceMetric(int x, int y, int width
 	return EdgeDistanceMetric(leftTopDistance, rightTopDistance, centerDistance);
 }
 
-Obstruction Vision::getGoalPathObstruction(float goalDistance) {
-	Obstruction obstruction = Obstruction::NONE;
+Vision::Obstruction Vision::getGoalPathObstruction(float goalDistance) {
+	Obstruction obstruction;
 	//float corridorWidth = 0.1f;
 	float yStep = 0.05f;
 	float xStep = 0.025f;
@@ -1152,19 +1152,23 @@ Obstruction Vision::getGoalPathObstruction(float goalDistance) {
 		return obstruction;
 	}
 
-	int invalidCountLeft = sampleCountLeft - validCountLeft;
-	int invalidCountRight = sampleCountRight - validCountRight;
+	obstruction.invalidCountLeft = sampleCountLeft - validCountLeft;
+	obstruction.invalidCountRight = sampleCountRight - validCountRight;
+
 	int maxInvalidCount = 10;
 
-	if (invalidCountLeft > maxInvalidCount || invalidCountRight > maxInvalidCount) {
-		if (invalidCountLeft > maxInvalidCount && invalidCountRight > maxInvalidCount) {
-			obstruction = Obstruction::BOTH;
-		} else if (invalidCountLeft > maxInvalidCount) {
-			obstruction = Obstruction::LEFT;
+	if (obstruction.invalidCountLeft > maxInvalidCount || obstruction.invalidCountRight > maxInvalidCount) {
+		if (obstruction.invalidCountLeft > maxInvalidCount && obstruction.invalidCountRight > maxInvalidCount) {
+			obstruction.left = true;
+			obstruction.right = true;
+		} else if (obstruction.invalidCountLeft > maxInvalidCount) {
+			obstruction.left = true;
 		} else {
-			obstruction = Obstruction::RIGHT;
+			obstruction.right = true;
 		}
 	}
+
+	
 
 	//int invalidCountLeft = sampleCount
 

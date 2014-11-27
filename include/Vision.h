@@ -65,6 +65,16 @@ public:
 		float furthestBallInWayDistance;
 	};
 
+	struct Obstruction {
+		Obstruction() : left(false), right(false), invalidCountLeft(0), invalidCountRight(0) {}
+		Obstruction(bool left, bool right, int invalidCountLeft, int invalidCountRight) : left(left), right(right), invalidCountLeft(invalidCountLeft), invalidCountRight(invalidCountRight) {}
+
+		bool left;
+		bool right;
+		int invalidCountLeft;
+		int invalidCountRight;
+	};
+
 	struct Result {
 		Result() : vision(NULL) {}
 
@@ -78,7 +88,7 @@ public:
 
 	class Results {
 		public:
-			Results() : front(NULL), rear(NULL), goalPathObstruction(Obstruction::NONE) {}
+			Results() : front(NULL), rear(NULL), goalPathObstruction() {}
 			Object* getClosestBall(Dir dir = Dir::ANY, bool nextClosest = false, bool preferLeft = false, bool preferRear = false, bool preferFront = false);
 			Object* getFurthestBall(Dir dir = Dir::ANY);
 			Object* getNextClosestBall(Dir dir = Dir::ANY);

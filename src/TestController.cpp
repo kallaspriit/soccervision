@@ -716,8 +716,8 @@ std::string TestController::getJSON() {
 		stream << "\"" << (it->first) << "\": \"" << (it->second) << "\",";
 	}
 
-	Obstruction goalPathObstruction = visionResults->goalPathObstruction;
-	bool isGoalPathObstructed = goalPathObstruction != Obstruction::NONE;
+	Vision::Obstruction goalPathObstruction = visionResults->goalPathObstruction;
+	bool isGoalPathObstructed = goalPathObstruction.left || goalPathObstruction.right;
 
 	//send some debug information to the client
 	stream << "\"#currentState\": \"" << currentStateName << "\",";
@@ -744,8 +744,13 @@ std::string TestController::getJSON() {
 	stream << "\"isNearLine\": " << (isNearLine ? "true" : "false") << ",";
 	stream << "\"isBallInWay\": " << (isBallInWay ? "true" : "false") << ",";
 	stream << "\"isAvoidingBallInWay\": " << (isAvoidingBallInWay ? "true" : "false") << ",";
-	stream << "\"isGoalPathObstructed\": \"" << (isGoalPathObstructed ? (goalPathObstruction == Obstruction::BOTH ? "both" : goalPathObstruction == Obstruction::LEFT ? "left" : "right") : "no") << "\",";
-	stream << "\"obstruction\": " << goalPathObstruction << ",";
+	stream << "\"isGoalPathObstructed\": \"" << (isGoalPathObstructed ? (goalPathObstruction.left && goalPathObstruction.right ? "both" : goalPathObstruction.left ? "left" : "right") : "no") << "\",";
+	stream << "\"obstruction\": {";
+	stream << "\"left\": {" << goalPathObstruction.left << ",";
+	stream << "\"right\": {" << goalPathObstruction.right << ",";
+	stream << "\"invalidCountLeft\": {" << goalPathObstruction.invalidCountLeft << ",";
+	stream << "\"invalidCountRight\": {" << goalPathObstruction.invalidCountRight;
+	stream << "\"obstruction\": },";
 	stream << "\"lastTargetGoalAngle\": " << Math::radToDeg(lastTargetGoalAngle) << ",";
 	stream << "\"#stateChanges\": [";
 
@@ -2575,8 +2580,8 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 	int goalHalfWidth = goalWidth / 2;
 	int goalKickThresholdPixels = (int)((float)goalHalfWidth * (1.0f - Config::goalKickThreshold));
 	double timeSinceLastKick = lastKickTime != 0.0 ? Util::duration(lastKickTime) : -1.0;
-	Obstruction goalPathObstruction = visionResults->goalPathObstruction;
-	bool isGoalPathObstructed = goalPathObstruction != Obstruction::NONE;
+	Vision::Obstruction goalPathObstruction = visionResults->goalPathObstruction;
+	bool isGoalPathObstructed = goalPathObstruction.left || goalPathObstruction.right;
 	float forwardSpeed = 0.0f;
 	float sideSpeed = 0.0f;
 	Vision::BallInWayMetric ballInWayMetric = visionResults->getBallInWayMetric(visionResults->front->balls, goal->y + goal->height / 2);
@@ -2604,7 +2609,7 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 		// decide which way to avoid the balls once
 		if (avoidBallSide == TargetMode::UNDECIDED) {
 			if (isGoalPathObstructed) {
-				if (goalPathObstruction == Obstruction::LEFT) {
+				if (goalPathObstruction.invalidCountLeft > goalPathObstruction.invalidCountRight) {
 					avoidBallSide = TargetMode::RIGHT;
 				}
 				else {

@@ -170,7 +170,7 @@ void DebugRenderer::renderBrush(unsigned char* image, int x, int y, int radius, 
 	canvas.drawCircle(x, y, radius, active ? 255 : 0, 0, active ? 0 : 255);
 }
 
-void DebugRenderer::renderObstructions(unsigned char* image, Obstruction obstruction, int width, int height) {
+/*void DebugRenderer::renderObstructions(unsigned char* image, Obstruction obstruction, int width, int height) {
 	Canvas canvas = Canvas();
 
 	canvas.data = image;
@@ -188,7 +188,7 @@ void DebugRenderer::renderObstructions(unsigned char* image, Obstruction obstruc
 	} else {
 		canvas.fillBox(width / 2, height - 80, 20, 40, 0, 200, 0);
 	}
-}
+}*/
 
 void DebugRenderer::renderObjectHighlight(unsigned char* image, Object* object, int red, int green, int blue, int width, int height) {
 	Canvas canvas = Canvas();
