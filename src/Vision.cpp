@@ -2049,7 +2049,7 @@ Vision::BallInWayMetric Vision::Results::getBallInWayMetric(ObjectList balls, in
 		ball = *it;
 
 		if (ignoreBall != NULL && ball == ignoreBall) {
-			//std::cout << "@ IGNORING OWN BALL" << std::endl;
+			std::cout << "@ IGNORING OWN BALL" << std::endl;
 
 			continue;
 		}
