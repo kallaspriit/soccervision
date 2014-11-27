@@ -352,7 +352,7 @@ bool Vision::isValidGoal(Object* goal, Side side) {
 	if (edgeDistanceMetric.centerDistance.distance != -1) {
 		//std::cout << "UPDATE GOAL DISTANCE FROM " << goal->distance << " TO " << edgeDistanceMetric.centerDistance.distance << std::endl;
 
-		goal->distance = edgeDistanceMetric.centerDistance.distance;
+		goal->distance = edgeDistanceMetric.centerDistance.distance - 0.25f;
 	}
 
 	/*if (undersideMetric < Config::goalMinUndersideMetric) {
