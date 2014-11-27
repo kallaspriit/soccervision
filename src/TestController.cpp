@@ -2437,7 +2437,7 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 			&& !escapeCornerPerformed
 			&& ai->isRobotNearTargetGoal()
 			&& (rearGoal == NULL || ai->getObjectClosestDistance(visionResults, rearGoal) > 1.5f)
-			) {
+		) {
 			ai->setState("escape-corner");
 
 			lastEscapeCornerTime = Util::millitime();
@@ -2577,6 +2577,12 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 		isBallInWay = false;
 		shouldManeuverBallInWay = false;
 		isGoalPathObstructed = false;
+	}
+
+	if (isBallInWay && !shouldManeuverBallInWay) {
+		robot->dribbler->useChipKickLimits();
+	} else {
+		robot->dribbler->useNormalLimits();
 	}
 
 	// drive sideways if there's a ball in the way
