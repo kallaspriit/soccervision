@@ -746,8 +746,8 @@ std::string TestController::getJSON() {
 	stream << "\"isAvoidingBallInWay\": " << (isAvoidingBallInWay ? "true" : "false") << ",";
 	stream << "\"isGoalPathObstructed\": \"" << (isGoalPathObstructed ? (goalPathObstruction.left && goalPathObstruction.right ? "both" : goalPathObstruction.left ? "left" : "right") : "no") << "\",";
 	stream << "\"obstruction\": {";
-	stream << "\"left\": {" << goalPathObstruction.left << ",";
-	stream << "\"right\": {" << goalPathObstruction.right << ",";
+	stream << "\"left\": " << (goalPathObstruction.left ? "true" : "false") << ",";
+	stream << "\"right\": " << (goalPathObstruction.right ? "true" : "false") << ",";
 	stream << "\"invalidCountLeft\": {" << goalPathObstruction.invalidCountLeft << ",";
 	stream << "\"invalidCountRight\": {" << goalPathObstruction.invalidCountRight;
 	stream << "\"obstruction\": },";
@@ -2611,8 +2611,7 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 			if (isGoalPathObstructed) {
 				if (goalPathObstruction.invalidCountLeft > goalPathObstruction.invalidCountRight) {
 					avoidBallSide = TargetMode::RIGHT;
-				}
-				else {
+				} else {
 					avoidBallSide = TargetMode::LEFT;
 				}
 			}
