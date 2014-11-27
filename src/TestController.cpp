@@ -1912,7 +1912,7 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 			// perform the blind reverse maneuver
 			reversePerformed = true;
 
-			robot->driveBehindBall(lastBallDistance, lastTargetAngle, reverseBlindSpeed, offsetDistance * 1.0f, targetMode == TargetMode::LEFT ? 1.0f : -1.0f);
+			robot->driveBehindBall(lastBallDistance, lastTargetAngle, reverseBlindSpeed, offsetDistance * 0.5f, targetMode == TargetMode::LEFT ? 1.0f : -1.0f);
 		}
 
 		return;
