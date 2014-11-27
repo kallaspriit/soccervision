@@ -540,7 +540,7 @@ int Vision::getGoalMaxInvalidSpree(int y) {
 }*/
 
 int Vision::getBallRadius(int width, int height) {
-	return (int)((float)(width + height) / 2.0f);
+	return (int)((float)(width + height) / 4.0f);
 }
 
 int Vision::getBallSenseRadius(int ballRadius, float distance) {
