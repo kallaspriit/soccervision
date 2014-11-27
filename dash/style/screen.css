@@ -64,6 +64,11 @@ A:hover {
 	top: 0;
 	width: 30px;
 	height: 30px;
+	text-align: center;
+	line-height: 30px;
+	color: #FFF;
+	font-size: 12px;
+	font-family: monospace;
 }
 #obstruction-indicator-left.active,
 #obstruction-indicator-right.active {

@@ -1263,7 +1263,8 @@ Dash.UI.prototype.showControllerState = function(state) {
 		}
 	}
 
-	$('#obstruction-indicator-left, #obstruction-indicator-right').removeClass('active');
+	$('#obstruction-indicator-left').removeClass('active').html(state.obstruction.invalidCountLeft);
+	$('#obstruction-indicator-right').removeClass('active').html(state.obstruction.invalidCountRight);
 
 	if (state.obstruction.left) {
 		$('#obstruction-indicator-left').addClass('active');

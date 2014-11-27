@@ -1043,7 +1043,7 @@ Vision::Obstruction Vision::getGoalPathObstruction(float goalDistance) {
 	Obstruction obstruction;
 	//float corridorWidth = 0.1f;
 	float yStep = 0.05f;
-	float xStep = 0.025f;
+	float xStep = 0.035f;
 	float xSteps = 4.0f;
 	float startDistance = 0.2f;
 	float endDistance = goalDistance;
