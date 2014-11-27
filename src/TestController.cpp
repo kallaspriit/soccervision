@@ -233,54 +233,38 @@ void TestController::step(float dt, Vision::Results* visionResults) {
 bool TestController::handleCommand(const Command& cmd) {
 	if (cmd.name == "target-vector" && cmd.parameters.size() == 3) {
 		handleTargetVectorCommand(cmd);
-	}
-	else if (cmd.name == "set-dribbler" && cmd.parameters.size() == 1) {
+	} else if (cmd.name == "set-dribbler" && cmd.parameters.size() == 1) {
 		handleDribblerCommand(cmd);
-	}
-	else if (cmd.name == "adjust-dribbler-limits" && cmd.parameters.size() == 2) {
+	} else if (cmd.name == "adjust-dribbler-limits" && cmd.parameters.size() == 2) {
 		handleAdjustDribblerLimitsCommand(cmd);
-	}
-	else if (cmd.name == "dribbler-normal-limits") {
+	} else if (cmd.name == "dribbler-normal-limits") {
 		robot->dribbler->useNormalLimits();
-	}
-	else if (cmd.name == "dribbler-chip-kick-limits") {
+	} else if (cmd.name == "dribbler-chip-kick-limits") {
 		robot->dribbler->useChipKickLimits();
-	}
-	else if (cmd.name == "kick" && cmd.parameters.size() == 1) {
+	} else if (cmd.name == "kick" && cmd.parameters.size() == 1) {
 		handleKickCommand(cmd);
-	}
-	else if (cmd.name == "chip-kick" && cmd.parameters.size() == 1) {
+	} else if (cmd.name == "chip-kick" && cmd.parameters.size() == 1) {
 		handleChipKickCommand(cmd);
-	}
-	else if (cmd.name == "reset-position") {
+	} else if (cmd.name == "reset-position") {
 		robot->setPosition(Config::fieldWidth / 2.0f, Config::fieldHeight / 2.0f, 0.0f);
-	}
-	else if (cmd.name == "stop") {
+	} else if (cmd.name == "stop") {
 		handleResetCommand();
 		setState("manual-control");
-	}
-	else if (cmd.name == "reset") {
+	} else if (cmd.name == "reset") {
 		handleResetCommand();
-	}
-	else if (cmd.name == "toggle-go") {
+	} else if (cmd.name == "toggle-go") {
 		handleToggleGoCommand();
-	}
-	else if (cmd.name == "toggle-side") {
+	} else if (cmd.name == "toggle-side") {
 		handleToggleSideCommand();
-	}
-	else if (cmd.name == "drive-to" && cmd.parameters.size() == 3) {
+	} else if (cmd.name == "drive-to" && cmd.parameters.size() == 3) {
 		handleDriveToCommand(cmd);
-	}
-	else if (cmd.name == "turn-by" && cmd.parameters.size() == 1) {
+	} else if (cmd.name == "turn-by" && cmd.parameters.size() == 1) {
 		handleTurnByCommand(cmd);
-	}
-	else if (cmd.name.substr(0, 4) == "run-") {
+	} else if (cmd.name.substr(0, 4) == "run-") {
 		setState(cmd.name.substr(4));
-	}
-	else if (cmd.name == "parameter" && cmd.parameters.size() == 2) {
+	} else if (cmd.name == "parameter" && cmd.parameters.size() == 2) {
 		handleParameterCommand(cmd);
-	}
-	else {
+	} else {
 		return false;
 	}
 
@@ -355,8 +339,7 @@ void TestController::handleToggleSideCommand() {
 		targetSide = Side::YELLOW;
 
 		robot->setPosition(Config::fieldWidth - Config::robotRadius, Config::robotRadius, Math::PI - Math::PI / 8.0f);
-	}
-	else {
+	} else {
 		targetSide = Side::BLUE;
 
 		robot->setPosition(Config::robotRadius, Config::fieldHeight - Config::robotRadius, -Math::PI / 8.0f);
@@ -463,15 +446,13 @@ void TestController::updateVisionInfo(Vision::Results* visionResults) {
 	// check whether robot is detected to be out for some frames
 	if (visionResults->isRobotOut(Dir::FRONT)) {
 		framesRobotOutFront = (int)Math::min((float)(framesRobotOutFront + 1), (float)robotOutFramesThreshold);
-	}
-	else {
+	} else {
 		framesRobotOutFront = (int)Math::max((float)(framesRobotOutFront - 1), 0.0f);
 	}
 
 	if (visionResults->isRobotOut(Dir::REAR)) {
 		framesRobotOutRear = (int)Math::min((float)(framesRobotOutRear + 1), (float)robotOutFramesThreshold);
-	}
-	else {
+	} else {
 		framesRobotOutRear = (int)Math::max((float)(framesRobotOutRear - 1), 0);
 	}
 
@@ -495,7 +476,7 @@ void TestController::updateVisionInfo(Vision::Results* visionResults) {
 
 	// near line detection
 	int robotNearLineFramesThreshold = 3;
-	
+
 	if (isNearLine) {
 		nearLineFrames = (int)Math::min((float)(nearLineFrames + 1), (float)robotNearLineFramesThreshold);
 	} else {
@@ -518,14 +499,13 @@ void TestController::updateVisionInfo(Vision::Results* visionResults) {
 	if (nearGoalFrames >= 3) {
 		lastNearGoalTime = Util::millitime();
 	}
-	
+
 	// in corner detection
 	int robotInCornerFramesThreshold = 3;
 
 	if (isInCorner) {
 		inCornerFrames = (int)Math::min((float)(inCornerFrames + 1), (float)robotInCornerFramesThreshold);
-	}
-	else {
+	} else {
 		inCornerFrames = (int)Math::max((float)(inCornerFrames - 1), 0);
 	}
 
@@ -641,7 +621,7 @@ bool TestController::isRobotInCorner(Vision::Results* visionResults) {
 
 /*bool TestController::isRobotNearGoal(float threshold) {
 	return lastClosestGoalDistance != -1.0f && lastClosestGoalDistance < threshold;
-}*/
+	}*/
 
 bool TestController::isRobotNearTargetGoal(float threshold) {
 	return lastTargetGoalDistance != -1.0f && lastTargetGoalDistance < threshold;
@@ -778,42 +758,38 @@ float TestController::getTargetAngle(float goalX, float goalY, float ballX, floa
 	float targetY1;
 	float targetY2;
 
-	if (Math::abs(ballX - goalX) < 0.001f){
+	if (Math::abs(ballX - goalX) < 0.001f) {
 		// special case of small x difference
-		if (targetMode == TargetMode::INLINE){
+		if (targetMode == TargetMode::INLINE) {
 			// let's not divide by zero
 			targetX1 = ballX;
 			targetX2 = ballX;
 			targetY1 = ballY + D;
 			targetY2 = ballY - D;
-		}
-		else if (targetMode == TargetMode::LEFT || targetMode == TargetMode::RIGHT){
+		} else if (targetMode == TargetMode::LEFT || targetMode == TargetMode::RIGHT) {
 			targetX1 = ballX + D;
 			targetX2 = ballX - D;
 			targetY1 = ballY;
 			targetY2 = ballY;
 		}
-	}
-	else if (Math::abs(ballY - goalY) < 0.001f){
+	} else if (Math::abs(ballY - goalY) < 0.001f) {
 		// special case of small y difference
-		if (targetMode == TargetMode::INLINE){
+		if (targetMode == TargetMode::INLINE) {
 			targetX1 = ballX + D;
 			targetX2 = ballX - D;
 			targetY1 = ballY;
 			targetY2 = ballY;
-		}
-		else if (targetMode == TargetMode::LEFT || targetMode == TargetMode::RIGHT) {
+		} else if (targetMode == TargetMode::LEFT || targetMode == TargetMode::RIGHT) {
 			targetX1 = ballX;
 			targetX2 = ballX;
 			targetY1 = ballY + D;
 			targetY2 = ballY - D;
 		}
-	}
-	else {
+	} else {
 		// normal case
 		float a = (ballY - goalY) / (ballX - goalX);
 
-		if (targetMode == TargetMode::LEFT || targetMode == TargetMode::RIGHT){
+		if (targetMode == TargetMode::LEFT || targetMode == TargetMode::RIGHT) {
 			// perpendicular to the line from goal to ball
 			a = -(1.0f / a);
 		}
@@ -847,21 +823,18 @@ float TestController::getTargetAngle(float goalX, float goalY, float ballX, floa
 
 	if (targetMode == TargetMode::INLINE) {
 		// choose target which is farther away from goal
-		if (target1Dist > target2Dist){
+		if (target1Dist > target2Dist) {
 			targetX = targetX1;
 			targetY = targetY1;
-		}
-		else{
+		} else {
 			targetX = targetX2;
 			targetY = targetY2;
 		}
-	}
-	else if (targetMode == TargetMode::LEFT) {
+	} else if (targetMode == TargetMode::LEFT) {
 		// choose one on left
 		targetX = targetX2;
 		targetY = targetY2;
-	}
-	else if (targetMode == TargetMode::RIGHT) {
+	} else if (targetMode == TargetMode::RIGHT) {
 		// choose one on right
 		targetX = targetX1;
 		targetY = targetY1;
@@ -916,8 +889,8 @@ bool TestController::isRobotNearGoal(float distanceThreshold) {
 	return (whiteDistance.min > 0 && whiteDistance.min < whiteThreshold)
 		&& (blackDistance.min > 0 && blackDistance.min < blackThreshold)
 		&& (
-			(blueGoalDistance > 0 && blueGoalDistance < goalThreshold)
-			|| (yellowGoalDistance > 0 && yellowGoalDistance < goalThreshold)
+		(blueGoalDistance > 0 && blueGoalDistance < goalThreshold)
+		|| (yellowGoalDistance > 0 && yellowGoalDistance < goalThreshold)
 		);
 }
 
@@ -938,8 +911,7 @@ void TestController::ManualControlState::step(float dt, Vision::Results* visionR
 
 			ai->manualKickStrength = 0;
 		}
-	}
-	else {
+	} else {
 		robot->stop();
 		robot->dribbler->stop();
 	}
@@ -949,7 +921,7 @@ void TestController::ManualControlState::step(float dt, Vision::Results* visionR
 }
 
 void TestController::WatchBallState::onEnter(Robot* robot, Parameters parameters) {
-	
+
 
 	// distanceX based
 	//pid.setInputLimits(-1.0f, 1.0f);
@@ -986,7 +958,7 @@ void TestController::WatchBallState::step(float dt, Vision::Results* visionResul
 		paramP != pid.getPParam()
 		|| paramI != pid.getIParam()
 		|| paramD != pid.getDParam()
-	) {
+		) {
 		std::cout << "! Updated PID params P: " << paramP << ", I: " << paramI << ", D: " << paramD << std::endl;
 
 		pid.setTunings(paramP, paramI, paramD);
@@ -1001,7 +973,7 @@ void TestController::WatchBallState::step(float dt, Vision::Results* visionResul
 	pid.setProcessValue(currentValue);
 
 	float sideSpeed = -pid.compute();
-	
+
 	robot->setTargetDir(0.0f, sideSpeed);
 	robot->lookAt(goal);
 
@@ -1035,7 +1007,7 @@ void TestController::WatchGoalState::step(float dt, Vision::Results* visionResul
 	}
 
 	robot->setTargetDir(ai->manualSpeedX, ai->manualSpeedY);
-	
+
 	//robot->lookAt(goal);
 
 	float paramP = Util::toFloat(ai->parameters[0]);
@@ -1046,7 +1018,7 @@ void TestController::WatchGoalState::step(float dt, Vision::Results* visionResul
 		paramP != pid.getPParam()
 		|| paramI != pid.getIParam()
 		|| paramD != pid.getDParam()
-	) {
+		) {
 		std::cout << "! Updated PID params P: " << paramP << ", I: " << paramI << ", D: " << paramD << std::endl;
 
 		pid.setTunings(paramP, paramI, paramD);
@@ -1111,8 +1083,7 @@ void TestController::FindBallState::onEnter(Robot* robot, Parameters parameters)
 		// otherwise the search direction is based on last seen target goal angle to turn the shortest path
 		if (ai->lastTargetGoalAngle > 0.0f) {
 			searchDir = 1.0f;
-		}
-		else {
+		} else {
 			searchDir = -1.0f;
 		}
 	}
@@ -1200,7 +1171,7 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 	// starts taking balls behind current one one after another
 	/*if (goal != NULL) {
 		preferRear = true;
-	}*/
+		}*/
 
 	Object* ball = visionResults->getClosestBall(ballSearchDir, false, false, preferRear, preferFront);
 
@@ -1266,8 +1237,7 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 				if (turnAngle < 0.0f) {
 					turnAngle += underturnAngle;
 					searchDir = -1.0f;
-				}
-				else {
+				} else {
 					turnAngle -= underturnAngle;
 					searchDir = 1.0f;
 				}
@@ -1319,8 +1289,7 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 
 				if (goal->angle > 0.0f) {
 					searchDir = 1.0f;
-				}
-				else {
+				} else {
 					searchDir = -1.0f;
 				}
 
@@ -1328,8 +1297,7 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 				if (Math::abs(goal->angle) < Math::degToRad(5.0f)) {
 					focusedOnGoal = true;
 				}
-			}
-			else {
+			} else {
 				// no goal found, spin
 				robot->setTargetOmega(searchDir * Math::PI);
 
@@ -1368,8 +1336,7 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 				&& rightLine != -1.0f && rightLine < nearLineDistance
 				) {
 				nearBothFrames++;
-			}
-			else {
+			} else {
 				nearBothFrames = 0;
 			}
 
@@ -1380,13 +1347,11 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 				nearBothFrames = 0;
 
 				return;
-			}
-			else {
+			} else {
 				// calculate the turning power based on how close we're to the lines
 				if (leftLine != -1.0f && (rightLine == -1.0f || leftLine < rightLine)) {
 					omegaPower = Math::map(leftLine, nearLineDistance, nearLineDistance * 2.0f, 1.0f, 0.0f);
-				}
-				else {
+				} else {
 					omegaPower = Math::map(rightLine, nearLineDistance, nearLineDistance * 2.0f, 1.0f, 0.0f);
 				}
 
@@ -1444,8 +1409,7 @@ void TestController::FetchBallFrontState::step(float dt, Vision::Results* vision
 
 	if (ball != NULL) {
 		ai->setLastBall(ball);
-	}
-	else {
+	} else {
 		// use ghost ball if available
 		ball = ai->getLastBall(Dir::FRONT);
 
@@ -1632,8 +1596,7 @@ void TestController::FetchBallDirectState::step(float dt, Vision::Results* visio
 	// use ghost ball if available
 	if (ball != NULL) {
 		ai->setLastBall(ball);
-	}
-	else {
+	} else {
 		ball = ai->getLastBall(Dir::FRONT);
 	}
 
@@ -1689,7 +1652,7 @@ void TestController::FetchBallDirectState::step(float dt, Vision::Results* visio
 
 		// the robot needs to be detected near the line for several frames to be considered true
 		if (nearLineFrames >= 10) {
-			nearLine = true;
+		nearLine = true;
 		}*/
 
 		// limit ball near line
@@ -1756,11 +1719,11 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 	/*Object* ball = visionResults->getClosestBall(Dir::FRONT);
 
 	if (ai->isRobotOutFront && (ball == NULL || ball->distance > 0.5f)) {
-		robot->clearTasks();
+	robot->clearTasks();
 
-		ai->setState("return-field");
+	ai->setState("return-field");
 
-		return;
+	return;
 	}*/
 
 	if (robot->hasTasks()) {
@@ -1813,8 +1776,7 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 	if (goal == NULL) {
 		if (ball != NULL && !ball->behind) {
 			ai->setState("fetch-ball-direct");
-		}
-		else {
+		} else {
 			// switch to searching for balls, search in the same direction as approached ball behind
 			Parameters parameters;
 
@@ -1832,7 +1794,7 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 	if (
 		ball == NULL
 		|| (lastBallDistance != -1.0f && ball->getDribblerDistance() > lastBallDistance * 1.25f)
-	) {
+		) {
 		// don't perform the blind reverse if the ball was lost at too great of a distance
 		if (!hadBall || lastBallDistance > 0.8f) {
 			// switch to searching for balls, search in the same direction as approached ball behind
@@ -1843,8 +1805,7 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 			}
 
 			ai->setState("find-ball", parameters);
-		}
-		else {
+		} else {
 			// perform the blind reverse maneuver
 			reversePerformed = true;
 
@@ -1872,8 +1833,7 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 		if (ball->angle + goal->angle > 0.0f) {
 			targetMode = TargetMode::LEFT;
 			searchDir = 1.0f;
-		}
-		else {
+		} else {
 			targetMode = TargetMode::RIGHT;
 			searchDir = -1.0f;
 		}
@@ -1923,7 +1883,7 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 			//&& goalBallDistance < minFetchBehindGoalBallDistance
 			&& ownGoal->distance <= 1.0f
 			&& (ai->lastTurnAroundTime == -1.0 || Util::duration(ai->lastTurnAroundTime) > minTurnBreak)
-		) {
+			) {
 			float turnAngle = ball->angle;
 			float underturnAngle = Math::degToRad(15.0f);
 			float turnSpeed = Math::TWO_PI;
@@ -1931,8 +1891,7 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 			if (turnAngle < 0.0f) {
 				turnAngle += underturnAngle;
 				searchDir = -1.0f;
-			}
-			else {
+			} else {
 				turnAngle -= underturnAngle;
 				searchDir = 1.0f;
 			}
@@ -1994,7 +1953,8 @@ void TestController::FetchBallNearState::onExit(Robot* robot) {
 
 void TestController::FetchBallNearState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration, float combinedDuration) {
 	bool isolated = false;
-	
+	bool aimMode = true;
+
 	robot->stop();
 
 	// always use chip-kick limits and no dribbler
@@ -2002,11 +1962,17 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	//robot->dribbler->useNormalLimits();
 	//robot->dribbler->start();
 
+	if (aimMode && robot->dribbler->gotBall()) {
+		ai->setState("aim");
+
+		return;
+	}
+
 	/*if (robot->dribbler->gotBall()) {
 		robot->kick();
 
 		return;
-	}*/
+		}*/
 
 	if (ai->isRobotOutFront || ai->isRobotOutRear) {
 		ai->setState("return-field");
@@ -2062,8 +2028,7 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 			// make sure to search in the dir the ball was last seen
 			if (lastBallAngle > 0.0f) {
 				parameters["search-dir"] = "1.0f";
-			}
-			else {
+			} else {
 				parameters["search-dir"] = "-1.0f";
 			}
 
@@ -2085,19 +2050,19 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 
 	// avoid driving into goal so try to find a ball from the rear camera
 	if (wasNearGoalLately) {
-		ball = visionResults->getClosestBall(Dir::REAR);
+	ball = visionResults->getClosestBall(Dir::REAR);
 
-		// fetch ball from rear if available
-		if (ball != NULL) {
-			ai->setState("fetch-ball-behind");
-		} else {
-			// turn by 90 degrees and hope something better shows up
-			robot->turnBy(Math::degToRad(90.0f));
+	// fetch ball from rear if available
+	if (ball != NULL) {
+	ai->setState("fetch-ball-behind");
+	} else {
+	// turn by 90 degrees and hope something better shows up
+	robot->turnBy(Math::degToRad(90.0f));
 
-			ai->setState("fetch-ball-behind");
-		}
+	ai->setState("fetch-ball-behind");
+	}
 
-		return;
+	return;
 	}*/
 
 	Vision::BallInWayMetric ballInWayMetric;
@@ -2112,10 +2077,10 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	// decide to use chip-kicker if there's a ball in way when the ball is close, add some delay so ball just hit wouldn't get counted
 	if (ball->distance < ballNearDistance) {
 		ballInWayMetric = visionResults->getBallInWayMetric(visionResults->front->balls, goal->y + goal->height / 2, ball);
-		
+
 		isBallInWay = ballInWayMetric.isBallInWay;
 		shouldAvoidBallInWay = isBallInWay && ai->shouldAvoidBallInWay(ballInWayMetric, goal->distance);
-		
+
 		if (shouldAvoidBallInWay) {
 			ballInWayFrames++;
 
@@ -2148,27 +2113,29 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 		return;
 	}
 
-	if (useChipKick) {
-		// does not work if the dribbler has no time to come back down, might work with faster servos
-		/*if (ball->distance < 0.2f && robot->coilgun->isLowVoltage()) {
-			std::cout << "@ LOW VOLTAGE, FETCH DIRECT" << std::endl;
+	if (!aimMode) {
+		if (useChipKick) {
+			// does not work if the dribbler has no time to come back down, might work with faster servos
+			/*if (ball->distance < 0.2f && robot->coilgun->isLowVoltage()) {
+				std::cout << "@ LOW VOLTAGE, FETCH DIRECT" << std::endl;
 
-			robot->dribbler->useNormalLimits();
-			robot->coilgun->cancelKickOnceGotBall();
+				robot->dribbler->useNormalLimits();
+				robot->coilgun->cancelKickOnceGotBall();
 
-			ai->setState("fetch-ball-direct");
+				ai->setState("fetch-ball-direct");
 
-			return;
-		}*/
+				return;
+				}*/
 
-		//robot->dribbler->useChipKickLimits();
-		robot->coilgun->kickOnceGotBall(0, 0, chipKickDistance, 0);
-	} else {
-		// reduce kick strength when goal is close
-		kickStrength = (int)Math::map(goal->distance, 1.0f, 4.0f, (float)Config::robotDefaultKickStrength / 2.0f, (float)Config::robotDefaultKickStrength);
+			//robot->dribbler->useChipKickLimits();
+			robot->coilgun->kickOnceGotBall(0, 0, chipKickDistance, 0);
+		} else {
+			// reduce kick strength when goal is close
+			kickStrength = (int)Math::map(goal->distance, 1.0f, 4.0f, (float)Config::robotDefaultKickStrength / 2.0f, (float)Config::robotDefaultKickStrength);
 
-		//robot->dribbler->useNormalLimits();
-		robot->coilgun->kickOnceGotBall(kickStrength, 0, 0, 0);
+			//robot->dribbler->useNormalLimits();
+			robot->coilgun->kickOnceGotBall(kickStrength, 0, 0, 0);
+		}
 	}
 
 	// configuration parameters
@@ -2182,14 +2149,14 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	//float maxSideSpeed = 1.5f;
 	//float approachP = 1.0f;
 	float lookAtGoalP = Config::lookAtP / 3.0f / 2.0f; // spend less effort on focusing on the goal, improves getting the ball
-	
+
 	// store ball first sighting distance
 	if (enterDistance == -1.0f) {
 		enterDistance = ballDistance;
 	} else if (
 		ballDistance > enterDistance + ballMovedAwayDistance
 		&& stateDuration >= 0.5f
-	) {
+		) {
 		// ball has gotten further than when started, probably messed it up, switch to faster fetch
 		if (isolated != true) {
 			ai->setState("fetch-ball-front");
@@ -2211,10 +2178,10 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	float paramD = Util::toFloat(ai->parameters[2]);
 
 	if (paramP != pid.getPParam() || paramI != pid.getIParam() || paramD != pid.getDParam()) {
-		std::cout << "! Updated PID params P: " << paramP << ", I: " << paramI << ", D: " << paramD << std::endl;
+	std::cout << "! Updated PID params P: " << paramP << ", I: " << paramI << ", D: " << paramD << std::endl;
 
-		pid.setTunings(paramP, paramI, paramD);
-		pid.reset();
+	pid.setTunings(paramP, paramI, paramD);
+	pid.reset();
 	}
 
 	/*pid.setSetPoint(0.0f);
@@ -2233,7 +2200,7 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	if (ball->distanceY < 0.2f && Math::abs(ball->distanceX) > 0.03f) {
 		forwardSpeed = 0.0f;
 	}
-	
+
 	//sideSpeed = 0.0f;
 	//forwardSpeed = 0.0f;
 
@@ -2262,11 +2229,11 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	robot->stop();
 
 	if (robot->dribbler->gotBall()) {
-		robot->dribbler->start();
+	robot->dribbler->start();
 
-		ai->setState("aim");
+	ai->setState("aim");
 
-		return;
+	return;
 	}
 
 	// fetches a nearby ball, focusing on the target goal
@@ -2277,22 +2244,22 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	ai->dbg("goalVisible", goal != NULL);
 
 	if (goal == NULL) {
-		// can't see the goal, switch to direct fetch if ball available, otherwise start searching for ball
-		if (ball != NULL) {
-			ai->setState("fetch-ball-direct");
-		}
-		else {
-			ai->setState("find-ball");
-		}
+	// can't see the goal, switch to direct fetch if ball available, otherwise start searching for ball
+	if (ball != NULL) {
+	ai->setState("fetch-ball-direct");
+	}
+	else {
+	ai->setState("find-ball");
+	}
 
-		return;
+	return;
 	}
 
 	// switch to searching for ball if not visible any more
 	if (ball == NULL) {
-		ai->setState("find-ball");
+	ai->setState("find-ball");
 
-		return;
+	return;
 	}
 
 	// configuration parameters
@@ -2308,16 +2275,16 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 
 	// store ball first sighting distance
 	if (enterDistance == -1.0f) {
-		enterDistance = ballDistance;
+	enterDistance = ballDistance;
 	}
 	else if (
-		(ballDistance > enterDistance + 0.2f || ballDistance > nearDistance)
-		&& stateDuration >= 0.5f
-		) {
-		// ball has gotten further than when started, probably messed it up, switch to faster fetch
-		ai->setState("fetch-ball-front");
+	(ballDistance > enterDistance + 0.2f || ballDistance > nearDistance)
+	&& stateDuration >= 0.5f
+	) {
+	// ball has gotten further than when started, probably messed it up, switch to faster fetch
+	ai->setState("fetch-ball-front");
 
-		return;
+	return;
 	}
 
 	// calculate movement
@@ -2360,7 +2327,7 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	ai->dbg("goalAngle", (Math::radToDeg(goal->angle)));
 	ai->dbg("lookAngle", (Math::radToDeg(lookAngle)));
 	ai->dbg("ball->distanceX", ball->distanceX);
-}*/
+	}*/
 
 void TestController::AimState::onEnter(Robot* robot, Parameters parameters) {
 	avoidBallSide = TargetMode::UNDECIDED;
@@ -2428,8 +2395,7 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 		if (searchGoalDir == 0.0f) {
 			if (ai->lastTargetGoalAngle > 0.0f) {
 				searchGoalDir = 1.0f;
-			}
-			else {
+			} else {
 				searchGoalDir = -1.0f;
 			}
 		}
@@ -2456,7 +2422,7 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 			&& !escapeCornerPerformed
 			&& ai->isRobotNearTargetGoal()
 			&& (rearGoal == NULL || ai->getObjectClosestDistance(visionResults, rearGoal) > 1.5f)
-		) {
+			) {
 			ai->setState("escape-corner");
 
 			lastEscapeCornerTime = Util::millitime();
@@ -2509,10 +2475,10 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 				// move forwards a bit, getting better grip of the ball
 				robot->setTargetDir(0.25f, 0.0f);
 				robot->dribbler->prime();
-			} else {
+				} else {
 				// TODO Accelerate to speed
 				robot->spinAroundDribbler(searchGoalDir == -1.0f, searchPeriod);
-			}*/
+				}*/
 
 			// give the ball some time to stabilize
 			if (robot->dribbler->getBallInDribblerTime() > Config::robotDribblerStabilityDelay) {
@@ -2614,13 +2580,11 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 				} else {
 					avoidBallSide = TargetMode::LEFT;
 				}
-			}
-			else {
+			} else {
 				// make sure to drive near the centerline of the field not out further
 				if (robot->getPosition().y < Config::fieldHeight / 2.0f) {
 					avoidBallSide = ai->targetSide == Side::BLUE ? TargetMode::RIGHT : TargetMode::LEFT;
-				}
-				else {
+				} else {
 					avoidBallSide = ai->targetSide == Side::BLUE ? TargetMode::LEFT : TargetMode::RIGHT;
 				}
 			}
@@ -2646,7 +2610,7 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 		if (
 			leftEdge + goalKickThresholdPixels < halfWidth
 			&& rightEdge - goalKickThresholdPixels > halfWidth
-		) {
+			) {
 			validWindow = true;
 		}
 	}
@@ -2664,8 +2628,7 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 
 	if (isFrameValid) {
 		validKickFrames++;
-	}
-	else {
+	} else {
 		validKickFrames = 0;
 	}
 
@@ -2690,12 +2653,10 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 				if (robot->chipKick(chipKickDistance)) {
 					wasKicked = true;
 				}
-			}
-			else {
+			} else {
 				waitingBallToSettle = true;
 			}
-		}
-		else {
+		} else {
 			// TODO restore normal kicking
 			robot->kick();
 			//robot->chipKick(Math::min(Math::max(goal->distance - 0.5f, 1.0f), 1.5f));
@@ -2708,8 +2669,7 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 
 			lastKickTime = Util::millitime();
 		}
-	}
-	else {
+	} else {
 		robot->setTargetDir(forwardSpeed, sideSpeed);
 		robot->lookAt(goal, Config::lookAtP, true);
 	}
@@ -2806,7 +2766,7 @@ void TestController::ReturnFieldState::step(float dt, Vision::Results* visionRes
 				&& visionResults->front->blackDistance.left != -1.0f
 				&& visionResults->front->blackDistance.right != -1.0f
 				&& Math::abs(visionResults->front->whiteDistance.left - visionResults->front->whiteDistance.right) < 0.05f
-			) {
+				) {
 				robot->setTargetDirFor(2.0f, 0.0f, 0.0f, 0.75f);
 
 				queuedApproachGoal = false;
@@ -2910,7 +2870,7 @@ void TestController::DriveCircleState::step(float dt, Vision::Results* visionRes
 	robot->lookAt(goal);
 }
 
-float TestController::DriveCircleState::getCircleTargetAngle(float start, float time, float period){
+float TestController::DriveCircleState::getCircleTargetAngle(float start, float time, float period) {
 	float omega = 2.0f * Math::PI / period;
 	float targetX = sin(omega * time + start);
 	float targetY = cos(omega * time + start);
@@ -2937,8 +2897,7 @@ void TestController::AccelerateState::step(float dt, Vision::Results* visionResu
 
 	if (ball != NULL) {
 		ai->setLastBall(ball);
-	}
-	else {
+	} else {
 		ball = ai->getLastBall(Dir::FRONT);
 	}
 
@@ -2994,8 +2953,7 @@ void TestController::DriveHomeState::step(float dt, Vision::Results* visionResul
 		homeX = Config::fieldWidth - Config::robotRadius;
 		homeY = Config::robotRadius;
 		homeOrientation = Math::PI - Math::PI / 8.0f;
-	}
-	else {
+	} else {
 		homeX = Config::robotRadius;
 		homeY = Config::fieldHeight - Config::robotRadius;
 		homeOrientation = -Math::PI / 8;
