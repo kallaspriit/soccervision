@@ -1966,7 +1966,8 @@ void TestController::FetchBallNearState::onExit(Robot* robot) {
 
 void TestController::FetchBallNearState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration, float combinedDuration) {
 	// goes to aim state when got ball is enabled, otherwise always uses chip kick limits and kicks as soon as dribbler senses ball
-	bool aimMode = true;
+	//bool aimMode = true;
+	bool aimMode = false;
 
 	robot->stop();
 
