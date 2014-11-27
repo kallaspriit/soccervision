@@ -90,6 +90,8 @@
 * + dribbler thinks it's got the ball some time after bdkick reported kicked ball, should not
 * + perhaps should calculate main coilgun duration to get the ball into the goal but not kick too hard
 * ¤ dribbler should not report having ball when last kick time is very small
+* - should not try to fetch-ball-front (focusing on goal) if the goal and ball distanceX is too large (eg in corner)
+* - fetch-ball-near should switch to fetch-ball-direct if goal is obstructed at small ball distance
 * - goal should not be not valid only when pathmetrics to center and corners fail
 * - detect another robot in the way and avoid kicking into it
 * - if got ball and don't see opponents goal, don't just spin in place as the other robot may be in way, focus at own goal from rear and drive from side to side
@@ -136,6 +138,8 @@
 * + should find a ball quickly when roaming around when suddenly becomes visible (remove foot etc)
 * - should not get stuck near a goal if a single ball is visible and it's in the goal
 * - should drive sideways when got ball near side of goal
+* - fetch-ball-near should switch to fetch-ball-direct if goal is obstructed at small ball distance
+* - should not try to fetch-ball-front (focusing on goal) if the goal and ball distanceX is too large (eg in corner)
 * - fetch a string of balls straight behind each other
 * - fetch a string of balls diagonally (both diagonals)
 * - fetch ball in opposite corner
@@ -1476,6 +1480,9 @@ void TestController::FetchBallFrontState::step(float dt, Vision::Results* vision
 		return;
 	}
 
+	float goalBallDistanceX = Math::abs(goal->distanceX - ball->distanceX);
+	ai->dbg("goalBallDistanceX", goalBallDistanceX);
+
 	// configuration parameters
 	float targetApproachSpeed = 3.5f * ai->speedMultiplier;
 	float brakingApproachSpeed = 1.5f * ai->speedMultiplier;
@@ -1645,11 +1652,11 @@ void TestController::FetchBallDirectState::step(float dt, Vision::Results* visio
 	float minFetchDirectDuration = 0.5f;
 
 	// switch to fetching from front using goal if both are visible, don't switch too quickly
-	if (ball != NULL && goal != NULL && !ball->behind && !goal->behind && stateDuration > minFetchDirectDuration) {
+	/*if (ball != NULL && goal != NULL && !ball->behind && !goal->behind && stateDuration > minFetchDirectDuration) {
 		ai->setState("fetch-ball-front");
 
 		return;
-	}
+	}*/
 
 	// don't have ball, find it
 	if (ball == NULL) {
