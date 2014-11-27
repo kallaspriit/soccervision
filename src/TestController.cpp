@@ -2089,6 +2089,12 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	return;
 	}*/
 
+	// reset chip-kick decision if have just kicked as the state might not change going after the next ball
+	if (robot->coilgun->getTimeSinceLastKicked() < 0.032f) {
+		useChipKick = false;
+		enterDistance = -1.0f;
+	}
+
 	Vision::BallInWayMetric ballInWayMetric;
 	float ballNearDistance = 0.4f;
 	float ballFarDistance = 1.0f;
@@ -2128,17 +2134,19 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 		robot->dribbler->start();
 	}
 
-	// store ball first sighting distance
-	if (enterDistance == -1.0f) {
-		enterDistance = ball->distance;
-	} else if (
-		ball->distance > enterDistance + 0.2f
-		&& stateDuration >= 0.5f
-	) {
-		// ball has gotten further than when started, probably messed it up, switch to faster fetch
-		ai->setState("fetch-ball-front");
+	// store ball first sighting distance, don't do it just after having kicked
+	if (robot->coilgun->getTimeSinceLastKicked() > 0.1f) {
+		if (enterDistance == -1.0f) {
+			enterDistance = ball->distance;
+		} else if (
+			ball->distance > enterDistance + 0.2f
+			&& stateDuration >= 0.5f
+		) {
+			// ball has gotten further than when started, probably messed it up, switch to faster fetch
+			ai->setState("fetch-ball-front");
 
-		return;
+			return;
+		}
 	}
 
 	if (!aimMode) {
