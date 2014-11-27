@@ -118,8 +118,8 @@
 * + fetch ball from in front of own goal facing opponents goal
 * + fetch ball from in front of own goal facing own goal
 * + fetch ball on the centerline facing own goal so it turns around (should not lose ball)
-* - fetch ball very close to own goal (should not turn around the ball into the goal)
-* - fetch ball close to own goal from behind
+* + fetch ball very close to own goal (should not turn around the ball into the goal)
+* + fetch ball close to own goal from behind
 * - fetch ball close to opponents goal corners
 * - fetch a string of balls straight behind each other
 * - fetch a string of balls diagonally (both diagonals)
@@ -2062,7 +2062,8 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 
 	lastBallAngle = ball->angle;
 
-	bool wasNearGoalLately = ai->wasNearGoalLately();
+	// does not work well when the ball is very close to the goal
+	/*bool wasNearGoalLately = ai->wasNearGoalLately();
 
 	// avoid driving into goal so try to find a ball from the rear camera
 	if (wasNearGoalLately) {
@@ -2079,7 +2080,7 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 		}
 
 		return;
-	}
+	}*/
 
 	Vision::BallInWayMetric ballInWayMetric;
 	float ballNearDistance = 0.4f;
@@ -2234,7 +2235,6 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	ai->dbg("isBallInWay", isBallInWay);
 	ai->dbg("ballInWayCount", ballInWayMetric.ballInWayCount);
 	ai->dbg("shouldAvoidBallInWay", shouldAvoidBallInWay);
-	ai->dbg("wasNearGoalLately", wasNearGoalLately);
 	ai->dbg("ballInWayFrames", ballInWayFrames);
 	ai->dbg("chipKickDistance", chipKickDistance);
 	ai->dbg("kickStrength", kickStrength);
