@@ -2186,19 +2186,6 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	//float approachP = 1.0f;
 	float lookAtGoalP = Config::lookAtP / 3.0f / 2.0f; // spend less effort on focusing on the goal, improves getting the ball
 
-	// store ball first sighting distance
-	if (enterDistance == -1.0f) {
-		enterDistance = ballDistance;
-	} else if (
-		ballDistance > enterDistance + ballMovedAwayDistance
-		&& stateDuration >= 0.5f
-	) {
-		// ball has gotten further than when started, probably messed it up, switch to faster fetch
-		ai->setState("fetch-ball-front");
-
-		return;
-	}
-
 	// magic solution..
 	//float sidePower = Math::map(Math::abs(ball->distanceX), 0.0f, maxSideSpeedDistance, 0.0f, 1.0f);
 	float sidePower = Math::map(Math::abs(Math::radToDeg(ball->angle)), 0.0f, maxSideSpeedBallAngle, 0.0f, 1.0f);
