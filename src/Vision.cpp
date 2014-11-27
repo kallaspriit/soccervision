@@ -973,7 +973,8 @@ Vision::EdgeDistanceMetric Vision::getEdgeDistanceMetric(int x, int y, int width
 	EdgeDistance centerDistance;
 
 	for (int senseX = x; senseX <= x + width; senseX++) {
-		for (int senseY = y + height; senseY >= y; senseY--) {
+		//for (int senseY = y + height; senseY >= y; senseY--) {
+		for (int senseY = y + height / 2; senseY < y + height; senseY++) {
 			if (senseX < x + halfWidth - centerWidth / 2 || senseX > x + halfWidth + centerWidth / 2) {
 				continue;
 			}
@@ -988,8 +989,9 @@ Vision::EdgeDistanceMetric Vision::getEdgeDistanceMetric(int x, int y, int width
 
 			colorName = std::string(color->name);
 
-			if (colorName == color1 || colorName == color2) {
-				//canvas.fillBoxCentered(senseX, senseY, 4, 4, 255, 0, 255);
+			//if (colorName == color1 || colorName == color2) {
+			if (colorName == "green") {
+				canvas.fillBoxCentered(senseX, senseY, 4, 4, 255, 0, 255);
 
 				centerSumY += senseY;
 				centerSampleCount++;
