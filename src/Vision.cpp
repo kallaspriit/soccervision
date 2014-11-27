@@ -1003,8 +1003,6 @@ Vision::PathMetric Vision::getPathMetric(int x1, int y1, int x2, int y2, std::ve
 					if (debug) {
 						canvas.drawMarker(x, y, 128, 0, 0);
 					}
-
-					break;
 				}
 			} else if (strcmp(color->name, "white") == 0) {
 				sawWhite = true;
