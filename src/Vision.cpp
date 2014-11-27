@@ -299,6 +299,21 @@ bool Vision::isValidGoal(Object* goal, Side side) {
 
 	//std::cout << "@ EDGE LEFT: " << edgeDistanceMetric.leftTopDistance.distance << "m, right: " << edgeDistanceMetric.rightTopDistance.distance << "m" << std::endl;
 
+	if (goal->area < Config::goalMinArea) {
+		//std::cout << "@ GOAL INVALID MIN AREA: " << goal->area << " VS " << Config::goalMinArea << std::endl;
+
+		return false;
+	} else if (goal->area > Config::goalCertainArea) {
+		return true;
+	}
+
+	if (goal->y - goal->height / 2 > Config::goalTopMaxY) {
+		//std::cout << "@ GOAL NOT TOP ENOUGH: " << (goal->y - goal->height / 2) << " VS " << Config::goalTopMaxY << std::endl;
+
+		// TODO restore in some form
+		return false;
+	}
+
 	if (goal->y + goal->height < Config::goalPathSenseStartY) {
 		PathMetric pathMetric = getPathMetric(
 			Config::cameraWidth / 2,
@@ -337,21 +352,6 @@ bool Vision::isValidGoal(Object* goal, Side side) {
 		) {
 		//std::cout << "@ GOAL INVALID TOP EDGE DISTANCE LEFT: " << edgeDistanceMetric.leftTopDistance.distance << "m, right: " << edgeDistanceMetric.rightTopDistance.distance << "m" << std::endl;
 
-		return false;
-	}
-
-	if (goal->area < Config::goalMinArea) {
-		//std::cout << "@ GOAL INVALID MIN AREA: " << goal->area << " VS " << Config::goalMinArea << std::endl;
-
-		return false;
-	} else if (goal->area > Config::goalCertainArea) {
-		return true;
-	}
-
-	if (goal->y - goal->height / 2 > Config::goalTopMaxY) {
-		//std::cout << "@ GOAL NOT TOP ENOUGH: " << (goal->y - goal->height / 2) << " VS " << Config::goalTopMaxY << std::endl;
-
-		// TODO restore in some form
 		return false;
 	}
 
