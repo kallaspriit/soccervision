@@ -31,7 +31,9 @@ void Coilgun::kick(int microseconds) {
 	if (lastKickTime == 0.0 || Util::duration(lastKickTime) >= Config::minKickInterval) {
 		//std::cout << "! Kicking: " << microseconds << std::endl;
 
-		com->send("kick:" + Util::toString(microseconds));
+		// temporarily use chip-kick instead
+		//com->send("kick:" + Util::toString(microseconds));
+		com->send("dkick:0:0:2000:0");
 
 		lastKickTime = Util::millitime();
 	} else {
