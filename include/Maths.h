@@ -115,6 +115,10 @@ static float distanceBetween(float x1, float y1, float x2, float y2) {
     return sqrt(pow(x1 - x2, 2) + pow(y1 - y2, 2));
 }
 
+static float getOffsetAngleBetween(float x1, float y1, float x2, float y2) {
+	return 0.0f; // TODO
+}
+
 static float standardDeviation(std::vector<float> elements, float& mean) {
 	float sum = (float)std::accumulate(elements.begin(), elements.end(), 0.0);
 	mean = sum / elements.size();

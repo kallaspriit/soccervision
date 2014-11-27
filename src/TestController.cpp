@@ -128,7 +128,7 @@
 * + fetch ball close to own goal from behind
 * + fetch ball on the black line in the center of own goal, can push it in and go for it
 * + should reverse out of own goal if gets into it
-* - should reverse out of opponents goal if gets into it
+* + should reverse out of opponents goal if gets into it
 * + fetch ball behind direct at far distance
 * + fetch ball behind direct at small distance
 * + fetch ball behind from center edge of the field when in front of opponents goal facing goal directly
@@ -136,7 +136,7 @@
 * + fetch ball close to opponents goal corners
 * + should roam the field between white lines if no balls are visible
 * + should find a ball quickly when roaming around when suddenly becomes visible (remove foot etc)
-* - should not get stuck near a goal if a single ball is visible and it's in the goal
+* - should not get stuck near a goal if a ball is in the goal and the next ball is far away
 * - should drive sideways when got ball near side of goal
 * - fetch-ball-near should switch to fetch-ball-direct if goal is obstructed at small ball distance
 * - should not try to fetch-ball-front (focusing on goal) if the goal and ball distanceX is too large (eg in corner)
@@ -1480,8 +1480,9 @@ void TestController::FetchBallFrontState::step(float dt, Vision::Results* vision
 		return;
 	}
 
-	float goalBallDistanceX = Math::abs(goal->distanceX - ball->distanceX);
-	ai->dbg("goalBallDistanceX", goalBallDistanceX);
+	float goalBallOffsetAngle = Math::getOffsetAngleBetween(goal->distanceX, goal->distanceY, ball->distanceX, ball->distanceY);
+	
+	ai->dbg("goalBallOffsetAngle", Math::radToDeg(goalBallOffsetAngle));
 
 	// configuration parameters
 	float targetApproachSpeed = 3.5f * ai->speedMultiplier;
@@ -1813,7 +1814,21 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 	Object* ball = visionResults->getClosestBall(Dir::REAR);
 	Object* goal = visionResults->getLargestGoal(ai->targetSide, Dir::FRONT);
 
+	bool usingGhost = false;
+
+	if (ball != NULL) {
+		ai->setLastBall(ball);
+	} else if (lastBallDistance >= 1.0f) {
+		// use ghost ball if available but only when the last seen distance is large enough
+		ball = ai->getLastBall(Dir::REAR);
+
+		if (ball != NULL) {
+			usingGhost = true;
+		}
+	}
+
 	ai->dbg("ballVisible", ball != NULL);
+	ai->dbg("usingGhost", usingGhost);
 	ai->dbg("goalVisible", goal != NULL);
 	ai->dbg("hasTasks", robot->hasTasks());
 	ai->dbg("timeSinceLostBall", timeSinceLostBall);
