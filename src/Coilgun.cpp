@@ -160,10 +160,6 @@ bool Coilgun::handleCommand(const Command& cmd) {
 		isKickingOnceGotBall = false;
 		lastKickTime = Util::millitime();
 
-		if (isKickingOnceGotBall) {
-			kickOnceGotBall(kickOnceGotBallParameters.mainDuration, kickOnceGotBallParameters.mainDelay, kickOnceGotBallParameters.chipDistance, kickOnceGotBallParameters.chipDelay);
-		}
-
 		return true;
 	}
 

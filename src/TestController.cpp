@@ -2371,6 +2371,8 @@ void TestController::AimState::onEnter(Robot* robot, Parameters parameters) {
 	nearLine = parameters.find("near-line") != parameters.end();
 	forceChipKick = parameters.find("chip-kick") != parameters.end();
 	escapeCornerPerformed = parameters.find("escape-corner-performed") != parameters.end();
+
+	robot->coilgun->cancelKickOnceGotBall();
 }
 
 void TestController::AimState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration, float combinedDuration) {
