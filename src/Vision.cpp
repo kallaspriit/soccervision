@@ -497,7 +497,7 @@ bool Vision::isBallInGoal(Object* ball, Dir dir, ObjectList& goals) {
 
 	// goal containment is not valid for larger distances as the ball can be contained when not in goal
 	// this can fail if the ball and goal are too far away
-	if (ball->distance <= 0.8f && ball->distance < 0.3f) {
+	if (ball->distance <= 0.8f && ball->distance < 0.4f) {
 		Object* goal;
 
 		for (ObjectListItc it = goals.begin(); it != goals.end(); it++) {
