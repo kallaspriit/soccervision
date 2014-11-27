@@ -313,7 +313,7 @@ bool Vision::isValidGoal(Object* goal, Side side) {
 		int goalEdgeSensePixels = (int)((float)goalHalfWidth * 0.9f);
 
 		PathMetric pathMetricLeft = getPathMetric(
-			Config::cameraWidth / 2,
+			Config::cameraWidth / 2 - goalEdgeSensePixels,
 			Config::goalPathSenseStartY,
 			goal->x - goalEdgeSensePixels,
 			goal->y + goal->height / 2,
@@ -322,7 +322,7 @@ bool Vision::isValidGoal(Object* goal, Side side) {
 		);
 
 		PathMetric pathMetricRight = getPathMetric(
-			Config::cameraWidth / 2,
+			Config::cameraWidth / 2 + goalEdgeSensePixels,
 			Config::goalPathSenseStartY,
 			goal->x + goalEdgeSensePixels,
 			goal->y + goal->height / 2,
