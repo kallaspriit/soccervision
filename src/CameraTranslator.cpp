@@ -348,6 +348,8 @@ Math::PointList CameraTranslator::getPointsBetween(float x1, float y1, float x2,
 		posY += stepY;
 	}
 
+	std::cout << "@ getPointsBetween x1: " << x1 << ", y1: " << y1 << ", x2: " << x2 << ", y2: " << y2 << ", stepX: " << stepX << ", stepY: " << stepY << std::endl;
+
 	return points;
 }
 
