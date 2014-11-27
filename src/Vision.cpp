@@ -975,7 +975,7 @@ Vision::EdgeDistanceMetric Vision::getEdgeDistanceMetric(int x, int y, int width
 
 	for (int senseX = x; senseX <= x + width; senseX++) {
 		//for (int senseY = y + height; senseY >= y; senseY--) {
-		for (int senseY = y + height / 2; senseY < y + height; senseY++) {
+		for (int senseY = y + height / 2; senseY < Config::cameraHeight; senseY++) {
 			if (senseX < x + halfWidth - centerWidth / 2 || senseX > x + halfWidth + centerWidth / 2) {
 				continue;
 			}
