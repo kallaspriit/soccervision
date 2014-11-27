@@ -1952,7 +1952,7 @@ void TestController::FetchBallNearState::onExit(Robot* robot) {
 }
 
 void TestController::FetchBallNearState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration, float combinedDuration) {
-	bool isolated = false;
+	// goes to aim state when got ball is enabled, otherwise always uses chip kick limits and kicks as soon as dribbler senses ball
 	bool aimMode = true;
 
 	robot->stop();
@@ -2011,12 +2011,10 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 
 	if (goal == NULL) {
 		// can't see the goal, switch to direct fetch if ball available, otherwise start searching for ball
-		if (isolated != true) {
-			if (ball != NULL) {
-				ai->setState("fetch-ball-direct");
-			} else {
-				ai->setState("find-ball");
-			}
+		if (ball != NULL) {
+			ai->setState("fetch-ball-direct");
+		} else {
+			ai->setState("find-ball");
 		}
 
 		return;
@@ -2024,23 +2022,21 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 
 	// switch to searching for ball if not visible any more
 	if (ball == NULL) {
-		if (isolated != true) {
-			Parameters parameters;
+		Parameters parameters;
 
-			// make sure to search in the dir the ball was last seen
-			if (lastBallAngle > 0.0f) {
-				parameters["search-dir"] = "1.0f";
-			} else {
-				parameters["search-dir"] = "-1.0f";
-			}
-
-			// make it use fetch-ball-direct if finds ball
-			parameters["fetch-ball-direct-once-found"] = "1";
-
-			ai->setState("find-ball", parameters);
-
-			//ai->setState("find-ball");
+		// make sure to search in the dir the ball was last seen
+		if (lastBallAngle > 0.0f) {
+			parameters["search-dir"] = "1.0f";
+		} else {
+			parameters["search-dir"] = "-1.0f";
 		}
+
+		// make it use fetch-ball-direct if finds ball
+		parameters["fetch-ball-direct-once-found"] = "1";
+
+		ai->setState("find-ball", parameters);
+
+		//ai->setState("find-ball");
 
 		return;
 	}
@@ -2164,11 +2160,9 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	} else if (
 		ballDistance > enterDistance + ballMovedAwayDistance
 		&& stateDuration >= 0.5f
-		) {
+	) {
 		// ball has gotten further than when started, probably messed it up, switch to faster fetch
-		if (isolated != true) {
-			ai->setState("fetch-ball-front");
-		}
+		ai->setState("fetch-ball-front");
 
 		return;
 	}
