@@ -2591,11 +2591,11 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 		isGoalPathObstructed = false;
 	}
 
-	if (forceChipKick || (isBallInWay && !shouldManeuverBallInWay)) {
+	/*if (forceChipKick || (isBallInWay && !shouldManeuverBallInWay)) {
 		robot->dribbler->useChipKickLimits();
 	} else {
 		robot->dribbler->useNormalLimits();
-	}
+	}*/
 
 	// drive sideways if there's a ball in the way
 	//if (isBallInWay || isGoalPathObstructed) {
@@ -2667,32 +2667,28 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 
 	bool performKick = validKickFrames >= Config::goalKickValidFrames;
 	bool wasKicked = false;
-	//bool waitingBallToSettle = false;
-	float chipKickDistance = 0.0f;
+	bool waitingBallToSettle = false;
 	bool useChipKick = false;
+	float chipKickDistance = 0.0f;
 
 	// only perform the kick if valid view has been observed for a couple of frames
 	if (performKick) {
 		if (isBallInWay || forceChipKick) {
-			//if (robot->dribbler->getBallInDribblerTime() >= 0.2f) {
+			useChipKick = robot->dribbler->getBallInDribblerTime() >= 0.2f;
+
+			if (useChipKick) {
 				// TODO closest ball may be too close to kick over
 				//float chipKickDistance = Math::max(goal->distance - 1.0f, 0.5f);
 
 				// try to kick 1m past the furhest ball but no further than 1m before the goal, also no less then 0.5m
-				useChipKick = true;
 				chipKickDistance = ai->getChipKickDistance(ballInWayMetric, goal->distance);
 
-				// kick instantly
-				robot->coilgun->chipKick(chipKickDistance);
-				wasKicked = true;
-
-				// kicks once the dribbler has been raised
-				/*if (robot->chipKick(chipKickDistance)) {
+				if (robot->chipKick(chipKickDistance)) {
 					wasKicked = true;
-				}*/
-			//} else {
-			//	waitingBallToSettle = true;
-			//}
+				}
+			} else {
+				waitingBallToSettle = true;
+			}
 		} else {
 			// TODO restore normal kicking
 			robot->kick();
@@ -2713,11 +2709,12 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 
 	ai->dbg("performKick", performKick);
 	ai->dbg("useChipKick", useChipKick);
-	ai->dbg("forceChipKick", forceChipKick);
 	ai->dbg("chipKickDistance", chipKickDistance);
 	ai->dbg("validWindow", validWindow);
 	ai->dbg("isFrameValid", isFrameValid);
 	ai->dbg("isKickTooSoon", isKickTooSoon);
+	ai->dbg("isKickTooSoon", waitingBallToSettle);
+	ai->dbg("waitingBallToSettle", true);
 	ai->dbg("isBallInWay", isBallInWay);
 	ai->dbg("ballInWayCount", ballInWayMetric.ballInWayCount);
 	ai->dbg("closestBallInWayDistance", ballInWayMetric.closestBallInWayDistance);
