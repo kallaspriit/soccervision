@@ -750,7 +750,7 @@ std::string TestController::getJSON() {
 	stream << "\"right\": " << (goalPathObstruction.right ? "true" : "false") << ",";
 	stream << "\"invalidCountLeft\": " << goalPathObstruction.invalidCountLeft << ",";
 	stream << "\"invalidCountRight\": " << goalPathObstruction.invalidCountRight;
-	stream << "\"},";
+	stream << "},";
 	stream << "\"lastTargetGoalAngle\": " << Math::radToDeg(lastTargetGoalAngle) << ",";
 	stream << "\"#stateChanges\": [";
 
