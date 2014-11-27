@@ -18,12 +18,13 @@ public:
 	typedef std::vector<std::string> ColorList;
 
 	struct PathMetric {
-		PathMetric(float percentage, int invalidSpree, bool validColorFound, bool out) : percentage(percentage), invalidSpree(invalidSpree), validColorFound(validColorFound), out(out) {}
+		PathMetric(float percentage, int invalidSpree, bool validColorFound, bool out, int invalidColorCount) : percentage(percentage), invalidSpree(invalidSpree), validColorFound(validColorFound), out(out), invalidColorCount(invalidColorCount) {}
 
 		float percentage;
 		int invalidSpree;
 		bool validColorFound;
 		bool out;
+		int invalidColorCount;
 	};
 
 	struct ColorDistance {

@@ -328,12 +328,13 @@ bool Vision::isValidGoal(Object* goal, Side side) {
 		);
 
 		if (
-			pathMetric.percentage < Config::minValidGoalPathThreshold
+			pathMetric.invalidColorCount > Config::maxGoalInvalidColorCount
+			//pathMetric.percentage < Config::minValidGoalPathThreshold
 			//|| pathMetric.out
 			//|| !pathMetric.validColorFound
 			//|| pathMetric.invalidSpree > getBallMaxInvalidSpree(ball->y + ball->height / 2)
 		) {
-			std::cout << "@ GOAL PATH FAILS: " << pathMetric.percentage << " VS " << Config::minValidGoalPathThreshold << ", OUT: " << (pathMetric.out ? "YES" : "NO") << std::endl;
+			//std::cout << "@ GOAL PATH FAILS: " << pathMetric.percentage << " VS " << Config::minValidGoalPathThreshold << ", OUT: " << (pathMetric.out ? "YES" : "NO") << std::endl;
 
 			return false;
 		}
@@ -1073,6 +1074,7 @@ Vision::PathMetric Vision::getPathMetric(int x1, int y1, int x2, int y2, std::ve
 		return PathMetric(1.0f, 0, true, false);
 	}*/
 
+	int invalidColorCount = sampleCount - matches;
 	float percentage = (float)matches / (float)sampleCount;
 	bool validColorFound = requiredColor == "" || requiredColorFound;
 	//bool isOut = crossingGreenWhiteBlackGreen || tooManyBlacksInRow;
@@ -1083,7 +1085,7 @@ Vision::PathMetric Vision::getPathMetric(int x1, int y1, int x2, int y2, std::ve
 	std::cout << "@ crossingGreenWhiteBlackGreen: " << crossingGreenWhiteBlackGreen << std::endl;
 	std::cout << "@ tooManyBlacksInRow: " << tooManyBlacksInRow << std::endl << std::endl;*/
 
-	return PathMetric(percentage, longestInvalidSpree, validColorFound, isOut);
+	return PathMetric(percentage, longestInvalidSpree, validColorFound, isOut, invalidColorCount);
 }
 
 Vision::EdgeDistanceMetric Vision::getEdgeDistanceMetric(int x, int y, int width, int height, std::string color1, std::string color2) {
