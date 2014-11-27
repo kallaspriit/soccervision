@@ -255,11 +255,11 @@ ObjectList Vision::processGoals(Dir dir) {
 			goal->distanceY = distance.y;
 			goal->angle = distance.angle;
 
-			if (goal->distance < 0.0f) {
+			/*if (goal->distance < 0.0f) {
 				std::cout << "- Skipping goal with invalid distance: " << goal->distance << std::endl;
 
 				continue;
-			}
+			}*/
 
 			filteredGoals.push_back(goal);
 		}
