@@ -760,6 +760,8 @@ Vision::PathMetric Vision::getPathMetric(int x1, int y1, int x2, int y2, std::ve
 	bool tooManyBlacksInRow = false;
 	int invalidSpree = 0;
 	int longestInvalidSpree = 0;
+	int greensInRow = 0;
+	int lastGreensInRow = 0;
 	std::string firstColor = "";
 	std::string lastColor = "";
 
@@ -833,25 +835,33 @@ Vision::PathMetric Vision::getPathMetric(int x1, int y1, int x2, int y2, std::ve
 			}
 
 			if (strcmp(color->name, "green") == 0) {
+				greensInRow++;
+
 				if (!sawGreen) {
 					sawGreen = true;
 
 					if (debug) {
 						canvas.drawMarker(x, y, 0, 128, 0);
 					}
-				} else if ((sawWhite || firstColor == "white") && previousBlack >= 1) {
+				// the greens in row avoids situation where green is seen as one sample between the white and the black lines
+				} else if ((sawWhite || firstColor == "white") && previousBlack >= 1 && lastGreensInRow >= 2) {
 					crossingGreenWhiteBlackGreen = true;
 
 					if (debug) {
 						canvas.drawMarker(x, y, 128, 0, 0);
 					}
 				}
-			} else if (strcmp(color->name, "white") == 0) {
-				sawWhite = true;
+			} else {
+				lastGreensInRow = greensInRow;
+				greensInRow = 0;
 
-				// avoid not seeing balls from outside the playing field
-				blacksInRow = 0;
-				tooManyBlacksInRow = false;
+				if (strcmp(color->name, "white") == 0) {
+					sawWhite = true;
+
+					// avoid not seeing balls from outside the playing field
+					blacksInRow = 0;
+					tooManyBlacksInRow = false;
+				}
 			}
 			
 			if (strcmp(color->name, "black") == 0) {

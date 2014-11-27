@@ -126,8 +126,10 @@
 * + fetch ball close to own goal from behind
 * + fetch ball on the black line in the center of own goal, can push it in and go for it
 * + should reverse out of a goal if gets into it
-* - fetch ball behind from center edge of the field when in front of opponents goal facing goal directly
-* - fetch ball when opponent is between the ball and the goal
+* + fetch ball behind direct at far distance
+* + fetch ball behind direct at small distance
+* + fetch ball behind from center edge of the field when in front of opponents goal facing goal directly
+* - fetch ball very close to the opponent goal (on the line) at the center
 * - fetch ball close to opponents goal corners
 * - fetch a string of balls straight behind each other
 * - fetch a string of balls diagonally (both diagonals)
@@ -137,6 +139,7 @@
 * - fetch ball on the line while opponents goal is visible
 * - fetch ball on the line when goal not visible (do not push out)
 * - fetch balls from corners (near own goal and opponents)
+* - fetch ball when opponent is between the ball and the goal
 * - test ball in way at large distance from opponents goal
 * - test ball in way at small distance from opponents goal
 * - test kicking into a very small goal
