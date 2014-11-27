@@ -540,6 +540,7 @@ int Vision::getGoalMaxInvalidSpree(int y) {
 }*/
 
 int Vision::getBallRadius(int width, int height) {
+	// divide by four because we want radius not diameter
 	return (int)((float)(width + height) / 4.0f);
 }
 
@@ -844,7 +845,7 @@ Vision::PathMetric Vision::getPathMetric(int x1, int y1, int x2, int y2, std::ve
 						canvas.drawMarker(x, y, 0, 128, 0);
 					}
 				// the greens in row avoids situation where green is seen as one sample between the white and the black lines
-				} else if ((sawWhite || firstColor == "white") && previousBlack >= 1 && lastGreensInRow >= 2) {
+				} else if ((sawWhite || firstColor == "white") && previousBlack >= 1/* && lastGreensInRow >= 2*/) {
 					crossingGreenWhiteBlackGreen = true;
 
 					if (debug) {
