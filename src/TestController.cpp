@@ -1790,7 +1790,7 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 	}
 
 	float reverseBlindSpeed = 1.25f;
-	float offsetDistance = 0.25f;
+	float offsetDistance = 0.22f;
 
 	// one possibility would be to fetch the ball furthest away
 	//Object* ball = visionResults->getFurthestBall(Dir::REAR);
