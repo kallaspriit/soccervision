@@ -124,6 +124,7 @@
 * + fetch ball on the centerline facing own goal so it turns around (should not lose ball)
 * + fetch ball very close to own goal (should not turn around the ball into the goal)
 * + fetch ball close to own goal from behind
+* - fetch ball on the black line in the center of own goal, can push it in and go for it
 * - fetch ball close to opponents goal corners
 * - fetch a string of balls straight behind each other
 * - fetch a string of balls diagonally (both diagonals)
@@ -2763,7 +2764,8 @@ void TestController::ReturnFieldState::step(float dt, Vision::Results* visionRes
 		return;
 	}
 
-	if (!ai->isRobotOutFront && !ai->isRobotOutRear) {
+	// don't let get out of this state too soon or can flicker on edge
+	if (!ai->isRobotOutFront && !ai->isRobotOutRear && stateDuration > 0.5f) {
 		ai->setState("find-ball");
 
 		return;
