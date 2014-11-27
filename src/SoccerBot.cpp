@@ -183,16 +183,16 @@ void SoccerBot::run() {
 		//}
 
 		// update goal path obstruction metric
-		float goalDistance = 6.0f;
 		Side targetSide = activeController->getTargetSide();
-
 		Object* targetGoal = visionResults->getLargestGoal(targetSide, Dir::FRONT);
 
 		if (targetGoal != NULL) {
-			goalDistance = targetGoal->distance;
-		}
+			float goalDistance = targetGoal->distance;
 
-		visionResults->goalPathObstruction = frontProcessor->vision->getGoalPathObstruction(goalDistance);
+			visionResults->goalPathObstruction = frontProcessor->vision->getGoalPathObstruction(goalDistance);
+		} else {
+			visionResults->goalPathObstruction = Obstruction::NONE;
+		}
 
 		if (debugging) {
 			Object* closestBall = visionResults->getClosestBall();
