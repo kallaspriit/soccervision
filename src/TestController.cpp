@@ -2009,11 +2009,11 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	}
 
 	// avoid going after the ball that was just kicked
-	if (robot->coilgun->getTimeSinceLastKicked() < 0.5f) {
+	/*if (robot->coilgun->getTimeSinceLastKicked() < 0.5f) {
 		ai->setState("find-ball");
 
 		return;
-	}
+	}*/
 
 	Object* ball = visionResults->getClosestBall(Dir::FRONT);
 	Object* goal = visionResults->getLargestGoal(ai->targetSide, Dir::FRONT);
