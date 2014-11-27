@@ -1118,10 +1118,10 @@ Obstruction Vision::getGoalPathObstruction(float goalDistance) {
 
 	// each sample is 5 centimeters apart
 
-	std::cout << "@ max y: " << maxDistanceY << " meters, left: " << validCountLeft << "/" << sampleCountLeft << ", right: " << validCountRight << "/" << sampleCountRight << std::endl;
+	//std::cout << "@ max y: " << maxDistanceY << " meters, left: " << validCountLeft << "/" << sampleCountLeft << ", right: " << validCountRight << "/" << sampleCountRight << std::endl;
 
 	// never mind if we're too close to the goal
-	if (maxDistanceY < 1.0f) {
+	if (maxDistanceY < 0.5f) {
 		return obstruction;
 	}
 
