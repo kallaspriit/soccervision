@@ -300,7 +300,7 @@ bool Vision::isValidGoal(Object* goal, Side side) {
 	}
 
 	if (goal->y + goal->height < Config::goalPathSenseStartY) {
-		PathMetric pathMetric = getPathMetric(
+		PathMetric pathMetricCenter = getPathMetric(
 			Config::cameraWidth / 2,
 			Config::goalPathSenseStartY,
 			goal->x,
@@ -309,12 +309,39 @@ bool Vision::isValidGoal(Object* goal, Side side) {
 			//,"green"
 		);
 
+		int goalHalfWidth = goal->width / 2;
+		int goalEdgeSensePixels = (int)((float)goalHalfWidth * 0.9f);
+
+		PathMetric pathMetricLeft = getPathMetric(
+			Config::cameraWidth / 2,
+			Config::goalPathSenseStartY,
+			goal->x - goalEdgeSensePixels,
+			goal->y + goal->height / 2,
+			validGoalPathColors
+			//,"green"
+		);
+
+		PathMetric pathMetricRight = getPathMetric(
+			Config::cameraWidth / 2,
+			Config::goalPathSenseStartY,
+			goal->x + goalEdgeSensePixels,
+			goal->y + goal->height / 2,
+			validGoalPathColors
+			//,"green"
+		);
+
 		if (
-			pathMetric.invalidColorCount > Config::maxGoalInvalidColorCount
-			&& pathMetric.percentage < Config::minValidGoalPathThreshold
-			//|| pathMetric.out
-			//|| !pathMetric.validColorFound
-			//|| pathMetric.invalidSpree > getBallMaxInvalidSpree(ball->y + ball->height / 2)
+			// center
+			pathMetricCenter.invalidColorCount > Config::maxGoalInvalidColorCount
+			&& pathMetricCenter.percentage < Config::minValidGoalPathThreshold
+
+			// left
+			&& pathMetricLeft.invalidColorCount > Config::maxGoalInvalidColorCount
+			&& pathMetricLeft.percentage < Config::minValidGoalPathThreshold
+
+			// right
+			&& pathMetricRight.invalidColorCount > Config::maxGoalInvalidColorCount
+			&& pathMetricRight.percentage < Config::minValidGoalPathThreshold
 		) {
 			//std::cout << "@ GOAL PATH FAILS: " << pathMetric.percentage << " VS " << Config::minValidGoalPathThreshold << ", OUT: " << (pathMetric.out ? "YES" : "NO") << std::endl;
 

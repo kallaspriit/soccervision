@@ -90,6 +90,7 @@
 * + dribbler thinks it's got the ball some time after bdkick reported kicked ball, should not
 * + perhaps should calculate main coilgun duration to get the ball into the goal but not kick too hard
 * ¤ dribbler should not report having ball when last kick time is very small
+* - goal should not be not valid only when pathmetrics to center and corners fail
 * - detect another robot in the way and avoid kicking into it
 * - if got ball and don't see opponents goal, don't just spin in place as the other robot may be in way, focus at own goal from rear and drive from side to side
 * - in fetch ball near, if the ball is very close and the kick window is not clear, send no-kick and fetch direct, special care when dribbler up
