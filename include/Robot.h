@@ -39,6 +39,7 @@ public:
 	float getOmega() { return omega; }
 	float getTravelledDistance() { return travelledDistance; }
 	float getTravelledRotation() { return travelledRotation; }
+	float getTimeSincLastDroveBehindBall();
 	bool isStalled();
 	bool hasTasks() { return getCurrentTask() != NULL; }
 
@@ -112,6 +113,7 @@ private:
 	float travelledRotation;
 
 	double lastCommandTime;
+	double lastDriveBehindBallTime;
     float lastDt;
     float totalTime;
 	bool coilgunCharged;

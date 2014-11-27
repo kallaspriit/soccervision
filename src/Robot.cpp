@@ -26,6 +26,7 @@ Robot::Robot(AbstractCommunication* com) : com(com), wheelFL(NULL), wheelFR(NULL
 	travelledRotation = 0.0f;
 
     lastCommandTime = -1;
+	lastDriveBehindBallTime = -1;
 	frameTargetSpeedSet = false;
 	coilgunCharged = false;
 
@@ -392,6 +393,10 @@ void Robot::spinAroundDribbler(bool reverse, float period, float radius, float f
 	setTargetDir(forwardSpeed, -speed, omega);
 }
 
+float Robot::getTimeSincLastDroveBehindBall() {
+	return (float)Util::duration(lastDriveBehindBallTime); 
+}
+
 bool Robot::isStalled() {
 	return wheelFL->isStalled()
 		|| wheelFR->isStalled()
@@ -557,6 +562,8 @@ void Robot::drivePath(const Math::PositionQueue positions, float speed) {
 
 void Robot::driveBehindBall(float ballDistance, float targetAngle, float speed, float offsetDistance, float side) {
 	addTask(new DriveBehindBallTask(ballDistance, targetAngle, speed, offsetDistance, side));
+
+	lastDriveBehindBallTime = Util::millitime();
 }
 
 void Robot::stopRotation() {

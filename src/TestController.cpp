@@ -132,6 +132,7 @@
 * + fetch ball behind direct at far distance
 * + fetch ball behind direct at small distance
 * + fetch ball behind from center edge of the field when in front of opponents goal facing goal directly
+* - fetch ball behind from opposite corner should not trigger return to field
 * + fetch ball very close to the opponent goal (on the line) at the center
 * + fetch ball close to opponents goal corners
 * + should roam the field between white lines if no balls are visible
@@ -458,17 +459,21 @@ void TestController::updateVisionInfo(Vision::Results* visionResults) {
 
 	int robotOutFramesThreshold = 20;
 
-	// check whether robot is detected to be out for some frames
-	if (visionResults->isRobotOut(Dir::FRONT)) {
-		framesRobotOutFront = (int)Math::min((float)(framesRobotOutFront + 1), (float)robotOutFramesThreshold);
-	} else {
-		framesRobotOutFront = (int)Math::max((float)(framesRobotOutFront - 1), 0.0f);
-	}
+	// don't track getting out of the field after having lately drove behind ball as we may be out if the ball was in a corner
+	if (robot->getTimeSincLastDroveBehindBall() > 1.0f) {
 
-	if (visionResults->isRobotOut(Dir::REAR)) {
-		framesRobotOutRear = (int)Math::min((float)(framesRobotOutRear + 1), (float)robotOutFramesThreshold);
-	} else {
-		framesRobotOutRear = (int)Math::max((float)(framesRobotOutRear - 1), 0);
+		// check whether robot is detected to be out for some frames
+		if (visionResults->isRobotOut(Dir::FRONT)) {
+			framesRobotOutFront = (int)Math::min((float)(framesRobotOutFront + 1), (float)robotOutFramesThreshold);
+		} else {
+			framesRobotOutFront = (int)Math::max((float)(framesRobotOutFront - 1), 0.0f);
+		}
+
+		if (visionResults->isRobotOut(Dir::REAR)) {
+			framesRobotOutRear = (int)Math::min((float)(framesRobotOutRear + 1), (float)robotOutFramesThreshold);
+		} else {
+			framesRobotOutRear = (int)Math::max((float)(framesRobotOutRear - 1), 0);
+		}
 	}
 
 	isRobotOutFront = framesRobotOutFront >= robotOutFramesThreshold;
