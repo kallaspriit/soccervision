@@ -2682,9 +2682,14 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 				useChipKick = true;
 				chipKickDistance = ai->getChipKickDistance(ballInWayMetric, goal->distance);
 
-				if (robot->chipKick(chipKickDistance)) {
+				// kick instantly
+				robot->coilgun->chipKick(chipKickDistance);
+				wasKicked = true;
+
+				// kicks once the dribbler has been raised
+				/*if (robot->chipKick(chipKickDistance)) {
 					wasKicked = true;
-				}
+				}*/
 			//} else {
 			//	waitingBallToSettle = true;
 			//}
