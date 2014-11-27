@@ -2254,7 +2254,7 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 
 	robot->setTargetDir(forwardSpeed, sideSpeed);
 	//robot->lookAt(goal, lookAtGoalP);
-	robot->lookAt(goal);
+	robot->lookAt(goal, Config::lookAtP, false);
 
 	ai->dbg("ballDistance", ballDistance);
 	ai->dbg("forwardSpeed", forwardSpeed);
