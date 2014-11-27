@@ -124,7 +124,9 @@
 * + fetch ball on the centerline facing own goal so it turns around (should not lose ball)
 * + fetch ball very close to own goal (should not turn around the ball into the goal)
 * + fetch ball close to own goal from behind
-* - fetch ball on the black line in the center of own goal, can push it in and go for it
+* + fetch ball on the black line in the center of own goal, can push it in and go for it
+* + should reverse out of a goal if gets into it
+* - fetch ball behind from center edge of the field when in front of opponents goal facing goal directly
 * - fetch ball close to opponents goal corners
 * - fetch a string of balls straight behind each other
 * - fetch a string of balls diagonally (both diagonals)
@@ -1950,7 +1952,7 @@ void TestController::FetchBallBehindState::step(float dt, Vision::Results* visio
 	float deacceleratedSpeed = Math::map(ballDistance, probableBallLostDistance, probableBallLostDistance * 2.0f, reverseBlindSpeed, forwardSpeed);
 
 	robot->setTargetDir(Math::Rad(targetAngle), deacceleratedSpeed);
-	robot->lookAt(goal);
+	robot->lookAt(goal, Config::lookAtP * 2.0f);
 
 	lastTargetAngle = targetAngle;
 
