@@ -441,7 +441,7 @@ void TestController::updateVisionInfo(Vision::Results* visionResults) {
 		}
 	}
 
-	int robotOutFramesThreshold = 10;
+	int robotOutFramesThreshold = 20;
 
 	// check whether robot is detected to be out for some frames
 	if (visionResults->isRobotOut(Dir::FRONT)) {
@@ -719,8 +719,8 @@ std::string TestController::getJSON() {
 	stream << "\"yellowGoalDistance\": " << yellowGoalDistance << ",";
 	stream << "\"lastClosestGoalDistance\": " << lastClosestGoalDistance << ",";
 	stream << "\"lastTargetGoalDistance\": " << lastTargetGoalDistance << ",";
-	stream << "\"isRobotOutFront\": " << (isRobotOutFront ? "true" : "false") << ",";
-	stream << "\"isRobotOutRear\": " << (isRobotOutRear ? "true" : "false") << ",";
+	stream << "\"isRobotOutFront\": \"" << (isRobotOutFront ? "yes - " + Util::toString(framesRobotOutFront) : "no") << "\",";
+	stream << "\"isRobotOutRear\": \"" << (isRobotOutRear ? "yes - " + Util::toString(framesRobotOutRear) : "no") << "\",";
 	stream << "\"isInCorner\": " << (isInCorner ? "true" : "false") << ",";
 	stream << "\"isNearGoal\": " << (isNearGoal ? "true" : "false") << ",";
 	stream << "\"visibleBallCount\": " << visibleBallCount << ",";
