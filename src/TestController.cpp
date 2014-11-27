@@ -127,6 +127,7 @@
 * + fetch ball on the black line in the center of own goal, can push it in and go for it
 * + should reverse out of a goal if gets into it
 * - fetch ball behind from center edge of the field when in front of opponents goal facing goal directly
+* - fetch ball when opponent is between the ball and the goal
 * - fetch ball close to opponents goal corners
 * - fetch a string of balls straight behind each other
 * - fetch a string of balls diagonally (both diagonals)
