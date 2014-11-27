@@ -439,7 +439,7 @@ bool Vision::isValidBall(Object* ball, Dir dir, ObjectList& goals) {
 			//|| !pathMetric.validColorFound
 			//|| pathMetric.invalidSpree > getBallMaxInvalidSpree(ball->y + ball->height / 2)
 		) {
-			std::cout << "@ BALL PATH FAIL: " << pathMetric.percentage << " VS " << Config::minValidBallPathThreshold << ", OUT: " << (pathMetric.out ? "YES" : "NO") << " FROM " << Config::ballPathSenseStartY << " TO " << pathMetricSenseY << std::endl;
+			//std::cout << "@ BALL PATH FAIL: " << pathMetric.percentage << " VS " << Config::minValidBallPathThreshold << ", OUT: " << (pathMetric.out ? "YES" : "NO") << " FROM " << Config::ballPathSenseStartY << " TO " << pathMetricSenseY << std::endl;
 
 			return false;
 		}
@@ -900,6 +900,11 @@ Vision::PathMetric Vision::getPathMetric(int x1, int y1, int x2, int y2, std::ve
 	bool validColorFound = requiredColor == "" || requiredColorFound;
 	//bool isOut = crossingGreenWhiteBlackGreen || tooManyBlacksInRow;
 	bool isOut = crossingGreenWhiteBlack || tooManyBlacksInRow;
+
+	// fake high percentage if too few samples available
+	if (sampleCount < 5) {
+		percentage = 100;
+	}
 
 	/*std::cout << "@ blacksInRow: " << blacksInRow << std::endl;
 	std::cout << "@ previousBlack: " << previousBlack << std::endl;
