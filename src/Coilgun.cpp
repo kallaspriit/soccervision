@@ -32,8 +32,7 @@ void Coilgun::kick(int microseconds) {
 		//std::cout << "! Kicking: " << microseconds << std::endl;
 
 		// temporarily use chip-kick instead
-		//com->send("kick:" + Util::toString(microseconds));
-		com->send("dkick:0:0:2000:0");
+		com->send("kick:" + Util::toString(microseconds));
 
 		lastKickTime = Util::millitime();
 	} else {

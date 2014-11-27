@@ -407,7 +407,9 @@ void Robot::stop() {
 }
 
 void Robot::kick(int microseconds) {
-	coilgun->kick(microseconds);
+	// temporarily use chip-kicker instead
+	chipKick(1.5f);
+	//coilgun->kick(microseconds);
 	dribbler->onKick();
 
 	// TODO Remove this hack once hardware issue is resolved
