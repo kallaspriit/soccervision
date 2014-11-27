@@ -137,6 +137,7 @@
 * + fetch ball close to opponents goal corners
 * + should roam the field between white lines if no balls are visible
 * + should find a ball quickly when roaming around when suddenly becomes visible (remove foot etc)
+* - should be able to see a ball from one corner to another from both cameras
 * - should not get stuck near a goal if a ball is in the goal and the next ball is far away
 * - should drive sideways when got ball near side of goal
 * - fetch-ball-near should switch to fetch-ball-direct if goal is obstructed at small ball distance
@@ -460,7 +461,7 @@ void TestController::updateVisionInfo(Vision::Results* visionResults) {
 	int robotOutFramesThreshold = 20;
 
 	// don't track getting out of the field after having lately drove behind ball as we may be out if the ball was in a corner
-	if (robot->getTimeSincLastDroveBehindBall() > 1.0f) {
+	if (robot->getTimeSincLastDroveBehindBall() > 2.0f) {
 
 		// check whether robot is detected to be out for some frames
 		if (visionResults->isRobotOut(Dir::FRONT)) {
