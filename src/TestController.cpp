@@ -1975,16 +1975,22 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	//robot->dribbler->useNormalLimits();
 	//robot->dribbler->start();
 
-	if (aimMode && robot->dribbler->gotBall()) {
-		Parameters parameters;
+	if (aimMode) {
+		robot->dribbler->useNormalLimits();
 
-		if (useChipKick) {
+		if (robot->dribbler->gotBall()) {
+			/*Parameters parameters;
+
+			if (useChipKick) {
 			parameters["chip-kick"] = "1";
+			}
+
+			ai->setState("aim", parameters);*/
+
+			ai->setState("aim");
+
+			return;
 		}
-
-		ai->setState("aim", parameters);
-
-		return;
 	} else {
 		robot->dribbler->useChipKickLimits();
 	}
@@ -2117,14 +2123,8 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 		return;
 	}
 
-	if (useChipKick) {
-		robot->dribbler->useChipKickLimits();
-	} else {
-		robot->dribbler->useNormalLimits();
-
-		if (ball->distance < 0.5f) {
-			robot->dribbler->start();
-		}
+	if (aimMode && ball->distance < 0.5f) {
+		robot->dribbler->start();
 	}
 
 	// store ball first sighting distance
