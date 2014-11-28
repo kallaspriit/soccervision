@@ -44,10 +44,10 @@ void EthernetCommunication::send(std::string message) {
 		send(queuedMessage);
 	}
 
-	/*if (message.substr(0, 6) != "speeds" && message.substr(0, 6) != "charge") {
+	if (message.substr(0, 6) != "speeds" && message.substr(0, 6) != "charge" && message.substr(0, 3) != "adc") {
 		// incoming message
 		std::cout << "SEND: " << message << std::endl;
-	}*/
+	}
 
 	message += "\n";
 
@@ -99,6 +99,11 @@ std::string EthernetCommunication::dequeueMessage() {
 	std::string message = messages.front();
 
 	messages.pop();
+
+	if (message.substr(0, 6) != "speeds" && message.substr(0, 6) != "charge" && message.substr(0, 3) != "adc") {
+		// incoming message
+		std::cout << "RECV: " << message << std::endl;
+	}
 
 	return message;
 }
