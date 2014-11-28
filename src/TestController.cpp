@@ -1255,7 +1255,7 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 			if (goal != NULL) {
 				// try not to trigger changing dribbler position if the ball is very close
 				if (ball->getDribblerDistance() < 0.05f) {
-					if (robot->dribbler->isRaised()) {
+					if (!robot->dribbler->isLowered()) {
 						ai->setState("fetch-ball-near");
 					} else {
 						ai->setState("fetch-ball-direct");
