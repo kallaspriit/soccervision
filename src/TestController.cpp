@@ -2373,7 +2373,7 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 
 	// pid-based
 	pid.setSetPoint(0.0f);
-	pid.setProcessValue(Math::degToRad(ball->angle));
+	pid.setProcessValue(Math::radToDeg(ball->angle));
 
 	float sideP = pid.compute();
 	float sideSpeed = Math::sign(ball->distanceX) * sideP * sidePower;
