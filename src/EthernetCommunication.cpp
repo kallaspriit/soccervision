@@ -100,7 +100,7 @@ std::string EthernetCommunication::dequeueMessage() {
 
 	messages.pop();
 
-	if (message.substr(0, 6) != "speeds" && message.substr(0, 6) != "charge" && message.substr(0, 3) != "adc") {
+	if (message.substr(0, 7) != "<speeds" && message.substr(0, 4) != "<adc") {
 		// incoming message
 		std::cout << "RECV: " << message << std::endl;
 	}
