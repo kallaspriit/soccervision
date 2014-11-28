@@ -356,6 +356,9 @@ A:hover {
 	font-size: 12px;
 	font-family: "Consolas", "Courier New", Courier, mono;
 }
+#coilgun-indicator.active {
+	display: block;
+}
 
 /* Tasks */
 #tasks {

@@ -1488,7 +1488,7 @@ void TestController::FetchBallFrontState::step(float dt, Vision::Results* vision
 		return;
 	}
 
-	float minGoalBallOffsetAngle = 80.0f;
+	float minGoalBallOffsetAngle = 90.0f;
 	int switchToFetchDirectOffsetAngleThreshold = 10;
 	float goalBallOffsetAngle = Math::getOffsetAngleBetween(ball->distanceX, ball->distanceY, goal->distanceX, goal->distanceY);
 	
