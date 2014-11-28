@@ -1087,12 +1087,12 @@ Vision::Obstruction Vision::getGoalPathObstruction(float goalDistance) {
 
 	// TODO make sure finds target side color in the end
 	// sample points every step distances
-	for (yDistance = startDistance; yDistance < endDistance; yDistance += yStep) {
-		if (yDistance > maxDistanceY) {
-			maxDistanceY = yDistance;
-		}
+	for (xDistance = -xStep * xSteps / 2 + xStep / 2.0f; xDistance < xStep * xSteps / 2; xDistance += xStep) {
+		for (yDistance = startDistance; yDistance < endDistance; yDistance += yStep) {
+			if (yDistance > maxDistanceY) {
+				maxDistanceY = yDistance;
+			}
 
-		for (xDistance = -xStep * xSteps / 2 + xStep / 2.0f; xDistance < xStep * xSteps / 2; xDistance += xStep) {
 			isLeft = xDistance < 0;
 			
 			// find corridor positions
