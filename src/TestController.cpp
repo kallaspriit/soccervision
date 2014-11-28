@@ -1499,7 +1499,7 @@ void TestController::FetchBallFrontState::step(float dt, Vision::Results* vision
 	}
 
 	ai->dbg("goalBallOffsetAngle", Math::radToDeg(goalBallOffsetAngle));
-	ai->dbg("ballGoalOffsetAngleTooSmallFrames", ballGoalOffsetAngleTooSmallFrames);
+	ai->dbg("goalBallOffsetAngleTooSmallFrames", ballGoalOffsetAngleTooSmallFrames);
 
 	// switch to fetch-direct if the ball-goal angle is too small thus it's slow and can lose sight of goal
 	if (ballGoalOffsetAngleTooSmallFrames >= switchToFetchDirectOffsetAngleThreshold) {
