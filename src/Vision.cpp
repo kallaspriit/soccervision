@@ -28,7 +28,8 @@ Vision::Vision(Blobber* blobber, CameraTranslator* cameraTranslator, Dir dir, in
     viewObstructedValidColors.push_back("blue-goal");
 
     goalObstructedValidColors.push_back("green");
-    goalObstructedValidColors.push_back("white");
+	goalObstructedValidColors.push_back("white");
+	goalObstructedValidColors.push_back("black");
     goalObstructedValidColors.push_back("ball");
 
     validGoalPathColors.push_back("green");
