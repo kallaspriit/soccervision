@@ -1557,7 +1557,7 @@ void TestController::FetchBallFrontState::step(float dt, Vision::Results* vision
 		Vision::Obstruction obstruction = ai->getGoalPathObstruction();
 
 		// if obstruction seems very likely then don't bother the fetch-near state where it raises the dribbler and has to lower it again
-		if ((obstruction.left && obstruction.right) || obstruction.invalidCountLeft >= 20 ||obstruction.invalidCountRight >= 20) {
+		if ((obstruction.left && obstruction.right) || obstruction.invalidCountLeft >= 25 ||obstruction.invalidCountRight >= 25) {
 			ai->setState("fetch-ball-direct");
 		} else {
 			ai->setState("fetch-ball-near");

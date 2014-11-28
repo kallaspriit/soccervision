@@ -1166,7 +1166,7 @@ Vision::Obstruction Vision::getGoalPathObstruction(float goalDistance) {
 	obstruction.invalidCountLeft = sampleCountLeft - validCountLeft;
 	obstruction.invalidCountRight = sampleCountRight - validCountRight;
 
-	int maxInvalidCount = 10;
+	int maxInvalidCount = 60 / (int)xSteps;
 
 	if (obstruction.invalidCountLeft > maxInvalidCount || obstruction.invalidCountRight > maxInvalidCount) {
 		if (obstruction.invalidCountLeft > maxInvalidCount && obstruction.invalidCountRight > maxInvalidCount) {
