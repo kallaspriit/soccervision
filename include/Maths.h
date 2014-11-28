@@ -16,6 +16,7 @@ namespace Math {
 
 const float PI = 3.14159265358979f;
 const float TWO_PI = 6.283185307f;
+const float E = 2.718f;
 
 static float max(float a, float b) {
 	return (a < b) ? b : a;
