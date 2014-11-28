@@ -1025,7 +1025,8 @@ Vision::EdgeDistanceMetric Vision::getEdgeDistanceMetric(int x, int y, int width
 			colorName = std::string(color->name);
 
 			//if (colorName == color1 || colorName == color2) {
-			if (colorName == "green") {
+			// also trigger for black is it may be the first color if looking at the goal from the side
+			if (colorName == "green" || colorName == "black") {
 				//canvas.fillBoxCentered(senseX, senseY, 4, 4, 255, 0, 255);
 
 				centerSumY += senseY;

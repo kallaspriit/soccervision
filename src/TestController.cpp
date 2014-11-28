@@ -2089,6 +2089,7 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 		return;
 	}
 
+	// this can fail when aiming at the goal from the side as it won't see the back edge of the goal and thinks it's closer than it really is
 	// return to field if got really close to one of the goals
 	Object* closestGoal = visionResults->getLargestGoal(Side::UNKNOWN, Dir::FRONT);
 
