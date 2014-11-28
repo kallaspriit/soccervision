@@ -8,9 +8,9 @@
 #include <iostream>
 
 Coilgun::Coilgun(AbstractCommunication* com) : com(com), lastKickTime(0.0), lastChargeRequestTime(0.0), timeSinceLastVoltageReading(0.0f), voltage(0.0f), isKickingOnceGotBall(false), kickOnceGotBallMissedFrames(0) {
-	for (float distance = 0.0f; distance < 7.0f; distance += 0.5f) {
+	/*for (float distance = 0.0f; distance < 7.0f; distance += 0.5f) {
 		std::cout << "@ chipkick " << distance << "m - " << getChipKickDurationByDistance(distance) << std::endl;
-	}
+	}*/
 };
 
 Coilgun::~Coilgun() {
