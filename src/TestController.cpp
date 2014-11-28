@@ -141,7 +141,7 @@
 * + should not get stuck near a goal if a ball is in the goal and the next ball is far away
 * - should drive sideways when got ball near side of goal to make the aiming window bigger
 * - fetch-ball-near should switch to fetch-ball-direct if goal is obstructed at small ball distance
-* - should not try to fetch-ball-front (focusing on goal) if the goal and ball distanceX is too large (eg in corner)
+* + should not try to fetch-ball-front (focusing on goal) if the goal and ball distanceX is too large (eg in corner)
 * - fetch a string of balls straight behind each other
 * - fetch a string of balls diagonally (both diagonals)
 * - fetch ball in opposite corner
