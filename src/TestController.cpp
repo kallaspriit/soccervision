@@ -1554,7 +1554,14 @@ void TestController::FetchBallFrontState::step(float dt, Vision::Results* vision
 
 	// ball is close, switch to fetching ball from near state
 	if (ballDistance < nearDistance) {
-		ai->setState("fetch-ball-near");
+		Vision::Obstruction obstruction = ai->getGoalPathObstruction();
+
+		// if obstruction seems very likely then don't bother the fetch-near state where it raises the dribbler and has to lower it again
+		if (obstruction.left && obstruction.right) {
+			ai->setState("fetch-ball-direct");
+		} else {
+			ai->setState("fetch-ball-near");
+		}
 
 		return;
 	}
