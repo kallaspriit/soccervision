@@ -187,7 +187,7 @@ public:
 	class FetchBallNearState : public State {
 
 	public:
-		FetchBallNearState(TestController* ai) : State(ai), enterDistance(-1.0f), enterVelocity(0.0f), smallestForwardSpeed(-1.0f), useChipKick(false), chipKickDistance(0.0f), lastBallAngle(0.0f), ballInWayFrames(0), maxSideSpeed(1.5f),
+		FetchBallNearState(TestController* ai) : State(ai), enterDistance(-1.0f), enterVelocity(0.0f), smallestForwardSpeed(-1.0f), useChipKick(false), switchToAim(false), chipKickDistance(0.0f), lastBallAngle(0.0f), ballInWayFrames(0), maxSideSpeed(1.5f),
 			kP(2.0f), kI(1.5f), kD(0.0015f), pid(kP, kI, kD, 0.016f) {}
 		void onEnter(Robot* robot, Parameters parameters);
 		void onExit(Robot* robot);
@@ -198,6 +198,7 @@ public:
 		float enterVelocity;
 		float smallestForwardSpeed;
 		bool useChipKick;
+		bool switchToAim;
 		float chipKickDistance;
 		float lastBallAngle;
 		float maxSideSpeed;

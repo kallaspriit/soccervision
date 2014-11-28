@@ -2023,6 +2023,7 @@ void TestController::FetchBallNearState::onEnter(Robot* robot, Parameters parame
 	enterDistance = -1.0f;
 	smallestForwardSpeed = -1.0f;
 	useChipKick = false;
+	switchToAim = false;
 	chipKickDistance = 0.0f;
 	lastBallAngle = 0.0f;
 	ballInWayFrames = 0;
@@ -2177,6 +2178,7 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	// reset chip-kick decision if have just kicked as the state might not change going after the next ball
 	if (robot->coilgun->getTimeSinceLastKicked() < 0.032f) {
 		useChipKick = false;
+		switchToAim = false;
 		enterDistance = -1.0f;
 		ballInWayFrames = 0;
 	}
@@ -2195,16 +2197,19 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	int kickStrength = 0;
 
 	// if we detect goal path obstruction very close to the ball then stop, lower dribbler and move to aim state
-	if (ball->distance <= ballVeryNearDistance) {
+	if (ball->distance <= ballVeryNearDistance || switchToAim) {
 		Vision::Obstruction goalPathObstruction = ai->getGoalPathObstruction();
 
 		isGoalPathObstructed = goalPathObstruction.left || goalPathObstruction.right;
 
-		if (isGoalPathObstructed) {
+		if (isGoalPathObstructed || switchToAim) {
+			switchToAim = true;
+
 			// wait for the dribbler to be get lowered
 			if (!robot->dribbler->isLowered()) {
 				robot->stop();
 				robot->dribbler->useNormalLimits();
+				robot->coilgun->cancelKickOnceGotBall();
 
 				isLoweringDribbler = true;
 			} else {
@@ -2354,6 +2359,7 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	ai->dbg("useChipKick", useChipKick);
 	ai->dbg("isBallInWay", isBallInWay);
 	ai->dbg("isLoweringDribbler", isLoweringDribbler);
+	ai->dbg("isSwitchingToAim", switchToAim);
 	ai->dbg("ballInWayCount", ballInWayMetric.ballInWayCount);
 	ai->dbg("shouldAvoidBallInWay", shouldAvoidBallInWay);
 	ai->dbg("ballInWayFrames", ballInWayFrames);
