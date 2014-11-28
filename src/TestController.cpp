@@ -2041,6 +2041,11 @@ void TestController::FetchBallNearState::onExit(Robot* robot) {
 }
 
 void TestController::FetchBallNearState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration, float combinedDuration) {
+	// wait for the possible reverse out of goal task to finish
+	if (robot->hasTasks()) {
+		return;
+	}
+	
 	// goes to aim state when got ball is enabled, otherwise always uses chip kick limits and kicks as soon as dribbler senses ball
 	//bool aimMode = true;
 	bool aimMode = false;
@@ -2088,7 +2093,7 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	Object* closestGoal = visionResults->getLargestGoal(Side::UNKNOWN, Dir::FRONT);
 
 	// back up
-	if (closestGoal != NULL && closestGoal->distance < 0.1f) {
+	if (closestGoal != NULL && closestGoal->distance < 0.1f && ai->wasNearGoalLately()) {
 		robot->setTargetDirFor(-2.0f, 0.0f, 0.0f, 0.5f);
 
 		return;
