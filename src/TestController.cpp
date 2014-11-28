@@ -1419,6 +1419,7 @@ void TestController::FetchBallFrontState::reset(Robot* robot) {
 	startBrakingVelocity = -1.0f;
 	lastBallDistance = -1.0f;
 	lastTargetAngle = 0.0f;
+	ballGoalOffsetAngleTooSmallFrames = 0;
 }
 
 void TestController::FetchBallFrontState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration, float combinedDuration) {
@@ -1487,9 +1488,23 @@ void TestController::FetchBallFrontState::step(float dt, Vision::Results* vision
 		return;
 	}
 
+	float minGoalBallOffsetAngle = 80.0f;
+	int switchToFetchDirectOffsetAngleThreshold = 10;
 	float goalBallOffsetAngle = Math::getOffsetAngleBetween(ball->distanceX, ball->distanceY, goal->distanceX, goal->distanceY);
 	
+	if (goalBallOffsetAngle < minGoalBallOffsetAngle) {
+		ballGoalOffsetAngleTooSmallFrames++;
+	}
+
 	ai->dbg("goalBallOffsetAngle", Math::radToDeg(goalBallOffsetAngle));
+	ai->dbg("switchToFetchDirectOffsetAngleThreshold", switchToFetchDirectOffsetAngleThreshold);
+
+	// switch to fetch-direct if the ball-goal angle is too small thus it's slow and can lose sight of goal
+	if (ballGoalOffsetAngleTooSmallFrames >= switchToFetchDirectOffsetAngleThreshold) {
+		ai->setState("fetch-ball-direct");
+
+		return;
+	}
 
 	// configuration parameters
 	float targetApproachSpeed = 3.5f * ai->speedMultiplier;
