@@ -1487,7 +1487,7 @@ void TestController::FetchBallFrontState::step(float dt, Vision::Results* vision
 		return;
 	}
 
-	float goalBallOffsetAngle = Math::getOffsetAngleBetween(goal->distanceX, goal->distanceY, ball->distanceX, ball->distanceY);
+	float goalBallOffsetAngle = Math::getOffsetAngleBetween(ball->distanceX, ball->distanceY, goal->distanceX, goal->distanceY);
 	
 	ai->dbg("goalBallOffsetAngle", Math::radToDeg(goalBallOffsetAngle));
 
