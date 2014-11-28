@@ -1186,7 +1186,7 @@ Vision::Obstruction Vision::getGoalPathObstruction(float goalDistance) {
 	obstruction.invalidCountLeft = sampleCountLeft - validCountLeft;
 	obstruction.invalidCountRight = sampleCountRight - validCountRight;
 
-	int maxInvalidCount = 40 / (int)(xSteps / 2);
+	int maxInvalidCount = 50 / (int)(xSteps / 2);
 	int manyBlacksCount = 4 * (int)xSteps;
 
 	
