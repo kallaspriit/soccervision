@@ -172,7 +172,7 @@ namespace Config {
 	const int robotDribblerNormalUpperLimit = 31;
 	const int robotDribblerChipKickLowerLimit = 100;
 	const int robotDribblerChipKickUpperLimit = 100;
-	const float robotDribblerMoveDuration = 0.6f;
+	const float robotDribblerMoveDuration = 0.4f;
 	const int robotDribblerLimitMin = 600;
 	const int robotDribblerLimitMax = 2500;
 	const float robotDribblerStabilityDelay = 0.2f;
