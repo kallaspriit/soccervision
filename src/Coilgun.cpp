@@ -41,6 +41,12 @@ void Coilgun::kick(int microseconds) {
 }
 
 void Coilgun::chipKick(float distanceMeters) {
+	if (distanceMeters < 0.75f) {
+		distanceMeters = 0.75f;
+	} else if (distanceMeters > 4.0f) {
+		distanceMeters = 4.0f;
+	}
+
 	int microseconds = getChipKickDurationByDistance(distanceMeters);
 
 	//std::cout << "! Chip-kicking to distance of " << distanceMeters << " meters for " << microseconds << " microseconds" << std::endl;
@@ -85,6 +91,12 @@ float Coilgun::getTimeSinceLastKicked() {
 
 void Coilgun::kickOnceGotBall(int mainDuration, int mainDelay, float chipDistance, int chipDelay) {
 	kickOnceGotBallMissedFrames = 0;
+
+	if (chipDistance < 0.75f) {
+		chipDistance = 0.75f;
+	} else if (chipDistance > 4.0f) {
+		chipDistance = 4.0f;
+	}
 
 	KickParameters kickParameters = KickParameters(mainDuration, mainDelay, chipDistance, chipDelay);
 
