@@ -2184,9 +2184,10 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	}
 
 
+	float ballDistance = ball->getDribblerDistance();
 	Vision::BallInWayMetric ballInWayMetric;
 	float ballVeryNearDistance = 0.05f;
-	float ballNearDistance = 0.4f;
+	float ballNearDistance = 0.3f;
 	float ballFarDistance = 1.0f;
 	bool isBallInWay = false;
 	bool shouldAvoidBallInWay = false;
@@ -2197,13 +2198,13 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	int kickStrength = 0;
 
 	// if we detect goal path obstruction very close to the ball then stop, lower dribbler and move to aim state
-	if (ball->getDribblerDistance() <= ballVeryNearDistance || switchToAim) {
+	if (ballDistance <= ballVeryNearDistance || switchToAim) {
 		Vision::Obstruction goalPathObstruction = ai->getGoalPathObstruction();
 		//Vision::Obstruction goalPathObstruction = visionResults->goalPathObstruction;
 
 		isGoalPathObstructed = goalPathObstruction.left || goalPathObstruction.right;
 
-		std::cout << "@ near " << ball->getDribblerDistance() << ", obstruction left: " << goalPathObstruction.left << ", right: " << goalPathObstruction.right << std::endl;
+		std::cout << "@ near " << ballDistance << ", obstruction left: " << goalPathObstruction.left << ", right: " << goalPathObstruction.right << std::endl;
 
 		if (isGoalPathObstructed || switchToAim) {
 			switchToAim = true;
@@ -2224,7 +2225,7 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	}
 
 	// decide to use chip-kicker if there's a ball in way when the ball is close, add some delay so ball just hit wouldn't get counted
-	if (ball->distance < ballNearDistance) {
+	if (ballDistance < ballNearDistance) {
 		// don't choose to chip kick too soon after last kick
 		if (robot->coilgun->getTimeSinceLastKicked() > 0.2f) {
 			ballInWayMetric = visionResults->getBallInWayMetric(visionResults->front->balls, goal->y + goal->height / 2, ball);
@@ -2259,9 +2260,9 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	// store ball first sighting distance, don't do it just after having kicked
 	if (robot->coilgun->getTimeSinceLastKicked() > 0.1f) {
 		if (enterDistance == -1.0f) {
-			enterDistance = ball->distance;
+			enterDistance = ballDistance;
 		} else if (
-			ball->distance > enterDistance + 0.2f
+			ballDistance > enterDistance + 0.2f
 			&& stateDuration >= 0.5f
 		) {
 			// ball has gotten further than when started, probably messed it up, switch to faster fetch
@@ -2297,7 +2298,6 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	}
 
 	// configuration parameters
-	float ballDistance = ball->getDribblerDistance();
 	float nearDistance = 0.35f;
 	float maxSideSpeedDistance = 0.3f;
 	//float maxSideSpeedBallAngle = 45.0f;
@@ -2312,7 +2312,7 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	//float sidePower = Math::map(Math::abs(ball->distanceX), 0.0f, maxSideSpeedDistance, 0.0f, 1.0f);
 	float sidePower = Math::map(Math::abs(Math::radToDeg(ball->angle)), 0.0f, maxSideSpeedBallAngle, 0.0f, 1.0f);
 
-	float maxSideSpeed = Math::map(ball->distance, 0.0f, 0.3f, 0.5f, 1.5f);
+	float maxSideSpeed = Math::map(ballDistance, 0.0f, 0.3f, 0.5f, 1.5f);
 	float sideSpeed = Math::sign(ball->distanceX) * Math::min(sideP * sidePower, maxSideSpeed);
 
 	// PID solution
@@ -2340,7 +2340,7 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	float forwardSpeed = approachP * (1.0f - sidePower);
 
 	// don't move forwards if very close to the ball and the ball is quite far sideways
-	if (ball->distanceY < 0.2f && Math::abs(ball->distanceX) > 0.03f) {
+	if (ballDistance < 0.05f && Math::abs(ball->distanceX) > 0.03f) {
 		forwardSpeed = 0.0f;
 	}
 
