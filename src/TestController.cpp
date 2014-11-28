@@ -2301,7 +2301,6 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	//float maxSideSpeedBallAngle = 45.0f;
 	float maxSideSpeedBallAngle = 35.0f;
 	float ballMovedAwayDistance = 0.2f;
-	float sideP = 0.85f;
 	//float maxSideSpeed = 1.5f;
 	//float approachP = 1.0f;
 	float lookAtGoalP = Config::lookAtP / 3.0f / 2.0f; // spend less effort on focusing on the goal, improves getting the ball
@@ -2310,8 +2309,9 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	//float sidePower = Math::map(Math::abs(ball->distanceX), 0.0f, maxSideSpeedDistance, 0.0f, 1.0f);
 	float sidePower = Math::map(Math::abs(Math::radToDeg(ball->angle)), 0.0f, maxSideSpeedBallAngle, 0.0f, 1.0f);
 
-	float maxSideSpeed = Math::map(ballDistance, 0.0f, 0.5f, 0.25f, 1.5f);
-	float sideSpeed = Math::sign(ball->distanceX) * Math::min(sideP * sidePower, maxSideSpeed);
+	// reduce side P close to the ball
+	float sideP = Math::map(ballDistance, 0.0f, 0.5f, 0.25f, 0.85f);
+	float sideSpeed = Math::sign(ball->distanceX) * sideP * sidePower;
 
 	// PID solution
 	/*float paramP = Util::toFloat(ai->parameters[0]);
@@ -2351,6 +2351,7 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 
 	ai->dbg("ballDistance", ballDistance);
 	ai->dbg("forwardSpeed", forwardSpeed);
+	ai->dbg("sidePower", sidePower);
 	ai->dbg("sideSpeed", sideSpeed);
 	ai->dbg("enterVelocity", enterVelocity);
 	ai->dbg("enterDistance", enterDistance);
