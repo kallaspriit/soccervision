@@ -1123,7 +1123,7 @@ Vision::Obstruction Vision::getGoalPathObstruction(float goalDistance) {
 							canvas.drawMarker(pos.x, pos.y, 255, 0, 0);
 						}
 
-						running = false;
+						//running = false;
 
 						break;
 					} else {
@@ -1182,9 +1182,9 @@ Vision::Obstruction Vision::getGoalPathObstruction(float goalDistance) {
 			}
 		}
 
-		if (!running) {
+		/*if (!running) {
 			break;
-		}
+		}*/
 	}
 
 	// each sample is 5 centimeters apart
