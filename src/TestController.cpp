@@ -140,8 +140,9 @@
 * + should be able to see a ball from one corner to another from both cameras
 * + should not get stuck near a goal if a ball is in the goal and the next ball is far away
 * + should drive sideways when got ball near side of goal to make the aiming window bigger
-* - should drive sideways and hit goal when got opponent in way at close distance
-* - should drive sideways and hit goal when got opponent in way at large distance
+* - should drive sideways and score when got opponent in way at close distance
+* - should drive sideways and score when got opponent in way at large distance
+* - should be able to steal the ball from opponents jaws, drive sideways and score
 * - fetch-ball-near should switch to fetch-ball-direct if goal is obstructed at small ball distance
 * + should not try to fetch-ball-front (focusing on goal) if the goal and ball distanceX is too large (eg in corner)
 * - fetch a string of balls straight behind each other
@@ -1251,8 +1252,18 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 
 		if (!ball->behind) {
 			// switch to fetching ball is ball found in front
-			if (goal != NULL && !useFetchBallDirectOnceFound) {
-				ai->setState("fetch-ball-front");
+			if (goal != NULL) {
+				if (ball->getDribblerDistance() < 0.05f) {
+					if (robot->dribbler->isRaised()) {
+						ai->setState("fetch-ball-near");
+					} else {
+						ai->setState("fetch-ball-direct");
+					}
+				} else if (!useFetchBallDirectOnceFound) {
+					ai->setState("fetch-ball-front");
+				} else {
+					ai->setState("fetch-ball-direct");
+				}
 			} else {
 				ai->setState("fetch-ball-direct");
 			}
