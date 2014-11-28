@@ -1189,11 +1189,9 @@ Vision::Obstruction Vision::getGoalPathObstruction(float goalDistance) {
 	int maxInvalidCount = 50 / (int)(xSteps / 2);
 	int manyBlacksCount = 4 * (int)xSteps;
 
-	
-
 	// if there's lots of black matches, were probably near the line and possibly on the side of the goal so reduce threshold
 	if (blackColorCount >= manyBlacksCount) {
-		maxInvalidCount /= 2;
+		maxInvalidCount /= 4;
 	}
 
 	//std::cout << "@ blacks: " << blackColorCount << ", max invalid: " << maxInvalidCount << std::endl;
