@@ -32,7 +32,7 @@ public:
 	void kick(int microseconds = Config::robotDefaultKickStrength);
 	void chipKick(float distance);
 	void kickOnceGotBall(int mainDuration, int mainDelay, float chipDistance, int chipDelay);
-	void cancelKickOnceGotBall();
+	void cancelKickOnceGotBall(bool force = false);
 	bool willKickOnceGotBall() { return isKickingOnceGotBall;  }
 	void charge();
 	void discharge();

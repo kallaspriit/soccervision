@@ -109,8 +109,8 @@ void Coilgun::kickOnceGotBall(int mainDuration, int mainDelay, float chipDistanc
 	isKickingOnceGotBall = true;
 }
 
-void Coilgun::cancelKickOnceGotBall() {
-	if (!isKickingOnceGotBall) {
+void Coilgun::cancelKickOnceGotBall(bool force) {
+	if (!isKickingOnceGotBall && force != true) {
 		return;
 	}
 

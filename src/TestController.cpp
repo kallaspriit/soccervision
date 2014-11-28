@@ -1253,6 +1253,7 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 		if (!ball->behind) {
 			// switch to fetching ball is ball found in front
 			if (goal != NULL) {
+				// try not to trigger changing dribbler position if the ball is very close
 				if (ball->getDribblerDistance() < 0.05f) {
 					if (robot->dribbler->isRaised()) {
 						ai->setState("fetch-ball-near");
@@ -1626,6 +1627,7 @@ void TestController::FetchBallDirectState::onEnter(Robot* robot, Parameters para
 	forwardSpeed = robot->getVelocity();
 	//nearLineFrames = 0;
 	//nearLine = false;
+	robot->coilgun->cancelKickOnceGotBall(true);
 }
 
 void TestController::FetchBallDirectState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration, float combinedDuration) {
@@ -2050,7 +2052,7 @@ void TestController::FetchBallNearState::onEnter(Robot* robot, Parameters parame
 }
 
 void TestController::FetchBallNearState::onExit(Robot* robot) {
-	robot->coilgun->cancelKickOnceGotBall();
+	robot->coilgun->cancelKickOnceGotBall(true);
 	robot->dribbler->useNormalLimits();
 }
 
