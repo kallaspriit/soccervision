@@ -139,7 +139,8 @@
 * + should find a ball quickly when roaming around when suddenly becomes visible (remove foot etc)
 * + should be able to see a ball from one corner to another from both cameras
 * + should not get stuck near a goal if a ball is in the goal and the next ball is far away
-* - should drive sideways when got ball near side of goal to make the aiming window bigger
+* + should drive sideways when got ball near side of goal to make the aiming window bigger
+* - should drive sideways when got opponent in way at close distance
 * - fetch-ball-near should switch to fetch-ball-direct if goal is obstructed at small ball distance
 * + should not try to fetch-ball-front (focusing on goal) if the goal and ball distanceX is too large (eg in corner)
 * - fetch a string of balls straight behind each other
@@ -150,17 +151,17 @@
 * - fetch ball on the line when goal not visible (do not push out)
 * - fetch balls from corners (near own goal and opponents), should back out
 * - fetch ball when opponent is between the ball and the goal
-* - test ball in way at large distance from opponents goal
-* - test ball in way at small distance from opponents goal
-* - test kicking into a very small goal
-* - test returning to field at all sides
-* - test can detect that robot is out from front
-* - test can detect that robot is out from rear
-* - test can detect balls are out
-* - test can detect balls are in goal
-* - test should not think it's got the ball after kicking
-* - test sees goals from various anges and distances
-* - test does not see goal in invalid places
+* - should kick over ball in way at large distance from opponents goal
+* - should kick over in way at small distance from opponents goal
+* - should be able to kick into a very small goal, including coming from fetch-ball-near state
+* - should be able to return to field at all sides
+* - should detect that robot is out from front
+* - should detect that robot is out from rear
+* - should detect balls are out
+* - should detect balls are in goal
+* - should not think it's got the ball after kicking
+* - should see goals from various anges and distances
+* - should not see goal in invalid places
 */
 
 TestController::TestController(Robot* robot, AbstractCommunication* com) : BaseAI(robot, com), targetSide(Side::BLUE), manualSpeedX(0.0f), manualSpeedY(0.0f), manualOmega(0.0f), manualDribblerSpeed(0), manualKickStrength(0), blueGoalDistance(0.0f), yellowGoalDistance(0.0f), lastCommandTime(-1.0), lastBallTime(-1.0), lastNearLineTime(-1.0), lastNearGoalTime(-1.0), lastInCornerTime(-1.0), lastGoalObstructedTime(-1.0), lastTargetGoalAngle(0.0f), lastBall(NULL), lastTurnAroundTime(-1.0), lastClosestGoalDistance(-1.0f), lastTargetGoalDistance(-1.0f), framesRobotOutFront(0), framesRobotOutRear(0), isRobotOutFront(false), isRobotOutRear(false), isNearLine(false), isInCorner(false), isBallInWay(false), isAvoidingBallInWay(false), inCornerFrames(0), nearLineFrames(0), nearGoalFrames(0), visibleBallCount(0), visionResults(NULL) {
