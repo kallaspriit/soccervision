@@ -122,9 +122,9 @@ void Coilgun::kickOnceGotBall(int mainDuration, int mainDelay, float chipDistanc
 }
 
 void Coilgun::cancelKickOnceGotBall(bool force) {
-	/*if (!isKickingOnceGotBall && force != true) {
+	if (!isKickingOnceGotBall && force != true) {
 		return;
-	}*/
+	}
 	
 	//std::cout << "! Cancelling kicking once got the ball" << std::endl;
 
