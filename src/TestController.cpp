@@ -2215,9 +2215,9 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 				isLoweringDribbler = true;
 			} else {
 				ai->setState("fetch-ball-direct");
-
-				return;
 			}
+
+			return;
 		}
 	}
 
