@@ -2311,7 +2311,7 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	float sidePower = Math::map(Math::abs(Math::radToDeg(ball->angle)), 0.0f, maxSideSpeedBallAngle, 0.0f, 1.0f);
 
 	// reduce side P close to the ball, consider using PID here
-	float sideP = Math::map(ballDistance, 0.0f, 0.5f, 0.35f, 0.85f);
+	float sideP = Math::map(ballDistance, 0.0f, 0.5f, 0.25f, 0.85f);
 	float sideSpeed = Math::sign(ball->distanceX) * sideP * sidePower;
 
 	// PID solution
