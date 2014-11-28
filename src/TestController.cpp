@@ -2856,7 +2856,7 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 		}
 	} else {
 		robot->setTargetDir(forwardSpeed, sideSpeed);
-		robot->lookAt(goal, Config::lookAtP, true);
+		robot->lookAt(goal, Config::lookAtP * 2.0f, true);
 	}
 
 	ai->dbg("performKick", performKick);
