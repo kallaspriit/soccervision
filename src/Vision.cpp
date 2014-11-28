@@ -1007,9 +1007,11 @@ Vision::EdgeDistanceMetric Vision::getEdgeDistanceMetric(int x, int y, int width
 	int centerSampleCount = 0;
 	int centerAvgY = -1;
 	EdgeDistance centerDistance;
-	bool sawValidColorColor = false;
+	bool sawValidColorColor;
 
 	for (int senseX = x; senseX <= x + width; senseX++) {
+		sawValidColorColor = false;
+
 		//for (int senseY = y + height; senseY >= y; senseY--) {
 		for (int senseY = y + height / 3; senseY < Config::cameraHeight; senseY++) {
 			if (senseX < x + halfWidth - centerWidth / 2 || senseX > x + halfWidth + centerWidth / 2) {
