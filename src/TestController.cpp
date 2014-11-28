@@ -2403,6 +2403,7 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	robot->lookAt(goal, Config::lookAtP, false);
 
 	ai->dbg("forwardSpeed", forwardSpeed);
+	ai->dbg("sideP", sideP);
 	ai->dbg("sidePower", sidePower);
 	ai->dbg("sideSpeed", sideSpeed);
 	ai->dbg("enterVelocity", enterVelocity);
