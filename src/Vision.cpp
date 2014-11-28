@@ -1082,6 +1082,7 @@ Vision::Obstruction Vision::getGoalPathObstruction(float goalDistance) {
 	int blackColorCount = 0;
 	float maxDistanceY = startDistance;
 	bool running = true;
+	bool lastColorBall = false;
 	bool isLeft;
 
 	// TODO make sure finds target side color in the end
@@ -1107,6 +1108,12 @@ Vision::Obstruction Vision::getGoalPathObstruction(float goalDistance) {
 			color = getColorAt(pos.x, pos.y);
 
 			if (color != NULL) {
+				if (strcmp(color->name, "ball") == 0) {
+					lastColorBall = true;
+				} else {
+					lastColorBall = false;
+				}
+
 				if (strcmp(color->name, "blue-goal") == 0 || strcmp(color->name, "yellow-goal") == 0) {
 					goalColorCount++;
 
@@ -1156,15 +1163,21 @@ Vision::Obstruction Vision::getGoalPathObstruction(float goalDistance) {
 					}
 				}
 			} else {
-				if (isLeft) {
-					sampleCountLeft++;
-				}
-				else {
-					sampleCountRight++;
-				}
+				// don't count holes if the last color was ball as they're probably on the ball
+				if (!lastColorBall) {
+					if (isLeft) {
+						sampleCountLeft++;
+					} else {
+						sampleCountRight++;
+					}
 
-				if (debug) {
-					canvas.drawMarker(pos.x, pos.y, 128, 0, 0);
+					if (debug) {
+						canvas.drawMarker(pos.x, pos.y, 128, 0, 0);
+					}
+				} else {
+					if (debug) {
+						canvas.drawMarker(pos.x, pos.y, 0, 0, 128);
+					}
 				}
 			}
 		}
