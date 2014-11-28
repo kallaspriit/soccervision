@@ -1273,6 +1273,12 @@ Dash.UI.prototype.showControllerState = function(state) {
 	if (state.obstruction.right) {
 		$('#obstruction-indicator-right').addClass('active');
 	}
+
+	if (state.isKickingOnceGotBall) {
+		$('#coilgun-indicator').addClass('active');
+	} else {
+		$('#coilgun-indicator').removeClass('active');
+	}
 };
 
 Dash.UI.prototype.rebuild = function(callback) {

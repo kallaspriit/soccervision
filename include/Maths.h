@@ -116,7 +116,23 @@ static float distanceBetween(float x1, float y1, float x2, float y2) {
 }
 
 static float getOffsetAngleBetween(float x1, float y1, float x2, float y2) {
-	return 0.0f; // TODO
+	float a = sqrt(pow(x2, 2.0f) + pow(y2, 2.0f));
+	float b = sqrt(pow(x1, 2.0f) + pow(y1, 2.0f));
+	float c = sqrt(pow(x2 - x1, 2.0f) + pow(y2 - y1, 2.0f));
+
+	if (a == 0.0f || b == 0.0f || c == 0.0f) {
+		return 0.0f;
+	}
+
+	float inside = (pow(a, 2.0f) + pow(b, 2.0f) - pow(c, 2.0f)) / (2.0f * a * b);
+
+	if (inside > 1.0f) {
+		inside = 1.0f;
+	} else if (inside < -1.0f) {
+		inside = -1.0f;
+	}
+
+	return acos(inside);
 }
 
 static float standardDeviation(std::vector<float> elements, float& mean) {

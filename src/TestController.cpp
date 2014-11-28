@@ -132,14 +132,14 @@
 * + fetch ball behind direct at far distance
 * + fetch ball behind direct at small distance
 * + fetch ball behind from center edge of the field when in front of opponents goal facing goal directly
-* - fetch ball behind from opposite corner should not trigger return to field
+* + fetch ball behind from opposite corner should not trigger return to field
 * + fetch ball very close to the opponent goal (on the line) at the center
 * + fetch ball close to opponents goal corners
 * + should roam the field between white lines if no balls are visible
 * + should find a ball quickly when roaming around when suddenly becomes visible (remove foot etc)
-* - should be able to see a ball from one corner to another from both cameras
-* - should not get stuck near a goal if a ball is in the goal and the next ball is far away
-* - should drive sideways when got ball near side of goal
+* + should be able to see a ball from one corner to another from both cameras
+* + should not get stuck near a goal if a ball is in the goal and the next ball is far away
+* - should drive sideways when got ball near side of goal to make the aiming window bigger
 * - fetch-ball-near should switch to fetch-ball-direct if goal is obstructed at small ball distance
 * - should not try to fetch-ball-front (focusing on goal) if the goal and ball distanceX is too large (eg in corner)
 * - fetch a string of balls straight behind each other
@@ -747,6 +747,7 @@ std::string TestController::getJSON() {
 	stream << "\"visibleBallCount\": " << visibleBallCount << ",";
 	stream << "\"wasInCornerLately\": " << (wasInCornerLately() ? "\"true: " + Util::toString(Util::duration(lastInCornerTime)) + "\"" : "false") << ",";
 	stream << "\"wasInGoalLately\": " << (wasNearGoalLately() ? "\"true: " + Util::toString(Util::duration(lastNearGoalTime)) + "\"" : "false") << ",";
+	stream << "\"isKickingOnceGotBall\": " << (robot->coilgun->willKickOnceGotBall() ? "true" : "false") << ",";
 	stream << "\"isNearLine\": " << (isNearLine ? "true" : "false") << ",";
 	stream << "\"isBallInWay\": " << (isBallInWay ? "true" : "false") << ",";
 	stream << "\"isAvoidingBallInWay\": " << (isAvoidingBallInWay ? "true" : "false") << ",";

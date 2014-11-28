@@ -33,6 +33,7 @@ public:
 	void chipKick(float distance);
 	void kickOnceGotBall(int mainDuration, int mainDelay, float chipDistance, int chipDelay);
 	void cancelKickOnceGotBall();
+	bool willKickOnceGotBall() { return isKickingOnceGotBall;  }
 	void charge();
 	void discharge();
 	bool isReady() { return false; } // TODO New communication
