@@ -2226,6 +2226,10 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	ai->dbg("isSwitchingToAim", switchToAim);
 
 	if (switchToAim) {
+		if (robot->dribbler->gotBall()) {
+			ai->setState("aim");
+		}
+
 		return;
 	}
 
