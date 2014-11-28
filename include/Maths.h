@@ -124,7 +124,7 @@ static float getOffsetAngleBetween(float x1, float y1, float x2, float y2) {
 		return 0.0f;
 	}
 
-	float inside = (pow(a, 2.0f) + pow(b, 2.0f) - pow(c, 2.0f)) / (2.0f * a * b);
+	float inside = (pow(b, 2.0f) + pow(c, 2.0f) - pow(a, 2.0f)) / (2.0f * b * c);
 
 	if (inside > 1.0f) {
 		inside = 1.0f;
