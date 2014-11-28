@@ -211,9 +211,9 @@ namespace Config {
 	// how much should the centerline be inside the goal to kick ball
 	// 0.5 means that the camera centerline needs to be in the center 50% of the goal, 0.75 in the 75% so smaller means more accurate but takes longer
 	//const float goalKickThreshold = 0.25f;
-	const float goalKickThreshold = 0.65f;
+	const float goalKickThreshold = 0.70f;
 	//const int goalKickValidFrames = 4;
-	const int goalKickValidFrames = 1;
+	const int goalKickValidFrames = 3;
 
 	// particle filter robot localizer parameters
 	const int robotLocalizerParticleCount = 1000;
