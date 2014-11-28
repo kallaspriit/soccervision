@@ -1068,7 +1068,6 @@ Vision::Obstruction Vision::getGoalPathObstruction(float goalDistance) {
 	float endDistance = goalDistance + 0.2f;
 	int stopGoalColorCount = 4; // stop searching any further if found this many goal colors
 	float goalPathObstructedThreshold = 0.4f;
-	int invalidSpreeThreshold = 10;
 
 	float xDistance, yDistance;
 	bool debug = canvas.data != NULL;
@@ -1228,14 +1227,17 @@ Vision::Obstruction Vision::getGoalPathObstruction(float goalDistance) {
 		invalidSpreeThreshold /= 2;
 	}*/
 
-	//obstruction.invalidCountLeft = sampleCountLeft - validCountLeft;
-	//obstruction.invalidCountRight = sampleCountRight - validCountRight;
+	
+
+	int invalidSpreeThreshold = 5;
+
 	obstruction.invalidCountLeft = longestInvalidSpreeLeft;
 	obstruction.invalidCountRight = longestInvalidSpreeRight;
 	obstruction.left = obstruction.invalidCountLeft > invalidSpreeThreshold;
 	obstruction.right = obstruction.invalidCountRight > invalidSpreeThreshold;
 
-	
+	//obstruction.invalidCountLeft = sampleCountLeft - validCountLeft;
+	//obstruction.invalidCountRight = sampleCountRight - validCountRight;
 
 	//std::cout << "@ blacks: " << blackColorCount << ", max invalid: " << maxInvalidCount << std::endl;
 
