@@ -213,7 +213,7 @@ namespace Config {
 	//const float goalKickThreshold = 0.25f;
 	const float goalKickThreshold = 0.60f;
 	//const int goalKickValidFrames = 4;
-	const int goalKickValidFrames = 3;
+	const int goalKickValidFrames = 20;
 
 	// particle filter robot localizer parameters
 	const int robotLocalizerParticleCount = 1000;
