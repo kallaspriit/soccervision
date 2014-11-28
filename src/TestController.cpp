@@ -2212,6 +2212,7 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 			// wait for the dribbler to be get lowered
 			if (!robot->dribbler->isLowered()) {
 				robot->stop();
+				robot->lookAt(ball);
 				robot->dribbler->useNormalLimits();
 				robot->coilgun->cancelKickOnceGotBall();
 
