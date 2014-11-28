@@ -1229,7 +1229,7 @@ Vision::Obstruction Vision::getGoalPathObstruction(float goalDistance) {
 
 	
 
-	int invalidSpreeThreshold = 5;
+	int invalidSpreeThreshold = 10;
 
 	obstruction.invalidCountLeft = longestInvalidSpreeLeft;
 	obstruction.invalidCountRight = longestInvalidSpreeRight;
