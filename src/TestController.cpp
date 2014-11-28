@@ -1493,9 +1493,9 @@ void TestController::FetchBallFrontState::step(float dt, Vision::Results* vision
 	float goalBallOffsetAngle = Math::getOffsetAngleBetween(ball->distanceX, ball->distanceY, goal->distanceX, goal->distanceY);
 	
 	if (Math::radToDeg(goalBallOffsetAngle) < minGoalBallOffsetAngle) {
-		ballGoalOffsetAngleTooSmallFrames = Math::min(ballGoalOffsetAngleTooSmallFrames + 1, switchToFetchDirectOffsetAngleThreshold);
+		ballGoalOffsetAngleTooSmallFrames = (int)Math::min((float)ballGoalOffsetAngleTooSmallFrames + 1.0f, (float)switchToFetchDirectOffsetAngleThreshold);
 	} else {
-		ballGoalOffsetAngleTooSmallFrames = Math::max(ballGoalOffsetAngleTooSmallFrames - 1, 0);
+		ballGoalOffsetAngleTooSmallFrames = (int)Math::max((float)ballGoalOffsetAngleTooSmallFrames - 1.0f, 0.0f);
 	}
 
 	ai->dbg("goalBallOffsetAngle", Math::radToDeg(goalBallOffsetAngle));
