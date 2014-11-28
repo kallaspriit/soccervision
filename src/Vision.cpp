@@ -1066,6 +1066,8 @@ Vision::Obstruction Vision::getGoalPathObstruction(float goalDistance) {
 	bool debug = canvas.data != NULL;
 	Blobber::Color* color;
 	CameraTranslator::CameraPosition pos;
+	int lastSenseX = 0;
+	int lastSenseY = 0;
 	int sampleCountLeft = 0;
 	int sampleCountRight = 0;
 	int validCountLeft = 0;
@@ -1088,6 +1090,14 @@ Vision::Obstruction Vision::getGoalPathObstruction(float goalDistance) {
 			
 			// find corridor positions
 			pos = cameraTranslator->getCameraPosition(xDistance, yDistance);
+
+			if (pos.x == lastSenseX && pos.y == lastSenseY) {
+				continue;
+			}
+
+			lastSenseX = pos.x;
+			lastSenseY = pos.y;
+
 			color = getColorAt(pos.x, pos.y);
 
 			if (color != NULL) {
