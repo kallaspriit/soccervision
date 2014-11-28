@@ -1071,6 +1071,7 @@ Vision::Obstruction Vision::getGoalPathObstruction(float goalDistance) {
 	int validCountLeft = 0;
 	int validCountRight = 0;
 	int goalColorCount = 0;
+	int blackColorCount = 0;
 	float maxDistanceY = startDistance;
 	bool running = true;
 	bool isLeft;
@@ -1109,6 +1110,8 @@ Vision::Obstruction Vision::getGoalPathObstruction(float goalDistance) {
 					}
 
 					continue;
+				} else if (strcmp(color->name, "black")) {
+					blackColorCount++;
 				}
 
 				if (find(goalObstructedValidColors.begin(), goalObstructedValidColors.end(), std::string(color->name)) != goalObstructedValidColors.end()) {
@@ -1168,6 +1171,11 @@ Vision::Obstruction Vision::getGoalPathObstruction(float goalDistance) {
 	obstruction.invalidCountRight = sampleCountRight - validCountRight;
 
 	int maxInvalidCount = 60 / (int)xSteps;
+
+	// if there's lots of black matches, were probably near the line and possibly on the side of the goal so reduce threshold
+	if (blackColorCount >= 8) {
+		maxInvalidCount /= 4;
+	}
 
 	if (obstruction.invalidCountLeft > maxInvalidCount || obstruction.invalidCountRight > maxInvalidCount) {
 		if (obstruction.invalidCountLeft > maxInvalidCount && obstruction.invalidCountRight > maxInvalidCount) {
