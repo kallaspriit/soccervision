@@ -2063,6 +2063,7 @@ void TestController::FetchBallNearState::onEnter(Robot* robot, Parameters parame
 	pid.setOutputLimits(-maxSideSpeed, maxSideSpeed);
 	pid.setMode(AUTO_MODE);
 	pid.setBias(0.0f);
+	pid.setTunings(kP, kI, kD);
 	pid.reset();
 }
 
@@ -2360,7 +2361,7 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	//float sideP = Math::map(ballDistance, 0.0f, 0.5f, 0.3f, 0.85f);
 
 	// PID solution
-	float paramP = Util::toFloat(ai->parameters[0]);
+	/*float paramP = Util::toFloat(ai->parameters[0]);
 	float paramI = Util::toFloat(ai->parameters[1]);
 	float paramD = Util::toFloat(ai->parameters[2]);
 
@@ -2369,7 +2370,7 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 
 		pid.setTunings(paramP, paramI, paramD);
 		pid.reset();
-	}
+	}*/
 
 	// pid-based
 	pid.setSetPoint(0.0f);
