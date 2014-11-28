@@ -2204,8 +2204,6 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 
 		isGoalPathObstructed = goalPathObstruction.left || goalPathObstruction.right;
 
-		std::cout << "@ near " << ballDistance << ", obstruction left: " << goalPathObstruction.left << ", right: " << goalPathObstruction.right << std::endl;
-
 		if (isGoalPathObstructed || switchToAim) {
 			switchToAim = true;
 
@@ -2312,7 +2310,7 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	//float sidePower = Math::map(Math::abs(ball->distanceX), 0.0f, maxSideSpeedDistance, 0.0f, 1.0f);
 	float sidePower = Math::map(Math::abs(Math::radToDeg(ball->angle)), 0.0f, maxSideSpeedBallAngle, 0.0f, 1.0f);
 
-	float maxSideSpeed = Math::map(ballDistance, 0.0f, 0.3f, 0.5f, 1.5f);
+	float maxSideSpeed = Math::map(ballDistance, 0.0f, 0.5f, 0.25f, 1.5f);
 	float sideSpeed = Math::sign(ball->distanceX) * Math::min(sideP * sidePower, maxSideSpeed);
 
 	// PID solution
