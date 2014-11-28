@@ -2198,7 +2198,8 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 
 	// if we detect goal path obstruction very close to the ball then stop, lower dribbler and move to aim state
 	if (ball->distance <= ballVeryNearDistance || switchToAim) {
-		Vision::Obstruction goalPathObstruction = ai->getGoalPathObstruction();
+		//Vision::Obstruction goalPathObstruction = ai->getGoalPathObstruction();
+		Vision::Obstruction goalPathObstruction = visionResults->goalPathObstruction;
 
 		isGoalPathObstructed = goalPathObstruction.left || goalPathObstruction.right;
 
@@ -2213,7 +2214,7 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 
 				isLoweringDribbler = true;
 			} else {
-				ai->setState("aim");
+				ai->setState("fetch-ball-direct");
 
 				return;
 			}
