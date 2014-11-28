@@ -2180,14 +2180,39 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 		ballInWayFrames = 0;
 	}
 
+
 	Vision::BallInWayMetric ballInWayMetric;
+	float ballVeryNearDistance = 0.05f;
 	float ballNearDistance = 0.4f;
 	float ballFarDistance = 1.0f;
 	bool isBallInWay = false;
 	bool shouldAvoidBallInWay = false;
+	bool isGoalPathObstructed = false;
+	bool isLoweringDribbler = false;
 	//int ballInWayFramesThreshold = 3;
 	int ballInWayFramesThreshold = 1;
 	int kickStrength = 0;
+
+	// if we detect goal path obstruction very close to the ball then stop, lower dribbler and move to aim state
+	if (ball->distance <= ballVeryNearDistance) {
+		Vision::Obstruction goalPathObstruction = ai->getGoalPathObstruction();
+
+		isGoalPathObstructed = goalPathObstruction.left || goalPathObstruction.right;
+
+		if (isGoalPathObstructed) {
+			// wait for the dribbler to be get lowered
+			if (!robot->dribbler->isLowered()) {
+				robot->stop();
+				robot->dribbler->useNormalLimits();
+
+				isLoweringDribbler = true;
+			} else {
+				ai->setState("aim");
+
+				return;
+			}
+		}
+	}
 
 	// decide to use chip-kicker if there's a ball in way when the ball is close, add some delay so ball just hit wouldn't get counted
 	if (ball->distance < ballNearDistance) {
@@ -2327,6 +2352,7 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	ai->dbg("ball->distanceX", ball->distanceX);
 	ai->dbg("useChipKick", useChipKick);
 	ai->dbg("isBallInWay", isBallInWay);
+	ai->dbg("isLoweringDribbler", isLoweringDribbler);
 	ai->dbg("ballInWayCount", ballInWayMetric.ballInWayCount);
 	ai->dbg("shouldAvoidBallInWay", shouldAvoidBallInWay);
 	ai->dbg("ballInWayFrames", ballInWayFrames);
