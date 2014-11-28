@@ -2187,7 +2187,7 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 
 	float ballDistance = ball->getDribblerDistance();
 	Vision::BallInWayMetric ballInWayMetric;
-	float ballVeryNearDistance = 0.05f;
+	float ballVeryNearDistance = 0.1f;
 	float ballNearDistance = 0.3f;
 	float ballFarDistance = 1.0f;
 	bool isBallInWay = false;
@@ -2218,9 +2218,15 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 			} else {
 				ai->setState("fetch-ball-direct");
 			}
-
-			return;
 		}
+	}
+
+	ai->dbg("ballDistance", ballDistance);
+	ai->dbg("isLoweringDribbler", isLoweringDribbler);
+	ai->dbg("isSwitchingToAim", switchToAim);
+
+	if (switchToAim) {
+		return;
 	}
 
 	// decide to use chip-kicker if there's a ball in way when the ball is close, add some delay so ball just hit wouldn't get counted
@@ -2351,7 +2357,6 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	//robot->lookAt(goal, lookAtGoalP);
 	robot->lookAt(goal, Config::lookAtP, false);
 
-	ai->dbg("ballDistance", ballDistance);
 	ai->dbg("forwardSpeed", forwardSpeed);
 	ai->dbg("sidePower", sidePower);
 	ai->dbg("sideSpeed", sideSpeed);
@@ -2362,8 +2367,6 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	ai->dbg("ball->distanceX", ball->distanceX);
 	ai->dbg("useChipKick", useChipKick);
 	ai->dbg("isBallInWay", isBallInWay);
-	ai->dbg("isLoweringDribbler", isLoweringDribbler);
-	ai->dbg("isSwitchingToAim", switchToAim);
 	ai->dbg("ballInWayCount", ballInWayMetric.ballInWayCount);
 	ai->dbg("shouldAvoidBallInWay", shouldAvoidBallInWay);
 	ai->dbg("ballInWayFrames", ballInWayFrames);
