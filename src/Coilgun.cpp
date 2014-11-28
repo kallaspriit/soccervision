@@ -8,7 +8,9 @@
 #include <iostream>
 
 Coilgun::Coilgun(AbstractCommunication* com) : com(com), lastKickTime(0.0), lastChargeRequestTime(0.0), timeSinceLastVoltageReading(0.0f), voltage(0.0f), isKickingOnceGotBall(false), kickOnceGotBallMissedFrames(0) {
-
+	for (float distance = 0.0f; distance < 7.0f; distance += 0.5f) {
+		std::cout << "@ chipkick " << distance << "m - " << getChipKickDurationByDistance(distance) << std::endl;
+	}
 };
 
 Coilgun::~Coilgun() {
@@ -74,13 +76,13 @@ int Coilgun::getChipKickDurationByDistance(float distanceMeters) {
 		+ e);*/
 
 	// 300V: y = 3.405E-5x^3 - 0.028x ^ 2 + 16.707x + 1193.148
-	float a = 3.405E-5f;
+	float a = 0.00003405f;
 	float b = 0.028f;
 	float c = 16.707f;
 	float d = 1193.148f;
 
-	return (int)(Math::pow(a * distanceCm, 3)
-		- Math::pow(b * distanceCm, 2)
+	return (int)(a * Math::pow(distanceCm, 3)
+		- b * Math::pow(distanceCm, 2)
 		+ c * distanceCm
 		+ d);
 }
