@@ -1068,6 +1068,7 @@ Vision::Obstruction Vision::getGoalPathObstruction(float goalDistance) {
 	float endDistance = goalDistance + 0.2f;
 	int stopGoalColorCount = 4; // stop searching any further if found this many goal colors
 	float goalPathObstructedThreshold = 0.4f;
+	int invalidSpreeThreshold = 10;
 
 	float xDistance, yDistance;
 	bool debug = canvas.data != NULL;
@@ -1075,20 +1076,29 @@ Vision::Obstruction Vision::getGoalPathObstruction(float goalDistance) {
 	CameraTranslator::CameraPosition pos;
 	int lastSenseX = 0;
 	int lastSenseY = 0;
-	int sampleCountLeft = 0;
-	int sampleCountRight = 0;
 	int validCountLeft = 0;
 	int validCountRight = 0;
+	int sampleCountLeft = 0;
+	int sampleCountRight = 0;
 	int goalColorCount = 0;
 	int blackColorCount = 0;
 	float maxDistanceY = startDistance;
 	bool running = true;
 	bool lastColorBall = false;
 	bool isLeft;
+	int invalidCounterLeft;
+	int invalidCounterRight;
+	bool foundInvalidSpreeLeft = false;
+	bool foundInvalidSpreeRight = false;
+	int longestInvalidSpreeLeft = 0;
+	int longestInvalidSpreeRight = 0;
 
 	// TODO make sure finds target side color in the end
 	// sample points every step distances
 	for (xDistance = -xStep * xSteps / 2 + xStep / 2.0f; xDistance < xStep * xSteps / 2; xDistance += xStep) {
+		invalidCounterLeft = 0;
+		invalidCounterRight = 0;
+
 		for (yDistance = startDistance; yDistance < endDistance; yDistance += yStep) {
 			if (yDistance > maxDistanceY) {
 				maxDistanceY = yDistance;
@@ -1146,10 +1156,14 @@ Vision::Obstruction Vision::getGoalPathObstruction(float goalDistance) {
 					if (isLeft) {
 						sampleCountLeft++;
 						validCountLeft++;
+
+						invalidCounterLeft = Math::max(invalidCounterLeft - 1, 0);
 					}
 					else {
 						sampleCountRight++;
 						validCountRight++;
+
+						invalidCounterRight = Math::max(invalidCounterRight - 1, 0);
 					}
 				} else {
 					if (isLeft) {
@@ -1168,8 +1182,26 @@ Vision::Obstruction Vision::getGoalPathObstruction(float goalDistance) {
 				if (!lastColorBall) {
 					if (isLeft) {
 						sampleCountLeft++;
+						invalidCounterLeft++;
 					} else {
 						sampleCountRight++;
+						invalidCounterRight++;
+					}
+
+					if (invalidCounterLeft > longestInvalidSpreeLeft) {
+						longestInvalidSpreeLeft = invalidCounterLeft;
+					}
+
+					if (invalidCounterRight > longestInvalidSpreeRight) {
+						longestInvalidSpreeRight = invalidCounterRight;
+					}
+
+					if (invalidCounterLeft > invalidSpreeThreshold) {
+						foundInvalidSpreeLeft = true;
+					}
+
+					if (invalidCounterRight > invalidSpreeThreshold) {
+						foundInvalidSpreeRight = true;
 					}
 
 					if (debug) {
@@ -1199,6 +1231,8 @@ Vision::Obstruction Vision::getGoalPathObstruction(float goalDistance) {
 
 	obstruction.invalidCountLeft = sampleCountLeft - validCountLeft;
 	obstruction.invalidCountRight = sampleCountRight - validCountRight;
+	obstruction.invalidCountLeft = longestInvalidSpreeLeft;
+	obstruction.invalidCountRight = longestInvalidSpreeRight;
 
 	int maxInvalidCount = 60 / (int)(xSteps / 2);
 	int manyBlacksCount = 4 * (int)xSteps;
@@ -1210,7 +1244,7 @@ Vision::Obstruction Vision::getGoalPathObstruction(float goalDistance) {
 
 	//std::cout << "@ blacks: " << blackColorCount << ", max invalid: " << maxInvalidCount << std::endl;
 
-	if (obstruction.invalidCountLeft > maxInvalidCount || obstruction.invalidCountRight > maxInvalidCount) {
+	/*if (obstruction.invalidCountLeft > maxInvalidCount || obstruction.invalidCountRight > maxInvalidCount) {
 		if (obstruction.invalidCountLeft > maxInvalidCount && obstruction.invalidCountRight > maxInvalidCount) {
 			obstruction.left = true;
 			obstruction.right = true;
@@ -1219,7 +1253,10 @@ Vision::Obstruction Vision::getGoalPathObstruction(float goalDistance) {
 		} else {
 			obstruction.right = true;
 		}
-	}
+	}*/
+
+	obstruction.left = foundInvalidSpreeLeft;
+	obstruction.right = foundInvalidSpreeRight;
 
 	
 
