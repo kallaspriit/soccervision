@@ -378,7 +378,7 @@ void TestController::handleParameterCommand(const Command& cmd) {
 
 	parameters[index] = value;
 
-	std::cout << "! Received parameter #" << index << ": " << value << std::endl;
+	//std::cout << "! Received parameter #" << index << ": " << value << std::endl;
 }
 
 void TestController::handleDriveToCommand(const Command& cmd) {

@@ -155,7 +155,7 @@ bool Coilgun::handleCommand(const Command& cmd) {
 	} else if (cmd.name == "kicked") {
 		int chipDuration = kickOnceGotBallParameters.chipDistance > 0 ? getChipKickDurationByDistance(kickOnceGotBallParameters.chipDistance) : 0;
 
-		std::cout << "! Kicked @ main duration: " << kickOnceGotBallParameters.mainDuration << ", chip distance: " << kickOnceGotBallParameters.chipDistance << ", chip duration: " << chipDuration << std::endl;
+		//std::cout << "! Kicked @ main duration: " << kickOnceGotBallParameters.mainDuration << ", chip distance: " << kickOnceGotBallParameters.chipDistance << ", chip duration: " << chipDuration << std::endl;
 
 		isKickingOnceGotBall = false;
 		lastKickTime = Util::millitime();
