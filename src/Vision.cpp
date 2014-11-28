@@ -1062,7 +1062,7 @@ Vision::Obstruction Vision::getGoalPathObstruction(float goalDistance) {
 	//float corridorWidth = 0.1f;
 	float yStep = 0.05f;
 	float xStep = 0.05f;
-	float xSteps = 4.0f;
+	float xSteps = 6.0f;
 	float startDistance = 0.35f;
 	float endDistance = goalDistance + 0.4f;
 	int stopGoalColorCount = 4; // stop searching any further if found this many goal colors
