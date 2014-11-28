@@ -55,9 +55,9 @@ void Dribbler::setLimits(int lower, int upper) {
 }
 
 void Dribbler::useNormalLimits() {
-	/*if (!isRaiseRequested) {
+	if (!isRaiseRequested) {
 		return;
-	}*/
+	}
 
 	//std::cout << "! Now using normal dribbler limits" << std::endl;
 
@@ -69,9 +69,9 @@ void Dribbler::useNormalLimits() {
 void Dribbler::useChipKickLimits() {
 	useChipKickLimitsMissedFrames = 0;
 
-	/*if (isRaiseRequested) {
+	if (isRaiseRequested) {
 		return;
-	}*/
+	}
 
 	//std::cout << "! Now using chip-kick dribbler limits" << std::endl;
 

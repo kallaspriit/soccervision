@@ -100,9 +100,9 @@ void Coilgun::kickOnceGotBall(int mainDuration, int mainDelay, float chipDistanc
 
 	KickParameters kickParameters = KickParameters(mainDuration, mainDelay, chipDistance, chipDelay);
 
-	/*if (isKickingOnceGotBall && kickParameters.areSameAs(kickOnceGotBallParameters)) {
+	if (isKickingOnceGotBall && kickParameters.areSameAs(kickOnceGotBallParameters)) {
 		return;
-	}*/
+	}
 
 	kickOnceGotBallParameters = kickParameters;
 
