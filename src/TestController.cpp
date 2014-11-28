@@ -118,6 +118,9 @@
 * - make all parameters settable in the UI
 * - implement logviking-style logging with filterable components
 *
+* For competition
+* - fetch ball near ball side speed needs PID
+*
 * Testing scenarious
 * + fetch ball direct at distance when seeing opponents goal
 * + fetch ball direct at distance when not seeing opponents goal
@@ -2054,9 +2057,9 @@ void TestController::FetchBallNearState::onEnter(Robot* robot, Parameters parame
 	chipKickDistance = 0.0f;
 	lastBallAngle = 0.0f;
 	ballInWayFrames = 0;
-	maxSideSpeed = 1.5f;
+	maxSideSpeed = 1.0f;
 
-	pid.setInputLimits(-1.0f, 1.0f);
+	pid.setInputLimits(-45.0f, 45.0f);
 	pid.setOutputLimits(-maxSideSpeed, maxSideSpeed);
 	pid.setMode(AUTO_MODE);
 	pid.setBias(0.0f);
@@ -2354,20 +2357,26 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	float sidePower = Math::map(Math::abs(Math::radToDeg(ball->angle)), 0.0f, maxSideSpeedBallAngle, 0.0f, 1.0f);
 
 	// reduce side P close to the ball, consider using PID here
-	float sideP = Math::map(ballDistance, 0.0f, 0.5f, 0.3f, 0.85f);
-	float sideSpeed = Math::sign(ball->distanceX) * sideP * sidePower;
+	//float sideP = Math::map(ballDistance, 0.0f, 0.5f, 0.3f, 0.85f);
 
 	// PID solution
-	/*float paramP = Util::toFloat(ai->parameters[0]);
+	float paramP = Util::toFloat(ai->parameters[0]);
 	float paramI = Util::toFloat(ai->parameters[1]);
 	float paramD = Util::toFloat(ai->parameters[2]);
 
 	if (paramP != pid.getPParam() || paramI != pid.getIParam() || paramD != pid.getDParam()) {
-	std::cout << "! Updated PID params P: " << paramP << ", I: " << paramI << ", D: " << paramD << std::endl;
+		std::cout << "! Updated PID params P: " << paramP << ", I: " << paramI << ", D: " << paramD << std::endl;
 
-	pid.setTunings(paramP, paramI, paramD);
-	pid.reset();
+		pid.setTunings(paramP, paramI, paramD);
+		pid.reset();
 	}
+
+	// pid-based
+	pid.setSetPoint(0.0f);
+	pid.setProcessValue(Math::degToRad(ball->angle));
+
+	float sideP = pid.compute();
+	float sideSpeed = Math::sign(ball->distanceX) * sideP * sidePower;
 
 	/*pid.setSetPoint(0.0f);
 	pid.setProcessValue(ball->distanceX);
