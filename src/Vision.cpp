@@ -1120,7 +1120,7 @@ Vision::Obstruction Vision::getGoalPathObstruction(float goalDistance) {
 					}
 
 					continue;
-				} else if (strcmp(color->name, "black")) {
+				} else if (strcmp(color->name, "black") == 0) {
 					blackColorCount++;
 				}
 
@@ -1181,7 +1181,7 @@ Vision::Obstruction Vision::getGoalPathObstruction(float goalDistance) {
 	obstruction.invalidCountRight = sampleCountRight - validCountRight;
 
 	int maxInvalidCount = 40 / (int)(xSteps / 2);
-	int manyBlacksCount = 10 * (int)xSteps;
+	int manyBlacksCount = 4 * (int)xSteps;
 
 	
 
