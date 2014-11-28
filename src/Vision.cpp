@@ -1007,6 +1007,7 @@ Vision::EdgeDistanceMetric Vision::getEdgeDistanceMetric(int x, int y, int width
 	int centerSampleCount = 0;
 	int centerAvgY = -1;
 	EdgeDistance centerDistance;
+	bool sawValidColorColor = false;
 
 	for (int senseX = x; senseX <= x + width; senseX++) {
 		//for (int senseY = y + height; senseY >= y; senseY--) {
@@ -1025,9 +1026,12 @@ Vision::EdgeDistanceMetric Vision::getEdgeDistanceMetric(int x, int y, int width
 
 			colorName = std::string(color->name);
 
-			//if (colorName == color1 || colorName == color2) {
+			if (colorName == color1 || colorName == color2) {
+				sawValidColorColor = true;
+			}
+
 			// also trigger for black is it may be the first color if looking at the goal from the side
-			if (colorName == "green" || colorName == "black") {
+			if (sawValidColorColor && (colorName == "green" || colorName == "black")) {
 				//canvas.fillBoxCentered(senseX, senseY, 4, 4, 255, 0, 255);
 
 				centerSumY += senseY;
