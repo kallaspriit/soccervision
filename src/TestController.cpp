@@ -1156,6 +1156,12 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 	robot->stop();
 	robot->dribbler->useNormalLimits();
 
+	if (ai->isRobotOutFront || ai->isRobotOutRear) {
+		ai->setState("return-field");
+
+		return;
+	}
+
 	lastSearchTime = Util::millitime();
 
 	// switch to aim if got ball
