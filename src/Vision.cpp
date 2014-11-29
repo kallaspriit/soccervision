@@ -1013,7 +1013,8 @@ Vision::EdgeDistanceMetric Vision::getEdgeDistanceMetric(int x, int y, int width
 		sawValidColorColor = false;
 
 		//for (int senseY = y + height; senseY >= y; senseY--) {
-		for (int senseY = y + height / 3; senseY < Config::cameraHeight; senseY++) {
+		//for (int senseY = y + height / 3; senseY < Config::cameraHeight; senseY++) {
+		for (int senseY = y + height / 3; senseY < y + height * 1.2f; senseY++) {
 			if (senseX < x + halfWidth - centerWidth / 2 || senseX > x + halfWidth + centerWidth / 2) {
 				continue;
 			}
