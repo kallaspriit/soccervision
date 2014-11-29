@@ -1058,6 +1058,8 @@ Vision::EdgeDistanceMetric Vision::getEdgeDistanceMetric(int x, int y, int width
 			} else {
 				if (sawValidColor && (colorName == "green"/* || colorName == "black"*/)) {
 					canvas.fillBoxCentered(senseX, senseY, 4, 4, 0, 0, 255);
+
+					break;
 				}
 			}
 		}
