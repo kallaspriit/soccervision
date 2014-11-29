@@ -1013,8 +1013,10 @@ Vision::EdgeDistanceMetric Vision::getEdgeDistanceMetric(int x, int y, int width
 	bool sawValidColor;
 	bool sawUndersideColor;
 	float senseWidthPercentage = 0.8f;
+	int senseStartX = (int)((float)x + (float)width * (1.0f - senseWidthPercentage));
+	int senseEndX = (int)((float)x + (float)width - (float)width * (1.0f - senseWidthPercentage));
 
-	for (int senseX = x + width * (1.0f - senseWidthPercentage); senseX <= x + width - width * (1.0f - senseWidthPercentage); senseX++) {
+	for (int senseX = senseStartX; senseX <= senseEndX; senseX++) {
 		sawValidColor = false;
 		sawUndersideColor = false;
 		senseRows++;
