@@ -1165,23 +1165,20 @@ Vision::EdgeDistanceMetric Vision::getEdgeDistanceMetric(int x, int y, int width
 	int newX = x;
 	int newWidth = width;
 
-	if (rightCutX != -1 && rightCutX < leftCutX) {
-		int tempCutX = leftCutX;
-
-		rightCutX = leftCutX;
-		leftCutX = tempCutX;
-	}
-
 	if (leftCutX != -1) {
 		newX = x + leftCutX;
 
-		canvas.fillBoxCentered(x + leftCutX, y + height, 15, 15, 255, 255, 0);
+		canvas.fillBoxCentered(newX, y + height, 15, 15, 255, 255, 0);
 	}
 
 	if (rightCutX != -1) {
 		newWidth = width - rightCutX;
 
-		canvas.fillBoxCentered(x + width - rightCutX, y + height, 15, 15, 255, 255, 0);
+		if (leftCutX != -1) {
+			newWidth = newWidth - leftCutX;
+		}
+
+		canvas.fillBoxCentered(newX + newWidth, y + height, 15, 15, 255, 255, 0);
 	}
 
 	std::cout << "new x: " << newX << " vs " << x << ", new width: " << newWidth << " vs " << width << ", left cut: " << leftCutX << ", right cut:" << rightCutX << std::endl;
