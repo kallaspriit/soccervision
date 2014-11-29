@@ -1027,7 +1027,7 @@ Vision::EdgeDistanceMetric Vision::getEdgeDistanceMetric(int x, int y, int width
 			color = getColorAt(senseX, senseY);
 
 			if (color == NULL) {
-				canvas.setPixelAt(senseX, senseY, 255, 255, 255);
+				//canvas.setPixelAt(senseX, senseY, 255, 255, 255);
 
 				continue;
 			}
@@ -1057,17 +1057,24 @@ Vision::EdgeDistanceMetric Vision::getEdgeDistanceMetric(int x, int y, int width
 
 	float validSenseRowsPercentage = (float)validRows / (float)senseRows;
 
-	std::cout << "@ valid percentage: " << validSenseRowsPercentage << std::endl;
+	//std::cout << "@ valid percentage: " << validSenseRowsPercentage << std::endl;
 
-	if (centerSampleCount > 0) {
-		centerAvgY = centerSumY / centerSampleCount;
+	if (validSenseRowsPercentage < 0.1f) {
+		// too few sense rows are valid, don't use this metric as distance
 
-		distance = getDistance(x + width / 2, centerAvgY);
-		centerDistance = EdgeDistance(x + width / 2, centerAvgY, distance.straight);
+		distance = getDistance(x + width / 2, y + height);
+		centerDistance = EdgeDistance(x + width / 2, y + height, distance.straight);
+	} else {
+		if (centerSampleCount > 0) {
+			centerAvgY = centerSumY / centerSampleCount;
 
-		canvas.fillBoxCentered(centerDistance.screenX, centerDistance.screenY, 10, 10, 255, 0, 0);
-		canvas.drawText(centerDistance.screenX, centerDistance.screenY + 10, Util::toString(centerDistance.distance) + "m", 0, 0, 0);
+			distance = getDistance(x + width / 2, centerAvgY);
+			centerDistance = EdgeDistance(x + width / 2, centerAvgY, distance.straight);
+		}
 	}
+
+	canvas.fillBoxCentered(centerDistance.screenX, centerDistance.screenY, 10, 10, 255, 0, 0);
+	canvas.drawText(centerDistance.screenX, centerDistance.screenY + 10, Util::toString(centerDistance.distance) + "m", 0, 0, 0);
 
 	return EdgeDistanceMetric(leftTopDistance, rightTopDistance, centerDistance);
 }
