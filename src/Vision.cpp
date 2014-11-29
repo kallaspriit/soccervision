@@ -1044,24 +1044,21 @@ Vision::EdgeDistanceMetric Vision::getEdgeDistanceMetric(int x, int y, int width
 				sawValidColor = true;
 			}
 
-			if (isDistanceSenseRow) {
-				// also trigger for black is it may be the first color if looking at the goal from the side
-				// don't count black as many robots are black
-				if (sawValidColor && (colorName == "green"/* || colorName == "black"*/)) {
+			// also trigger for black is it may be the first color if looking at the goal from the side
+			// don't count black as many robots are black
+			if (sawValidColor && (colorName == "green"/* || colorName == "black"*/)) {
+				sawUndersideColor = true;
+
+				if (isDistanceSenseRow) {
 					canvas.fillBoxCentered(senseX, senseY, 4, 4, 255, 0, 255);
 
 					centerSumY += senseY;
 					centerSampleCount++;
-					sawUndersideColor = true;
-
-					break;
-				}
-			} else {
-				if (sawValidColor && (colorName == "green"/* || colorName == "black"*/)) {
+				} else {
 					canvas.fillBoxCentered(senseX, senseY, 4, 4, 0, 0, 255);
-
-					break;
 				}
+					
+				break;
 			}
 		}
 
