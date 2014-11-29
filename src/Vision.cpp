@@ -1089,12 +1089,18 @@ Vision::Obstruction Vision::getGoalPathObstruction(float goalDistance) {
 	int invalidCounterRight;
 	int longestInvalidSpreeLeft = 0;
 	int longestInvalidSpreeRight = 0;
+	int invalidSpreeSumLeft = 0;
+	int invalidSpreeSumRight = 0;
+	int longestInvalidLineLeft;
+	int longestInvalidLineRight;
 
 	// TODO make sure finds target side color in the end
 	// sample points every step distances
 	for (xDistance = -xStep * xSteps / 2 + xStep / 2.0f; xDistance < xStep * xSteps / 2; xDistance += xStep) {
 		invalidCounterLeft = 0;
 		invalidCounterRight = 0;
+		longestInvalidLineLeft = 0;
+		longestInvalidLineRight = 0;
 
 		for (yDistance = startDistance; yDistance < endDistance; yDistance += yStep) {
 			if (yDistance > maxDistanceY) {
@@ -1193,6 +1199,14 @@ Vision::Obstruction Vision::getGoalPathObstruction(float goalDistance) {
 						longestInvalidSpreeRight = invalidCounterRight;
 					}
 
+					if (invalidCounterLeft > longestInvalidLineLeft) {
+						longestInvalidLineLeft = invalidCounterLeft;
+					}
+
+					if (invalidCounterRight > longestInvalidLineRight) {
+						longestInvalidLineRight = invalidCounterRight;
+					}
+
 					if (debug) {
 						canvas.drawMarker(pos.x, pos.y, 128, 0, 0);
 					}
@@ -1203,6 +1217,9 @@ Vision::Obstruction Vision::getGoalPathObstruction(float goalDistance) {
 				}
 			}
 		}
+
+		invalidSpreeSumLeft += longestInvalidLineLeft;
+		invalidSpreeSumRight += longestInvalidLineRight;
 
 		/*if (!running) {
 			break;
@@ -1230,6 +1247,8 @@ Vision::Obstruction Vision::getGoalPathObstruction(float goalDistance) {
 	
 
 	int invalidSpreeThreshold = 8;
+
+	std::cout << "left: " << longestInvalidSpreeLeft << " vs " << invalidSpreeSumLeft << ", right: " << longestInvalidSpreeRight << " vs " << invalidSpreeSumRight << std::endl;
 
 	obstruction.invalidCountLeft = longestInvalidSpreeLeft;
 	obstruction.invalidCountRight = longestInvalidSpreeRight;
