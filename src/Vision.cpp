@@ -1053,7 +1053,7 @@ Vision::EdgeDistanceMetric Vision::getEdgeDistanceMetric(int x, int y, int width
 		}
 	}
 
-	int validSenseRowsPercentage = validRows / senseRows;
+	float validSenseRowsPercentage = (float)validRows / (float)senseRows;
 
 	std::cout << "@ valid percentage: " << validSenseRowsPercentage << std::endl;
 
