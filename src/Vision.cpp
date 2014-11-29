@@ -1015,6 +1015,7 @@ Vision::EdgeDistanceMetric Vision::getEdgeDistanceMetric(int x, int y, int width
 	float senseWidthPercentage = 0.8f;
 	int senseStartX = (int)((float)x + (float)width * (1.0f - senseWidthPercentage));
 	int senseEndX = (int)((float)x + (float)width - (float)width * (1.0f - senseWidthPercentage));
+	std::vector<bool> validRowsMap;
 
 	for (int senseX = x; senseX <= x + width; senseX++) {
 		sawValidColor = false;
@@ -1028,7 +1029,7 @@ Vision::EdgeDistanceMetric Vision::getEdgeDistanceMetric(int x, int y, int width
 
 		//for (int senseY = y + height; senseY >= y; senseY--) {
 		//for (int senseY = y + height / 3; senseY < Config::cameraHeight; senseY++) {
-		for (int senseY = y + height / 3; senseY < y + height * 1.2f; senseY++) {
+		for (int senseY = y + height / 4; senseY < y + height * 1.2f; senseY++) {
 			color = getColorAt(senseX, senseY);
 
 			if (color == NULL) {
@@ -1066,6 +1067,10 @@ Vision::EdgeDistanceMetric Vision::getEdgeDistanceMetric(int x, int y, int width
 
 		if (sawUndersideColor) {
 			validRows++;
+
+			validRowsMap.push_back(true);
+		} else {
+			validRowsMap.push_back(false);
 		}
 	}
 
@@ -1079,6 +1084,29 @@ Vision::EdgeDistanceMetric Vision::getEdgeDistanceMetric(int x, int y, int width
 		distance = getDistance(x + width / 2, y + height);
 		centerDistance = EdgeDistance(x + width / 2, y + height, distance.straight);
 	} else {
+		// scan pixels left to right
+		int invalidCounter = 0;
+		int cutThreshold = (int)((float)width * 0.05f);
+
+		for (int i = 0; i <= width; i++) {
+			if (validRowsMap[i] == true) {
+				if (invalidCounter > 0) {
+					invalidCounter--;
+				}
+			}
+			else {
+				invalidCounter++;
+			}
+
+			if (invalidCounter >= cutThreshold) {
+				std::cout << "cut at " << i << "/" << width << std::endl;
+
+				canvas.fillBoxCentered(x + i, centerAvgY, 15, 15, 255, 255, 0);
+
+				break;
+			}
+		}
+
 		if (centerSampleCount > 0) {
 			centerAvgY = centerSumY / centerSampleCount;
 
