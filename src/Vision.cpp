@@ -1174,7 +1174,14 @@ Vision::EdgeDistanceMetric Vision::getEdgeDistanceMetric(int x, int y, int width
 		newX = x + rightCutX;
 		newWidth = width - rightCutX;
 	} else if (leftCutX != -1) {
-		newWidth = leftCutX;
+		if (leftCutX == rightCutX) {
+			// right side is obstructed
+			newWidth = leftCutX;
+		} else {
+			// both sides obstructed
+			newX = rightCutX;
+			newWidth = leftCutX - rightCutX;
+		}
 	}
 
 	canvas.fillBoxCentered(newX, y + height, 15, 15, 255, 255, 0);
