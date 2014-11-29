@@ -377,6 +377,18 @@ bool Vision::isValidGoal(Object* goal, Side side) {
 		goal->distance = Math::min(edgeDistanceMetric.centerDistance.distance - 0.25f, 5.5f);
 	}
 
+	// update position and width if available
+	if (edgeDistanceMetric.newX != -1) {
+		goal->x = edgeDistanceMetric.newX;
+	}
+
+	// update position and width if available
+	if (edgeDistanceMetric.newWidth != -1) {
+		goal->width = edgeDistanceMetric.newWidth;
+	}
+
+	// TODO update goal angle
+
 	/*if (undersideMetric < Config::goalMinUndersideMetric) {
 		//std::cout << "@ GOAL INVALID UNDERSIDE: " << undersideMetric << " VS " << Config::goalMinUndersideMetric << std::endl;
 
@@ -1162,20 +1174,16 @@ Vision::EdgeDistanceMetric Vision::getEdgeDistanceMetric(int x, int y, int width
 	int newWidth = width;
 
 	if (leftCutX != -1) {
-		newX = leftCutX;
+		newX = x + leftCutX;
 	}
 
 	if (rightCutX != -1) {
-		newWidth = rightCutX;
-
-		if (leftCutX != -1) {
-			newWidth -= leftCutX;
-		}
+		newWidth = width - rightCutX;
 	}
 
-	std::cout << "new x: " << newX << " vs " << x << ", new width: " << newWidth << " vs " << width << std::endl;
+	std::cout << "new x: " << newX << " vs " << x << ", new width: " << newWidth << " vs " << width << ", left cut: " << leftCutX << ", right cut:" << rightCutX << std::endl;
 
-	return EdgeDistanceMetric(leftTopDistance, rightTopDistance, centerDistance);
+	return EdgeDistanceMetric(leftTopDistance, rightTopDistance, centerDistance, newX, newWidth);
 }
 
 Vision::Obstruction Vision::getGoalPathObstruction(float goalDistance) {

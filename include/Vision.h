@@ -124,11 +124,13 @@ public:
 	};
 
 	struct EdgeDistanceMetric {
-		EdgeDistanceMetric(Vision::EdgeDistance leftTopDistance, Vision::EdgeDistance rightTopDistance, Vision::EdgeDistance centerDistance) : leftTopDistance(leftTopDistance), rightTopDistance(rightTopDistance), centerDistance(centerDistance) {}
+		EdgeDistanceMetric(Vision::EdgeDistance leftTopDistance, Vision::EdgeDistance rightTopDistance, Vision::EdgeDistance centerDistance, int newX = -1, int newWidth = -1) : leftTopDistance(leftTopDistance), rightTopDistance(rightTopDistance), centerDistance(centerDistance), newX(newX), newWidth(newWidth) {}
 
 		Vision::EdgeDistance leftTopDistance;
 		Vision::EdgeDistance rightTopDistance;
 		Vision::EdgeDistance centerDistance;
+		int newX;
+		int newWidth;
 	};
 
     Vision(Blobber* blobber, CameraTranslator* cameraTranslator, Dir dir, int width, int height);
