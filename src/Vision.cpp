@@ -378,13 +378,13 @@ bool Vision::isValidGoal(Object* goal, Side side) {
 	}
 
 	// update position and width if available
-	if (edgeDistanceMetric.newX != -1) {
-		goal->x = edgeDistanceMetric.newX;
-	}
-
-	// update position and width if available
 	if (edgeDistanceMetric.newWidth != -1) {
 		goal->width = edgeDistanceMetric.newWidth;
+	}
+
+	// update position and width if available, note that goal x is in center but edge metric from corner
+	if (edgeDistanceMetric.newX != -1) {
+		goal->x = edgeDistanceMetric.newX - goal->width / 2;
 	}
 
 	// TODO update goal angle
@@ -1165,7 +1165,13 @@ Vision::EdgeDistanceMetric Vision::getEdgeDistanceMetric(int x, int y, int width
 	int newX = x;
 	int newWidth = width;
 
-	if (leftCutX != -1) {
+	if (leftCutX == -1 && rightCutX != -1) {
+		// left side is obstructed
+		newX = width - rightCutX;
+		newWidth = rightCutX;
+	}
+
+	/*if (leftCutX != -1) {
 		newX = x + leftCutX;
 
 		canvas.fillBoxCentered(newX, y + height, 15, 15, 255, 255, 0);
@@ -1179,7 +1185,7 @@ Vision::EdgeDistanceMetric Vision::getEdgeDistanceMetric(int x, int y, int width
 		}
 
 		canvas.fillBoxCentered(newX + newWidth, y + height, 15, 15, 255, 255, 0);
-	}
+	}*/
 
 	std::cout << "new x: " << newX << " vs " << x << ", new width: " << newWidth << " vs " << width << ", left cut: " << leftCutX << ", right cut:" << rightCutX << std::endl;
 
