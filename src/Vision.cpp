@@ -369,7 +369,8 @@ bool Vision::isValidGoal(Object* goal, Side side) {
 	}
 
 	// set real distance from edge distance metric center distance
-	if (edgeDistanceMetric.centerDistance.distance != -1) {
+	// only update the distance if the new distance does not differ from the original one by more then some ammount
+	if (edgeDistanceMetric.centerDistance.distance != -1 && Math::abs(edgeDistanceMetric.centerDistance.distance - goal->distance) < 1.0f) {
 		//std::cout << "UPDATE GOAL DISTANCE FROM " << goal->distance << " TO " << edgeDistanceMetric.centerDistance.distance << std::endl;
 
 		// substract goal depth to get distance at the front
