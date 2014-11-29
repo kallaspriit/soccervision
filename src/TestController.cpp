@@ -1019,8 +1019,8 @@ void TestController::WatchBallState::step(float dt, Vision::Results* visionResul
 	ai->dbg("2. I", pid.getIParam());
 	ai->dbg("3. D", pid.getDParam());
 	ai->dbg("4. currentError", currentError);
-	ai->dbg("5. accumulatedError", pid.getAccumulatedError());
-	ai->dbg("6. sideSpeed", sideSpeed);
+	//ai->dbg("5. accumulatedError", pid.getAccumulatedError());
+	ai->dbg("5. sideSpeed", sideSpeed);
 }
 
 void TestController::WatchGoalState::onEnter(Robot* robot, Parameters parameters) {
@@ -1072,7 +1072,7 @@ void TestController::WatchGoalState::step(float dt, Vision::Results* visionResul
 	ai->dbg("1. P", pid.getPParam());
 	ai->dbg("2. I", pid.getIParam());
 	ai->dbg("3. D", pid.getDParam());
-	ai->dbg("5. accumulatedError", pid.getAccumulatedError());
+	//ai->dbg("5. accumulatedError", pid.getAccumulatedError());
 	ai->dbg("6. targetOmega", targetOmega);
 }
 
