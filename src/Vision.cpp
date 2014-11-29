@@ -1075,6 +1075,9 @@ Vision::EdgeDistanceMetric Vision::getEdgeDistanceMetric(int x, int y, int width
 
 	//std::cout << "@ valid percentage: " << validSenseRowsPercentage << std::endl;
 
+	int leftCutX = -1;
+	int rightCutX = -1;
+
 	if (validSenseRowsPercentage < 0.1f) {
 		// too few sense rows are valid, don't use this metric as distance
 
@@ -1085,8 +1088,6 @@ Vision::EdgeDistanceMetric Vision::getEdgeDistanceMetric(int x, int y, int width
 		int invalidCounter = 0;
 		int cutThreshold = (int)((float)width * 0.1f);
 		int lastValidX = -1;
-		int leftCutX = -1;
-		int rightCutX = -1;
 		bool sawValid = false;
 
 		// detect left cut
@@ -1156,6 +1157,23 @@ Vision::EdgeDistanceMetric Vision::getEdgeDistanceMetric(int x, int y, int width
 
 	canvas.fillBoxCentered(centerDistance.screenX, centerDistance.screenY, 10, 10, 255, 0, 0);
 	canvas.drawText(centerDistance.screenX, centerDistance.screenY + 10, Util::toString(centerDistance.distance) + "m", 0, 0, 0);
+
+	int newX = x;
+	int newWidth = width;
+
+	if (leftCutX != -1) {
+		newX = leftCutX;
+	}
+
+	if (rightCutX != -1) {
+		newWidth = rightCutX;
+
+		if (leftCutX != -1) {
+			newWidth -= leftCutX;
+		}
+	}
+
+	std::cout << "new x: " << newX << " vs " << x << ", new width: " << newWidth << " vs " << width << std::endl;
 
 	return EdgeDistanceMetric(leftTopDistance, rightTopDistance, centerDistance);
 }
