@@ -1121,6 +1121,8 @@ Vision::EdgeDistanceMetric Vision::getEdgeDistanceMetric(int x, int y, int width
 			if (invalidCounter >= cutThreshold) {
 				leftCutX = lastValidX;
 
+				canvas.fillBoxCentered(x + leftCutX, y + height, 15, 15, 0, 255, 255);
+
 				break;
 			}
 		}
@@ -1147,6 +1149,8 @@ Vision::EdgeDistanceMetric Vision::getEdgeDistanceMetric(int x, int y, int width
 			if (invalidCounter >= cutThreshold) {
 				rightCutX = lastValidX;
 
+				canvas.fillBoxCentered(x + width - rightCutX, y + height, 15, 15, 255, 0, 255);
+
 				break;
 			}
 		}
@@ -1167,7 +1171,7 @@ Vision::EdgeDistanceMetric Vision::getEdgeDistanceMetric(int x, int y, int width
 
 	if (leftCutX == -1 && rightCutX != -1) {
 		// left side is obstructed
-		newX = width - rightCutX;
+		newX = x + (width - rightCutX);
 		newWidth = rightCutX;
 
 	}
