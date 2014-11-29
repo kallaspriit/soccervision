@@ -121,6 +121,8 @@
 * Competition
 * - when reversing blind, stop if got too many non-color or black pixels behind (the black matte)
 * - reduce goal size to seen edge distance are to aim to correct area
+* - PID for lookAt
+* - improve ball side speed PID
 *
 * Testing scenarious
 * + fetch ball direct at distance when seeing opponents goal
@@ -2358,15 +2360,15 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	float sideSpeed = Math::sign(ball->distanceX) * sideP * sidePower;
 
 	// PID solution
-	/*float paramP = Util::toFloat(ai->parameters[0]);
+	float paramP = Util::toFloat(ai->parameters[0]);
 	float paramI = Util::toFloat(ai->parameters[1]);
 	float paramD = Util::toFloat(ai->parameters[2]);
 
 	if (paramP != pid.getPParam() || paramI != pid.getIParam() || paramD != pid.getDParam()) {
-	std::cout << "! Updated PID params P: " << paramP << ", I: " << paramI << ", D: " << paramD << std::endl;
+		std::cout << "! Updated PID params P: " << paramP << ", I: " << paramI << ", D: " << paramD << std::endl;
 
-	pid.setTunings(paramP, paramI, paramD);
-	pid.reset();
+		pid.setTunings(paramP, paramI, paramD);
+		pid.reset();
 	}
 
 	/*pid.setSetPoint(0.0f);
