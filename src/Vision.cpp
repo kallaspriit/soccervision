@@ -1085,7 +1085,10 @@ Vision::EdgeDistanceMetric Vision::getEdgeDistanceMetric(int x, int y, int width
 		int invalidCounter = 0;
 		int cutThreshold = (int)((float)width * 0.1f);
 		int lastValidX = -1;
+		int leftCutX = -1;
+		int rightCutX = -1;
 
+		// detect left cut
 		for (int i = 0; i <= width; i++) {
 			if (validRowsMap[i] == true) {
 				if (invalidCounter > 0) {
@@ -1101,7 +1104,37 @@ Vision::EdgeDistanceMetric Vision::getEdgeDistanceMetric(int x, int y, int width
 			}
 
 			if (invalidCounter >= cutThreshold) {
-				std::cout << "cut at " << i << "/" << width << " where invalidCounter: " << invalidCounter << "/" << cutThreshold << std::endl;
+				leftCutX = lastValidX;
+
+				//std::cout << "cut at " << i << "/" << width << " where invalidCounter: " << invalidCounter << "/" << cutThreshold << std::endl;
+
+				canvas.fillBoxCentered(x + lastValidX, y + height, 15, 15, 255, 255, 0);
+
+				break;
+			}
+		}
+
+		// detect right cut
+		invalidCounter = 0;
+
+		for (int i = width; i >= 0; i--) {
+			if (validRowsMap[i] == true) {
+				if (invalidCounter > 0) {
+					invalidCounter--;
+				}
+
+				if (lastValidX == -1 || i < lastValidX) {
+					lastValidX = i;
+				}
+			}
+			else {
+				invalidCounter++;
+			}
+
+			if (invalidCounter >= cutThreshold) {
+				rightCutX = lastValidX;
+
+				//std::cout << "cut at " << i << "/" << width << " where invalidCounter: " << invalidCounter << "/" << cutThreshold << std::endl;
 
 				canvas.fillBoxCentered(x + lastValidX, y + height, 15, 15, 255, 255, 0);
 
