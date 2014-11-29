@@ -1203,7 +1203,7 @@ Vision::EdgeDistanceMetric Vision::getEdgeDistanceMetric(int x, int y, int width
 		canvas.fillBoxCentered(newX + newWidth, y + height, 15, 15, 255, 255, 0);
 	}*/
 
-	std::cout << "new x: " << newX << " vs " << x << ", new width: " << newWidth << " vs " << width << ", left cut: " << leftCutX << ", right cut:" << rightCutX << std::endl;
+	//std::cout << "new x: " << newX << " vs " << x << ", new width: " << newWidth << " vs " << width << ", left cut: " << leftCutX << ", right cut:" << rightCutX << std::endl;
 
 	return EdgeDistanceMetric(leftTopDistance, rightTopDistance, centerDistance, newX, newWidth);
 }
