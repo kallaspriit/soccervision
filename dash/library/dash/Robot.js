@@ -15,8 +15,8 @@ Dash.Robot.prototype.setController = function(name) {
 };
 
 Dash.Robot.prototype.kick = function(duration) {
-	//duration = duration || 1000;
-	duration = duration || 3250;
+	duration = duration || 1500;
+	//duration = duration || 3250;
 	//duration = duration || 6500;
 
 	if (this.socket.isOpen()) {
