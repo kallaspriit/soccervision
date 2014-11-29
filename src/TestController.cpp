@@ -461,7 +461,7 @@ void TestController::updateVisionInfo(Vision::Results* visionResults) {
 		}
 	}
 
-	int robotOutFramesThreshold = 20;
+	int robotOutFramesThreshold = 10;
 
 	// don't track getting out of the field after having lately drove behind ball as we may be out if the ball was in a corner
 	if (robot->getTimeSincLastDroveBehindBall() > 2.0f) {
