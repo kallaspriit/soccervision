@@ -1179,7 +1179,7 @@ Vision::EdgeDistanceMetric Vision::getEdgeDistanceMetric(int x, int y, int width
 			newWidth = leftCutX;
 		} else {
 			// both sides obstructed
-			newX = rightCutX;
+			newX = x + rightCutX;
 			newWidth = leftCutX - rightCutX;
 		}
 	}
