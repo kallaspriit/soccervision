@@ -1008,12 +1008,15 @@ Vision::EdgeDistanceMetric Vision::getEdgeDistanceMetric(int x, int y, int width
 	int centerSampleCount = 0;
 	int centerAvgY = -1;
 	int senseRows = 0;
+	int validRows = 0;
 	EdgeDistance centerDistance;
 	bool sawValidColor;
+	bool sawUndersideColor;
 	float senseWidthPercentage = 0.8f;
 
 	for (int senseX = x + width * (1.0f - senseWidthPercentage); senseX <= x + width - width * (1.0f - senseWidthPercentage); senseX++) {
 		sawValidColor = false;
+		sawUndersideColor = false;
 		senseRows++;
 
 		//for (int senseY = y + height; senseY >= y; senseY--) {
@@ -1039,11 +1042,20 @@ Vision::EdgeDistanceMetric Vision::getEdgeDistanceMetric(int x, int y, int width
 
 				centerSumY += senseY;
 				centerSampleCount++;
+				sawUndersideColor = true;
 				
 				break;
 			}
 		}
+
+		if (sawUndersideColor) {
+			validRows++;
+		}
 	}
+
+	int validSenseRowsPercentage = validRows / senseRows;
+
+	std::cout << "@ valid percentage: " << validSenseRowsPercentage << std::endl;
 
 	if (centerSampleCount > 0) {
 		centerAvgY = centerSumY / centerSampleCount;
