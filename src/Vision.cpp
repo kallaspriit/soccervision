@@ -1246,12 +1246,17 @@ Vision::Obstruction Vision::getGoalPathObstruction(float goalDistance) {
 
 	
 
-	int invalidSpreeThreshold = 8;
+	int invalidSpreeThreshold = 20;
 
-	std::cout << "left: " << longestInvalidSpreeLeft << " vs " << invalidSpreeSumLeft << ", right: " << longestInvalidSpreeRight << " vs " << invalidSpreeSumRight << std::endl;
+	//std::cout << "left: " << longestInvalidSpreeLeft << " vs " << invalidSpreeSumLeft << ", right: " << longestInvalidSpreeRight << " vs " << invalidSpreeSumRight << std::endl;
 
-	obstruction.invalidCountLeft = longestInvalidSpreeLeft;
+	/*obstruction.invalidCountLeft = longestInvalidSpreeLeft;
 	obstruction.invalidCountRight = longestInvalidSpreeRight;
+	obstruction.left = obstruction.invalidCountLeft > invalidSpreeThreshold;
+	obstruction.right = obstruction.invalidCountRight > invalidSpreeThreshold;*/
+
+	obstruction.invalidCountLeft = invalidSpreeSumLeft;
+	obstruction.invalidCountRight = invalidSpreeSumRight;
 	obstruction.left = obstruction.invalidCountLeft > invalidSpreeThreshold;
 	obstruction.right = obstruction.invalidCountRight > invalidSpreeThreshold;
 
