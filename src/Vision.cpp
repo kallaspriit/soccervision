@@ -1087,10 +1087,13 @@ Vision::EdgeDistanceMetric Vision::getEdgeDistanceMetric(int x, int y, int width
 		int lastValidX = -1;
 		int leftCutX = -1;
 		int rightCutX = -1;
+		bool sawValid = false;
 
 		// detect left cut
 		for (int i = 0; i <= width; i++) {
 			if (validRowsMap[i] == true) {
+				sawValid = true;
+
 				if (invalidCounter > 0) {
 					invalidCounter--;
 				}
@@ -1098,8 +1101,7 @@ Vision::EdgeDistanceMetric Vision::getEdgeDistanceMetric(int x, int y, int width
 				if (lastValidX == -1 || i > lastValidX) {
 					lastValidX = i;
 				}
-			}
-			else {
+			} else if (sawValid) {
 				invalidCounter++;
 			}
 
@@ -1116,9 +1118,12 @@ Vision::EdgeDistanceMetric Vision::getEdgeDistanceMetric(int x, int y, int width
 
 		// detect right cut
 		invalidCounter = 0;
+		sawValid = false;
 
 		for (int i = width; i >= 0; i--) {
 			if (validRowsMap[i] == true) {
+				sawValid = true;
+
 				if (invalidCounter > 0) {
 					invalidCounter--;
 				}
@@ -1126,8 +1131,7 @@ Vision::EdgeDistanceMetric Vision::getEdgeDistanceMetric(int x, int y, int width
 				if (lastValidX == -1 || i < lastValidX) {
 					lastValidX = i;
 				}
-			}
-			else {
+			} else if (sawValid) {
 				invalidCounter++;
 			}
 
