@@ -1007,19 +1007,18 @@ Vision::EdgeDistanceMetric Vision::getEdgeDistanceMetric(int x, int y, int width
 	int centerSumY = 0;
 	int centerSampleCount = 0;
 	int centerAvgY = -1;
+	int senseRows = 0;
 	EdgeDistance centerDistance;
 	bool sawValidColor;
+	float senseWidthPercentage = 0.8f;
 
-	for (int senseX = x; senseX <= x + width; senseX++) {
+	for (int senseX = x + width * (1.0f - senseWidthPercentage); senseX <= x + width - width * (1.0f - senseWidthPercentage); senseX++) {
 		sawValidColor = false;
+		senseRows++;
 
 		//for (int senseY = y + height; senseY >= y; senseY--) {
 		//for (int senseY = y + height / 3; senseY < Config::cameraHeight; senseY++) {
 		for (int senseY = y + height / 3; senseY < y + height * 1.2f; senseY++) {
-			if (senseX < x + halfWidth - centerWidth / 2 || senseX > x + halfWidth + centerWidth / 2) {
-				continue;
-			}
-
 			color = getColorAt(senseX, senseY);
 
 			if (color == NULL) {
