@@ -118,6 +118,10 @@
 * - make all parameters settable in the UI
 * - implement logviking-style logging with filterable components
 *
+* Competition
+* - when reversing blind, stop if got too many non-color or black pixels behind (the black matte)
+* - reduce goal size to seen edge distance are to aim to correct area
+*
 * Testing scenarious
 * + fetch ball direct at distance when seeing opponents goal
 * + fetch ball direct at distance when not seeing opponents goal

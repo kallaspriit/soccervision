@@ -1016,10 +1016,15 @@ Vision::EdgeDistanceMetric Vision::getEdgeDistanceMetric(int x, int y, int width
 	int senseStartX = (int)((float)x + (float)width * (1.0f - senseWidthPercentage));
 	int senseEndX = (int)((float)x + (float)width - (float)width * (1.0f - senseWidthPercentage));
 
-	for (int senseX = senseStartX; senseX <= senseEndX; senseX++) {
+	for (int senseX = x; senseX <= x + width; senseX++) {
 		sawValidColor = false;
 		sawUndersideColor = false;
-		senseRows++;
+		
+		bool isDistanceSenseRow = senseX >= senseStartX && senseX <= senseEndX;
+
+		if (isDistanceSenseRow) {
+			senseRows++;
+		}
 
 		//for (int senseY = y + height; senseY >= y; senseY--) {
 		//for (int senseY = y + height / 3; senseY < Config::cameraHeight; senseY++) {
@@ -1038,15 +1043,22 @@ Vision::EdgeDistanceMetric Vision::getEdgeDistanceMetric(int x, int y, int width
 				sawValidColor = true;
 			}
 
-			// also trigger for black is it may be the first color if looking at the goal from the side
-			if (sawValidColor && (colorName == "green" || colorName == "black")) {
-				canvas.fillBoxCentered(senseX, senseY, 4, 4, 255, 0, 255);
+			if (isDistanceSenseRow) {
+				// also trigger for black is it may be the first color if looking at the goal from the side
+				// don't count black as many robots are black
+				if (sawValidColor && (colorName == "green"/* || colorName == "black"*/)) {
+					canvas.fillBoxCentered(senseX, senseY, 4, 4, 255, 0, 255);
 
-				centerSumY += senseY;
-				centerSampleCount++;
-				sawUndersideColor = true;
-				
-				break;
+					centerSumY += senseY;
+					centerSampleCount++;
+					sawUndersideColor = true;
+
+					break;
+				}
+			} else {
+				if (sawValidColor && (colorName == "green"/* || colorName == "black"*/)) {
+					canvas.fillBoxCentered(senseX, senseY, 4, 4, 0, 0, 255);
+				}
 			}
 		}
 
