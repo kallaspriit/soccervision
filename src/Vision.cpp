@@ -1084,11 +1084,16 @@ Vision::EdgeDistanceMetric Vision::getEdgeDistanceMetric(int x, int y, int width
 		// scan pixels left to right
 		int invalidCounter = 0;
 		int cutThreshold = (int)((float)width * 0.1f);
+		int lastValidX = -1;
 
 		for (int i = 0; i <= width; i++) {
 			if (validRowsMap[i] == true) {
 				if (invalidCounter > 0) {
 					invalidCounter--;
+				}
+
+				if (lastValidX == -1 || i > lastValidX) {
+					lastValidX = i;
 				}
 			}
 			else {
@@ -1098,7 +1103,7 @@ Vision::EdgeDistanceMetric Vision::getEdgeDistanceMetric(int x, int y, int width
 			if (invalidCounter >= cutThreshold) {
 				std::cout << "cut at " << i << "/" << width << " where invalidCounter: " << invalidCounter << "/" << cutThreshold << std::endl;
 
-				canvas.fillBoxCentered(x + i, y + height, 15, 15, 255, 255, 0);
+				canvas.fillBoxCentered(x + lastValidX, y + height, 15, 15, 255, 255, 0);
 
 				break;
 			}
