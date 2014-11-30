@@ -1671,6 +1671,11 @@ void TestController::FetchBallDirectState::step(float dt, Vision::Results* visio
 		return;
 	}
 
+	// make it fall out of this state after kick
+	if (robot->coilgun->getTimeSinceLastKicked() <= 0.032f && stateDuration > 0.032f) {
+		ai->setState("find-ball");
+	}
+
 	if (robot->dribbler->gotBall()) {
 		ai->dbg("gotBall", true);
 
@@ -2091,6 +2096,11 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	// wait for the possible reverse out of goal task to finish
 	if (robot->hasTasks()) {
 		return;
+	}
+
+	// make it fall out of this state after kick
+	if (robot->coilgun->getTimeSinceLastKicked() <= 0.032f && stateDuration > 0.032f) {
+		ai->setState("find-ball");
 	}
 	
 	// goes to aim state when got ball is enabled, otherwise always uses chip kick limits and kicks as soon as dribbler senses ball
