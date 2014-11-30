@@ -1032,7 +1032,7 @@ void TestController::WatchBallState::step(float dt, Vision::Results* visionResul
 void TestController::WatchGoalState::onEnter(Robot* robot, Parameters parameters) {
 	pid.reset();
 
-	float lookAtLimit = Config::lookAtMaxSpeedAngle * Config::lookAtP;
+	float lookAtLimit = Math::degToRad(Config::lookAtMaxSpeedAngle) * Config::lookAtP;
 
 	pid.setInputLimits(-Config::lookAtMaxSpeedAngle, Config::lookAtMaxSpeedAngle);
 	pid.setOutputLimits(-lookAtLimit, lookAtLimit);
@@ -1047,7 +1047,22 @@ void TestController::WatchGoalState::step(float dt, Vision::Results* visionResul
 	if (goal == NULL) {
 		robot->setTargetDir(ai->manualSpeedX, ai->manualSpeedY, ai->manualOmega);
 
-		return;
+		if (goal == NULL) {
+			float searchGoalDir;
+
+			if (ai->lastTargetGoalAngle > 0.0f) {
+				searchGoalDir = 1.0f;
+			}
+			else {
+				searchGoalDir = -1.0f;
+			}
+
+			float searchPeriod = 1.0f;
+
+			robot->spinAroundDribbler(searchGoalDir == -1.0f, searchPeriod);
+
+			return;
+		}
 	}
 
 	robot->setTargetDir(ai->manualSpeedX, ai->manualSpeedY);
@@ -1062,7 +1077,7 @@ void TestController::WatchGoalState::step(float dt, Vision::Results* visionResul
 		paramP != pid.getPParam()
 		|| paramI != pid.getIParam()
 		|| paramD != pid.getDParam()
-		) {
+	) {
 		std::cout << "! Updated PID params P: " << paramP << ", I: " << paramI << ", D: " << paramD << std::endl;
 
 		pid.setTunings(paramP, paramI, paramD);
@@ -2575,7 +2590,7 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 	ai->dbg("timeSinceEscapeCorner", lastEscapeCornerTime == -1.0 ? -1.0 : Util::duration(lastEscapeCornerTime));
 
 	// configuration parameters
-	float searchPeriod = Config::robotSpinAroundDribblerPeriod;
+	float searchPeriod = 1.0f;
 	float reversePeriod = 1.0f;
 	float reverseSpeed = 1.5f;
 	float maxAimDuration = 6.0f;
