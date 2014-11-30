@@ -73,8 +73,8 @@ int Coilgun::getChipKickDurationByDistance(float distanceMeters) {
 	float c = 16.707f;
 	float d = 1193.148f;
 
-	return (int)(Math::pow(a * distanceCm, 3)
-		- Math::pow(b * distanceCm, 2)
+	return (int)(a * Math::pow(distanceCm, 3)
+		- b * Math::pow(distanceCm, 2)
 		+ c * distanceCm
 		+ d);
 }
