@@ -133,9 +133,9 @@ void Dribbler::step(float dt) {
 	}
 
 	// apply limits just in case periodically
-	/*if (timeSinceLimitsApplied > 1.0f) {
+	if (timeSinceLimitsApplied > 1.0f) {
 		applyLimits();
-	}*/
+	}
 
 	timeSinceLimitsApplied += dt;
 
