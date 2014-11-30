@@ -1032,7 +1032,7 @@ void TestController::WatchBallState::step(float dt, Vision::Results* visionResul
 void TestController::WatchGoalState::onEnter(Robot* robot, Parameters parameters) {
 	pid.reset();
 
-	float lookAtLimit = Math::degToRad(Config::lookAtMaxSpeedAngle) * Config::lookAtP;
+	float lookAtLimit = 10.0f;
 
 	pid.setInputLimits(-Config::lookAtMaxSpeedAngle, Config::lookAtMaxSpeedAngle);
 	pid.setOutputLimits(-lookAtLimit, lookAtLimit);
@@ -1042,30 +1042,26 @@ void TestController::WatchGoalState::onEnter(Robot* robot, Parameters parameters
 }
 
 void TestController::WatchGoalState::step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration, float combinedDuration) {
+	robot->stop();
+	
 	Object* goal = visionResults->getLargestGoal(ai->targetSide, Dir::FRONT);
 
 	if (goal == NULL) {
-		robot->setTargetDir(ai->manualSpeedX, ai->manualSpeedY, ai->manualOmega);
+		float searchPeriod = 2.0f;
+		float searchGoalDir;
 
-		if (goal == NULL) {
-			float searchGoalDir;
-
-			if (ai->lastTargetGoalAngle > 0.0f) {
-				searchGoalDir = 1.0f;
-			}
-			else {
-				searchGoalDir = -1.0f;
-			}
-
-			float searchPeriod = 1.0f;
-
-			robot->spinAroundDribbler(searchGoalDir == -1.0f, searchPeriod);
-
-			return;
+		if (ai->lastTargetGoalAngle > 0.0f) {
+			searchGoalDir = 1.0f;
+		} else {
+			searchGoalDir = -1.0f;
 		}
+
+		robot->spinAroundDribbler(searchGoalDir == -1.0f, searchPeriod);
+
+		return;
 	}
 
-	robot->setTargetDir(ai->manualSpeedX, ai->manualSpeedY);
+	//robot->setTargetDir(ai->manualSpeedX, ai->manualSpeedY);
 
 	//robot->lookAt(goal);
 
@@ -1084,11 +1080,12 @@ void TestController::WatchGoalState::step(float dt, Vision::Results* visionResul
 		pid.reset();
 	}
 
+	pid.setSetPoint(0.0f);
 	pid.setProcessValue(Math::radToDeg(goal->angle));
 
 	float targetOmega = pid.compute();
 
-	robot->setTargetOmega(-Math::degToRad(targetOmega));
+	robot->setTargetOmega(-targetOmega);
 
 	ai->dbg("1. P", pid.getPParam());
 	ai->dbg("2. I", pid.getIParam());
@@ -2590,7 +2587,7 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 	ai->dbg("timeSinceEscapeCorner", lastEscapeCornerTime == -1.0 ? -1.0 : Util::duration(lastEscapeCornerTime));
 
 	// configuration parameters
-	float searchPeriod = 1.0f;
+	float searchPeriod = 2.0f;
 	float reversePeriod = 1.0f;
 	float reverseSpeed = 1.5f;
 	float maxAimDuration = 6.0f;
