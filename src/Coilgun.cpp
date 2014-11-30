@@ -133,12 +133,12 @@ void Coilgun::step(float dt) {
 
 			std::string parametersStr = Util::toString(kickOnceGotBallParameters.mainDuration) + ":" + Util::toString(kickOnceGotBallParameters.mainDelay) + ":" + Util::toString(chipDuration) + ":" + Util::toString(kickOnceGotBallParameters.chipDelay);
 
-			com->send("bdkick:" + parametersStr);
-
-			lastBdkickRequestTime = Util::millitime();
+			com->send("bdkick:" + parametersStr);	
 		} else {
 			com->send("nokick");
 		}
+
+		lastBdkickRequestTime = Util::millitime();
 	}
 
 	timeSinceLastVoltageReading += dt;
