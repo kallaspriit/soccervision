@@ -1047,7 +1047,7 @@ void TestController::WatchGoalState::step(float dt, Vision::Results* visionResul
 	Object* goal = visionResults->getLargestGoal(ai->targetSide, Dir::FRONT);
 
 	if (goal == NULL) {
-		float searchPeriod = 2.0f;
+		float searchPeriod = 1.5f;
 		float searchGoalDir;
 
 		if (ai->lastTargetGoalAngle > 0.0f) {
