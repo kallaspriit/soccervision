@@ -12,7 +12,7 @@
 #include <map>
 #include <sstream>
 
-Robot::Robot(AbstractCommunication* com) : com(com), wheelFL(NULL), wheelFR(NULL), wheelRL(NULL), wheelRR(NULL), coilgun(NULL), robotLocalizer(NULL), odometerLocalizer(NULL), ballLocalizer(NULL), odometer(NULL), visionResults(NULL), chipKickRequested(false), requestedChipKickLowerDribbler(false), requestedChipKickDistance(0.0f), lookAtPid(Config::lookAtP, Config::lookAtI, Config::lookAtD, 0.016f) {
+Robot::Robot(AbstractCommunication* com) : com(com), wheelFL(NULL), wheelFR(NULL), wheelRL(NULL), wheelRR(NULL), coilgun(NULL), robotLocalizer(NULL), odometerLocalizer(NULL), ballLocalizer(NULL), odometer(NULL), visionResults(NULL), chipKickRequested(false), requestedChipKickLowerDribbler(false), requestedChipKickDistance(0.0f), lookAtPid(0.35f, 0.0f, 0.0012f, 0.016f) {
     targetOmega = 0;
     targetDir = Math::Vector(0, 0);
    
@@ -32,8 +32,9 @@ Robot::Robot(AbstractCommunication* com) : com(com), wheelFL(NULL), wheelFR(NULL
 
 	json = "null";
 
-	float lookAtLimit = Config::lookAtMaxSpeedAngle * Config::lookAtP;
+	float lookAtLimit = 10.0f;
 
+	lookAtPid.setTunings(0.35f, 0.0f, 0.0012f);
 	lookAtPid.setInputLimits(-Config::lookAtMaxSpeedAngle, Config::lookAtMaxSpeedAngle);
 	lookAtPid.setOutputLimits(-lookAtLimit, lookAtLimit);
 	lookAtPid.setMode(AUTO_MODE);
@@ -514,9 +515,16 @@ void Robot::lookAt(Object* object, float lookAtP, bool stare) {
 
 void Robot::lookAt(const Math::Angle& angle, float lookAtP) {
 	// simple P-controller
-	setTargetOmega(Math::limit(angle.rad() * lookAtP, Math::degToRad(Config::lookAtMaxSpeedAngle) * Config::lookAtP));
+	//setTargetOmega(Math::limit(angle.rad() * lookAtP, Math::degToRad(Config::lookAtMaxSpeedAngle) * Config::lookAtP));
 
 	// PID controller
+	lookAtPid.setSetPoint(0.0f);
+	lookAtPid.setProcessValue(angle.deg());
+
+	float targetOmega = lookAtPid.compute();
+
+	setTargetOmega(-targetOmega);
+
 	/*lookAtPid.setProcessValue(angle.deg());
 
 	float omega = lookAtPid.compute();
