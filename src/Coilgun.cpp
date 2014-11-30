@@ -127,7 +127,7 @@ void Coilgun::step(float dt) {
 		charge();
 	}
 
-	if (Util::duration(lastBdkickRequestTime) >= 0.5) {
+	if (Util::duration(lastBdkickRequestTime) >= 1.0) {
 		if (isKickingOnceGotBall) {
 			int chipDuration = kickOnceGotBallParameters.chipDistance > 0 ? getChipKickDurationByDistance(kickOnceGotBallParameters.chipDistance) : 0;
 
