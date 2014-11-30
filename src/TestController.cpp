@@ -2078,9 +2078,9 @@ void TestController::FetchBallNearState::onEnter(Robot* robot, Parameters parame
 	chipKickDistance = 0.0f;
 	lastBallAngle = 0.0f;
 	ballInWayFrames = 0;
-	maxSideSpeed = 1.5f;
+	maxSideSpeed = 1.0f;
 
-	pid.setInputLimits(-1.0f, 1.0f);
+	pid.setInputLimits(-45.0f, 45.0f);
 	pid.setOutputLimits(-maxSideSpeed, maxSideSpeed);
 	pid.setMode(AUTO_MODE);
 	pid.setBias(0.0f);
@@ -2372,17 +2372,10 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	//float maxSideSpeed = 1.5f;
 	//float approachP = 1.0f;
 	float lookAtGoalP = Config::lookAtP / 3.0f / 2.0f; // spend less effort on focusing on the goal, improves getting the ball
-
-	// magic solution..
-	//float sidePower = Math::map(Math::abs(ball->distanceX), 0.0f, maxSideSpeedDistance, 0.0f, 1.0f);
 	float sidePower = Math::map(Math::abs(Math::radToDeg(ball->angle)), 0.0f, maxSideSpeedBallAngle, 0.0f, 1.0f);
 
-	// reduce side P close to the ball, consider using PID here
-	float sideP = Math::map(ballDistance, 0.0f, 0.5f, 0.3f, 0.85f);
-	float sideSpeed = Math::sign(ball->distanceX) * sideP * sidePower;
-
 	// PID solution
-	float paramP = Util::toFloat(ai->parameters[0]);
+	/*float paramP = Util::toFloat(ai->parameters[0]);
 	float paramI = Util::toFloat(ai->parameters[1]);
 	float paramD = Util::toFloat(ai->parameters[2]);
 
@@ -2391,7 +2384,23 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 
 		pid.setTunings(paramP, paramI, paramD);
 		pid.reset();
-	}
+	}*/
+
+	// magic solution..
+	//float sidePower = Math::map(Math::abs(ball->distanceX), 0.0f, maxSideSpeedDistance, 0.0f, 1.0f);
+	//float sidePower = Math::map(Math::abs(Math::radToDeg(ball->angle)), 0.0f, maxSideSpeedBallAngle, 0.0f, 1.0f);
+
+	// pid-based
+	pid.setSetPoint(0.0f);
+	pid.setProcessValue(Math::radToDeg(ball->angle));
+
+	float sideP = pid.compute();
+	float sideSpeed = Math::sign(ball->distanceX) * sideP * sidePower;
+
+	// reduce side P close to the ball, consider using PID here
+	//float sideP = Math::map(ballDistance, 0.0f, 0.5f, 0.3f, 0.85f);
+	//float sideSpeed = Math::sign(ball->distanceX) * sideP * sidePower;
+	
 
 	/*pid.setSetPoint(0.0f);
 	pid.setProcessValue(ball->distanceX);
