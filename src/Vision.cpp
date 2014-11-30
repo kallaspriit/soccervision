@@ -1098,7 +1098,7 @@ Vision::EdgeDistanceMetric Vision::getEdgeDistanceMetric(int x, int y, int width
 	} else {
 		// scan pixels left to right
 		int invalidCounter = 0;
-		int cutThreshold = (int)((float)width * 0.1f);
+		int cutThreshold = (int)((float)width * 0.15f);
 		int lastValidX = -1;
 		bool sawValid = false;
 
