@@ -127,14 +127,18 @@ void Coilgun::step(float dt) {
 		charge();
 	}
 
-	if (isKickingOnceGotBall && Util::duration(lastBdkickRequestTime) >= 0.5) {
-		int chipDuration = kickOnceGotBallParameters.chipDistance > 0 ? getChipKickDurationByDistance(kickOnceGotBallParameters.chipDistance) : 0;
+	if (Util::duration(lastBdkickRequestTime) >= 0.5) {
+		if (isKickingOnceGotBall) {
+			int chipDuration = kickOnceGotBallParameters.chipDistance > 0 ? getChipKickDurationByDistance(kickOnceGotBallParameters.chipDistance) : 0;
 
-		std::string parametersStr = Util::toString(kickOnceGotBallParameters.mainDuration) + ":" + Util::toString(kickOnceGotBallParameters.mainDelay) + ":" + Util::toString(chipDuration) + ":" + Util::toString(kickOnceGotBallParameters.chipDelay);
+			std::string parametersStr = Util::toString(kickOnceGotBallParameters.mainDuration) + ":" + Util::toString(kickOnceGotBallParameters.mainDelay) + ":" + Util::toString(chipDuration) + ":" + Util::toString(kickOnceGotBallParameters.chipDelay);
 
-		com->send("bdkick:" + parametersStr);
+			com->send("bdkick:" + parametersStr);
 
-		lastBdkickRequestTime = Util::millitime();
+			lastBdkickRequestTime = Util::millitime();
+		} else {
+			com->send("nokick");
+		}
 	}
 
 	timeSinceLastVoltageReading += dt;
