@@ -95,7 +95,7 @@ namespace Config {
 	const int surroundSenseThresholdY = cameraHeight - 180;
 
 	// minimum object metric thresholds to be considered valid
-	const float minValidBallSurroundThreshold = 0.5f;
+	const float minValidBallSurroundThreshold = 0.4f;
 	const float minValidBallPathThreshold = 0.75f;
 	const float minValidGoalPathThreshold = 0.65f;
 	const int maxGoalInvalidColorCount = 10;

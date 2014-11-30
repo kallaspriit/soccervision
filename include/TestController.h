@@ -188,7 +188,7 @@ public:
 
 	public:
 		FetchBallNearState(TestController* ai) : State(ai), enterDistance(-1.0f), enterVelocity(0.0f), smallestForwardSpeed(-1.0f), useChipKick(false), switchToAim(false), chipKickDistance(0.0f), lastBallAngle(0.0f), ballInWayFrames(0), maxSideSpeed(1.5f),
-			kP(4.0f), kI(1.0f), kD(0.0025f), pid(kP, kI, kD, 0.016f) {}
+			kP(4.0f), kI(1.0f), kD(0.0035f), pid(kP, kI, kD, 0.016f) {}
 		void onEnter(Robot* robot, Parameters parameters);
 		void onExit(Robot* robot);
 		void step(float dt, Vision::Results* visionResults, Robot* robot, float totalDuration, float stateDuration, float combinedDuration);
