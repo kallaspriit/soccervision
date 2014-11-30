@@ -50,6 +50,7 @@ private:
 	AbstractCommunication* com;
 	double lastKickTime;
 	double lastChargeRequestTime;
+	double lastBdkickRequestTime;
 	float timeSinceLastVoltageReading;
 	float voltage;
 	bool isKickingOnceGotBall;

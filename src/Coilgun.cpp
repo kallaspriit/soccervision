@@ -7,7 +7,7 @@
 
 #include <iostream>
 
-Coilgun::Coilgun(AbstractCommunication* com) : com(com), lastKickTime(0.0), lastChargeRequestTime(0.0), timeSinceLastVoltageReading(0.0f), voltage(0.0f), isKickingOnceGotBall(false), kickOnceGotBallMissedFrames(0) {
+Coilgun::Coilgun(AbstractCommunication* com) : com(com), lastKickTime(0.0), lastChargeRequestTime(0.0), lastBdkickRequestTime(0.0), timeSinceLastVoltageReading(0.0f), voltage(0.0f), isKickingOnceGotBall(false), kickOnceGotBallMissedFrames(0) {
 
 };
 
@@ -125,6 +125,16 @@ void Coilgun::cancelKickOnceGotBall(bool force) {
 void Coilgun::step(float dt) {
 	if (isLowVoltage() && Util::duration(lastChargeRequestTime) >= 1.0) {
 		charge();
+	}
+
+	if (isKickingOnceGotBall && Util::duration(lastBdkickRequestTime) >= 0.5) {
+		int chipDuration = kickOnceGotBallParameters.chipDistance > 0 ? getChipKickDurationByDistance(kickOnceGotBallParameters.chipDistance) : 0;
+
+		std::string parametersStr = Util::toString(kickOnceGotBallParameters.mainDuration) + ":" + Util::toString(kickOnceGotBallParameters.mainDelay) + ":" + Util::toString(chipDuration) + ":" + Util::toString(kickOnceGotBallParameters.chipDelay);
+
+		com->send("bdkick:" + parametersStr);
+
+		lastBdkickRequestTime = Util::millitime();
 	}
 
 	timeSinceLastVoltageReading += dt;
