@@ -2377,7 +2377,7 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	float sidePower = Math::map(Math::abs(Math::radToDeg(ball->angle)), 0.0f, maxSideSpeedBallAngle, 0.0f, 1.0f);
 	
 	// PID solution
-	/*float paramP = Util::toFloat(ai->parameters[0]);
+	float paramP = Util::toFloat(ai->parameters[0]);
 	float paramI = Util::toFloat(ai->parameters[1]);
 	float paramD = Util::toFloat(ai->parameters[2]);
 
@@ -2386,7 +2386,7 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 
 		pid.setTunings(paramP, paramI, paramD);
 		pid.reset();
-	}*/
+	}
 
 	// magic solution..
 	//float sidePower = Math::map(Math::abs(ball->distanceX), 0.0f, maxSideSpeedDistance, 0.0f, 1.0f);
@@ -2429,6 +2429,7 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	robot->lookAt(goal, Config::lookAtP, false);
 
 	ai->dbg("forwardSpeed", forwardSpeed);
+	ai->dbg("sideP", sideP);
 	ai->dbg("sidePower", sidePower);
 	ai->dbg("sideSpeed", sideSpeed);
 	ai->dbg("enterVelocity", enterVelocity);
