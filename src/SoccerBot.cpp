@@ -989,8 +989,14 @@ void SoccerBot::handleCommunicationMessage(std::string message) {
 		if (
 			command.name != "speeds"
 			&& command.name != "adc"
+			&& command.name != "ball"
 		) {
 			std::cout << "! Got command: " << command.name << " with " << command.parameters.size() << " parameters" << std::endl;
+
+			for (int i = 0; i < command.parameters.size(); i++)
+			{
+				std::cout << "  > " << (i + 1) << " " << command.parameters.at(i) << std::endl;
+			}
 		}
 	}
 }
