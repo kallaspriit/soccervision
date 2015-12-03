@@ -983,11 +983,11 @@ void SoccerBot::handleCommunicationMessage(std::string message) {
 		activeController->handleCommunicationMessage(message);
 	}
 
-	/*if (Command::isValid(message)) {
+	if (Command::isValid(message)) {
         Command command = Command::parse(message);
 
-		// do something?
-	}*/
+		std::cout << "! Got command: " << command.isValid << std::endl;
+	}
 }
 
 std::string SoccerBot::getStateJSON() {
