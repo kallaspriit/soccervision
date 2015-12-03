@@ -35,21 +35,21 @@ bool XimeaCamera::open(int serial) {
     bool found = false;
 
     for (unsigned int i = 0; i < deviceCount; i++) {
-		//std::cout << "  > opening camera #" << i << ".. ";
+		std::cout << "  > opening camera #" << i << ".. ";
         xiOpenDevice(i, &device);
-		//std::cout << "done!" << std::endl;
+		std::cout << "done!" << std::endl;
 
         xiGetParamInt(device, XI_PRM_DEVICE_SN, &sn);
-       // std::cout << "  > found camera with serial number: " << sn << ".. ";
+        std::cout << "  > found camera with serial number: " << sn << ".. ";
 
         if (serial == 0 || serial == sn) {
             found = true;
 
-			//std::cout << "match found!" << std::endl;
+			std::cout << "match found!" << std::endl;
 
 			break;
         } else {
-			//std::cout << "not the right one, closing it" << std::endl;
+			std::cout << "not the right one, closing it" << std::endl;
 
             xiCloseDevice(device);
         }
