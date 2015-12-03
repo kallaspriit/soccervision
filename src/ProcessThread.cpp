@@ -120,7 +120,7 @@ void* ProcessThread::run() {
 	visionResult = vision->process();
 
 	if (debug) {
-		DebugRenderer::renderBlobs(classification, blobber);
+		// DebugRenderer::renderBlobs(classification, blobber);
 		DebugRenderer::renderBalls(rgb, vision, visionResult->balls);
 		DebugRenderer::renderGoals(rgb, visionResult->goals);
 		//DebugRenderer::renderObstructions(rgb, visionResult->goalPathObstruction);

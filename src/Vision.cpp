@@ -2220,7 +2220,7 @@ Object* Vision::Results::getLargestGoal(Side side, Dir dir) {
 			area = goal->width * goal->height;
 		
 			if (side != Side::UNKNOWN && goal->type != (int)side) {
-				std::cout << "! Skip " << sideName << " goal front : " << area << " at " << goal->width << "x" << goal->height << " of " << front->goals.size() << " goals" << " - type " << goal->type << " vs " << ((int)side) << std::endl;
+				std::cout << "@ Skip " << sideName << " goal front : " << area << " at " << goal->width << "x" << goal->height << " of " << front->goals.size() << " goals" << " - type " << goal->type << " vs " << ((int)side) << std::endl;
 
 				continue;
 			}
@@ -2229,9 +2229,9 @@ Object* Vision::Results::getLargestGoal(Side side, Dir dir) {
 				largestGoal = goal;
 				largestArea = area;
 
-				std::cout << "! New largest " << sideName << " goal front : " << area << " at " << goal->width << "x" << goal->height << " of " << front->goals.size() << " goals" << " - type " << goal->type << " vs " << ((int)side) << std::endl;
+				std::cout << "@ New largest " << sideName << " goal front : " << area << " at " << goal->width << "x" << goal->height << " of " << front->goals.size() << " goals" << " - type " << goal->type << " vs " << ((int)side) << std::endl;
 			} else {
-				std::cout << "! Not largest " << sideName << " goal front : " << area << " at " << goal->width << "x" << goal->height << " of " << front->goals.size() << " goals" << " - type " << goal->type << " vs " << ((int)side) << std::endl;
+				std::cout << "@ Not largest " << sideName << " goal front : " << area << " at " << goal->width << "x" << goal->height << " of " << front->goals.size() << " goals" << " - type " << goal->type << " vs " << ((int)side) << std::endl;
 			}
 		}
 	}
@@ -2270,7 +2270,7 @@ Object* Vision::Results::getLargestGoal(Side side, Dir dir) {
 
 		area = largestGoal->width * largestGoal->height;
 
-		std::cout << "! Final largest " << sideName << " goal: " << area << " at " << largestGoal->width << "x" << largestGoal->height << std::endl;
+		std::cout << "@ Final largest " << sideName << " goal: " << area << " at " << largestGoal->width << "x" << largestGoal->height << std::endl;
 
 		return largestGoal;
 	}/* else if (
