@@ -2226,7 +2226,7 @@ Object* Vision::Results::getLargestGoal(Side side, Dir dir) {
 				largestGoal = goal;
 				largestArea = area;
 
-				std::cout << "! New largest goal front: " << area << std::endl;
+				std::cout << "! New largest goal front: " << area << " at " << goal->width << "x" << goal->height << std::endl;
 			}
 		}
 	}
