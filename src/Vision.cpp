@@ -2263,6 +2263,10 @@ Object* Vision::Results::getLargestGoal(Side side, Dir dir) {
 
 		//lastLargestGoal.copyFrom(largestGoal);
 
+		area = largestGoal->width * largestGoal->height;
+
+		std::cout << "! Final largest goal: " << area << " at " << largestGoal->width << "x" << largestGoal->height << std::endl;
+
 		return largestGoal;
 	}/* else if (
 		lastLargestGoal.width > 0
