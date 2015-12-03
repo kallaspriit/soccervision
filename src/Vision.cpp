@@ -2210,6 +2210,7 @@ Object* Vision::Results::getLargestGoal(Side side, Dir dir) {
 	int largestArea = 0;
 	Object* goal;
 	Object* largestGoal = NULL;
+	std::string sideName = side == Side::BLUE ? "blue" : "yellow";
 
 	if (front != NULL && dir != Dir::REAR) {
 		for (ObjectListItc it = front->goals.begin(); it != front->goals.end(); it++) {
@@ -2226,7 +2227,7 @@ Object* Vision::Results::getLargestGoal(Side side, Dir dir) {
 				largestGoal = goal;
 				largestArea = area;
 
-				std::cout << "! New largest goal front: " << area << " at " << goal->width << "x" << goal->height << std::endl;
+				std::cout << "! New largest " << sideName << " goal front : " << area << " at " << goal->width << "x" << goal->height << std::endl;
 			}
 		}
 	}
@@ -2265,7 +2266,7 @@ Object* Vision::Results::getLargestGoal(Side side, Dir dir) {
 
 		area = largestGoal->width * largestGoal->height;
 
-		std::cout << "! Final largest goal: " << area << " at " << largestGoal->width << "x" << largestGoal->height << std::endl;
+		std::cout << "! Final largest " << sideName << " goal: " << area << " at " << largestGoal->width << "x" << largestGoal->height << std::endl;
 
 		return largestGoal;
 	}/* else if (
