@@ -289,7 +289,7 @@ bool Vision::isValidGoal(Object* goal, Side side) {
 	//std::cout << "@ EDGE LEFT: " << edgeDistanceMetric.leftTopDistance.distance << "m, right: " << edgeDistanceMetric.rightTopDistance.distance << "m" << std::endl;
 
 	if (goal->area < Config::goalMinArea) {
-		std::cout << "@ GOAL INVALID MIN AREA: " << goal->area << " VS " << Config::goalMinArea << std::endl;
+		// std::cout << "@ GOAL INVALID MIN AREA: " << goal->area << " VS " << Config::goalMinArea << std::endl;
 
 		return false;
 	}/* else if (goal->area > Config::goalCertainArea) {
@@ -297,7 +297,7 @@ bool Vision::isValidGoal(Object* goal, Side side) {
 	}*/
 
 	if (goal->y - goal->height / 2 > Config::goalTopMaxY) {
-		std::cout << "@ GOAL NOT TOP ENOUGH: " << (goal->y - goal->height / 2) << " VS " << Config::goalTopMaxY << std::endl;
+		// std::cout << "@ GOAL NOT TOP ENOUGH: " << (goal->y - goal->height / 2) << " VS " << Config::goalTopMaxY << std::endl;
 
 		// TODO restore in some form
 		return false;
@@ -347,7 +347,7 @@ bool Vision::isValidGoal(Object* goal, Side side) {
 			&& pathMetricRight.invalidColorCount > Config::maxGoalInvalidColorCount
 			&& pathMetricRight.percentage < Config::minValidGoalPathThreshold
 		) {
-			std::cout << "@ GOAL INVALID COLOR FAILS LEFT: " << pathMetricLeft.percentage << "; CENTER: " << pathMetricCenter.percentage << "; RIGHT: " << pathMetricRight.percentage << std::endl;
+			// std::cout << "@ GOAL INVALID COLOR FAILS LEFT: " << pathMetricLeft.percentage << "; CENTER: " << pathMetricCenter.percentage << "; RIGHT: " << pathMetricRight.percentage << std::endl;
 
 			return false;
 		}
@@ -366,7 +366,7 @@ bool Vision::isValidGoal(Object* goal, Side side) {
 		(edgeDistanceMetric.leftTopDistance.distance < Config::goalTopMinDistance && edgeDistanceMetric.leftTopDistance.screenY > Config::goalTopMaxY)
 		&& (edgeDistanceMetric.rightTopDistance.distance < Config::goalTopMinDistance && edgeDistanceMetric.rightTopDistance.screenY > Config::goalTopMaxY)
 	) {
-		std::cout << "@ GOAL INVALID TOP EDGE DISTANCE LEFT: " << edgeDistanceMetric.leftTopDistance.distance << "m, right: " << edgeDistanceMetric.rightTopDistance.distance << "m" << std::endl;
+		// std::cout << "@ GOAL INVALID TOP EDGE DISTANCE LEFT: " << edgeDistanceMetric.leftTopDistance.distance << "m, right: " << edgeDistanceMetric.rightTopDistance.distance << "m" << std::endl;
 
 		return false;
 	}
@@ -381,6 +381,7 @@ bool Vision::isValidGoal(Object* goal, Side side) {
 	}
 
 	/*
+	CAN MESS UP GOAL SIZE!
 	// update position and width if available
 	if (edgeDistanceMetric.newWidth != -1) {
 		goal->width = edgeDistanceMetric.newWidth;
@@ -418,7 +419,7 @@ bool Vision::isNotOpponentMarker(Object* goal, Side side, ObjectList& goals)
 
 		// this is only reliable if the goal is close by
 		if (goal->intersects(otherGoal)) {
-			std::cout << "@ Goal intersects opposite side goal, must be opponent marker" << std::endl;
+			// std::cout << "@ Goal intersects opposite side goal, must be opponent marker" << std::endl;
 
 			return false;
 		}
@@ -2222,7 +2223,7 @@ Object* Vision::Results::getLargestGoal(Side side, Dir dir) {
 			area = goal->width * goal->height;
 		
 			if (side != Side::UNKNOWN && goal->type != (int)side) {
-				std::cout << "@ Skip " << sideName << " goal front : " << area << " at " << goal->width << "x" << goal->height << " of " << front->goals.size() << " goals" << " - type " << goal->type << " vs " << ((int)side) << std::endl;
+				//std::cout << "@ Skip " << sideName << " goal front : " << area << " at " << goal->width << "x" << goal->height << " of " << front->goals.size() << " goals" << " - type " << goal->type << " vs " << ((int)side) << std::endl;
 
 				continue;
 			}
@@ -2231,9 +2232,9 @@ Object* Vision::Results::getLargestGoal(Side side, Dir dir) {
 				largestGoal = goal;
 				largestArea = area;
 
-				std::cout << "@ New largest " << sideName << " goal front : " << area << " at " << goal->width << "x" << goal->height << " of " << front->goals.size() << " goals" << " - type " << goal->type << " vs " << ((int)side) << std::endl;
+				//std::cout << "@ New largest " << sideName << " goal front : " << area << " at " << goal->width << "x" << goal->height << " of " << front->goals.size() << " goals" << " - type " << goal->type << " vs " << ((int)side) << std::endl;
 			} else {
-				std::cout << "@ Not largest " << sideName << " goal front : " << area << " at " << goal->width << "x" << goal->height << " of " << front->goals.size() << " goals" << " - type " << goal->type << " vs " << ((int)side) << std::endl;
+				//std::cout << "@ Not largest " << sideName << " goal front : " << area << " at " << goal->width << "x" << goal->height << " of " << front->goals.size() << " goals" << " - type " << goal->type << " vs " << ((int)side) << std::endl;
 			}
 		}
 	}
@@ -2257,6 +2258,8 @@ Object* Vision::Results::getLargestGoal(Side side, Dir dir) {
 	}
 
 	if (largestGoal != NULL) {
+		area = largestGoal->width * largestGoal->height;
+
 		if (dir == Dir::ANY) {
 			Side otherSide = side == Side::BLUE ? Side::YELLOW : Side::BLUE;
 			Dir sameDir = largestGoal->behind ? Dir::REAR : Dir::FRONT;
@@ -2264,15 +2267,15 @@ Object* Vision::Results::getLargestGoal(Side side, Dir dir) {
 
 			// don't use the found goal if other goal is also visible on the same side and is larger
 			if (otherGaol != NULL && otherGaol->area > largestGoal->area) {
+				std::cout << "@ Not returning largest " << sideName << " goal: " << area << " at " << largestGoal->width << "x" << largestGoal->height << std::endl;
+
 				return NULL;
 			}
 		}
 
 		//lastLargestGoal.copyFrom(largestGoal);
 
-		area = largestGoal->width * largestGoal->height;
-
-		std::cout << "@ Final largest " << sideName << " goal: " << area << " at " << largestGoal->width << "x" << largestGoal->height << std::endl;
+		//std::cout << "@ Final largest " << sideName << " goal: " << area << " at " << largestGoal->width << "x" << largestGoal->height << std::endl;
 
 		return largestGoal;
 	}/* else if (
