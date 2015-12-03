@@ -289,7 +289,7 @@ bool Vision::isValidGoal(Object* goal, Side side) {
 	//std::cout << "@ EDGE LEFT: " << edgeDistanceMetric.leftTopDistance.distance << "m, right: " << edgeDistanceMetric.rightTopDistance.distance << "m" << std::endl;
 
 	if (goal->area < Config::goalMinArea) {
-		//std::cout << "@ GOAL INVALID MIN AREA: " << goal->area << " VS " << Config::goalMinArea << std::endl;
+		std::cout << "@ GOAL INVALID MIN AREA: " << goal->area << " VS " << Config::goalMinArea << std::endl;
 
 		return false;
 	}/* else if (goal->area > Config::goalCertainArea) {
@@ -297,7 +297,7 @@ bool Vision::isValidGoal(Object* goal, Side side) {
 	}*/
 
 	if (goal->y - goal->height / 2 > Config::goalTopMaxY) {
-		//std::cout << "@ GOAL NOT TOP ENOUGH: " << (goal->y - goal->height / 2) << " VS " << Config::goalTopMaxY << std::endl;
+		std::cout << "@ GOAL NOT TOP ENOUGH: " << (goal->y - goal->height / 2) << " VS " << Config::goalTopMaxY << std::endl;
 
 		// TODO restore in some form
 		return false;
@@ -347,7 +347,7 @@ bool Vision::isValidGoal(Object* goal, Side side) {
 			&& pathMetricRight.invalidColorCount > Config::maxGoalInvalidColorCount
 			&& pathMetricRight.percentage < Config::minValidGoalPathThreshold
 		) {
-			//std::cout << "@ GOAL PATH FAILS: " << pathMetric.percentage << " VS " << Config::minValidGoalPathThreshold << ", OUT: " << (pathMetric.out ? "YES" : "NO") << std::endl;
+			std::cout << "@ GOAL INVALID COLOR FAILS LEFT: " << pathMetricLeft.percentage << "; CENTER: " << pathMetricCenter.percentage << "; RIGHT: " << pathMetricRight.percentage << std::endl;
 
 			return false;
 		}
@@ -365,8 +365,8 @@ bool Vision::isValidGoal(Object* goal, Side side) {
 	if (
 		(edgeDistanceMetric.leftTopDistance.distance < Config::goalTopMinDistance && edgeDistanceMetric.leftTopDistance.screenY > Config::goalTopMaxY)
 		&& (edgeDistanceMetric.rightTopDistance.distance < Config::goalTopMinDistance && edgeDistanceMetric.rightTopDistance.screenY > Config::goalTopMaxY)
-		) {
-		//std::cout << "@ GOAL INVALID TOP EDGE DISTANCE LEFT: " << edgeDistanceMetric.leftTopDistance.distance << "m, right: " << edgeDistanceMetric.rightTopDistance.distance << "m" << std::endl;
+	) {
+		std::cout << "@ GOAL INVALID TOP EDGE DISTANCE LEFT: " << edgeDistanceMetric.leftTopDistance.distance << "m, right: " << edgeDistanceMetric.rightTopDistance.distance << "m" << std::endl;
 
 		return false;
 	}
@@ -416,7 +416,7 @@ bool Vision::isNotOpponentMarker(Object* goal, Side side, ObjectList& goals)
 
 		// this is only reliable if the goal is close by
 		if (goal->intersects(otherGoal)) {
-			std::cout << "! Goal intersects opposite side goal, must be opponent marker" << std::endl;
+			// std::cout << "@ Goal intersects opposite side goal, must be opponent marker" << std::endl;
 
 			return false;
 		}
