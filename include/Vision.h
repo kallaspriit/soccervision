@@ -164,6 +164,7 @@ private:
 	Object* Vision::mergeGoals(Object* goal1, Object* goal2);
 	bool isValidBall(Object* ball, Dir dir, ObjectList& goals);
     bool isValidGoal(Object* goal, Side side);
+	bool isNotOpponentMarker(Object* goal, Side side, ObjectList& goals);
 	bool isBallInGoal(Object* ball, Dir dir, ObjectList& goals);
 	int getBallRadius(int width, int height);
 	int getBallSenseRadius(int ballRadius, float distance);

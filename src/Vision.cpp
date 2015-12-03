@@ -229,7 +229,10 @@ ObjectList Vision::processGoals(Dir dir) {
 	for (ObjectListItc it = mergedGoals.begin(); it != mergedGoals.end(); it++) {
 		Object* goal = *it;
 
-		if (isValidGoal(goal, goal->type == 0 ? Side::YELLOW : Side::BLUE)) {
+		if (
+			isValidGoal(goal, goal->type == 0 ? Side::YELLOW : Side::BLUE)
+			&& isNotOpponentMarker(goal, goal->type == 0 ? Side::YELLOW : Side::BLUE, mergedGoals)
+		) {
 			// TODO Extend the goal downwards using extended color / limited ammount horizontal too
 
 			distance = getDistance(goal->x, goal->y + goal->height / 2);
@@ -396,6 +399,30 @@ bool Vision::isValidGoal(Object* goal, Side side) {
 	}*/
 
     return true;
+}
+
+bool Vision::isNotOpponentMarker(Object* goal, Side side, ObjectList& goals)
+{
+	// check for goal intersecting opposite goal to detect the marker on the opponent robot
+	Object* otherGoal;
+
+	for (ObjectListItc it = goals.begin(); it != goals.end(); it++) {
+		otherGoal = *it;
+
+		// ignore same side intersecting goals
+		if (goal->type == otherGoal->type) {
+			continue;
+		}
+
+		// this is only reliable if the goal is close by
+		if (goal->intersects(otherGoal)) {
+			std::cout << "! Goal intersects opposite side goal, must be opponent marker" << std::endl;
+
+			return false;
+		}
+	}
+
+	return true;
 }
 
 bool Vision::isValidBall(Object* ball, Dir dir, ObjectList& goals) {
