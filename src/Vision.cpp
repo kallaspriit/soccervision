@@ -416,7 +416,7 @@ bool Vision::isNotOpponentMarker(Object* goal, Side side, ObjectList& goals)
 
 		// this is only reliable if the goal is close by
 		if (goal->intersects(otherGoal)) {
-			// std::cout << "@ Goal intersects opposite side goal, must be opponent marker" << std::endl;
+			std::cout << "@ Goal intersects opposite side goal, must be opponent marker" << std::endl;
 
 			return false;
 		}
