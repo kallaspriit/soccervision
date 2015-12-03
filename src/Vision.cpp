@@ -2215,21 +2215,23 @@ Object* Vision::Results::getLargestGoal(Side side, Dir dir) {
 	if (front != NULL && dir != Dir::REAR) {
 		for (ObjectListItc it = front->goals.begin(); it != front->goals.end(); it++) {
 			goal = *it;
-		
-			if (side != Side::UNKNOWN && goal->type != (int)side) {
-				continue;
-			}
 
 			//area = goal->area;
 			area = goal->width * goal->height;
+		
+			if (side != Side::UNKNOWN && goal->type != (int)side) {
+				std::cout << "! Skip " << sideName << " goal front : " << area << " at " << goal->width << "x" << goal->height << " of " << front->goals.size() << " goals" << " - type " << goal->type << " vs " << ((int)side) << std::endl;
+
+				continue;
+			}
 
 			if (largestGoal == NULL || area > largestArea) {
 				largestGoal = goal;
 				largestArea = area;
 
-				std::cout << "! New largest " << sideName << " goal front : " << area << " at " << goal->width << "x" << goal->height << " of " << front->goals.size() << " goals" << std::endl;
+				std::cout << "! New largest " << sideName << " goal front : " << area << " at " << goal->width << "x" << goal->height << " of " << front->goals.size() << " goals" << " - type " << goal->type << " vs " << ((int)side) << std::endl;
 			} else {
-				std::cout << "! Not largest " << sideName << " goal front : " << area << " at " << goal->width << "x" << goal->height << " of " << front->goals.size() << " goals" << std::endl;
+				std::cout << "! Not largest " << sideName << " goal front : " << area << " at " << goal->width << "x" << goal->height << " of " << front->goals.size() << " goals" << " - type " << goal->type << " vs " << ((int)side) << std::endl;
 			}
 		}
 	}
