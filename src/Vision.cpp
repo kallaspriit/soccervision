@@ -229,10 +229,10 @@ ObjectList Vision::processGoals(Dir dir) {
 	for (ObjectListItc it = mergedGoals.begin(); it != mergedGoals.end(); it++) {
 		Object* goal = *it;
 
-		// if (
-		//	isValidGoal(goal, goal->type == 0 ? Side::YELLOW : Side::BLUE)
-		//	&& isNotOpponentMarker(goal, goal->type == 0 ? Side::YELLOW : Side::BLUE, mergedGoals)
-		//) {
+		if (
+			isValidGoal(goal, goal->type == 0 ? Side::YELLOW : Side::BLUE)
+			// && isNotOpponentMarker(goal, goal->type == 0 ? Side::YELLOW : Side::BLUE, mergedGoals)
+		) {
 			// TODO Extend the goal downwards using extended color / limited ammount horizontal too
 
 			distance = getDistance(goal->x, goal->y + goal->height / 2);
@@ -258,7 +258,7 @@ ObjectList Vision::processGoals(Dir dir) {
 			}*/
 
 			filteredGoals.push_back(goal);
-		//}
+		}
 	}
 
 	return filteredGoals;
