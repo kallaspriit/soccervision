@@ -17,7 +17,7 @@ XimeaCamera::~XimeaCamera() {
 }
 
 bool XimeaCamera::open(int serial) {
-	//std::cout << "! Searching for a camera with serial: " << serial << std::endl;
+	std::cout << "! Searching for a camera with serial: " << serial << std::endl;
 
     DWORD deviceCount = 0;
     xiGetNumberDevices(&deviceCount);
@@ -27,7 +27,7 @@ bool XimeaCamera::open(int serial) {
     }
 
 	if (serial != 0) {
-		//std::cout << "  > found " << deviceCount << " available devices" << std::endl;
+		std::cout << "  > found " << deviceCount << " available devices" << std::endl;
 	}
 
     int sn = 0;
