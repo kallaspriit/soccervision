@@ -362,11 +362,17 @@ bool Vision::isValidGoal(Object* goal, Side side) {
 
 	// also comparing pixel values because distance calculation messes up for very high pixels..
 	// expect both sides to fail as one of them can get incorecctly labelled
+	// if (
+	//	(edgeDistanceMetric.leftTopDistance.distance < Config::goalTopMinDistance && edgeDistanceMetric.leftTopDistance.screenY > Config::goalTopMaxY)
+	//	&& (edgeDistanceMetric.rightTopDistance.distance < Config::goalTopMinDistance && edgeDistanceMetric.rightTopDistance.screenY > Config::goalTopMaxY)
+	//) {
+
+
 	if (
-		(edgeDistanceMetric.leftTopDistance.distance < Config::goalTopMinDistance && edgeDistanceMetric.leftTopDistance.screenY > Config::goalTopMaxY)
-		&& (edgeDistanceMetric.rightTopDistance.distance < Config::goalTopMinDistance && edgeDistanceMetric.rightTopDistance.screenY > Config::goalTopMaxY)
+		edgeDistanceMetric.leftTopDistance.distance < Config::goalTopMinDistance
+		&& edgeDistanceMetric.rightTopDistance.distance < Config::goalTopMinDistance
 	) {
-		// std::cout << "@ GOAL INVALID TOP EDGE DISTANCE LEFT: " << edgeDistanceMetric.leftTopDistance.distance << "m, right: " << edgeDistanceMetric.rightTopDistance.distance << "m" << std::endl;
+		std::cout << "@ GOAL INVALID TOP EDGE DISTANCE LEFT: " << edgeDistanceMetric.leftTopDistance.distance << "m, right: " << edgeDistanceMetric.rightTopDistance.distance << "m" << std::endl;
 
 		return false;
 	}
@@ -2267,7 +2273,7 @@ Object* Vision::Results::getLargestGoal(Side side, Dir dir) {
 
 			// don't use the found goal if other goal is also visible on the same side and is larger
 			if (otherGaol != NULL && otherGaol->area > largestGoal->area) {
-				std::cout << "@ Not returning largest " << sideName << " goal: " << area << " at " << largestGoal->width << "x" << largestGoal->height << std::endl;
+				// std::cout << "@ Not returning largest " << sideName << " goal: " << area << " at " << largestGoal->width << "x" << largestGoal->height << std::endl;
 
 				return NULL;
 			}
