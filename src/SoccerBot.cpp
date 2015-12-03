@@ -986,7 +986,12 @@ void SoccerBot::handleCommunicationMessage(std::string message) {
 	if (Command::isValid(message)) {
         Command command = Command::parse(message);
 
-		std::cout << "! Got command: " << command.name << std::endl;
+		if (
+			command.name != "speeds"
+			&& command.name != "adc"
+		) {
+			std::cout << "! Got command: " << command.name << " with " << command.parameters.size() << " parameters" << std::endl;
+		}
 	}
 }
 
