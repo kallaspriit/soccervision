@@ -15,10 +15,10 @@ namespace Config {
 	//const CommunicationMode communicationMode = COM;
 
 	// camera serials
-	// const int frontCameraSerial = 857769553;
-	// const int rearCameraSerial = 857735761;
-	const int frontCameraSerial = 33208651;
-	const int rearCameraSerial = 33200251;
+	const int frontCameraSerial = 857769553;
+	const int rearCameraSerial = 857735761;
+	// const int frontCameraSerial = 33208651;
+	// const int rearCameraSerial = 33200251;
 
 	// indexes of motors according to the communication messages
 	const int wheelFLId = 0;
