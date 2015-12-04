@@ -185,6 +185,18 @@
 				<input type="text" class="send-parameter-field" data-index="2" value="" placeholder="Parameter 3"/>
 				<input type="text" class="send-parameter-field" data-index="3" value="" placeholder="Parameter 4"/>
 			</div>
+			<div id="referee-controls">
+				<select name="field-choice" id="field-choice">
+					<option value="A" selected="selected">Field: A</option>
+					<option value="B">Field: B</option>
+				</select>
+				<select name="robot-id-choice" id="robot-id-choice">
+					<option value="A" selected="selected">Robot: A</option>
+					<option value="B">Robot: B</option>
+					<option value="C">Robot: C</option>
+					<option value="D">Robot: D</option>
+				</select>
+			</div>
 			<ul id="connection">
 				<li></li>
 				<li></li>
@@ -201,6 +213,10 @@
 			<div id="ball-indicator"></div>
 			<div id="dribbler-indicator"></div>
 			<div id="coilgun-indicator">ARM</div>
+			<div id="camera-fps-indicators">
+				<div id="camera-fps-indicator-front" class="camera-fps-indicator">0FPS</div>
+				<div id="camera-fps-indicator-rear" class="camera-fps-indicator">0FPS</div>
+			</div>
 			<!--div id="fps-indicator"></div-->
 			<!--div id="robot">
 				<div id="dir"></div>

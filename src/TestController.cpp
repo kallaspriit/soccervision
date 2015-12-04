@@ -290,7 +290,13 @@ bool TestController::handleCommand(const Command& cmd) {
 		setState(cmd.name.substr(4));
 	} else if (cmd.name == "parameter" && cmd.parameters.size() == 2) {
 		handleParameterCommand(cmd);
-	} else {
+	} else if (cmd.name == "ref-field" && cmd.parameters.size() == 1) {
+		handleRefFieldIdCommand(cmd);
+	}
+	else if (cmd.name == "ref-robot-id" && cmd.parameters.size() == 1) {
+		handleRefRobotIdCommand(cmd);
+	}
+	else {
 		return false;
 	}
 
@@ -385,6 +391,18 @@ void TestController::handleParameterCommand(const Command& cmd) {
 	parameters[index] = value;
 
 	//std::cout << "! Received parameter #" << index << ": " << value << std::endl;
+}
+
+void TestController::handleRefFieldIdCommand(const Command& cmd) {
+	std::string id = cmd.parameters[0];
+
+	std::cout << "! Got referee field id: " << id << std::endl;
+}
+
+void TestController::handleRefRobotIdCommand(const Command& cmd) {
+	std::string id = cmd.parameters[0];
+
+	std::cout << "! Got referee robot id: " << id << std::endl;
 }
 
 void TestController::handleDriveToCommand(const Command& cmd) {

@@ -207,6 +207,20 @@ Dash.UI.prototype.setupParameterFields = function() {
 	});
 };
 
+Dash.UI.prototype.setupRefereeFields = function() {
+	$('#field-choice').change(function() {
+		var selectedField = $(this).val();
+
+		dash.socket.send('<ref-field:' + selectedField + '>');
+	});
+
+	$('#robot-id-choice').change(function() {
+		var selectedRobotId = $(this).val();
+
+		dash.socket.send('<ref-robot-id:' + selectedRobotId + '>');
+	});
+};
+
 Dash.UI.prototype.initSocket = function() {
 	var self = this,
 		cookieHost = $.cookie('host');
@@ -235,6 +249,7 @@ Dash.UI.prototype.initSocket = function() {
 		//}, 2000);
 
 		self.setupParameterFields();
+		self.setupRefereeFields();
 	});
 	
 	dash.socket.bind(Dash.Socket.Event.CLOSE, function(e) {
@@ -1205,7 +1220,11 @@ Dash.UI.prototype.showStateStats = function(state) {
 	} else {
 		$('#contents').addClass('no-error');
 	}
-	
+
+	// show camera FPS
+	$('#camera-fps-indicator-front').html(state.frontCameraFps + 'FPS (' + state.frontCameraMissedFrameCount + 'MF)');
+	$('#camera-fps-indicator-rear').html(state.rearCameraFps + 'FPS (' + state.rearCameraMissedFrameCount + 'MF)');
+
 	this.showControllerState(state.controllerState);
 
 	if (

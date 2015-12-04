@@ -838,3 +838,27 @@ TABLE.form.tight TH {
 .range-slider {
 	width: 250px;
 }
+
+#camera-fps-indicators {
+	box-sizing: border-box;
+	position: absolute;
+	bottom: 0;
+	right: 0;
+	width: 300px;
+	height: 30px;
+	line-height: 30px;
+}
+.camera-fps-indicator {
+	float: left;
+	width: 50%;
+	text-align: center;
+	color: #FFF;
+}
+
+#referee-controls {
+	position: absolute;
+	bottom: 100%;
+	right: 0;
+	margin-bottom: 20px;
+	color: #FFF;
+}
