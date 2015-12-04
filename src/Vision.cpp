@@ -1136,9 +1136,11 @@ Vision::EdgeDistanceMetric Vision::getEdgeDistanceMetric(int x, int y, int width
 		centerDistance = EdgeDistance(x + width / 2, y + height, distance.straight);
 	} else {
 		// scan pixels left to right
-		int invalidCounter = 0;
 		int cutThreshold = (int)((float)width * 0.15f);
+
+		// runtime, reset for right cut!
 		int lastValidX = -1;
+		int invalidCounter = 0;
 		bool sawValid = false;
 
 		// detect left cut
@@ -1167,6 +1169,7 @@ Vision::EdgeDistanceMetric Vision::getEdgeDistanceMetric(int x, int y, int width
 		}
 
 		// detect right cut
+		lastValidX = -1;
 		invalidCounter = 0;
 		sawValid = false;
 
