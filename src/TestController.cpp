@@ -458,6 +458,12 @@ void TestController::handleRefExternalCommand(const Command& cmd) {
 	std::string commandName = command.substr(3);
 
 	std::cout << "  > got referee command '" << commandName << "'" << std::endl;
+
+	if (commandName == "START----") {
+		handleRefereeStart();
+	} else if (commandName == "STOP-----") {
+		handleRefereeStop();
+	}
 }
 
 void TestController::handleDriveToCommand(const Command& cmd) {
@@ -783,6 +789,18 @@ Object* TestController::getLastBall(Dir dir) {
 	}
 
 	return lastBall;
+}
+
+void TestController::handleRefereeStart() {
+	std::cout << "! Got referee start command, finding ball" << std::endl;
+
+	setState("find-ball");
+}
+
+void TestController::handleRefereeStop() {
+	std::cout << "! Got referee stop command, providing manual control" << std::endl;
+
+	setState("manual-control");
 }
 
 float TestController::getObjectClosestDistance(Vision::Results* visionResults, Object* object) {

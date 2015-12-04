@@ -322,7 +322,6 @@ public:
 	bool shouldAvoidBallInWay(Vision::BallInWayMetric ballInWayMetric, float goalDistance);
 	bool shouldManeuverBallInWay(Vision::BallInWayMetric ballInWayMetric, float goalDistance, bool isLowVoltage);
 	Vision::Obstruction getGoalPathObstruction(float lifetime = 0.2f);
-	char getRefIdName(RefId refId);
 
     void step(float dt, Vision::Results* visionResults);
 	Side getTargetSide() { return targetSide; }
@@ -348,6 +347,10 @@ private:
 	void setLastBall(Object* ball);
 	float getObjectClosestDistance(Vision::Results* visionResults, Object* object);
 	Object* getLastBall(Dir dir = Dir::ANY);
+
+	char getRefIdName(RefId refId);
+	void handleRefereeStart();
+	void handleRefereeStop();
 
 	Vision::Results* visionResults;
 
