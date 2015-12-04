@@ -1223,7 +1223,7 @@ Vision::EdgeDistanceMetric Vision::getEdgeDistanceMetric(int x, int y, int width
 	int validLeftWidth = leftCutX != -1 ? leftCutX : -1;
 	int validRightWidth = rightCutX != -1 ? width - rightCutX : -1;
 
-	std::cout << "@ LEFT CUT: " << leftCutX << " WIDTH: " << validLeftWidth << "; RIGHT CUT: " << rightCutX << " WIDTH: " << validRightWidth << std::endl;
+	// std::cout << "@ LEFT CUT: " << leftCutX << " WIDTH: " << validLeftWidth << "; RIGHT CUT: " << rightCutX << " WIDTH: " << validRightWidth << std::endl;
 
 	if (validLeftWidth != -1 && validRightWidth != -1) {
 		// got cuts from both sides, choose the widest side
