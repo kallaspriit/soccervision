@@ -112,9 +112,9 @@ XimeaCamera::Frame* XimeaCamera::getFrame() {
 	int frameNumberDiff = frame.number - lastFrameNumber;
 
 	if (frameNumberDiff == 0) {
-		// std::cout << "@ GOT FRAME " << serialNumber << " " << frame.number << " AGAIN" << std::endl;
+		std::cout << "@ GOT FRAME " << serialNumber << " " << frame.number << " AGAIN" << std::endl;
 	} else if (frameNumberDiff > 1) {
-		// std::cout << "@ MISSED " << serialNumber << " " << (frameNumberDiff - 1) << " FRAMES" << std::endl;
+		std::cout << "@ MISSED " << serialNumber << " " << (frameNumberDiff - 1) << " FRAMES" << std::endl;
 	}
 
     lastFrameNumber = frame.number;
