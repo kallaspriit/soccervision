@@ -294,7 +294,10 @@ bool TestController::handleCommand(const Command& cmd) {
 		handleRefFieldIdCommand(cmd);
 	} else if (cmd.name == "ref-robot-id" && cmd.parameters.size() == 1) {
 		handleRefRobotIdCommand(cmd);
-	} else {
+	} else if (cmd.name == "ref" && cmd.parameters.size() == 1) {
+		handleRefExternalCommand(cmd);
+	}
+	else {
 		return false;
 	}
 
@@ -421,6 +424,12 @@ void TestController::handleRefRobotIdCommand(const Command& cmd) {
 	} else {
 		std::cout << "- Got unexpected referee robot id: " << id << std::endl;
 	}
+}
+
+void TestController::handleRefExternalCommand(const Command& cmd) {
+	std::string command = cmd.parameters[0];
+
+	std::cout << "! Got referee command: " << command << std::endl;
 }
 
 void TestController::handleDriveToCommand(const Command& cmd) {

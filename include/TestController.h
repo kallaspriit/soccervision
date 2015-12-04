@@ -315,6 +315,7 @@ public:
 	void handleParameterCommand(const Command& cmd);
 	void handleRefFieldIdCommand(const Command& cmd);
 	void handleRefRobotIdCommand(const Command& cmd);
+	void handleRefExternalCommand(const Command& cmd);
 
 	float getTargetAngle(float goalX, float goalY, float ballX, float ballY, float D, TargetMode targetMode = TargetMode::INLINE);
 	float getChipKickDistance(Vision::BallInWayMetric ballInWayMetric, float goalDistance);
