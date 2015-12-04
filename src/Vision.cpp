@@ -303,56 +303,6 @@ bool Vision::isValidGoal(Object* goal, Side side) {
 		return false;
 	}
 
-	if (goal->y + goal->height < Config::goalPathSenseStartY) {
-		PathMetric pathMetricCenter = getPathMetric(
-			Config::cameraWidth / 2,
-			Config::goalPathSenseStartY,
-			goal->x,
-			goal->y + goal->height / 2,
-			validGoalPathColors
-			//,"green"
-		);
-
-		int goalHalfWidth = goal->width / 2;
-		int goalEdgeSensePixels = (int)((float)goalHalfWidth * 0.85f);
-
-		PathMetric pathMetricLeft = getPathMetric(
-			Config::cameraWidth / 2 - goalEdgeSensePixels,
-			Config::goalPathSenseStartY,
-			goal->x - goalEdgeSensePixels,
-			goal->y + goal->height / 2,
-			validGoalPathColors
-			//,"green"
-		);
-
-		PathMetric pathMetricRight = getPathMetric(
-			Config::cameraWidth / 2 + goalEdgeSensePixels,
-			Config::goalPathSenseStartY,
-			goal->x + goalEdgeSensePixels,
-			goal->y + goal->height / 2,
-			validGoalPathColors
-			//,"green"
-		);
-
-		if (
-			// center
-			pathMetricCenter.invalidColorCount > Config::maxGoalInvalidColorCount
-			&& pathMetricCenter.percentage < Config::minValidGoalPathThreshold
-
-			// left
-			&& pathMetricLeft.invalidColorCount > Config::maxGoalInvalidColorCount
-			&& pathMetricLeft.percentage < Config::minValidGoalPathThreshold
-
-			// right
-			&& pathMetricRight.invalidColorCount > Config::maxGoalInvalidColorCount
-			&& pathMetricRight.percentage < Config::minValidGoalPathThreshold
-		) {
-			// std::cout << "@ GOAL INVALID COLOR FAILS LEFT: " << pathMetricLeft.percentage << "; CENTER: " << pathMetricCenter.percentage << "; RIGHT: " << pathMetricRight.percentage << std::endl;
-
-			return false;
-		}
-	}
-
 	std::string color1 = goal->type == 0 ? "blue-goal" : "yellow-goal";
 	std::string color2 = goal->type == 0 ? "blue-goal-wide" : "yellow-goal-wide";
 	int halfWidth = goal->width / 2;
@@ -395,6 +345,57 @@ bool Vision::isValidGoal(Object* goal, Side side) {
 	// update position and width if available, note that goal x is in center but edge metric from corner
 	if (edgeDistanceMetric.newX != -1) {
 		goal->x = edgeDistanceMetric.newX + goal->width / 2;
+	}
+
+	// check for colors on lines from robot to goal left-center-right
+	if (goal->y + goal->height < Config::goalPathSenseStartY) {
+		PathMetric pathMetricCenter = getPathMetric(
+			Config::cameraWidth / 2,
+			Config::goalPathSenseStartY,
+			goal->x,
+			goal->y + goal->height / 2,
+			validGoalPathColors
+			//,"green"
+			);
+
+		int goalHalfWidth = goal->width / 2;
+		int goalEdgeSensePixels = (int)((float)goalHalfWidth * 0.85f);
+
+		PathMetric pathMetricLeft = getPathMetric(
+			Config::cameraWidth / 2 - goalEdgeSensePixels,
+			Config::goalPathSenseStartY,
+			goal->x - goalEdgeSensePixels,
+			goal->y + goal->height / 2,
+			validGoalPathColors
+			//,"green"
+			);
+
+		PathMetric pathMetricRight = getPathMetric(
+			Config::cameraWidth / 2 + goalEdgeSensePixels,
+			Config::goalPathSenseStartY,
+			goal->x + goalEdgeSensePixels,
+			goal->y + goal->height / 2,
+			validGoalPathColors
+			//,"green"
+			);
+
+		if (
+			// center
+			pathMetricCenter.invalidColorCount > Config::maxGoalInvalidColorCount
+			&& pathMetricCenter.percentage < Config::minValidGoalPathThreshold
+
+			// left
+			&& pathMetricLeft.invalidColorCount > Config::maxGoalInvalidColorCount
+			&& pathMetricLeft.percentage < Config::minValidGoalPathThreshold
+
+			// right
+			&& pathMetricRight.invalidColorCount > Config::maxGoalInvalidColorCount
+			&& pathMetricRight.percentage < Config::minValidGoalPathThreshold
+			) {
+			// std::cout << "@ GOAL INVALID COLOR FAILS LEFT: " << pathMetricLeft.percentage << "; CENTER: " << pathMetricCenter.percentage << "; RIGHT: " << pathMetricRight.percentage << std::endl;
+
+			return false;
+		}
 	}
 
 	// TODO update goal angle
