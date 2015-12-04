@@ -1232,7 +1232,7 @@ Vision::EdgeDistanceMetric Vision::getEdgeDistanceMetric(int x, int y, int width
 			newWidth = validLeftWidth;
 		} else {
 			// choose right side, update width and position
-			newX = rightCutX;
+			newX = x + rightCutX;
 			newWidth = validRightWidth;
 		}
 	} else if (validLeftWidth != -1) {
@@ -1240,7 +1240,7 @@ Vision::EdgeDistanceMetric Vision::getEdgeDistanceMetric(int x, int y, int width
 		newWidth = validLeftWidth;
 	} else if (validRightWidth != -1) {
 		// use right side, update width and position
-		newX = rightCutX;
+		newX = x + rightCutX;
 		newWidth = validRightWidth;
 	}
 
