@@ -387,7 +387,7 @@ bool Vision::isValidGoal(Object* goal, Side side) {
 	}
 
 	// CAN MESS UP GOAL SIZE, TAKING THE SMALLER ONE!
-	// update position and width if available
+	// update position and width from obstructed goal, used when there's a low robot in the way
 	if (edgeDistanceMetric.newWidth != -1) {
 		goal->width = edgeDistanceMetric.newWidth;
 	}
@@ -1005,6 +1005,7 @@ Vision::EdgeDistanceMetric Vision::getEdgeDistanceMetric(int x, int y, int width
 	Blobber::Color* color;
 	std::string colorName;
 
+	// left and right top distances
 	for (int senseX = x; senseX <= x + width; senseX++) {
 		for (int senseY = y; senseY <= y + height; senseY++) {
 			color = getColorAt(senseX, senseY);
@@ -1041,6 +1042,7 @@ Vision::EdgeDistanceMetric Vision::getEdgeDistanceMetric(int x, int y, int width
 		}
 	}
 
+	// render left and right top distance boxes and distances
 	if (leftTopDistance.distance != -1) {
 		canvas.fillBoxCentered(leftTopDistance.screenX, leftTopDistance.screenY, 10, 10, 255, 0, 0);
 		canvas.drawText(leftTopDistance.screenX, leftTopDistance.screenY + 10, Util::toString(leftTopDistance.distance) + "m", 0, 0, 0);
@@ -1123,6 +1125,7 @@ Vision::EdgeDistanceMetric Vision::getEdgeDistanceMetric(int x, int y, int width
 
 	//std::cout << "@ valid percentage: " << validSenseRowsPercentage << std::endl;
 
+	// find goal cutting - means a low-profile opponent is in the way of the goal
 	int leftCutX = -1;
 	int rightCutX = -1;
 
@@ -1157,7 +1160,7 @@ Vision::EdgeDistanceMetric Vision::getEdgeDistanceMetric(int x, int y, int width
 			if (invalidCounter >= cutThreshold) {
 				leftCutX = lastValidX;
 
-				canvas.fillBoxCentered(x + leftCutX, y + height, 15, 15, 0, 255, 255);
+				canvas.fillBoxCentered(x + leftCutX, y + height, 10, 10, 0, 128, 0);
 
 				break;
 			}
@@ -1185,7 +1188,7 @@ Vision::EdgeDistanceMetric Vision::getEdgeDistanceMetric(int x, int y, int width
 			if (invalidCounter >= cutThreshold) {
 				rightCutX = lastValidX;
 
-				canvas.fillBoxCentered(x + rightCutX, y + height, 15, 15, 255, 0, 255);
+				canvas.fillBoxCentered(x + rightCutX, y + height, 10, 10, 0, 128, 0);
 
 				break;
 			}
@@ -1199,11 +1202,14 @@ Vision::EdgeDistanceMetric Vision::getEdgeDistanceMetric(int x, int y, int width
 		}
 	}
 
+	// draw center distance box and text
 	canvas.fillBoxCentered(centerDistance.screenX, centerDistance.screenY, 10, 10, 255, 0, 0);
 	canvas.drawText(centerDistance.screenX, centerDistance.screenY + 10, Util::toString(centerDistance.distance) + "m", 0, 0, 0);
 
 	int newX = x;
 	int newWidth = width;
+
+	std::cout << "@ LEFT CUT: " << leftCutX << "; RIGHT CUT: " << rightCutX << std::endl;
 
 	if (leftCutX == -1 && rightCutX != -1) {
 		// left side is obstructed
