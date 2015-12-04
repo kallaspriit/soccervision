@@ -429,7 +429,33 @@ void TestController::handleRefRobotIdCommand(const Command& cmd) {
 void TestController::handleRefExternalCommand(const Command& cmd) {
 	std::string command = cmd.parameters[0];
 
-	std::cout << "! Got referee command: " << command << std::endl;
+	std::cout << "! Got referee command: " << command << ", my field id: " << getRefIdName(refFieldId) << ", my robot id: " << getRefIdName(refRobotId) << std::endl;
+
+	if (command[0] != 'a') {
+		std::cout << "- Invalid referee command start, expected 'a': " << command << std::endl;
+
+		return;
+	}
+
+	char everyoneRobotId = 'X';
+	char commandFieldId = command[1];
+	char commandRobotId = command[2];
+	char myFieldId = getRefIdName(refFieldId);
+	char myRobotId = getRefIdName(refRobotId);
+
+	if (commandFieldId != myFieldId) {
+		std::cout << "  >  not for my field (" << commandFieldId << " vs " << myFieldId << ")" << std::endl;
+
+		return;
+	}
+
+	if (commandRobotId != myRobotId) {
+		std::cout << "  >  not for my robot (" << commandRobotId << " vs " << myRobotId << ")" << std::endl;
+
+		return;
+	}
+
+	std::cout << "  > it's for me!" << std::endl;
 }
 
 void TestController::handleDriveToCommand(const Command& cmd) {
@@ -972,19 +998,19 @@ Vision::Obstruction TestController::getGoalPathObstruction(float lifetime) {
 	}
 }
 
-std::string TestController::getRefIdName(RefId refId) {
+char TestController::getRefIdName(RefId refId) {
 	switch (refId) {
 		case RefId::A:
-			return "A";
+			return 'A';
 
 		case RefId::B:
-			return "B";
+			return 'B';
 
 		case RefId::C:
-			return "C";
+			return 'C';
 
 		case RefId::D:
-			return "D";
+			return 'D';
 	}
 
 	throw std::runtime_error("unexpected ref id");

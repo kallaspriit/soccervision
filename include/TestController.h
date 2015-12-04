@@ -322,7 +322,7 @@ public:
 	bool shouldAvoidBallInWay(Vision::BallInWayMetric ballInWayMetric, float goalDistance);
 	bool shouldManeuverBallInWay(Vision::BallInWayMetric ballInWayMetric, float goalDistance, bool isLowVoltage);
 	Vision::Obstruction getGoalPathObstruction(float lifetime = 0.2f);
-	std::string getRefIdName(RefId refId);
+	char getRefIdName(RefId refId);
 
     void step(float dt, Vision::Results* visionResults);
 	Side getTargetSide() { return targetSide; }
