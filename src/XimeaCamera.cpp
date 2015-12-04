@@ -8,6 +8,7 @@ XimeaCamera::XimeaCamera() : opened(false), acquisitioning(false) {
     image.bp_size = 0;
     device = NULL;
 	serialNumber = 0;
+	missedFrameCount = 0;
 
     frame.data = NULL;
 }
@@ -112,9 +113,11 @@ XimeaCamera::Frame* XimeaCamera::getFrame() {
 	int frameNumberDiff = frame.number - lastFrameNumber;
 
 	if (frameNumberDiff == 0) {
-		std::cout << "@ GOT FRAME " << serialNumber << " " << frame.number << " AGAIN" << std::endl;
+		// std::cout << "@ GOT FRAME " << serialNumber << " " << frame.number << " AGAIN" << std::endl;
 	} else if (frameNumberDiff > 1) {
-		std::cout << "@ MISSED " << serialNumber << " " << (frameNumberDiff - 1) << " FRAMES" << std::endl;
+		// std::cout << "@ MISSED " << serialNumber << " " << (frameNumberDiff - 1) << " FRAMES" << std::endl;
+
+		missedFrameCount += frameNumberDiff - 1;
 	}
 
     lastFrameNumber = frame.number;
@@ -123,9 +126,11 @@ XimeaCamera::Frame* XimeaCamera::getFrame() {
 
 	fpsCounter.step();
 
+	/*
 	if (fpsCounter.isChanged()) {
 		std::cout << "@ CAMERA " << serialNumber << " FPS: " << fpsCounter.getFps() << std::endl;
 	}
+	*/
 
     return &frame;
 }

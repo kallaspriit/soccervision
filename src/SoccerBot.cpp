@@ -1056,6 +1056,12 @@ std::string SoccerBot::getStateJSON() {
 	stream << "\"frontCameraTranslator\":" << frontCameraTranslator->getJSON() << ",";
 	stream << "\"rearCameraTranslator\":" << rearCameraTranslator->getJSON() << ",";
 
+	stream << "\"frontCameraFps\":" << frontCamera->getFps() << ",";
+	stream << "\"rearCameraFps\":" << rearCamera->getFps() << ",";
+
+	stream << "\"frontCameraMissedFrameCount\":" << frontCamera->getMissedFrameCount() << ",";
+	stream << "\"rearCameraMissedFrameCount\":" << rearCamera->getMissedFrameCount() << ",";
+
 	stream << "\"fps\":" << fpsCounter->getFps();
 
     stream << "}";

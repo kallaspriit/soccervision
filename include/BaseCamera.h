@@ -25,10 +25,12 @@ public:
 	virtual void stopAcquisition() {}
 	virtual void close() {}
 	int getFps() { return fpsCounter.getFps(); }
+	int getMissedFrameCount() { return missedFrameCount; }
 
 
 protected:
 	FpsCounter fpsCounter;
+	int missedFrameCount;
 
 };
 
