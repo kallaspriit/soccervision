@@ -805,8 +805,8 @@ std::string TestController::getJSON() {
 	stream << "\"invalidCountLeft\": " << goalPathObstruction.invalidCountLeft << ",";
 	stream << "\"invalidCountRight\": " << goalPathObstruction.invalidCountRight;
 	stream << "},";
-	stream << "\"refFieldId\": \"" << refFieldId << "\",";
-	stream << "\"refRobotId\": \"" << refRobotId << "\",";
+	stream << "\"refFieldId\": \"" << getRefIdName(refFieldId) << "\",";
+	stream << "\"refRobotId\": \"" << getRefIdName(refRobotId) << "\",";
 	stream << "\"lastTargetGoalAngle\": " << Math::radToDeg(lastTargetGoalAngle) << ",";
 	stream << "\"#stateChanges\": [";
 
@@ -963,6 +963,24 @@ Vision::Obstruction TestController::getGoalPathObstruction(float lifetime) {
 	} else {
 		return visionResults->goalPathObstruction;
 	}
+}
+
+std::string TestController::getRefIdName(RefId refId) {
+	switch (refId) {
+		case RefId::A:
+			return "A";
+
+		case RefId::B:
+			return "B";
+
+		case RefId::C:
+			return "C";
+
+		case RefId::D:
+			return "D";
+	}
+
+	throw std::runtime_error("unexpected ref id");
 }
 
 bool TestController::isRobotNearGoal(float distanceThreshold) {
