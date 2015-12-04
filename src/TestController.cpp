@@ -449,7 +449,7 @@ void TestController::handleRefExternalCommand(const Command& cmd) {
 		return;
 	}
 
-	if (commandRobotId != myRobotId) {
+	if (commandRobotId != myRobotId && commandRobotId != everyoneRobotId) {
 		std::cout << "  >  not for my robot (" << commandRobotId << " vs " << myRobotId << ")" << std::endl;
 
 		return;
