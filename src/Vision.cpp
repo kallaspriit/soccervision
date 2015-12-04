@@ -231,7 +231,7 @@ ObjectList Vision::processGoals(Dir dir) {
 
 		if (
 			isValidGoal(goal, goal->type == 0 ? Side::YELLOW : Side::BLUE)
-			&& isNotOpponentMarker(goal, goal->type == 0 ? Side::YELLOW : Side::BLUE, mergedGoals)
+			// && isNotOpponentMarker(goal, goal->type == 0 ? Side::YELLOW : Side::BLUE, mergedGoals)
 		) {
 			// TODO Extend the goal downwards using extended color / limited ammount horizontal too
 
