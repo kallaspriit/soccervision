@@ -1220,9 +1220,31 @@ Vision::EdgeDistanceMetric Vision::getEdgeDistanceMetric(int x, int y, int width
 
 	int newX = x;
 	int newWidth = width;
+	int validLeftWidth = leftCutX != -1 ? leftCutX : -1;
+	int validRightWidth = rightCutX != -1 ? width - rightCutX : -1;
 
-	std::cout << "@ LEFT CUT: " << leftCutX << "; RIGHT CUT: " << rightCutX << std::endl;
+	std::cout << "@ LEFT CUT: " << leftCutX << " WIDTH: " << validLeftWidth << "; RIGHT CUT: " << rightCutX << " WIDTH: " << validRightWidth << std::endl;
 
+	if (validLeftWidth != -1 && validRightWidth != -1) {
+		// got cuts from both sides, choose the widest side
+		if (validLeftWidth > validRightWidth) {
+			// choose left side, just update the width
+			newWidth = validLeftWidth;
+		} else {
+			// choose right side, update width and position
+			newX = rightCutX;
+			newWidth = validRightWidth;
+		}
+	} else if (validLeftWidth != -1) {
+		// use left side, just update the width
+		newWidth = validLeftWidth;
+	} else if (validRightWidth != -1) {
+		// use right side, update width and position
+		newX = rightCutX;
+		newWidth = validRightWidth;
+	}
+
+	/*
 	if (leftCutX == -1 && rightCutX != -1) {
 		// left side is obstructed
 		newX = x + rightCutX;
@@ -1237,6 +1259,7 @@ Vision::EdgeDistanceMetric Vision::getEdgeDistanceMetric(int x, int y, int width
 			newWidth = leftCutX - rightCutX;
 		}
 	}
+	*/
 
 	// render new goal position bottom positions
 	canvas.fillBoxCentered(newX, y + height, 5, 5, 255, 255, 0);
