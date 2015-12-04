@@ -297,7 +297,7 @@ bool Vision::isValidGoal(Object* goal, Side side) {
 	}*/
 
 	if (goal->y - goal->height / 2 > Config::goalTopMaxY) {
-		// std::cout << "@ GOAL NOT TOP ENOUGH: " << (goal->y - goal->height / 2) << " VS " << Config::goalTopMaxY << std::endl;
+		std::cout << "@ GOAL NOT TOP ENOUGH: " << (goal->y - goal->height / 2) << " VS " << Config::goalTopMaxY << std::endl;
 
 		// TODO restore in some form
 		return false;
@@ -322,7 +322,7 @@ bool Vision::isValidGoal(Object* goal, Side side) {
 		edgeDistanceMetric.leftTopDistance.distance < Config::goalTopMinDistance
 		&& edgeDistanceMetric.rightTopDistance.distance < Config::goalTopMinDistance
 	) {
-		// std::cout << "@ GOAL INVALID TOP EDGE DISTANCE LEFT: " << edgeDistanceMetric.leftTopDistance.distance << "m, right: " << edgeDistanceMetric.rightTopDistance.distance << "m" << std::endl;
+		std::cout << "@ GOAL INVALID TOP EDGE DISTANCE LEFT: " << edgeDistanceMetric.leftTopDistance.distance << "m, right: " << edgeDistanceMetric.rightTopDistance.distance << "m" << std::endl;
 
 		return false;
 	}
@@ -391,8 +391,8 @@ bool Vision::isValidGoal(Object* goal, Side side) {
 			// right
 			&& pathMetricRight.invalidColorCount > Config::maxGoalInvalidColorCount
 			&& pathMetricRight.percentage < Config::minValidGoalPathThreshold
-			) {
-			// std::cout << "@ GOAL INVALID COLOR FAILS LEFT: " << pathMetricLeft.percentage << "; CENTER: " << pathMetricCenter.percentage << "; RIGHT: " << pathMetricRight.percentage << std::endl;
+		) {
+			std::cout << "@ GOAL INVALID COLOR FAILS LEFT: " << pathMetricLeft.percentage << "; CENTER: " << pathMetricCenter.percentage << "; RIGHT: " << pathMetricRight.percentage << std::endl;
 
 			return false;
 		}
