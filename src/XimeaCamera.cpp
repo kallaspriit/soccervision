@@ -96,6 +96,8 @@ XimeaCamera::Frame* XimeaCamera::getFrame() {
     //xiGetImage(device, 64, &image);
 
     if (image.bp == NULL) {
+		// std::cout << "@ FAILED TO GET FRAME FOR " << serialNumber << std::endl;
+
         return NULL;
     }
 
@@ -110,9 +112,9 @@ XimeaCamera::Frame* XimeaCamera::getFrame() {
 	int frameNumberDiff = frame.number - lastFrameNumber;
 
 	if (frameNumberDiff == 0) {
-		std::cout << "@ GOT FRAME " << serialNumber << " " << frame.number << " AGAIN" << std::endl;
+		// std::cout << "@ GOT FRAME " << serialNumber << " " << frame.number << " AGAIN" << std::endl;
 	} else if (frameNumberDiff > 1) {
-		std::cout << "@ MISSED " << serialNumber << " " << (frameNumberDiff - 1) << " FRAMES" << std::endl;
+		// std::cout << "@ MISSED " << serialNumber << " " << (frameNumberDiff - 1) << " FRAMES" << std::endl;
 	}
 
     lastFrameNumber = frame.number;
