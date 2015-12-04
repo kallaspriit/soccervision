@@ -792,7 +792,7 @@ Object* TestController::getLastBall(Dir dir) {
 }
 
 void TestController::handleRefereeStart() {
-	std::cout << "! Got referee start command, finding ball" << std::endl;
+	std::cout << "! Got referee start command, start finding ball" << std::endl;
 
 	setState("find-ball");
 }

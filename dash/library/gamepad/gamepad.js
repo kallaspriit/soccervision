@@ -150,7 +150,15 @@
 		if (navigator) {
 			if (typeof(navigator.getGamepads) !== 'undefined') {
 				platform = new WebKitPlatform(listener, function() {
-					return navigator.getGamepads();
+					var gamepads = navigator.getGamepads();
+
+					return Array.prototype.slice.call(gamepads).filter(function(gamepad) {
+						if (!gamepad) {
+							return false;
+						}
+
+						return gamepad.id.toLowerCase().indexOf('unknown') === -1;
+					});
 				});
 			} else if (typeof(navigator.webkitGamepads) !== 'undefined') {
 				platform = new WebKitPlatform(listener, function() {
