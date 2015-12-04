@@ -1188,7 +1188,7 @@ Vision::EdgeDistanceMetric Vision::getEdgeDistanceMetric(int x, int y, int width
 			if (invalidCounter >= cutThreshold) {
 				rightCutX = lastValidX;
 
-				canvas.fillBoxCentered(x + rightCutX, y + height, 10, 10, 0, 128, 0);
+				canvas.fillBoxCentered(x + rightCutX, y + height, 20, 20, 0, 128, 0);
 
 				break;
 			}
@@ -1203,7 +1203,7 @@ Vision::EdgeDistanceMetric Vision::getEdgeDistanceMetric(int x, int y, int width
 	}
 
 	// draw center distance box and text
-	canvas.fillBoxCentered(centerDistance.screenX, centerDistance.screenY, 10, 10, 255, 0, 0);
+	canvas.fillBoxCentered(centerDistance.screenX, centerDistance.screenY, 20, 20, 255, 0, 0);
 	canvas.drawText(centerDistance.screenX, centerDistance.screenY + 10, Util::toString(centerDistance.distance) + "m", 0, 0, 0);
 
 	int newX = x;
@@ -1226,8 +1226,9 @@ Vision::EdgeDistanceMetric Vision::getEdgeDistanceMetric(int x, int y, int width
 		}
 	}
 
-	canvas.fillBoxCentered(newX, y + height, 15, 15, 255, 255, 0);
-	canvas.fillBoxCentered(newX + newWidth, y + height, 15, 15, 255, 255, 0);
+	// render new goal position bottom positions
+	canvas.fillBoxCentered(newX, y + height, 5, 5, 255, 255, 0);
+	canvas.fillBoxCentered(newX + newWidth, y + height, 5, 5, 255, 255, 0);
 
 	/*if (leftCutX != -1) {
 		newX = x + leftCutX;
