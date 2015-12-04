@@ -386,8 +386,7 @@ bool Vision::isValidGoal(Object* goal, Side side) {
 		goal->distance = Math::min(edgeDistanceMetric.centerDistance.distance - 0.25f, 5.5f);
 	}
 
-	/*
-	CAN MESS UP GOAL SIZE!
+	// CAN MESS UP GOAL SIZE, TAKING THE SMALLER ONE!
 	// update position and width if available
 	if (edgeDistanceMetric.newWidth != -1) {
 		goal->width = edgeDistanceMetric.newWidth;
@@ -397,7 +396,6 @@ bool Vision::isValidGoal(Object* goal, Side side) {
 	if (edgeDistanceMetric.newX != -1) {
 		goal->x = edgeDistanceMetric.newX + goal->width / 2;
 	}
-	*/
 
 	// TODO update goal angle
 
