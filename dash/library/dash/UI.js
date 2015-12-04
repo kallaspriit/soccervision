@@ -208,10 +208,10 @@ Dash.UI.prototype.setupParameterFields = function() {
 };
 
 Dash.UI.prototype.setupRefereeFields = function() {
-	$('#field-choice').change(function() {
-		var selectedField = $(this).val();
+	$('#field-id-choice').change(function() {
+		var selectedFieldId = $(this).val();
 
-		dash.socket.send('<ref-field:' + selectedField + '>');
+		dash.socket.send('<ref-field-id:' + selectedFieldId + '>');
 	});
 
 	$('#robot-id-choice').change(function() {
@@ -1297,6 +1297,20 @@ Dash.UI.prototype.showControllerState = function(state) {
 		$('#coilgun-indicator').addClass('active');
 	} else {
 		$('#coilgun-indicator').removeClass('active');
+	}
+
+	// choose correct referee field id
+	var refFieldIdSelect = $('#field-id-choice');
+
+	if (refFieldIdSelect.val() !== state.refFieldId) {
+		refFieldIdSelect.val(state.refFieldId);
+	}
+
+	// choose correct referee robot id
+	var refRobotIdSelect = $('#robot-id-choice');
+
+	if (refRobotIdSelect.val() !== state.refRobotId) {
+		refRobotIdSelect.val(state.refRobotId);
 	}
 };
 

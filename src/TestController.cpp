@@ -290,13 +290,11 @@ bool TestController::handleCommand(const Command& cmd) {
 		setState(cmd.name.substr(4));
 	} else if (cmd.name == "parameter" && cmd.parameters.size() == 2) {
 		handleParameterCommand(cmd);
-	} else if (cmd.name == "ref-field" && cmd.parameters.size() == 1) {
+	} else if (cmd.name == "ref-field-id" && cmd.parameters.size() == 1) {
 		handleRefFieldIdCommand(cmd);
-	}
-	else if (cmd.name == "ref-robot-id" && cmd.parameters.size() == 1) {
+	} else if (cmd.name == "ref-robot-id" && cmd.parameters.size() == 1) {
 		handleRefRobotIdCommand(cmd);
-	}
-	else {
+	} else {
 		return false;
 	}
 
