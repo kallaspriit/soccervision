@@ -15,6 +15,7 @@ class TestController : public BaseAI {
 
 public:
 	enum TargetMode { LEFT = -1, INLINE = 0, RIGHT = 1, UNDECIDED = 2 };
+	enum RefId { A, B, C, D };
 
 	typedef std::map<std::string, std::string> Messages;
 	typedef Messages::iterator MessagesIt;
@@ -392,6 +393,9 @@ private:
 
 	Object* lastBall;
 	Vision::Obstruction lastGoalPathObstruction;
+
+	RefId refFieldId;
+	RefId refRobotId;
 
 	Params parameters;
 	Messages messages;

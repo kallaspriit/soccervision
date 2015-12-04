@@ -172,7 +172,7 @@
 * - should not see goal in invalid places
 */
 
-TestController::TestController(Robot* robot, AbstractCommunication* com) : BaseAI(robot, com), targetSide(Side::BLUE), manualSpeedX(0.0f), manualSpeedY(0.0f), manualOmega(0.0f), manualDribblerSpeed(0), manualKickStrength(0), blueGoalDistance(0.0f), yellowGoalDistance(0.0f), lastCommandTime(-1.0), lastBallTime(-1.0), lastNearLineTime(-1.0), lastNearGoalTime(-1.0), lastInCornerTime(-1.0), lastGoalObstructedTime(-1.0), lastTargetGoalAngle(0.0f), lastBall(NULL), lastTurnAroundTime(-1.0), lastClosestGoalDistance(-1.0f), lastTargetGoalDistance(-1.0f), framesRobotOutFront(0), framesRobotOutRear(0), isRobotOutFront(false), isRobotOutRear(false), isNearLine(false), isInCorner(false), isBallInWay(false), isAvoidingBallInWay(false), inCornerFrames(0), nearLineFrames(0), nearGoalFrames(0), visibleBallCount(0), visionResults(NULL) {
+TestController::TestController(Robot* robot, AbstractCommunication* com) : BaseAI(robot, com), targetSide(Side::BLUE), manualSpeedX(0.0f), manualSpeedY(0.0f), manualOmega(0.0f), manualDribblerSpeed(0), manualKickStrength(0), blueGoalDistance(0.0f), yellowGoalDistance(0.0f), lastCommandTime(-1.0), lastBallTime(-1.0), lastNearLineTime(-1.0), lastNearGoalTime(-1.0), lastInCornerTime(-1.0), lastGoalObstructedTime(-1.0), lastTargetGoalAngle(0.0f), lastBall(NULL), lastTurnAroundTime(-1.0), lastClosestGoalDistance(-1.0f), lastTargetGoalDistance(-1.0f), framesRobotOutFront(0), framesRobotOutRear(0), isRobotOutFront(false), isRobotOutRear(false), isNearLine(false), isInCorner(false), isBallInWay(false), isAvoidingBallInWay(false), inCornerFrames(0), nearLineFrames(0), nearGoalFrames(0), visibleBallCount(0), visionResults(NULL), refFieldId(TestController::RefId::A), refRobotId(TestController::A) {
 	setupStates();
 
 	speedMultiplier = 1.0f;
@@ -397,12 +397,32 @@ void TestController::handleRefFieldIdCommand(const Command& cmd) {
 	std::string id = cmd.parameters[0];
 
 	std::cout << "! Got referee field id: " << id << std::endl;
+
+	if (id == "A") {
+		refFieldId = RefId::A;
+	} else if (id == "B") {
+		refFieldId = RefId::B;
+	} else {
+		std::cout << "- Got unexpected referee field id: " << id << std::endl;
+	}
 }
 
 void TestController::handleRefRobotIdCommand(const Command& cmd) {
 	std::string id = cmd.parameters[0];
 
 	std::cout << "! Got referee robot id: " << id << std::endl;
+
+	if (id == "A") {
+		refRobotId = RefId::A;
+	} else if (id == "B") {
+		refRobotId = RefId::B;
+	} else if (id == "C") {
+		refRobotId = RefId::C;
+	} else if (id == "D") {
+		refRobotId = RefId::D;
+	} else {
+		std::cout << "- Got unexpected referee robot id: " << id << std::endl;
+	}
 }
 
 void TestController::handleDriveToCommand(const Command& cmd) {
@@ -785,6 +805,8 @@ std::string TestController::getJSON() {
 	stream << "\"invalidCountLeft\": " << goalPathObstruction.invalidCountLeft << ",";
 	stream << "\"invalidCountRight\": " << goalPathObstruction.invalidCountRight;
 	stream << "},";
+	stream << "\"refFieldId\": \"" << refFieldId << "\",";
+	stream << "\"refRobotId\": \"" << refRobotId << "\",";
 	stream << "\"lastTargetGoalAngle\": " << Math::radToDeg(lastTargetGoalAngle) << ",";
 	stream << "\"#stateChanges\": [";
 
