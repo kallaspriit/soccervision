@@ -455,7 +455,9 @@ void TestController::handleRefExternalCommand(const Command& cmd) {
 		return;
 	}
 
-	std::cout << "  > it's for me!" << std::endl;
+	std::string commandName = command.substr(3);
+
+	std::cout << "  > got referee command '" << commandName << "'" << std::endl;
 }
 
 void TestController::handleDriveToCommand(const Command& cmd) {
