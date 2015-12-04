@@ -1067,7 +1067,15 @@ Vision::EdgeDistanceMetric Vision::getEdgeDistanceMetric(int x, int y, int width
 	int senseEndX = (int)((float)x + (float)width - (float)width * (1.0f - senseWidthPercentage));
 	std::vector<bool> validRowsMap;
 
-	for (int senseX = x; senseX <= x + width; senseX++) {
+	int checkStartX = x;
+	int checkEndX = x + width;
+	int checkStartY = y + height / 4;
+	int checkEndY = y + height * 1.2f;
+
+	// draw check volume
+	canvas.drawBox(checkStartX, checkStartY, checkEndX - checkStartX, checkEndY - checkStartY, 128, 128, 128);
+
+	for (int senseX = checkStartX; senseX <= checkEndX; senseX++) {
 		sawValidColor = false;
 		sawUndersideColor = false;
 		
@@ -1079,7 +1087,7 @@ Vision::EdgeDistanceMetric Vision::getEdgeDistanceMetric(int x, int y, int width
 
 		//for (int senseY = y + height; senseY >= y; senseY--) {
 		//for (int senseY = y + height / 3; senseY < Config::cameraHeight; senseY++) {
-		for (int senseY = y + height / 4; senseY < y + height * 1.2f; senseY++) {
+		for (int senseY = checkStartY; senseY < checkEndY; senseY++) {
 			color = getColorAt(senseX, senseY);
 
 			if (color == NULL) {
@@ -1191,7 +1199,7 @@ Vision::EdgeDistanceMetric Vision::getEdgeDistanceMetric(int x, int y, int width
 			if (invalidCounter >= cutThreshold) {
 				rightCutX = lastValidX;
 
-				canvas.fillBoxCentered(x + rightCutX, y + height, 20, 20, 0, 128, 0);
+				canvas.fillBoxCentered(x + rightCutX, y + height, 10, 10, 0, 128, 0);
 
 				break;
 			}
