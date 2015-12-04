@@ -109,6 +109,8 @@ XimeaCamera::Frame* XimeaCamera::getFrame() {
 
     lastFrameNumber = frame.number;
 
+	std::cout << "@ FRAME " << serialNumber << " " << lastFrameNumber << std::endl;
+
     return &frame;
 }
 

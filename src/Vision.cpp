@@ -1215,7 +1215,7 @@ Vision::EdgeDistanceMetric Vision::getEdgeDistanceMetric(int x, int y, int width
 	}
 
 	// draw center distance box and text
-	canvas.fillBoxCentered(centerDistance.screenX, centerDistance.screenY, 20, 20, 255, 0, 0);
+	canvas.fillBoxCentered(centerDistance.screenX, centerDistance.screenY, 10, 10, 255, 0, 0);
 	canvas.drawText(centerDistance.screenX, centerDistance.screenY + 10, Util::toString(centerDistance.distance) + "m", 0, 0, 0);
 
 	int newX = x;
