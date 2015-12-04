@@ -1,6 +1,8 @@
 #ifndef CAMERA_H
 #define CAMERA_H
 
+#include "FpsCounter.h"
+
 class BaseCamera {
 
 public:
@@ -22,6 +24,11 @@ public:
 	virtual void startAcquisition() {}
 	virtual void stopAcquisition() {}
 	virtual void close() {}
+	int getFps() { return fpsCounter.getFps(); }
+
+
+protected:
+	FpsCounter fpsCounter;
 
 };
 

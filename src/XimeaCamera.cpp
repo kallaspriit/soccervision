@@ -121,6 +121,12 @@ XimeaCamera::Frame* XimeaCamera::getFrame() {
 
 	// std::cout << "@ FRAME " << serialNumber << " " << lastFrameNumber << std::endl;
 
+	fpsCounter.step();
+
+	if (fpsCounter.isChanged()) {
+		std::cout << "@ CAMERA " << serialNumber << " FPS: " << fpsCounter.getFps() << std::endl;
+	}
+
     return &frame;
 }
 
