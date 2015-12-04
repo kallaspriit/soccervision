@@ -141,11 +141,13 @@ void DebugRenderer::renderGoals(unsigned char* image, const ObjectList& goals, i
 		//canvas.drawLine(goal->x - goal->width / 2, goal->y - goal->height / 2, goal->x + goal->width / 2, goal->y + goal->height / 2, r, g, b);
         //canvas.drawLine(goal->x - goal->width / 2, goal->y + goal->height / 2, goal->x + goal->width / 2, goal->y - goal->height / 2, r, g, b);
 
+		int offsetY = 20;
+
         sprintf(buf, "%.2fm %.1f deg", goal->distance, Math::radToDeg(goal->angle));
-        canvas.drawText(goal->x - goal->width / 2 + 2, goal->y + goal->height / 2 + 2, buf, r, g, b);
+		canvas.drawText(goal->x - goal->width / 2 + 2, goal->y + goal->height / 2 + offsetY, buf, r, g, b);
 
 		sprintf(buf, "%d x %d, %d", goal->x, goal->y + goal->height / 2, goal->area);
-        canvas.drawText(goal->x - goal->width / 2 + 2, goal->y + goal->height / 2 + 12, buf, r, g, b);
+		canvas.drawText(goal->x - goal->width / 2 + 2, goal->y + goal->height / 2 + offsetY + 10, buf, r, g, b);
 
         /*int boxArea = goal->width * goal->height;
 

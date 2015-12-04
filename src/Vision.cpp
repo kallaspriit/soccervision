@@ -1107,6 +1107,7 @@ Vision::EdgeDistanceMetric Vision::getEdgeDistanceMetric(int x, int y, int width
 			if (sawValidColor && (colorName == "green"/* || colorName == "black"*/)) {
 				sawUndersideColor = true;
 
+				// draw violet if distance sense row, otherwise blue for valid point
 				if (isDistanceSenseRow) {
 					canvas.fillBoxCentered(senseX, senseY, 4, 4, 255, 0, 255);
 
