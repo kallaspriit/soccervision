@@ -3090,9 +3090,11 @@ void TestController::ReturnFieldState::step(float dt, Vision::Results* visionRes
 	if (goal != NULL && goal->distance > Config::fieldWidth / 3.0f) {
 		robot->lookAt(goal);
 
+		ai->dbg("goalAngle", Math::radToDeg(goal->angle));
+
 		if (Math::abs(goal->angle) < Math::degToRad(5.0f)) {
 			// make a blind dash towards the goal
-			robot->setTargetDirFor(2.0f, 0.0f, 0.0f, 0.75f);
+			robot->setTargetDirFor(1.0f, 0.0f, 0.0f, 0.75f);
 
 			queuedApproachGoal = false;
 

@@ -2487,6 +2487,7 @@ bool Vision::Results::isRobotOut(Dir dir) {
 		return false;
 	}
 
+	/*
 	if (dir == Dir::FRONT) {
 		std::cout << "! Checking robot out:" << std::endl;
 
@@ -2494,6 +2495,7 @@ bool Vision::Results::isRobotOut(Dir dir) {
 			std::cout << "  > color #" << i << ": " << colorOrder[i] << std::endl;
 		}
 	}
+	*/
 
 	for (int i = 0; i < (int)colorOrder.size(); i++) {
 		if (colorOrder[i] != "black") {
