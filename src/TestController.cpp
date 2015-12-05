@@ -2724,7 +2724,7 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 	float reversePeriod = 1.0f;
 	float reverseSpeed = 1.5f;
 	float maxAimDuration = 2.5f;
-	int weakKickStrength = 1000; // kicks it a bit, but might stay on the field in new place
+	int weakKickStrength = 750; // kicks it a bit, but might stay on the field in new place
 
 	if (goal == NULL) {
 		// no goal visible, start searching for it
