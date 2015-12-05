@@ -2499,7 +2499,7 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	//float approachP = 1.0f;
 	float lookAtGoalP = Config::lookAtP / 3.0f / 2.0f; // spend less effort on focusing on the goal, improves getting the ball
 	
-	float sidePower = Math::map(Math::abs(Math::radToDeg(ball->angle)), 0.0f, maxSideSpeedBallAngle, 0.0f, 1.0f);
+	// float sidePower = Math::map(Math::abs(Math::radToDeg(ball->angle)), 0.0f, maxSideSpeedBallAngle, 0.0f, 1.0f);
 	
 	// PID solution
 	/*float paramP = Util::toFloat(ai->parameters[0]);
@@ -2521,8 +2521,11 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	pid.setSetPoint(0.0f);
 	pid.setProcessValue(Math::radToDeg(ball->angle));
 
-	float sideP = -pid.compute();
-	float sideSpeed = sideP * sidePower;
+	// float sideP = -pid.compute();
+	float sidePower = Math::map(Math::abs(Math::radToDeg(ball->angle)), 0.0f, maxSideSpeedBallAngle, 0.0f, 1.0f);
+	// float sideSpeed = sideP * sidePower;
+
+	float sideSpeed = -pid.compute();
 
 	// reduce side P close to the ball, consider using PID here
 	//float sideP = Math::map(ballDistance, 0.0f, 0.5f, 0.3f, 0.85f);
@@ -2547,14 +2550,14 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	}
 
 	//sideSpeed = 0.0f;
-	//forwardSpeed = 0.0f;
+	forwardSpeed = 0.0f;
 
 	robot->setTargetDir(forwardSpeed, sideSpeed);
 	//robot->lookAt(goal, lookAtGoalP);
 	robot->lookAt(goal, Config::lookAtP, false);
 
 	ai->dbg("forwardSpeed", forwardSpeed);
-	ai->dbg("sideP", sideP);
+	// ai->dbg("sideP", sideP);
 	ai->dbg("sidePower", sidePower);
 	ai->dbg("sideSpeed", sideSpeed);
 	ai->dbg("enterVelocity", enterVelocity);
