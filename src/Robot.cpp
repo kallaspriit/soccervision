@@ -34,7 +34,8 @@ Robot::Robot(AbstractCommunication* com) : com(com), wheelFL(NULL), wheelFR(NULL
 
 	float lookAtLimit = 10.0f;
 
-	lookAtPid.setTunings(0.35f, 0.0f, 0.0012f);
+	// lookAtPid.setTunings(0.35f, 0.0f, 0.0012f); // 2014
+	lookAtPid.setTunings(0.5f, 0.0f, 0.0015f);
 	lookAtPid.setInputLimits(-Config::lookAtMaxSpeedAngle, Config::lookAtMaxSpeedAngle);
 	lookAtPid.setOutputLimits(-lookAtLimit, lookAtLimit);
 	lookAtPid.setMode(AUTO_MODE);
