@@ -1811,7 +1811,8 @@ Vision::ColorList Vision::getViewColorOrder() {
 			lastColor = color->name;
 
 			if (debug) {
-				canvas.drawMarker(x, y, 255, 0, 0);
+				//canvas.drawMarker(x, y, 255, 0, 0);
+				canvas.fillBoxCentered(x, y, 20, 20, 128, 128, 128);
 			}
 		}
 	}
