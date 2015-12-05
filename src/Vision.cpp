@@ -1810,15 +1810,14 @@ Vision::ColorList Vision::getViewColorOrder() {
 
 		if (color->name != lastColor) {
 			colorChangeDetected = true;
+			lastColor = color->name;
+			sameColorCount = 0;
 		} else {
 			sameColorCount++;
 		}
 
 		if (colorChangeDetected && sameColorCount >= minColorConsecutive) {
 			colors.push_back(color->name);
-
-			lastColor = color->name;
-			sameColorCount = 0;
 
 			if (debug) {
 				canvas.fillBoxCentered(x, y, 10, 10, 128, 128, 128);
