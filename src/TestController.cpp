@@ -2542,12 +2542,12 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	float forwardSpeed = approachP * (1.0f - sidePower);
 
 	// don't move forwards if very close to the ball and the ball is quite far sideways
-	if (ballDistance < 0.05f && Math::abs(ball->distanceX) > 0.03f) {
+	if (ballDistance < 0.065f && Math::abs(ball->distanceX) > 0.03f) {
 		forwardSpeed = 0.0f;
 	}
 
 	//sideSpeed = 0.0f;
-	forwardSpeed = 0.0f;
+	//forwardSpeed = 0.0f;
 
 	robot->setTargetDir(forwardSpeed, sideSpeed);
 	//robot->lookAt(goal, lookAtGoalP);
