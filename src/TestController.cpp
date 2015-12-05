@@ -2931,7 +2931,7 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 		bool nearbyAnotherBall = nextClosestBall != NULL && nextClosestBall->getDribblerDistance() < anotherBallCloseDistance;
 
 		// decide which way to avoid the balls once
-		if (avoidBallSide == TargetMode::UNDECIDED) {
+		//if (avoidBallSide == TargetMode::UNDECIDED) {
 			if (isGoalPathObstructed) {
 				if (goalPathObstruction.invalidCountLeft > goalPathObstruction.invalidCountRight) {
 					avoidBallSide = TargetMode::RIGHT;
@@ -2946,7 +2946,7 @@ void TestController::AimState::step(float dt, Vision::Results* visionResults, Ro
 					avoidBallSide = ai->targetSide == Side::BLUE ? TargetMode::LEFT : TargetMode::RIGHT;
 				}
 			}
-		}
+		//}
 
 		// don't move forwards near another ball not to drive into it
 		if (nearbyAnotherBall) {
