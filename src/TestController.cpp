@@ -1863,9 +1863,9 @@ void TestController::FetchBallDirectState::step(float dt, Vision::Results* visio
 
 	// configuration parameters
 	float targetApproachSpeed = 3.5f * ai->speedMultiplier;
-	float minApproachSpeed = 0.15f;
+	float minApproachSpeed = 0.2f;
 	float accelerateAcceleration = 2.8f * ai->speedMultiplier;
-	float brakeAcceleration = 2.0f * ai->speedMultiplier;
+	float brakeAcceleration = 0.5f * ai->speedMultiplier; // 2.0f
 	float nearLineSpeed = 0.4f;
 	float nearBallDistance = 0.1f;
 	float realSpeed = robot->getVelocity();
