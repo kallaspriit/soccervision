@@ -3089,8 +3089,8 @@ void TestController::ReturnFieldState::step(float dt, Vision::Results* visionRes
 
 	if (goal != NULL && goal->distance > Config::fieldWidth / 3.0f) {
 		// look at goal and drive towards it
+		robot->setTargetDir(1.0f, 0.0f);
 		robot->lookAt(goal);
-		robot->setTargetDir(1.0f, 0.0f, 0.0f);
 
 		ai->dbg("goalAngle", Math::radToDeg(goal->angle));
 		/*
