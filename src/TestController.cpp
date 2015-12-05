@@ -1826,12 +1826,14 @@ void TestController::FetchBallDirectState::step(float dt, Vision::Results* visio
 	// return to field if got really close to one of the goals
 	Object* closestGoal = visionResults->getLargestGoal(Side::UNKNOWN, Dir::FRONT);
 
-	// back up
+	// back up, dangerous
+	/*
 	if (closestGoal != NULL && closestGoal->distance < 0.1f && ai->wasNearGoalLately()) {
 		robot->setTargetDirFor(-2.0f, 0.0f, 0.0f, 0.5f);
 
 		return;
 	}
+	*/
 
 	// find ball and goal in front
 	Object* ball = visionResults->getClosestBall(Dir::FRONT);
