@@ -2477,32 +2477,38 @@ bool Vision::Results::isRobotOut(Dir dir) {
 		return false;
 	}
 
-	std::cout << "! Checking robot out:" << std::endl;
+	if (dir == Dir::FRONT) {
+		std::cout << "! Checking robot out:" << std::endl;
+
+		for (int i = 0; i < (int)colorOrder.size(); i++) {
+			std::cout << "  > color #" << i << ": " << colorOrder[i] << std::endl;
+		}
+	}
 
 	for (int i = 0; i < (int)colorOrder.size(); i++) {
 		if (colorOrder[i] != "black") {
-			std::cout << "  > didn't find black (" << colorOrder[i] << ")" << std::endl;
+			//std::cout << "  > didn't find black (" << colorOrder[i] << ")" << std::endl;
 
 			continue;
 		}
 
 		// found black, search for black > white > green
 		if ((int)colorOrder.size() < i + 2) {
-			std::cout << "  > not enough colors (" << colorOrder.size() << " at " << i << ")" << std::endl;
+			//std::cout << "  > not enough colors (" << colorOrder.size() << " at " << i << ")" << std::endl;
 
 			return false;
 		}
 
 		if (colorOrder[i + 1] == "white" && colorOrder[i + 2] == "green") {
-			std::cout << "  > found white and green following!" << std::endl;
+			//std::cout << "  > found white and green following!" << std::endl;
 
 			return true;
 		} else {
-			std::cout << "  > no out color" << std::endl;
+			//std::cout << "  > no out color" << std::endl;
 		}
 	}
 
-	std::cout << "  > not out" << std::endl;
+	//std::cout << "  > not out" << std::endl;
 
 	return false;
 }
