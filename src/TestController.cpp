@@ -1669,7 +1669,8 @@ void TestController::FetchBallFrontState::step(float dt, Vision::Results* vision
 	// configuration parameters
 	float targetApproachSpeed = 3.5f * ai->speedMultiplier;
 	float brakingApproachSpeed = 1.5f * ai->speedMultiplier;
-	float maxNearSpeed = 0.75f * ai->speedMultiplier;
+	//float maxNearSpeed = 0.75f * ai->speedMultiplier; // 2014
+	float maxNearSpeed = 0.5f * ai->speedMultiplier;
 	float minApproachSpeed = 0.75f * ai->speedMultiplier;
 	// float accelerateAcceleration = 3.5f * ai->speedMultiplier; // 2014
 	float accelerateAcceleration = 2.8f * ai->speedMultiplier;
@@ -1680,8 +1681,7 @@ void TestController::FetchBallFrontState::step(float dt, Vision::Results* vision
 	float focusBetweenBallGoalAngle = 15.0f;
 	float maxAngleBrakingAngle = 40.0f;
 	float maxBallBrakingAngle = 10.0f;
-	// float nearDistance = 0.45f; // 2014
-	float nearDistance = 0.3f;
+	float nearDistance = 0.45f;
 	float retratingBallDistanceDiff = 0.2f;
 	//float offsetDistance = 0.3f; // TODO check
 	float offsetDistance = 0.4f;
@@ -1691,7 +1691,7 @@ void TestController::FetchBallFrontState::step(float dt, Vision::Results* vision
 	float ballAngle = ball->angle;
 	float goalAngle = goal->angle;
 	float angleDiff = Math::abs(goalAngle - ballAngle);
-	float adaptiveBrakingDistance = Math::getAccelerationDistance(realSpeed, 0.0f, brakeAcceleration);
+	float brakeDistance = Math::getAccelerationDistance(realSpeed, 0.0f, brakeAcceleration);
 
 	// reset if we probably started to watch a ball we just kicked
 	if (lastBallDistance != -1.0f && ballDistance - lastBallDistance > retratingBallDistanceDiff) {
@@ -1713,8 +1713,8 @@ void TestController::FetchBallFrontState::step(float dt, Vision::Results* vision
 	}
 
 	// only choose the braking distance once
-	if (startBrakingDistance == -1.0f && ballDistance < adaptiveBrakingDistance) {
-		startBrakingDistance = adaptiveBrakingDistance;
+	if (startBrakingDistance == -1.0f && ballDistance < brakeDistance) {
+		startBrakingDistance = brakeDistance;
 		startBrakingVelocity = robot->getVelocity();
 	}
 
