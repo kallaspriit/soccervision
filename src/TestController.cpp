@@ -2538,7 +2538,7 @@ void TestController::FetchBallNearState::step(float dt, Vision::Results* visionR
 	// increase side power near the ball
 	sidePower = Math::min(sidePower * Math::map(ball->distance, 0.0f, 0.5f, 4.0f, 1.0f), 1.0f);*/
 
-	float approachP = Math::map(ball->distance, 0.0f, 1.0f, 0.25f, 1.5f);
+	float approachP = Math::map(ball->distance, 0.0f, 0.5f, 0.20f, 0.5f);
 	float forwardSpeed = approachP * (1.0f - sidePower);
 
 	// don't move forwards if very close to the ball and the ball is quite far sideways
