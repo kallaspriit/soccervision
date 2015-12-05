@@ -3100,12 +3100,12 @@ void TestController::ReturnFieldState::step(float dt, Vision::Results* visionRes
 		}
 	} else if (ai->isRobotOutRear) {
 		// turn half a turn in the same dir as normal find ball would
-		robot->turnBy(Math::degToRad(180.0f) * findBallState->searchDir, Math::TWO_PI);
+		robot->turnBy(Math::degToRad(180.0f) * findBallState->searchDir, Math::TWO_PI / 2.0f);
 
 		return;
 	} else if (ai->isRobotOutFront || queuedApproachGoal) {
 		// robot is out from front camera, search for a goal and focus on it before starting moving
-		float searchSpeed = Math::PI;
+		float searchSpeed = Math::TWO_PI / 4.0f;
 
 		if (stateDuration > Math::TWO_PI / searchSpeed) {
 			searchSpeed /= 2.0f;
