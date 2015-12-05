@@ -1461,14 +1461,16 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 			return;
 		}
 
+		float maxGoalSearchTime = searchPeriod * 2.0f;
+
 		// first turn towards one of the goals to get started in the right direction
-		if (!focusedOnGoal) {
+		if (!focusedOnGoal && stateDuration < maxGoalSearchTime) {
 			Object* goal = visionResults->getLargestGoal(Side::UNKNOWN, Dir::FRONT);
 
 			float focusGoalMinDistance = Config::fieldWidth / 3.0f;
 
 			// make the goal min distance requirement smaller if been searching for some time
-			if (stateDuration > searchPeriod * 2.0f) {
+			if (stateDuration > searchPeriod) {
 				focusGoalMinDistance = Config::fieldWidth / 6.0f;
 			}
 
