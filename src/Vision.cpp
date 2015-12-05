@@ -2483,8 +2483,7 @@ bool Vision::Results::isRobotOut(Dir dir) {
 		}
 
 		// found black, search for black > white > green
-
-		if ((int)colorOrder.size() < i + 3) {
+		if ((int)colorOrder.size() < i + 2) {
 			return false;
 		}
 
