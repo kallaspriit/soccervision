@@ -94,7 +94,10 @@ void Coilgun::kickOnceGotBall(int mainDuration, int mainDelay, float chipDistanc
 
 	kickOnceGotBallParameters = kickParameters;
 
-	int chipDuration = kickOnceGotBallParameters.chipDistance > 0 ? getChipKickDurationByDistance(kickOnceGotBallParameters.chipDistance) : 0;
+	// limit max chip kick distance
+	float maxChipKickDistance = 1.5f;
+	float kickDistance = Math::min(kickOnceGotBallParameters.chipDistance, maxChipKickDistance);
+	int chipDuration = kickDistance > 0 ? getChipKickDurationByDistance(kickDistance) : 0;
 
 	std::string parametersStr = Util::toString(kickOnceGotBallParameters.mainDuration) + ":" + Util::toString(kickOnceGotBallParameters.mainDelay) + ":" + Util::toString(chipDuration) + ":" + Util::toString(kickOnceGotBallParameters.chipDelay);
 
