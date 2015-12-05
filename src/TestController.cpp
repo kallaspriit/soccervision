@@ -1672,8 +1672,8 @@ void TestController::FetchBallFrontState::step(float dt, Vision::Results* vision
 	float maxNearSpeed = 0.75f * ai->speedMultiplier;
 	float minApproachSpeed = 0.75f * ai->speedMultiplier;
 	float accelerateAcceleration = 3.5f * ai->speedMultiplier;
-	//float brakeAcceleration = 3.0f * ai->speedMultiplier;
-	float brakeAcceleration = 2.5f * ai->speedMultiplier;
+	//float brakeAcceleration = 2.5f * ai->speedMultiplier; // 2014
+	float brakeAcceleration = 1.25f * ai->speedMultiplier;
 	float maxOffsetDistanceAngleDiff = 45.0f;
 	float maxAngleDiffDistance = 0.6f;
 	float focusBetweenBallGoalAngle = 15.0f;
