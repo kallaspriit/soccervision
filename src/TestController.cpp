@@ -3093,6 +3093,9 @@ void TestController::ReturnFieldState::step(float dt, Vision::Results* visionRes
 		robot->lookAt(goal);
 
 		ai->dbg("goalAngle", Math::radToDeg(goal->angle));
+
+		return;
+
 		/*
 		if (Math::abs(goal->angle) < Math::degToRad(5.0f)) {
 			// make a blind dash towards the goal
