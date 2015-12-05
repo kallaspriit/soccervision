@@ -1863,7 +1863,7 @@ void TestController::FetchBallDirectState::step(float dt, Vision::Results* visio
 
 	// configuration parameters
 	float targetApproachSpeed = 3.5f * ai->speedMultiplier;
-	float minApproachSpeed = 0.3f;
+	float minApproachSpeed = 0.15f;
 	float accelerateAcceleration = 2.8f * ai->speedMultiplier;
 	float brakeAcceleration = 2.0f * ai->speedMultiplier;
 	float nearLineSpeed = 0.4f;
@@ -1885,7 +1885,10 @@ void TestController::FetchBallDirectState::step(float dt, Vision::Results* visio
 	}
 
 	// accelerate towards the ball, apply minimum speed
-	forwardSpeed = Math::max(Math::getAcceleratedSpeed(forwardSpeed, targetApproachSpeed, dt, accelerateAcceleration), minApproachSpeed);
+	forwardSpeed = Math::max(
+		Math::getAcceleratedSpeed(forwardSpeed, targetApproachSpeed, dt, accelerateAcceleration),
+		minApproachSpeed
+	);
 
 	// limit the speed low near the white-black line to avoid driving the ball out
 	//if (nearLine || ai->isRobotNearLine(visionResults, true)) {
