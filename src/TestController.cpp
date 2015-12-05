@@ -1465,8 +1465,15 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 		if (!focusedOnGoal) {
 			Object* goal = visionResults->getLargestGoal(Side::UNKNOWN, Dir::FRONT);
 
+			float focusGoalMinDistance = Config::fieldWidth / 3.0f;
+
+			// make the goal min distance requirement smaller if been searching for some time
+			if (stateDuration > searchPeriod * 2.0f) {
+				focusGoalMinDistance = Config::fieldWidth / 6.0f;
+			}
+
 			// only consider goals far away not to drive into own goal if next to it
-			if (goal != NULL && goal->distance > Config::fieldWidth / 3.0f) {
+			if (goal != NULL && goal->distance > focusGoalMinDistance) {
 				ai->dbg("focusGoalType", goal->type);
 
 				robot->lookAt(goal);
