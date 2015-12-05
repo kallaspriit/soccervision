@@ -1501,7 +1501,7 @@ void TestController::FindBallState::step(float dt, Vision::Results* visionResult
 		// drive forwards until near a line, then bounce off it, covering most of the field in some time
 		float nearLineDistance = 0.5f;
 		float omegaP = Math::PI;
-		float forwardP = 1.5f;
+		float forwardP = 1.2f;
 		float omegaPower = 0.0f;
 		float omega = 0.0f;
 
