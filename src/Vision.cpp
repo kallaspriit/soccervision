@@ -226,6 +226,8 @@ ObjectList Vision::processGoals(Dir dir) {
 
 	ObjectList mergedGoals = Object::mergeOverlapping(allGoals, Config::goalOverlapMargin, true);
 
+	float maxGoalDistance = Math::sqrt(Math::pow(Config::fieldHeight / 2.0f, 2.0) + Math::pow(Config::fieldWidth, 2.0f));
+
 	for (ObjectListItc it = mergedGoals.begin(); it != mergedGoals.end(); it++) {
 		Object* goal = *it;
 
@@ -247,8 +249,11 @@ ObjectList Vision::processGoals(Dir dir) {
 
 			// straight distance is already updated in valid goal check
 			//goal->distance = distance.straight;
+
+			// limit goal distance to maximum possible when on the field
 			goal->distanceX = distance.x;
-			goal->distanceY = distance.y;
+			goal->distanceY = Math::min(distance.y, maxGoalDistance);
+			goal->distance = Math::min(goal->distance, maxGoalDistance);
 			goal->angle = distance.angle;
 
 			/*if (goal->distance < 0.0f) {
