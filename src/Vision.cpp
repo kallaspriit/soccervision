@@ -1797,6 +1797,9 @@ Vision::ColorList Vision::getViewColorOrder() {
 	Blobber::Color* color;
 	bool debug = canvas.data != NULL;
 	std::string lastColor = "";
+	int sameColorCount = 0;
+	bool colorChangeDetected = false;
+	int minColorConsecutive = 2;
 
 	for (y = Config::ballPathSenseStartY; y >= 0; y -= 3) {
 		color = getColorAt(x, y);
@@ -1806,14 +1809,22 @@ Vision::ColorList Vision::getViewColorOrder() {
 		}
 
 		if (color->name != lastColor) {
+			colorChangeDetected = true;
+		} else {
+			sameColorCount++;
+		}
+
+		if (colorChangeDetected && sameColorCount >= minColorConsecutive) {
 			colors.push_back(color->name);
 
 			lastColor = color->name;
+			sameColorCount = 0;
 
 			if (debug) {
-				//canvas.drawMarker(x, y, 255, 0, 0);
-				canvas.fillBoxCentered(x, y, 20, 20, 128, 128, 128);
+				canvas.fillBoxCentered(x, y, 10, 10, 128, 128, 128);
 			}
+
+			colorChangeDetected = false;
 		}
 	}
 
