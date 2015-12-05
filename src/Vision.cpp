@@ -2505,7 +2505,7 @@ bool Vision::Results::isRobotOut(Dir dir) {
 		}
 
 		// found black, search for black > white > green
-		if ((int)colorOrder.size() < i + 2) {
+		if ((int)colorOrder.size() < i + 3) {
 			//std::cout << "  > not enough colors (" << colorOrder.size() << " at " << i << ")" << std::endl;
 
 			return false;
